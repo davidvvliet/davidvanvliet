@@ -20,7 +20,7 @@ export default function Home() {
     }}>
       <h1 style={{ 
         fontFamily: 'var(--font-roboto-mono)', 
-        fontSize: '3.75rem', 
+        fontSize: '2.5rem', 
         letterSpacing: '-0.025em' 
       }}>
         DAVID VAN VLIET
@@ -33,14 +33,14 @@ export default function Home() {
         style={{ 
           display: 'flex', 
           alignItems: 'center', 
-          gap: '0.75rem', 
+          gap: '0.5rem', 
           transition: 'opacity 0.3s' 
         }}
         onMouseEnter={(e) => e.currentTarget.style.opacity = '0.7'}
         onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
       >
         <Image 
-          src="/thenewlogo.png" 
+          src="/reverselogo.png" 
           alt="Radar" 
           width={40} 
           height={40}
