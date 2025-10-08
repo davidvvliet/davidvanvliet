@@ -81,7 +81,7 @@ export default function Home() {
           fontSize: isMobile ? '1.125rem' : '1.5rem',
           fontWeight: '600'
         }}>
-          Radar
+          radar
         </span>
       </a>
     </div>
