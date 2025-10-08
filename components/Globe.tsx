@@ -380,7 +380,6 @@ export function ThreeJSGlobeWithDots({
       htmlDot.className = 'absolute pointer-events-auto cursor-pointer';
       htmlDot.innerHTML = `
         <div class="relative flex h-3 w-3">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style="background-color: ${dot.color}"></span>
           <span class="relative inline-flex rounded-full h-3 w-3" style="background-color: ${dot.color}"></span>
         </div>
       `;

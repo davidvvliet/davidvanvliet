@@ -2,12 +2,25 @@
 
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
 const Globe = dynamic(() => import('@/components/Globe').then(mod => mod.ThreeJSGlobeWithDots), {
   ssr: false,
 });
 
 export default function Home() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   return (
     <div style={{ 
       display: 'flex', 
@@ -15,17 +28,18 @@ export default function Home() {
       alignItems: 'center', 
       justifyContent: 'center', 
       minHeight: '100vh', 
-      gap: '2rem', 
-      padding: '2rem' 
+      gap: isMobile ? '1rem' : '2rem', 
+      padding: isMobile ? '1rem' : '2rem' 
     }}>
       <h1 style={{ 
         fontFamily: 'var(--font-roboto-mono)', 
-        fontSize: '2.5rem', 
-        letterSpacing: '-0.025em' 
+        fontSize: isMobile ? '1.5rem' : '2.5rem', 
+        letterSpacing: '-0.025em',
+        textAlign: 'center'
       }}>
         DAVID VAN VLIET
       </h1>
-      <Globe size={600} />
+      <Globe size={isMobile ? 350 : 600} />
       <a 
         href="https://www.radar.ltd" 
         target="_blank" 
@@ -40,14 +54,14 @@ export default function Home() {
         onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
       >
         <Image 
-          src="/reverselogo.png" 
+          src="/0a0a0a_logo.png" 
           alt="Radar" 
-          width={40} 
-          height={40}
+          width={isMobile ? 30 : 40} 
+          height={isMobile ? 30 : 40}
         />
         <span style={{ 
           fontFamily: 'Roboto Mono, sans-serif', 
-          fontSize: '1.5rem',
+          fontSize: isMobile ? '1.125rem' : '1.5rem',
           fontWeight: '600'
         }}>
           Radar
