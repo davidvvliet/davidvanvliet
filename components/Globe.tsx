@@ -123,7 +123,6 @@ export function ThreeJSGlobeWithDots({
   dotSizeMultiplier = 1
 }: ThreeJSGlobeWithDotsProps) {
   const mountRef = useRef<HTMLDivElement>(null);
-  const overlayRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const globeRef = useRef<THREE.Group | null>(null);
@@ -132,15 +131,9 @@ export function ThreeJSGlobeWithDots({
   const controlsRef = useRef<OrbitControls | null>(null);
   const autoRotateRef = useRef<boolean>(true);
   const dotsRef = useRef<THREE.Mesh[]>([]);
-  const htmlDotsRef = useRef<HTMLDivElement[]>([]);
   const raycasterRef = useRef<THREE.Raycaster>(new THREE.Raycaster());
   const mouseRef = useRef<THREE.Vector2>(new THREE.Vector2());
   const initializedRef = useRef<boolean>(false);
-
-  // Memoize the stable callback to prevent unnecessary re-renders
-  const stableOnDotClick = useCallback((dot: PersonaDot) => {
-    onDotClick?.(dot);
-  }, [onDotClick]);
 
   // Memoize dots comparison to prevent unnecessary updates
   const dotsString = useMemo(() => JSON.stringify(dots), [dots]);
@@ -304,7 +297,6 @@ export function ThreeJSGlobeWithDots({
       if (globeRef.current && autoRotateRef.current) {
         globeRef.current.rotation.y += speed;
       }
-      updateHtmlDotPositions();
       renderer.render(scene, camera);
     };
     animate();
@@ -331,11 +323,6 @@ export function ThreeJSGlobeWithDots({
         dot.geometry.dispose();
         (dot.material as THREE.Material).dispose();
       });
-      htmlDotsRef.current.forEach(htmlDot => {
-        if (htmlDot.parentNode) {
-          htmlDot.parentNode.removeChild(htmlDot);
-        }
-      });
       renderer.dispose();
       initializedRef.current = false;
     };
@@ -343,7 +330,7 @@ export function ThreeJSGlobeWithDots({
 
   // Separate effect for updating dots only
   useEffect(() => {
-    if (!sceneRef.current || !globeRef.current || !overlayRef.current) return;
+    if (!sceneRef.current || !globeRef.current) return;
 
     const globeRadius = 1.3;
 
@@ -354,10 +341,6 @@ export function ThreeJSGlobeWithDots({
       (dot.material as THREE.Material).dispose();
     });
     dotsRef.current = [];
-
-    // Clear existing HTML dots
-    overlayRef.current.innerHTML = '';
-    htmlDotsRef.current = [];
 
     // Create new dots
     dots.forEach(dot => {
@@ -374,54 +357,8 @@ export function ThreeJSGlobeWithDots({
       dotMesh.userData = { dot: dot };
       globeRef.current!.add(dotMesh);
       dotsRef.current.push(dotMesh);
-
-      // Create HTML overlay dot
-      const htmlDot = document.createElement('div');
-      htmlDot.className = 'absolute pointer-events-auto cursor-pointer';
-      htmlDot.innerHTML = `
-        <div class="relative flex h-3 w-3">
-          <span class="relative inline-flex rounded-full h-3 w-3" style="background-color: ${dot.color}"></span>
-        </div>
-      `;
-      
-      htmlDot.addEventListener('click', (e) => {
-        e.stopPropagation();
-        stableOnDotClick(dot);
-      });
-      
-      overlayRef.current!.appendChild(htmlDot);
-      htmlDotsRef.current.push(htmlDot);
     });
-  }, [dotsString, stableOnDotClick]); // Use stringified dots for comparison
-
-  // Function to update HTML dot positions
-  const updateHtmlDotPositions = () => {
-    if (!overlayRef.current || !cameraRef.current) return;
-    
-    dotsRef.current.forEach((dotMesh, index) => {
-      const htmlDot = htmlDotsRef.current[index];
-      if (!htmlDot) return;
-      
-      const vector = new THREE.Vector3();
-      dotMesh.getWorldPosition(vector);
-      vector.project(cameraRef.current!);
-      
-      const x = (vector.x * 0.5 + 0.5) * size;
-      const y = (vector.y * -0.5 + 0.5) * size;
-      
-      const distance = cameraRef.current!.position.distanceTo(dotMesh.position);
-      const globeCenter = new THREE.Vector3(0, 0, 0);
-      const globeCenterDistance = cameraRef.current!.position.distanceTo(globeCenter);
-      
-      if (distance < globeCenterDistance + 0.1) {
-        htmlDot.style.left = `${x - 6}px`;
-        htmlDot.style.top = `${y - 6}px`;
-        htmlDot.style.display = 'block';
-      } else {
-        htmlDot.style.display = 'none';
-      }
-    });
-  };
+  }, [dotsString, dotSizeMultiplier]); // Use stringified dots for comparison
 
   return (
     <div 
@@ -441,14 +378,6 @@ export function ThreeJSGlobeWithDots({
           position: 'absolute',
           top: 0,
           left: 0
-        }}
-      />
-      <div 
-        ref={overlayRef}
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          width: size,
-          height: size
         }}
       />
     </div>
