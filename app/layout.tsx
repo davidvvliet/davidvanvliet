@@ -11,6 +11,9 @@ const robotoMono = Roboto_Mono({
 export const metadata: Metadata = {
   title: "David Van Vliet",
   description: "Personal website of David Van Vliet",
+  icons: {
+    icon: "/jupiter.png",
+  },
 };
 
 export default function RootLayout({
