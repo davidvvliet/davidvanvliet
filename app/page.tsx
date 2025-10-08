@@ -41,12 +41,21 @@ export default function Home() {
     }}>
       <h1 style={{ 
         fontFamily: 'var(--font-roboto-mono)', 
-        fontSize: isMobile ? '1.5rem' : '2.5rem', 
+        fontSize: isMobile ? '1rem' : '1.5rem', 
         letterSpacing: '-0.025em',
         textAlign: 'center'
       }}>
         DAVID VAN VLIET
       </h1>
+      <p style={{
+        fontFamily: 'var(--font-roboto-mono)',
+        fontSize: isMobile ? '0.75rem' : '0.875rem',
+        textAlign: 'center',
+        color: '#ededed',
+        marginTop: '-1rem'
+      }}>
+        21; Palo Alto, CA; david@marketradar.co
+      </p>
       <Globe size={isMobile ? 350 : 600} dots={dots} />
       <a 
         href="https://www.radar.ltd" 
