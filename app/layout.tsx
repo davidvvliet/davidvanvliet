@@ -9,8 +9,8 @@ const robotoMono = Roboto_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "David Van Vliet",
-  description: "Personal website of David Van Vliet",
+  title: "David",
+  description: "Personal website of David van Vliet",
   icons: {
     icon: "/jupiter.png",
   },
