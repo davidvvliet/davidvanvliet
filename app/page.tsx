@@ -114,13 +114,12 @@ export default function Home() {
         marginTop: '2rem'
       }}>
         <Image 
-          src="/pulsar-map.png" 
+          src={isMobile ? "/pulsar_map.png" : "/pulsar-map.png"}
           alt="Pulsar Map" 
           fill
           style={{
-            objectFit: isMobile ? 'contain' : 'cover',
-            objectPosition: 'center',
-            transform: isMobile ? 'rotate(90deg)' : 'none'
+            objectFit: 'cover',
+            objectPosition: 'center'
           }}
         />
       </div>
