@@ -369,7 +369,7 @@ export function ThreeJSGlobeWithDots({
     // Create new dots
     dots.forEach(dot => {
       const position = latLonToVector3(dot.lat, dot.lon, globeRadius + 0.02);
-      const dotSize = 0.02 * dotSizeMultiplier;
+      const dotSize = 0.02 * dotSizeMultiplier * dot.size;
       const dotGeometry = new THREE.SphereGeometry(dotSize, 8, 8);
       const dotMaterial = new THREE.MeshBasicMaterial({
         color: dot.color,
