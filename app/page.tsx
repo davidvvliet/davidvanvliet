@@ -118,9 +118,8 @@ export default function Home() {
           alt="Pulsar Map" 
           fill
           style={{
-            objectFit: 'cover',
-            objectPosition: 'center',
-            transform: isMobile ? 'rotate(90deg)' : 'none'
+            objectFit: isMobile ? 'contain' : 'cover',
+            objectPosition: 'center'
           }}
         />
       </div>
