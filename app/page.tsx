@@ -119,7 +119,8 @@ export default function Home() {
           fill
           style={{
             objectFit: 'cover',
-            objectPosition: 'center'
+            objectPosition: 'center',
+            transform: isMobile ? 'rotate(90deg)' : 'none'
           }}
         />
       </div>
