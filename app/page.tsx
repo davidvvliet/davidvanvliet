@@ -10,6 +10,7 @@ const Globe = dynamic(() => import('@/components/Globe').then(mod => mod.ThreeJS
 
 export default function Home() {
   const [isMobile, setIsMobile] = useState(false);
+  const [selectedDot, setSelectedDot] = useState<any>(null);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -22,11 +23,10 @@ export default function Home() {
   }, []);
 
   const dots = [
-    { id: 1, lat: 43.403, lon: 10.861, color: '#00ff00', size: 1 },      // Volterra, Italy
-    { id: 2, lat: 52.3676, lon: 4.9041, color: '#00ff00', size: 1 },     // Amsterdam, Netherlands
-    { id: 3, lat: 35.682839, lon: 139.759455, color: '#00ff00', size: 1 }, // Tokyo, Japan
-    { id: 4, lat: 29.7604, lon: -95.3698, color: '#00ff00', size: 1 },   // Houston, Texas
-    { id: 5, lat: 37.4419, lon: -122.1430, color: '#00ff00', size: 1 },  // Palo Alto, CA
+    { id: 1, lat: 52.3676, lon: 4.9041, color: '#00ff00', size: 2, info: 'Amsterdam — Birthplace\n(2004-2022)' },
+    { id: 2, lat: 35.682839, lon: 139.759455, color: '#00ff00', size: 2, info: 'Tokyo - Favorite city\n(every now and then)' },
+    { id: 3, lat: 29.7604, lon: -95.3698, color: '#00ff00', size: 2, info: 'Houston - Rice University\n(2022-2025)' },
+    { id: 4, lat: 37.4419, lon: -122.1430, color: '#00ff00', size: 2, info: 'Palo Alto — Best city in the world, current location\n(2025-present)' },
   ];
 
   return (
@@ -56,7 +56,27 @@ export default function Home() {
       }}>
         21; Palo Alto, CA; david@marketradar.co
       </p>
-      <Globe size={isMobile ? 350 : 600} dots={dots} />
+      <div style={{ position: 'relative' }}>
+        <Globe size={isMobile ? 350 : 600} dots={dots} onDotClick={setSelectedDot} />
+        {selectedDot && (
+          <div style={{
+            position: 'absolute',
+            left: isMobile ? 'calc(350px + 1rem)' : 'calc(600px + 1rem)',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            background: 'rgba(0, 0, 0, 0.8)',
+            color: '#ededed',
+            padding: '1rem',
+            borderRadius: '8px',
+            fontFamily: 'var(--font-roboto-mono)',
+            fontSize: isMobile ? '0.75rem' : '0.875rem',
+            minWidth: '300px',
+            whiteSpace: 'pre-line'
+          }}>
+            {selectedDot.info}
+          </div>
+        )}
+      </div>
       <a 
         href="https://www.radar.ltd" 
         target="_blank" 

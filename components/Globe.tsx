@@ -12,6 +12,7 @@ interface PersonaDot {
   size: number;
   opacity?: number;
   persona?: any;
+  info?: string;
 }
 
 interface ThreeJSGlobeWithDotsProps {
@@ -286,9 +287,31 @@ export function ThreeJSGlobeWithDots({
       renderer.domElement.style.cursor = autoRotateRef.current ? 'grab' : 'grabbing';
     };
 
+    const onMouseClick = (event: MouseEvent) => {
+      if (!onDotClick || !camera || !globeGroup) return;
+
+      const rect = renderer.domElement.getBoundingClientRect();
+      const mouse = new THREE.Vector2();
+      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+      const raycaster = new THREE.Raycaster();
+      raycaster.setFromCamera(mouse, camera);
+
+      const intersects = raycaster.intersectObjects(globeGroup.children, true);
+      
+      for (let intersect of intersects) {
+        if (intersect.object.userData && intersect.object.userData.dot && intersect.object.userData.dot.info) {
+          onDotClick(intersect.object.userData.dot);
+          break;
+        }
+      }
+    };
+
     controls.addEventListener('start', onControlsStart);
     controls.addEventListener('end', onControlsEnd);
     renderer.domElement.addEventListener('mousemove', onMouseMove);
+    renderer.domElement.addEventListener('click', onMouseClick);
 
     // Animation loop
     const animate = () => {
@@ -315,6 +338,7 @@ export function ThreeJSGlobeWithDots({
       }
       if (renderer.domElement) {
         renderer.domElement.removeEventListener('mousemove', onMouseMove);
+        renderer.domElement.removeEventListener('click', onMouseClick);
       }
       if (mountRef.current && renderer.domElement && mountRef.current.contains(renderer.domElement)) {
         mountRef.current.removeChild(renderer.domElement);
