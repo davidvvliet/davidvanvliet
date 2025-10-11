@@ -104,6 +104,25 @@ export default function Home() {
           radar
         </span>
       </a>
+      
+      {/* Full-page pulsar map section */}
+      <div style={{
+        height: '100vh',
+        width: '100%',
+        position: 'relative',
+        overflow: 'hidden',
+        marginTop: '2rem'
+      }}>
+        <Image 
+          src="/pulsar-map.png" 
+          alt="Pulsar Map" 
+          fill
+          style={{
+            objectFit: 'cover',
+            objectPosition: 'center'
+          }}
+        />
+      </div>
     </div>
   );
 }
