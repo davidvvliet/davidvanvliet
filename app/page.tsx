@@ -61,16 +61,16 @@ export default function Home() {
         {selectedDot && (
           <div style={{
             position: 'absolute',
-            left: isMobile ? 'calc(350px + 1rem)' : 'calc(600px + 1rem)',
-            top: '50%',
-            transform: 'translateY(-50%)',
+            left: isMobile ? '50%' : 'calc(600px + 1rem)',
+            top: isMobile ? 'calc(100% + 1rem)' : '50%',
+            transform: isMobile ? 'translateX(-50%)' : 'translateY(-50%)',
             background: 'rgba(0, 0, 0, 0.8)',
             color: '#ededed',
             padding: '1rem',
             borderRadius: '8px',
             fontFamily: 'var(--font-roboto-mono)',
             fontSize: isMobile ? '0.75rem' : '0.875rem',
-            minWidth: '300px',
+            minWidth: isMobile ? '280px' : '300px',
             whiteSpace: 'pre-line'
           }}>
             {selectedDot.info}
