@@ -1,14 +1,15 @@
 "use client";
 
 import dynamic from 'next/dynamic';
-import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import styles from './page.module.css';
 
 const Globe = dynamic(() => import('@/components/Globe').then(mod => mod.ThreeJSGlobeWithDots), {
   ssr: false,
 });
 
-export default function Home() {
+export default function GridPage() {
   const [isMobile, setIsMobile] = useState(false);
   const [selectedDot, setSelectedDot] = useState<any>(null);
 
@@ -23,106 +24,95 @@ export default function Home() {
   }, []);
 
   const dots = [
-    { id: 1, lat: 52.3676, lon: 4.9041, color: '#00ff00', size: 1.5, info: 'Amsterdam; Birthplace\n(2004-2022)' },
-    { id: 2, lat: 35.682839, lon: 139.759455, color: '#00ff00', size: 1.5, info: 'Tokyo; Favorite city\n(every now and then)' },
-    { id: 3, lat: 29.7604, lon: -95.3698, color: '#00ff00', size: 1.5, info: 'Houston; Rice University\n(2022-2025)' },
-    { id: 4, lat: 37.4419, lon: -122.1430, color: '#00ff00', size: 1.5, info: 'Palo Alto; Best city in the world, current location\n(2025-present)' },
+    { id: 1, lat: 52.3676, lon: 4.9041, color: '#00ff00', size: 4, info: 'Amsterdam — Birthplace\n(2004-2022)' },
+    { id: 2, lat: 35.682839, lon: 139.759455, color: '#00ff00', size: 4, info: 'Tokyo - Favorite city\n(every now and then)' },
+    { id: 3, lat: 29.7604, lon: -95.3698, color: '#00ff00', size: 4, info: 'Houston - Rice University\n(2022-2025)' },
+    { id: 4, lat: 37.4419, lon: -122.1430, color: '#00ff00', size: 4, info: 'Palo Alto — Best city in the world, current location\n(2025-present)' },
   ];
-
   return (
-    <div style={{ 
-      display: 'flex', 
-      flexDirection: 'column', 
-      alignItems: 'center', 
-      justifyContent: 'center', 
-      minHeight: '100vh', 
-      gap: isMobile ? '1rem' : '2rem', 
-      padding: isMobile ? '1rem' : '2rem' 
-    }}>
-      <h1 style={{ 
-        fontFamily: 'var(--font-roboto-mono)', 
-        fontSize: isMobile ? '1rem' : '1.5rem', 
-        letterSpacing: '-0.025em',
-        textAlign: 'center'
-      }}>
-        David van Vliet
-      </h1>
-      <p style={{
-        fontFamily: 'var(--font-roboto-mono)',
-        fontSize: isMobile ? '0.75rem' : '0.875rem',
-        textAlign: 'center',
-        color: '#ededed',
-        marginTop: '-1rem'
-      }}>
-        21; Palo Alto, CA; david@marketradar.co
-      </p>
-      <div style={{ position: 'relative' }}>
-        <Globe size={isMobile ? 350 : 600} dots={dots} onDotClick={setSelectedDot} />
-        {selectedDot && (
-          <div style={{
-            position: 'absolute',
-            left: isMobile ? '50%' : 'calc(600px + 1rem)',
-            top: isMobile ? 'calc(100% + 1rem)' : '50%',
-            transform: isMobile ? 'translateX(-50%)' : 'translateY(-50%)',
-            background: 'rgba(0, 0, 0, 0.8)',
-            color: '#ededed',
-            padding: '1rem',
-            borderRadius: '8px',
-            fontFamily: 'var(--font-roboto-mono)',
-            fontSize: isMobile ? '0.75rem' : '0.875rem',
-            minWidth: isMobile ? '280px' : '300px',
-            whiteSpace: 'pre-line'
-          }}>
-            {selectedDot.info}
-          </div>
-        )}
+    <div className={styles.gridContainer}>
+      {/* Thin navbar - full width */}
+      <div className={styles.cell1}>
+        <h1 className={styles.navbarTitle}>
+          David van Vliet
+        </h1>
+        <p className={styles.navbarSubtitle}>
+          21; Palo Alto, CA; david@marketradar.co
+        </p>
       </div>
-      <a 
-        href="https://www.radar.ltd" 
-        target="_blank" 
-        rel="noopener noreferrer"
-        style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          gap: '0.5rem', 
-          transition: 'opacity 0.3s' 
-        }}
-        onMouseEnter={(e) => e.currentTarget.style.opacity = '0.7'}
-        onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
-      >
-        <Image 
-          src="/0a0a0a_logo.png" 
-          alt="Radar" 
-          width={isMobile ? 30 : 40} 
-          height={isMobile ? 30 : 40}
-        />
-        <span style={{ 
-          fontFamily: 'Roboto Mono, sans-serif', 
-          fontSize: isMobile ? '1.125rem' : '1.5rem',
-          fontWeight: '600'
-        }}>
-          radar
-        </span>
-      </a>
       
-      {/* Full-page pulsar map section */}
-      <div style={{
-        height: '100vh',
-        width: '100%',
-        position: 'relative',
-        overflow: 'hidden',
-        marginTop: '2rem'
-      }}>
-        <Image 
-          src={isMobile ? "/pulsar_mobile_0a0a0a.png" : "/pulsar-map.png"}
-          alt="Pulsar Map" 
-          fill
-          style={{
-            objectFit: 'cover',
-            objectPosition: 'center'
-          }}
-        />
+      {/* Two identical cells - each half width */}
+      <div className={styles.cell2}>
+          <Globe size={isMobile ? 300 : 500} dots={dots} onDotClick={setSelectedDot} dotSizeMultiplier={0.3} />
+      </div>
+      
+      <div className={styles.rightCell}>
+        <div className={styles.cell3}>
+          <div>
+            Born in Amsterdam. Moved to Houston at 18. Now in the Bay.
+          </div>
+          <br />
+          <br />
+          <div>
+            Currently based in Palo Alto where I'm building <a href="https://tryradar.ai" target="_blank" rel="noopener noreferrer" className={styles.descriptionLink}>Radar</a>;
+            The best way to navigate the private market.
+          </div>
+          <br />
+          <br />
+          <div>
+            
+          </div>
+        </div>
+        <div className={styles.linksSection}>
+          <div className={styles.linksContainer}>
+            <div className={styles.linksTop}>
+              <div className={styles.cell6}>
+                <a href="https://github.com/davidvvliet" target="_blank" rel="noopener noreferrer" className={styles.link}>
+                  github
+                </a>
+                <a href="https://www.linkedin.com/in/davidvvliet/" target="_blank" rel="noopener noreferrer" className={styles.link}>
+                  linkedin
+                </a>
+              </div>
+              <div className={styles.linksTopRight}>
+                <div className={styles.cell7}>
+                </div>
+                <div className={styles.linksTopRightBottom}>
+                  <div className={styles.cell8}>
+                  </div>
+                  <div className={styles.cell9}>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className={styles.cell5}>
+              <a href="https://tryradar.ai" target="_blank" rel="noopener noreferrer">
+                <Image 
+                  src="/radar-full-logo.png" 
+                  alt="Radar Logo" 
+                  width={150} 
+                  height={150}
+                  className={styles.radarLogo}
+                />
+              </a>
+            </div>
+          </div>
+          <div className={styles.cell4}>
+          </div>
+        </div>
+      </div>
+      
+      {/* Full width cell underneath */}
+      <div className={styles.cell10}>
+      </div>
+      
+      {/* Two identical cells underneath - matching style */}
+      <div className={styles.cell11}>
+      </div>
+      
+      <div className={styles.emptyCell}>
       </div>
     </div>
   );
 }
+

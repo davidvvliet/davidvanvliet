@@ -1,0 +1,159 @@
+.gridContainer {
+  min-height: 200vh;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.618fr 1fr;
+  grid-template-rows: 120px 1.618fr 1fr 1fr;
+  gap: 0;
+  background-color: #0a0a0a;
+}
+
+.cell1 {
+  grid-column: 1 / -1;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+}
+
+.navbarTitle {
+  font-family: var(--font-roboto-mono);
+  font-size: 1.5rem;
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+
+.navbarSubtitle {
+  font-family: var(--font-roboto-mono);
+  font-size: 0.875rem;
+  color: #ededed;
+  margin: 0;
+}
+
+.cell2 {
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rightCell {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  display: grid;
+  grid-template-rows: 1.618fr 1fr;
+  gap: 0;
+}
+
+.cell3 {
+  padding: 2rem;
+  font-family: var(--font-roboto-mono);
+  font-size: 0.875rem;
+  color: #ededed;
+  line-height: 1.6;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.descriptionLink {
+  color: #00ff00;
+}
+
+.linksSection {
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  display: grid;
+  grid-template-columns: 1fr 1.618fr;
+  gap: 0;
+}
+
+.linksContainer {
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+  display: grid;
+  grid-template-rows: 1fr 1.618fr;
+  gap: 0;
+}
+
+.linksTop {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  display: grid;
+  grid-template-columns: 1.618fr 1fr;
+  gap: 0;
+}
+
+.cell6 {
+  padding: 1rem;
+  font-family: var(--font-roboto-mono);
+  font-size: 0.875rem;
+  color: #00ff00;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.linksTopRight {
+  display: grid;
+  grid-template-rows: 1.618fr 1fr;
+  gap: 0;
+}
+
+.cell7 {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.linksTopRightBottom {
+  display: grid;
+  grid-template-columns: 1fr 1.618fr;
+  gap: 0;
+}
+
+.cell8 {
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.cell9 {
+  /* Empty cell for now */
+  display: block;
+}
+
+.cell5 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.radarLogo {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.cell4 {
+  /* Empty cell for now - placeholder */
+  display: block;
+}
+
+.link {
+  color: #00ff00;
+  text-decoration: none;
+}
+
+.cell10 {
+  grid-column: 1 / -1;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.cell11 {
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.emptyCell {
+  /* Empty cell - no styles needed */
+  display: block;
+}
+
