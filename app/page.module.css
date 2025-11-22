@@ -102,6 +102,12 @@
 
 .cell7 {
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  min-width: 0;
+  min-height: 0;
 }
 
 .linksTopRightBottom {
@@ -117,6 +123,15 @@
 .cell9 {
   /* Empty cell for now */
   display: block;
+}
+
+.pulsarMap {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  max-width: 100%;
+  max-height: 100%;
+  transform: scale(1.4);
 }
 
 .cell5 {

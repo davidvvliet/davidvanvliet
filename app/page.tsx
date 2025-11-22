@@ -77,6 +77,13 @@ export default function GridPage() {
               </div>
               <div className={styles.linksTopRight}>
                 <div className={styles.cell7}>
+                  <Image 
+                    src="/pulsar-map.png" 
+                    alt="Pulsar Map" 
+                    width={2000} 
+                    height={2000}
+                    className={styles.pulsarMap}
+                  />
                 </div>
                 <div className={styles.linksTopRightBottom}>
                   <div className={styles.cell8}>
