@@ -1,0 +1,46 @@
+.chessBoard {
+  width: 100%;
+  max-width: 250px;
+  max-height: 250px;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  gap: 0;
+  aspect-ratio: 1;
+}
+
+.square {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  aspect-ratio: 1;
+  cursor: pointer;
+}
+
+.square.light {
+  background-color: #1a1a1a;
+}
+
+.square.dark {
+  background-color: #0a0a0a;
+}
+
+.square.selected {
+  background-color: rgba(0, 255, 0, 0.4);
+}
+
+.piece {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+  user-select: none;
+  cursor: pointer;
+}
+
+.piece:hover {
+  opacity: 0.8;
+}
+

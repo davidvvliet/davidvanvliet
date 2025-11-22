@@ -132,8 +132,10 @@
 }
 
 .cell4 {
-  /* Empty cell for now - placeholder */
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
 }
 
 .link {

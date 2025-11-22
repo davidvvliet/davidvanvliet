@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import ChessBoard from '@/components/ChessBoard';
 import styles from './page.module.css';
 
 const Globe = dynamic(() => import('@/components/Globe').then(mod => mod.ThreeJSGlobeWithDots), {
@@ -98,6 +99,7 @@ export default function GridPage() {
             </div>
           </div>
           <div className={styles.cell4}>
+            <ChessBoard />
           </div>
         </div>
       </div>
