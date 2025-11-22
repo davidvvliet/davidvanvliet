@@ -24,10 +24,10 @@ export default function GridPage() {
   }, []);
 
   const dots = [
-    { id: 1, lat: 52.3676, lon: 4.9041, color: '#00ff00', size: 4, info: 'Amsterdam — Birthplace\n(2004-2022)' },
-    { id: 2, lat: 35.682839, lon: 139.759455, color: '#00ff00', size: 4, info: 'Tokyo - Favorite city\n(every now and then)' },
-    { id: 3, lat: 29.7604, lon: -95.3698, color: '#00ff00', size: 4, info: 'Houston - Rice University\n(2022-2025)' },
-    { id: 4, lat: 37.4419, lon: -122.1430, color: '#00ff00', size: 4, info: 'Palo Alto — Best city in the world, current location\n(2025-present)' },
+    { id: 1, lat: 52.3676, lon: 4.9041, color: '#00ff00', size: 4 },
+    { id: 2, lat: 35.682839, lon: 139.759455, color: '#00ff00', size: 4 },
+    { id: 3, lat: 29.7604, lon: -95.3698, color: '#00ff00', size: 4 },
+    { id: 4, lat: 37.4419, lon: -122.1430, color: '#00ff00', size: 4 },
   ];
   return (
     <div className={styles.gridContainer}>
@@ -100,17 +100,6 @@ export default function GridPage() {
           <div className={styles.cell4}>
           </div>
         </div>
-      </div>
-      
-      {/* Full width cell underneath */}
-      <div className={styles.cell10}>
-      </div>
-      
-      {/* Two identical cells underneath - matching style */}
-      <div className={styles.cell11}>
-      </div>
-      
-      <div className={styles.emptyCell}>
       </div>
     </div>
   );

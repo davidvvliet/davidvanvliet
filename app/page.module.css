@@ -1,9 +1,9 @@
 .gridContainer {
-  min-height: 200vh;
+  min-height: 100vh;
   width: 100%;
   display: grid;
   grid-template-columns: 61.8% 38.2%;
-  grid-template-rows: 120px calc((100vh - 120px) * 0.447) calc((100vh - 120px) * 0.276) calc((100vh - 120px) * 0.276);
+  grid-template-rows: 120px 1fr;
   gap: 0;
   background-color: #0a0a0a;
 }
@@ -35,16 +35,14 @@
 
 .cell2 {
   border-right: 1px solid rgba(255, 255, 255, 0.3);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .rightCell {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   display: grid;
-  grid-template-rows: 1.618fr 1fr;
+  grid-template-rows: 61.8% 38.2%;
   gap: 0;
 }
 
@@ -67,21 +65,21 @@
 .linksSection {
   border-top: 1px solid rgba(255, 255, 255, 0.3);
   display: grid;
-  grid-template-columns: 1fr 1.618fr;
+  grid-template-columns: 38.2% 61.8%;
   gap: 0;
 }
 
 .linksContainer {
   border-right: 1px solid rgba(255, 255, 255, 0.3);
   display: grid;
-  grid-template-rows: 1fr 1.618fr;
+  grid-template-rows: 38.2% 61.8%;
   gap: 0;
 }
 
 .linksTop {
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   display: grid;
-  grid-template-columns: 1.618fr 1fr;
+  grid-template-columns: 61.8% 38.2%;
   gap: 0;
 }
 
@@ -98,7 +96,7 @@
 
 .linksTopRight {
   display: grid;
-  grid-template-rows: 1.618fr 1fr;
+  grid-template-rows: 61.8% 38.2%;
   gap: 0;
 }
 
@@ -108,7 +106,7 @@
 
 .linksTopRightBottom {
   display: grid;
-  grid-template-columns: 1fr 1.618fr;
+  grid-template-columns: 38.2% 61.8%;
   gap: 0;
 }
 
@@ -143,19 +141,6 @@
   text-decoration: none;
 }
 
-.cell10 {
-  grid-column: 1 / -1;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.cell11 {
-  border-right: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.emptyCell {
-  /* Empty cell - no styles needed */
-  display: block;
-}
 
 /* Mobile: Stack all grids vertically */
 @media (max-width: 768px) {
@@ -213,11 +198,6 @@
   }
 
   .cell8 {
-    border-right: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-  }
-
-  .cell11 {
     border-right: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   }
