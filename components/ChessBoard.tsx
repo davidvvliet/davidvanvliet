@@ -105,6 +105,7 @@ export default function ChessBoard() {
       
       if (square) {
         setSelectedSquare(squareName);
+        setValidMoves(getValidMoves(squareName));
       }
     } else {
       // Square already selected - attempt to make a move
@@ -119,6 +120,7 @@ export default function ChessBoard() {
           // Move is valid - update board
           setBoard(chess.board());
           setSelectedSquare(null);
+          setValidMoves([]);
         } else {
           // Invalid move - deselect or select new square
           const [file, rank] = squareName.split('');
@@ -128,8 +130,10 @@ export default function ChessBoard() {
           
           if (square) {
             setSelectedSquare(squareName);
+            setValidMoves(getValidMoves(squareName));
           } else {
             setSelectedSquare(null);
+            setValidMoves([]);
           }
         }
       } catch (error) {
@@ -141,8 +145,10 @@ export default function ChessBoard() {
         
         if (square) {
           setSelectedSquare(squareName);
+          setValidMoves(getValidMoves(squareName));
         } else {
           setSelectedSquare(null);
+          setValidMoves([]);
         }
       }
     }

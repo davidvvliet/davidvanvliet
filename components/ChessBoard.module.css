@@ -29,7 +29,7 @@
 }
 
 .square.selected {
-  background-color: rgba(0, 255, 0, 0.4);
+  background-color: rgba(0, 255, 0, 0.1);
 }
 
 .square.dragging {
@@ -37,7 +37,7 @@
 }
 
 .square.validMove {
-  background-color: rgba(0, 255, 0, 0.2);
+  background-color: rgba(0, 255, 0, 0.1);
 }
 
 .square.validMove::after {
