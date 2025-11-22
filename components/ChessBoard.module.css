@@ -32,12 +32,33 @@
   background-color: rgba(0, 255, 0, 0.4);
 }
 
+.square.dragging {
+  opacity: 0.5;
+}
+
+.square.validMove {
+  background-color: rgba(0, 255, 0, 0.2);
+}
+
+.square.validMove::after {
+  content: '';
+  position: absolute;
+  width: 30%;
+  height: 30%;
+  border-radius: 50%;
+  background-color: rgba(0, 255, 0, 0.6);
+}
+
 .piece {
   width: 80%;
   height: 80%;
   object-fit: contain;
   user-select: none;
-  cursor: pointer;
+  cursor: grab;
+}
+
+.piece:active {
+  cursor: grabbing;
 }
 
 .piece:hover {
