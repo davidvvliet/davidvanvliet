@@ -107,6 +107,10 @@ export default function ChessBoard() {
         setSelectedSquare(squareName);
         setValidMoves(getValidMoves(squareName));
       }
+    } else if (selectedSquare === squareName) {
+      // Clicking the same selected square - deselect it
+      setSelectedSquare(null);
+      setValidMoves([]);
     } else {
       // Square already selected - attempt to make a move
       try {
