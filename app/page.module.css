@@ -213,6 +213,7 @@
   .linksTop {
     grid-template-columns: 1fr;
     grid-template-rows: auto;
+    border-bottom: none;
   }
 
   .cell6 {
@@ -223,6 +224,10 @@
   .linksTopRight {
     grid-template-columns: 1fr;
     grid-template-rows: auto;
+  }
+
+  .cell7 {
+    border-bottom: none;
   }
 
   .linksTopRightBottom {
