@@ -35,7 +35,7 @@ export default function GridPage() {
       {/* Thin navbar - full width */}
       <div className={styles.cell1}>
         <h1 className={styles.navbarTitle}>
-          David van Vliet
+          David
         </h1>
         <p className={styles.navbarSubtitle}>
           21; Palo Alto, CA; david@marketradar.co

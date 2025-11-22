@@ -11,7 +11,7 @@ const robotoMono = Roboto_Mono({
 
 export const metadata: Metadata = {
   title: "David",
-  description: "Personal website of David van Vliet",
+  description: "David's site",
   icons: {
     icon: "/jupiter.png",
   },

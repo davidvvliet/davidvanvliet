@@ -45,7 +45,7 @@ export default function Home() {
         letterSpacing: '-0.025em',
         textAlign: 'center'
       }}>
-        David van Vliet
+        David
       </h1>
       <p style={{
         fontFamily: 'var(--font-roboto-mono)',
