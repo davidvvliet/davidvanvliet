@@ -50,7 +50,7 @@ export default function GridPage() {
       <div className={styles.rightCell}>
         <div className={styles.cell3}>
           <div>
-            Born in Amsterdam. Moved to Houston at 18. Now in the Bay.
+            From Amsterdam. Came to the US at 18. Now in the Bay.
           </div>
           <br />
           <br />
