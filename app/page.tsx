@@ -87,6 +87,13 @@ export default function GridPage() {
                 </div>
                 <div className={styles.linksTopRightBottom}>
                   <div className={styles.cell8}>
+                    <Image 
+                      src="/orbital-2-1-0.png" 
+                      alt="Orbital Visualization" 
+                      width={1000} 
+                      height={1000}
+                      className={styles.orbitalImage}
+                    />
                   </div>
                   <div className={styles.cell9}>
                   </div>
