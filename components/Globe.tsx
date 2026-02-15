@@ -190,15 +190,15 @@ export function ThreeJSGlobeWithDots({
 
     // Create wireframe sphere
     const globeRadius = 1.3;
-    // const sphereGeometry = new THREE.SphereGeometry(globeRadius, 32, 32);
-    // const wireframeMaterial = new THREE.MeshBasicMaterial({
-    //   color: color,
-    //   wireframe: true,
-    //   transparent: true,
-    //   opacity: 0.4
-    // });
-    // const wireframeSphere = new THREE.Mesh(sphereGeometry, wireframeMaterial);
-    // globeGroup.add(wireframeSphere);
+    const sphereGeometry = new THREE.SphereGeometry(globeRadius, 32, 32);
+    const wireframeMaterial = new THREE.MeshBasicMaterial({
+      color: color,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.4
+    });
+    const wireframeSphere = new THREE.Mesh(sphereGeometry, wireframeMaterial);
+    globeGroup.add(wireframeSphere);
 
     // Create latitude and longitude lines
     const createLatitudeLines = () => {
@@ -254,7 +254,7 @@ export function ThreeJSGlobeWithDots({
     loadGeoJsonData()
       .then((geoJson) => {
         if (geoJson && sceneRef.current && globeGroup.parent) {
-          drawGeoJsonContoursAndFill(geoJson, globeGroup, globeRadius + 0.002, "#ffffff", "#2a2a2a", 0.9, 0.85);
+          drawGeoJsonContoursAndFill(geoJson, globeGroup, globeRadius + 0.002, "#ffffff", "#0a0a0a", 0.9, 0.85);
         }
       });
 
