@@ -200,6 +200,14 @@ export function ThreeJSGlobeWithDots({
     const wireframeSphere = new THREE.Mesh(sphereGeometry, wireframeMaterial);
     globeGroup.add(wireframeSphere);
 
+    // Occluder sphere: writes to depth buffer only, hides continents behind the globe
+    const occluderGeometry = new THREE.SphereGeometry(globeRadius - 0.01, 32, 32);
+    const occluderMaterial = new THREE.MeshBasicMaterial({
+      colorWrite: false,
+    });
+    const occluderSphere = new THREE.Mesh(occluderGeometry, occluderMaterial);
+    globeGroup.add(occluderSphere);
+
     // Create latitude and longitude lines
     const createLatitudeLines = () => {
       const latitudes = [];
