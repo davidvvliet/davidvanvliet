@@ -55,7 +55,7 @@ export default function GridPage() {
           <br />
           <br />
           <div>
-            Based in Palo Alto, building <a href="https://theradarcorp.com" target="_blank" rel="noopener noreferrer" className={styles.descriptionLink}>Radar</a>;
+            Based in Palo Alto, building <a href="https://theradarcorp.com" target="_blank" rel="noopener noreferrer" className={styles.descriptionLink}>Radar Corp</a>;
             The best way to navigate the private market.
           </div>
           <br />
