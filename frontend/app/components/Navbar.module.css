@@ -26,19 +26,12 @@
 }
 
 @media (max-width: 768px) {
-  .navbar {
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 0;
-    padding: 0 1.25rem;
-  }
-
   .navbarTitle {
-    font-size: 1rem;
+    font-size: 1.1rem;
   }
 
   .navbarSubtitle {
     font-size: 0.7rem;
-    text-align: right;
+    text-align: center;
   }
 }
