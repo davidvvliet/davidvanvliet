@@ -6,6 +6,7 @@
   background-color: #0a0a0a;
   width: 100vw;
   height: calc(100vh - 80px);
+  overflow: hidden;
 }
 
 
