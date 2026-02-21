@@ -4,6 +4,7 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Navbar from './Navbar';
+import ChessBoard from './ChessBoard';
 import styles from './MobilePage.module.css';
 
 const Globe = dynamic(() => import('./Globe').then(mod => mod.ThreeJSGlobeWithDots), {
@@ -37,34 +38,39 @@ export default function MobilePage() {
             <a href="https://theradarcorp.com" target="_blank" rel="noopener noreferrer" className={styles.descriptionLink}>
               Radar Corp.
             </a>
-            <br />
+            <br /><br />
             We make products for private and public market investors to facilitate optimal capital flow.
           </div>
 
-          {/* Right 38.2%: links top | radar bottom */}
+          {/* Right 38.2%: linksContainer top (38.2%) | chess bottom (61.8%) */}
           <div className={styles.rightCell}>
 
-            {/* Top 61.8%: links */}
-            <div className={styles.linksCell}>
-              <a href="https://github.com/davidvvliet" target="_blank" rel="noopener noreferrer" className={styles.link}>
-                github
-              </a>
-              <a href="https://www.linkedin.com/in/davidvvliet/" target="_blank" rel="noopener noreferrer" className={styles.link}>
-                linkedin
-              </a>
+            {/* Top 38.2%: links left (38.2%) | radar right (61.8%) */}
+            <div className={styles.linksContainer}>
+              <div className={styles.linksCell}>
+                <a href="https://github.com/davidvvliet" target="_blank" rel="noopener noreferrer" className={styles.link}>
+                  github
+                </a>
+                <a href="https://www.linkedin.com/in/davidvvliet/" target="_blank" rel="noopener noreferrer" className={styles.link}>
+                  linkedin
+                </a>
+              </div>
+              <div className={styles.radarCell}>
+                <a href="https://tryradar.ai" target="_blank" rel="noopener noreferrer">
+                  <Image
+                    src="/radar-full-logo.png"
+                    alt="Radar Logo"
+                    width={60}
+                    height={60}
+                    className={styles.radarLogo}
+                  />
+                </a>
+              </div>
             </div>
 
-            {/* Bottom 38.2%: radar logo */}
-            <div className={styles.radarCell}>
-              <a href="https://tryradar.ai" target="_blank" rel="noopener noreferrer">
-                <Image
-                  src="/radar-full-logo.png"
-                  alt="Radar Logo"
-                  width={100}
-                  height={100}
-                  className={styles.radarLogo}
-                />
-              </a>
+            {/* Bottom 61.8%: chess board */}
+            <div className={styles.chessCell}>
+              <ChessBoard />
             </div>
 
           </div>
