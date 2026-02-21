@@ -41,14 +41,14 @@
   color: #00ff00;
 }
 
-/* Right 38.2%: linksContainer (38.2%) top | chess (61.8%) bottom */
+/* Right 38.2%: linksContainer (38.2%) top | pulsar (61.8%) bottom */
 .rightCell {
   display: grid;
   grid-template-rows: 38.2% 61.8%;
   overflow: hidden;
 }
 
-/* Top 38.2%: links (38.2%) left | radar (61.8%) right */
+/* Top 38.2%: orbital (38.2%) left | links (61.8%) right */
 .linksContainer {
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   display: grid;
@@ -56,8 +56,24 @@
   overflow: hidden;
 }
 
-.linksCell {
+/* Left 38.2%: orbital image */
+.orbitalCell {
   border-right: 1px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.orbitalImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transform: scale(2.5);
+}
+
+/* Right 61.8%: github / linkedin */
+.linksCell {
   padding: 0.5rem;
   font-family: var(--font-roboto-mono);
   font-size: 0.7rem;
@@ -74,24 +90,16 @@
   text-decoration: none;
 }
 
-.radarCell {
+/* Bottom 61.8%: pulsar map */
+.pulsarCell {
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  padding: 0.25rem;
 }
 
-.radarLogo {
-  max-width: 70%;
-  height: auto;
+.pulsarImage {
+  width: 100%;
+  height: 100%;
   object-fit: contain;
-}
-
-/* Bottom 61.8%: chess board */
-.chessCell {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
 }

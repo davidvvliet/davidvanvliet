@@ -4,7 +4,6 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Navbar from './Navbar';
-import ChessBoard from './ChessBoard';
 import styles from './MobilePage.module.css';
 
 const Globe = dynamic(() => import('./Globe').then(mod => mod.ThreeJSGlobeWithDots), {
@@ -45,8 +44,17 @@ export default function MobilePage() {
           {/* Right 38.2%: linksContainer top (38.2%) | chess bottom (61.8%) */}
           <div className={styles.rightCell}>
 
-            {/* Top 38.2%: links left (38.2%) | radar right (61.8%) */}
+            {/* Top 38.2%: orbital left (38.2%) | links right (61.8%) */}
             <div className={styles.linksContainer}>
+              <div className={styles.orbitalCell}>
+                <Image
+                  src="/orbital-2-1-0.png"
+                  alt="Orbital"
+                  width={200}
+                  height={200}
+                  className={styles.orbitalImage}
+                />
+              </div>
               <div className={styles.linksCell}>
                 <a href="https://github.com/davidvvliet" target="_blank" rel="noopener noreferrer" className={styles.link}>
                   github
@@ -55,22 +63,17 @@ export default function MobilePage() {
                   linkedin
                 </a>
               </div>
-              <div className={styles.radarCell}>
-                <a href="https://tryradar.ai" target="_blank" rel="noopener noreferrer">
-                  <Image
-                    src="/radar-full-logo.png"
-                    alt="Radar Logo"
-                    width={60}
-                    height={60}
-                    className={styles.radarLogo}
-                  />
-                </a>
-              </div>
             </div>
 
-            {/* Bottom 61.8%: chess board */}
-            <div className={styles.chessCell}>
-              <ChessBoard />
+            {/* Bottom 61.8%: pulsar map */}
+            <div className={styles.pulsarCell}>
+              <Image
+                src="/pulsar_mobile_0a0a0a.png"
+                alt="Pulsar Map"
+                width={600}
+                height={600}
+                className={styles.pulsarImage}
+              />
             </div>
 
           </div>
