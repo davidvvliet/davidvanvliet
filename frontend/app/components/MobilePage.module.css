@@ -1,0 +1,75 @@
+.container {
+  width: 100vw;
+  height: calc(100vh - 80px);
+  display: grid;
+  grid-template-rows: 61.8% 38.2%;
+  background-color: #0a0a0a;
+  overflow: hidden;
+}
+
+/* Top: Globe */
+.globeCell {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Bottom: bio left | links+radar right */
+.bottomCell {
+  display: grid;
+  grid-template-columns: 61.8% 38.2%;
+}
+
+.bioCell {
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 1rem;
+  font-family: var(--font-roboto-mono);
+  font-size: 0.75rem;
+  color: #ededed;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.descriptionLink {
+  color: #00ff00;
+}
+
+/* Right: links top (61.8%) | radar bottom (38.2%) */
+.rightCell {
+  display: grid;
+  grid-template-rows: 61.8% 38.2%;
+}
+
+.linksCell {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 1rem;
+  font-family: var(--font-roboto-mono);
+  font-size: 0.75rem;
+  color: #00ff00;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.link {
+  color: #00ff00;
+  text-decoration: none;
+}
+
+.radarCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.radarLogo {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
