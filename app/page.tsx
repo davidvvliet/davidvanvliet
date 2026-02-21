@@ -50,7 +50,7 @@ export default function GridPage() {
       <div className={styles.rightCell}>
         <div className={styles.cell3}>
           <div>
-            Based in Palo Alto, building <a href="https://theradarcorp.com" target="_blank" rel="noopener noreferrer" className={styles.descriptionLink}>Radar Corp</a>
+            Based in Palo Alto, building <a href="https://theradarcorp.com" target="_blank" rel="noopener noreferrer" className={styles.descriptionLink}>Radar Corp.</a>
             <br />
             We make products for private and public market investors to facilitate optimal capital flow.
           </div>
