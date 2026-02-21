@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "dev": "next dev --webpack",
+    "build": "next build",
     "start": "next start"
   },
   "dependencies": {
@@ -26,6 +26,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/three": "^0.180.0",
+    "baseline-browser-mapping": "^2.10.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

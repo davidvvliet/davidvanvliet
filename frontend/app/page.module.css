@@ -1,37 +1,13 @@
 .gridContainer {
-  min-height: 100vh;
-  width: 100%;
   display: grid;
   grid-template-columns: 61.8% 38.2%;
-  grid-template-rows: 120px 1fr;
+  grid-template-rows: 1fr;
   gap: 0;
   background-color: #0a0a0a;
+  width: 100vw;
+  height: calc(100vh - 80px);
 }
 
-.cell1 {
-  grid-column: 1 / -1;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 1rem;
-}
-
-.navbarTitle {
-  font-family: var(--font-roboto-mono);
-  font-size: 1.5rem;
-  letter-spacing: -0.025em;
-  margin: 0;
-}
-
-.navbarSubtitle {
-  font-family: var(--font-roboto-mono);
-  font-size: 0.875rem;
-  color: #ededed;
-  margin: 0;
-}
 
 .cell2 {
   border-right: 1px solid rgba(255, 255, 255, 0.3);
@@ -175,45 +151,46 @@
 }
 
 
-/* Mobile: Stack all grids vertically */
+/* Mobile: flip to portrait golden rectangle (top/bottom rows) */
 @media (max-width: 768px) {
   .gridContainer {
     grid-template-columns: 1fr;
-    grid-template-rows: auto;
+    grid-template-rows: 61.8% 38.2%;
   }
 
   .cell2 {
-    grid-column: 1;
     border-right: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   }
 
   .rightCell {
-    grid-column: 1;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
+    grid-template-rows: 1fr;
+    grid-template-columns: 61.8% 38.2%;
   }
 
   .cell3 {
-    grid-row: auto;
+    border-right: 1px solid rgba(255, 255, 255, 0.3);
+    overflow-y: auto;
   }
 
   .linksSection {
     grid-template-columns: 1fr;
-    grid-template-rows: auto;
+    grid-template-rows: 61.8% 38.2%;
+    border-top: none;
   }
 
   .linksContainer {
-    grid-column: 1;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
     border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    grid-template-rows: 1fr;
+    grid-template-columns: 61.8% 38.2%;
   }
 
   .linksTop {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
     border-bottom: none;
+    border-right: 1px solid rgba(255, 255, 255, 0.3);
+    grid-template-columns: 1fr;
+    grid-template-rows: 61.8% 38.2%;
   }
 
   .cell6 {
@@ -222,22 +199,7 @@
   }
 
   .linksTopRight {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-  }
-
-  .cell7 {
-    border-bottom: none;
-  }
-
-  .linksTopRightBottom {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-  }
-
-  .cell8 {
-    border-right: none;
-    border-bottom: none;
+    grid-template-rows: 61.8% 38.2%;
   }
 
   .pulsarMap {
@@ -250,6 +212,10 @@
 
   .cell4 {
     display: none;
+  }
+
+  .cell5 {
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
   }
 }
 

@@ -1,0 +1,26 @@
+.navbar {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 80px;
+  padding: 0 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  background-color: #0a0a0a;
+}
+
+.navbarTitle {
+  font-family: var(--font-roboto-mono);
+  font-size: 1.5rem;
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+
+.navbarSubtitle {
+  font-family: var(--font-roboto-mono);
+  font-size: 0.875rem;
+  color: #ededed;
+  margin: 0;
+}

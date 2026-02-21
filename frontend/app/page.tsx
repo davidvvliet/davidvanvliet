@@ -1,12 +1,13 @@
 "use client";
 
 import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import ChessBoard from '@/components/ChessBoard';
+import ChessBoard from './components/ChessBoard';
+import Navbar from './components/Navbar';
 import styles from './page.module.css';
 
-const Globe = dynamic(() => import('@/components/Globe').then(mod => mod.ThreeJSGlobeWithDots), {
+const Globe = dynamic(() => import('./components/Globe').then(mod => mod.ThreeJSGlobeWithDots), {
   ssr: false,
 });
 
@@ -31,17 +32,9 @@ export default function GridPage() {
     { id: 4, lat: 37.4419, lon: -122.1430, color: '#00ff00', size: 4 },
   ];
   return (
-    <div className={styles.gridContainer}>
-      {/* Thin navbar - full width */}
-      <div className={styles.cell1}>
-        <h1 className={styles.navbarTitle}>
-          David
-        </h1>
-        <p className={styles.navbarSubtitle}>
-          21; Palo Alto, CA; david@marketradar.co
-        </p>
-      </div>
-      
+    <>
+      <Navbar />
+      <div className={styles.gridContainer}>
       {/* Two identical cells - each half width */}
       <div className={styles.cell2}>
           <Globe size={isMobile ? 300 : 500} dots={dots} onDotClick={setSelectedDot} dotSizeMultiplier={0.3} />
@@ -114,6 +107,7 @@ export default function GridPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

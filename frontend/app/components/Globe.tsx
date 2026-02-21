@@ -210,7 +210,7 @@ export function ThreeJSGlobeWithDots({
 
     // Create latitude and longitude lines
     const createLatitudeLines = () => {
-      const latitudes = [];
+      const latitudes: THREE.Line[] = [];
       for (let i = -80; i <= 80; i += 20) {
         const phi = (90 - i) * (Math.PI / 180);
         const radius = Math.sin(phi) * globeRadius;
@@ -238,7 +238,7 @@ export function ThreeJSGlobeWithDots({
     };
 
     const createLongitudeLines = () => {
-      const longitudes = [];
+      const longitudes: THREE.Line[] = [];
       for (let i = 0; i < 180; i += 20) {
         const curve = new THREE.EllipseCurve(0, 0, globeRadius, globeRadius, 0, Math.PI, false, 0);
         const points = curve.getPoints(32);
