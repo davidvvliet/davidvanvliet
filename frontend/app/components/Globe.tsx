@@ -46,12 +46,10 @@ const lonLatToVector3 = (lon: number, lat: number, radius: number) => {
 };
 
 const drawGeoJsonContoursAndFill = (
-  geoJson: any, 
-  group: THREE.Group, 
-  radius: number, 
-  outlineColor = "#fff", 
-  fillColor = "#888",
-  fillOpacity = 0.22,
+  geoJson: any,
+  group: THREE.Group,
+  radius: number,
+  outlineColor = "#fff",
   outlineOpacity = 0.85
 ) => {
   geoJson.features.forEach((feature: any) => {
@@ -62,7 +60,7 @@ const drawGeoJsonContoursAndFill = (
       : geometry.coordinates;
 
     coordsList.forEach((polygon: any) => {
-      polygon.forEach((ring: any, ringIndex: number) => {
+      polygon.forEach((ring: any) => {
         if (ring.length < 3) return;
         const vec3Points = ring.map(([lon, lat]: [number, number]) =>
           lonLatToVector3(lon, lat, radius)
@@ -77,38 +75,6 @@ const drawGeoJsonContoursAndFill = (
           })
         );
         group.add(line);
-
-        if (ringIndex === 0) {
-          const shape2d = new THREE.Shape(
-            ring.map(([lon, lat]: [number, number]) => {
-              return new THREE.Vector2(
-                (-lon + 180) / 360 * 2 * Math.PI, // Fixed: negate longitude to match outline fix
-                (90 - lat) / 180 * Math.PI
-              );
-            })
-          );
-          const geometry2d = new THREE.ShapeGeometry(shape2d);
-          const positionArray = geometry2d.attributes.position.array as Float32Array;
-          for (let index = 0; index < positionArray.length; index += 3) {
-            const lambda = positionArray[index];
-            const phi = positionArray[index + 1];
-            const r = radius - 0.01;
-            positionArray[index]     = r * Math.sin(phi) * Math.cos(lambda);
-            positionArray[index + 1] = r * Math.cos(phi);
-            positionArray[index + 2] = r * Math.sin(phi) * Math.sin(lambda);
-          }
-          const mesh = new THREE.Mesh(
-            geometry2d,
-            new THREE.MeshBasicMaterial({
-              color: fillColor,
-              transparent: true,
-              opacity: fillOpacity,
-              depthWrite: false,
-              side: THREE.DoubleSide,
-            })
-          );
-          group.add(mesh);
-        }
       });
     });
   });
@@ -171,7 +137,7 @@ export function ThreeJSGlobeWithDots({
       antialias: true, 
       alpha: true 
     });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(size, size);
     renderer.setClearColor(new THREE.Color(0x000000), 0);
     renderer.domElement.style.display = 'block';
@@ -262,7 +228,7 @@ export function ThreeJSGlobeWithDots({
     loadGeoJsonData()
       .then((geoJson) => {
         if (geoJson && sceneRef.current && globeGroup.parent) {
-          drawGeoJsonContoursAndFill(geoJson, globeGroup, globeRadius + 0.002, "#ffffff", "#0a0a0a", 0.9, 0.85);
+          drawGeoJsonContoursAndFill(geoJson, globeGroup, globeRadius + 0.002, "#ffffff", 0.85);
         }
       });
 
@@ -323,11 +289,15 @@ export function ThreeJSGlobeWithDots({
     renderer.domElement.addEventListener('click', onMouseClick);
 
     // Animation loop
+    let lastTime = performance.now();
     const animate = () => {
       animationIdRef.current = requestAnimationFrame(animate);
+      const now = performance.now();
+      const delta = (now - lastTime) / 1000; // seconds
+      lastTime = now;
       controls.update();
       if (globeRef.current && autoRotateRef.current) {
-        globeRef.current.rotation.y += speed;
+        globeRef.current.rotation.y += speed * delta * 60;
       }
       renderer.render(scene, camera);
     };
