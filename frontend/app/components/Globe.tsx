@@ -171,8 +171,8 @@ export function ThreeJSGlobeWithDots({
       antialias: true, 
       alpha: true 
     });
-    renderer.setSize(size, size);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(size, size);
     renderer.setClearColor(new THREE.Color(0x000000), 0);
     renderer.domElement.style.display = 'block';
     renderer.domElement.style.outline = 'none';
