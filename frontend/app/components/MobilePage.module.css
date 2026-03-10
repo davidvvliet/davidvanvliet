@@ -20,6 +20,7 @@
 .bottomCell {
   display: grid;
   grid-template-columns: 61.8% 38.2%;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   overflow: hidden;
 }
 
