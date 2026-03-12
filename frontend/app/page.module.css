@@ -69,6 +69,7 @@
   flex-direction: column;
   gap: 0.5rem;
   border-right: 1px solid rgba(255, 255, 255, 0.3);
+  justify-content: center;
 }
 
 .linksTopRight {

@@ -67,6 +67,9 @@ export default function GridPage() {
                 <a href="https://www.linkedin.com/in/davidvvliet/" target="_blank" rel="noopener noreferrer" className={styles.link}>
                   linkedin
                 </a>
+                <a href="https://x.com/deepfieldnorth" target="_blank" rel="noopener noreferrer" className={styles.link}>
+                  X
+                </a>
               </div>
               <div className={styles.linksTopRight}>
                 <div className={styles.cell7}>
