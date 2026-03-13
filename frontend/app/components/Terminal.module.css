@@ -1,0 +1,68 @@
+.terminal {
+  font-family: var(--font-roboto-mono);
+  font-size: 0.875rem;
+  color: #00ff00;
+  cursor: text;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.line {
+  display: flex;
+  gap: 0.4rem;
+  word-break: break-all;
+}
+
+.prompt {
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.inputRow {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputText {
+  white-space: pre;
+}
+
+.caret {
+  width: 8px;
+  height: 1em;
+  background: #00ff00;
+  display: inline-block;
+  animation: blink 1s step-start infinite;
+  flex-shrink: 0;
+}
+
+.hiddenInput {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-roboto-mono);
+  font-size: 0.875rem;
+  pointer-events: none;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}

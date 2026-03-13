@@ -6,6 +6,7 @@ import Image from 'next/image';
 import ChessBoard from './components/ChessBoard';
 import Navbar from './components/Navbar';
 import MobilePage from './components/MobilePage';
+import Terminal from './components/Terminal';
 import styles from './page.module.css';
 
 const Globe = dynamic(() => import('./components/Globe').then(mod => mod.ThreeJSGlobeWithDots), {
@@ -51,11 +52,7 @@ export default function GridPage() {
             <br /><br />
             We make products for private and public market investors to facilitate optimal capital flow.
           </div>
-          <br />
-          <br />
-          <div>
-            
-          </div>
+          <Terminal />
         </div>
         <div className={styles.linksSection}>
           <div className={styles.linksContainer}>
