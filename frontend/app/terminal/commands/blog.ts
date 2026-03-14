@@ -12,6 +12,8 @@ const blog: Command = {
       if (posts.length === 0) return ["No blog posts yet."];
       const maxTitle = Math.max(...posts.map((p) => p.title.length));
       return [
+        "Usage: blog <name>",
+        "",
         "Blog posts:",
         ...posts.map((p) => `  ${p.title.padEnd(maxTitle)}    ${p.date}`),
       ];
