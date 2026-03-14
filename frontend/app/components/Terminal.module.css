@@ -42,7 +42,7 @@
 .line {
   display: flex;
   gap: 0.4rem;
-  word-break: break-all;
+  overflow-wrap: break-word;
   white-space: pre-wrap;
 }
 
