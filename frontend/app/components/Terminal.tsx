@@ -60,7 +60,14 @@ export default function Terminal() {
     <div className={styles.terminal} onClick={() => inputRef.current?.focus()}>
       {lines.map((line, i) => (
         <div key={i} className={`${styles.line} ${line.type === "output" ? styles.output : ""}`}>
-          {line.text}
+          {line.type === "input" && line.text.startsWith(">") ? (
+            <>
+              <span className={styles.prompt}>&gt;</span>
+              {line.text.slice(1)}
+            </>
+          ) : (
+            line.text
+          )}
         </div>
       ))}
       <div className={styles.inputRow}>
