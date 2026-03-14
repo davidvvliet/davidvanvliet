@@ -63,7 +63,7 @@ export default function Terminal() {
           {line.type === "input" && line.text.startsWith(">") ? (
             <>
               <span className={styles.prompt}>&gt;</span>
-              {line.text.slice(1)}
+              {line.text.slice(2)}
             </>
           ) : (
             line.text
