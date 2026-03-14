@@ -17,6 +17,10 @@
   word-break: break-all;
 }
 
+.output {
+  color: #00ff00;
+}
+
 .prompt {
   flex-shrink: 0;
   user-select: none;

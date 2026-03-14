@@ -4,8 +4,10 @@ import { useState, useRef, useEffect, KeyboardEvent } from "react";
 import styles from "./Terminal.module.css";
 import { getCommand } from "../terminal";
 
+type Line = { text: string; type: "input" | "output" };
+
 export default function Terminal() {
-  const [lines, setLines] = useState<string[]>([]);
+  const [lines, setLines] = useState<Line[]>([]);
   const [input, setInput] = useState("");
   const [cursorPos, setCursorPos] = useState(0);
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -24,7 +26,7 @@ export default function Terminal() {
     if (e.key === "Enter") {
       const trimmed = input.trim();
       if (!trimmed) {
-        setLines((prev) => [...prev, ">"]);
+        setLines((prev) => [...prev, { text: ">", type: "input" }]);
         setInput("");
         setCursorPos(0);
         return;
@@ -40,7 +42,11 @@ export default function Terminal() {
       if (output.includes("__CLEAR__")) {
         setLines([]);
       } else {
-        setLines((prev) => [...prev, `> ${trimmed}`, ...output]);
+        setLines((prev) => [
+          ...prev,
+          { text: `> ${trimmed}`, type: "input" },
+          ...output.map((text) => ({ text, type: "output" as const })),
+        ]);
       }
       setInput("");
       setCursorPos(0);
@@ -53,8 +59,8 @@ export default function Terminal() {
   return (
     <div className={styles.terminal} onClick={() => inputRef.current?.focus()}>
       {lines.map((line, i) => (
-        <div key={i} className={styles.line}>
-          {line}
+        <div key={i} className={`${styles.line} ${line.type === "output" ? styles.output : ""}`}>
+          {line.text}
         </div>
       ))}
       <div className={styles.inputRow}>
