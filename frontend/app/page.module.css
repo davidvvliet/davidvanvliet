@@ -28,7 +28,6 @@
 }
 
 .cell3 {
-  padding: 2rem;
   font-family: var(--font-roboto-mono);
   font-size: 0.875rem;
   color: #ededed;
@@ -36,8 +35,7 @@
   text-align: left;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  overflow-y: auto;
+  min-height: 0;
   min-height: 0;
 }
 
