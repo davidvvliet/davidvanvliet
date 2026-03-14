@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     images: ["/og-image.png"],
   },
   icons: {
-    icon: "/voyager1large.png",
+    icon: "/voyager1plate.png",
   },
   robots: {
     index: true,
