@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, KeyboardEvent } from "react";
 import styles from "./Terminal.module.css";
+import { getCommand } from "../terminal";
 
 export default function Terminal() {
   const [lines, setLines] = useState<string[]>([]);
@@ -21,7 +22,22 @@ export default function Terminal() {
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      setLines((prev) => [...prev, input]);
+      const trimmed = input.trim();
+      if (!trimmed) {
+        setLines((prev) => [...prev, ">"]);
+        setInput("");
+        setCursorPos(0);
+        return;
+      }
+
+      const [name, ...args] = trimmed.split(" ");
+      const command = getCommand(name.toLowerCase());
+
+      const output = command
+        ? command.execute(args)
+        : [`Unknown command: ${name}. Type "help" for available commands.`];
+
+      setLines((prev) => [...prev, `> ${trimmed}`, ...output]);
       setInput("");
       setCursorPos(0);
     }
@@ -34,7 +50,7 @@ export default function Terminal() {
     <div className={styles.terminal} onClick={() => inputRef.current?.focus()}>
       {lines.map((line, i) => (
         <div key={i} className={styles.line}>
-          <span className={styles.prompt}>&gt;</span> {line}
+          {line}
         </div>
       ))}
       <div className={styles.inputRow}>
