@@ -13,7 +13,7 @@ export default function AsciiResume() {
       <div className={styles.spacer} />
       <div className={styles.row}>
         <span>RICE UNIVERSITY (2022-2025)</span>
-        <span>Houston, TX</span>
+        <span>Houston, Texas</span>
       </div>
       <div className={styles.row}>
         <span>Major in Computer Science (BA); Minor in Statistics</span>
