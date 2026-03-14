@@ -58,18 +58,26 @@ export default function Terminal() {
 
   return (
     <div className={styles.terminal} onClick={() => inputRef.current?.focus()}>
-      {lines.map((line, i) => (
-        <div key={i} className={`${styles.line} ${line.type === "output" ? styles.output : ""}`}>
-          {line.type === "input" && line.text.startsWith(">") ? (
-            <>
-              <span className={styles.prompt}>&gt;</span>
-              {line.text.slice(2)}
-            </>
-          ) : (
-            line.text
-          )}
-        </div>
-      ))}
+      {lines.map((line, i) =>
+        line.type === "output" && line.text.startsWith("__IMG__") ? (
+          <div key={i} className={styles.imageRow}>
+            {line.text.slice(7).split(",").map((src, j) => (
+              <img key={j} src={src} alt="" className={styles.poster} />
+            ))}
+          </div>
+        ) : (
+          <div key={i} className={`${styles.line} ${line.type === "output" ? styles.output : ""}`}>
+            {line.type === "input" && line.text.startsWith(">") ? (
+              <>
+                <span className={styles.prompt}>&gt;</span>
+                {line.text.slice(2)}
+              </>
+            ) : (
+              line.text
+            )}
+          </div>
+        )
+      )}
       <div className={styles.inputRow}>
         <span className={styles.prompt}>&gt;</span>
         <div className={styles.inputWrapper}>

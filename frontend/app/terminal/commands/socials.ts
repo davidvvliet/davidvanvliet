@@ -9,7 +9,7 @@ const links: Record<string, string> = {
 
 const socials: Command = {
   name: "socials",
-  description: "Open a social link (github, linkedin, X)",
+  description: "Open my socials (github, linkedin, X)",
   execute: (args) => {
     const input = args[0]?.toLowerCase();
 
