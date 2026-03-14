@@ -8,6 +8,7 @@ import Navbar from './components/Navbar';
 import MobilePage from './components/MobilePage';
 import Terminal from './components/Terminal';
 import AsciiResume from './components/AsciiResume';
+import BlogPost from './components/BlogPost';
 import styles from './page.module.css';
 import { usePageStore } from './store/pageStore';
 
@@ -47,6 +48,8 @@ export default function GridPage() {
       <div className={styles.cell2}>
           {leftPanel === "resume" ? (
             <AsciiResume />
+          ) : leftPanel === "blog" ? (
+            <BlogPost />
           ) : (
             <Globe size={isMobile ? 300 : 500} dots={dots} onDotClick={setSelectedDot} dotSizeMultiplier={0.3} />
           )}

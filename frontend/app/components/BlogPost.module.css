@@ -1,0 +1,39 @@
+.blog {
+  font-family: var(--font-roboto-mono);
+  font-size: 0.75rem;
+  color: #00ff00;
+  overflow: auto;
+  width: 100%;
+  height: 100%;
+  padding: 1rem 1rem 3rem 1rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.blog::-webkit-scrollbar {
+  width: 6px;
+}
+
+.blog::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.blog::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.title {
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.date {
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 1rem;
+}
+
+.content {
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
