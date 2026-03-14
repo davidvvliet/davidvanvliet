@@ -40,7 +40,7 @@ export default function AsciiResume() {
       <div className={styles.subSeparator}>──────────────────────────────────────────────────────────────────</div>
       <div className={styles.text}>• Founded Radar to build information platforms that facilitate optimal capital flow for VC and PE firms.</div>
       <div className={styles.text}>• Radar offers rich data on millions of companies, a cutting edge agentic search method, and agentic monitoring of company data and news.</div>
-      <div className={styles.text}>• Developed Radar through various pilots and am now deploying the product at enterprise scale.</div>
+      <div className={styles.text}>• Single-handedly developed Radar through various pilots to make it a competitive, SOTA solution in its market, and am now deploying the product at enterprise scale.</div>
 
       <div className={styles.spacer} />
       <div className={styles.row}>
