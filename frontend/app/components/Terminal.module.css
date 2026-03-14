@@ -39,12 +39,14 @@
 }
 
 .caret {
-  width: 8px;
   height: 1em;
   background: #00ff00;
+  color: #0a0a0a;
   display: inline-block;
   animation: blink 1s step-start infinite;
   flex-shrink: 0;
+  white-space: pre;
+  line-height: 1em;
 }
 
 .hiddenInput {
@@ -63,6 +65,6 @@
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+  0%, 100% { background: #00ff00; color: #0a0a0a; }
+  50% { background: transparent; color: #00ff00; }
 }
