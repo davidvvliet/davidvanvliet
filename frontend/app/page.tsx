@@ -7,7 +7,9 @@ import ChessBoard from './components/ChessBoard';
 import Navbar from './components/Navbar';
 import MobilePage from './components/MobilePage';
 import Terminal from './components/Terminal';
+import AsciiResume from './components/AsciiResume';
 import styles from './page.module.css';
+import { usePageStore } from './store/pageStore';
 
 const Globe = dynamic(() => import('./components/Globe').then(mod => mod.ThreeJSGlobeWithDots), {
   ssr: false,
@@ -16,6 +18,7 @@ const Globe = dynamic(() => import('./components/Globe').then(mod => mod.ThreeJS
 export default function GridPage() {
   const [isMobile, setIsMobile] = useState(false);
   const [selectedDot, setSelectedDot] = useState<any>(null);
+  const leftPanel = usePageStore((s) => s.leftPanel);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -42,16 +45,15 @@ export default function GridPage() {
       <div className={styles.gridContainer}>
       {/* Two identical cells - each half width */}
       <div className={styles.cell2}>
-          <Globe size={isMobile ? 300 : 500} dots={dots} onDotClick={setSelectedDot} dotSizeMultiplier={0.3} />
+          {leftPanel === "resume" ? (
+            <AsciiResume />
+          ) : (
+            <Globe size={isMobile ? 300 : 500} dots={dots} onDotClick={setSelectedDot} dotSizeMultiplier={0.3} />
+          )}
       </div>
       
       <div className={styles.rightCell}>
         <div className={styles.cell3}>
-          <div>
-            Based in Palo Alto, building <a href="https://theradarcorp.com" target="_blank" rel="noopener noreferrer" className={styles.descriptionLink}>Radar Corp.</a>
-            <br /><br />
-            We make products for private and public market investors to facilitate optimal capital flow.
-          </div>
           <Terminal />
         </div>
         <div className={styles.linksSection}>

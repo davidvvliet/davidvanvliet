@@ -1,0 +1,55 @@
+.resume {
+  font-family: var(--font-roboto-mono);
+  font-size: 0.75rem;
+  color: #00ff00;
+  overflow: auto;
+  width: 100%;
+  height: 100%;
+  padding: 1rem 1rem 2rem 1rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.resume::-webkit-scrollbar {
+  width: 6px;
+}
+
+.resume::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.resume::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.inner {
+  display: grid;
+  width: min-content;
+}
+
+.separator {
+  white-space: nowrap;
+}
+
+.subSeparator {
+  white-space: nowrap;
+}
+
+.sectionTitle {
+  padding: 0.25rem 0;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.text {
+  line-height: 1.6;
+}
+
+.spacer {
+  height: 0.75rem;
+}
