@@ -37,7 +37,11 @@ export default function Terminal() {
         ? command.execute(args)
         : [`Unknown command: ${name}. Type "help" for available commands.`];
 
-      setLines((prev) => [...prev, `> ${trimmed}`, ...output]);
+      if (output.includes("__CLEAR__")) {
+        setLines([]);
+      } else {
+        setLines((prev) => [...prev, `> ${trimmed}`, ...output]);
+      }
       setInput("");
       setCursorPos(0);
     }
