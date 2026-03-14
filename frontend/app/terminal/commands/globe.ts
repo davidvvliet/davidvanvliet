@@ -4,7 +4,7 @@ import { usePageStore } from "../../store/pageStore";
 
 const globe: Command = {
   name: "globe",
-  description: "Show the globe",
+  description: "Open globe",
   execute: () => {
     usePageStore.getState().setLeftPanel("");
     return [];

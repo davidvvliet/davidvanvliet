@@ -4,7 +4,7 @@ import { usePageStore } from "../../store/pageStore";
 
 const resume: Command = {
   name: "resume",
-  description: "Show resume",
+  description: "Open my resume",
   execute: () => {
     usePageStore.getState().setLeftPanel("resume");
     return ["Loading resume..."];

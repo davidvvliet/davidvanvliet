@@ -5,7 +5,7 @@ import { usePageStore } from "../../store/pageStore";
 
 const blog: Command = {
   name: "blog",
-  description: "List or open a blog post",
+  description: "List or open blog posts",
   execute: (args) => {
     if (!args[0]) {
       const posts = getAllPosts();
