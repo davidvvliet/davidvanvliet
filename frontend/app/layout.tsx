@@ -10,7 +10,7 @@ const robotoMono = Roboto_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://davidvvliet.com"),
+  metadataBase: new URL("https://www.davidvvliet.com"),
   title: {
     default: "David van Vliet",
     template: "%s | David van Vliet",
@@ -25,18 +25,18 @@ export const metadata: Metadata = {
     "davidv.nl",
     "davidvvliet.com",
   ],
-  authors: [{ name: "David van Vliet", url: "https://davidvvliet.com" }],
+  authors: [{ name: "David van Vliet", url: "https://www.davidvvliet.com" }],
   creator: "David van Vliet",
   alternates: {
-    canonical: "https://davidvvliet.com",
+    canonical: "https://www.davidvvliet.com",
     languages: {
-      "en-US": "https://davidvvliet.com",
+      "en-US": "https://www.davidvvliet.com",
       "nl-NL": "https://davidv.nl",
     },
   },
   openGraph: {
     type: "website",
-    url: "https://davidvvliet.com",
+    url: "https://www.davidvvliet.com",
     title: "David van Vliet",
     description:
       "David van Vliet, founder based in Palo Alto, California. Building Radar Corp, products for private and public market investors.",
@@ -77,7 +77,7 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "David van Vliet",
-  url: "https://davidvvliet.com",
+  url: "https://www.davidvvliet.com",
   sameAs: [
     "https://davidv.nl",
     "https://github.com/davidvvliet",
