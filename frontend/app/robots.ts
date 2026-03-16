@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: "https://davidvvliet.com/sitemap.xml",
-    host: "https://davidvvliet.com",
+    sitemap: "https://www.davidvvliet.com/sitemap.xml",
+    host: "https://www.davidvvliet.com",
   };
 }
