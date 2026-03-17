@@ -69,6 +69,9 @@ export default function MobilePage() {
                 <a href="https://www.linkedin.com/in/davidvvliet/" target="_blank" rel="noopener noreferrer" className={styles.link}>
                   linkedin
                 </a>
+                <a href="https://x.com/deepfieldnorth" target="_blank" rel="noopener noreferrer" className={styles.link}>
+                  X
+                </a>
               </div>
             </div>
 

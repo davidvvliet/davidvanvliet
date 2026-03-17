@@ -65,6 +65,11 @@ export default function Terminal() {
               <img key={j} src={src} alt="" className={styles.poster} />
             ))}
           </div>
+        ) : line.type === "output" && line.text.startsWith("__COL__") ? (
+          <div key={i} className={styles.colRow}>
+            <span className={`${styles.colLeft} ${styles.output}`}>{line.text.split("__COL__")[1]}</span>
+            <span className={styles.dim}>{line.text.split("__COL__")[2]}</span>
+          </div>
         ) : (
           <div key={i} className={`${styles.line} ${line.type === "output" ? styles.output : ""}`}>
             {line.type === "input" && line.text.startsWith(">") ? (

@@ -74,6 +74,16 @@
   color: rgba(255, 255, 255, 0.4);
 }
 
+.colRow {
+  display: flex;
+  gap: 1rem;
+}
+
+.colLeft {
+  min-width: 6rem;
+  flex-shrink: 0;
+}
+
 .prompt {
   color: white;
   flex-shrink: 0;
