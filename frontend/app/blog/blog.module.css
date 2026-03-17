@@ -1,0 +1,60 @@
+.page {
+  background: #0a0a0a;
+  min-height: 100vh;
+  padding: 2rem;
+  font-family: var(--font-roboto-mono);
+  font-size: 0.75rem;
+  color: #00ff00;
+}
+
+.back {
+  color: rgba(255, 255, 255, 0.4);
+  text-decoration: none;
+  display: block;
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.date {
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 1.5rem;
+}
+
+.content {
+  line-height: 1.6;
+  white-space: pre-wrap;
+  margin: 0;
+  max-width: 150ch;
+}
+
+
+.postLink {
+  display: block;
+  color: #00ff00;
+  text-decoration: none;
+  margin-bottom: 0.25rem;
+  white-space: pre;
+  font-size: 0.875rem;
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 1.25rem;
+  }
+
+  .postLink {
+    white-space: pre-wrap;
+  }
+
+  .content {
+    max-width: 100%;
+  }
+}
+
+.postDate {
+  color: rgba(255, 255, 255, 0.5);
+}

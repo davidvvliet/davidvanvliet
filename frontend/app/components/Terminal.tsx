@@ -72,6 +72,16 @@ export default function Terminal() {
                 <span className={styles.prompt}>&gt;</span>
                 {line.text.slice(2)}
               </>
+            ) : line.text.includes("__GRAY__") ? (
+              <>
+                {line.text.split("__GRAY__")[0]}
+                <span className={styles.gray}>{line.text.split("__GRAY__")[1]}</span>
+              </>
+            ) : line.text.includes("__DIM__") ? (
+              <>
+                {line.text.split("__DIM__")[0]}
+                <span className={styles.dim}>{line.text.split("__DIM__")[1]}</span>
+              </>
             ) : (
               line.text
             )}

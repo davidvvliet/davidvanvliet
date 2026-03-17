@@ -12,12 +12,12 @@ export default function AsciiResume() {
 
       <div className={styles.spacer} />
       <div className={styles.row}>
-        <span>RICE UNIVERSITY (2022-2025)</span>
-        <span>Houston, Texas</span>
+        <span className={styles.bold}>RICE UNIVERSITY (2022-2025)</span>
+        <span className={styles.right}>Houston, Texas</span>
       </div>
       <div className={styles.row}>
-        <span>Major in Computer Science (BA); Minor in Statistics</span>
-        <span>May 2025 (Graduated 1 year early)</span>
+        <span className={styles.sub}>Major in Computer Science (BA); Minor in Statistics</span>
+        <span className={styles.right}>May 2025 (Graduated 1 year early)</span>
       </div>
       <div className={styles.spacer} />
       <div className={styles.text}>Coursework: Quantitative Risk Management, Stochastic Models, Market Models,</div>
@@ -30,12 +30,12 @@ export default function AsciiResume() {
 
       <div className={styles.spacer} />
       <div className={styles.row}>
-        <span>RADAR CORPORATION</span>
-        <span>San Francisco, California</span>
+        <span className={styles.bold}>RADAR CORPORATION</span>
+        <span className={styles.right}>San Francisco, California</span>
       </div>
       <div className={styles.row}>
-        <span>Founder</span>
-        <span>Jun 2025 - Present</span>
+        <span className={styles.sub}>Founder</span>
+        <span className={styles.right}>Jun 2025 - Present</span>
       </div>
       <div className={styles.subSeparator}>──────────────────────────────────────────────────────────────────</div>
       <div className={styles.text}>• Founded Radar to build information platforms that facilitate optimal capital flow for VC and PE firms.</div>
@@ -44,12 +44,12 @@ export default function AsciiResume() {
 
       <div className={styles.spacer} />
       <div className={styles.row}>
-        <span>MAIN CAPITAL PARTNERS</span>
-        <span>The Hague, The Netherlands</span>
+        <span className={styles.bold}>MAIN CAPITAL PARTNERS</span>
+        <span className={styles.right}>The Hague, The Netherlands</span>
       </div>
       <div className={styles.row}>
-        <span>Software Engineering</span>
-        <span>May 2023 - Jul 2023, May 2024 - Jul 2024</span>
+        <span className={styles.sub}>Software Engineering</span>
+        <span className={styles.right}>May 2023 - Jul 2023, May 2024 - Jul 2024</span>
       </div>
       <div className={styles.subSeparator}>──────────────────────────────────────────────────────────────────</div>
       <div className={styles.text}>• Built an application using OCR in Python that processes PDF files into a standardized format, ready to upload to a database.</div>
@@ -63,43 +63,43 @@ export default function AsciiResume() {
 
       <div className={styles.spacer} />
       <div className={styles.row}>
-        <span>INTRINSIC</span>
-        <span>Jan 2026</span>
+        <span className={styles.bold}>INTRINSIC</span>
+        <span className={styles.right}>Jan 2026</span>
       </div>
       <div className={styles.text}>• Agentic fundamental analysis through a spreadsheet workspace, where agents use verified SEC data on any publicly listed company to automate financial modeling.</div>
 
       <div className={styles.spacer} />
       <div className={styles.row}>
-        <span>PIXELPOLISH</span>
-        <span>Jun 2025</span>
+        <span className={styles.bold}>PIXELPOLISH</span>
+        <span className={styles.right}>Jun 2025</span>
       </div>
       <div className={styles.text}>• AI-powered web interface manipulation platform enabling real-time DOM editing and natural language CSS/HTML modifications via OpenAI and Claude model integrations.</div>
 
       <div className={styles.spacer} />
       <div className={styles.row}>
-        <span>DYNASTAI (3rd place Hackathon winner)</span>
-        <span>May 2025</span>
+        <span className={styles.bold}>DYNASTAI (3rd place Hackathon winner)</span>
+        <span className={styles.right}>May 2025</span>
       </div>
       <div className={styles.text}>• Adaptive reinforcement learning environment for medieval kingdom management, featuring a dynamic reward system that evolves based on agent behavior.</div>
 
       <div className={styles.spacer} />
       <div className={styles.row}>
-        <span>DYNAMIC DELTA HEDGING SIMULATION</span>
-        <span>Dec 2024</span>
+        <span className={styles.bold}>DYNAMIC DELTA HEDGING SIMULATION</span>
+        <span className={styles.right}>Dec 2024</span>
       </div>
       <div className={styles.text}>• Delta hedging strategy simulation for options on natural gas and crude oil futures using Black-Scholes, Geometric Brownian Motion simulation and payoff functions.</div>
 
       <div className={styles.spacer} />
       <div className={styles.row}>
-        <span>OPTIONS IMPLIED VOLATILITY SURFACE GENERATOR</span>
-        <span>Feb 2025</span>
+        <span className={styles.bold}>OPTIONS IMPLIED VOLATILITY SURFACE GENERATOR</span>
+        <span className={styles.right}>Feb 2025</span>
       </div>
       <div className={styles.text}>• 3D IV Surface generator that takes a stock ticker as input. Strike price on x-axis, DTE on y-axis, and IV on z-axis.</div>
 
       <div className={styles.spacer} />
       <div className={styles.row}>
-        <span>DISCORD-LIKE MESSAGING BOARD</span>
-        <span>Dec 2024</span>
+        <span className={styles.bold}>DISCORD-LIKE MESSAGING BOARD</span>
+        <span className={styles.right}>Dec 2024</span>
       </div>
       <div className={styles.text}>• Messaging board similar to Discord built in Typescript. Allows for the creation of workspaces that contain channels wherein users can post and react.</div>
 

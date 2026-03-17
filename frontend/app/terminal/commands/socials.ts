@@ -9,13 +9,14 @@ const links: Record<string, string> = {
 
 const socials: Command = {
   name: "socials",
+  aliases: ["s"],
   description: "Open my socials (github, linkedin, X)",
   execute: (args) => {
     const input = args[0]?.toLowerCase();
 
     if (!input) {
       return [
-        "Usage: socials <platform>",
+        "__DIM__Usage: socials | s <platform>",
         `Available: ${Object.keys(links).join(", ")}`,
       ];
     }

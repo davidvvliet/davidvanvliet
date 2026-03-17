@@ -4,7 +4,11 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Navbar from './Navbar';
+import Terminal from './Terminal';
+import MobileResume from './MobileResume';
+import BlogPost from './BlogPost';
 import styles from './MobilePage.module.css';
+import { usePageStore } from '../store/pageStore';
 
 const Globe = dynamic(() => import('./Globe').then(mod => mod.ThreeJSGlobeWithDots), {
   ssr: false,
@@ -18,27 +22,30 @@ const dots = [
 ];
 
 export default function MobilePage() {
+  const leftPanel = usePageStore((s) => s.leftPanel);
+
   return (
     <>
       <Navbar />
       <div className={styles.container}>
 
-        {/* Top 61.8%: Globe */}
+        {/* Top 61.8%: controlled by terminal */}
         <div className={styles.globeCell}>
-          <Globe size={320} dots={dots} onDotClick={() => {}} dotSizeMultiplier={0.3} />
+          {leftPanel === "resume" ? (
+            <MobileResume />
+          ) : leftPanel === "blog" ? (
+            <BlogPost />
+          ) : (
+            <Globe size={320} dots={dots} onDotClick={() => {}} dotSizeMultiplier={0.3} />
+          )}
         </div>
 
-        {/* Bottom 38.2%: bio | links+radar */}
+        {/* Bottom 38.2%: terminal | links+radar */}
         <div className={styles.bottomCell}>
 
-          {/* Left 61.8%: bio text */}
-          <div className={styles.bioCell}>
-            Based in Palo Alto, building{' '}
-            <a href="https://theradarcorp.com" target="_blank" rel="noopener noreferrer" className={styles.descriptionLink}>
-              Radar Corp.
-            </a>
-            <br /><br />
-            We make products for private and public market investors to facilitate optimal capital flow.
+          {/* Left 61.8%: terminal */}
+          <div className={styles.terminalCell}>
+            <Terminal />
           </div>
 
           {/* Right 38.2%: linksContainer top (38.2%) | chess bottom (61.8%) */}

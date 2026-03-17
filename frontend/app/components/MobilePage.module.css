@@ -24,22 +24,11 @@
   overflow: hidden;
 }
 
-/* Left 61.8%: bio text */
-.bioCell {
+/* Left 61.8%: terminal */
+.terminalCell {
   border-right: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 1rem;
-  font-family: var(--font-roboto-mono);
-  font-size: 0.75rem;
-  color: #ededed;
-  line-height: 1.6;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
   overflow: hidden;
-}
-
-.descriptionLink {
-  color: #00ff00;
+  min-height: 0;
 }
 
 /* Right 38.2%: linksContainer (38.2%) top | pulsar (61.8%) bottom */

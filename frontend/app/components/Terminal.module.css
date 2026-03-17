@@ -39,6 +39,22 @@
   border-radius: 0px;
 }
 
+@media (max-width: 768px) {
+  .terminal {
+    height: 100%;
+    padding: 1rem 1rem;
+  }
+
+  .imageRow {
+    flex-direction: column;
+  }
+
+  .poster {
+    height: auto;
+    width: 60%;
+  }
+}
+
 .line {
   display: flex;
   gap: 0.4rem;
@@ -48,6 +64,14 @@
 
 .output {
   color: #00ff00;
+}
+
+.dim {
+  color: rgba(0, 255, 0, 0.6);
+}
+
+.gray {
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .prompt {

@@ -5,6 +5,7 @@ import { usePageStore } from "../../store/pageStore";
 
 const blog: Command = {
   name: "blog",
+  aliases: ["b"],
   description: "List or open blog posts",
   execute: (args) => {
     if (!args[0]) {
@@ -12,10 +13,10 @@ const blog: Command = {
       if (posts.length === 0) return ["No blog posts yet."];
       const maxTitle = Math.max(...posts.map((p) => p.title.length));
       return [
-        "Usage: blog <name>",
+        "__DIM__Usage: blog | b <post>",
         "",
         "Blog posts:",
-        ...posts.map((p) => `  ${p.title.padEnd(maxTitle)}    ${p.date}`),
+        ...posts.map((p) => `  ${p.title.padEnd(maxTitle)}    __GRAY__${p.date}`),
       ];
     }
 
