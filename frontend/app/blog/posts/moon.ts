@@ -4,7 +4,7 @@ registerPost({
   slug: "moon",
   title: "Moon",
   date: "2026-02-28",
-  content: `Recently, I have placed myself in the fortunate position of not needing to remind myself of the overview effect, I am constantly living it.
+  content: `Recently, I have placed myself in the fortunate position of not needing to remind myself of the overview effect. I am constantly living it.
 
 We are on a rock.
 
