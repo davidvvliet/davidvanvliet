@@ -37,7 +37,6 @@ export default function AsciiResume() {
         <span className={styles.sub}>Founder</span>
         <span className={styles.right}>Jun 2025 - Present</span>
       </div>
-      <div className={styles.subSeparator}>──────────────────────────────────────────────────────────────────</div>
       <div className={styles.text}>• Founded Radar to build information platforms that facilitate optimal capital flow for VC and PE firms.</div>
       <div className={styles.text}>• Radar offers rich data on millions of companies, a cutting edge agentic search method, and agentic monitoring of company data and news.</div>
       <div className={styles.text}>• Single-handedly developed Radar through various pilots to make it a competitive, SOTA solution in its market, and am now deploying the product at enterprise scale.</div>
@@ -51,7 +50,6 @@ export default function AsciiResume() {
         <span className={styles.sub}>Software Engineering</span>
         <span className={styles.right}>May 2023 - Jul 2023, May 2024 - Jul 2024</span>
       </div>
-      <div className={styles.subSeparator}>──────────────────────────────────────────────────────────────────</div>
       <div className={styles.text}>• Built an application using OCR in Python that processes PDF files into a standardized format, ready to upload to a database.</div>
       <div className={styles.text}>• Built a multi-label classification model in Python that takes the text on a company{"'"}s website using Beautiful Soup and predicts its sector.</div>
       <div className={styles.text}>• Built an application using t-SNE that takes a company and returns a ranking of all companies in the database, ranked by their similarity to the input company.</div>
