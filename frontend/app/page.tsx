@@ -19,6 +19,7 @@ const Globe = dynamic(() => import('./components/Globe').then(mod => mod.ThreeJS
 export default function GridPage() {
   const [isMobile, setIsMobile] = useState(false);
   const [selectedDot, setSelectedDot] = useState<any>(null);
+  const [hoveredDot, setHoveredDot] = useState<any>(null);
   const leftPanel = usePageStore((s) => s.leftPanel);
 
   useEffect(() => {
@@ -32,10 +33,9 @@ export default function GridPage() {
   }, []);
 
   const dots = [
-    { id: 1, lat: 52.3676, lon: 4.9041, color: '#00ff00', size: 4 },
-    { id: 2, lat: 35.682839, lon: 139.759455, color: '#00ff00', size: 4 },
-    { id: 3, lat: 29.7604, lon: -95.3698, color: '#00ff00', size: 4 },
-    { id: 4, lat: 37.4419, lon: -122.1430, color: '#00ff00', size: 4 },
+    { id: 1, lat: 52.3676, lon: 4.9041, color: '#00ff00', size: 4, label: 'Amsterdam', subtitle: '2004-2022', description: 'Born here' },
+    { id: 3, lat: 29.7604, lon: -95.3698, color: '#00ff00', size: 4, label: 'Houston', subtitle: '2022-2025', description: 'Rice University' },
+    { id: 4, lat: 37.4419, lon: -122.1430, color: '#00ff00', size: 4, label: 'San Francisco', subtitle: '2025-present', description: 'Based here' },
   ];
 
   if (isMobile) return <MobilePage />;
@@ -51,7 +51,12 @@ export default function GridPage() {
           ) : leftPanel === "blog" ? (
             <BlogPost />
           ) : (
-            <Globe size={isMobile ? 300 : 500} dots={dots} onDotClick={setSelectedDot} dotSizeMultiplier={0.3} />
+            <div className={styles.globeWrapper}>
+              <div className={styles.globeLabel}>
+                {hoveredDot && <><span className={styles.globeLabelLocation}>{hoveredDot.label}</span><span className={styles.globeLabelSubtitle}>{hoveredDot.subtitle}</span><span className={styles.globeLabelDescription}>{hoveredDot.description}</span></>}
+              </div>
+              <Globe size={isMobile ? 300 : 500} dots={dots} onDotClick={setSelectedDot} onDotHover={setHoveredDot} dotSizeMultiplier={0.3} />
+            </div>
           )}
       </div>
       

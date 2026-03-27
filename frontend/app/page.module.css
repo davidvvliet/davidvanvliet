@@ -146,6 +146,36 @@
   object-fit: contain;
 }
 
+.globeWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.globeLabel {
+  min-height: 2em;
+  font-family: var(--font-roboto-mono);
+  font-size: 0.875rem;
+  text-align: center;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.globeLabelLocation {
+  color: #00ff00;
+}
+
+.globeLabelSubtitle {
+  color: rgba(0, 255, 0, 0.6);
+}
+
+.globeLabelDescription {
+  color: rgba(255, 255, 255, 0.5);
+}
+
 .cell4 {
   display: flex;
   align-items: center;

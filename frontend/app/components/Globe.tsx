@@ -13,6 +13,8 @@ interface PersonaDot {
   opacity?: number;
   persona?: any;
   info?: string;
+  label?: string;
+  description?: string;
 }
 
 interface ThreeJSGlobeWithDotsProps {
@@ -22,6 +24,7 @@ interface ThreeJSGlobeWithDotsProps {
   speed?: number;
   dots?: PersonaDot[];
   onDotClick?: (dot: PersonaDot) => void;
+  onDotHover?: (dot: PersonaDot | null) => void;
   dotSizeMultiplier?: number;
 }
 
@@ -80,13 +83,14 @@ const drawGeoJsonContoursAndFill = (
   });
 };
 
-export function ThreeJSGlobeWithDots({ 
-  className, 
-  size = 800, 
+export function ThreeJSGlobeWithDots({
+  className,
+  size = 800,
   color = "#333333",
   speed = 0.003,
   dots = [],
   onDotClick,
+  onDotHover,
   dotSizeMultiplier = 1
 }: ThreeJSGlobeWithDotsProps) {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -101,6 +105,7 @@ export function ThreeJSGlobeWithDots({
   const raycasterRef = useRef<THREE.Raycaster>(new THREE.Raycaster());
   const mouseRef = useRef<THREE.Vector2>(new THREE.Vector2());
   const initializedRef = useRef<boolean>(false);
+  const hoveredDotRef = useRef<PersonaDot | null>(null);
 
   // Memoize dots comparison to prevent unnecessary updates
   const dotsString = useMemo(() => JSON.stringify(dots), [dots]);
@@ -259,7 +264,33 @@ export function ThreeJSGlobeWithDots({
     };
 
     const onMouseMove = (event: MouseEvent) => {
-      renderer.domElement.style.cursor = autoRotateRef.current ? 'grab' : 'grabbing';
+      if (!camera || !globeGroup) return;
+
+      const rect = renderer.domElement.getBoundingClientRect();
+      const mouse = new THREE.Vector2(
+        ((event.clientX - rect.left) / rect.width) * 2 - 1,
+        -((event.clientY - rect.top) / rect.height) * 2 + 1
+      );
+
+      const raycaster = new THREE.Raycaster();
+      raycaster.setFromCamera(mouse, camera);
+
+      const intersects = raycaster.intersectObjects(dotsRef.current, false);
+
+      if (intersects.length > 0 && intersects[0].object.userData.dot) {
+        const dot = intersects[0].object.userData.dot as PersonaDot;
+        if (hoveredDotRef.current?.id !== dot.id) {
+          hoveredDotRef.current = dot;
+          onDotHover?.(dot);
+        }
+        renderer.domElement.style.cursor = 'pointer';
+      } else {
+        if (hoveredDotRef.current !== null) {
+          hoveredDotRef.current = null;
+          onDotHover?.(null);
+        }
+        renderer.domElement.style.cursor = autoRotateRef.current ? 'grab' : 'grabbing';
+      }
     };
 
     const onMouseClick = (event: MouseEvent) => {
@@ -357,9 +388,15 @@ export function ThreeJSGlobeWithDots({
       });
       const dotMesh = new THREE.Mesh(dotGeometry, dotMaterial);
       dotMesh.position.copy(position);
-      dotMesh.userData = { dot: dot };
       globeRef.current!.add(dotMesh);
-      dotsRef.current.push(dotMesh);
+
+      const hitboxGeometry = new THREE.SphereGeometry(dotSize * 4, 8, 8);
+      const hitboxMaterial = new THREE.MeshBasicMaterial({ visible: false });
+      const hitboxMesh = new THREE.Mesh(hitboxGeometry, hitboxMaterial);
+      hitboxMesh.position.copy(position);
+      hitboxMesh.userData = { dot: dot };
+      globeRef.current!.add(hitboxMesh);
+      dotsRef.current.push(hitboxMesh);
     });
   }, [dotsString, dotSizeMultiplier]); // Use stringified dots for comparison
 
@@ -373,10 +410,10 @@ export function ThreeJSGlobeWithDots({
         cursor: 'grab'
       }}
     >
-      <div 
-        ref={mountRef} 
-        style={{ 
-          width: size, 
+      <div
+        ref={mountRef}
+        style={{
+          width: size,
           height: size,
           position: 'absolute',
           top: 0,
