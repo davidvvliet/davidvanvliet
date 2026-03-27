@@ -6,9 +6,7 @@ registerPost({
   date: "2026-02-28",
   content: `Recently, I have placed myself in the fortunate position of not needing to remind myself of the overview effect. I am constantly living it.
 
-We are on a rock.
-
-Floating through space. Orbiting a massive, gaseous balancing act of gravity and explosion.
+We are on a rock, orbiting a massive, gaseous balancing act of gravity and explosion.
 
 We are neighbored by countless similar systems in every direction, collectively swirling around a core of matter that is yet incomprehensible to us.
 
