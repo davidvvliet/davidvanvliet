@@ -5,8 +5,8 @@ const responses: Record<string, { description: string; output: string[]; hidden?
     description: "About this site",
     output: [
       "This is my personal website, where you can find many of my interests displayed.", 
-      "I'm Based in Palo Alto, building Radar Corp.",
-      "We make software for private and public market investors to facilitate optimal capital flow.",
+      "I'm based in NYC, building yAI.",
+      "We build general agents that automate repetitive workflows in financial institutions.",
     ],
   },
   test: {
