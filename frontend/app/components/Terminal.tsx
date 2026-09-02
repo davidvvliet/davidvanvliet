@@ -1,10 +1,24 @@
 "use client";
 
-import { useState, useRef, useEffect, KeyboardEvent } from "react";
+import React, { useState, useRef, useEffect, KeyboardEvent } from "react";
 import styles from "./Terminal.module.css";
 import { getCommand, getAllCommands } from "../terminal";
 
 type Line = { text: string; type: "input" | "output" };
+
+// Turn bare http(s) URLs in output text into clickable links.
+const URL_RE = /(https?:\/\/[^\s]+)/g;
+function linkify(text: string): React.ReactNode {
+  const parts = text.split(URL_RE);
+  if (parts.length === 1) return text;
+  return parts.map((part, i) =>
+    /^https?:\/\//.test(part) ? (
+      <a key={i} href={part} target="_blank" rel="noopener noreferrer" className={styles.link}>{part}</a>
+    ) : (
+      part
+    )
+  );
+}
 
 export default function Terminal() {
   const [lines, setLines] = useState<Line[]>([]);
@@ -144,16 +158,16 @@ export default function Terminal() {
               </>
             ) : line.text.includes("__GRAY__") ? (
               <>
-                {line.text.split("__GRAY__")[0]}
-                <span className={styles.gray}>{line.text.split("__GRAY__")[1]}</span>
+                {linkify(line.text.split("__GRAY__")[0])}
+                <span className={styles.gray}>{linkify(line.text.split("__GRAY__")[1])}</span>
               </>
             ) : line.text.includes("__DIM__") ? (
               <>
-                {line.text.split("__DIM__")[0]}
-                <span className={styles.dim}>{line.text.split("__DIM__")[1]}</span>
+                {linkify(line.text.split("__DIM__")[0])}
+                <span className={styles.dim}>{linkify(line.text.split("__DIM__")[1])}</span>
               </>
             ) : (
-              line.text
+              linkify(line.text)
             )}
           </div>
         )

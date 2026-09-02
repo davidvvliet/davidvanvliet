@@ -43,14 +43,15 @@ const MAX_CAMERA_DISTANCE = 180;       // How far out the user can scroll
 // Body sizes and the Moon's orbit stay compressed (at true ratio Earth would
 // be 0.004 units across), and bodies are never drawn smaller than MIN_BODY_PX
 // so the outer system still reads as a system rather than empty space.
-const ORBIT_SCALE = 90;                // Earth (1 AU) orbits at this radius
+const ORBIT_SCALE = 260;               // Earth (1 AU) orbits at this radius
 const orbitRadiusForAU = (au: number) => ORBIT_SCALE * au;
 const EARTH_ORBIT_AU = 1;
 const MIN_BODY_PX = 3;                 // Minimum on-screen radius of any body, in pixels
-// A moon's enforced size is capped relative to its planet, so it can't outgrow
-// the body it orbits as you zoom out; below a pixel it is hidden.
-const MOON_MAX_PARENT_FRACTION = 1 / 3;
-const MOON_HIDE_PX = 1;
+// A body's enforced size is capped relative to its parent (moons to their
+// planet, planets to the Sun), so it can't outgrow what it orbits as you zoom
+// out; below a pixel it is hidden.
+const CHILD_MAX_PARENT_FRACTION = 1 / 3;
+const CHILD_HIDE_PX = 1;
 const MIN_CLOSE_DISTANCE = 0.5;        // Closest zoom for any body, so tiny moons stay past the near plane
 const ORBIT_RING_OPACITY = 0.12;
 
@@ -64,6 +65,7 @@ type PlanetSpec = {
   color: number;
   phaseDeg: number;        // starting position on the orbit
   solid?: boolean;         // solid sphere instead of wireframe (e.g. cloud-covered)
+  texture?: string;        // equirectangular map under /public; implies solid
 };
 
 type MoonSpec = {
@@ -88,8 +90,9 @@ const MOONS: MoonSpec[] = [
 const PLANETS: PlanetSpec[] = [
   { name: 'Mercury', au: 0.387, radiusEarths: 0.383, periodDays: 87.97, rotationDays: 58.65, inclinationDeg: 7.0, color: 0x8a847c, phaseDeg: 120 },
   // Venus rotates retrograde (negative period). Solid: it's a featureless cloud deck.
-  { name: 'Venus', au: 0.723, radiusEarths: 0.949, periodDays: 224.7, rotationDays: -243.0, inclinationDeg: 3.39, color: 0xf2ecdf, phaseDeg: 230, solid: true },
+  { name: 'Venus', au: 0.723, radiusEarths: 0.949, periodDays: 224.7, rotationDays: -243.0, inclinationDeg: 3.39, color: 0xe8dcc0, phaseDeg: 230, solid: true },
   { name: 'Mars', au: 1.524, radiusEarths: 0.532, periodDays: 686.98, rotationDays: 1.026, inclinationDeg: 1.85, color: 0xc1663f, phaseDeg: 40 },
+  { name: 'Jupiter', au: 5.203, radiusEarths: 10.97, periodDays: 4332.6, rotationDays: 0.4135, inclinationDeg: 1.30, color: 0xc9a37a, phaseDeg: 300, texture: '/jupiter.jpg' },
 ];
 // One clock for all motion, so every period keeps its real ratio.
 // Change SECONDS_PER_DAY to speed everything up or down together.
@@ -104,7 +107,7 @@ const MOON_RADIUS = EARTH_RADIUS * 0.273; // True ratio: Moon diameter is 27.3% 
 const MOON_INCLINATION_DEG = 5.14;     // Real inclination of the Moon's orbit
 const MOON_COLOR = 0x8c8c8c;           // Wireframe color, brighter than Earth's so the wires read
 
-const SUN_RADIUS = 7;                  // ~5x Earth's radius, ~20x the moon's
+const SUN_RADIUS = 20;                 // ~15x Earth's radius; bigger than Jupiter, far short of the real 109x
 const SUN_COLOR = 0xfff4e8;            // G2V: near-white, faintly warm (the yellow is atmospheric)
 const SUN_GLOW_SCALE = 3.2;            // Glow sprite size as a multiple of the sun's diameter
 
@@ -480,10 +483,22 @@ export function SolarSystem({
 
     // Other planets, from the table.
     const planetDisposables: { geometry: THREE.BufferGeometry; material: THREE.Material }[] = [];
+    const textureLoader = new THREE.TextureLoader();
+    const textures: THREE.Texture[] = [];
     for (const spec of PLANETS) {
       const radius = EARTH_RADIUS * spec.radiusEarths;
-      const geometry = new THREE.SphereGeometry(radius, 16, 16);
-      const material = new THREE.MeshBasicMaterial({ color: spec.color, wireframe: !spec.solid, transparent: true, opacity: spec.solid ? 1 : 0.8 });
+      // More segments for bigger bodies so large wireframes don't look like polygons.
+      const segments = THREE.MathUtils.clamp(Math.round(12 + radius * 2.5), 16, 48);
+      const geometry = new THREE.SphereGeometry(radius, segments, segments);
+      const solid = spec.solid || !!spec.texture;
+      const material = new THREE.MeshBasicMaterial({ color: spec.texture ? 0xffffff : spec.color, wireframe: !solid, transparent: true, opacity: solid ? 1 : 0.8 });
+      if (spec.texture) {
+        const tex = textureLoader.load(spec.texture);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        material.map = tex;
+        material.needsUpdate = true;
+        textures.push(tex);
+      }
       const mesh = new THREE.Mesh(geometry, material);
       planetDisposables.push({ geometry, material });
       const holder = new THREE.Group(); // position-only; the mesh spins inside it
@@ -756,13 +771,15 @@ export function SolarSystem({
         for (const b of bodies) {
           const px = screenPx.get(b)!;
           let targetPx = Math.max(px, MIN_BODY_PX);
-          const isMoon = b.parent !== null && b.parent !== sunBody;
-          if (isMoon) {
-            // Never larger than a fraction of the (possibly floored) parent.
+          const hasParent = b.parent !== null;
+          if (hasParent) {
+            // Inflation is capped at a fraction of the (possibly floored) parent.
+            // The cap only limits inflation; a body is never drawn below its true size
+            // (e.g. Earth up close must not shrink because the Sun is far away).
             const parentPx = Math.max(screenPx.get(b.parent!)!, MIN_BODY_PX);
-            targetPx = Math.min(targetPx, parentPx * MOON_MAX_PARENT_FRACTION);
+            targetPx = Math.max(px, Math.min(targetPx, parentPx * CHILD_MAX_PARENT_FRACTION));
           }
-          const visible = !isMoon || targetPx >= MOON_HIDE_PX;
+          const visible = !hasParent || targetPx >= CHILD_HIDE_PX;
           b.visual.visible = visible;
           b.scale = visible ? targetPx / px : 0;
           b.visual.scale.setScalar(visible ? b.scale : 1);
@@ -827,6 +844,7 @@ export function SolarSystem({
       sunMaterialRef.current = null;
       sunGlowMaterialRef.current = null;
       planetDisposables.forEach(({ geometry, material }) => { geometry.dispose(); material.dispose(); });
+      textures.forEach((t) => t.dispose());
       orbitRings.forEach((ring) => { ring.geometry.dispose(); (ring.material as THREE.Material).dispose(); });
       renderer.dispose();
       initializedRef.current = false;
