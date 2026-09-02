@@ -17,7 +17,7 @@ interface PersonaDot {
   description?: string;
 }
 
-interface ThreeJSGlobeWithDotsProps {
+interface SolarSystemProps {
   className?: string;
   size?: number;
   color?: string;
@@ -31,9 +31,9 @@ interface ThreeJSGlobeWithDotsProps {
 }
 
 // --- Scene layout ---
-// The scene is heliocentric: the Sun sits at the origin and Earth orbits it.
-// The *camera* is Earth-centric at close range (its target follows Earth) and
-// blends toward the Sun as you zoom out, so it feels geocentric until it doesn't.
+// The scene is heliocentric: the Sun sits at the origin and everything orbits
+// it. The camera follows one focused body (Earth on load); clicking another
+// body makes it the focus. Focus never changes on its own.
 const EARTH_RADIUS = 1.3;              // Base unit; everything else is relative to this
 const CAMERA_FOV = 50;
 const DEFAULT_CAMERA_DISTANCE = 4.5;   // Initial view; also the closest allowed zoom
@@ -47,6 +47,11 @@ const ORBIT_SCALE = 90;                // Earth (1 AU) orbits at this radius
 const orbitRadiusForAU = (au: number) => ORBIT_SCALE * au;
 const EARTH_ORBIT_AU = 1;
 const MIN_BODY_PX = 3;                 // Minimum on-screen radius of any body, in pixels
+// A moon's enforced size is capped relative to its planet, so it can't outgrow
+// the body it orbits as you zoom out; below a pixel it is hidden.
+const MOON_MAX_PARENT_FRACTION = 1 / 3;
+const MOON_HIDE_PX = 1;
+const MIN_CLOSE_DISTANCE = 0.5;        // Closest zoom for any body, so tiny moons stay past the near plane
 const ORBIT_RING_OPACITY = 0.12;
 
 type PlanetSpec = {
@@ -61,12 +66,30 @@ type PlanetSpec = {
   solid?: boolean;         // solid sphere instead of wireframe (e.g. cloud-covered)
 };
 
+type MoonSpec = {
+  name: string;
+  planet: string;          // name of the planet it orbits (from PLANETS)
+  orbitPlanetRadii: number;// orbit radius in radii of its planet (true ratio)
+  radiusEarths: number;    // radius relative to Earth (true ratio; tiny ones render as dots)
+  periodDays: number;
+  inclinationDeg: number;
+  color: number;
+  phaseDeg: number;
+};
+
+// Moons of the table planets (Earth's Moon is built separately). One row each.
+const MOONS: MoonSpec[] = [
+  { name: 'Phobos', planet: 'Mars', orbitPlanetRadii: 2.77, radiusEarths: 0.00174, periodDays: 0.3189, inclinationDeg: 1.08, color: 0x7a746c, phaseDeg: 0 },
+  { name: 'Deimos', planet: 'Mars', orbitPlanetRadii: 6.92, radiusEarths: 0.00097, periodDays: 1.263, inclinationDeg: 1.79, color: 0x7a746c, phaseDeg: 200 },
+];
+
 // Planets other than Earth (Earth is built separately: it has the continents,
 // the location dots and the Moon). Adding a planet = one row.
 const PLANETS: PlanetSpec[] = [
   { name: 'Mercury', au: 0.387, radiusEarths: 0.383, periodDays: 87.97, rotationDays: 58.65, inclinationDeg: 7.0, color: 0x8a847c, phaseDeg: 120 },
   // Venus rotates retrograde (negative period). Solid: it's a featureless cloud deck.
-  { name: 'Venus', au: 0.723, radiusEarths: 0.949, periodDays: 224.7, rotationDays: -243.0, inclinationDeg: 3.39, color: 0xe8dcc0, phaseDeg: 230, solid: true },
+  { name: 'Venus', au: 0.723, radiusEarths: 0.949, periodDays: 224.7, rotationDays: -243.0, inclinationDeg: 3.39, color: 0xf2ecdf, phaseDeg: 230, solid: true },
+  { name: 'Mars', au: 1.524, radiusEarths: 0.532, periodDays: 686.98, rotationDays: 1.026, inclinationDeg: 1.85, color: 0xc1663f, phaseDeg: 40 },
 ];
 // One clock for all motion, so every period keeps its real ratio.
 // Change SECONDS_PER_DAY to speed everything up or down together.
@@ -91,11 +114,14 @@ const FIT_MARGIN = 1.15;               // Extra room for perspective
 
 // Focus / picking
 const MIN_DISTANCE_RADII = DEFAULT_CAMERA_DISTANCE / EARTH_RADIUS; // closest zoom, in body radii
-const MAX_DISTANCE_FIT_FACTOR = 1.6;   // max zoom = (distance where the body's system fits) * this
-const LEAF_MAX_DISTANCE_RADII = 40;    // max zoom for bodies with no satellites
-const NAME_VISIBLE_RADII = 7.5;         // focused body's name shows only within this many radii
+// These are multiples of a body's closest zoom distance (which has a floor for
+// tiny bodies), so they stay reachable for moons a few km across.
+const NAME_VISIBLE_FACTOR = 7.5 / MIN_DISTANCE_RADII;  // ~2.2x close-up: focused body's name shows within this
+const REFOCUS_FACTOR = 20 / MIN_DISTANCE_RADII;        // ~5.8x close-up: beyond this, clicking the focused body zooms back in
 const FOCUS_TRANSITION_SECONDS = 0.9;
-const PICK_MIN_PX = 12;                // click tolerance around tiny bodies
+const PICK_MIN_PX = 12;                // click tolerance floor, in pixels
+const PICK_RADIUS_MULTIPLE = 4;        // tolerance = drawn radius * this (capped: big bodies use their outline)
+const PICK_CAP_PX = 60;                // above this drawn radius, the outline itself is the hitbox
 const DRAG_THRESHOLD_PX = 5;           // pointer movement beyond this is a drag, not a click
 
 type Body = {
@@ -163,7 +189,7 @@ const drawGeoJsonContoursAndFill = (
   });
 };
 
-export function ThreeJSGlobeWithDots({
+export function SolarSystem({
   className,
   size,
   color = "#333333",
@@ -174,7 +200,7 @@ export function ThreeJSGlobeWithDots({
   onBodyHover,
   onFocusChange,
   dotSizeMultiplier = 1
-}: ThreeJSGlobeWithDotsProps) {
+}: SolarSystemProps) {
   const mountRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
@@ -414,11 +440,11 @@ export function ThreeJSGlobeWithDots({
     type Orbiter = { object: THREE.Object3D; orbitRadius: number; periodDays: number; angle: number; spin?: THREE.Object3D; rotationDays?: number };
     const orbiters: Orbiter[] = [];
     const orbitRings: THREE.LineLoop[] = [];
-    const addOrbiter = (object: THREE.Object3D, orbitRadius: number, periodDays: number, inclinationDeg: number, phaseDeg: number, spin?: THREE.Object3D, rotationDays?: number) => {
+    const addOrbiter = (object: THREE.Object3D, orbitRadius: number, periodDays: number, inclinationDeg: number, phaseDeg: number, spin?: THREE.Object3D, rotationDays?: number, parent: THREE.Object3D = scene) => {
       const pivot = new THREE.Group();
       pivot.rotation.x = THREE.MathUtils.degToRad(inclinationDeg);
       pivot.add(object);
-      scene.add(pivot);
+      parent.add(pivot);
       // Faint orbit ring
       const ringPoints: THREE.Vector3[] = [];
       for (let i = 0; i < 128; i++) {
@@ -467,6 +493,22 @@ export function ThreeJSGlobeWithDots({
       bodies.push({ name: spec.name, object: holder, visual: mesh, radius, parent: sunBody, systemRadius: 0, scale: 1 });
       sunBody.systemRadius = Math.max(sunBody.systemRadius, orbitRadius);
     }
+
+    // Moons from the table: each orbits inside its planet's position-only
+    // holder, so it follows the planet without inheriting its spin.
+    for (const spec of MOONS) {
+      const planetBody = bodies.find((b) => b.name === spec.planet);
+      if (!planetBody) continue;
+      const radius = EARTH_RADIUS * spec.radiusEarths;
+      const geometry = new THREE.SphereGeometry(radius, 8, 8);
+      const material = new THREE.MeshBasicMaterial({ color: spec.color, transparent: true, opacity: 1 });
+      const mesh = new THREE.Mesh(geometry, material);
+      planetDisposables.push({ geometry, material });
+      const orbitRadius = planetBody.radius * spec.orbitPlanetRadii;
+      addOrbiter(mesh, orbitRadius, spec.periodDays, spec.inclinationDeg, spec.phaseDeg, undefined, undefined, planetBody.object);
+      bodies.push({ name: spec.name, object: mesh, visual: mesh, radius, parent: planetBody, systemRadius: 0, scale: 1 });
+      planetBody.systemRadius = Math.max(planetBody.systemRadius, orbitRadius);
+    }
     updateOrbiters(0);
     const earthPosition = new THREE.Vector3();
     earthSystem.getWorldPosition(earthPosition);
@@ -488,19 +530,18 @@ export function ThreeJSGlobeWithDots({
     // The root frame (the Sun) is only ever a wide view: its closest zoom is
     // where its whole system fits on screen. Other bodies allow a close-up.
     const minDistanceFor = (b: Body) =>
-      b.parent ? b.radius * MIN_DISTANCE_RADII : fitDistance(b.systemRadius + b.radius);
-    const maxDistanceFor = (b: Body) =>
-      b.systemRadius > 0
-        ? fitDistance(b.systemRadius + b.radius) * MAX_DISTANCE_FIT_FACTOR
-        : b.radius * LEAF_MAX_DISTANCE_RADII;
+      b.parent ? Math.max(b.radius * MIN_DISTANCE_RADII, MIN_CLOSE_DISTANCE) : fitDistance(b.systemRadius + b.radius);
 
     const setFocus = (next: Body, opts: { zoomTo?: boolean } = {}) => {
-      if (next === focus) return;
+      // Clicking the already-focused body only does something when the camera
+      // has drifted far enough away that flying back in is meaningful.
+      const isSame = next === focus;
+      if (isSame && camera.position.distanceTo(controls.target) < minDistanceFor(next) * REFOCUS_FACTOR) return;
       transition = {
         from: focus,
         t: 0,
         distTo: opts.zoomTo
-          ? (next.parent ? next.radius * MIN_DISTANCE_RADII * 1.5 : minDistanceFor(next) * 1.1)
+          ? (next.parent ? Math.max(next.radius * MIN_DISTANCE_RADII * 1.5, MIN_CLOSE_DISTANCE * 1.5) : minDistanceFor(next) * 1.1)
           : null,
         startOffset: camera.position.clone().sub(worldPos(focus, tmpA)),
       };
@@ -508,7 +549,7 @@ export function ThreeJSGlobeWithDots({
     };
     let reportedFocusName: string | null | undefined;
     const reportFocus = (dist: number) => {
-      const name = dist <= focus.radius * NAME_VISIBLE_RADII ? focus.name : null;
+      const name = dist <= minDistanceFor(focus) * NAME_VISIBLE_FACTOR ? focus.name : null;
       if (name !== reportedFocusName) {
         reportedFocusName = name;
         onFocusChange?.(name);
@@ -521,21 +562,27 @@ export function ThreeJSGlobeWithDots({
       const rect = renderer.domElement.getBoundingClientRect();
       const px = clientX - rect.left;
       const py = clientY - rect.top;
+      // Tolerance scales with drawn size so small bodies are forgiving and big
+      // ones are exact. When several qualify, the smallest on screen wins, so a
+      // moon can be picked while it sits inside its planet's outline.
       let best: Body | null = null;
-      let bestDist = Infinity;
+      let bestRadius = Infinity;
       for (const b of bodies) {
         worldPos(b, tmpA);
         const camDist = tmpA.distanceTo(camera.position);
         tmpB.copy(tmpA).project(camera);
         if (tmpB.z > 1) continue; // behind the camera
+        if (!b.visual.visible) continue; // hidden (e.g. a moon too small to draw)
         const sx = ((tmpB.x + 1) / 2) * rect.width;
         const sy = ((1 - tmpB.y) / 2) * rect.height;
         const screenRadius = ((b.radius * b.scale) / (camDist * Math.tan(THREE.MathUtils.degToRad(CAMERA_FOV / 2)))) * (rect.height / 2);
-        const tolerance = Math.max(screenRadius, PICK_MIN_PX);
+        const tolerance = screenRadius >= PICK_CAP_PX
+          ? screenRadius
+          : Math.max(PICK_MIN_PX, screenRadius * PICK_RADIUS_MULTIPLE);
         const d = Math.hypot(sx - px, sy - py);
-        if (d <= tolerance && d < bestDist) {
+        if (d <= tolerance && screenRadius < bestRadius) {
           best = b;
-          bestDist = d;
+          bestRadius = screenRadius;
         }
       }
       return best;
@@ -595,7 +642,8 @@ export function ThreeJSGlobeWithDots({
           onDotHover?.(null);
         }
         const body = pickBody(event.clientX, event.clientY);
-        const name = body && body !== focus ? body.name : null;
+        const farFromFocus = camera.position.distanceTo(controls.target) >= minDistanceFor(focus) * REFOCUS_FACTOR;
+        const name = body && (body !== focus || farFromFocus) ? body.name : null;
         if (hoveredBodyRef.current !== name) {
           hoveredBodyRef.current = name;
           onBodyHover?.(name);
@@ -627,7 +675,7 @@ export function ThreeJSGlobeWithDots({
       }
 
       // 2. A body: make it the reference frame and zoom to it.
-      //    Clicking empty space does nothing; zoom out (or Escape) to go up.
+      //    Clicking empty space does nothing.
       const body = pickBody(event.clientX, event.clientY);
       if (body) setFocus(body, { zoomTo: true });
     };
@@ -684,18 +732,13 @@ export function ThreeJSGlobeWithDots({
       controls.target.copy(focusPoint);
       camera.position.copy(focusPoint).add(offset);
 
-      // Per-body zoom limits. Zooming out past a moon's limit hands focus to
-      // its planet (a short hop). Planets never hand off to the Sun: the camera
-      // would have to fly across the whole orbit. Their range extends to the
-      // full system distance instead, and the Sun frame is entered by clicking it.
+      // Zoom limits. Focus never changes on its own: every body can be zoomed
+      // out to the full system view while staying centered. Only a click (or
+      // Escape) moves the frame.
       // (Limits are relaxed mid-transition so the eased distance isn't clamped.)
       const systemMax = Math.max(MAX_CAMERA_DISTANCE, minDistanceFor(sunBody) * 1.5);
-      const handsOffToParent = focus.parent !== null && focus.parent !== sunBody;
       controls.minDistance = transition ? 0.1 : minDistanceFor(focus);
-      controls.maxDistance = transition ? systemMax * 10 : (handsOffToParent ? maxDistanceFor(focus) : systemMax);
-      if (!transition && handsOffToParent && dist >= controls.maxDistance * 0.995) {
-        setFocus(focus.parent!);
-      }
+      controls.maxDistance = transition ? systemMax * 10 : systemMax;
       controls.update();
 
       reportFocus(dist);
@@ -704,12 +747,25 @@ export function ThreeJSGlobeWithDots({
       {
         const halfHeightPx = renderer.domElement.clientHeight / 2;
         const tanHalfFov = Math.tan(THREE.MathUtils.degToRad(CAMERA_FOV / 2));
+        const screenPx = new Map<Body, number>(); // true (unscaled) on-screen radius
         for (const b of bodies) {
           worldPos(b, tmpA);
           const camDist = tmpA.distanceTo(camera.position);
-          const px = (b.radius / (camDist * tanHalfFov)) * halfHeightPx;
-          b.scale = px < MIN_BODY_PX ? MIN_BODY_PX / px : 1;
-          b.visual.scale.setScalar(b.scale);
+          screenPx.set(b, (b.radius / (camDist * tanHalfFov)) * halfHeightPx);
+        }
+        for (const b of bodies) {
+          const px = screenPx.get(b)!;
+          let targetPx = Math.max(px, MIN_BODY_PX);
+          const isMoon = b.parent !== null && b.parent !== sunBody;
+          if (isMoon) {
+            // Never larger than a fraction of the (possibly floored) parent.
+            const parentPx = Math.max(screenPx.get(b.parent!)!, MIN_BODY_PX);
+            targetPx = Math.min(targetPx, parentPx * MOON_MAX_PARENT_FRACTION);
+          }
+          const visible = !isMoon || targetPx >= MOON_HIDE_PX;
+          b.visual.visible = visible;
+          b.scale = visible ? targetPx / px : 0;
+          b.visual.scale.setScalar(visible ? b.scale : 1);
         }
       }
 
@@ -839,4 +895,4 @@ export function ThreeJSGlobeWithDots({
   );
 }
 
-export default ThreeJSGlobeWithDots;
+export default SolarSystem;

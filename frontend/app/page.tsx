@@ -12,7 +12,7 @@ import BlogPost from './components/BlogPost';
 import styles from './page.module.css';
 import { usePageStore } from './store/pageStore';
 
-const Globe = dynamic(() => import('./components/Globe').then(mod => mod.ThreeJSGlobeWithDots), {
+const SolarSystem = dynamic(() => import('./components/SolarSystem').then(mod => mod.SolarSystem), {
   ssr: false,
 });
 
@@ -65,7 +65,7 @@ export default function GridPage() {
                 ) : null}
               </div>
               <div className={styles.globeCanvas}>
-                <Globe dots={dots} onDotClick={setSelectedDot} onDotHover={setHoveredDot} onBodyHover={setHoveredBody} onFocusChange={setFocusedBody} dotSizeMultiplier={0.3} />
+                <SolarSystem dots={dots} onDotClick={setSelectedDot} onDotHover={setHoveredDot} onBodyHover={setHoveredBody} onFocusChange={setFocusedBody} dotSizeMultiplier={0.3} />
               </div>
             </div>
           )}

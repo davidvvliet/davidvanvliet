@@ -10,7 +10,7 @@ import BlogPost from './BlogPost';
 import styles from './MobilePage.module.css';
 import { usePageStore } from '../store/pageStore';
 
-const Globe = dynamic(() => import('./Globe').then(mod => mod.ThreeJSGlobeWithDots), {
+const SolarSystem = dynamic(() => import('./SolarSystem').then(mod => mod.SolarSystem), {
   ssr: false,
 });
 
@@ -36,7 +36,7 @@ export default function MobilePage() {
           ) : leftPanel === "blog" ? (
             <BlogPost />
           ) : (
-            <Globe size={320} dots={dots} onDotClick={() => {}} dotSizeMultiplier={0.3} />
+            <SolarSystem size={320} dots={dots} onDotClick={() => {}} dotSizeMultiplier={0.3} />
           )}
         </div>
 
