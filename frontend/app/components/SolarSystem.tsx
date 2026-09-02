@@ -3,6 +3,8 @@
 import React, { useRef, useEffect, useCallback, useMemo } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { usePageStore } from '../store/pageStore';
+import { PLANETS, MOONS } from './solarSystemData';
 
 interface PersonaDot {
   id: number;
@@ -50,50 +52,17 @@ const MIN_BODY_PX = 3;                 // Minimum on-screen radius of any body, 
 // A body's enforced size is capped relative to its parent (moons to their
 // planet, planets to the Sun), so it can't outgrow what it orbits as you zoom
 // out; below a pixel it is hidden.
-const CHILD_MAX_PARENT_FRACTION = 1 / 3;
+const CHILD_MAX_PARENT_FRACTION = 1 / 3;  // upper bound for any child; planets vs the Sun use exactly this
+// Moons get their own cap from their real size ratio to their planet, times a
+// tolerance, bounded above by the fraction. Io ends up ~0.10, Earth's Moon 1/3.
+const MOON_RATIO_TOLERANCE = 4;
+// While the planet is drawn large, a moon may still use the pixel floor even if
+// its cap is below it, so km-scale moons show as dots at the planet's close-up.
+const DOT_MOON_PARENT_PX = 100;
 const CHILD_HIDE_PX = 1;
 const MIN_CLOSE_DISTANCE = 0.5;        // Closest zoom for any body, so tiny moons stay past the near plane
 const ORBIT_RING_OPACITY = 0.12;
 
-type PlanetSpec = {
-  name: string;
-  au: number;              // semi-major axis
-  radiusEarths: number;    // radius relative to Earth
-  periodDays: number;      // orbital period
-  rotationDays: number;    // sidereal rotation period
-  inclinationDeg: number;  // orbit inclination to the ecliptic
-  color: number;
-  phaseDeg: number;        // starting position on the orbit
-  solid?: boolean;         // solid sphere instead of wireframe (e.g. cloud-covered)
-  texture?: string;        // equirectangular map under /public; implies solid
-};
-
-type MoonSpec = {
-  name: string;
-  planet: string;          // name of the planet it orbits (from PLANETS)
-  orbitPlanetRadii: number;// orbit radius in radii of its planet (true ratio)
-  radiusEarths: number;    // radius relative to Earth (true ratio; tiny ones render as dots)
-  periodDays: number;
-  inclinationDeg: number;
-  color: number;
-  phaseDeg: number;
-};
-
-// Moons of the table planets (Earth's Moon is built separately). One row each.
-const MOONS: MoonSpec[] = [
-  { name: 'Phobos', planet: 'Mars', orbitPlanetRadii: 2.77, radiusEarths: 0.00174, periodDays: 0.3189, inclinationDeg: 1.08, color: 0x7a746c, phaseDeg: 0 },
-  { name: 'Deimos', planet: 'Mars', orbitPlanetRadii: 6.92, radiusEarths: 0.00097, periodDays: 1.263, inclinationDeg: 1.79, color: 0x7a746c, phaseDeg: 200 },
-];
-
-// Planets other than Earth (Earth is built separately: it has the continents,
-// the location dots and the Moon). Adding a planet = one row.
-const PLANETS: PlanetSpec[] = [
-  { name: 'Mercury', au: 0.387, radiusEarths: 0.383, periodDays: 87.97, rotationDays: 58.65, inclinationDeg: 7.0, color: 0x8a847c, phaseDeg: 120 },
-  // Venus rotates retrograde (negative period). Solid: it's a featureless cloud deck.
-  { name: 'Venus', au: 0.723, radiusEarths: 0.949, periodDays: 224.7, rotationDays: -243.0, inclinationDeg: 3.39, color: 0xe8dcc0, phaseDeg: 230, solid: true },
-  { name: 'Mars', au: 1.524, radiusEarths: 0.532, periodDays: 686.98, rotationDays: 1.026, inclinationDeg: 1.85, color: 0xc1663f, phaseDeg: 40 },
-  { name: 'Jupiter', au: 5.203, radiusEarths: 10.97, periodDays: 4332.6, rotationDays: 0.4135, inclinationDeg: 1.30, color: 0xc9a37a, phaseDeg: 300, texture: '/jupiter.jpg' },
-];
 // One clock for all motion, so every period keeps its real ratio.
 // Change SECONDS_PER_DAY to speed everything up or down together.
 const SECONDS_PER_DAY = 10;            // Real seconds per simulated Earth day
@@ -105,7 +74,7 @@ const angularSpeed = (periodDays: number) => (2 * Math.PI) / (periodDays * SECON
 const MOON_ORBIT_RADIUS = 6;           // Distance from Earth's centre (cinematic, not true scale)
 const MOON_RADIUS = EARTH_RADIUS * 0.273; // True ratio: Moon diameter is 27.3% of Earth's
 const MOON_INCLINATION_DEG = 5.14;     // Real inclination of the Moon's orbit
-const MOON_COLOR = 0x8c8c8c;           // Wireframe color, brighter than Earth's so the wires read
+const MOON_TEXTURE = '/moon.jpg';      // Equirectangular map
 
 const SUN_RADIUS = 20;                 // ~15x Earth's radius; bigger than Jupiter, far short of the real 109x
 const SUN_COLOR = 0xfff4e8;            // G2V: near-white, faintly warm (the yellow is atmospheric)
@@ -120,6 +89,7 @@ const MIN_DISTANCE_RADII = DEFAULT_CAMERA_DISTANCE / EARTH_RADIUS; // closest zo
 // These are multiples of a body's closest zoom distance (which has a floor for
 // tiny bodies), so they stay reachable for moons a few km across.
 const NAME_VISIBLE_FACTOR = 7.5 / MIN_DISTANCE_RADII;  // ~2.2x close-up: focused body's name shows within this
+const ROOT_NAME_VISIBLE_FACTOR = 1.15;                 // the Sun's closest zoom is already its wide view, so use a tighter band
 const REFOCUS_FACTOR = 20 / MIN_DISTANCE_RADII;        // ~5.8x close-up: beyond this, clicking the focused body zooms back in
 const FOCUS_TRANSITION_SECONDS = 0.9;
 const PICK_MIN_PX = 12;                // click tolerance floor, in pixels
@@ -135,6 +105,7 @@ type Body = {
   parent: Body | null;
   systemRadius: number;     // radius of its satellites' orbits (0 = none)
   scale: number;            // current enforced scale (1 = true size)
+  focusRadii?: number;      // click fly-in distance override, in radii
 };
 
 // --- GeoJSON outline helpers ---
@@ -221,6 +192,9 @@ export function SolarSystem({
   const earthSystemRef = useRef<THREE.Group | null>(null);
   const hoveredBodyRef = useRef<string | null>(null);
   const pointerDownPosRef = useRef<{ x: number; y: number } | null>(null);
+  const focusByNameRef = useRef<((name: string) => void) | null>(null);
+  const focusRequest = usePageStore((s) => s.focusRequest);
+  const handledFocusSeqRef = useRef<number>(0);
   const isPointerDownRef = useRef<boolean>(false);
   const moonMaterialRef = useRef<THREE.MeshBasicMaterial | null>(null);
   const sunMaterialRef = useRef<THREE.MeshBasicMaterial | null>(null);
@@ -315,10 +289,11 @@ export function SolarSystem({
     earthSystem.add(moonPivot);
     moonPivotRef.current = moonPivot;
 
-    const moonGeometry = new THREE.SphereGeometry(MOON_RADIUS, 16, 16);
+    const moonGeometry = new THREE.SphereGeometry(MOON_RADIUS, 32, 32);
+    const moonTexture = new THREE.TextureLoader().load(MOON_TEXTURE);
+    moonTexture.colorSpace = THREE.SRGBColorSpace;
     const moonMaterial = new THREE.MeshBasicMaterial({
-      color: MOON_COLOR,
-      wireframe: true,
+      map: moonTexture,
       transparent: true,
       opacity: 1,
     });
@@ -485,10 +460,12 @@ export function SolarSystem({
     const planetDisposables: { geometry: THREE.BufferGeometry; material: THREE.Material }[] = [];
     const textureLoader = new THREE.TextureLoader();
     const textures: THREE.Texture[] = [];
+    const tiltedByPlanet = new Map<string, THREE.Group>(); // moons orbit in their planet's equatorial plane
     for (const spec of PLANETS) {
       const radius = EARTH_RADIUS * spec.radiusEarths;
-      // More segments for bigger bodies so large wireframes don't look like polygons.
-      const segments = THREE.MathUtils.clamp(Math.round(12 + radius * 2.5), 16, 48);
+      // More segments for bigger bodies so large wireframes don't look like
+      // polygons; textured bodies always get enough for a round silhouette.
+      const segments = spec.texture ? 48 : THREE.MathUtils.clamp(Math.round(12 + radius * 2.5), 16, 48);
       const geometry = new THREE.SphereGeometry(radius, segments, segments);
       const solid = spec.solid || !!spec.texture;
       const material = new THREE.MeshBasicMaterial({ color: spec.texture ? 0xffffff : spec.color, wireframe: !solid, transparent: true, opacity: solid ? 1 : 0.8 });
@@ -501,11 +478,41 @@ export function SolarSystem({
       }
       const mesh = new THREE.Mesh(geometry, material);
       planetDisposables.push({ geometry, material });
-      const holder = new THREE.Group(); // position-only; the mesh spins inside it
-      holder.add(mesh);
+      const holder = new THREE.Group(); // position-only; the tilted body spins inside it
+      const tilted = new THREE.Group(); // carries the axial tilt; the mesh spins about its local y
+      tiltedByPlanet.set(spec.name, tilted);
+      tilted.rotation.z = THREE.MathUtils.degToRad(spec.axialTiltDeg ?? 0);
+      tilted.add(mesh);
+      holder.add(tilted);
+      if (spec.rings) {
+        const ringInner = radius * spec.rings.innerRadii;
+        const ringOuter = radius * spec.rings.outerRadii;
+        const ringGeometry = new THREE.RingGeometry(ringInner, ringOuter, 128);
+        const ringMaterial = new THREE.MeshBasicMaterial({ color: spec.rings.texture ? 0xffffff : spec.rings.color, transparent: true, opacity: spec.rings.texture ? 1 : spec.rings.opacity, side: THREE.DoubleSide, depthWrite: false });
+        if (spec.rings.texture) {
+          // RingGeometry's UVs are planar; remap them radially so a strip texture
+          // (inner edge at u=0, outer edge at u=1) wraps around the ring.
+          const pos = ringGeometry.attributes.position;
+          const uv = ringGeometry.attributes.uv;
+          for (let i = 0; i < pos.count; i++) {
+            const r = Math.hypot(pos.getX(i), pos.getY(i));
+            uv.setXY(i, (r - ringInner) / (ringOuter - ringInner), 0.5);
+          }
+          uv.needsUpdate = true;
+          const ringTex = textureLoader.load(spec.rings.texture);
+          ringTex.colorSpace = THREE.SRGBColorSpace;
+          ringMaterial.map = ringTex;
+          ringMaterial.needsUpdate = true;
+          textures.push(ringTex);
+        }
+        const ringMesh = new THREE.Mesh(ringGeometry, ringMaterial);
+        ringMesh.rotation.x = -Math.PI / 2; // lie in the equatorial plane
+        tilted.add(ringMesh);
+        planetDisposables.push({ geometry: ringGeometry, material: ringMaterial });
+      }
       const orbitRadius = orbitRadiusForAU(spec.au);
       addOrbiter(holder, orbitRadius, spec.periodDays, spec.inclinationDeg, spec.phaseDeg, mesh, spec.rotationDays);
-      bodies.push({ name: spec.name, object: holder, visual: mesh, radius, parent: sunBody, systemRadius: 0, scale: 1 });
+      bodies.push({ name: spec.name, object: holder, visual: tilted, radius, parent: sunBody, systemRadius: 0, scale: 1, focusRadii: spec.focusRadii });
       sunBody.systemRadius = Math.max(sunBody.systemRadius, orbitRadius);
     }
 
@@ -515,12 +522,26 @@ export function SolarSystem({
       const planetBody = bodies.find((b) => b.name === spec.planet);
       if (!planetBody) continue;
       const radius = EARTH_RADIUS * spec.radiusEarths;
-      const geometry = new THREE.SphereGeometry(radius, 8, 8);
-      const material = new THREE.MeshBasicMaterial({ color: spec.color, transparent: true, opacity: 1 });
+      // Real-sized moons get a wireframe like the planets; km-scale ones that
+      // only ever render as dots stay solid so they read as a point.
+      const isDot = radius < 0.05;
+      const solid = isDot || !!spec.texture || !!spec.solid;
+      const segments = isDot ? 8 : spec.texture ? 48 : THREE.MathUtils.clamp(Math.round(12 + radius * 2.5), 16, 48);
+      const geometry = new THREE.SphereGeometry(radius, segments, segments);
+      const material = new THREE.MeshBasicMaterial({ color: spec.texture ? 0xffffff : spec.color, wireframe: !solid, transparent: true, opacity: solid ? 1 : 0.8 });
+      if (spec.texture) {
+        const tex = textureLoader.load(spec.texture);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        material.map = tex;
+        material.needsUpdate = true;
+        textures.push(tex);
+      }
       const mesh = new THREE.Mesh(geometry, material);
       planetDisposables.push({ geometry, material });
       const orbitRadius = planetBody.radius * spec.orbitPlanetRadii;
-      addOrbiter(mesh, orbitRadius, spec.periodDays, spec.inclinationDeg, spec.phaseDeg, undefined, undefined, planetBody.object);
+      // Table moon inclinations are given to the planet's equator, so they orbit
+      // inside the planet's tilted group (Titan then sits in Saturn's ring plane).
+      addOrbiter(mesh, orbitRadius, spec.periodDays, spec.inclinationDeg, spec.phaseDeg, undefined, undefined, tiltedByPlanet.get(spec.planet) ?? planetBody.object);
       bodies.push({ name: spec.name, object: mesh, visual: mesh, radius, parent: planetBody, systemRadius: 0, scale: 1 });
       planetBody.systemRadius = Math.max(planetBody.systemRadius, orbitRadius);
     }
@@ -556,7 +577,7 @@ export function SolarSystem({
         from: focus,
         t: 0,
         distTo: opts.zoomTo
-          ? (next.parent ? Math.max(next.radius * MIN_DISTANCE_RADII * 1.5, MIN_CLOSE_DISTANCE * 1.5) : minDistanceFor(next) * 1.1)
+          ? (next.parent ? Math.max(next.radius * (next.focusRadii ?? MIN_DISTANCE_RADII * 1.5), MIN_CLOSE_DISTANCE * 1.5) : minDistanceFor(next) * 1.1)
           : null,
         startOffset: camera.position.clone().sub(worldPos(focus, tmpA)),
       };
@@ -564,7 +585,8 @@ export function SolarSystem({
     };
     let reportedFocusName: string | null | undefined;
     const reportFocus = (dist: number) => {
-      const name = dist <= minDistanceFor(focus) * NAME_VISIBLE_FACTOR ? focus.name : null;
+      const factor = focus.parent ? NAME_VISIBLE_FACTOR : ROOT_NAME_VISIBLE_FACTOR;
+      const name = dist <= minDistanceFor(focus) * factor ? focus.name : null;
       if (name !== reportedFocusName) {
         reportedFocusName = name;
         onFocusChange?.(name);
@@ -777,7 +799,13 @@ export function SolarSystem({
             // The cap only limits inflation; a body is never drawn below its true size
             // (e.g. Earth up close must not shrink because the Sun is far away).
             const parentPx = Math.max(screenPx.get(b.parent!)!, MIN_BODY_PX);
-            targetPx = Math.max(px, Math.min(targetPx, parentPx * CHILD_MAX_PARENT_FRACTION));
+            const isMoon = b.parent !== sunBody;
+            const fraction = isMoon
+              ? Math.min(CHILD_MAX_PARENT_FRACTION, MOON_RATIO_TOLERANCE * (b.radius / b.parent!.radius))
+              : CHILD_MAX_PARENT_FRACTION;
+            let capped = Math.min(targetPx, parentPx * fraction);
+            if (isMoon && parentPx >= DOT_MOON_PARENT_PX) capped = Math.max(capped, MIN_BODY_PX);
+            targetPx = Math.max(px, capped);
           }
           const visible = !hasParent || targetPx >= CHILD_HIDE_PX;
           b.visual.visible = visible;
@@ -802,6 +830,18 @@ export function SolarSystem({
         camera.updateProjectionMatrix();
       });
       resizeObserver.observe(mount);
+    }
+
+    // Expose focus-by-name for the terminal's `fly` command, and apply any
+    // request that arrived before the scene existed (e.g. from another view).
+    focusByNameRef.current = (name: string) => {
+      const body = bodies.find((b) => b.name.toLowerCase() === name.toLowerCase());
+      if (body) setFocus(body, { zoomTo: true });
+    };
+    const pending = usePageStore.getState().focusRequest;
+    if (pending && pending.seq !== handledFocusSeqRef.current) {
+      handledFocusSeqRef.current = pending.seq;
+      focusByNameRef.current(pending.name);
     }
 
     initializedRef.current = true;
@@ -834,6 +874,7 @@ export function SolarSystem({
       });
       moonGeometry.dispose();
       moonMaterial.dispose();
+      moonTexture.dispose();
       moonPivotRef.current = null;
       moonMaterialRef.current = null;
       earthSystemRef.current = null;
@@ -850,6 +891,14 @@ export function SolarSystem({
       initializedRef.current = false;
     };
   }, [size, color, speed]); // Removed dots and onDotClick from dependencies
+
+  // Fly to a body requested from the terminal.
+  useEffect(() => {
+    if (!focusRequest || focusRequest.seq === handledFocusSeqRef.current) return;
+    if (!focusByNameRef.current) return; // scene not built yet; init will pick it up
+    handledFocusSeqRef.current = focusRequest.seq;
+    focusByNameRef.current(focusRequest.name);
+  }, [focusRequest]);
 
   // Separate effect for updating dots only
   useEffect(() => {

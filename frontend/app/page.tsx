@@ -11,6 +11,7 @@ import AsciiResume from './components/AsciiResume';
 import BlogPost from './components/BlogPost';
 import styles from './page.module.css';
 import { usePageStore } from './store/pageStore';
+import { BODY_FACTS } from './components/solarSystemData';
 
 const SolarSystem = dynamic(() => import('./components/SolarSystem').then(mod => mod.SolarSystem), {
   ssr: false,
@@ -57,11 +58,14 @@ export default function GridPage() {
             <div className={styles.globeWrapper}>
               <div className={styles.globeLabel}>
                 {hoveredDot ? (
-                  <><span className={styles.globeLabelLocation}>{hoveredDot.label}</span><span className={styles.globeLabelSubtitle}>{hoveredDot.subtitle}</span><span className={styles.globeLabelDescription}>{hoveredDot.description}</span></>
+                  <div className={styles.globeLabelRow}><span className={styles.globeLabelLocation}>{hoveredDot.label}</span><span className={styles.globeLabelSubtitle}>{hoveredDot.subtitle}</span><span className={styles.globeLabelDescription}>{hoveredDot.description}</span></div>
                 ) : hoveredBody ? (
-                  <><span className={styles.globeLabelLocation}>{hoveredBody}</span><span className={styles.globeLabelDescription}>Click to focus</span></>
+                  <div className={styles.globeLabelRow}><span className={styles.globeLabelLocation}>{hoveredBody}</span><span className={styles.globeLabelDescription}>Click to focus</span></div>
                 ) : focusedBody ? (
-                  <span className={styles.globeLabelLocation}>{focusedBody}</span>
+                  <>
+                    <span className={styles.globeLabelLocation}>{focusedBody}</span>
+                    {BODY_FACTS[focusedBody] && <span className={styles.globeLabelFact}>{BODY_FACTS[focusedBody]}</span>}
+                  </>
                 ) : null}
               </div>
               <div className={styles.globeCanvas}>

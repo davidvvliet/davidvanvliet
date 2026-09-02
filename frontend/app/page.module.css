@@ -184,13 +184,15 @@
   left: 0;
   right: 0;
   top: 2.5rem;
+  padding: 0 1.5rem;
   pointer-events: none;
   min-height: 2em;
   font-family: var(--font-roboto-mono);
   font-size: 0.875rem;
   text-align: center;
   display: flex;
-  gap: 0.5rem;
+  flex-direction: column;
+  gap: 0.35rem;
   align-items: center;
   justify-content: center;
 }
@@ -204,6 +206,22 @@
 }
 
 .globeLabelDescription {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Hover labels (dot / body) keep their pieces on one line. */
+.globeLabelRow {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Favourite fact under the focused body's name. */
+.globeLabelFact {
+  max-width: 34rem;
+  font-size: 0.75rem;
+  line-height: 1.5;
   color: rgba(255, 255, 255, 0.5);
 }
 
