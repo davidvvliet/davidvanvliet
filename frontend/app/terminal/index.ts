@@ -4,7 +4,7 @@ import "./commands/response";
 import "./commands/blog";
 import "./commands/socials";
 import "./commands/resume";
-import "./commands/globe";
+import "./commands/explore";
 import "./commands/radarcorp";
 import "./commands/books";
 import "./commands/films";

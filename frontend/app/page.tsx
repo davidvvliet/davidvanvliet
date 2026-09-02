@@ -21,6 +21,7 @@ export default function GridPage() {
   const [selectedDot, setSelectedDot] = useState<any>(null);
   const [hoveredDot, setHoveredDot] = useState<any>(null);
   const [hoveredBody, setHoveredBody] = useState<string | null>(null);
+  const [focusedBody, setFocusedBody] = useState<string | null>("Earth");
   const leftPanel = usePageStore((s) => s.leftPanel);
 
   useEffect(() => {
@@ -59,10 +60,12 @@ export default function GridPage() {
                   <><span className={styles.globeLabelLocation}>{hoveredDot.label}</span><span className={styles.globeLabelSubtitle}>{hoveredDot.subtitle}</span><span className={styles.globeLabelDescription}>{hoveredDot.description}</span></>
                 ) : hoveredBody ? (
                   <><span className={styles.globeLabelLocation}>{hoveredBody}</span><span className={styles.globeLabelDescription}>Click to focus</span></>
+                ) : focusedBody ? (
+                  <span className={styles.globeLabelLocation}>{focusedBody}</span>
                 ) : null}
               </div>
               <div className={styles.globeCanvas}>
-                <Globe dots={dots} onDotClick={setSelectedDot} onDotHover={setHoveredDot} onBodyHover={setHoveredBody} dotSizeMultiplier={0.3} />
+                <Globe dots={dots} onDotClick={setSelectedDot} onDotHover={setHoveredDot} onBodyHover={setHoveredBody} onFocusChange={setFocusedBody} dotSizeMultiplier={0.3} />
               </div>
             </div>
           )}

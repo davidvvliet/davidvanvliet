@@ -2,14 +2,14 @@ import { Command } from "../types";
 import { register } from "../registry";
 import { usePageStore } from "../../store/pageStore";
 
-const globe: Command = {
-  name: "globe",
-  aliases: ["g"],
-  description: "Open globe",
+const explore: Command = {
+  name: "explore",
+  aliases: ["e"],
+  description: "Explore the solar system",
   execute: () => {
     usePageStore.getState().setLeftPanel("");
     return [];
   },
 };
 
-register(globe);
+register(explore);

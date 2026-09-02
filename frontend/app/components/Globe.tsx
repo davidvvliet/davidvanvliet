@@ -26,6 +26,7 @@ interface ThreeJSGlobeWithDotsProps {
   onDotClick?: (dot: PersonaDot) => void;
   onDotHover?: (dot: PersonaDot | null) => void;
   onBodyHover?: (name: string | null) => void;
+  onFocusChange?: (name: string | null) => void; // null when the camera is far from the focused body
   dotSizeMultiplier?: number;
 }
 
@@ -38,12 +39,35 @@ const CAMERA_FOV = 50;
 const DEFAULT_CAMERA_DISTANCE = 4.5;   // Initial view; also the closest allowed zoom
 const MAX_CAMERA_DISTANCE = 180;       // How far out the user can scroll
 
-// Distances/sizes are compressed (real ratios are far too extreme to render), but
-// keep the ordering. Orbit radius = ORBIT_SCALE * sqrt(AU) so the table below can
-// grow to more planets and stay consistent.
+// Planet orbits use TRUE distance ratios: orbit radius = ORBIT_SCALE * AU.
+// Body sizes and the Moon's orbit stay compressed (at true ratio Earth would
+// be 0.004 units across), and bodies are never drawn smaller than MIN_BODY_PX
+// so the outer system still reads as a system rather than empty space.
 const ORBIT_SCALE = 90;                // Earth (1 AU) orbits at this radius
-const orbitRadiusForAU = (au: number) => ORBIT_SCALE * Math.sqrt(au);
+const orbitRadiusForAU = (au: number) => ORBIT_SCALE * au;
 const EARTH_ORBIT_AU = 1;
+const MIN_BODY_PX = 3;                 // Minimum on-screen radius of any body, in pixels
+const ORBIT_RING_OPACITY = 0.12;
+
+type PlanetSpec = {
+  name: string;
+  au: number;              // semi-major axis
+  radiusEarths: number;    // radius relative to Earth
+  periodDays: number;      // orbital period
+  rotationDays: number;    // sidereal rotation period
+  inclinationDeg: number;  // orbit inclination to the ecliptic
+  color: number;
+  phaseDeg: number;        // starting position on the orbit
+  solid?: boolean;         // solid sphere instead of wireframe (e.g. cloud-covered)
+};
+
+// Planets other than Earth (Earth is built separately: it has the continents,
+// the location dots and the Moon). Adding a planet = one row.
+const PLANETS: PlanetSpec[] = [
+  { name: 'Mercury', au: 0.387, radiusEarths: 0.383, periodDays: 87.97, rotationDays: 58.65, inclinationDeg: 7.0, color: 0x8a847c, phaseDeg: 120 },
+  // Venus rotates retrograde (negative period). Solid: it's a featureless cloud deck.
+  { name: 'Venus', au: 0.723, radiusEarths: 0.949, periodDays: 224.7, rotationDays: -243.0, inclinationDeg: 3.39, color: 0xe8dcc0, phaseDeg: 230, solid: true },
+];
 // One clock for all motion, so every period keeps its real ratio.
 // Change SECONDS_PER_DAY to speed everything up or down together.
 const SECONDS_PER_DAY = 10;            // Real seconds per simulated Earth day
@@ -58,7 +82,7 @@ const MOON_INCLINATION_DEG = 5.14;     // Real inclination of the Moon's orbit
 const MOON_COLOR = 0x8c8c8c;           // Wireframe color, brighter than Earth's so the wires read
 
 const SUN_RADIUS = 7;                  // ~5x Earth's radius, ~20x the moon's
-const SUN_COLOR = 0xffe2a0;
+const SUN_COLOR = 0xfff4e8;            // G2V: near-white, faintly warm (the yellow is atmospheric)
 const SUN_GLOW_SCALE = 3.2;            // Glow sprite size as a multiple of the sun's diameter
 
 // "Fit" distance: how far back the camera must be for an extent to fit the
@@ -69,6 +93,7 @@ const FIT_MARGIN = 1.15;               // Extra room for perspective
 const MIN_DISTANCE_RADII = DEFAULT_CAMERA_DISTANCE / EARTH_RADIUS; // closest zoom, in body radii
 const MAX_DISTANCE_FIT_FACTOR = 1.6;   // max zoom = (distance where the body's system fits) * this
 const LEAF_MAX_DISTANCE_RADII = 40;    // max zoom for bodies with no satellites
+const NAME_VISIBLE_RADII = 7.5;         // focused body's name shows only within this many radii
 const FOCUS_TRANSITION_SECONDS = 0.9;
 const PICK_MIN_PX = 12;                // click tolerance around tiny bodies
 const DRAG_THRESHOLD_PX = 5;           // pointer movement beyond this is a drag, not a click
@@ -76,9 +101,11 @@ const DRAG_THRESHOLD_PX = 5;           // pointer movement beyond this is a drag
 type Body = {
   name: string;
   object: THREE.Object3D;   // world position is read from this each frame
+  visual: THREE.Object3D;   // what gets scaled up to enforce MIN_BODY_PX
   radius: number;
   parent: Body | null;
   systemRadius: number;     // radius of its satellites' orbits (0 = none)
+  scale: number;            // current enforced scale (1 = true size)
 };
 
 // --- GeoJSON outline helpers ---
@@ -145,6 +172,7 @@ export function ThreeJSGlobeWithDots({
   onDotClick,
   onDotHover,
   onBodyHover,
+  onFocusChange,
   dotSizeMultiplier = 1
 }: ThreeJSGlobeWithDotsProps) {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -162,7 +190,6 @@ export function ThreeJSGlobeWithDots({
   const hoveredDotRef = useRef<PersonaDot | null>(null);
   const moonPivotRef = useRef<THREE.Group | null>(null);
   const earthSystemRef = useRef<THREE.Group | null>(null);
-  const earthOrbitAngleRef = useRef<number>(0);
   const hoveredBodyRef = useRef<string | null>(null);
   const pointerDownPosRef = useRef<{ x: number; y: number } | null>(null);
   const isPointerDownRef = useRef<boolean>(false);
@@ -199,13 +226,14 @@ export function ThreeJSGlobeWithDots({
     const mount = mountRef.current;
     const initialWidth = size ?? (mount.clientWidth || 500);
     const initialHeight = size ?? (mount.clientHeight || 500);
-    const camera = new THREE.PerspectiveCamera(CAMERA_FOV, initialWidth / initialHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(CAMERA_FOV, initialWidth / initialHeight, 0.1, 10000);
     cameraRef.current = camera;
 
     // Renderer setup
     const renderer = new THREE.WebGLRenderer({ 
       antialias: true, 
-      alpha: true 
+      alpha: true,
+      logarithmicDepthBuffer: true, // near 0.1 to far 10000 without z-fighting
     });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(initialWidth, initialHeight);
@@ -286,10 +314,10 @@ export function ThreeJSGlobeWithDots({
     glowCanvas.width = glowCanvas.height = 256;
     const glowCtx = glowCanvas.getContext('2d')!;
     const gradient = glowCtx.createRadialGradient(128, 128, 0, 128, 128, 128);
-    gradient.addColorStop(0, 'rgba(255, 226, 160, 1)');
-    gradient.addColorStop(0.25, 'rgba(255, 226, 160, 0.55)');
-    gradient.addColorStop(0.6, 'rgba(255, 200, 120, 0.12)');
-    gradient.addColorStop(1, 'rgba(255, 200, 120, 0)');
+    gradient.addColorStop(0, 'rgba(255, 244, 232, 1)');
+    gradient.addColorStop(0.25, 'rgba(255, 244, 232, 0.55)');
+    gradient.addColorStop(0.6, 'rgba(255, 236, 214, 0.12)');
+    gradient.addColorStop(1, 'rgba(255, 236, 214, 0)');
     glowCtx.fillStyle = gradient;
     glowCtx.fillRect(0, 0, 256, 256);
     const glowTexture = new THREE.CanvasTexture(glowCanvas);
@@ -380,21 +408,68 @@ export function ThreeJSGlobeWithDots({
     controls.maxDistance = MAX_CAMERA_DISTANCE;
     controlsRef.current = controls;
 
-    // Place Earth on its orbit.
-    const earthOrbitRadius = orbitRadiusForAU(EARTH_ORBIT_AU);
-    const earthPosition = new THREE.Vector3();
-    const updateEarthPosition = () => {
-      const a = earthOrbitAngleRef.current;
-      earthPosition.set(earthOrbitRadius * Math.cos(a), 0, -earthOrbitRadius * Math.sin(a));
-      earthSystem.position.copy(earthPosition);
+    // Orbiters: anything that goes around the Sun. Each sits in an inclined
+    // pivot; its position is computed from an angle each frame (not by rotating
+    // the pivot), so axial tilts stay fixed in space.
+    type Orbiter = { object: THREE.Object3D; orbitRadius: number; periodDays: number; angle: number; spin?: THREE.Object3D; rotationDays?: number };
+    const orbiters: Orbiter[] = [];
+    const orbitRings: THREE.LineLoop[] = [];
+    const addOrbiter = (object: THREE.Object3D, orbitRadius: number, periodDays: number, inclinationDeg: number, phaseDeg: number, spin?: THREE.Object3D, rotationDays?: number) => {
+      const pivot = new THREE.Group();
+      pivot.rotation.x = THREE.MathUtils.degToRad(inclinationDeg);
+      pivot.add(object);
+      scene.add(pivot);
+      // Faint orbit ring
+      const ringPoints: THREE.Vector3[] = [];
+      for (let i = 0; i < 128; i++) {
+        const a = (i / 128) * Math.PI * 2;
+        ringPoints.push(new THREE.Vector3(orbitRadius * Math.cos(a), 0, -orbitRadius * Math.sin(a)));
+      }
+      const ring = new THREE.LineLoop(
+        new THREE.BufferGeometry().setFromPoints(ringPoints),
+        new THREE.LineBasicMaterial({ color: color, transparent: true, opacity: ORBIT_RING_OPACITY })
+      );
+      pivot.add(ring);
+      orbitRings.push(ring);
+      orbiters.push({ object, orbitRadius, periodDays, angle: THREE.MathUtils.degToRad(phaseDeg), spin, rotationDays });
     };
-    updateEarthPosition();
+    const updateOrbiters = (delta: number) => {
+      for (const o of orbiters) {
+        o.angle += angularSpeed(o.periodDays) * delta;
+        o.object.position.set(o.orbitRadius * Math.cos(o.angle), 0, -o.orbitRadius * Math.sin(o.angle));
+        if (o.spin && o.rotationDays) o.spin.rotation.y += angularSpeed(o.rotationDays) * delta;
+      }
+    };
 
-    // Bodies that can be focused (clicked). Adding a planet = one entry here.
-    const sunBody: Body = { name: 'Sun', object: sun, radius: SUN_RADIUS, parent: null, systemRadius: earthOrbitRadius };
-    const earthBody: Body = { name: 'Earth', object: earthSystem, radius: EARTH_RADIUS, parent: sunBody, systemRadius: MOON_ORBIT_RADIUS };
-    const moonBody: Body = { name: 'Moon', object: moon, radius: MOON_RADIUS, parent: earthBody, systemRadius: 0 };
+    // Earth (its spin is driven separately, gated by auto-rotate).
+    const earthOrbitRadius = orbitRadiusForAU(EARTH_ORBIT_AU);
+    scene.remove(earthSystem);
+    addOrbiter(earthSystem, earthOrbitRadius, EARTH_YEAR_DAYS, 0, 0);
+
+    // Bodies that can be focused (clicked).
+    const sunBody: Body = { name: 'Sun', object: sun, visual: sun, radius: SUN_RADIUS, parent: null, systemRadius: earthOrbitRadius, scale: 1 };
+    const earthBody: Body = { name: 'Earth', object: earthSystem, visual: globeGroup, radius: EARTH_RADIUS, parent: sunBody, systemRadius: MOON_ORBIT_RADIUS, scale: 1 };
+    const moonBody: Body = { name: 'Moon', object: moon, visual: moon, radius: MOON_RADIUS, parent: earthBody, systemRadius: 0, scale: 1 };
     const bodies: Body[] = [sunBody, earthBody, moonBody];
+
+    // Other planets, from the table.
+    const planetDisposables: { geometry: THREE.BufferGeometry; material: THREE.Material }[] = [];
+    for (const spec of PLANETS) {
+      const radius = EARTH_RADIUS * spec.radiusEarths;
+      const geometry = new THREE.SphereGeometry(radius, 16, 16);
+      const material = new THREE.MeshBasicMaterial({ color: spec.color, wireframe: !spec.solid, transparent: true, opacity: spec.solid ? 1 : 0.8 });
+      const mesh = new THREE.Mesh(geometry, material);
+      planetDisposables.push({ geometry, material });
+      const holder = new THREE.Group(); // position-only; the mesh spins inside it
+      holder.add(mesh);
+      const orbitRadius = orbitRadiusForAU(spec.au);
+      addOrbiter(holder, orbitRadius, spec.periodDays, spec.inclinationDeg, spec.phaseDeg, mesh, spec.rotationDays);
+      bodies.push({ name: spec.name, object: holder, visual: mesh, radius, parent: sunBody, systemRadius: 0, scale: 1 });
+      sunBody.systemRadius = Math.max(sunBody.systemRadius, orbitRadius);
+    }
+    updateOrbiters(0);
+    const earthPosition = new THREE.Vector3();
+    earthSystem.getWorldPosition(earthPosition);
     const worldPos = (b: Body, out: THREE.Vector3) => b.object.getWorldPosition(out);
 
     // Focus state: the camera target follows `focus`. A transition eases the
@@ -431,6 +506,14 @@ export function ThreeJSGlobeWithDots({
       };
       focus = next;
     };
+    let reportedFocusName: string | null | undefined;
+    const reportFocus = (dist: number) => {
+      const name = dist <= focus.radius * NAME_VISIBLE_RADII ? focus.name : null;
+      if (name !== reportedFocusName) {
+        reportedFocusName = name;
+        onFocusChange?.(name);
+      }
+    };
 
     // Screen-space picking: a body is hit if the pointer is within its on-screen
     // radius (or a minimum pixel tolerance, so tiny bodies stay clickable).
@@ -447,7 +530,7 @@ export function ThreeJSGlobeWithDots({
         if (tmpB.z > 1) continue; // behind the camera
         const sx = ((tmpB.x + 1) / 2) * rect.width;
         const sy = ((1 - tmpB.y) / 2) * rect.height;
-        const screenRadius = (b.radius / (camDist * Math.tan(THREE.MathUtils.degToRad(CAMERA_FOV / 2)))) * (rect.height / 2);
+        const screenRadius = ((b.radius * b.scale) / (camDist * Math.tan(THREE.MathUtils.degToRad(CAMERA_FOV / 2)))) * (rect.height / 2);
         const tolerance = Math.max(screenRadius, PICK_MIN_PX);
         const d = Math.hypot(sx - px, sy - py);
         if (d <= tolerance && d < bestDist) {
@@ -461,6 +544,7 @@ export function ThreeJSGlobeWithDots({
     controls.target.copy(earthPosition);
     camera.position.copy(earthPosition).add(new THREE.Vector3(0, 0, DEFAULT_CAMERA_DISTANCE));
     controls.update();
+    reportFocus(DEFAULT_CAMERA_DISTANCE);
 
     // User interaction handlers
     const onControlsStart = () => {
@@ -566,8 +650,7 @@ export function ThreeJSGlobeWithDots({
       lastTime = now;
 
       // Orbital motion
-      earthOrbitAngleRef.current += angularSpeed(EARTH_YEAR_DAYS) * delta;
-      updateEarthPosition();
+      updateOrbiters(delta);
       if (globeRef.current && autoRotateRef.current) {
         globeRef.current.rotation.y += angularSpeed(EARTH_DAY_DAYS) * delta;
       }
@@ -615,6 +698,20 @@ export function ThreeJSGlobeWithDots({
       }
       controls.update();
 
+      reportFocus(dist);
+
+      // Enforce a minimum on-screen size so distant bodies stay visible.
+      {
+        const halfHeightPx = renderer.domElement.clientHeight / 2;
+        const tanHalfFov = Math.tan(THREE.MathUtils.degToRad(CAMERA_FOV / 2));
+        for (const b of bodies) {
+          worldPos(b, tmpA);
+          const camDist = tmpA.distanceTo(camera.position);
+          const px = (b.radius / (camDist * tanHalfFov)) * halfHeightPx;
+          b.scale = px < MIN_BODY_PX ? MIN_BODY_PX / px : 1;
+          b.visual.scale.setScalar(b.scale);
+        }
+      }
 
       renderer.render(scene, camera);
     };
@@ -673,6 +770,8 @@ export function ThreeJSGlobeWithDots({
       glowTexture.dispose();
       sunMaterialRef.current = null;
       sunGlowMaterialRef.current = null;
+      planetDisposables.forEach(({ geometry, material }) => { geometry.dispose(); material.dispose(); });
+      orbitRings.forEach((ring) => { ring.geometry.dispose(); (ring.material as THREE.Material).dispose(); });
       renderer.dispose();
       initializedRef.current = false;
     };
