@@ -30,7 +30,7 @@ export default function AsciiResume() {
 
       <div className={styles.spacer} />
       <div className={styles.row}>
-        <span className={styles.bold}>WHYAI TECHNOLOGIES, INC.</span>
+        <span className={styles.bold}>WHYAI TECHNOLOGIES, INC. (<a href="https://yaihq.com" target="_blank" rel="noopener noreferrer">yAIhq.com</a>)</span>
         <span className={styles.right}>New York, New York</span>
       </div>
       <div className={styles.row}>
