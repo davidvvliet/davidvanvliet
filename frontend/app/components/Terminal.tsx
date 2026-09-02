@@ -31,21 +31,33 @@ export default function Terminal() {
   };
 
   const handleTab = () => {
-    // Only complete the command name (first word), and only when nothing
-    // has been typed after it yet.
-    if (input.includes(" ")) return;
-    const prefix = input.toLowerCase();
-    if (!prefix) return;
+    const words = input.split(" ");
+    const isCommandWord = words.length === 1;
+    const current = words[words.length - 1];
+    const prefix = current.toLowerCase();
 
-    const matches = getAllCommands()
-      .filter((cmd) => !cmd.hidden && cmd.name.startsWith(prefix))
-      .map((cmd) => cmd.name)
+    let candidates: string[];
+    if (isCommandWord) {
+      if (!prefix) return;
+      candidates = getAllCommands()
+        .filter((cmd) => !cmd.hidden)
+        .map((cmd) => cmd.name);
+    } else {
+      const command = getCommand(words[0].toLowerCase());
+      if (!command?.complete) return;
+      candidates = command.complete(words.slice(1));
+    }
+
+    const matches = candidates
+      .filter((c) => c.toLowerCase().startsWith(prefix))
       .sort();
-
     if (matches.length === 0) return;
 
+    const replaceCurrent = (value: string) =>
+      setInputAndCursor([...words.slice(0, -1), value].join(" "));
+
     if (matches.length === 1) {
-      setInputAndCursor(`${matches[0]} `);
+      replaceCurrent(`${matches[0]} `);
       return;
     }
 
@@ -57,8 +69,8 @@ export default function Terminal() {
       common = common.slice(0, i);
     }
 
-    if (common.length > prefix.length) {
-      setInputAndCursor(common);
+    if (common.length > current.length) {
+      replaceCurrent(common);
     } else {
       // Nothing more to fill in: list the candidates, like a shell does.
       setLines((prev) => [
