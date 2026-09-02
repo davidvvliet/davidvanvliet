@@ -50,6 +50,8 @@
   display: grid;
   grid-template-columns: 38.2% 61.8%;
   gap: 0;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .linksContainer {
@@ -58,6 +60,7 @@
   grid-template-rows: 38.2% 61.8%;
   gap: 0;
   min-height: 0;
+  overflow: hidden;
 }
 
 .linksTop {
@@ -66,6 +69,7 @@
   grid-template-columns: 61.8% 38.2%;
   gap: 0;
   min-height: 0;
+  overflow: hidden;
 }
 
 .cell6 {
@@ -85,6 +89,7 @@
   grid-template-rows: 61.8% 38.2%;
   gap: 0;
   min-height: 0;
+  overflow: hidden;
 }
 
 .cell7 {
@@ -102,6 +107,7 @@
   grid-template-columns: 38.2% 61.8%;
   gap: 0;
   min-height: 0;
+  overflow: hidden;
 }
 
 .cell8 {
