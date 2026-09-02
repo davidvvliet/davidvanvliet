@@ -9,10 +9,6 @@ const projects: Record<string, { description: string; url: string }> = {
     description: "Open Intrinsic",
     url: "https://runintrinsic.com",
   },
-  yai: {
-    description: "Open yAI",
-    url: "https://yaihq.com",
-  },
 };
 
 for (const [name, { description, url }] of Object.entries(projects)) {
