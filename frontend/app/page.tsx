@@ -20,6 +20,7 @@ export default function GridPage() {
   const [isMobile, setIsMobile] = useState(false);
   const [selectedDot, setSelectedDot] = useState<any>(null);
   const [hoveredDot, setHoveredDot] = useState<any>(null);
+  const [hoveredBody, setHoveredBody] = useState<string | null>(null);
   const leftPanel = usePageStore((s) => s.leftPanel);
 
   useEffect(() => {
@@ -54,9 +55,15 @@ export default function GridPage() {
           ) : (
             <div className={styles.globeWrapper}>
               <div className={styles.globeLabel}>
-                {hoveredDot && <><span className={styles.globeLabelLocation}>{hoveredDot.label}</span><span className={styles.globeLabelSubtitle}>{hoveredDot.subtitle}</span><span className={styles.globeLabelDescription}>{hoveredDot.description}</span></>}
+                {hoveredDot ? (
+                  <><span className={styles.globeLabelLocation}>{hoveredDot.label}</span><span className={styles.globeLabelSubtitle}>{hoveredDot.subtitle}</span><span className={styles.globeLabelDescription}>{hoveredDot.description}</span></>
+                ) : hoveredBody ? (
+                  <><span className={styles.globeLabelLocation}>{hoveredBody}</span><span className={styles.globeLabelDescription}>Click to focus</span></>
+                ) : null}
               </div>
-              <Globe size={isMobile ? 300 : 500} dots={dots} onDotClick={setSelectedDot} onDotHover={setHoveredDot} dotSizeMultiplier={0.3} />
+              <div className={styles.globeCanvas}>
+                <Globe dots={dots} onDotClick={setSelectedDot} onDotHover={setHoveredDot} onBodyHover={setHoveredBody} dotSizeMultiplier={0.3} />
+              </div>
             </div>
           )}
       </div>
