@@ -5,7 +5,7 @@ const books: Command = {
   name: "books",
   description: "Good books",
   execute: () => {
-    return ["__IMG__/comc.jpg,/atlasshrugged.jpg"];
+    return ["__IMG__/comc.jpg,/atlasshrugged.jpg,/infinity.jpg"];
   },
 };
 
