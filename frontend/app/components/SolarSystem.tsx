@@ -83,13 +83,14 @@ const SUN_GLOW_SCALE = 3.2;            // Glow sprite size as a multiple of the 
 // "Fit" distance: how far back the camera must be for an extent to fit the
 // canvas width. Used for per-body zoom limits.
 const FIT_MARGIN = 1.15;               // Extra room for perspective
+const WIDE_VIEW_PLANET = 'Jupiter';    // The Sun's default (click / fly) view fits this planet's orbit; zoom-out still reaches the outermost
 
 // Focus / picking
 const MIN_DISTANCE_RADII = DEFAULT_CAMERA_DISTANCE / EARTH_RADIUS; // closest zoom, in body radii
 // These are multiples of a body's closest zoom distance (which has a floor for
 // tiny bodies), so they stay reachable for moons a few km across.
 const NAME_VISIBLE_FACTOR = 7.5 / MIN_DISTANCE_RADII;  // ~2.2x close-up: focused body's name shows within this
-const ROOT_NAME_VISIBLE_FACTOR = 1.15;                 // the Sun's closest zoom is already its wide view, so use a tighter band
+const ROOT_NAME_VISIBLE_FACTOR = 1.15;                 // for the Sun, relative to its wide-view fly-in distance
 const REFOCUS_FACTOR = 20 / MIN_DISTANCE_RADII;        // ~5.8x close-up: beyond this, clicking the focused body zooms back in
 const FOCUS_TRANSITION_SECONDS = 0.9;
 const PICK_MIN_PX = 12;                // click tolerance floor, in pixels
@@ -183,6 +184,7 @@ export function SolarSystem({
   const animationIdRef = useRef<number | null>(null);
   const controlsRef = useRef<OrbitControls | null>(null);
   const autoRotateRef = useRef<boolean>(true);
+  const hoverPausedRef = useRef<boolean>(false); // Earth's spin pauses while the pointer is over it
   const dotsRef = useRef<THREE.Mesh[]>([]);
   const raycasterRef = useRef<THREE.Raycaster>(new THREE.Raycaster());
   const mouseRef = useRef<THREE.Vector2>(new THREE.Vector2());
@@ -229,14 +231,14 @@ export function SolarSystem({
     const mount = mountRef.current;
     const initialWidth = size ?? (mount.clientWidth || 500);
     const initialHeight = size ?? (mount.clientHeight || 500);
-    const camera = new THREE.PerspectiveCamera(CAMERA_FOV, initialWidth / initialHeight, 0.1, 10000);
+    const camera = new THREE.PerspectiveCamera(CAMERA_FOV, initialWidth / initialHeight, 0.1, 100000);
     cameraRef.current = camera;
 
     // Renderer setup
     const renderer = new THREE.WebGLRenderer({ 
       antialias: true, 
       alpha: true,
-      logarithmicDepthBuffer: true, // near 0.1 to far 10000 without z-fighting
+      logarithmicDepthBuffer: true, // near 0.1 to far 100000 without z-fighting
     });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(initialWidth, initialHeight);
@@ -300,6 +302,9 @@ export function SolarSystem({
     moonMaterialRef.current = moonMaterial;
     const moon = new THREE.Mesh(moonGeometry, moonMaterial);
     moon.position.x = MOON_ORBIT_RADIUS;
+    // SphereGeometry puts the map's centre (lon 0, the near side) on +x, which
+    // points away from Earth here; turn it so the near side faces Earth.
+    moon.rotation.y = Math.PI;
     moonPivot.add(moon);
 
     // Sun: a solid sphere at the origin plus a soft additive glow sprite that
@@ -415,10 +420,10 @@ export function SolarSystem({
     // Orbiters: anything that goes around the Sun. Each sits in an inclined
     // pivot; its position is computed from an angle each frame (not by rotating
     // the pivot), so axial tilts stay fixed in space.
-    type Orbiter = { object: THREE.Object3D; orbitRadius: number; periodDays: number; angle: number; spin?: THREE.Object3D; rotationDays?: number };
+    type Orbiter = { object: THREE.Object3D; orbitRadius: number; periodDays: number; angle: number; spin?: THREE.Object3D; rotationDays?: number; tidallyLocked?: boolean };
     const orbiters: Orbiter[] = [];
     const orbitRings: THREE.LineLoop[] = [];
-    const addOrbiter = (object: THREE.Object3D, orbitRadius: number, periodDays: number, inclinationDeg: number, phaseDeg: number, spin?: THREE.Object3D, rotationDays?: number, parent: THREE.Object3D = scene) => {
+    const addOrbiter = (object: THREE.Object3D, orbitRadius: number, periodDays: number, inclinationDeg: number, phaseDeg: number, spin?: THREE.Object3D, rotationDays?: number, parent: THREE.Object3D = scene, tidallyLocked = false) => {
       const pivot = new THREE.Group();
       pivot.rotation.x = THREE.MathUtils.degToRad(inclinationDeg);
       pivot.add(object);
@@ -435,13 +440,16 @@ export function SolarSystem({
       );
       pivot.add(ring);
       orbitRings.push(ring);
-      orbiters.push({ object, orbitRadius, periodDays, angle: THREE.MathUtils.degToRad(phaseDeg), spin, rotationDays });
+      orbiters.push({ object, orbitRadius, periodDays, angle: THREE.MathUtils.degToRad(phaseDeg), spin, rotationDays, tidallyLocked });
     };
     const updateOrbiters = (delta: number) => {
       for (const o of orbiters) {
         o.angle += angularSpeed(o.periodDays) * delta;
         o.object.position.set(o.orbitRadius * Math.cos(o.angle), 0, -o.orbitRadius * Math.sin(o.angle));
         if (o.spin && o.rotationDays) o.spin.rotation.y += angularSpeed(o.rotationDays) * delta;
+        // Tidal lock: one rotation per orbit, with the map's centre (+x on the
+        // sphere) always pointing back at the parent.
+        if (o.tidallyLocked) o.object.rotation.y = o.angle + Math.PI;
       }
     };
 
@@ -460,6 +468,7 @@ export function SolarSystem({
     const planetDisposables: { geometry: THREE.BufferGeometry; material: THREE.Material }[] = [];
     const textureLoader = new THREE.TextureLoader();
     const textures: THREE.Texture[] = [];
+    let outermostOrbit = earthOrbitRadius; // basis for the max zoom-out
     const tiltedByPlanet = new Map<string, THREE.Group>(); // moons orbit in their planet's equatorial plane
     for (const spec of PLANETS) {
       const radius = EARTH_RADIUS * spec.radiusEarths;
@@ -479,10 +488,16 @@ export function SolarSystem({
       const mesh = new THREE.Mesh(geometry, material);
       planetDisposables.push({ geometry, material });
       const holder = new THREE.Group(); // position-only; the tilted body spins inside it
-      const tilted = new THREE.Group(); // carries the axial tilt; the mesh spins about its local y
+      const tilted = new THREE.Group(); // carries the axial tilt; moons' pivots attach here
       tiltedByPlanet.set(spec.name, tilted);
       tilted.rotation.z = THREE.MathUtils.degToRad(spec.axialTiltDeg ?? 0);
-      tilted.add(mesh);
+      // The visual group (planet mesh + rings) is what the size floor scales.
+      // It's a sibling of the moon pivots, so inflating a distant planet never
+      // inflates its moons or their orbits along with it.
+      const visual = new THREE.Group();
+      mesh.rotation.y = THREE.MathUtils.degToRad(spec.spinPhaseDeg ?? 0);
+      visual.add(mesh);
+      tilted.add(visual);
       holder.add(tilted);
       if (spec.rings) {
         const ringInner = radius * spec.rings.innerRadii;
@@ -507,13 +522,14 @@ export function SolarSystem({
         }
         const ringMesh = new THREE.Mesh(ringGeometry, ringMaterial);
         ringMesh.rotation.x = -Math.PI / 2; // lie in the equatorial plane
-        tilted.add(ringMesh);
+        visual.add(ringMesh);
         planetDisposables.push({ geometry: ringGeometry, material: ringMaterial });
       }
       const orbitRadius = orbitRadiusForAU(spec.au);
       addOrbiter(holder, orbitRadius, spec.periodDays, spec.inclinationDeg, spec.phaseDeg, mesh, spec.rotationDays);
-      bodies.push({ name: spec.name, object: holder, visual: tilted, radius, parent: sunBody, systemRadius: 0, scale: 1, focusRadii: spec.focusRadii });
-      sunBody.systemRadius = Math.max(sunBody.systemRadius, orbitRadius);
+      bodies.push({ name: spec.name, object: holder, visual, radius, parent: sunBody, systemRadius: 0, scale: 1, focusRadii: spec.focusRadii });
+      outermostOrbit = Math.max(outermostOrbit, orbitRadius);
+      if (spec.name === WIDE_VIEW_PLANET) sunBody.systemRadius = orbitRadius;
     }
 
     // Moons from the table: each orbits inside its planet's position-only
@@ -524,7 +540,7 @@ export function SolarSystem({
       const radius = EARTH_RADIUS * spec.radiusEarths;
       // Real-sized moons get a wireframe like the planets; km-scale ones that
       // only ever render as dots stay solid so they read as a point.
-      const isDot = radius < 0.05;
+      const isDot = radius < 0.03; // km-scale moons (Phobos, Deimos); Mimas at 0.04 is a real sphere
       const solid = isDot || !!spec.texture || !!spec.solid;
       const segments = isDot ? 8 : spec.texture ? 48 : THREE.MathUtils.clamp(Math.round(12 + radius * 2.5), 16, 48);
       const geometry = new THREE.SphereGeometry(radius, segments, segments);
@@ -541,7 +557,7 @@ export function SolarSystem({
       const orbitRadius = planetBody.radius * spec.orbitPlanetRadii;
       // Table moon inclinations are given to the planet's equator, so they orbit
       // inside the planet's tilted group (Titan then sits in Saturn's ring plane).
-      addOrbiter(mesh, orbitRadius, spec.periodDays, spec.inclinationDeg, spec.phaseDeg, undefined, undefined, tiltedByPlanet.get(spec.planet) ?? planetBody.object);
+      addOrbiter(mesh, orbitRadius, spec.periodDays, spec.inclinationDeg, spec.phaseDeg, undefined, undefined, tiltedByPlanet.get(spec.planet) ?? planetBody.object, true);
       bodies.push({ name: spec.name, object: mesh, visual: mesh, radius, parent: planetBody, systemRadius: 0, scale: 1 });
       planetBody.systemRadius = Math.max(planetBody.systemRadius, orbitRadius);
     }
@@ -565,8 +581,10 @@ export function SolarSystem({
     const fitDistance = (extent: number) => (extent * FIT_MARGIN) / halfWidthPerUnit();
     // The root frame (the Sun) is only ever a wide view: its closest zoom is
     // where its whole system fits on screen. Other bodies allow a close-up.
-    const minDistanceFor = (b: Body) =>
-      b.parent ? Math.max(b.radius * MIN_DISTANCE_RADII, MIN_CLOSE_DISTANCE) : fitDistance(b.systemRadius + b.radius);
+    // Closest zoom: a few radii for everything, the Sun included.
+    const minDistanceFor = (b: Body) => Math.max(b.radius * MIN_DISTANCE_RADII, MIN_CLOSE_DISTANCE);
+    // Where the Sun's system fits on screen: its click fly-in, and the basis for the max zoom-out.
+    const wideViewDistance = (b: Body) => fitDistance(b.systemRadius + b.radius);
 
     const setFocus = (next: Body, opts: { zoomTo?: boolean } = {}) => {
       // Clicking the already-focused body only does something when the camera
@@ -577,7 +595,7 @@ export function SolarSystem({
         from: focus,
         t: 0,
         distTo: opts.zoomTo
-          ? (next.parent ? Math.max(next.radius * (next.focusRadii ?? MIN_DISTANCE_RADII * 1.5), MIN_CLOSE_DISTANCE * 1.5) : minDistanceFor(next) * 1.1)
+          ? (next.parent ? Math.max(next.radius * (next.focusRadii ?? MIN_DISTANCE_RADII * 1.5), MIN_CLOSE_DISTANCE * 1.5) : wideViewDistance(next) * 1.1)
           : null,
         startOffset: camera.position.clone().sub(worldPos(focus, tmpA)),
       };
@@ -585,8 +603,10 @@ export function SolarSystem({
     };
     let reportedFocusName: string | null | undefined;
     const reportFocus = (dist: number) => {
-      const factor = focus.parent ? NAME_VISIBLE_FACTOR : ROOT_NAME_VISIBLE_FACTOR;
-      const name = dist <= minDistanceFor(focus) * factor ? focus.name : null;
+      const nameLimit = focus.parent
+        ? minDistanceFor(focus) * NAME_VISIBLE_FACTOR
+        : wideViewDistance(focus) * 1.1 * ROOT_NAME_VISIBLE_FACTOR;
+      const name = dist <= nameLimit ? focus.name : null;
       if (name !== reportedFocusName) {
         reportedFocusName = name;
         onFocusChange?.(name);
@@ -602,24 +622,33 @@ export function SolarSystem({
       // Tolerance scales with drawn size so small bodies are forgiving and big
       // ones are exact. When several qualify, the smallest on screen wins, so a
       // moon can be picked while it sits inside its planet's outline.
-      let best: Body | null = null;
-      let bestRadius = Infinity;
-      for (const b of bodies) {
+      // Occlusion: a body whose centre is behind another body's on-screen disc
+      // (at the click point) is not pickable, so a moon behind its planet can't
+      // be clicked through it.
+      const tanHalfFov = Math.tan(THREE.MathUtils.degToRad(CAMERA_FOV / 2));
+      const projected = bodies.map((b) => {
         worldPos(b, tmpA);
         const camDist = tmpA.distanceTo(camera.position);
         tmpB.copy(tmpA).project(camera);
-        if (tmpB.z > 1) continue; // behind the camera
-        if (!b.visual.visible) continue; // hidden (e.g. a moon too small to draw)
         const sx = ((tmpB.x + 1) / 2) * rect.width;
         const sy = ((1 - tmpB.y) / 2) * rect.height;
-        const screenRadius = ((b.radius * b.scale) / (camDist * Math.tan(THREE.MathUtils.degToRad(CAMERA_FOV / 2)))) * (rect.height / 2);
-        const tolerance = screenRadius >= PICK_CAP_PX
-          ? screenRadius
-          : Math.max(PICK_MIN_PX, screenRadius * PICK_RADIUS_MULTIPLE);
-        const d = Math.hypot(sx - px, sy - py);
-        if (d <= tolerance && screenRadius < bestRadius) {
-          best = b;
-          bestRadius = screenRadius;
+        const screenRadius = ((b.radius * b.scale) / (camDist * tanHalfFov)) * (rect.height / 2);
+        return { b, camDist, behindCamera: tmpB.z > 1, sx, sy, screenRadius, d: Math.hypot(sx - px, sy - py) };
+      });
+      const occluded = (c: (typeof projected)[number]) =>
+        projected.some((o) => o !== c && !o.behindCamera && o.b.visual.visible && o.d <= o.screenRadius && o.camDist < c.camDist);
+
+      let best: Body | null = null;
+      let bestRadius = Infinity;
+      for (const c of projected) {
+        if (c.behindCamera) continue;
+        if (!c.b.visual.visible) continue; // hidden (e.g. a moon too small to draw)
+        const tolerance = c.screenRadius >= PICK_CAP_PX
+          ? c.screenRadius
+          : Math.max(PICK_MIN_PX, c.screenRadius * PICK_RADIUS_MULTIPLE);
+        if (c.d <= tolerance && c.screenRadius < bestRadius && !occluded(c)) {
+          best = c.b;
+          bestRadius = c.screenRadius;
         }
       }
       return best;
@@ -672,6 +701,7 @@ export function SolarSystem({
           hoveredDotRef.current = dot;
           onDotHover?.(dot);
         }
+        hoverPausedRef.current = true; // a dot is on Earth
         renderer.domElement.style.cursor = 'pointer';
       } else {
         if (hoveredDotRef.current !== null) {
@@ -679,6 +709,7 @@ export function SolarSystem({
           onDotHover?.(null);
         }
         const body = pickBody(event.clientX, event.clientY);
+        hoverPausedRef.current = body === earthBody;
         const farFromFocus = camera.position.distanceTo(controls.target) >= minDistanceFor(focus) * REFOCUS_FACTOR;
         const name = body && (body !== focus || farFromFocus) ? body.name : null;
         if (hoveredBodyRef.current !== name) {
@@ -723,7 +754,9 @@ export function SolarSystem({
     window.addEventListener('pointerup', onPointerUp);
     window.addEventListener('keydown', onKeyDown);
     controls.addEventListener('end', onControlsEnd);
+    const onMouseLeave = () => { hoverPausedRef.current = false; };
     renderer.domElement.addEventListener('mousemove', onMouseMove);
+    renderer.domElement.addEventListener('mouseleave', onMouseLeave);
     renderer.domElement.addEventListener('click', onMouseClick);
 
     // Animation loop
@@ -736,7 +769,7 @@ export function SolarSystem({
 
       // Orbital motion
       updateOrbiters(delta);
-      if (globeRef.current && autoRotateRef.current) {
+      if (globeRef.current && autoRotateRef.current && !hoverPausedRef.current) {
         globeRef.current.rotation.y += angularSpeed(EARTH_DAY_DAYS) * delta;
       }
       if (moonPivotRef.current) {
@@ -773,7 +806,7 @@ export function SolarSystem({
       // out to the full system view while staying centered. Only a click (or
       // Escape) moves the frame.
       // (Limits are relaxed mid-transition so the eased distance isn't clamped.)
-      const systemMax = Math.max(MAX_CAMERA_DISTANCE, minDistanceFor(sunBody) * 1.5);
+      const systemMax = Math.max(MAX_CAMERA_DISTANCE, fitDistance(outermostOrbit + sunBody.radius) * 1.5);
       controls.minDistance = transition ? 0.1 : minDistanceFor(focus);
       controls.maxDistance = transition ? systemMax * 10 : systemMax;
       controls.update();
@@ -863,6 +896,7 @@ export function SolarSystem({
       }
       if (renderer.domElement) {
         renderer.domElement.removeEventListener('mousemove', onMouseMove);
+        renderer.domElement.removeEventListener('mouseleave', onMouseLeave);
         renderer.domElement.removeEventListener('click', onMouseClick);
       }
       if (mountRef.current && renderer.domElement && mountRef.current.contains(renderer.domElement)) {

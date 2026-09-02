@@ -8,10 +8,9 @@ const findBody = (input: string) => BODY_NAMES.find((n) => n.toLowerCase() === i
 const fly: Command = {
   name: "fly",
   description: "Fly to a planet or moon",
-  hidden: true,
   execute: (args) => {
     if (!args[0]) {
-      return ["__DIM__Usage: fly <body>", "", "Bodies:", `  ${BODY_NAMES.join("  ")}`];
+      return ["__DIM__Usage: fly <body>", "Type a planet or moon and you'll fly there."];
     }
     const body = findBody(args[0]);
     if (!body) return [`Unknown body: ${args[0]}. Type "fly" to see the list.`];
