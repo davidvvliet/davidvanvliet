@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, KeyboardEvent } from "react";
 import styles from "./Terminal.module.css";
-import { getCommand } from "../terminal";
+import { getCommand, getAllCommands } from "../terminal";
 
 type Line = { text: string; type: "input" | "output" };
 
@@ -22,7 +22,60 @@ export default function Terminal() {
     setCursorPos(pos);
   };
 
+  const setInputAndCursor = (value: string) => {
+    setInput(value);
+    setCursorPos(value.length);
+    requestAnimationFrame(() => {
+      inputRef.current?.setSelectionRange(value.length, value.length);
+    });
+  };
+
+  const handleTab = () => {
+    // Only complete the command name (first word), and only when nothing
+    // has been typed after it yet.
+    if (input.includes(" ")) return;
+    const prefix = input.toLowerCase();
+    if (!prefix) return;
+
+    const matches = getAllCommands()
+      .filter((cmd) => !cmd.hidden && cmd.name.startsWith(prefix))
+      .map((cmd) => cmd.name)
+      .sort();
+
+    if (matches.length === 0) return;
+
+    if (matches.length === 1) {
+      setInputAndCursor(`${matches[0]} `);
+      return;
+    }
+
+    // Fill in the longest common prefix shared by all matches.
+    let common = matches[0];
+    for (const name of matches.slice(1)) {
+      let i = 0;
+      while (i < common.length && i < name.length && common[i] === name[i]) i++;
+      common = common.slice(0, i);
+    }
+
+    if (common.length > prefix.length) {
+      setInputAndCursor(common);
+    } else {
+      // Nothing more to fill in: list the candidates, like a shell does.
+      setLines((prev) => [
+        ...prev,
+        { text: `> ${input}`, type: "input" },
+        { text: matches.join("  "), type: "output" },
+      ]);
+    }
+  };
+
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Tab") {
+      e.preventDefault();
+      handleTab();
+      return;
+    }
+
     if (e.key === "Enter") {
       const trimmed = input.trim();
       if (!trimmed) {
