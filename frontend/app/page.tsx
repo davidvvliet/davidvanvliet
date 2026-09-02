@@ -100,6 +100,13 @@ export default function GridPage() {
                     />
                   </div>
                   <div className={styles.cell9}>
+                    <Image 
+                      src="/monolith.jpg" 
+                      alt="2001: A Space Odyssey Monolith" 
+                      width={1200} 
+                      height={545}
+                      className={styles.monolithImage}
+                    />
                   </div>
                 </div>
               </div>

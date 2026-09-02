@@ -122,8 +122,18 @@
 }
 
 .cell9 {
-  /* Empty cell */
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  min-width: 0;
+  min-height: 0;
+}
+
+.monolithImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .orbitalImage {
