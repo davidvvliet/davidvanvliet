@@ -8,8 +8,10 @@ export type PlanetSpec = {
   periodDays: number;      // orbital period
   rotationDays: number;    // sidereal rotation period
   inclinationDeg: number;  // orbit inclination to the ecliptic
+  eccentricity?: number;   // orbital eccentricity (0 = circle)
+  perihelionDeg?: number;  // longitude of perihelion (J2000), direction of closest approach
   color: number;
-  phaseDeg: number;        // starting position on the orbit
+  phaseDeg: number;        // starting mean anomaly
   solid?: boolean;         // solid sphere instead of wireframe (e.g. cloud-covered)
   texture?: string;        // equirectangular map under /public; implies solid
   focusRadii?: number;     // click fly-in distance in body radii (default: MIN_DISTANCE_RADII * 1.5)
@@ -67,34 +69,34 @@ export const MOONS: MoonSpec[] = [
 // Planets other than Earth (Earth is built separately: it has the continents,
 // the location dots and the Moon). Adding a planet = one row.
 export const PLANETS: PlanetSpec[] = [
-  { name: 'Mercury', au: 0.387, radiusEarths: 0.383, periodDays: 87.97, rotationDays: 58.65, inclinationDeg: 7.0, color: 0x8a847c, phaseDeg: 120, texture: '/mercury.jpg' },
-  // Venus rotates retrograde (negative period). Solid: it's a featureless cloud deck.
-  { name: 'Venus', au: 0.723, radiusEarths: 0.949, periodDays: 224.7, rotationDays: -243.0, inclinationDeg: 3.39, color: 0xe8dcc0, phaseDeg: 230, texture: '/venus.jpg' },
-  { name: 'Mars', au: 1.524, radiusEarths: 0.532, periodDays: 686.98, rotationDays: 1.026, inclinationDeg: 1.85, color: 0xc1663f, phaseDeg: 40, texture: '/mars.jpg' },
+  { name: 'Mercury', au: 0.387, radiusEarths: 0.383, periodDays: 87.97, rotationDays: 58.65, inclinationDeg: 7.0, eccentricity: 0.2056, perihelionDeg: 77.46, axialTiltDeg: 0.03, color: 0x8a847c, phaseDeg: 120, texture: '/mercury.jpg' },
+  // Venus: retrograde spin expressed as a 177 degree axial tilt (same convention as Uranus and Pluto).
+  { name: 'Venus', au: 0.723, radiusEarths: 0.949, periodDays: 224.7, rotationDays: 243.0, inclinationDeg: 3.39, eccentricity: 0.0068, perihelionDeg: 131.6, axialTiltDeg: 177.4, color: 0xe8dcc0, phaseDeg: 230, texture: '/venus.jpg' },
+  { name: 'Mars', au: 1.524, radiusEarths: 0.532, periodDays: 686.98, rotationDays: 1.026, inclinationDeg: 1.85, eccentricity: 0.0934, perihelionDeg: 336.0, axialTiltDeg: 25.19, color: 0xc1663f, phaseDeg: 40, texture: '/mars.jpg' },
   // Ceres: dwarf planet in the asteroid belt. Rotation 9 hours, small 4 degree axial tilt.
-  { name: 'Ceres', au: 2.766, radiusEarths: 0.0737, periodDays: 1682, rotationDays: 0.378, inclinationDeg: 10.59, color: 0x8f8a84, phaseDeg: 260, axialTiltDeg: 4.0, texture: '/ceres.jpg' },
-  { name: 'Jupiter', au: 5.203, radiusEarths: 10.97, periodDays: 4332.6, rotationDays: 0.4135, inclinationDeg: 1.30, color: 0xc9a37a, phaseDeg: 300, texture: '/jupiter.jpg', focusRadii: 7 },
+  { name: 'Ceres', au: 2.766, radiusEarths: 0.0737, periodDays: 1682, rotationDays: 0.378, inclinationDeg: 10.59, eccentricity: 0.0785, perihelionDeg: 153.4, color: 0x8f8a84, phaseDeg: 260, axialTiltDeg: 4.0, texture: '/ceres.jpg' },
+  { name: 'Jupiter', au: 5.203, radiusEarths: 10.97, periodDays: 4332.6, rotationDays: 0.4135, inclinationDeg: 1.30, eccentricity: 0.0489, perihelionDeg: 14.7, axialTiltDeg: 3.13, color: 0xc9a37a, phaseDeg: 300, texture: '/jupiter.jpg', focusRadii: 7 },
   // Saturn: rings span the C ring's inner edge to the A ring's outer edge, in Saturn radii.
-  { name: 'Saturn', au: 9.537, radiusEarths: 9.14, periodDays: 10759, rotationDays: 0.444, inclinationDeg: 2.49, color: 0xe3d2a6, phaseDeg: 150, focusRadii: 9, axialTiltDeg: 26.7, texture: '/saturn.jpg',
+  { name: 'Saturn', au: 9.537, radiusEarths: 9.14, periodDays: 10759, rotationDays: 0.444, inclinationDeg: 2.49, eccentricity: 0.0565, perihelionDeg: 92.6, color: 0xe3d2a6, phaseDeg: 150, focusRadii: 9, axialTiltDeg: 26.7, texture: '/saturn.jpg',
     rings: { innerRadii: 1.24, outerRadii: 2.27, color: 0xd8c9a3, opacity: 0.45, texture: '/saturn-ring.png' } },
   // Uranus: axis tilted 97.8 degrees, so it rolls around its orbit on its side. (Spin is
   // about its own tilted axis; the >90 degree tilt is what makes it retrograde to the ecliptic.)
-  { name: 'Uranus', au: 19.19, radiusEarths: 3.98, periodDays: 30687, rotationDays: 0.718, inclinationDeg: 0.77, color: 0xa9d4d8, phaseDeg: 210, axialTiltDeg: 97.8, texture: '/uranus.jpg',
+  { name: 'Uranus', au: 19.19, radiusEarths: 3.98, periodDays: 30687, rotationDays: 0.718, inclinationDeg: 0.77, eccentricity: 0.0457, perihelionDeg: 170.9, color: 0xa9d4d8, phaseDeg: 210, axialTiltDeg: 97.8, texture: '/uranus.jpg',
     // Main ring system spans ring 6 to the epsilon ring; dark and narrow, nothing like Saturn's.
     rings: { innerRadii: 1.64, outerRadii: 2.02, color: 0x8a8f93, opacity: 0.35, texture: '/uranus-ring.png' } },
-  { name: 'Neptune', au: 30.07, radiusEarths: 3.86, periodDays: 60190, rotationDays: 0.671, inclinationDeg: 1.77, color: 0x3f5fbf, phaseDeg: 330, axialTiltDeg: 28.3, texture: '/neptune.jpg' },
+  { name: 'Neptune', au: 30.07, radiusEarths: 3.86, periodDays: 60190, rotationDays: 0.671, inclinationDeg: 1.77, eccentricity: 0.0113, perihelionDeg: 45.0, color: 0x3f5fbf, phaseDeg: 330, axialTiltDeg: 28.3, texture: '/neptune.jpg' },
   // Pluto: mean distance (its real orbit is eccentric enough to cross Neptune's), steeply
   // inclined, spinning on a 122 degree tilt (so retrograde to the ecliptic). Charon orbits its equator.
   // spinPhaseDeg = Charon's phaseDeg + 180: Pluto's prime meridian (lon 0, the map seam) is defined
   // as the sub-Charon point, so the heart (lon 180, map centre) faces away from Charon. Both turn at
   // the same rate, so this alignment holds: they are mutually locked.
-  { name: 'Pluto', au: 39.48, radiusEarths: 0.1865, periodDays: 90560, rotationDays: 6.387, inclinationDeg: 17.16, color: 0xc9a98a, phaseDeg: 100, axialTiltDeg: 122.5, texture: '/pluto.jpg', spinPhaseDeg: 180 },
+  { name: 'Pluto', au: 39.48, radiusEarths: 0.1865, periodDays: 90560, rotationDays: 6.387, inclinationDeg: 17.16, eccentricity: 0.2488, perihelionDeg: 224.1, color: 0xc9a98a, phaseDeg: 100, axialTiltDeg: 122.5, texture: '/pluto.jpg', spinPhaseDeg: 180 },
 ];
 /** A favourite fact per body, shown under the name when the body is in focus. */
 export const BODY_FACTS: Record<string, string> = {
   Io: "Io is the most volcanic body in the solar system. Before the discovery of erupting volcanoes on Io, we weren't aware of any other body in the solar system with active volcanism at all. It shows how quickly perspectives can change from exploration and new information.",
   Uranus: "Uranus spins on its side, suggesting a massive collision at some point in its past. Uranus has rings, just like Saturn does! Neptune and Jupiter actually have rings as well, likely from small debris coming from their moons, but they're much fainter.",
-  Venus: "Venus is very similar to Earth. It is in the habitable zone and is roughly the same size. Even with these similarities, their paths have clearly diverged significantly. These facts make Venus an important point of interest for understanding how planets behave and for studying what habitable zone exoplanets might be like.",
+  Venus: "Venus is very similar to Earth. It is in the habitable zone and is roughly the same size. However, even with these similarities, their paths have clearly diverged significantly. These facts make Venus an important point of interest for understanding how planets behave and for studying what habitable zone exoplanets might be like.",
 };
 
 // Shared across the Uranian moons.
@@ -203,6 +205,28 @@ export const STARS: StarSpec[] = [
   { name: 'Delta Bootis', raDeg: 228.876, decDeg: 33.315, magnitude: 3.47, spectral: 'G', lightYears: 122 },
   { name: 'Rho Bootis', raDeg: 217.957, decDeg: 30.371, magnitude: 3.58, spectral: 'K', lightYears: 160 },
   { name: 'Xuange', raDeg: 214.096, decDeg: 46.088, magnitude: 4.18, spectral: 'A', lightYears: 99 },
+  // Triangulum: a small, faint triangle below Andromeda.
+  { name: 'Beta Trianguli', raDeg: 32.386, decDeg: 34.987, magnitude: 3.00, spectral: 'A', lightYears: 127 },
+  { name: 'Mothallah', raDeg: 28.270, decDeg: 29.579, magnitude: 3.41, spectral: 'F', lightYears: 63 },
+  { name: 'Gamma Trianguli', raDeg: 34.329, decDeg: 33.847, magnitude: 4.01, spectral: 'A', lightYears: 112 },
+  // Leo: the Sickle (Regulus up through Rasalas) and the hindquarters (Denebola, Zosma, Chertan).
+  { name: 'Regulus', raDeg: 152.093, decDeg: 11.967, magnitude: 1.36, spectral: 'B', lightYears: 79 },
+  { name: 'Denebola', raDeg: 177.265, decDeg: 14.572, magnitude: 2.14, spectral: 'A', lightYears: 36 },
+  { name: 'Algieba', raDeg: 154.993, decDeg: 19.842, magnitude: 2.01, spectral: 'K', lightYears: 130 },
+  { name: 'Zosma', raDeg: 168.527, decDeg: 20.524, magnitude: 2.56, spectral: 'A', lightYears: 58 },
+  { name: 'Chertan', raDeg: 168.560, decDeg: 15.430, magnitude: 3.32, spectral: 'A', lightYears: 165 },
+  { name: 'Adhafera', raDeg: 154.173, decDeg: 23.417, magnitude: 3.44, spectral: 'F', lightYears: 274 },
+  { name: 'Rasalas', raDeg: 148.191, decDeg: 26.007, magnitude: 3.88, spectral: 'K', lightYears: 124 },
+  { name: 'Algenubi', raDeg: 146.463, decDeg: 23.774, magnitude: 2.98, spectral: 'G', lightYears: 247 },
+  // Virgo: Spica and the Y-shaped bowl.
+  { name: 'Spica', raDeg: 201.298, decDeg: -11.161, magnitude: 0.97, spectral: 'B', lightYears: 250 },
+  { name: 'Porrima', raDeg: 190.415, decDeg: -1.449, magnitude: 2.74, spectral: 'F', lightYears: 38 },
+  { name: 'Vindemiatrix', raDeg: 195.544, decDeg: 10.959, magnitude: 2.83, spectral: 'G', lightYears: 110 },
+  { name: 'Heze', raDeg: 203.673, decDeg: -0.596, magnitude: 3.38, spectral: 'A', lightYears: 74 },
+  { name: 'Auva', raDeg: 193.901, decDeg: 3.397, magnitude: 3.38, spectral: 'M', lightYears: 198 },
+  { name: 'Zavijava', raDeg: 177.674, decDeg: 1.765, magnitude: 3.60, spectral: 'F', lightYears: 36 },
+  { name: 'Zaniah', raDeg: 184.977, decDeg: -0.667, magnitude: 3.89, spectral: 'A', lightYears: 265 },
+  { name: 'Syrma', raDeg: 214.004, decDeg: -6.000, magnitude: 4.08, spectral: 'F', lightYears: 70 },
 ];
 
 // Approximate blackbody colors by spectral class.

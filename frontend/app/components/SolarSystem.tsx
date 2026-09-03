@@ -47,7 +47,11 @@ const MAX_CAMERA_DISTANCE = 180;       // How far out the user can scroll
 // one compressed thing: at true ratio Earth would be 0.004 units across.
 // Bodies are never drawn smaller than MIN_BODY_PX so the outer system still
 // reads as a system rather than empty space.
-const ORBIT_SCALE = 260;               // Earth (1 AU) orbits at this radius
+// TRUE SCALE: one AU is Earth's radius divided by Earth's real radius-to-AU ratio
+// (6371 km / 149,597,870 km), so sizes, planet orbits (AU) and moon orbits
+// (planet radii) all sit on one consistent scale. Earth orbits at ~30,500 units.
+const EARTH_RADIUS_PER_AU = 6371 / 149597870;
+const ORBIT_SCALE = EARTH_RADIUS / EARTH_RADIUS_PER_AU;
 const orbitRadiusForAU = (au: number) => ORBIT_SCALE * au;
 const EARTH_ORBIT_AU = 1;
 const MIN_BODY_PX = 3;                 // Minimum on-screen radius of any body, in pixels
@@ -71,6 +75,8 @@ const SECONDS_PER_DAY = 10;            // Real seconds per simulated Earth day
 const EARTH_DAY_DAYS = 0.99727;        // Sidereal rotation period, in days
 const MOON_ORBIT_DAYS = 27.32;         // Sidereal month
 const EARTH_YEAR_DAYS = 365.25;
+const EARTH_ECCENTRICITY = 0.0167;
+const EARTH_PERIHELION_DEG = 102.9;    // longitude of perihelion (J2000)
 const angularSpeed = (periodDays: number) => (2 * Math.PI) / (periodDays * SECONDS_PER_DAY); // rad/s
 
 const MOON_ORBIT_RADIUS = EARTH_RADIUS * 60.3; // True ratio: 384,400 km is 60.3 Earth radii
@@ -78,16 +84,18 @@ const MOON_RADIUS = EARTH_RADIUS * 0.273; // True ratio: Moon diameter is 27.3% 
 const MOON_INCLINATION_DEG = 5.14;     // Real inclination of the Moon's orbit
 const MOON_TEXTURE = '/moon.jpg';      // Equirectangular map
 
-const SUN_RADIUS = 20;                 // ~15x Earth's radius; bigger than Jupiter, far short of the real 109x
+
+const SUN_RADIUS = EARTH_RADIUS * 109.2; // True ratio
 const SUN_COLOR = 0xfff4e8;            // G2V: near-white, faintly warm (the yellow is atmospheric)
-const SUN_GLOW_SCALE = 3.2;            // Glow sprite size as a multiple of the sun's diameter
+const SUN_ROTATION_DAYS = 25.05;       // sidereal rotation at the equator
+const SUN_GLOW_SCALE = 4.5;            // Glow sprite size as a multiple of the sun's diameter
 
 // Stars: one sprite each on a sphere that is re-centred on the camera every
 // frame (no parallax, which is physically right at this scale). Directions are
 // true; the sphere radius just has to sit inside the far plane. The sprite is a
 // telescope-style star: saturated core, tinted halo, diffraction spikes. Size
 // follows brightness, so only the bright ones show spikes.
-const STAR_SPHERE_RADIUS = 50000;
+const STAR_SPHERE_RADIUS = 8e6;        // beyond the max zoom-out (~3.7M at Pluto's orbit), inside the far plane
 const STAR_BASE_PX = 22;               // on-screen size (pixels) of a magnitude-0 star's sprite
 const STAR_MIN_PX = 4;                 // faint stars (mag 4-5) still show as a small dot
 const STAR_MAG_EXPONENT = 0.18;        // size = base * 10^(-exp * mag); 0.2 matches real flux by area, lower is gentler
@@ -153,7 +161,8 @@ const MIN_DISTANCE_RADII = DEFAULT_CAMERA_DISTANCE / EARTH_RADIUS; // closest zo
 const NAME_VISIBLE_FACTOR = 7.5 / MIN_DISTANCE_RADII;  // ~2.2x close-up: focused body's name shows within this
 const ROOT_NAME_VISIBLE_FACTOR = 1.15;                 // for the Sun, relative to its wide-view fly-in distance
 const REFOCUS_FACTOR = 20 / MIN_DISTANCE_RADII;        // ~5.8x close-up: beyond this, clicking the focused body zooms back in
-const FOCUS_TRANSITION_SECONDS = 0.9;
+const FOCUS_TRANSITION_SECONDS = 0.9;  // base duration; fly-ins add time per decade of distance covered
+const FOCUS_SECONDS_PER_DECADE = 0.45; // Earth -> Moon ~1.6 s, Earth -> Pluto ~3.5 s
 const PICK_MIN_PX = 12;                // click tolerance floor, in pixels
 const PICK_RADIUS_MULTIPLE = 4;        // tolerance = drawn radius * this (capped: big bodies use their outline)
 const PICK_CAP_PX = 60;                // above this drawn radius, the outline itself is the hitbox
@@ -296,14 +305,14 @@ export function SolarSystem({
     const mount = mountRef.current;
     const initialWidth = size ?? (mount.clientWidth || 500);
     const initialHeight = size ?? (mount.clientHeight || 500);
-    const camera = new THREE.PerspectiveCamera(CAMERA_FOV, initialWidth / initialHeight, 0.1, 100000);
+    const camera = new THREE.PerspectiveCamera(CAMERA_FOV, initialWidth / initialHeight, 0.1, 3e7);
     cameraRef.current = camera;
 
     // Renderer setup
     const renderer = new THREE.WebGLRenderer({ 
       antialias: true, 
       alpha: true,
-      logarithmicDepthBuffer: true, // near 0.1 to far 100000 without z-fighting
+      logarithmicDepthBuffer: true, // near 0.1 to far 3e7 without z-fighting
     });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(initialWidth, initialHeight);
@@ -374,7 +383,7 @@ export function SolarSystem({
 
     // Sun: a solid sphere at the origin plus a soft additive glow sprite that
     // always faces the camera.
-    const sunGeometry = new THREE.SphereGeometry(SUN_RADIUS, 24, 24);
+    const sunGeometry = new THREE.SphereGeometry(SUN_RADIUS, 48, 48);
     const sunMaterial = new THREE.MeshBasicMaterial({
       color: SUN_COLOR,
       transparent: true,
@@ -389,8 +398,8 @@ export function SolarSystem({
     const glowCtx = glowCanvas.getContext('2d')!;
     const gradient = glowCtx.createRadialGradient(128, 128, 0, 128, 128, 128);
     gradient.addColorStop(0, 'rgba(255, 244, 232, 1)');
-    gradient.addColorStop(0.25, 'rgba(255, 244, 232, 0.55)');
-    gradient.addColorStop(0.6, 'rgba(255, 236, 214, 0.12)');
+    gradient.addColorStop(0.3, 'rgba(255, 244, 232, 0.85)');
+    gradient.addColorStop(0.6, 'rgba(255, 236, 214, 0.3)');
     gradient.addColorStop(1, 'rgba(255, 236, 214, 0)');
     glowCtx.fillStyle = gradient;
     glowCtx.fillRect(0, 0, 256, 256);
@@ -545,12 +554,13 @@ export function SolarSystem({
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
     scene.add(ambientLight);
 
+
     // Controls
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
     controls.enableZoom = true;
-    controls.zoomSpeed = 0.6;
+    controls.zoomSpeed = 0.8;
     controls.enablePan = false;
     controls.minDistance = DEFAULT_CAMERA_DISTANCE; // can't zoom in past the default view
     controls.maxDistance = MAX_CAMERA_DISTANCE;
@@ -559,19 +569,40 @@ export function SolarSystem({
     // Orbiters: anything that goes around the Sun. Each sits in an inclined
     // pivot; its position is computed from an angle each frame (not by rotating
     // the pivot), so axial tilts stay fixed in space.
-    type Orbiter = { object: THREE.Object3D; orbitRadius: number; periodDays: number; angle: number; spin?: THREE.Object3D; rotationDays?: number; tidallyLocked?: boolean; faceOffset?: number };
+    // Keplerian orbits: `orbitRadius` is the semi-major axis, `angle` the mean
+    // anomaly. Eccentric orbits solve Kepler's equation each frame; e = 0 is a circle.
+    type Orbiter = { object: THREE.Object3D; orbitRadius: number; periodDays: number; angle: number; e: number; perihelion: number; spin?: THREE.Object3D; rotationDays?: number; tidallyLocked?: boolean; faceOffset?: number };
     const orbiters: Orbiter[] = [];
     const orbitRings: THREE.LineLoop[] = [];
-    const addOrbiter = (object: THREE.Object3D, orbitRadius: number, periodDays: number, inclinationDeg: number, phaseDeg: number, spin?: THREE.Object3D, rotationDays?: number, parent: THREE.Object3D = scene, tidallyLocked = false, faceOffsetDeg = 0) => {
+    const ringByObject = new Map<THREE.Object3D, THREE.LineLoop>();
+    // Position in the orbit plane for eccentric anomaly E (angle measured from perihelion).
+    const keplerPoint = (a: number, e: number, perihelion: number, E: number, out: THREE.Vector3) => {
+      const nu = 2 * Math.atan2(Math.sqrt(1 + e) * Math.sin(E / 2), Math.sqrt(1 - e) * Math.cos(E / 2));
+      const r = a * (1 - e * Math.cos(E));
+      const theta = nu + perihelion;
+      out.set(r * Math.cos(theta), 0, -r * Math.sin(theta));
+      return theta;
+    };
+    const solveKepler = (M: number, e: number) => {
+      let E = e < 0.8 ? M : Math.PI;
+      for (let i = 0; i < 5; i++) E -= (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
+      return E;
+    };
+    const addOrbiter = (object: THREE.Object3D, orbitRadius: number, periodDays: number, inclinationDeg: number, phaseDeg: number, spin?: THREE.Object3D, rotationDays?: number, parent: THREE.Object3D = scene, tidallyLocked = false, faceOffsetDeg = 0, eccentricity = 0, perihelionDeg = 0) => {
       const pivot = new THREE.Group();
       pivot.rotation.x = THREE.MathUtils.degToRad(inclinationDeg);
       pivot.add(object);
       parent.add(pivot);
-      // Faint orbit ring
+      const perihelion = THREE.MathUtils.degToRad(perihelionDeg);
+      // Faint orbit ring: an ellipse with the parent at one focus.
       const ringPoints: THREE.Vector3[] = [];
-      for (let i = 0; i < 128; i++) {
-        const a = (i / 128) * Math.PI * 2;
-        ringPoints.push(new THREE.Vector3(orbitRadius * Math.cos(a), 0, -orbitRadius * Math.sin(a)));
+      // 1024 segments: at true scale a coarse polygon would visibly miss the
+      // body it belongs to when viewed up close.
+      const RING_SEGMENTS = 1024;
+      for (let i = 0; i < RING_SEGMENTS; i++) {
+        const pt = new THREE.Vector3();
+        keplerPoint(orbitRadius, eccentricity, perihelion, (i / RING_SEGMENTS) * Math.PI * 2, pt);
+        ringPoints.push(pt);
       }
       const ring = new THREE.LineLoop(
         new THREE.BufferGeometry().setFromPoints(ringPoints),
@@ -579,23 +610,25 @@ export function SolarSystem({
       );
       pivot.add(ring);
       orbitRings.push(ring);
-      orbiters.push({ object, orbitRadius, periodDays, angle: THREE.MathUtils.degToRad(phaseDeg), spin, rotationDays, tidallyLocked, faceOffset: THREE.MathUtils.degToRad(faceOffsetDeg) });
+      ringByObject.set(object, ring);
+      orbiters.push({ object, orbitRadius, periodDays, angle: THREE.MathUtils.degToRad(phaseDeg), e: eccentricity, perihelion, spin, rotationDays, tidallyLocked, faceOffset: THREE.MathUtils.degToRad(faceOffsetDeg) });
     };
     const updateOrbiters = (delta: number) => {
       for (const o of orbiters) {
-        o.angle += angularSpeed(o.periodDays) * delta;
-        o.object.position.set(o.orbitRadius * Math.cos(o.angle), 0, -o.orbitRadius * Math.sin(o.angle));
+        o.angle += angularSpeed(o.periodDays) * delta; // mean anomaly
+        const E = o.e > 0 ? solveKepler(o.angle, o.e) : o.angle;
+        const theta = keplerPoint(o.orbitRadius, o.e, o.perihelion, E, o.object.position);
         if (o.spin && o.rotationDays) o.spin.rotation.y += angularSpeed(o.rotationDays) * delta;
         // Tidal lock: one rotation per orbit, with the map's centre (+x on the
         // sphere) always pointing back at the parent.
-        if (o.tidallyLocked) o.object.rotation.y = o.angle + Math.PI + (o.faceOffset ?? 0);
+        if (o.tidallyLocked) o.object.rotation.y = theta + Math.PI + (o.faceOffset ?? 0);
       }
     };
 
     // Earth (its spin is driven separately, gated by auto-rotate).
     const earthOrbitRadius = orbitRadiusForAU(EARTH_ORBIT_AU);
     scene.remove(earthSystem);
-    addOrbiter(earthSystem, earthOrbitRadius, EARTH_YEAR_DAYS, 0, 0);
+    addOrbiter(earthSystem, earthOrbitRadius, EARTH_YEAR_DAYS, 0, 0, undefined, undefined, scene, false, 0, EARTH_ECCENTRICITY, EARTH_PERIHELION_DEG);
 
     // Bodies that can be focused (clicked).
     const sunBody: Body = { name: 'Sun', object: sun, visual: sun, radius: SUN_RADIUS, parent: null, systemRadius: earthOrbitRadius, scale: 1 };
@@ -665,7 +698,7 @@ export function SolarSystem({
         planetDisposables.push({ geometry: ringGeometry, material: ringMaterial });
       }
       const orbitRadius = orbitRadiusForAU(spec.au);
-      addOrbiter(holder, orbitRadius, spec.periodDays, spec.inclinationDeg, spec.phaseDeg, mesh, spec.rotationDays);
+      addOrbiter(holder, orbitRadius, spec.periodDays, spec.inclinationDeg, spec.phaseDeg, mesh, spec.rotationDays, scene, false, 0, spec.eccentricity ?? 0, spec.perihelionDeg ?? 0);
       bodies.push({ name: spec.name, object: holder, visual, radius, parent: sunBody, systemRadius: 0, scale: 1, focusRadii: spec.focusRadii });
       outermostOrbit = Math.max(outermostOrbit, orbitRadius);
       if (spec.name === WIDE_VIEW_PLANET) sunBody.systemRadius = orbitRadius;
@@ -711,7 +744,7 @@ export function SolarSystem({
     // For zoomTo transitions, `startOffset` is the camera's offset from the old
     // body at the start; the camera then flies straight toward the new body
     // along the line of sight, so it never passes through the parent.
-    let transition: { from: Body; t: number; distTo: number | null; startOffset: THREE.Vector3 } | null = null;
+    let transition: { from: Body; t: number; distTo: number | null; startOffset: THREE.Vector3; seconds: number } | null = null;
     const focusPoint = new THREE.Vector3();
     const tmpA = new THREE.Vector3();
     const tmpB = new THREE.Vector3();
@@ -726,6 +759,7 @@ export function SolarSystem({
     const wideViewDistance = (b: Body) => fitDistance(b.systemRadius + b.radius);
 
     const setFocus = (next: Body, opts: { zoomTo?: boolean } = {}) => {
+      hasInteracted = true; // a click or `fly` counts as interaction
       // Clicking the already-focused body only does something when the camera
       // has drifted far enough away that flying back in is meaningful.
       const isSame = next === focus;
@@ -737,15 +771,25 @@ export function SolarSystem({
           ? (next.parent ? Math.max(next.radius * (next.focusRadii ?? MIN_DISTANCE_RADII * 1.5), MIN_CLOSE_DISTANCE * 1.5) : wideViewDistance(next) * 1.1)
           : null,
         startOffset: camera.position.clone().sub(worldPos(focus, tmpA)),
+        seconds: FOCUS_TRANSITION_SECONDS,
       };
+      if (transition.distTo !== null) {
+        // Longer flights take longer, but only logarithmically.
+        const startDist = camera.position.distanceTo(worldPos(next, tmpB));
+        const decades = Math.max(0, Math.log10(startDist / transition.distTo));
+        transition.seconds = FOCUS_TRANSITION_SECONDS + FOCUS_SECONDS_PER_DECADE * decades;
+      }
       focus = next;
     };
     let reportedFocusName: string | null | undefined;
+    // The focused body's name is held back until the user first interacts
+    // (scroll or drag), so the page doesn't open with "Earth" over the globe.
+    let hasInteracted = false;
     const reportFocus = (dist: number) => {
       const nameLimit = focus.parent
         ? minDistanceFor(focus) * NAME_VISIBLE_FACTOR
         : wideViewDistance(focus) * 1.1 * ROOT_NAME_VISIBLE_FACTOR;
-      const name = dist <= nameLimit ? focus.name : null;
+      const name = hasInteracted && dist <= nameLimit ? focus.name : null;
       if (name !== reportedFocusName) {
         reportedFocusName = name;
         onFocusChange?.(name);
@@ -800,6 +844,7 @@ export function SolarSystem({
 
     // User interaction handlers
     const onControlsStart = () => {
+      hasInteracted = true;
       renderer.domElement.style.cursor = 'grabbing';
     };
     // 'change' fires only when the camera actually moves (a drag or zoom),
@@ -919,6 +964,7 @@ export function SolarSystem({
 
       // Orbital motion
       updateOrbiters(delta);
+      sun.rotation.y += angularSpeed(SUN_ROTATION_DAYS) * delta;
       if (globeRef.current && autoRotateRef.current && !hoverPausedRef.current) {
         globeRef.current.rotation.y += angularSpeed(EARTH_DAY_DAYS) * delta;
       }
@@ -933,19 +979,28 @@ export function SolarSystem({
       let dist = offset.length();
       worldPos(focus, focusPoint);
       if (transition) {
-        transition.t = Math.min(1, transition.t + delta / FOCUS_TRANSITION_SECONDS);
+        transition.t = Math.min(1, transition.t + delta / transition.seconds);
         const k = THREE.MathUtils.smoothstep(transition.t, 0, 1);
         const newBodyPos = tmpB.copy(focusPoint);
         worldPos(transition.from, tmpA);
-        focusPoint.copy(tmpA).lerp(newBodyPos, k);
         if (transition.distTo !== null) {
-          // Straight flight: from (old body + start offset) toward the new body,
-          // ending at distTo on the near side of it.
+          // Straight flight from (old body + start offset) toward the new body,
+          // with the distance to it shrinking by a constant RATIO per unit time
+          // (log-space easing), so the body grows at a steady visual rate instead
+          // of inflating in the last few frames. The target slides in step.
           const startPos = tmpA.add(transition.startOffset);
-          const endPos = startPos.clone().sub(newBodyPos).setLength(transition.distTo).add(newBodyPos);
-          camera.position.copy(startPos).lerp(endPos, k);
+          const toStart = startPos.clone().sub(newBodyPos);
+          const startDist = Math.max(toStart.length(), 1e-6);
+          const endDist = transition.distTo;
+          const d = startDist * Math.pow(endDist / startDist, k);
+          camera.position.copy(newBodyPos).addScaledVector(toStart.normalize(), d);
+          const travelled = startDist === endDist ? 1 : (startDist - d) / (startDist - endDist);
+          worldPos(transition.from, tmpA);
+          focusPoint.copy(tmpA).lerp(newBodyPos, THREE.MathUtils.clamp(travelled, 0, 1));
           offset.copy(camera.position).sub(focusPoint);
           dist = offset.length();
+        } else {
+          focusPoint.copy(tmpA).lerp(newBodyPos, k);
         }
         if (transition.t >= 1) transition = null;
       }
@@ -962,6 +1017,14 @@ export function SolarSystem({
       controls.update();
 
       reportFocus(dist);
+
+      // A body's own orbit ring passes through its centre; hide it while the
+      // camera is close to that body so it doesn't cut across the close-up.
+      {
+        const ownRing = ringByObject.get(focus.object);
+        for (const ring of orbitRings) ring.visible = true;
+        if (ownRing) ownRing.visible = dist > minDistanceFor(focus) * REFOCUS_FACTOR;
+      }
 
       // Keep the star sphere centred on the camera: pure direction, no parallax.
       starField.position.copy(camera.position);
@@ -998,6 +1061,8 @@ export function SolarSystem({
           b.scale = visible ? targetPx / px : 0;
           b.visual.scale.setScalar(visible ? b.scale : 1);
         }
+        // The Sun's glow inflates with its disc, so it never shrinks to nothing far out.
+        sunGlow.scale.setScalar(SUN_RADIUS * 2 * SUN_GLOW_SCALE * sunBody.scale);
       }
 
       renderer.render(scene, camera);

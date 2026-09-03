@@ -20,6 +20,6 @@ export const usePageStore = create<PageState>((set) => ({
   focusRequest: null,
   requestFocus: (name) =>
     set((state) => ({ focusRequest: { name, seq: (state.focusRequest?.seq ?? 0) + 1 } })),
-  starsVisible: true,
+  starsVisible: false,
   setStarsVisible: (visible) => set({ starsVisible: visible }),
 }));
