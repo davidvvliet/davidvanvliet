@@ -22,6 +22,7 @@ export default function GridPage() {
   const [selectedDot, setSelectedDot] = useState<any>(null);
   const [hoveredDot, setHoveredDot] = useState<any>(null);
   const [hoveredBody, setHoveredBody] = useState<string | null>(null);
+  const [hoveredStar, setHoveredStar] = useState<{ name: string; lightYears: number } | null>(null);
   const [focusedBody, setFocusedBody] = useState<string | null>("Earth");
   const leftPanel = usePageStore((s) => s.leftPanel);
 
@@ -61,6 +62,8 @@ export default function GridPage() {
                   <div className={styles.globeLabelRow}><span className={styles.globeLabelLocation}>{hoveredDot.label}</span><span className={styles.globeLabelSubtitle}>{hoveredDot.subtitle}</span><span className={styles.globeLabelDescription}>{hoveredDot.description}</span></div>
                 ) : hoveredBody ? (
                   <div className={styles.globeLabelRow}><span className={styles.globeLabelLocation}>{hoveredBody}</span><span className={styles.globeLabelDescription}>Click to focus</span></div>
+                ) : hoveredStar ? (
+                  <div className={styles.globeLabelRow}><span className={styles.globeLabelLocation}>{hoveredStar.name}</span><span className={styles.globeLabelDescription}>{hoveredStar.lightYears.toLocaleString()} light-years</span></div>
                 ) : focusedBody ? (
                   <>
                     <span className={styles.globeLabelLocation}>{focusedBody}</span>
@@ -69,7 +72,7 @@ export default function GridPage() {
                 ) : null}
               </div>
               <div className={styles.globeCanvas}>
-                <SolarSystem dots={dots} onDotClick={setSelectedDot} onDotHover={setHoveredDot} onBodyHover={setHoveredBody} onFocusChange={setFocusedBody} dotSizeMultiplier={0.3} />
+                <SolarSystem dots={dots} onDotClick={setSelectedDot} onDotHover={setHoveredDot} onBodyHover={setHoveredBody} onStarHover={setHoveredStar} onFocusChange={setFocusedBody} dotSizeMultiplier={0.3} />
               </div>
             </div>
           )}

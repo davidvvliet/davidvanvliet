@@ -4,7 +4,7 @@ import React, { useRef, useEffect, useCallback, useMemo } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { usePageStore } from '../store/pageStore';
-import { PLANETS, MOONS } from './solarSystemData';
+import { PLANETS, MOONS, STARS, SPECTRAL_COLORS } from './solarSystemData';
 
 interface PersonaDot {
   id: number;
@@ -28,6 +28,7 @@ interface SolarSystemProps {
   onDotClick?: (dot: PersonaDot) => void;
   onDotHover?: (dot: PersonaDot | null) => void;
   onBodyHover?: (name: string | null) => void;
+  onStarHover?: (star: { name: string; lightYears: number } | null) => void;
   onFocusChange?: (name: string | null) => void; // null when the camera is far from the focused body
   dotSizeMultiplier?: number;
 }
@@ -41,10 +42,11 @@ const CAMERA_FOV = 50;
 const DEFAULT_CAMERA_DISTANCE = 4.5;   // Initial view; also the closest allowed zoom
 const MAX_CAMERA_DISTANCE = 180;       // How far out the user can scroll
 
-// Planet orbits use TRUE distance ratios: orbit radius = ORBIT_SCALE * AU.
-// Body sizes and the Moon's orbit stay compressed (at true ratio Earth would
-// be 0.004 units across), and bodies are never drawn smaller than MIN_BODY_PX
-// so the outer system still reads as a system rather than empty space.
+// Planet orbits and moon orbits use TRUE distance ratios (orbit radius =
+// ORBIT_SCALE * AU for planets; planet radii for moons). Body sizes are the
+// one compressed thing: at true ratio Earth would be 0.004 units across.
+// Bodies are never drawn smaller than MIN_BODY_PX so the outer system still
+// reads as a system rather than empty space.
 const ORBIT_SCALE = 260;               // Earth (1 AU) orbits at this radius
 const orbitRadiusForAU = (au: number) => ORBIT_SCALE * au;
 const EARTH_ORBIT_AU = 1;
@@ -71,7 +73,7 @@ const MOON_ORBIT_DAYS = 27.32;         // Sidereal month
 const EARTH_YEAR_DAYS = 365.25;
 const angularSpeed = (periodDays: number) => (2 * Math.PI) / (periodDays * SECONDS_PER_DAY); // rad/s
 
-const MOON_ORBIT_RADIUS = 6;           // Distance from Earth's centre (cinematic, not true scale)
+const MOON_ORBIT_RADIUS = EARTH_RADIUS * 60.3; // True ratio: 384,400 km is 60.3 Earth radii
 const MOON_RADIUS = EARTH_RADIUS * 0.273; // True ratio: Moon diameter is 27.3% of Earth's
 const MOON_INCLINATION_DEG = 5.14;     // Real inclination of the Moon's orbit
 const MOON_TEXTURE = '/moon.jpg';      // Equirectangular map
@@ -79,6 +81,65 @@ const MOON_TEXTURE = '/moon.jpg';      // Equirectangular map
 const SUN_RADIUS = 20;                 // ~15x Earth's radius; bigger than Jupiter, far short of the real 109x
 const SUN_COLOR = 0xfff4e8;            // G2V: near-white, faintly warm (the yellow is atmospheric)
 const SUN_GLOW_SCALE = 3.2;            // Glow sprite size as a multiple of the sun's diameter
+
+// Stars: one sprite each on a sphere that is re-centred on the camera every
+// frame (no parallax, which is physically right at this scale). Directions are
+// true; the sphere radius just has to sit inside the far plane. The sprite is a
+// telescope-style star: saturated core, tinted halo, diffraction spikes. Size
+// follows brightness, so only the bright ones show spikes.
+const STAR_SPHERE_RADIUS = 50000;
+const STAR_BASE_PX = 22;               // on-screen size (pixels) of a magnitude-0 star's sprite
+const STAR_MIN_PX = 4;                 // faint stars (mag 4-5) still show as a small dot
+const STAR_MAG_EXPONENT = 0.18;        // size = base * 10^(-exp * mag); 0.2 matches real flux by area, lower is gentler
+const OBLIQUITY_DEG = 23.44;           // equatorial -> ecliptic; matches Earth's tilt in the scene
+
+// Draws the star sprite texture once: core + halo + 4 main spikes + 4 fainter diagonals.
+function makeStarTexture(): THREE.CanvasTexture {
+  const size = 256;
+  const c = document.createElement('canvas');
+  c.width = c.height = size;
+  const ctx = c.getContext('2d')!;
+  const mid = size / 2;
+  ctx.clearRect(0, 0, size, size);
+  ctx.globalCompositeOperation = 'lighter';
+
+  const spike = (angle: number, length: number, width: number, alpha: number) => {
+    ctx.save();
+    ctx.translate(mid, mid);
+    ctx.rotate(angle);
+    const g = ctx.createLinearGradient(-length, 0, length, 0);
+    g.addColorStop(0, 'rgba(255,255,255,0)');
+    g.addColorStop(0.5, `rgba(255,255,255,${alpha})`);
+    g.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(-length, -width / 2, length * 2, width);
+    ctx.restore();
+  };
+  // Main cross, then a fainter diagonal cross (secondary struts).
+  spike(0, mid, 2.2, 0.9);
+  spike(Math.PI / 2, mid, 2.2, 0.9);
+  spike(Math.PI / 4, mid * 0.55, 1.4, 0.35);
+  spike(-Math.PI / 4, mid * 0.55, 1.4, 0.35);
+
+  // Halo (wide, soft) and core (small, saturated).
+  const halo = ctx.createRadialGradient(mid, mid, 0, mid, mid, mid * 0.5);
+  halo.addColorStop(0, 'rgba(255,255,255,0.9)');
+  halo.addColorStop(0.15, 'rgba(255,255,255,0.45)');
+  halo.addColorStop(0.5, 'rgba(255,255,255,0.08)');
+  halo.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = halo;
+  ctx.fillRect(0, 0, size, size);
+  const core = ctx.createRadialGradient(mid, mid, 0, mid, mid, mid * 0.09);
+  core.addColorStop(0, 'rgba(255,255,255,1)');
+  core.addColorStop(0.6, 'rgba(255,255,255,1)');
+  core.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = core;
+  ctx.fillRect(0, 0, size, size);
+
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
 
 // "Fit" distance: how far back the camera must be for an extent to fit the
 // canvas width. Used for per-body zoom limits.
@@ -173,6 +234,7 @@ export function SolarSystem({
   onDotClick,
   onDotHover,
   onBodyHover,
+  onStarHover,
   onFocusChange,
   dotSizeMultiplier = 1
 }: SolarSystemProps) {
@@ -193,9 +255,12 @@ export function SolarSystem({
   const moonPivotRef = useRef<THREE.Group | null>(null);
   const earthSystemRef = useRef<THREE.Group | null>(null);
   const hoveredBodyRef = useRef<string | null>(null);
+  const hoveredStarRef = useRef<string | null>(null);
   const pointerDownPosRef = useRef<{ x: number; y: number } | null>(null);
   const focusByNameRef = useRef<((name: string) => void) | null>(null);
   const focusRequest = usePageStore((s) => s.focusRequest);
+  const starsVisible = usePageStore((s) => s.starsVisible);
+  const starFieldRef = useRef<THREE.Group | null>(null);
   const handledFocusSeqRef = useRef<number>(0);
   const isPointerDownRef = useRef<boolean>(false);
   const moonMaterialRef = useRef<THREE.MeshBasicMaterial | null>(null);
@@ -344,6 +409,80 @@ export function SolarSystem({
     sunGlow.position.copy(sun.position);
     scene.add(sunGlow);
 
+    // Star field. Equatorial (RA/Dec) -> scene frame: the vernal equinox is +x,
+    // the celestial north pole is Earth's tilted pole (0, cos e, sin e), and the
+    // third axis completes a right-handed set. Same rotation as Earth's globe.
+    const starField = new THREE.Group();
+    const starTexture = makeStarTexture();
+    const starSprites: { sprite: THREE.Sprite; px: number; name: string; lightYears: number }[] = [];
+    // Anything on the sky that gets a hover label.
+    const skyPickables: { object: THREE.Object3D; px: number; name: string; lightYears: number }[] = [];
+    {
+      const e = THREE.MathUtils.degToRad(OBLIQUITY_DEG);
+      const e1 = new THREE.Vector3(1, 0, 0);
+      const e2 = new THREE.Vector3(0, Math.sin(e), -Math.cos(e));
+      const e3 = new THREE.Vector3(0, Math.cos(e), Math.sin(e));
+      for (const star of STARS) {
+        const ra = THREE.MathUtils.degToRad(star.raDeg);
+        const dec = THREE.MathUtils.degToRad(star.decDeg);
+        const pos = new THREE.Vector3()
+          .addScaledVector(e1, Math.cos(dec) * Math.cos(ra))
+          .addScaledVector(e2, Math.cos(dec) * Math.sin(ra))
+          .addScaledVector(e3, Math.sin(dec))
+          .multiplyScalar(STAR_SPHERE_RADIUS);
+        const material = new THREE.SpriteMaterial({
+          map: starTexture,
+          color: SPECTRAL_COLORS[star.spectral],
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+          depthTest: true, // hidden by anything nearer (Earth's occluder, planets)
+          transparent: true,
+        });
+        const sprite = new THREE.Sprite(material);
+        sprite.renderOrder = 1; // draw last so depth from every body is already there (renderOrder isn't inherited from the group)
+        sprite.position.copy(pos);
+        // Sprite size in pixels from magnitude.
+        const px = Math.max(STAR_MIN_PX, STAR_BASE_PX * Math.pow(10, -STAR_MAG_EXPONENT * star.magnitude));
+        starSprites.push({ sprite, px, name: star.name, lightYears: star.lightYears });
+        skyPickables.push({ object: sprite, px, name: star.name, lightYears: star.lightYears });
+        starField.add(sprite);
+      }
+    }
+    // Sprites live at a fixed distance, so a pixel size maps to a fixed world size
+    // for a given canvas height; recomputed on resize.
+    const updateStarSizes = () => {
+      const h = renderer.domElement.clientHeight || 1;
+      const worldPerPx = (2 * STAR_SPHERE_RADIUS * Math.tan(THREE.MathUtils.degToRad(CAMERA_FOV / 2))) / h;
+      for (const { sprite, px } of starSprites) sprite.scale.setScalar(px * worldPerPx);
+    };
+    updateStarSizes();
+
+    starField.visible = usePageStore.getState().starsVisible;
+    starFieldRef.current = starField;
+    scene.add(starField);
+
+    // Screen-space star hit test: within the sprite's core-ish radius or a minimum.
+    const pickStar = (clientX: number, clientY: number) => {
+      const rect = renderer.domElement.getBoundingClientRect();
+      const px = clientX - rect.left;
+      const py = clientY - rect.top;
+      let best: (typeof skyPickables)[number] | null = null;
+      let bestD = Infinity;
+      if (!starField.visible) return null;
+      for (const s of skyPickables) {
+        if (!s.object.visible) continue;
+        s.object.getWorldPosition(tmpA);
+        tmpB.copy(tmpA).project(camera);
+        if (tmpB.z > 1) continue;
+        const sx = ((tmpB.x + 1) / 2) * rect.width;
+        const sy = ((1 - tmpB.y) / 2) * rect.height;
+        const d = Math.hypot(sx - px, sy - py);
+        const tolerance = Math.max(PICK_MIN_PX, s.px * 0.35);
+        if (d <= tolerance && d < bestD) { best = s; bestD = d; }
+      }
+      return best;
+    };
+
     // Create latitude and longitude lines
     const createLatitudeLines = () => {
       const latitudes: THREE.Line[] = [];
@@ -420,10 +559,10 @@ export function SolarSystem({
     // Orbiters: anything that goes around the Sun. Each sits in an inclined
     // pivot; its position is computed from an angle each frame (not by rotating
     // the pivot), so axial tilts stay fixed in space.
-    type Orbiter = { object: THREE.Object3D; orbitRadius: number; periodDays: number; angle: number; spin?: THREE.Object3D; rotationDays?: number; tidallyLocked?: boolean };
+    type Orbiter = { object: THREE.Object3D; orbitRadius: number; periodDays: number; angle: number; spin?: THREE.Object3D; rotationDays?: number; tidallyLocked?: boolean; faceOffset?: number };
     const orbiters: Orbiter[] = [];
     const orbitRings: THREE.LineLoop[] = [];
-    const addOrbiter = (object: THREE.Object3D, orbitRadius: number, periodDays: number, inclinationDeg: number, phaseDeg: number, spin?: THREE.Object3D, rotationDays?: number, parent: THREE.Object3D = scene, tidallyLocked = false) => {
+    const addOrbiter = (object: THREE.Object3D, orbitRadius: number, periodDays: number, inclinationDeg: number, phaseDeg: number, spin?: THREE.Object3D, rotationDays?: number, parent: THREE.Object3D = scene, tidallyLocked = false, faceOffsetDeg = 0) => {
       const pivot = new THREE.Group();
       pivot.rotation.x = THREE.MathUtils.degToRad(inclinationDeg);
       pivot.add(object);
@@ -440,7 +579,7 @@ export function SolarSystem({
       );
       pivot.add(ring);
       orbitRings.push(ring);
-      orbiters.push({ object, orbitRadius, periodDays, angle: THREE.MathUtils.degToRad(phaseDeg), spin, rotationDays, tidallyLocked });
+      orbiters.push({ object, orbitRadius, periodDays, angle: THREE.MathUtils.degToRad(phaseDeg), spin, rotationDays, tidallyLocked, faceOffset: THREE.MathUtils.degToRad(faceOffsetDeg) });
     };
     const updateOrbiters = (delta: number) => {
       for (const o of orbiters) {
@@ -449,7 +588,7 @@ export function SolarSystem({
         if (o.spin && o.rotationDays) o.spin.rotation.y += angularSpeed(o.rotationDays) * delta;
         // Tidal lock: one rotation per orbit, with the map's centre (+x on the
         // sphere) always pointing back at the parent.
-        if (o.tidallyLocked) o.object.rotation.y = o.angle + Math.PI;
+        if (o.tidallyLocked) o.object.rotation.y = o.angle + Math.PI + (o.faceOffset ?? 0);
       }
     };
 
@@ -557,7 +696,7 @@ export function SolarSystem({
       const orbitRadius = planetBody.radius * spec.orbitPlanetRadii;
       // Table moon inclinations are given to the planet's equator, so they orbit
       // inside the planet's tilted group (Titan then sits in Saturn's ring plane).
-      addOrbiter(mesh, orbitRadius, spec.periodDays, spec.inclinationDeg, spec.phaseDeg, undefined, undefined, tiltedByPlanet.get(spec.planet) ?? planetBody.object, true);
+      addOrbiter(mesh, orbitRadius, spec.periodDays, spec.inclinationDeg, spec.phaseDeg, undefined, undefined, tiltedByPlanet.get(spec.planet) ?? planetBody.object, true, spec.faceOffsetDeg);
       bodies.push({ name: spec.name, object: mesh, visual: mesh, radius, parent: planetBody, systemRadius: 0, scale: 1 });
       planetBody.systemRadius = Math.max(planetBody.systemRadius, orbitRadius);
     }
@@ -702,6 +841,10 @@ export function SolarSystem({
           onDotHover?.(dot);
         }
         hoverPausedRef.current = true; // a dot is on Earth
+        if (hoveredStarRef.current !== null) {
+          hoveredStarRef.current = null;
+          onStarHover?.(null);
+        }
         renderer.domElement.style.cursor = 'pointer';
       } else {
         if (hoveredDotRef.current !== null) {
@@ -715,6 +858,13 @@ export function SolarSystem({
         if (hoveredBodyRef.current !== name) {
           hoveredBodyRef.current = name;
           onBodyHover?.(name);
+        }
+        // Stars (not focusable): label only, and only when nothing nearer is hovered.
+        const star = body ? null : pickStar(event.clientX, event.clientY);
+        const starName = star ? star.name : null;
+        if (hoveredStarRef.current !== starName) {
+          hoveredStarRef.current = starName;
+          onStarHover?.(star ? { name: star.name, lightYears: star.lightYears } : null);
         }
         renderer.domElement.style.cursor = name ? 'pointer' : (autoRotateRef.current ? 'grab' : 'grabbing');
       }
@@ -813,6 +963,9 @@ export function SolarSystem({
 
       reportFocus(dist);
 
+      // Keep the star sphere centred on the camera: pure direction, no parallax.
+      starField.position.copy(camera.position);
+
       // Enforce a minimum on-screen size so distant bodies stay visible.
       {
         const halfHeightPx = renderer.domElement.clientHeight / 2;
@@ -861,6 +1014,7 @@ export function SolarSystem({
         renderer.setSize(w, h);
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
+        updateStarSizes();
       });
       resizeObserver.observe(mount);
     }
@@ -919,12 +1073,19 @@ export function SolarSystem({
       sunMaterialRef.current = null;
       sunGlowMaterialRef.current = null;
       planetDisposables.forEach(({ geometry, material }) => { geometry.dispose(); material.dispose(); });
+      starSprites.forEach(({ sprite }) => sprite.material.dispose());
+      starTexture.dispose();
       textures.forEach((t) => t.dispose());
       orbitRings.forEach((ring) => { ring.geometry.dispose(); (ring.material as THREE.Material).dispose(); });
       renderer.dispose();
       initializedRef.current = false;
     };
   }, [size, color, speed]); // Removed dots and onDotClick from dependencies
+
+  // Show/hide the stars (terminal `stars` command).
+  useEffect(() => {
+    if (starFieldRef.current) starFieldRef.current.visible = starsVisible;
+  }, [starsVisible]);
 
   // Fly to a body requested from the terminal.
   useEffect(() => {

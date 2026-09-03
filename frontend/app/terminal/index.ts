@@ -6,6 +6,7 @@ import "./commands/socials";
 import "./commands/resume";
 import "./commands/explore";
 import "./commands/fly";
+import "./commands/stars";
 import "./commands/radarcorp";
 import "./commands/books";
 import "./commands/films";

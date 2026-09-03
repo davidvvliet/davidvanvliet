@@ -8,6 +8,8 @@ interface PageState {
   /** Body the solar system should fly to. `seq` increments so repeat requests fire. */
   focusRequest: { name: string; seq: number } | null;
   requestFocus: (name: string) => void;
+  starsVisible: boolean;
+  setStarsVisible: (visible: boolean) => void;
 }
 
 export const usePageStore = create<PageState>((set) => ({
@@ -18,4 +20,6 @@ export const usePageStore = create<PageState>((set) => ({
   focusRequest: null,
   requestFocus: (name) =>
     set((state) => ({ focusRequest: { name, seq: (state.focusRequest?.seq ?? 0) + 1 } })),
+  starsVisible: true,
+  setStarsVisible: (visible) => set({ starsVisible: visible }),
 }));

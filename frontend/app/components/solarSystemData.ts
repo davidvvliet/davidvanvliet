@@ -29,6 +29,7 @@ export type MoonSpec = {
   phaseDeg: number;
   texture?: string;        // equirectangular map under /public; implies solid
   solid?: boolean;         // solid sphere instead of wireframe (e.g. haze-covered)
+  faceOffsetDeg?: number;  // extra spin so the map's sub-planet point faces the planet (180 for maps centred on lon 180)
 };
 
 // Moons of the table planets (Earth's Moon is built separately). One row each.
@@ -37,7 +38,7 @@ export const MOONS: MoonSpec[] = [
   { name: 'Deimos', planet: 'Mars', orbitPlanetRadii: 6.92, radiusEarths: 0.00097, periodDays: 1.263, inclinationDeg: 1.79, color: 0x7a746c, phaseDeg: 200 },
   // Galilean moons. Inclinations are to Jupiter's equator (its axis is tilted only 3 degrees).
   { name: 'Io', planet: 'Jupiter', orbitPlanetRadii: 5.90, radiusEarths: 0.286, periodDays: 1.769, inclinationDeg: 0.05, color: 0xd9c46a, phaseDeg: 0, texture: '/io.jpg' },
-  { name: 'Europa', planet: 'Jupiter', orbitPlanetRadii: 9.39, radiusEarths: 0.245, periodDays: 3.551, inclinationDeg: 0.47, color: 0xc8bfae, phaseDeg: 90, texture: '/europa.jpg' },
+  { name: 'Europa', planet: 'Jupiter', orbitPlanetRadii: 9.39, radiusEarths: 0.245, periodDays: 3.551, inclinationDeg: 0.47, color: 0xc8bfae, phaseDeg: 90, texture: '/europa.jpg', faceOffsetDeg: 180 },
   { name: 'Ganymede', planet: 'Jupiter', orbitPlanetRadii: 14.97, radiusEarths: 0.413, periodDays: 7.155, inclinationDeg: 0.20, color: 0x9a9184, phaseDeg: 180, texture: '/ganymede.jpg' },
   { name: 'Callisto', planet: 'Jupiter', orbitPlanetRadii: 26.33, radiusEarths: 0.378, periodDays: 16.69, inclinationDeg: 0.19, color: 0x6e665c, phaseDeg: 270, texture: '/callisto.jpg' },
   // Titan: solid, its orange haze hides the surface.
@@ -92,7 +93,8 @@ export const PLANETS: PlanetSpec[] = [
 /** A favourite fact per body, shown under the name when the body is in focus. */
 export const BODY_FACTS: Record<string, string> = {
   Io: "Io is the most volcanic body in the solar system. Before the discovery of erupting volcanoes on Io, we weren't aware of any other body in the solar system with active volcanism at all. It shows how quickly perspectives can change from exploration and new information.",
-  Uranus: "Uranus spins on its side, suggesting a massive collision at some point in its past. Uranus has rings, just like Saturn does!",
+  Uranus: "Uranus spins on its side, suggesting a massive collision at some point in its past. Uranus has rings, just like Saturn does! Neptune and Jupiter actually have rings as well, likely from small debris coming from their moons, but they're much fainter.",
+  Venus: "Venus is very similar to Earth. It is in the habitable zone and is roughly the same size. Even with these similarities, their paths have clearly diverged significantly. These facts make Venus an important point of interest for understanding how planets behave and for studying what habitable zone exoplanets might be like.",
 };
 
 // Shared across the Uranian moons.
@@ -104,3 +106,107 @@ for (const name of ['Miranda', 'Ariel', 'Umbriel', 'Titania', 'Oberon']) {
 
 /** Every focusable body name, for the terminal's `fly` command. */
 export const BODY_NAMES: string[] = ['Sun', 'Mercury', 'Venus', 'Earth', 'Moon', ...PLANETS.filter((p) => !['Mercury', 'Venus'].includes(p.name)).map((p) => p.name), ...MOONS.map((m) => m.name)];
+
+// --- Stars ---
+// The ten brightest stars in the night sky (plus Polaris, as a check that the
+// sky is aligned: it should sit over Earth's north pole). J2000 coordinates.
+// Only direction is used; at solar-system scale their parallax is nil.
+export type StarSpec = {
+  name: string;
+  raDeg: number;           // right ascension, degrees
+  decDeg: number;          // declination, degrees
+  magnitude: number;       // apparent visual magnitude
+  spectral: 'O' | 'B' | 'A' | 'F' | 'G' | 'K' | 'M';
+  lightYears: number;      // distance, for the hover label
+};
+
+export const STARS: StarSpec[] = [
+  { name: 'Sirius', raDeg: 101.287, decDeg: -16.716, magnitude: -1.46, spectral: 'A', lightYears: 8.6 },
+  { name: 'Canopus', raDeg: 95.988, decDeg: -52.696, magnitude: -0.74, spectral: 'F', lightYears: 310 },
+  { name: 'Alpha Centauri', raDeg: 219.902, decDeg: -60.834, magnitude: -0.27, spectral: 'G', lightYears: 4.4 },
+  { name: 'Arcturus', raDeg: 213.915, decDeg: 19.182, magnitude: -0.05, spectral: 'K', lightYears: 37 },
+  { name: 'Vega', raDeg: 279.235, decDeg: 38.784, magnitude: 0.03, spectral: 'A', lightYears: 25 },
+  { name: 'Capella', raDeg: 79.172, decDeg: 45.998, magnitude: 0.08, spectral: 'G', lightYears: 43 },
+  { name: 'Rigel', raDeg: 78.634, decDeg: -8.202, magnitude: 0.13, spectral: 'B', lightYears: 860 },
+  { name: 'Procyon', raDeg: 114.826, decDeg: 5.225, magnitude: 0.34, spectral: 'F', lightYears: 11 },
+  { name: 'Achernar', raDeg: 24.429, decDeg: -57.237, magnitude: 0.46, spectral: 'B', lightYears: 140 },
+  { name: 'Betelgeuse', raDeg: 88.793, decDeg: 7.407, magnitude: 0.50, spectral: 'M', lightYears: 550 },
+  { name: 'Polaris', raDeg: 37.954, decDeg: 89.264, magnitude: 1.98, spectral: 'F', lightYears: 430 },
+  // The rest of Orion (Betelgeuse and Rigel are above): shoulders, belt, knee, head.
+  { name: 'Bellatrix', raDeg: 81.283, decDeg: 6.350, magnitude: 1.64, spectral: 'B', lightYears: 250 },
+  { name: 'Mintaka', raDeg: 83.002, decDeg: -0.299, magnitude: 2.23, spectral: 'O', lightYears: 1200 },
+  { name: 'Alnilam', raDeg: 84.053, decDeg: -1.202, magnitude: 1.69, spectral: 'B', lightYears: 2000 },
+  { name: 'Alnitak', raDeg: 85.190, decDeg: -1.943, magnitude: 1.77, spectral: 'O', lightYears: 1260 },
+  { name: 'Saiph', raDeg: 86.939, decDeg: -9.670, magnitude: 2.09, spectral: 'B', lightYears: 650 },
+  { name: 'Meissa', raDeg: 83.784, decDeg: 9.934, magnitude: 3.39, spectral: 'O', lightYears: 1100 },
+  // The Southern Cross (Crux).
+  { name: 'Acrux', raDeg: 186.650, decDeg: -63.099, magnitude: 0.76, spectral: 'B', lightYears: 320 },
+  { name: 'Mimosa', raDeg: 191.930, decDeg: -59.689, magnitude: 1.25, spectral: 'B', lightYears: 280 },
+  { name: 'Gacrux', raDeg: 187.791, decDeg: -57.113, magnitude: 1.64, spectral: 'M', lightYears: 89 },
+  { name: 'Imai', raDeg: 183.786, decDeg: -58.749, magnitude: 2.79, spectral: 'B', lightYears: 345 },
+  { name: 'Ginan', raDeg: 185.340, decDeg: -60.401, magnitude: 3.59, spectral: 'K', lightYears: 230 },
+  // Canis Major (Sirius is above).
+  { name: 'Adhara', raDeg: 104.656, decDeg: -28.972, magnitude: 1.50, spectral: 'B', lightYears: 430 },
+  { name: 'Wezen', raDeg: 107.098, decDeg: -26.393, magnitude: 1.83, spectral: 'F', lightYears: 1600 },
+  { name: 'Mirzam', raDeg: 95.675, decDeg: -17.956, magnitude: 1.98, spectral: 'B', lightYears: 490 },
+  { name: 'Aludra', raDeg: 111.024, decDeg: -29.303, magnitude: 2.45, spectral: 'B', lightYears: 2000 },
+  { name: 'Furud', raDeg: 95.078, decDeg: -30.063, magnitude: 3.02, spectral: 'B', lightYears: 360 },
+  // Ursa Major: the Big Dipper.
+  { name: 'Dubhe', raDeg: 165.932, decDeg: 61.751, magnitude: 1.79, spectral: 'K', lightYears: 123 },
+  { name: 'Merak', raDeg: 165.460, decDeg: 56.383, magnitude: 2.37, spectral: 'A', lightYears: 80 },
+  { name: 'Phecda', raDeg: 178.458, decDeg: 53.695, magnitude: 2.44, spectral: 'A', lightYears: 83 },
+  { name: 'Megrez', raDeg: 183.857, decDeg: 57.033, magnitude: 3.31, spectral: 'A', lightYears: 81 },
+  { name: 'Alioth', raDeg: 193.507, decDeg: 55.960, magnitude: 1.77, spectral: 'A', lightYears: 83 },
+  { name: 'Mizar', raDeg: 200.981, decDeg: 54.925, magnitude: 2.04, spectral: 'A', lightYears: 83 },
+  { name: 'Alkaid', raDeg: 206.885, decDeg: 49.313, magnitude: 1.86, spectral: 'B', lightYears: 104 },
+  // Ursa Minor: the Little Dipper (Polaris is above). Faint apart from Kochab.
+  { name: 'Kochab', raDeg: 222.676, decDeg: 74.156, magnitude: 2.08, spectral: 'K', lightYears: 130 },
+  { name: 'Pherkad', raDeg: 230.182, decDeg: 71.834, magnitude: 3.05, spectral: 'A', lightYears: 490 },
+  { name: 'Yildun', raDeg: 263.054, decDeg: 86.586, magnitude: 4.36, spectral: 'A', lightYears: 172 },
+  { name: 'Epsilon Ursae Minoris', raDeg: 251.493, decDeg: 82.037, magnitude: 4.23, spectral: 'G', lightYears: 300 },
+  { name: 'Zeta Ursae Minoris', raDeg: 236.015, decDeg: 77.794, magnitude: 4.32, spectral: 'A', lightYears: 380 },
+  { name: 'Eta Ursae Minoris', raDeg: 244.376, decDeg: 75.755, magnitude: 4.95, spectral: 'F', lightYears: 97 },
+  // Auriga (Capella is above). Elnath is formally Taurus's but completes Auriga's pentagon.
+  { name: 'Menkalinan', raDeg: 89.882, decDeg: 44.948, magnitude: 1.90, spectral: 'A', lightYears: 81 },
+  { name: 'Mahasim', raDeg: 89.930, decDeg: 37.213, magnitude: 2.65, spectral: 'A', lightYears: 166 },
+  { name: 'Hassaleh', raDeg: 74.248, decDeg: 33.166, magnitude: 2.69, spectral: 'K', lightYears: 490 },
+  { name: 'Almaaz', raDeg: 75.492, decDeg: 43.823, magnitude: 3.00, spectral: 'F', lightYears: 2000 },
+  { name: 'Haedus', raDeg: 76.629, decDeg: 41.234, magnitude: 3.18, spectral: 'B', lightYears: 243 },
+  { name: 'Saclateni', raDeg: 75.620, decDeg: 41.076, magnitude: 3.75, spectral: 'K', lightYears: 790 },
+  { name: 'Elnath', raDeg: 81.573, decDeg: 28.608, magnitude: 1.65, spectral: 'B', lightYears: 134 },
+  // Cassiopeia: the W.
+  { name: 'Schedar', raDeg: 10.127, decDeg: 56.537, magnitude: 2.24, spectral: 'K', lightYears: 228 },
+  { name: 'Caph', raDeg: 2.295, decDeg: 59.150, magnitude: 2.28, spectral: 'F', lightYears: 54 },
+  { name: 'Navi', raDeg: 14.177, decDeg: 60.717, magnitude: 2.15, spectral: 'B', lightYears: 550 },
+  { name: 'Ruchbah', raDeg: 21.454, decDeg: 60.235, magnitude: 2.68, spectral: 'A', lightYears: 99 },
+  { name: 'Segin', raDeg: 28.599, decDeg: 63.670, magnitude: 3.37, spectral: 'B', lightYears: 440 },
+  // Cygnus: the Northern Cross. Deneb is the tail, Albireo the head (a famous gold-and-blue double).
+  { name: 'Deneb', raDeg: 310.358, decDeg: 45.280, magnitude: 1.25, spectral: 'A', lightYears: 2600 },
+  { name: 'Sadr', raDeg: 305.557, decDeg: 40.257, magnitude: 2.23, spectral: 'F', lightYears: 1800 },
+  { name: 'Aljanah', raDeg: 311.553, decDeg: 33.970, magnitude: 2.48, spectral: 'K', lightYears: 72 },
+  { name: 'Fawaris', raDeg: 296.244, decDeg: 45.131, magnitude: 2.87, spectral: 'B', lightYears: 165 },
+  { name: 'Albireo', raDeg: 292.680, decDeg: 27.960, magnitude: 3.18, spectral: 'K', lightYears: 430 },
+  { name: 'Zeta Cygni', raDeg: 318.234, decDeg: 30.227, magnitude: 3.20, spectral: 'G', lightYears: 143 },
+  { name: 'Iota Cygni', raDeg: 292.427, decDeg: 51.730, magnitude: 3.77, spectral: 'A', lightYears: 121 },
+  { name: 'Kappa Cygni', raDeg: 289.276, decDeg: 53.369, magnitude: 3.80, spectral: 'G', lightYears: 124 },
+  // Lyra (Vega is above): a small parallelogram hanging off Vega. Epsilon Lyrae is the "Double Double".
+  { name: 'Sheliak', raDeg: 282.520, decDeg: 33.363, magnitude: 3.52, spectral: 'B', lightYears: 960 },
+  { name: 'Sulafat', raDeg: 284.736, decDeg: 32.690, magnitude: 3.25, spectral: 'B', lightYears: 620 },
+  { name: 'Delta Lyrae', raDeg: 283.626, decDeg: 36.899, magnitude: 4.22, spectral: 'M', lightYears: 740 },
+  { name: 'Zeta Lyrae', raDeg: 281.193, decDeg: 37.605, magnitude: 4.34, spectral: 'A', lightYears: 156 },
+  { name: 'Epsilon Lyrae', raDeg: 281.085, decDeg: 39.670, magnitude: 4.67, spectral: 'A', lightYears: 160 },
+  // Bootes (Arcturus is above): the kite.
+  { name: 'Izar', raDeg: 221.247, decDeg: 27.074, magnitude: 2.37, spectral: 'K', lightYears: 202 },
+  { name: 'Muphrid', raDeg: 208.671, decDeg: 18.398, magnitude: 2.68, spectral: 'G', lightYears: 37 },
+  { name: 'Seginus', raDeg: 218.019, decDeg: 38.308, magnitude: 3.03, spectral: 'A', lightYears: 87 },
+  { name: 'Nekkar', raDeg: 225.487, decDeg: 40.391, magnitude: 3.49, spectral: 'G', lightYears: 225 },
+  { name: 'Delta Bootis', raDeg: 228.876, decDeg: 33.315, magnitude: 3.47, spectral: 'G', lightYears: 122 },
+  { name: 'Rho Bootis', raDeg: 217.957, decDeg: 30.371, magnitude: 3.58, spectral: 'K', lightYears: 160 },
+  { name: 'Xuange', raDeg: 214.096, decDeg: 46.088, magnitude: 4.18, spectral: 'A', lightYears: 99 },
+];
+
+// Approximate blackbody colors by spectral class.
+export const SPECTRAL_COLORS: Record<StarSpec['spectral'], number> = {
+  O: 0x9bb0ff, B: 0xaabfff, A: 0xcad7ff, F: 0xf8f7ff, G: 0xfff4ea, K: 0xffd2a1, M: 0xffcc6f,
+};
+
