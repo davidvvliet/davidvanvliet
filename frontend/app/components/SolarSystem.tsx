@@ -28,7 +28,7 @@ interface SolarSystemProps {
   onDotClick?: (dot: PersonaDot) => void;
   onDotHover?: (dot: PersonaDot | null) => void;
   onBodyHover?: (name: string | null) => void;
-  onStarHover?: (star: { name: string; lightYears: number } | null) => void;
+  onStarHover?: (star: { name: string; lightYears: number; spectral?: string; fact?: string } | null) => void;
   onFocusChange?: (name: string | null) => void; // null when the camera is far from the focused body
   dotSizeMultiplier?: number;
 }
@@ -147,9 +147,9 @@ function makeStarTexture(): THREE.CanvasTexture {
 
   // Halo (wide, soft) and core (small, saturated).
   const halo = ctx.createRadialGradient(mid, mid, 0, mid, mid, mid * 0.5);
-  halo.addColorStop(0, 'rgba(255,255,255,0.9)');
-  halo.addColorStop(0.15, 'rgba(255,255,255,0.45)');
-  halo.addColorStop(0.5, 'rgba(255,255,255,0.08)');
+  halo.addColorStop(0, 'rgba(255,255,255,1)');
+  halo.addColorStop(0.15, 'rgba(255,255,255,0.65)');
+  halo.addColorStop(0.5, 'rgba(255,255,255,0.15)');
   halo.addColorStop(1, 'rgba(255,255,255,0)');
   ctx.fillStyle = halo;
   ctx.fillRect(0, 0, size, size);
@@ -448,7 +448,7 @@ export function SolarSystem({
     const starTexture = makeStarTexture();
     const starSprites: { sprite: THREE.Sprite; px: number; name: string; lightYears: number }[] = [];
     // Anything on the sky that gets a hover label.
-    const skyPickables: { object: THREE.Object3D; px: number; name: string; lightYears: number }[] = [];
+    const skyPickables: { object: THREE.Object3D; px: number; name: string; lightYears: number; spectral?: string; fact?: string }[] = [];
     {
       const e = THREE.MathUtils.degToRad(OBLIQUITY_DEG);
       const e1 = new THREE.Vector3(1, 0, 0);
@@ -476,7 +476,7 @@ export function SolarSystem({
         // Sprite size in pixels from magnitude.
         const px = Math.max(STAR_MIN_PX, STAR_BASE_PX * Math.pow(10, -STAR_MAG_EXPONENT * star.magnitude));
         starSprites.push({ sprite, px, name: star.name, lightYears: star.lightYears });
-        skyPickables.push({ object: sprite, px, name: star.name, lightYears: star.lightYears });
+        skyPickables.push({ object: sprite, px, name: star.name, lightYears: star.lightYears, spectral: star.spectral, fact: star.fact });
         starField.add(sprite);
       }
     }
@@ -937,7 +937,7 @@ export function SolarSystem({
         const starName = star ? star.name : null;
         if (hoveredStarRef.current !== starName) {
           hoveredStarRef.current = starName;
-          onStarHover?.(star ? { name: star.name, lightYears: star.lightYears } : null);
+          onStarHover?.(star ? { name: star.name, lightYears: star.lightYears, spectral: star.spectral, fact: star.fact } : null);
         }
         renderer.domElement.style.cursor = name ? 'pointer' : (autoRotateRef.current ? 'grab' : 'grabbing');
       }

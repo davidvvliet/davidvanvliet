@@ -22,7 +22,7 @@ export default function GridPage() {
   const [selectedDot, setSelectedDot] = useState<any>(null);
   const [hoveredDot, setHoveredDot] = useState<any>(null);
   const [hoveredBody, setHoveredBody] = useState<string | null>(null);
-  const [hoveredStar, setHoveredStar] = useState<{ name: string; lightYears: number } | null>(null);
+  const [hoveredStar, setHoveredStar] = useState<{ name: string; lightYears: number; spectral?: string; fact?: string } | null>(null);
   const [focusedBody, setFocusedBody] = useState<string | null>("Earth");
   const leftPanel = usePageStore((s) => s.leftPanel);
 
@@ -63,7 +63,10 @@ export default function GridPage() {
                 ) : hoveredBody ? (
                   <div className={styles.globeLabelRow}><span className={styles.globeLabelLocation}>{hoveredBody}</span><span className={styles.globeLabelDescription}>Click to focus</span></div>
                 ) : hoveredStar ? (
-                  <div className={styles.globeLabelRow}><span className={styles.globeLabelLocation}>{hoveredStar.name}</span><span className={styles.globeLabelDescription}>{hoveredStar.lightYears.toLocaleString()} light-years</span></div>
+                  <>
+                    <div className={styles.globeLabelRow}><span className={styles.globeLabelLocation}>{hoveredStar.name}</span><span className={styles.globeLabelDescription}>{hoveredStar.lightYears.toLocaleString()} light-years</span>{hoveredStar.spectral && <span className={styles.globeLabelSubtitle}>Type {hoveredStar.spectral}</span>}</div>
+                    {hoveredStar.fact && <span className={styles.globeLabelFact}>{hoveredStar.fact}</span>}
+                  </>
                 ) : focusedBody ? (
                   <>
                     <span className={styles.globeLabelLocation}>{focusedBody}</span>
