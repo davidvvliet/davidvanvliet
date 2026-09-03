@@ -94,7 +94,7 @@ export const PLANETS: PlanetSpec[] = [
 ];
 /** A favourite fact per body, shown under the name when the body is in focus. */
 export const BODY_FACTS: Record<string, string> = {
-  Io: "Io is the most volcanic body in the solar system. Before the discovery of erupting volcanoes on Io, we weren't aware of any other body in the solar system with active volcanism at all. It shows how quickly perspectives can change from exploration and new information.",
+  Io: "Io is the most volcanic body in the solar system. Before the discovery of erupting volcanoes on Io, we weren't aware of any other body in the solar system with active volcanism at all. It shows how quickly perspectives can change from exploration and new information. Thank you Voyager 1 :)",
   Uranus: "Uranus spins on its side, suggesting a massive collision at some point in its past. Uranus has rings, just like Saturn does! Neptune and Jupiter actually have rings as well, likely from small debris coming from their moons, but they're much fainter.",
   Venus: "Venus is very similar to Earth. It is in the habitable zone and is roughly the same size. However, even with these similarities, their paths have clearly diverged significantly. These facts make Venus an important point of interest for understanding how planets behave and for studying what habitable zone exoplanets might be like.",
 };
@@ -227,6 +227,15 @@ export const STARS: StarSpec[] = [
   { name: 'Zavijava', raDeg: 177.674, decDeg: 1.765, magnitude: 3.60, spectral: 'F', lightYears: 36 },
   { name: 'Zaniah', raDeg: 184.977, decDeg: -0.667, magnitude: 3.89, spectral: 'A', lightYears: 265 },
   { name: 'Syrma', raDeg: 214.004, decDeg: -6.000, magnitude: 4.08, spectral: 'F', lightYears: 70 },
+  // Centaurus (Alpha Centauri is above). Hadar is the other Pointer to the Southern Cross.
+  { name: 'Hadar', raDeg: 210.956, decDeg: -60.373, magnitude: 0.61, spectral: 'B', lightYears: 390 },
+  { name: 'Menkent', raDeg: 211.671, decDeg: -36.370, magnitude: 2.06, spectral: 'K', lightYears: 59 },
+  { name: 'Muhlifain', raDeg: 190.379, decDeg: -48.960, magnitude: 2.17, spectral: 'A', lightYears: 130 },
+  { name: 'Epsilon Centauri', raDeg: 204.972, decDeg: -53.466, magnitude: 2.30, spectral: 'B', lightYears: 430 },
+  { name: 'Eta Centauri', raDeg: 218.877, decDeg: -42.158, magnitude: 2.31, spectral: 'B', lightYears: 310 },
+  { name: 'Zeta Centauri', raDeg: 208.885, decDeg: -47.288, magnitude: 2.55, spectral: 'B', lightYears: 380 },
+  { name: 'Delta Centauri', raDeg: 182.090, decDeg: -50.722, magnitude: 2.58, spectral: 'B', lightYears: 400 },
+  { name: 'Iota Centauri', raDeg: 200.149, decDeg: -36.712, magnitude: 2.75, spectral: 'A', lightYears: 59 },
 ];
 
 // Approximate blackbody colors by spectral class.

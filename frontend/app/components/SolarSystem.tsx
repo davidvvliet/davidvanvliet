@@ -51,8 +51,28 @@ const MAX_CAMERA_DISTANCE = 180;       // How far out the user can scroll
 // (6371 km / 149,597,870 km), so sizes, planet orbits (AU) and moon orbits
 // (planet radii) all sit on one consistent scale. Earth orbits at ~30,500 units.
 const EARTH_RADIUS_PER_AU = 6371 / 149597870;
-const ORBIT_SCALE = EARTH_RADIUS / EARTH_RADIUS_PER_AU;
-const orbitRadiusForAU = (au: number) => ORBIT_SCALE * au;
+// Two scale modes (terminal `scale` command). "true": every ratio exact.
+// "compact": the cinematic layout, distances squeezed toward their parents so
+// the Moon and the Sun are close enough to see from Earth's default view.
+export type ScaleMode = 'true' | 'compact';
+const SCALES: Record<ScaleMode, { orbitScale: number; sunRadius: number; moonOrbitRadius: number; starSphereRadius: number; farPlane: number; sunGlowScale: number }> = {
+  true: {
+    orbitScale: EARTH_RADIUS / EARTH_RADIUS_PER_AU, // ~30,500 units per AU
+    sunRadius: EARTH_RADIUS * 109.2,
+    moonOrbitRadius: EARTH_RADIUS * 60.3,           // 384,400 km
+    starSphereRadius: 8e6,                          // beyond the max zoom-out (~3.7M at Pluto), inside the far plane
+    farPlane: 3e7,
+    sunGlowScale: 4.5,                              // glow sprite size as a multiple of the Sun's diameter
+  },
+  compact: {
+    orbitScale: 260,
+    sunRadius: 20,
+    moonOrbitRadius: 6,
+    starSphereRadius: 50000,
+    farPlane: 1e5,
+    sunGlowScale: 2.5,                              // the Sun is already big here; keep the glare modest
+  },
+};
 const EARTH_ORBIT_AU = 1;
 const MIN_BODY_PX = 3;                 // Minimum on-screen radius of any body, in pixels
 // A body's enforced size is capped relative to its parent (moons to their
@@ -67,35 +87,31 @@ const MOON_RATIO_TOLERANCE = 4;
 const DOT_MOON_PARENT_PX = 100;
 const CHILD_HIDE_PX = 1;
 const MIN_CLOSE_DISTANCE = 0.5;        // Closest zoom for any body, so tiny moons stay past the near plane
-const ORBIT_RING_OPACITY = 0.12;
+const ORBIT_RING_STYLE = { color: 0xffffff, opacity: 0.45 }; // rings are hidden until the `orbits` command shows them
 
-// One clock for all motion, so every period keeps its real ratio.
-// Change SECONDS_PER_DAY to speed everything up or down together.
-const SECONDS_PER_DAY = 10;            // Real seconds per simulated Earth day
+// One clock for all motion, so every period keeps its real ratio. The clock
+// rate (real seconds per simulated Earth day) is live: see the `time` command.
+let secondsPerDay = 10;
 const EARTH_DAY_DAYS = 0.99727;        // Sidereal rotation period, in days
 const MOON_ORBIT_DAYS = 27.32;         // Sidereal month
 const EARTH_YEAR_DAYS = 365.25;
 const EARTH_ECCENTRICITY = 0.0167;
 const EARTH_PERIHELION_DEG = 102.9;    // longitude of perihelion (J2000)
-const angularSpeed = (periodDays: number) => (2 * Math.PI) / (periodDays * SECONDS_PER_DAY); // rad/s
+const angularSpeed = (periodDays: number) => (2 * Math.PI) / (periodDays * secondsPerDay); // rad/s
 
-const MOON_ORBIT_RADIUS = EARTH_RADIUS * 60.3; // True ratio: 384,400 km is 60.3 Earth radii
 const MOON_RADIUS = EARTH_RADIUS * 0.273; // True ratio: Moon diameter is 27.3% of Earth's
 const MOON_INCLINATION_DEG = 5.14;     // Real inclination of the Moon's orbit
 const MOON_TEXTURE = '/moon.jpg';      // Equirectangular map
 
 
-const SUN_RADIUS = EARTH_RADIUS * 109.2; // True ratio
 const SUN_COLOR = 0xfff4e8;            // G2V: near-white, faintly warm (the yellow is atmospheric)
 const SUN_ROTATION_DAYS = 25.05;       // sidereal rotation at the equator
-const SUN_GLOW_SCALE = 4.5;            // Glow sprite size as a multiple of the sun's diameter
 
 // Stars: one sprite each on a sphere that is re-centred on the camera every
 // frame (no parallax, which is physically right at this scale). Directions are
 // true; the sphere radius just has to sit inside the far plane. The sprite is a
 // telescope-style star: saturated core, tinted halo, diffraction spikes. Size
 // follows brightness, so only the bright ones show spikes.
-const STAR_SPHERE_RADIUS = 8e6;        // beyond the max zoom-out (~3.7M at Pluto's orbit), inside the far plane
 const STAR_BASE_PX = 22;               // on-screen size (pixels) of a magnitude-0 star's sprite
 const STAR_MIN_PX = 4;                 // faint stars (mag 4-5) still show as a small dot
 const STAR_MAG_EXPONENT = 0.18;        // size = base * 10^(-exp * mag); 0.2 matches real flux by area, lower is gentler
@@ -269,6 +285,11 @@ export function SolarSystem({
   const focusByNameRef = useRef<((name: string) => void) | null>(null);
   const focusRequest = usePageStore((s) => s.focusRequest);
   const starsVisible = usePageStore((s) => s.starsVisible);
+  const orbitsHighlighted = usePageStore((s) => s.orbitsHighlighted);
+  const scaleMode = usePageStore((s) => s.scaleMode);
+  const storeSecondsPerDay = usePageStore((s) => s.secondsPerDay);
+  secondsPerDay = storeSecondsPerDay; // picked up by angularSpeed() on the next frame
+  const setOrbitStyleRef = useRef<((on: boolean) => void) | null>(null);
   const starFieldRef = useRef<THREE.Group | null>(null);
   const handledFocusSeqRef = useRef<number>(0);
   const isPointerDownRef = useRef<boolean>(false);
@@ -291,6 +312,8 @@ export function SolarSystem({
   // Initialize the scene only once
   useEffect(() => {
     if (!mountRef.current || initializedRef.current) return;
+    const { orbitScale, sunRadius: SUN_RADIUS, moonOrbitRadius: MOON_ORBIT_RADIUS, starSphereRadius: STAR_SPHERE_RADIUS, farPlane, sunGlowScale: SUN_GLOW_SCALE } = SCALES[scaleMode];
+    const orbitRadiusForAU = (au: number) => orbitScale * au;
 
     // Clean up any existing content first
     while (mountRef.current.firstChild) {
@@ -305,7 +328,7 @@ export function SolarSystem({
     const mount = mountRef.current;
     const initialWidth = size ?? (mount.clientWidth || 500);
     const initialHeight = size ?? (mount.clientHeight || 500);
-    const camera = new THREE.PerspectiveCamera(CAMERA_FOV, initialWidth / initialHeight, 0.1, 3e7);
+    const camera = new THREE.PerspectiveCamera(CAMERA_FOV, initialWidth / initialHeight, 0.1, farPlane);
     cameraRef.current = camera;
 
     // Renderer setup
@@ -606,7 +629,7 @@ export function SolarSystem({
       }
       const ring = new THREE.LineLoop(
         new THREE.BufferGeometry().setFromPoints(ringPoints),
-        new THREE.LineBasicMaterial({ color: color, transparent: true, opacity: ORBIT_RING_OPACITY })
+        new THREE.LineBasicMaterial({ color: ORBIT_RING_STYLE.color, transparent: true, opacity: ORBIT_RING_STYLE.opacity })
       );
       pivot.add(ring);
       orbitRings.push(ring);
@@ -837,6 +860,11 @@ export function SolarSystem({
       return best;
     };
 
+    // Orbit rings: hidden by default, shown with the `orbits` command.
+    let ringsShown = usePageStore.getState().orbitsHighlighted;
+    const setOrbitStyle = (on: boolean) => { ringsShown = on; };
+    setOrbitStyleRef.current = setOrbitStyle;
+
     controls.target.copy(earthPosition);
     camera.position.copy(earthPosition).add(new THREE.Vector3(0, 0, DEFAULT_CAMERA_DISTANCE));
     controls.update();
@@ -1022,8 +1050,8 @@ export function SolarSystem({
       // camera is close to that body so it doesn't cut across the close-up.
       {
         const ownRing = ringByObject.get(focus.object);
-        for (const ring of orbitRings) ring.visible = true;
-        if (ownRing) ownRing.visible = dist > minDistanceFor(focus) * REFOCUS_FACTOR;
+        for (const ring of orbitRings) ring.visible = ringsShown;
+        if (ownRing) ownRing.visible = ringsShown && dist > minDistanceFor(focus) * REFOCUS_FACTOR;
       }
 
       // Keep the star sphere centred on the camera: pure direction, no parallax.
@@ -1145,7 +1173,12 @@ export function SolarSystem({
       renderer.dispose();
       initializedRef.current = false;
     };
-  }, [size, color, speed]); // Removed dots and onDotClick from dependencies
+  }, [size, color, speed, scaleMode]); // scaleMode: the whole scene is rebuilt on switch
+
+  // Orbit ring highlight (terminal `orbits` command).
+  useEffect(() => {
+    setOrbitStyleRef.current?.(orbitsHighlighted);
+  }, [orbitsHighlighted]);
 
   // Show/hide the stars (terminal `stars` command).
   useEffect(() => {
