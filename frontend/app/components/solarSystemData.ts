@@ -104,6 +104,7 @@ export const BODY_FACTS: Record<string, string> = {
   Neptune: "We've only visited Neptune once, with Voyager 2 in 1989. It imaged the dark spot storm that you can see here. This storm has since disappeared. Jupiter's red spot has lasted for centuries, suggesting that Neptune's climate changes far more rapidly.",
   Eris: "We have never sent a spacecraft to Eris, so we don't know what its surface looks like. This map is a fictional interpretation. Discovering more of these planet-like objects that didn't dominate their own orbit led to a reworking of the planet definition, causing Pluto to be demoted as well.",
   Makemake: "We have never sent a spacecraft to Makemake, so we don't know what its surface looks like. This map is a fictional interpretation. We do know that it appears red/brown, from frozen methane on its surface.",
+  Saturn: "My favorite thing about Saturn is the hexagonal storm at its north pole. About four Earths could fit inside it. It's an amazing display of fluid dynamics at a colossal scale.",
   Venus: "Venus is very similar to Earth. It is in the habitable zone and is roughly the same size. However, even with these similarities, their paths have clearly diverged significantly. These facts make Venus an important point of interest for understanding how planets behave and for studying what habitable zone exoplanets might be like.",
 };
 
@@ -133,7 +134,7 @@ export type StarSpec = {
 
 export const STARS: StarSpec[] = [
   { name: 'Sirius', raDeg: 101.287, decDeg: -16.716, magnitude: -1.46, spectral: 'A', lightYears: 8.6, fact: 'The brightest star in our night sky.' },
-  { name: 'Canopus', raDeg: 95.988, decDeg: -52.696, magnitude: -0.74, spectral: 'F', lightYears: 310 },
+  { name: 'Canopus', raDeg: 95.988, decDeg: -52.696, magnitude: -0.74, spectral: 'F', lightYears: 310, fact: "One of the most famous stars for star tracking in spacecraft. It's used for the roll component of a spacecraft's orientation, where the Sun is used for pitch and yaw. Canopus' brightness (second brightest in our night sky) and position make it ideal." },
   { name: 'Alpha Centauri', raDeg: 219.902, decDeg: -60.834, magnitude: -0.27, spectral: 'G', lightYears: 4.4, fact: 'The closest star system to the Sun.' },
   { name: 'Arcturus', raDeg: 213.915, decDeg: 19.182, magnitude: -0.05, spectral: 'K', lightYears: 37 },
   { name: 'Vega', raDeg: 279.235, decDeg: 38.784, magnitude: 0.03, spectral: 'A', lightYears: 25 },
@@ -192,7 +193,7 @@ export const STARS: StarSpec[] = [
   { name: 'Ruchbah', raDeg: 21.454, decDeg: 60.235, magnitude: 2.68, spectral: 'A', lightYears: 99 },
   { name: 'Segin', raDeg: 28.599, decDeg: 63.670, magnitude: 3.37, spectral: 'B', lightYears: 440 },
   // Cygnus: the Northern Cross. Deneb is the tail, Albireo the head (a famous gold-and-blue double).
-  { name: 'Deneb', raDeg: 310.358, decDeg: 45.280, magnitude: 1.25, spectral: 'A', lightYears: 2600 },
+  { name: 'Deneb', raDeg: 310.358, decDeg: 45.280, magnitude: 1.25, spectral: 'A', lightYears: 2600, fact: "Deneb is also used for star tracking at times. It is bright and sits nearly opposite the default reference, Canopus. For example, Voyager 2 was commanded to acquire the star in 1977 so that it could flip over." },
   { name: 'Sadr', raDeg: 305.557, decDeg: 40.257, magnitude: 2.23, spectral: 'F', lightYears: 1800 },
   { name: 'Aljanah', raDeg: 311.553, decDeg: 33.970, magnitude: 2.48, spectral: 'K', lightYears: 72 },
   { name: 'Fawaris', raDeg: 296.244, decDeg: 45.131, magnitude: 2.87, spectral: 'B', lightYears: 165 },
@@ -356,7 +357,29 @@ export const STARS: StarSpec[] = [
   { name: 'Peacock', raDeg: 306.412, decDeg: -56.735, magnitude: 1.94, spectral: 'B', lightYears: 179 },
   { name: 'Beta Pavonis', raDeg: 311.240, decDeg: -66.203, magnitude: 3.42, spectral: 'A', lightYears: 135 },
   { name: 'Delta Pavonis', raDeg: 302.182, decDeg: -66.182, magnitude: 3.56, spectral: 'G', lightYears: 20 },
+  // Eridanus: the river, winding from Cursa beside Rigel all the way down to Achernar (above).
+  { name: 'Cursa', raDeg: 76.962, decDeg: -5.086, magnitude: 2.79, spectral: 'A', lightYears: 89 },
+  { name: 'Acamar', raDeg: 44.565, decDeg: -40.305, magnitude: 2.88, spectral: 'A', lightYears: 165 },
+  { name: 'Zaurak', raDeg: 59.507, decDeg: -13.509, magnitude: 2.95, spectral: 'M', lightYears: 203 },
+  { name: 'Rana', raDeg: 55.812, decDeg: -9.765, magnitude: 3.54, spectral: 'K', lightYears: 29 },
+  { name: 'Phi Eridani', raDeg: 34.127, decDeg: -51.512, magnitude: 3.56, spectral: 'B', lightYears: 155 },
+  { name: 'Upsilon4 Eridani', raDeg: 64.473, decDeg: -33.798, magnitude: 3.56, spectral: 'B', lightYears: 178 },
+  { name: 'Chi Eridani', raDeg: 28.990, decDeg: -51.609, magnitude: 3.69, spectral: 'G', lightYears: 57 },
+  { name: 'Tau4 Eridani', raDeg: 49.879, decDeg: -21.758, magnitude: 3.69, spectral: 'M', lightYears: 300 },
+  { name: 'Ran', raDeg: 53.233, decDeg: -9.458, magnitude: 3.73, spectral: 'K', lightYears: 10.5 },
+  { name: 'Theemin', raDeg: 68.888, decDeg: -30.562, magnitude: 3.82, spectral: 'G', lightYears: 209 },
+  { name: 'Sceptrum', raDeg: 69.545, decDeg: -14.304, magnitude: 3.87, spectral: 'K', lightYears: 110 },
+  { name: 'Azha', raDeg: 44.107, decDeg: -8.898, magnitude: 3.89, spectral: 'K', lightYears: 137 },
+  { name: 'Nu Eridani', raDeg: 69.080, decDeg: -3.353, magnitude: 3.93, spectral: 'B', lightYears: 590 },
+  { name: 'Beid', raDeg: 62.966, decDeg: -6.838, magnitude: 4.04, spectral: 'F', lightYears: 122 },
+  { name: 'Iota Eridani', raDeg: 40.167, decDeg: -39.856, magnitude: 4.11, spectral: 'K', lightYears: 145 },
+  { name: 'Kappa Eridani', raDeg: 36.746, decDeg: -47.704, magnitude: 4.24, spectral: 'B', lightYears: 530 },
+  { name: 'Lambda Eridani', raDeg: 77.287, decDeg: -8.754, magnitude: 4.27, spectral: 'B', lightYears: 1000 },
+  { name: 'Keid', raDeg: 63.818, decDeg: -7.653, magnitude: 4.43, spectral: 'K', lightYears: 16.3 },
 ];
+
+/** Every star name, for the terminal's `fly` command (which turns toward stars). */
+export const STAR_NAMES: string[] = STARS.map((s) => s.name);
 
 // Approximate blackbody colors by spectral class.
 export const SPECTRAL_COLORS: Record<StarSpec['spectral'], number> = {

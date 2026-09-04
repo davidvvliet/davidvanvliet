@@ -96,7 +96,7 @@ const jsonLd = {
     addressRegion: "CA",
     addressCountry: "US",
   },
-  email: "david@theradarcorp.com",
+  email: "axeldvvliet@gmail.com",
   description:
     "David van Vliet is a 21-year-old founder based in Palo Alto, California, building Radar Corp, products for private and public market investors.",
 };

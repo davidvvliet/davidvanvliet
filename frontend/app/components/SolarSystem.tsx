@@ -174,14 +174,14 @@ const WIDE_VIEW_PLANET = 'Jupiter';    // The Sun's default (click / fly) view f
 const MIN_DISTANCE_RADII = DEFAULT_CAMERA_DISTANCE / EARTH_RADIUS; // closest zoom, in body radii
 // These are multiples of a body's closest zoom distance (which has a floor for
 // tiny bodies), so they stay reachable for moons a few km across.
-const NAME_VISIBLE_FACTOR = 7.5 / MIN_DISTANCE_RADII;  // ~2.2x close-up: focused body's name shows within this
+const NAME_VISIBLE_FACTOR = 10 / MIN_DISTANCE_RADII;   // ~2.9x close-up: focused body's name shows within 10 radii
 const ROOT_NAME_VISIBLE_FACTOR = 1.15;                 // for the Sun, relative to its wide-view fly-in distance
 const REFOCUS_FACTOR = 20 / MIN_DISTANCE_RADII;        // ~5.8x close-up: beyond this, clicking the focused body zooms back in
 const FOCUS_TRANSITION_SECONDS = 0.9;  // base duration; fly-ins add time per decade of distance covered
 const FOCUS_SECONDS_PER_DECADE = 0.45; // Earth -> Moon ~1.6 s, Earth -> Pluto ~3.5 s
 const PICK_MIN_PX = 12;                // click tolerance floor, in pixels
 const PICK_RADIUS_MULTIPLE = 4;        // tolerance = drawn radius * this (capped: big bodies use their outline)
-const PICK_CAP_PX = 60;                // above this drawn radius, the outline itself is the hitbox
+const PICK_CAP_PX = 30;                // above this drawn radius, the outline itself is the hitbox
 const DRAG_THRESHOLD_PX = 5;           // pointer movement beyond this is a drag, not a click
 
 type Body = {
@@ -446,7 +446,7 @@ export function SolarSystem({
     // third axis completes a right-handed set. Same rotation as Earth's globe.
     const starField = new THREE.Group();
     const starTexture = makeStarTexture();
-    const starSprites: { sprite: THREE.Sprite; px: number; name: string; lightYears: number }[] = [];
+    const starSprites: { sprite: THREE.Sprite; px: number; name: string; lightYears: number; spectral: string; fact?: string }[] = [];
     // Anything on the sky that gets a hover label.
     const skyPickables: { object: THREE.Object3D; px: number; name: string; lightYears: number; spectral?: string; fact?: string }[] = [];
     {
@@ -475,7 +475,7 @@ export function SolarSystem({
         sprite.position.copy(pos);
         // Sprite size in pixels from magnitude.
         const px = Math.max(STAR_MIN_PX, STAR_BASE_PX * Math.pow(10, -STAR_MAG_EXPONENT * star.magnitude));
-        starSprites.push({ sprite, px, name: star.name, lightYears: star.lightYears });
+        starSprites.push({ sprite, px, name: star.name, lightYears: star.lightYears, spectral: star.spectral, fact: star.fact });
         skyPickables.push({ object: sprite, px, name: star.name, lightYears: star.lightYears, spectral: star.spectral, fact: star.fact });
         starField.add(sprite);
       }
@@ -768,6 +768,27 @@ export function SolarSystem({
     // body at the start; the camera then flies straight toward the new body
     // along the line of sight, so it never passes through the parent.
     let transition: { from: Body; t: number; distTo: number | null; startOffset: THREE.Vector3; seconds: number } | null = null;
+    // Turning toward a star: rotates the camera's offset around the focus so the
+    // star ends up just beside the focused body's disc (a little past its
+    // angular radius), rather than hidden behind it. Distance is kept.
+    let aim: { from: THREE.Vector3; to: THREE.Vector3; t: number; star: (typeof starSprites)[number]; distFrom: number; distTo: number } | null = null;
+    const AIM_SECONDS = 1.0;
+    const AIM_MARGIN_RAD = THREE.MathUtils.degToRad(10); // clearance beyond the disc's edge
+    // Closer than this the star would land outside the frame (disc ~17 degrees at
+    // the close-up + margin > the 25 degree half-height), so ease out to it first.
+    const AIM_MIN_RADII = 8;
+    // A star label engaged by `fly` stays pinned until a drag/zoom or focus change;
+    // mouse hover can temporarily replace it but not clear it.
+    type StarInfo = { name: string; lightYears: number; spectral?: string; fact?: string };
+    let pinnedStar: StarInfo | null = null;
+    const clearPinnedStar = () => {
+      if (!pinnedStar) return;
+      pinnedStar = null;
+      if (hoveredStarRef.current !== null) {
+        hoveredStarRef.current = null;
+        onStarHover?.(null);
+      }
+    };
     const focusPoint = new THREE.Vector3();
     const tmpA = new THREE.Vector3();
     const tmpB = new THREE.Vector3();
@@ -783,6 +804,7 @@ export function SolarSystem({
 
     const setFocus = (next: Body, opts: { zoomTo?: boolean } = {}) => {
       hasInteracted = true; // a click or `fly` counts as interaction
+      clearPinnedStar();
       // Clicking the already-focused body only does something when the camera
       // has drifted far enough away that flying back in is meaningful.
       const isSame = next === focus;
@@ -873,6 +895,7 @@ export function SolarSystem({
     // User interaction handlers
     const onControlsStart = () => {
       hasInteracted = true;
+      clearPinnedStar(); // a drag or zoom releases the star label
       renderer.domElement.style.cursor = 'grabbing';
     };
     // 'change' fires only when the camera actually moves (a drag or zoom),
@@ -933,11 +956,14 @@ export function SolarSystem({
           onBodyHover?.(name);
         }
         // Stars (not focusable): label only, and only when nothing nearer is hovered.
-        const star = body ? null : pickStar(event.clientX, event.clientY);
-        const starName = star ? star.name : null;
+        const picked = body ? null : pickStar(event.clientX, event.clientY);
+        const shown: StarInfo | null = picked
+          ? { name: picked.name, lightYears: picked.lightYears, spectral: picked.spectral, fact: picked.fact }
+          : body ? null : pinnedStar; // nothing under the pointer: keep the pinned star
+        const starName = shown ? shown.name : null;
         if (hoveredStarRef.current !== starName) {
           hoveredStarRef.current = starName;
-          onStarHover?.(star ? { name: star.name, lightYears: star.lightYears, spectral: star.spectral, fact: star.fact } : null);
+          onStarHover?.(shown);
         }
         renderer.domElement.style.cursor = name ? 'pointer' : (autoRotateRef.current ? 'grab' : 'grabbing');
       }
@@ -1032,6 +1058,16 @@ export function SolarSystem({
         }
         if (transition.t >= 1) transition = null;
       }
+      if (aim) {
+        aim.t = Math.min(1, aim.t + delta / AIM_SECONDS);
+        const k = THREE.MathUtils.smoothstep(aim.t, 0, 1);
+        // Spherical interpolation of the offset direction via a quaternion.
+        const q = new THREE.Quaternion().setFromUnitVectors(aim.from, aim.to);
+        const step = new THREE.Quaternion().slerp(q, k); // identity -> q
+        dist = THREE.MathUtils.lerp(aim.distFrom, aim.distTo, k); // unchanged if already far enough
+        offset.copy(aim.from).applyQuaternion(step).setLength(dist);
+        if (aim.t >= 1) aim = null;
+      }
       controls.target.copy(focusPoint);
       camera.position.copy(focusPoint).add(offset);
 
@@ -1116,7 +1152,31 @@ export function SolarSystem({
     // request that arrived before the scene existed (e.g. from another view).
     focusByNameRef.current = (name: string) => {
       const body = bodies.find((b) => b.name.toLowerCase() === name.toLowerCase());
-      if (body) setFocus(body, { zoomTo: true });
+      if (body) { setFocus(body, { zoomTo: true }); return; }
+      // A star: don't travel, turn. The star field is centred on the camera, so a
+      // sprite's local position is its direction. Put the camera on the far side
+      // of the focus from that direction, so the star sits behind the focused body.
+      const star = starSprites.find((s) => s.name.toLowerCase() === name.toLowerCase());
+      if (!star) return;
+      hasInteracted = true;
+      const dir = star.sprite.position.clone().normalize();
+      const from = camera.position.clone().sub(controls.target).normalize();
+      // Camera opposite the star would put the star dead behind the body. Tilt
+      // that direction by the body's angular radius plus a margin, about an axis
+      // perpendicular to the star direction, so the star clears the disc.
+      const d = camera.position.distanceTo(controls.target);
+      const distTo = Math.max(d, focus.radius * AIM_MIN_RADII); // no change if already far enough
+      const angularRadius = Math.asin(Math.min(1, focus.radius / Math.max(distTo, focus.radius)));
+      const tilt = angularRadius + AIM_MARGIN_RAD;
+      let axis = new THREE.Vector3().crossVectors(dir, camera.up).normalize();
+      if (axis.lengthSq() < 1e-6) axis = new THREE.Vector3(1, 0, 0);
+      const to = dir.clone().negate().applyAxisAngle(axis, -tilt); // negative: star lands above the body
+      aim = { from, to, t: 0, star, distFrom: d, distTo };
+      // Engage the star's label right away, as if hovered. Mouse hover, a drag
+      // or a focus change replaces it as usual.
+      pinnedStar = { name: star.name, lightYears: star.lightYears, spectral: star.spectral, fact: star.fact };
+      hoveredStarRef.current = star.name;
+      onStarHover?.(pinnedStar);
     };
     const pending = usePageStore.getState().focusRequest;
     if (pending && pending.seq !== handledFocusSeqRef.current) {

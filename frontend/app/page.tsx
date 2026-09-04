@@ -39,7 +39,7 @@ export default function GridPage() {
   const dots = [
     { id: 1, lat: 52.3676, lon: 4.9041, color: '#00ff00', size: 4, label: 'Amsterdam', subtitle: '2004-2022', description: 'Born here' },
     { id: 3, lat: 29.7604, lon: -95.3698, color: '#00ff00', size: 4, label: 'Houston', subtitle: '2022-2025', description: 'Rice University' },
-    { id: 4, lat: 37.4419, lon: -122.1430, color: '#00ff00', size: 4, label: 'San Francisco', subtitle: '2025', description: 'Radar' },
+    { id: 4, lat: 37.4419, lon: -122.1430, color: '#00ff00', size: 4, label: 'San Francisco', subtitle: '2025', description: 'Worked on Radar Corp' },
     { id: 5, lat: 40.7128, lon: -74.0060, color: '#00ff00', size: 4, label: 'New York City', subtitle: '2026-present', description: 'Based here' },
   ];
 
@@ -60,6 +60,11 @@ export default function GridPage() {
               <div className={styles.globeLabel}>
                 {hoveredDot ? (
                   <div className={styles.globeLabelRow}><span className={styles.globeLabelLocation}>{hoveredDot.label}</span><span className={styles.globeLabelSubtitle}>{hoveredDot.subtitle}</span><span className={styles.globeLabelDescription}>{hoveredDot.description}</span></div>
+                ) : hoveredBody === 'Sun' ? (
+                  <>
+                    <div className={styles.globeLabelRow}><span className={styles.globeLabelLocation}>Sun</span><span className={styles.globeLabelDescription}>8.3 light-minutes</span><span className={styles.globeLabelSubtitle}>Type G</span></div>
+                    <span className={styles.globeLabelFact}>Click to focus</span>
+                  </>
                 ) : hoveredBody ? (
                   <div className={styles.globeLabelRow}><span className={styles.globeLabelLocation}>{hoveredBody}</span><span className={styles.globeLabelDescription}>Click to focus</span></div>
                 ) : hoveredStar ? (

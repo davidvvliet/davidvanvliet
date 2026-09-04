@@ -26,6 +26,11 @@ export default function Terminal() {
   const [cursorPos, setCursorPos] = useState(0);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  // Command history for Up/Down. `historyIndex` is where we are while browsing
+  // (history.length = not browsing); `draft` is what was typed before browsing.
+  const historyRef = useRef<string[]>([]);
+  const historyIndexRef = useRef<number>(0);
+  const draftRef = useRef<string>("");
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -95,10 +100,27 @@ export default function Terminal() {
     }
   };
 
+  const browseHistory = (direction: -1 | 1) => {
+    const history = historyRef.current;
+    if (history.length === 0) return;
+    const atEnd = historyIndexRef.current === history.length;
+    if (atEnd && direction === 1) return; // nothing newer
+    if (atEnd) draftRef.current = input; // leaving the live line: remember it
+    const next = Math.max(0, Math.min(history.length, historyIndexRef.current + direction));
+    historyIndexRef.current = next;
+    setInputAndCursor(next === history.length ? draftRef.current : history[next]);
+  };
+
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Tab") {
       e.preventDefault();
       handleTab();
+      return;
+    }
+
+    if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+      e.preventDefault(); // otherwise the caret jumps to the start/end
+      browseHistory(e.key === "ArrowUp" ? -1 : 1);
       return;
     }
 
@@ -110,6 +132,12 @@ export default function Terminal() {
         setCursorPos(0);
         return;
       }
+
+      // Record in history (skip consecutive duplicates) and reset browsing.
+      const history = historyRef.current;
+      if (history[history.length - 1] !== trimmed) history.push(trimmed);
+      historyIndexRef.current = history.length;
+      draftRef.current = "";
 
       const [name, ...args] = trimmed.split(" ");
       const command = getCommand(name.toLowerCase());
@@ -185,6 +213,7 @@ export default function Terminal() {
             onChange={(e) => {
               setInput(e.target.value);
               setCursorPos(e.target.selectionStart ?? e.target.value.length);
+              historyIndexRef.current = historyRef.current.length; // typing leaves browse mode
             }}
             onKeyDown={handleKeyDown}
             onKeyUp={syncCursor}

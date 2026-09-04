@@ -5,7 +5,7 @@ export default function Navbar() {
   return (
     <nav className={styles.navbar}>
       <h1 className={styles.navbarTitle}>David van Vliet</h1>
-      <p className={styles.navbarSubtitle}>22; New York City; david@theradarcorp.com</p>
+      <p className={styles.navbarSubtitle}>22; New York City; axeldvvliet@gmail.com</p>
     </nav>
   );
 }
