@@ -64,6 +64,8 @@ export const MOONS: MoonSpec[] = [
   { name: 'Triton', planet: 'Neptune', orbitPlanetRadii: 14.41, radiusEarths: 0.2124, periodDays: -5.877, inclinationDeg: 23.1, color: 0xc7b8b0, phaseDeg: 45 },
   // Charon: half Pluto's size and mutually locked with it (its orbit equals Pluto's day).
   { name: 'Charon', planet: 'Pluto', orbitPlanetRadii: 16.5, radiusEarths: 0.0951, periodDays: 6.387, inclinationDeg: 0.0, color: 0x9a8f88, phaseDeg: 0, texture: '/charon.jpg' },
+  // Dysnomia: Eris's moon, and the reason Eris's mass is known.
+  { name: 'Dysnomia', planet: 'Eris', orbitPlanetRadii: 32.0, radiusEarths: 0.055, periodDays: 15.79, inclinationDeg: 0.0, color: 0x6e6a66, phaseDeg: 120 },
 ];
 
 // Planets other than Earth (Earth is built separately: it has the continents,
@@ -91,12 +93,17 @@ export const PLANETS: PlanetSpec[] = [
   // as the sub-Charon point, so the heart (lon 180, map centre) faces away from Charon. Both turn at
   // the same rate, so this alignment holds: they are mutually locked.
   { name: 'Pluto', au: 39.48, radiusEarths: 0.1865, periodDays: 90560, rotationDays: 6.387, inclinationDeg: 17.16, eccentricity: 0.2488, perihelionDeg: 224.1, color: 0xc9a98a, phaseDeg: 100, axialTiltDeg: 122.5, texture: '/pluto.jpg', spinPhaseDeg: 180 },
+  // Two more dwarf planets. Their maps are artist's impressions: no spacecraft has visited either.
+  { name: 'Makemake', au: 45.43, radiusEarths: 0.1122, periodDays: 111800, rotationDays: 0.95, inclinationDeg: 28.98, eccentricity: 0.161, perihelionDeg: 14.4, color: 0xb5745f, phaseDeg: 190, texture: '/makemake.jpg' },
+  { name: 'Eris', au: 67.86, radiusEarths: 0.1826, periodDays: 204200, rotationDays: 1.08, inclinationDeg: 44.04, eccentricity: 0.436, perihelionDeg: 187.5, axialTiltDeg: 78, color: 0xd9d9d9, phaseDeg: 300, texture: '/eris.jpg' },
 ];
 /** A favourite fact per body, shown under the name when the body is in focus. */
 export const BODY_FACTS: Record<string, string> = {
   Io: "Io is the most volcanic body in the solar system. Before the discovery of erupting volcanoes on Io, we weren't aware of any other body in the solar system with active volcanism at all. It shows how quickly perspectives can change from exploration and new information. Thank you Voyager 1 :)",
   Uranus: "Uranus spins on its side, suggesting a massive collision at some point in its past. Uranus has rings, just like Saturn does! Neptune and Jupiter actually have rings as well, likely from small debris coming from their moons, but they're much fainter.",
   Neptune: "We've only visited Neptune once, with Voyager 2 in 1989. It imaged the dark spot storm that you can see here. This storm has since disappeared. Jupiter's red spot has lasted for centuries, suggesting that Neptune's climate changes far more rapidly.",
+  Eris: "No spacecraft has ever visited Eris, so this surface is an artist's impression. Eris is slightly smaller than Pluto but more massive, and its discovery in 2005 is what led to Pluto being reclassified as a dwarf planet.",
+  Makemake: "No spacecraft has ever visited Makemake, so this surface is an artist's impression. It's one of the largest known objects in the Kuiper belt, with a reddish surface of frozen methane.",
   Venus: "Venus is very similar to Earth. It is in the habitable zone and is roughly the same size. However, even with these similarities, their paths have clearly diverged significantly. These facts make Venus an important point of interest for understanding how planets behave and for studying what habitable zone exoplanets might be like.",
 };
 

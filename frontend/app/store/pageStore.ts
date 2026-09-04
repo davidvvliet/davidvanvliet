@@ -17,7 +17,17 @@ interface PageState {
   setScaleMode: (mode: "true" | "compact") => void;
   secondsPerDay: number; // real seconds per simulated Earth day; every motion scales with it
   setSecondsPerDay: (seconds: number) => void;
+  /** Restore every persisted setting to its default. */
+  resetSettings: () => void;
 }
+
+/** Defaults for the settings that persist to local storage. */
+export const DEFAULT_SETTINGS = {
+  starsVisible: false,
+  orbitsHighlighted: false,
+  scaleMode: "compact" as const,
+  secondsPerDay: 10,
+};
 
 export const usePageStore = create<PageState>()(
   persist(
@@ -29,14 +39,12 @@ export const usePageStore = create<PageState>()(
   focusRequest: null,
   requestFocus: (name) =>
     set((state) => ({ focusRequest: { name, seq: (state.focusRequest?.seq ?? 0) + 1 } })),
-  starsVisible: false,
+  ...DEFAULT_SETTINGS,
   setStarsVisible: (visible) => set({ starsVisible: visible }),
-  orbitsHighlighted: false,
   setOrbitsHighlighted: (on) => set({ orbitsHighlighted: on }),
-  scaleMode: "compact",
   setScaleMode: (mode) => set({ scaleMode: mode }),
-  secondsPerDay: 10,
   setSecondsPerDay: (seconds) => set({ secondsPerDay: seconds }),
+  resetSettings: () => set({ ...DEFAULT_SETTINGS }),
     }),
     {
       name: "explore-settings",
