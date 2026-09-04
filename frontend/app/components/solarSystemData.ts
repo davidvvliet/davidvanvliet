@@ -102,8 +102,8 @@ export const BODY_FACTS: Record<string, string> = {
   Io: "Io is the most volcanic body in the solar system. Before the discovery of erupting volcanoes on Io, we weren't aware of any other body in the solar system with active volcanism at all. It shows how quickly perspectives can change from exploration and new information. Thank you Voyager 1 :)",
   Uranus: "Uranus spins on its side, suggesting a massive collision at some point in its past. Uranus has rings, just like Saturn does! Neptune and Jupiter actually have rings as well, likely from small debris coming from their moons, but they're much fainter.",
   Neptune: "We've only visited Neptune once, with Voyager 2 in 1989. It imaged the dark spot storm that you can see here. This storm has since disappeared. Jupiter's red spot has lasted for centuries, suggesting that Neptune's climate changes far more rapidly.",
-  Eris: "No spacecraft has ever visited Eris, so this surface is an artist's impression. Eris is slightly smaller than Pluto but more massive, and its discovery in 2005 is what led to Pluto being reclassified as a dwarf planet.",
-  Makemake: "No spacecraft has ever visited Makemake, so this surface is an artist's impression. It's one of the largest known objects in the Kuiper belt, with a reddish surface of frozen methane.",
+  Eris: "We have never sent a spacecraft to Eris, so we don't know what its surface looks like. This map is a fictional interpretation. Discovering more of these planet-like objects that didn't dominate their own orbit led to a reworking of the planet definition, causing Pluto to be demoted as well.",
+  Makemake: "We have never sent a spacecraft to Makemake, so we don't know what its surface looks like. This map is a fictional interpretation. We do know that it appears red/brown, from frozen methane on its surface.",
   Venus: "Venus is very similar to Earth. It is in the habitable zone and is roughly the same size. However, even with these similarities, their paths have clearly diverged significantly. These facts make Venus an important point of interest for understanding how planets behave and for studying what habitable zone exoplanets might be like.",
 };
 
@@ -132,13 +132,13 @@ export type StarSpec = {
 };
 
 export const STARS: StarSpec[] = [
-  { name: 'Sirius', raDeg: 101.287, decDeg: -16.716, magnitude: -1.46, spectral: 'A', lightYears: 8.6, fact: 'The brightest star in the night sky.' },
+  { name: 'Sirius', raDeg: 101.287, decDeg: -16.716, magnitude: -1.46, spectral: 'A', lightYears: 8.6, fact: 'The brightest star in our night sky.' },
   { name: 'Canopus', raDeg: 95.988, decDeg: -52.696, magnitude: -0.74, spectral: 'F', lightYears: 310 },
   { name: 'Alpha Centauri', raDeg: 219.902, decDeg: -60.834, magnitude: -0.27, spectral: 'G', lightYears: 4.4, fact: 'The closest star system to the Sun.' },
   { name: 'Arcturus', raDeg: 213.915, decDeg: 19.182, magnitude: -0.05, spectral: 'K', lightYears: 37 },
   { name: 'Vega', raDeg: 279.235, decDeg: 38.784, magnitude: 0.03, spectral: 'A', lightYears: 25 },
   { name: 'Capella', raDeg: 79.172, decDeg: 45.998, magnitude: 0.08, spectral: 'G', lightYears: 43 },
-  { name: 'Rigel', raDeg: 78.634, decDeg: -8.202, magnitude: 0.13, spectral: 'B', lightYears: 860 },
+  { name: 'Rigel', raDeg: 78.634, decDeg: -8.202, magnitude: 0.13, spectral: 'B', lightYears: 860, fact: 'One of my favorite stars.' },
   { name: 'Procyon', raDeg: 114.826, decDeg: 5.225, magnitude: 0.34, spectral: 'F', lightYears: 11 },
   { name: 'Achernar', raDeg: 24.429, decDeg: -57.237, magnitude: 0.46, spectral: 'B', lightYears: 140 },
   { name: 'Betelgeuse', raDeg: 88.793, decDeg: 7.407, magnitude: 0.50, spectral: 'M', lightYears: 550, fact: 'Betelgeuse is unstable and will likely go supernova within 100,000 years. The explosion will be visible from Earth for months and will shine as bright as a full moon. Earth is far enough away to be safe from this event.' },
@@ -297,7 +297,7 @@ export const STARS: StarSpec[] = [
   { name: 'Kappa Geminorum', raDeg: 116.112, decDeg: 24.398, magnitude: 3.57, spectral: 'G', lightYears: 141 },
   { name: 'Mekbuda', raDeg: 106.027, decDeg: 20.570, magnitude: 3.93, spectral: 'F', lightYears: 1200 },
   // Aquila: Altair completes the Summer Triangle with Vega and Deneb.
-  { name: 'Altair', raDeg: 297.696, decDeg: 8.868, magnitude: 0.77, spectral: 'A', lightYears: 17 },
+  { name: 'Altair', raDeg: 297.696, decDeg: 8.868, magnitude: 0.77, spectral: 'A', lightYears: 17, fact: 'I love the name of this star. It means something like the flying eagle in Arabic. Many stars have Arabic-origin names because Arab astronomers preserved and expanded upon ancient star catalogs.' },
   { name: 'Tarazed', raDeg: 296.565, decDeg: 10.613, magnitude: 2.72, spectral: 'K', lightYears: 395 },
   { name: 'Okab', raDeg: 286.353, decDeg: 13.864, magnitude: 2.99, spectral: 'A', lightYears: 83 },
   { name: 'Theta Aquilae', raDeg: 302.826, decDeg: -0.821, magnitude: 3.24, spectral: 'B', lightYears: 290 },
