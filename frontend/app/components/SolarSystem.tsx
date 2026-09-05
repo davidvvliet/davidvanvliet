@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { usePageStore } from '../store/pageStore';
 import { PLANETS, MOONS, STARS, SPECTRAL_COLORS, APOLLO_SITES, MISSIONS } from './solarSystemData';
+import { moonPositionJ2000Km } from './lunar';
 
 interface PersonaDot {
   id: number;
@@ -96,12 +97,6 @@ let secondsPerDay = 10;
 const J2000 = 2451545.0;
 const jdNow = () => Date.now() / 86400000 + 2440587.5;
 const EARTH_MEAN_LONGITUDE_DEG = 100.464; // J2000
-// Moon mean elements (degrees, per day since J2000): mean longitude, longitude of
-// perigee and of the ascending node all precess; inclination and eccentricity are ~fixed.
-const MOON_L0 = 218.316, MOON_L_RATE = 13.176396;
-const MOON_PERI0 = 83.353, MOON_PERI_RATE = 0.111403;
-const MOON_NODE0 = 125.045, MOON_NODE_RATE = -0.052954;
-const MOON_ECCENTRICITY = 0.0549;
 // Earth's rotation from the date: Greenwich mean sidereal time.
 const gmstDeg = (jd: number) => 280.46061837 + 360.98564736629 * (jd - J2000);
 const EARTH_DAY_DAYS = 0.99727;        // Sidereal rotation period, in days
@@ -749,12 +744,38 @@ export function SolarSystem({
     addOrbiter(earthSystem, earthOrbitRadius, EARTH_YEAR_DAYS, 0, {
       eccentricity: EARTH_ECCENTRICITY, perihelionDeg: EARTH_PERIHELION_DEG, meanLongitudeDeg: EARTH_MEAN_LONGITUDE_DEG,
     });
-    // The Moon, in Earth's frame, with its real precessing node and perigee.
-    addOrbiter(moon, MOON_ORBIT_RADIUS, MOON_ORBIT_DAYS, MOON_INCLINATION_DEG, {
-      parent: earthSystem, tidallyLocked: true, eccentricity: MOON_ECCENTRICITY,
-      perihelionDeg: MOON_PERI0, nodeDeg: MOON_NODE0, meanLongitudeDeg: MOON_L0,
-      periRateDegPerDay: MOON_PERI_RATE, nodeRateDegPerDay: MOON_NODE_RATE,
-    });
+    // The Moon, in Earth's frame, from the lunar theory (see lunar.ts): position
+    // and tidal-lock rotation are set every frame. Its ring is the theory's path
+    // over one orbit around the current date, refreshed as the date moves.
+    earthSystem.add(moon);
+    const MOON_KM_TO_UNITS = MOON_ORBIT_RADIUS / 384400; // true scale: km -> units; compact: same shape, squeezed
+    const moonPosAt = (jd: number, out: THREE.Vector3) => {
+      const k = moonPositionJ2000Km(jd);
+      return out.set(k.x * MOON_KM_TO_UNITS, k.z * MOON_KM_TO_UNITS, -k.y * MOON_KM_TO_UNITS);
+    };
+    const MOON_RING_SAMPLES = 256;
+    const moonRingPositions = new Float32Array((MOON_RING_SAMPLES + 1) * 3);
+    const moonRingGeometry = new THREE.BufferGeometry();
+    moonRingGeometry.setAttribute('position', new THREE.BufferAttribute(moonRingPositions, 3));
+    const moonRing = new THREE.Line(moonRingGeometry, new THREE.LineBasicMaterial({ color: ORBIT_RING_STYLE.color, transparent: true, opacity: ORBIT_RING_STYLE.opacity }));
+    earthSystem.add(moonRing);
+    orbitRings.push(moonRing as unknown as THREE.LineLoop);
+    ringByObject.set(moon, moonRing as unknown as THREE.LineLoop);
+    let moonRingJD = -Infinity;
+    const updateMoon = (jd: number) => {
+      moonPosAt(jd, moon.position);
+      // Tidal lock: the map's centre (+x on the sphere) faces Earth.
+      moon.rotation.y = Math.atan2(-moon.position.z, moon.position.x) + Math.PI;
+      if (Math.abs(jd - moonRingJD) > 0.25) {
+        moonRingJD = jd;
+        const v = new THREE.Vector3();
+        for (let i = 0; i <= MOON_RING_SAMPLES; i++) {
+          moonPosAt(jd - MOON_ORBIT_DAYS / 2 + (i / MOON_RING_SAMPLES) * MOON_ORBIT_DAYS, v);
+          moonRingPositions.set([v.x, v.y, v.z], i * 3);
+        }
+        (moonRingGeometry.attributes.position as THREE.BufferAttribute).needsUpdate = true;
+      }
+    };
 
     // Bodies that can be focused (clicked).
     const sunBody: Body = { name: 'Sun', object: sun, visual: sun, radius: SUN_RADIUS, parent: null, systemRadius: earthOrbitRadius, scale: 1 };
@@ -868,6 +889,7 @@ export function SolarSystem({
     let simJD = jdNow();
     simJDRef.current = simJD;
     updateOrbiters(simJD);
+    updateMoon(simJD);
     const earthPosition = new THREE.Vector3();
     earthSystem.getWorldPosition(earthPosition);
     const worldPos = (b: Body, out: THREE.Vector3) => b.object.getWorldPosition(out);
@@ -1272,6 +1294,7 @@ export function SolarSystem({
 
       // Orbital motion and spins, all from the date.
       updateOrbiters(simJD);
+      updateMoon(simJD);
       updateMission(simJD);
       sun.rotation.y = (2 * Math.PI * (simJD - J2000)) / SUN_ROTATION_DAYS;
       // Earth: Greenwich sidereal time puts lon 0 (local -x on the globe) at the
@@ -1528,6 +1551,8 @@ export function SolarSystem({
       });
       moonGeometry.dispose();
       moonMaterial.dispose();
+      moonRingGeometry.dispose();
+      (moonRing.material as THREE.Material).dispose();
       apolloDisposables.forEach((d) => d.dispose());
       moonDotsRef.current = [];
       apolloGroupRef.current = null;

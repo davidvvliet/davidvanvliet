@@ -393,6 +393,8 @@ export const MISSIONS: MissionSpec[] = [
   { id: 'voyager1', name: 'Voyager 1', file: '/missions/voyager1.json', center: 'Sun', view: { distanceAU: 8, elevationDeg: 28 }, secondsPerDay: 0.1 },
   { id: 'voyager2', name: 'Voyager 2', file: '/missions/voyager2.json', center: 'Sun', view: { distanceAU: 8, elevationDeg: 28 }, secondsPerDay: 0.1 },
   { id: 'newhorizons', name: 'New Horizons', file: '/missions/newhorizons.json', center: 'Sun', view: { distanceAU: 8, elevationDeg: 28 }, secondsPerDay: 0.1 },
+  // Earth-centred: the path is drawn in Earth's moving frame. 0.006 AU is ~2.3 Earth-Moon distances.
+  { id: 'artemis2', name: 'Artemis II', file: '/missions/artemis2.json', center: 'Earth', view: { distanceAU: 0.006, elevationDeg: 28 }, secondsPerDay: 10 },
 ];
 
 /** Apollo landing sites, for the hidden `apollo` command. Selenographic lat/lon (east positive). */
