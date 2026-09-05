@@ -60,7 +60,7 @@ const SCALES: Record<ScaleMode, { orbitScale: number; sunRadius: number; moonOrb
   true: {
     orbitScale: EARTH_RADIUS / EARTH_RADIUS_PER_AU, // ~30,500 units per AU
     sunRadius: EARTH_RADIUS * 109.2,
-    moonOrbitRadius: EARTH_RADIUS * 60.3,           // 384,400 km
+    moonOrbitRadius: EARTH_RADIUS * (384400 / 6371), // 384,400 km, on the same km scale as orbitScale
     starSphereRadius: 8e6,                          // beyond the max zoom-out (~3.7M at Pluto), inside the far plane
     farPlane: 3e7,
     sunGlowScale: 4.5,                              // glow sprite size as a multiple of the Sun's diameter
@@ -762,8 +762,12 @@ export function SolarSystem({
     orbitRings.push(moonRing as unknown as THREE.LineLoop);
     ringByObject.set(moon, moonRing as unknown as THREE.LineLoop);
     let moonRingJD = -Infinity;
+    // A frame at the Moon's position that does not spin with it: Moon-centred mission segments live here.
+    const moonFrame = new THREE.Group();
+    earthSystem.add(moonFrame);
     const updateMoon = (jd: number) => {
       moonPosAt(jd, moon.position);
+      moonFrame.position.copy(moon.position);
       // Tidal lock: the map's centre (+x on the sphere) faces Earth.
       moon.rotation.y = Math.atan2(-moon.position.z, moon.position.x) + Math.PI;
       if (Math.abs(jd - moonRingJD) > 0.25) {
@@ -944,7 +948,7 @@ export function SolarSystem({
       // Surface photos shown in the terminal the first time a body is focused.
       const SURFACE_PHOTOS: Record<string, [string, string]> = {
         Titan: ['/titan-huygens-1.jpg,/titan-huygens-2.jpg,/titan-huygens-3.jpg,/titan-huygens-4.jpg,/titan-huygens-5.jpg,/titan-huygens-6.jpg,/titan-huygens.jpg', "The Huygens lander on Titan, 14 January 2005. My mind was completely blown when I learned we had landed and imaged its surface. One of only four planets or moons we've landed on outside of Earth, the others being the Moon, Mars and Venus."],
-        Venus: ['/venus-venera13.jpg', "Venera 13 on the surface of Venus, 1 March 1982. It survived 127 minutes at 457 degrees C. I find this to be the most impressive accomplishment of the Soviets during the space race."],
+        Venus: ['/venus-venera13.jpg', "Venera 13 on the surface of Venus, 1 March 1982. It survived 127 minutes at 457 degrees C. I find these surface images to be the most impressive accomplishment of the Soviets during the space race."],
       };
       const photo = SURFACE_PHOTOS[next.name];
       if (photo && next !== focus && !shownInTerminal.has(next.name)) {
@@ -1171,18 +1175,25 @@ export function SolarSystem({
     renderer.domElement.addEventListener('click', onMouseClick);
 
     // ---- Mission tracking ----
-    // A trajectory is a list of [jd, x, y, z] in AU from JPL Horizons (heliocentric
-    // ecliptic; x = equinox, y = longitude 90, z = north). Scene axes: x, y = z_h,
-    // z = -y_h. The line is drawn up to the simulated date, with a marker at the
-    // tip that is itself a focusable body, so the craft can be followed.
-    type Mission = { spec: (typeof MISSIONS)[number]; points: number[][]; line: THREE.Line; positions: Float32Array; pristine: Float32Array; lastTipIndex: number; marker: THREE.Mesh; body: Body; group: THREE.Group };
+    // A trajectory is one or more segments of [jd, x, y, z] in AU (ecliptic J2000;
+    // x = equinox, y = longitude 90, z = north). Scene axes: x, y = z_h, z = -y_h.
+    // Each segment is drawn in the frame of its centre (Sun, Earth or Moon), so a
+    // lunar orbit stays a clean loop around the moving Moon. The line is drawn up to
+    // the simulated date, with a marker at the tip that is itself a focusable body.
+    type SegmentCenter = 'Sun' | 'Earth' | 'Moon';
+    type Segment = { center: SegmentCenter; points: number[][]; line: THREE.Line; positions: Float32Array; pristine: Float32Array; lastTipIndex: number; group: THREE.Group };
+    type Mission = { spec: (typeof MISSIONS)[number]; segments: Segment[]; active: number; marker: THREE.Mesh; body: Body };
     let mission: Mission | null = null;
     const toScene = (x: number, y: number, z: number, out: THREE.Vector3) => out.set(x * orbitScale, z * orbitScale, -y * orbitScale);
+    const frameFor = (center: SegmentCenter) => (center === 'Earth' ? earthSystem : center === 'Moon' ? moonFrame : scene);
     const clearMission = () => {
       if (!mission) return;
-      mission.group.parent?.remove(mission.group);
-      mission.line.geometry.dispose();
-      (mission.line.material as THREE.Material).dispose();
+      for (const seg of mission.segments) {
+        seg.group.parent?.remove(seg.group);
+        seg.line.geometry.dispose();
+        (seg.line.material as THREE.Material).dispose();
+      }
+      mission.marker.parent?.remove(mission.marker);
       mission.marker.geometry.dispose();
       (mission.marker.material as THREE.Material).dispose();
       const i = bodies.indexOf(mission.body);
@@ -1198,30 +1209,33 @@ export function SolarSystem({
       const res = await fetch(spec.file);
       if (!res.ok) return;
       const data = await res.json();
-      const points: number[][] = data.points;
-      const parent = spec.center === 'Earth' ? earthSystem : scene;
-      const group = new THREE.Group();
-      parent.add(group);
-      const positions = new Float32Array(points.length * 3);
+      const raw: { center: SegmentCenter; points: number[][] }[] = data.segments ?? [{ center: spec.center, points: data.points }];
       const v = new THREE.Vector3();
-      points.forEach((p, i) => { toScene(p[1], p[2], p[3], v); positions.set([v.x, v.y, v.z], i * 3); });
-      const geometry = new THREE.BufferGeometry();
-      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-      geometry.setDrawRange(0, 0);
-      const line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: 0x66ccff, transparent: true, opacity: 0.95 }));
-      group.add(line);
+      const segments: Segment[] = raw.map((r) => {
+        const group = new THREE.Group();
+        frameFor(r.center).add(group);
+        const positions = new Float32Array((r.points.length + 1) * 3); // +1: a slot for the interpolated tip
+        r.points.forEach((p, i) => { toScene(p[1], p[2], p[3], v); positions.set([v.x, v.y, v.z], i * 3); });
+        const geometry = new THREE.BufferGeometry();
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.setDrawRange(0, 0);
+        const line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: 0x66ccff, transparent: true, opacity: 0.95 }));
+        group.add(line);
+        return { center: r.center, points: r.points, line, positions, pristine: positions.slice(), lastTipIndex: -1, group };
+      });
       const markerRadius = EARTH_RADIUS * 0.02; // tiny; the pixel floor keeps it visible as a dot
       const marker = new THREE.Mesh(new THREE.SphereGeometry(markerRadius, 8, 8), new THREE.MeshBasicMaterial({ color: 0x66ccff }));
-      group.add(marker);
+      segments[0].group.add(marker);
       const body: Body = { name: spec.name, object: marker, visual: marker, radius: markerRadius, parent: spec.center === 'Earth' ? earthBody : sunBody, systemRadius: 0, scale: 1 };
       bodies.push(body);
-      mission = { spec, points, line, positions, pristine: positions.slice(), lastTipIndex: -1, marker, body, group };
-      // Start the clock at launch. Focus the craft itself (a cut, not a flight;
-      // it starts at Earth), then ease the camera to the mission's preset: far out
-      // and above the ecliptic, keeping the current azimuth. The camera then
-      // follows the craft for the whole journey. Without a preset, just pull back.
-      dateRequestRef.current = points[0][0];
-      updateMission(points[0][0]); // place the marker at launch before focusing it
+      mission = { spec, segments, active: 0, marker, body };
+      // Start the clock at the first sample. Focus the craft itself (a cut, not a
+      // flight), then ease the camera to the mission's preset: far out and above the
+      // ecliptic, keeping the current azimuth. The camera then follows the craft for
+      // the whole journey. Without a preset, just pull back.
+      const startJD = segments[0].points[0][0];
+      dateRequestRef.current = startJD;
+      updateMission(startJD); // place the marker before focusing it
       focus = body;
       transition = null;
       aim = null;
@@ -1244,10 +1258,30 @@ export function SolarSystem({
       }
     };
     trackRef.current = (id) => { loadMission(id); };
+    // Restores the sample slot a segment's tip last overwrote.
+    const restoreTip = (seg: Segment) => {
+      if (seg.lastTipIndex >= 0 && seg.lastTipIndex < seg.points.length) {
+        const k = seg.lastTipIndex * 3;
+        seg.positions.set(seg.pristine.subarray(k, k + 3), k);
+        (seg.line.geometry.attributes.position as THREE.BufferAttribute).needsUpdate = true;
+      }
+      seg.lastTipIndex = -1;
+    };
     // Advances the drawn portion of the trajectory to the current date.
     const updateMission = (jd: number) => {
       if (!mission) return;
-      const pts = mission.points;
+      // The active segment is the last one that has started; earlier ones are drawn
+      // in full, later ones not at all.
+      let active = 0;
+      for (let i = 1; i < mission.segments.length; i++) if (mission.segments[i].points[0][0] <= jd) active = i;
+      mission.segments.forEach((seg, i) => {
+        if (i === active) return;
+        restoreTip(seg);
+        seg.line.geometry.setDrawRange(0, i < active ? seg.points.length : 0);
+      });
+      const seg = mission.segments[active];
+      if (active !== mission.active) { seg.group.add(mission.marker); mission.active = active; }
+      const pts = seg.points;
       // Binary search for the last sample at or before jd.
       let lo = 0, hi = pts.length - 1;
       if (jd <= pts[0][0]) hi = 0;
@@ -1259,15 +1293,12 @@ export function SolarSystem({
       // Draw all samples up to `lo`, plus a final segment to the interpolated tip.
       // The tip temporarily overwrites the next sample's slot; restore the slot we
       // used last frame so the buffer stays exact once the tip moves on.
-      const n = lo + 1;
-      if (mission.lastTipIndex >= 0 && mission.lastTipIndex !== n) {
-        const k = mission.lastTipIndex * 3;
-        mission.positions.set(mission.pristine.subarray(k, k + 3), k);
-      }
-      mission.lastTipIndex = n;
-      mission.positions.set([mission.marker.position.x, mission.marker.position.y, mission.marker.position.z], n * 3);
-      (mission.line.geometry.attributes.position as THREE.BufferAttribute).needsUpdate = true;
-      mission.line.geometry.setDrawRange(0, Math.min(n + 1, pts.length));
+      const n = lo + 1; // <= pts.length, the spare slot
+      if (seg.lastTipIndex !== n) restoreTip(seg);
+      seg.lastTipIndex = n;
+      seg.positions.set([mission.marker.position.x, mission.marker.position.y, mission.marker.position.z], n * 3);
+      (seg.line.geometry.attributes.position as THREE.BufferAttribute).needsUpdate = true;
+      seg.line.geometry.setDrawRange(0, n + 1);
     };
     const pendingTrack = usePageStore.getState().trackRequest;
     if (pendingTrack && pendingTrack.seq !== handledTrackSeqRef.current) {
@@ -1289,7 +1320,15 @@ export function SolarSystem({
       // The clock. A `date` request jumps it; otherwise it runs at the set rate.
       const jump = dateRequestRef.current;
       if (jump !== null) { simJD = jump; dateRequestRef.current = null; }
+      const before = simJD;
       simJD += delta / secondsPerDay;
+      // A tracked mission freezes the clock at its last sample (a `date` past it runs on).
+      if (mission) {
+        const last = mission.segments[mission.segments.length - 1].points;
+        const endJD = last[last.length - 1][0];
+        if (before < endJD && simJD > endJD) simJD = endJD;
+        else if (before === endJD && jump === null) simJD = endJD;
+      }
       simJDRef.current = simJD;
 
       // Orbital motion and spins, all from the date.

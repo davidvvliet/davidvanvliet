@@ -18,5 +18,6 @@ import "./commands/launch";
 import "./commands/radarcorp";
 import "./commands/books";
 import "./commands/films";
+import "./commands/puzzle";
 
 export { getCommand, getAllCommands } from "./registry";

@@ -11,7 +11,7 @@ import AsciiResume from './components/AsciiResume';
 import BlogPost from './components/BlogPost';
 import styles from './page.module.css';
 import { usePageStore } from './store/pageStore';
-import { BODY_FACTS } from './components/solarSystemData';
+import { BODY_FACTS, MISSIONS } from './components/solarSystemData';
 
 const SolarSystem = dynamic(() => import('./components/SolarSystem').then(mod => mod.SolarSystem), {
   ssr: false,
@@ -25,10 +25,14 @@ export default function GridPage() {
   const [hoveredStar, setHoveredStar] = useState<{ name: string; lightYears: number; spectral?: string; fact?: string } | null>(null);
   const [focusedBody, setFocusedBody] = useState<string | null>("Earth");
   // Mission date readout: shown while a mission is launched, as month and year.
-  const missionActive = usePageStore((s) => s.trackRequest?.id != null);
+  const missionId = usePageStore((s) => s.trackRequest?.id ?? null);
   const simJD = usePageStore((s) => s.simJD);
-  const missionDate = missionActive && simJD
-    ? new Date((simJD - 2440587.5) * 86400000).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' })
+  const missionFormat = MISSIONS.find((m) => m.id === missionId)?.dateFormat ?? 'month';
+  const missionDate = missionId && simJD
+    ? new Date((simJD - 2440587.5) * 86400000).toLocaleDateString('en-US',
+        missionFormat === 'day'
+          ? { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }
+          : { month: 'long', year: 'numeric', timeZone: 'UTC' })
     : null;
   const leftPanel = usePageStore((s) => s.leftPanel);
 

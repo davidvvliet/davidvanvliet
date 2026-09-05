@@ -28,6 +28,9 @@ interface PageState {
   setScaleMode: (mode: "true" | "compact") => void;
   secondsPerDay: number; // real seconds per simulated Earth day; every motion scales with it
   setSecondsPerDay: (seconds: number) => void;
+  /** Steps ahead in the puzzle sequence for this browser only (hidden `puzzle` command). Survives `reset`. */
+  puzzleOffset: number;
+  nextPuzzle: () => void;
   /** Restore every persisted setting to its default. */
   resetSettings: () => void;
   /** Lines pushed to the terminal from elsewhere (e.g. the scene). `seq` increments per push. */
@@ -58,6 +61,8 @@ export const usePageStore = create<PageState>()(
   setOrbitsHighlighted: (on) => set({ orbitsHighlighted: on }),
   setScaleMode: (mode) => set({ scaleMode: mode }),
   setSecondsPerDay: (seconds) => set({ secondsPerDay: seconds }),
+  puzzleOffset: 0,
+  nextPuzzle: () => set((state) => ({ puzzleOffset: state.puzzleOffset + 1 })),
   resetSettings: () => set({ ...DEFAULT_SETTINGS }),
   simJD: 0,
   setSimJD: (jd) => set({ simJD: jd }),
@@ -73,12 +78,12 @@ export const usePageStore = create<PageState>()(
     }),
     {
       name: "explore-settings",
-      // Only preferences persist. Panel, blog post and focus requests are per-visit.
+      // Only preferences persist. Panel, blog post, focus requests and the clock rate are per-visit.
       partialize: (s) => ({
         starsVisible: s.starsVisible,
         orbitsHighlighted: s.orbitsHighlighted,
         scaleMode: s.scaleMode,
-        secondsPerDay: s.secondsPerDay,
+        puzzleOffset: s.puzzleOffset,
       }),
     }
   )

@@ -388,13 +388,39 @@ export type MissionSpec = {
   view?: { distanceAU: number; elevationDeg: number };
   /** Clock rate set on launch, real seconds per Earth day. */
   secondsPerDay?: number;
+  /** Date readout while launched: month and year (default) or the full day. */
+  dateFormat?: 'month' | 'day';
+  /** Where the path comes from, shown on launch when it is not a plain Horizons ephemeris. */
+  note?: string;
 };
 export const MISSIONS: MissionSpec[] = [
   { id: 'voyager1', name: 'Voyager 1', file: '/missions/voyager1.json', center: 'Sun', view: { distanceAU: 8, elevationDeg: 28 }, secondsPerDay: 0.1 },
   { id: 'voyager2', name: 'Voyager 2', file: '/missions/voyager2.json', center: 'Sun', view: { distanceAU: 8, elevationDeg: 28 }, secondsPerDay: 0.1 },
   { id: 'newhorizons', name: 'New Horizons', file: '/missions/newhorizons.json', center: 'Sun', view: { distanceAU: 8, elevationDeg: 28 }, secondsPerDay: 0.1 },
+  { id: 'pioneer10', name: 'Pioneer 10', file: '/missions/pioneer10.json', center: 'Sun', view: { distanceAU: 8, elevationDeg: 28 }, secondsPerDay: 0.1 },
+  { id: 'pioneer11', name: 'Pioneer 11', file: '/missions/pioneer11.json', center: 'Sun', view: { distanceAU: 8, elevationDeg: 28 }, secondsPerDay: 0.1 },
+  { id: 'dawn', name: 'Dawn', file: '/missions/dawn.json', center: 'Sun', view: { distanceAU: 4, elevationDeg: 28 }, secondsPerDay: 0.1 },
+  { id: 'ulysses', name: 'Ulysses', file: '/missions/ulysses.json', center: 'Sun', view: { distanceAU: 8, elevationDeg: 28 }, secondsPerDay: 0.1 },
+  { id: 'cassini', name: 'Cassini', file: '/missions/cassini.json', center: 'Sun', view: { distanceAU: 8, elevationDeg: 28 }, secondsPerDay: 0.1 },
+  { id: 'parker', name: 'Parker Solar Probe', file: '/missions/parker.json', center: 'Sun', view: { distanceAU: 2, elevationDeg: 28 }, secondsPerDay: 0.1 },
+  { id: 'mariner2', name: 'Mariner 2', file: '/missions/mariner2.json', center: 'Sun', view: { distanceAU: 2, elevationDeg: 28 }, secondsPerDay: 0.2 },
+  // No ephemeris exists: integrated from the injection state in JPL TR 32-740, the midcourse burn shot onto the report's encounter table.
+  { id: 'mariner4', name: 'Mariner 4', file: '/missions/mariner4.json', center: 'Sun', view: { distanceAU: 2, elevationDeg: 28 }, secondsPerDay: 0.2,
+    note: 'Reconstructed from the injection state and encounter conditions in JPL Technical Report 32-740; no tracking data exists.' },
   // Earth-centred: the path is drawn in Earth's moving frame. 0.006 AU is ~2.3 Earth-Moon distances.
-  { id: 'artemis2', name: 'Artemis II', file: '/missions/artemis2.json', center: 'Earth', view: { distanceAU: 0.006, elevationDeg: 28 }, secondsPerDay: 10 },
+  { id: 'artemis2', name: 'Artemis II', file: '/missions/artemis2.json', center: 'Earth', view: { distanceAU: 0.006, elevationDeg: 28 }, secondsPerDay: 10, dateFormat: 'day' },
+  // Apollo: no ephemeris exists. 15-17: the lunar orbit is the metric-camera state
+  // vectors (Apollo Image Archive, ASU) and the translunar legs are integrated between
+  // the injection and entry conditions in the NASA mission reports. 13: integrated burn
+  // to burn between the mission report's tabulated states (no orbit data exists).
+  ...([
+    ['13', 'Every leg is reconstructed between the burn conditions tabulated in the mission report; no tracking data exists. The path starts at translunar injection.'],
+    ['15', undefined], ['16', undefined], ['17', undefined],
+  ] as const).map(([n, note]) => ({
+    id: `apollo${n}`, name: `Apollo ${n}`, file: `/missions/apollo${n}.json`, center: 'Earth' as const,
+    view: { distanceAU: 0.006, elevationDeg: 28 }, secondsPerDay: 10, dateFormat: 'day' as const,
+    note: note ?? 'Lunar orbit from the metric-camera state vectors (Apollo Image Archive). The legs to and from the Moon are reconstructed between the injection and entry conditions in the mission report; the path starts at translunar injection.',
+  })),
 ];
 
 /** Apollo landing sites, for the hidden `apollo` command. Selenographic lat/lon (east positive). */

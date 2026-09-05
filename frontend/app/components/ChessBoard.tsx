@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Chess } from 'chess.js';
 import Image from 'next/image';
 import styles from './ChessBoard.module.css';
+import { usePageStore } from '../store/pageStore';
 
 const PIECE_IMAGES: { [key: string]: string } = {
   'wP': '/pawn.png', 'wR': '/rook.png', 'wN': '/knight.png', 'wB': '/bishop.png', 'wQ': '/queen.png', 'wK': '/king.png',
@@ -45,6 +46,7 @@ export default function ChessBoard() {
 
   const refresh = () => setBoard(chess.board());
 
+  const puzzleOffset = usePageStore((s) => s.puzzleOffset);
   const loadPuzzle = useCallback(async () => {
     const token = ++loadTokenRef.current;
     setStatus('loading');
@@ -57,8 +59,9 @@ export default function ChessBoard() {
       if (!res.ok) throw new Error(String(res.status));
       const all: { id: string; fen: string; moves: string[]; rating: number }[] = await res.json();
       const day = Math.floor(Date.now() / 86400000); // UTC day number
-      const data = all[day % all.length];
-      console.log('[chess] day', day, 'index', day % all.length, 'puzzle', data.id, 'rating', data.rating, 'fen', data.fen);
+      const index = (day + puzzleOffset) % all.length; // the offset moves this browser ahead in the sequence
+      const data = all[index];
+      console.log('[chess] day', day, 'index', index, 'puzzle', data.id, 'rating', data.rating, 'fen', data.fen);
       // The FEN is the position before the opponent's setup move; apply it in a
       // scratch instance and load the resulting puzzle position in one step.
       const setup = data.moves[0];
@@ -83,7 +86,7 @@ export default function ChessBoard() {
       setStatus('freeplay');
     }
     refresh();
-  }, [chess]);
+  }, [chess, puzzleOffset]);
 
   useEffect(() => { loadPuzzle(); }, [loadPuzzle]);
 
