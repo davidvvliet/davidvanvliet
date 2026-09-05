@@ -26,6 +26,28 @@ function linkify(text: string): React.ReactNode {
   );
 }
 
+// A video line. Fresh: autoplays at 3x and scrolls into view once it has a size;
+// when it ends, its source is dropped (releasing the decoder and buffers) and the
+// poster, the last frame, stays. Restored from a previous visit: poster only,
+// nothing is fetched.
+function VideoLine({ src, restored, onSized }: { src: string; restored?: boolean; onSized: () => void }) {
+  const [done, setDone] = useState(!!restored);
+  const poster = src.replace(/\.webm$/, ".jpg");
+  return (
+    <video
+      src={done ? undefined : src}
+      poster={poster}
+      className={styles.video}
+      autoPlay={!done}
+      muted
+      playsInline
+      preload={done ? "none" : "auto"}
+      onLoadedMetadata={(e) => { e.currentTarget.playbackRate = 3; onSized(); }}
+      onEnded={() => setDone(true)}
+    />
+  );
+}
+
 export default function Terminal() {
   const [lines, setLines] = useState<Line[]>([]);
   const terminalPush = usePageStore((s) => s.terminalPush);
@@ -207,21 +229,7 @@ export default function Terminal() {
       {lines.map((line, i) =>
         line.type === "output" && line.text.startsWith("__VIDEO__") ? (
           <div key={i} className={styles.imageRow}>
-            <video
-              src={line.text.slice(9)}
-              className={styles.video}
-              autoPlay={!line.restored}
-              muted
-              playsInline
-              preload={line.restored ? "metadata" : "auto"}
-              onLoadedMetadata={(e) => {
-                // Fresh: play at 3x. Restored from a previous visit: park on the last frame.
-                if (line.restored) e.currentTarget.currentTime = Math.max(0, e.currentTarget.duration - 0.05);
-                else e.currentTarget.playbackRate = 3;
-                // The element only gets its height now, after the scroll on push already happened.
-                if (!line.restored) bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-              }}
-            />
+            <VideoLine src={line.text.slice(9)} restored={line.restored} onSized={() => bottomRef.current?.scrollIntoView({ behavior: "smooth" })} />
           </div>
         ) : line.type === "output" && line.text.startsWith("__IMG__") ? (
           <div key={i} className={styles.imageRow}>
