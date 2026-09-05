@@ -78,7 +78,7 @@ export const PLANETS: PlanetSpec[] = [
   { name: 'Venus', au: 0.723, radiusEarths: 0.949, periodDays: 224.7, rotationDays: 243.0, inclinationDeg: 3.39, eccentricity: 0.0068, perihelionDeg: 131.6, axialTiltDeg: 177.4, nodeDeg: 76.68, meanLongitudeDeg: 181.98, color: 0xe8dcc0, phaseDeg: 230, texture: '/venus.jpg' },
   { name: 'Mars', au: 1.524, radiusEarths: 0.532, periodDays: 686.98, rotationDays: 1.026, inclinationDeg: 1.85, eccentricity: 0.0934, perihelionDeg: 336.0, axialTiltDeg: 25.19, nodeDeg: 49.558, meanLongitudeDeg: 355.453, color: 0xc1663f, phaseDeg: 40, texture: '/mars.jpg' },
   // Ceres: dwarf planet in the asteroid belt. Rotation 9 hours, small 4 degree axial tilt.
-  { name: 'Ceres', au: 2.766, radiusEarths: 0.0737, periodDays: 1682, rotationDays: 0.378, inclinationDeg: 10.59, eccentricity: 0.0785, perihelionDeg: 153.4, nodeDeg: 80.305, meanLongitudeDeg: 230.8, color: 0x8f8a84, phaseDeg: 260, axialTiltDeg: 4.0, texture: '/ceres.jpg' },
+  { name: 'Ceres', au: 2.766, radiusEarths: 0.0737, periodDays: 1682, rotationDays: 0.378, inclinationDeg: 10.59, eccentricity: 0.0785, perihelionDeg: 153.4, nodeDeg: 80.305, meanLongitudeDeg: 160.9, color: 0x8f8a84, phaseDeg: 260, axialTiltDeg: 4.0, texture: '/ceres.jpg' },
   { name: 'Jupiter', au: 5.203, radiusEarths: 10.97, periodDays: 4332.6, rotationDays: 0.4135, inclinationDeg: 1.30, eccentricity: 0.0489, perihelionDeg: 14.7, axialTiltDeg: 3.13, nodeDeg: 100.556, meanLongitudeDeg: 34.404, color: 0xc9a37a, phaseDeg: 300, texture: '/jupiter.jpg', focusRadii: 7 },
   // Saturn: rings span the C ring's inner edge to the A ring's outer edge, in Saturn radii.
   { name: 'Saturn', au: 9.537, radiusEarths: 9.14, periodDays: 10759, rotationDays: 0.444, inclinationDeg: 2.49, eccentricity: 0.0565, perihelionDeg: 92.6, nodeDeg: 113.715, meanLongitudeDeg: 49.944, color: 0xe3d2a6, phaseDeg: 150, focusRadii: 9, axialTiltDeg: 26.7, texture: '/saturn.jpg',
@@ -96,8 +96,8 @@ export const PLANETS: PlanetSpec[] = [
   // the same rate, so this alignment holds: they are mutually locked.
   { name: 'Pluto', au: 39.48, radiusEarths: 0.1865, periodDays: 90560, rotationDays: 6.387, inclinationDeg: 17.16, eccentricity: 0.2488, perihelionDeg: 224.1, nodeDeg: 110.307, meanLongitudeDeg: 238.929, color: 0xc9a98a, phaseDeg: 100, axialTiltDeg: 122.5, texture: '/pluto.jpg', spinPhaseDeg: 180 },
   // Two more dwarf planets. Their maps are artist's impressions: no spacecraft has visited either.
-  { name: 'Makemake', au: 45.43, radiusEarths: 0.1122, periodDays: 111800, rotationDays: 0.95, inclinationDeg: 28.98, eccentricity: 0.161, perihelionDeg: 14.4, nodeDeg: 79.62, meanLongitudeDeg: 99.5, color: 0xb5745f, phaseDeg: 190, texture: '/makemake.jpg' },
-  { name: 'Eris', au: 67.86, radiusEarths: 0.1826, periodDays: 204200, rotationDays: 1.08, inclinationDeg: 44.04, eccentricity: 0.436, perihelionDeg: 187.5, axialTiltDeg: 78, nodeDeg: 35.95, meanLongitudeDeg: 25.1, color: 0xd9d9d9, phaseDeg: 300, texture: '/eris.jpg' },
+  { name: 'Makemake', au: 45.43, radiusEarths: 0.1122, periodDays: 111800, rotationDays: 0.95, inclinationDeg: 28.98, eccentricity: 0.161, perihelionDeg: 14.4, nodeDeg: 79.62, meanLongitudeDeg: 156.0, color: 0xb5745f, phaseDeg: 190, texture: '/makemake.jpg' },
+  { name: 'Eris', au: 67.86, radiusEarths: 0.1826, periodDays: 204200, rotationDays: 1.08, inclinationDeg: 44.04, eccentricity: 0.436, perihelionDeg: 187.5, axialTiltDeg: 78, nodeDeg: 35.95, meanLongitudeDeg: 20.5, color: 0xd9d9d9, phaseDeg: 300, texture: '/eris.jpg' },
 ];
 /** A favourite fact per body, shown under the name when the body is in focus. */
 export const BODY_FACTS: Record<string, string> = {
@@ -391,6 +391,8 @@ export type MissionSpec = {
 };
 export const MISSIONS: MissionSpec[] = [
   { id: 'voyager1', name: 'Voyager 1', file: '/missions/voyager1.json', center: 'Sun', view: { distanceAU: 8, elevationDeg: 28 }, secondsPerDay: 0.1 },
+  { id: 'voyager2', name: 'Voyager 2', file: '/missions/voyager2.json', center: 'Sun', view: { distanceAU: 8, elevationDeg: 28 }, secondsPerDay: 0.1 },
+  { id: 'newhorizons', name: 'New Horizons', file: '/missions/newhorizons.json', center: 'Sun', view: { distanceAU: 8, elevationDeg: 28 }, secondsPerDay: 0.1 },
 ];
 
 /** Apollo landing sites, for the hidden `apollo` command. Selenographic lat/lon (east positive). */
