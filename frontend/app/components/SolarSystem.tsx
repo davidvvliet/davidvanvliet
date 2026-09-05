@@ -677,6 +677,7 @@ export function SolarSystem({
       meanAnomalyDeg?: number;     // mean anomaly at J2000 (fallback)
       periRateDegPerDay?: number; nodeRateDegPerDay?: number;
     };
+    const RING_SAG_TOLERANCE = EARTH_RADIUS * (100 / 6371); // 100 km at true scale; the same fraction of Earth's drawn radius in compact mode
     const addOrbiter = (object: THREE.Object3D, orbitRadius: number, periodDays: number, inclinationDeg: number, o: OrbitOpts = {}) => {
       const parent = o.parent ?? scene;
       const eccentricity = o.eccentricity ?? 0;
@@ -689,14 +690,19 @@ export function SolarSystem({
       pivot.add(object);
       parent.add(pivot);
       const perihelion = THREE.MathUtils.degToRad(periLonDeg - nodeDeg); // argument of perihelion
-      // Faint orbit ring: an ellipse with the parent at one focus.
+      // Faint orbit ring: an ellipse with the parent at one focus. A polygon's
+      // chords sag inside the true curve by ~a*pi^2/(2N^2), so pick N from the
+      // orbit size to keep that under RING_SAG_TOLERANCE (else a small body seen
+      // up close sits visibly outside its own line: Pluto was 20 radii off at
+      // 1024 segments). Vertices are spaced in true anomaly, which puts them
+      // where an eccentric orbit bends most, near perihelion.
       const ringPoints: THREE.Vector3[] = [];
-      // 1024 segments: at true scale a coarse polygon would visibly miss the
-      // body it belongs to when viewed up close.
-      const RING_SEGMENTS = 1024;
+      const RING_SEGMENTS = THREE.MathUtils.clamp(Math.ceil(Math.PI * Math.sqrt(orbitRadius / (2 * RING_SAG_TOLERANCE))), 1024, 32768);
       for (let i = 0; i < RING_SEGMENTS; i++) {
         const pt = new THREE.Vector3();
-        keplerPoint(orbitRadius, eccentricity, perihelion, (i / RING_SEGMENTS) * Math.PI * 2, pt);
+        const nu = (i / RING_SEGMENTS) * Math.PI * 2;
+        const E = 2 * Math.atan2(Math.sqrt(1 - eccentricity) * Math.sin(nu / 2), Math.sqrt(1 + eccentricity) * Math.cos(nu / 2));
+        keplerPoint(orbitRadius, eccentricity, perihelion, E, pt);
         ringPoints.push(pt);
       }
       const ring = new THREE.LineLoop(
@@ -813,7 +819,6 @@ export function SolarSystem({
       const holder = new THREE.Group(); // position-only; the tilted body spins inside it
       const tilted = new THREE.Group(); // carries the axial tilt; moons' pivots attach here
       tiltedByPlanet.set(spec.name, tilted);
-      tilted.rotation.z = THREE.MathUtils.degToRad(spec.axialTiltDeg ?? 0);
       // The visual group (planet mesh + rings) is what the size floor scales.
       // It's a sibling of the moon pivots, so inflating a distant planet never
       // inflates its moons or their orbits along with it.
@@ -853,6 +858,13 @@ export function SolarSystem({
         eccentricity: spec.eccentricity, perihelionDeg: spec.perihelionDeg, nodeDeg: spec.nodeDeg,
         meanLongitudeDeg: spec.meanLongitudeDeg, meanAnomalyDeg: spec.phaseDeg,
       });
+      // Axial tilt: lean the pole by axialTiltDeg toward ecliptic longitude poleLonDeg
+      // (scene x = longitude 0; a rotation about y advances longitude). The pivot is
+      // already rotated by the orbit's node and inclination, so undo that first.
+      {
+        const lean = new THREE.Quaternion().setFromEuler(new THREE.Euler(0, THREE.MathUtils.degToRad((spec.poleLonDeg ?? 180) - 180), THREE.MathUtils.degToRad(spec.axialTiltDeg ?? 0), 'YZX'));
+        tilted.quaternion.copy((holder.parent as THREE.Object3D).quaternion).invert().multiply(lean);
+      }
       bodies.push({ name: spec.name, object: holder, visual, radius, parent: sunBody, systemRadius: 0, scale: 1, focusRadii: spec.focusRadii });
       outermostOrbit = Math.max(outermostOrbit, orbitRadius);
       if (spec.name === WIDE_VIEW_PLANET) sunBody.systemRadius = orbitRadius;

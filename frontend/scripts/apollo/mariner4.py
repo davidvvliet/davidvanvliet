@@ -56,9 +56,9 @@ def encounter(sol_dense, t_guess):
     # B-plane: S = incoming asymptote direction (approximate by v at CA rotated: use h and e), T = S x ecliptic-pole, R = S x T
     mu = GM['mars']; h = np.cross(r, v); e = np.cross(v, h)/mu - r/np.linalg.norm(r)
     a = 1/(2/np.linalg.norm(r) - v@v/mu); vinf = np.sqrt(-mu/a)
-    S = np.cos(np.arccos(-1/np.linalg.norm(e)))*e/np.linalg.norm(e) + np.sin(np.arccos(-1/np.linalg.norm(e)))*np.cross(h, e)/np.linalg.norm(np.cross(h, e))
-    S = -S  # incoming direction
-    N = ECL.T @ np.array([0, 0, 1.0]); Tv = np.cross(S, N); Tv /= np.linalg.norm(Tv); Rv = -np.cross(S, Tv)  # R sign chosen to match the report's B.R
+    th = np.arccos(-1/np.linalg.norm(e)); eh = e/np.linalg.norm(e); ph = np.cross(h, e); ph /= np.linalg.norm(ph)
+    S = -np.cos(th)*eh + np.sin(th)*ph  # incoming asymptote direction
+    N = ECL.T @ np.array([0, 0, 1.0]); Tv = np.cross(S, N); Tv /= np.linalg.norm(Tv); Rv = np.cross(S, Tv)  # JPL: T in the ecliptic, R = S x T
     B = np.cross(h, S)/vinf * 0 + (np.linalg.norm(h)/vinf) * np.cross(S, h/np.linalg.norm(h))  # B vector, |B| = h/vinf, perpendicular to S in the orbit plane
     return tca, np.linalg.norm(r), B@Tv, B@Rv, vinf
 

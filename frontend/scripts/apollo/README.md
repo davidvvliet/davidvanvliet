@@ -24,4 +24,4 @@ Run: `python -m venv venv && venv/bin/pip install numpy scipy astropy jplephem &
 with the three CSV files in the same directory.
 
 ## Mariner 4
-`mariner4.py`: injection state (JPL TR 32-740 Table 90, equatorial of date; the printed sign of Zdot is wrong and is taken from the report's own spherical set), trimmed onto the report's pre-midcourse encounter prediction; the 5 Dec 1964 midcourse burn shot onto Table 92 (closest approach time, altitude, B-plane angle). Resulting burn 17.1 m/s against the report's 16.70.
+`mariner4.py`: injection state (JPL TR 32-740 Table 90, equatorial of date; the printed sign of Zdot is wrong and is taken from the report's own spherical set), trimmed onto the report's pre-midcourse encounter prediction; the 5 Dec 1964 midcourse burn shot onto Table 92 (closest approach time, altitude, B-plane angle; T in the ecliptic, R = S x T). Resulting burn 17.1 m/s against the report's 16.70.
