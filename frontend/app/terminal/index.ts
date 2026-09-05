@@ -11,6 +11,7 @@ import "./commands/orbits";
 import "./commands/scale";
 import "./commands/time";
 import "./commands/reset";
+import "./commands/puzzle";
 import "./commands/radarcorp";
 import "./commands/books";
 import "./commands/films";

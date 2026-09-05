@@ -19,6 +19,9 @@ interface PageState {
   setSecondsPerDay: (seconds: number) => void;
   /** Restore every persisted setting to its default. */
   resetSettings: () => void;
+  /** Chess: load a new puzzle (query is the Lichess filter string, e.g. "?angle=mate"). */
+  puzzleRequest: { query: string; seq: number } | null;
+  requestPuzzle: (query: string) => void;
 }
 
 /** Defaults for the settings that persist to local storage. */
@@ -45,6 +48,9 @@ export const usePageStore = create<PageState>()(
   setScaleMode: (mode) => set({ scaleMode: mode }),
   setSecondsPerDay: (seconds) => set({ secondsPerDay: seconds }),
   resetSettings: () => set({ ...DEFAULT_SETTINGS }),
+  puzzleRequest: null,
+  requestPuzzle: (query) =>
+    set((state) => ({ puzzleRequest: { query, seq: (state.puzzleRequest?.seq ?? 0) + 1 } })),
     }),
     {
       name: "explore-settings",

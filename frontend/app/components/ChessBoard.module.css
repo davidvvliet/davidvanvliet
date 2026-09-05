@@ -1,7 +1,16 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+  max-width: 220px;
+}
+
 .chessBoard {
   width: 100%;
-  max-width: 250px;
-  max-height: 250px;
+  max-width: 220px;
+  max-height: 220px;
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   grid-template-rows: repeat(8, 1fr);
@@ -65,3 +74,39 @@
   opacity: 0.8;
 }
 
+
+.square.wrong {
+  background-color: rgba(255, 60, 60, 0.35);
+}
+
+.status {
+  font-family: var(--font-roboto-mono);
+  font-size: 0.75rem;
+  color: #00ff00;
+  display: flex;
+  gap: 0.6rem;
+  align-items: baseline;
+}
+
+.statusDim {
+  color: rgba(0, 255, 0, 0.6);
+}
+
+.statusSolved {
+  color: #ffffff;
+}
+
+.next {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.next:hover {
+  color: #00ff00;
+}

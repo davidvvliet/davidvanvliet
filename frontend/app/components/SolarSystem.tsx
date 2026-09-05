@@ -283,6 +283,10 @@ export function SolarSystem({
   const hoveredStarRef = useRef<string | null>(null);
   const pointerDownPosRef = useRef<{ x: number; y: number } | null>(null);
   const focusByNameRef = useRef<((name: string) => void) | null>(null);
+  // Saved across a scene rebuild (scale switch): which body was focused and the
+  // camera's offset from it in body radii, so the view is restored, not reset.
+  const savedViewRef = useRef<{ name: string; dir: THREE.Vector3; radii: number } | null>(null);
+  const aimAtStarRef = useRef<((star: { sprite: THREE.Sprite; px: number; name: string; lightYears: number; spectral: string; fact?: string }) => void) | null>(null);
   const focusRequest = usePageStore((s) => s.focusRequest);
   const starsVisible = usePageStore((s) => s.starsVisible);
   const orbitsHighlighted = usePageStore((s) => s.orbitsHighlighted);
@@ -773,7 +777,7 @@ export function SolarSystem({
     // angular radius), rather than hidden behind it. Distance is kept.
     let aim: { from: THREE.Vector3; to: THREE.Vector3; t: number; star: (typeof starSprites)[number]; distFrom: number; distTo: number } | null = null;
     const AIM_SECONDS = 1.0;
-    const AIM_MARGIN_RAD = THREE.MathUtils.degToRad(10); // clearance beyond the disc's edge
+    const AIM_MARGIN_RAD = THREE.MathUtils.degToRad(8); // clearance beyond the disc's edge
     // Closer than this the star would land outside the frame (disc ~17 degrees at
     // the close-up + margin > the 25 degree half-height), so ease out to it first.
     const AIM_MIN_RADII = 8;
@@ -965,7 +969,7 @@ export function SolarSystem({
           hoveredStarRef.current = starName;
           onStarHover?.(shown);
         }
-        renderer.domElement.style.cursor = name ? 'pointer' : (autoRotateRef.current ? 'grab' : 'grabbing');
+        renderer.domElement.style.cursor = name || picked ? 'pointer' : (autoRotateRef.current ? 'grab' : 'grabbing');
       }
     };
 
@@ -994,7 +998,14 @@ export function SolarSystem({
       // 2. A body: make it the reference frame and zoom to it.
       //    Clicking empty space does nothing.
       const body = pickBody(event.clientX, event.clientY);
-      if (body) setFocus(body, { zoomTo: true });
+      if (body) { setFocus(body, { zoomTo: true }); return; }
+
+      // 3. A star: turn toward it, same as the terminal.
+      const picked = pickStar(event.clientX, event.clientY);
+      if (picked) {
+        const star = starSprites.find((s) => s.name === picked.name);
+        if (star) aimAtStarRef.current?.(star);
+      }
     };
 
     controls.addEventListener('start', onControlsStart);
@@ -1150,14 +1161,10 @@ export function SolarSystem({
 
     // Expose focus-by-name for the terminal's `fly` command, and apply any
     // request that arrived before the scene existed (e.g. from another view).
-    focusByNameRef.current = (name: string) => {
-      const body = bodies.find((b) => b.name.toLowerCase() === name.toLowerCase());
-      if (body) { setFocus(body, { zoomTo: true }); return; }
-      // A star: don't travel, turn. The star field is centred on the camera, so a
-      // sprite's local position is its direction. Put the camera on the far side
-      // of the focus from that direction, so the star sits behind the focused body.
-      const star = starSprites.find((s) => s.name.toLowerCase() === name.toLowerCase());
-      if (!star) return;
+    // A star: don't travel, turn. The star field is centred on the camera, so a
+    // sprite's local position is its direction. Put the camera on the far side
+    // of the focus from that direction, so the star sits beside the focused body.
+    const aimAtStar = (star: (typeof starSprites)[number]) => {
       hasInteracted = true;
       const dir = star.sprite.position.clone().normalize();
       const from = camera.position.clone().sub(controls.target).normalize();
@@ -1178,6 +1185,30 @@ export function SolarSystem({
       hoveredStarRef.current = star.name;
       onStarHover?.(pinnedStar);
     };
+    focusByNameRef.current = (name: string) => {
+      const body = bodies.find((b) => b.name.toLowerCase() === name.toLowerCase());
+      if (body) { setFocus(body, { zoomTo: true }); return; }
+      const star = starSprites.find((s) => s.name.toLowerCase() === name.toLowerCase());
+      if (star) aimAtStar(star);
+    };
+    aimAtStarRef.current = aimAtStar;
+    // Restore the view saved by a previous scene (scale switch), if any.
+    const saved = savedViewRef.current;
+    if (saved) {
+      savedViewRef.current = null;
+      const body = bodies.find((b) => b.name === saved.name);
+      if (body) {
+        focus = body;
+        transition = null;
+        hasInteracted = true; // the user had already been exploring
+        worldPos(body, focusPoint);
+        const d = Math.max(saved.radii * body.radius, minDistanceFor(body));
+        controls.target.copy(focusPoint);
+        camera.position.copy(focusPoint).addScaledVector(saved.dir, d);
+        controls.update();
+        reportFocus(d);
+      }
+    }
     const pending = usePageStore.getState().focusRequest;
     if (pending && pending.seq !== handledFocusSeqRef.current) {
       handledFocusSeqRef.current = pending.seq;
@@ -1231,6 +1262,11 @@ export function SolarSystem({
       textures.forEach((t) => t.dispose());
       orbitRings.forEach((ring) => { ring.geometry.dispose(); (ring.material as THREE.Material).dispose(); });
       renderer.dispose();
+      savedViewRef.current = {
+        name: focus.name,
+        dir: camera.position.clone().sub(controls.target).normalize(),
+        radii: camera.position.distanceTo(controls.target) / focus.radius,
+      };
       initializedRef.current = false;
     };
   }, [size, color, speed, scaleMode]); // scaleMode: the whole scene is rebuilt on switch

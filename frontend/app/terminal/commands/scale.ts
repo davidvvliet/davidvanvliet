@@ -4,7 +4,8 @@ import { usePageStore } from "../../store/pageStore";
 
 const TRUE_MSG = [
   "This is a true-scale version of the actual solar system.",
-  "Every distance and Sun/planet/moon size is exact and is based on a chosen unit size of the Earth.",
+  "Every distance and Sun/planet/moon size* is exact and is based on a chosen unit size of the Earth.",
+  "__DIM__*Although zooming out enough will change the size ratios due to a minimum on-screen size for each body.",
 ];
 const COMPACT_MSG = ["A more compact version of the solar system."];
 

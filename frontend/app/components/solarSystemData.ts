@@ -105,6 +105,7 @@ export const BODY_FACTS: Record<string, string> = {
   Eris: "We have never sent a spacecraft to Eris, so we don't know what its surface looks like. This map is a fictional interpretation. Discovering more of these planet-like objects that didn't dominate their own orbit led to a reworking of the planet definition, causing Pluto to be demoted as well.",
   Makemake: "We have never sent a spacecraft to Makemake, so we don't know what its surface looks like. This map is a fictional interpretation. We do know that it appears red/brown, from frozen methane on its surface.",
   Saturn: "My favorite thing about Saturn is the hexagonal storm at its north pole. About four Earths could fit inside it. It's an amazing display of fluid dynamics at a colossal scale.",
+  Mercury: "I would love to disassemble this planet and use the material for a Dyson sphere. Even if it were entirely gone from the solar system, it would not destabilize any of the other planets' orbits.",
   Venus: "Venus is very similar to Earth. It is in the habitable zone and is roughly the same size. However, even with these similarities, their paths have clearly diverged significantly. These facts make Venus an important point of interest for understanding how planets behave and for studying what habitable zone exoplanets might be like.",
 };
 
@@ -134,7 +135,7 @@ export type StarSpec = {
 
 export const STARS: StarSpec[] = [
   { name: 'Sirius', raDeg: 101.287, decDeg: -16.716, magnitude: -1.46, spectral: 'A', lightYears: 8.6, fact: 'The brightest star in our night sky.' },
-  { name: 'Canopus', raDeg: 95.988, decDeg: -52.696, magnitude: -0.74, spectral: 'F', lightYears: 310, fact: "One of the most famous stars for star tracking in spacecraft. It's used for the roll component of a spacecraft's orientation, where the Sun is used for pitch and yaw. Canopus' brightness (second brightest in our night sky) and position make it ideal." },
+  { name: 'Canopus', raDeg: 95.988, decDeg: -52.696, magnitude: -0.74, spectral: 'F', lightYears: 310, fact: "My favorite thing about Canopus is that it's commonly used in star tracking by spacecraft. It's used for the roll component of a spacecraft's orientation, where the Sun is used for pitch and yaw. Canopus' brightness (2nd brightest in our night sky) and position make it ideal." },
   { name: 'Alpha Centauri', raDeg: 219.902, decDeg: -60.834, magnitude: -0.27, spectral: 'G', lightYears: 4.4, fact: 'The closest star system to the Sun.' },
   { name: 'Arcturus', raDeg: 213.915, decDeg: 19.182, magnitude: -0.05, spectral: 'K', lightYears: 37 },
   { name: 'Vega', raDeg: 279.235, decDeg: 38.784, magnitude: 0.03, spectral: 'A', lightYears: 25 },
