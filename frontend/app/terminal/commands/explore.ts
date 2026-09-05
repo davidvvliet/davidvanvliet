@@ -4,6 +4,7 @@ import { usePageStore } from "../../store/pageStore";
 
 const explore: Command = {
   name: "explore",
+  category: "explore",
   aliases: ["e"],
   description: "Explore the solar system",
   execute: () => {
@@ -11,6 +12,9 @@ const explore: Command = {
       "",
       "__DIM__Credits:",
       "__DIM__Björn Jónsson, planetary maps: https://bjj.mmedia.is/data/planetary_maps.html",
+      "__DIM__Solar System Scope, planet and ring textures: https://www.solarsystemscope.com/textures/",
+      "__DIM__NASA, JPL and USGS, mission and surface imagery",
+      "__DIM__JPL Horizons, spacecraft and planet ephemerides: https://ssd.jpl.nasa.gov/horizons/",
     ];
     const store = usePageStore.getState();
     if (store.leftPanel === "") {

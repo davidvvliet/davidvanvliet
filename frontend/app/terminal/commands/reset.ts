@@ -4,6 +4,7 @@ import { usePageStore } from "../../store/pageStore";
 
 const reset: Command = {
   name: "reset",
+  category: "explore",
   description: "Reset all settings",
   execute: () => {
     usePageStore.getState().resetSettings();

@@ -9,6 +9,15 @@ interface PageState {
   /** Body the solar system should fly to. `seq` increments so repeat requests fire. */
   focusRequest: { name: string; seq: number } | null;
   requestFocus: (name: string) => void;
+  /** Simulated Julian date, published by the scene a few times a second. */
+  simJD: number;
+  setSimJD: (jd: number) => void;
+  /** Trace a mission's trajectory (id from MISSIONS), or null to clear. */
+  trackRequest: { id: string | null; seq: number } | null;
+  requestTrack: (id: string | null) => void;
+  /** Request to jump the clock to a Julian date. */
+  dateRequest: { jd: number; seq: number } | null;
+  requestDate: (jd: number) => void;
   apolloVisible: boolean; // Apollo landing-site dots on the Moon (hidden `apollo` command)
   setApolloVisible: (visible: boolean) => void;
   starsVisible: boolean;
@@ -24,9 +33,6 @@ interface PageState {
   /** Lines pushed to the terminal from elsewhere (e.g. the scene). `seq` increments per push. */
   terminalPush: { lines: string[]; seq: number } | null;
   pushTerminalLines: (lines: string[]) => void;
-  /** Chess: load a new puzzle (query is the Lichess filter string, e.g. "?angle=mate"). */
-  puzzleRequest: { query: string; seq: number } | null;
-  requestPuzzle: (query: string) => void;
 }
 
 /** Defaults for the settings that persist to local storage. */
@@ -53,14 +59,17 @@ export const usePageStore = create<PageState>()(
   setScaleMode: (mode) => set({ scaleMode: mode }),
   setSecondsPerDay: (seconds) => set({ secondsPerDay: seconds }),
   resetSettings: () => set({ ...DEFAULT_SETTINGS }),
+  simJD: 0,
+  setSimJD: (jd) => set({ simJD: jd }),
+  trackRequest: null,
+  requestTrack: (id) => set((state) => ({ trackRequest: { id, seq: (state.trackRequest?.seq ?? 0) + 1 } })),
+  dateRequest: null,
+  requestDate: (jd) => set((state) => ({ dateRequest: { jd, seq: (state.dateRequest?.seq ?? 0) + 1 } })),
   apolloVisible: false,
   setApolloVisible: (visible) => set({ apolloVisible: visible }),
   terminalPush: null,
   pushTerminalLines: (lines) =>
     set((state) => ({ terminalPush: { lines, seq: (state.terminalPush?.seq ?? 0) + 1 } })),
-  puzzleRequest: null,
-  requestPuzzle: (query) =>
-    set((state) => ({ puzzleRequest: { query, seq: (state.puzzleRequest?.seq ?? 0) + 1 } })),
     }),
     {
       name: "explore-settings",

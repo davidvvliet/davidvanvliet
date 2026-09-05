@@ -4,7 +4,6 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Chess } from 'chess.js';
 import Image from 'next/image';
 import styles from './ChessBoard.module.css';
-import { usePageStore } from '../store/pageStore';
 
 const PIECE_IMAGES: { [key: string]: string } = {
   'wP': '/pawn.png', 'wR': '/rook.png', 'wN': '/knight.png', 'wB': '/bishop.png', 'wQ': '/queen.png', 'wK': '/king.png',
@@ -43,8 +42,6 @@ export default function ChessBoard() {
   const [wrongSquare, setWrongSquare] = useState<string | null>(null);
   const solutionIndexRef = useRef(0);
   const loadTokenRef = useRef(0); // ignores stale loads (React dev double-mount, quick retries)
-  const puzzleRequest = usePageStore((s) => s.puzzleRequest);
-  const handledPuzzleSeqRef = useRef(0);
 
   const refresh = () => setBoard(chess.board());
 
@@ -89,13 +86,6 @@ export default function ChessBoard() {
   }, [chess]);
 
   useEffect(() => { loadPuzzle(); }, [loadPuzzle]);
-
-  // Terminal `puzzle` command: reload today's puzzle.
-  useEffect(() => {
-    if (!puzzleRequest || puzzleRequest.seq === handledPuzzleSeqRef.current) return;
-    handledPuzzleSeqRef.current = puzzleRequest.seq;
-    loadPuzzle();
-  }, [puzzleRequest, loadPuzzle]);
 
   const uci = (m: { from: string; to: string; promotion?: string }) => `${m.from}${m.to}${m.promotion ?? ''}`;
 

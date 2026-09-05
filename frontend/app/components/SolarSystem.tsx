@@ -4,7 +4,7 @@ import React, { useRef, useEffect, useCallback, useMemo } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { usePageStore } from '../store/pageStore';
-import { PLANETS, MOONS, STARS, SPECTRAL_COLORS, APOLLO_SITES } from './solarSystemData';
+import { PLANETS, MOONS, STARS, SPECTRAL_COLORS, APOLLO_SITES, MISSIONS } from './solarSystemData';
 
 interface PersonaDot {
   id: number;
@@ -89,9 +89,21 @@ const CHILD_HIDE_PX = 1;
 const MIN_CLOSE_DISTANCE = 0.5;        // Closest zoom for any body, so tiny moons stay past the near plane
 const ORBIT_RING_STYLE = { color: 0xffffff, opacity: 0.45 }; // rings are hidden until the `orbits` command shows them
 
-// One clock for all motion, so every period keeps its real ratio. The clock
-// rate (real seconds per simulated Earth day) is live: see the `time` command.
+// One clock for all motion: a simulated Julian date, advanced by real seconds /
+// secondsPerDay (live: see the `time` command). Positions are functions of the
+// date, seeded from real J2000 orbital elements, so the sky matches real dates.
 let secondsPerDay = 10;
+const J2000 = 2451545.0;
+const jdNow = () => Date.now() / 86400000 + 2440587.5;
+const EARTH_MEAN_LONGITUDE_DEG = 100.464; // J2000
+// Moon mean elements (degrees, per day since J2000): mean longitude, longitude of
+// perigee and of the ascending node all precess; inclination and eccentricity are ~fixed.
+const MOON_L0 = 218.316, MOON_L_RATE = 13.176396;
+const MOON_PERI0 = 83.353, MOON_PERI_RATE = 0.111403;
+const MOON_NODE0 = 125.045, MOON_NODE_RATE = -0.052954;
+const MOON_ECCENTRICITY = 0.0549;
+// Earth's rotation from the date: Greenwich mean sidereal time.
+const gmstDeg = (jd: number) => 280.46061837 + 360.98564736629 * (jd - J2000);
 const EARTH_DAY_DAYS = 0.99727;        // Sidereal rotation period, in days
 const MOON_ORBIT_DAYS = 27.32;         // Sidereal month
 const EARTH_YEAR_DAYS = 365.25;
@@ -275,12 +287,18 @@ export function SolarSystem({
   const dotsRef = useRef<THREE.Mesh[]>([]);
   const moonDotsRef = useRef<THREE.Mesh[]>([]); // Apollo site hitboxes (kept apart from the Earth dots effect)
   const apolloGroupRef = useRef<THREE.Group | null>(null);
+  const handledDateSeqRef = useRef(0);
+  const trackRequest = usePageStore((s) => s.trackRequest);
+  const handledTrackSeqRef = useRef(0);
+  const trackRef = useRef<((id: string | null) => void) | null>(null);
   const apolloVisible = usePageStore((s) => s.apolloVisible);
   const raycasterRef = useRef<THREE.Raycaster>(new THREE.Raycaster());
   const mouseRef = useRef<THREE.Vector2>(new THREE.Vector2());
   const initializedRef = useRef<boolean>(false);
   const hoveredDotRef = useRef<PersonaDot | null>(null);
-  const moonPivotRef = useRef<THREE.Group | null>(null);
+  const simJDRef = useRef<number>(0);        // current simulated Julian date (read by the `date` command via the store)
+  const dateRequestRef = useRef<number | null>(null); // a requested jump, consumed by the loop
+  const dateRequest = usePageStore((s) => s.dateRequest);
   const earthSystemRef = useRef<THREE.Group | null>(null);
   const hoveredBodyRef = useRef<string | null>(null);
   const hoveredStarRef = useRef<string | null>(null);
@@ -367,7 +385,7 @@ export function SolarSystem({
     earthSystem.add(globeGroup);
 
     // Add Earth's realistic tilt (23.5 degrees)
-    globeGroup.rotation.x = Math.PI * (23.5 / 180); // Convert degrees to radians
+    globeGroup.rotation.x = -THREE.MathUtils.degToRad(OBLIQUITY_DEG); // pole leans toward -z (ecliptic longitude 90)
 
     // Create wireframe sphere
     const globeRadius = EARTH_RADIUS;
@@ -389,11 +407,8 @@ export function SolarSystem({
     const occluderSphere = new THREE.Mesh(occluderGeometry, occluderMaterial);
     globeGroup.add(occluderSphere);
 
-    // Moon: its own pivot under the Earth system (sibling of the globe group).
-    const moonPivot = new THREE.Group();
-    moonPivot.rotation.x = THREE.MathUtils.degToRad(MOON_INCLINATION_DEG);
-    earthSystem.add(moonPivot);
-    moonPivotRef.current = moonPivot;
+    // Moon: added as an orbiter of the Earth system below (after the orbit
+    // machinery is defined), with its real precessing node and perigee.
 
     const moonGeometry = new THREE.SphereGeometry(MOON_RADIUS, 32, 32);
     const moonTexture = new THREE.TextureLoader().load(MOON_TEXTURE);
@@ -405,11 +420,8 @@ export function SolarSystem({
     });
     moonMaterialRef.current = moonMaterial;
     const moon = new THREE.Mesh(moonGeometry, moonMaterial);
-    moon.position.x = MOON_ORBIT_RADIUS;
-    // SphereGeometry puts the map's centre (lon 0, the near side) on +x, which
-    // points away from Earth here; turn it so the near side faces Earth.
-    moon.rotation.y = Math.PI;
-    moonPivot.add(moon);
+    // (Position and tidal-lock rotation are set every frame by the orbiter update:
+    // the map's centre, lon 0, is turned to face Earth.)
 
     // Apollo landing sites: green dots on the Moon, like Earth's location dots.
     // Placed via the sphere's own texture mapping (u = lon, v = lat), so they
@@ -492,8 +504,8 @@ export function SolarSystem({
     {
       const e = THREE.MathUtils.degToRad(OBLIQUITY_DEG);
       const e1 = new THREE.Vector3(1, 0, 0);
-      const e2 = new THREE.Vector3(0, Math.sin(e), -Math.cos(e));
-      const e3 = new THREE.Vector3(0, Math.cos(e), Math.sin(e));
+      const e2 = new THREE.Vector3(0, -Math.sin(e), -Math.cos(e));
+      const e3 = new THREE.Vector3(0, Math.cos(e), -Math.sin(e));
       for (const star of STARS) {
         const ra = THREE.MathUtils.degToRad(star.raDeg);
         const dec = THREE.MathUtils.degToRad(star.decDeg);
@@ -634,7 +646,17 @@ export function SolarSystem({
     // the pivot), so axial tilts stay fixed in space.
     // Keplerian orbits: `orbitRadius` is the semi-major axis, `angle` the mean
     // anomaly. Eccentric orbits solve Kepler's equation each frame; e = 0 is a circle.
-    type Orbiter = { object: THREE.Object3D; orbitRadius: number; periodDays: number; angle: number; e: number; perihelion: number; spin?: THREE.Object3D; rotationDays?: number; tidallyLocked?: boolean; faceOffset?: number };
+    // Positions come from the simulated date: M(t) = M0 + n (t - J2000), with the
+    // orbit plane set by node (rotation about y) and inclination (about the node
+    // line), and perihelion measured from the node inside that plane.
+    type Orbiter = {
+      object: THREE.Object3D; pivot: THREE.Group; orbitRadius: number; e: number;
+      M0: number; n: number;                 // mean anomaly at J2000 (rad), mean motion (rad/day)
+      argPeri: number; node: number;         // rad
+      periRate?: number; nodeRate?: number;  // rad/day (the Moon precesses)
+      spin?: THREE.Object3D; rotationDays?: number; spinPhase?: number;
+      tidallyLocked?: boolean; faceOffset?: number;
+    };
     const orbiters: Orbiter[] = [];
     const orbitRings: THREE.LineLoop[] = [];
     const ringByObject = new Map<THREE.Object3D, THREE.LineLoop>();
@@ -651,12 +673,27 @@ export function SolarSystem({
       for (let i = 0; i < 5; i++) E -= (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
       return E;
     };
-    const addOrbiter = (object: THREE.Object3D, orbitRadius: number, periodDays: number, inclinationDeg: number, phaseDeg: number, spin?: THREE.Object3D, rotationDays?: number, parent: THREE.Object3D = scene, tidallyLocked = false, faceOffsetDeg = 0, eccentricity = 0, perihelionDeg = 0) => {
+    type OrbitOpts = {
+      spin?: THREE.Object3D; rotationDays?: number; spinPhaseDeg?: number; parent?: THREE.Object3D;
+      tidallyLocked?: boolean; faceOffsetDeg?: number; eccentricity?: number;
+      perihelionDeg?: number;      // longitude of perihelion (from the reference direction)
+      nodeDeg?: number;            // longitude of the ascending node
+      meanLongitudeDeg?: number;   // mean longitude at J2000 (preferred)
+      meanAnomalyDeg?: number;     // mean anomaly at J2000 (fallback)
+      periRateDegPerDay?: number; nodeRateDegPerDay?: number;
+    };
+    const addOrbiter = (object: THREE.Object3D, orbitRadius: number, periodDays: number, inclinationDeg: number, o: OrbitOpts = {}) => {
+      const parent = o.parent ?? scene;
+      const eccentricity = o.eccentricity ?? 0;
+      const nodeDeg = o.nodeDeg ?? 0;
+      const periLonDeg = o.perihelionDeg ?? 0;
       const pivot = new THREE.Group();
+      pivot.rotation.order = 'YXZ';
+      pivot.rotation.y = THREE.MathUtils.degToRad(nodeDeg);
       pivot.rotation.x = THREE.MathUtils.degToRad(inclinationDeg);
       pivot.add(object);
       parent.add(pivot);
-      const perihelion = THREE.MathUtils.degToRad(perihelionDeg);
+      const perihelion = THREE.MathUtils.degToRad(periLonDeg - nodeDeg); // argument of perihelion
       // Faint orbit ring: an ellipse with the parent at one focus.
       const ringPoints: THREE.Vector3[] = [];
       // 1024 segments: at true scale a coarse polygon would visibly miss the
@@ -674,14 +711,32 @@ export function SolarSystem({
       pivot.add(ring);
       orbitRings.push(ring);
       ringByObject.set(object, ring);
-      orbiters.push({ object, orbitRadius, periodDays, angle: THREE.MathUtils.degToRad(phaseDeg), e: eccentricity, perihelion, spin, rotationDays, tidallyLocked, faceOffset: THREE.MathUtils.degToRad(faceOffsetDeg) });
+      const M0deg = o.meanLongitudeDeg !== undefined ? o.meanLongitudeDeg - periLonDeg : (o.meanAnomalyDeg ?? 0);
+      orbiters.push({
+        object, pivot, orbitRadius, e: eccentricity,
+        M0: THREE.MathUtils.degToRad(M0deg), n: (2 * Math.PI) / periodDays,
+        argPeri: perihelion, node: THREE.MathUtils.degToRad(nodeDeg),
+        periRate: o.periRateDegPerDay !== undefined ? THREE.MathUtils.degToRad(o.periRateDegPerDay) : undefined,
+        nodeRate: o.nodeRateDegPerDay !== undefined ? THREE.MathUtils.degToRad(o.nodeRateDegPerDay) : undefined,
+        spin: o.spin, rotationDays: o.rotationDays, spinPhase: THREE.MathUtils.degToRad(o.spinPhaseDeg ?? 0),
+        tidallyLocked: o.tidallyLocked ?? false, faceOffset: THREE.MathUtils.degToRad(o.faceOffsetDeg ?? 0),
+      });
     };
-    const updateOrbiters = (delta: number) => {
+    const updateOrbiters = (jd: number) => {
+      const t = jd - J2000;
       for (const o of orbiters) {
-        o.angle += angularSpeed(o.periodDays) * delta; // mean anomaly
-        const E = o.e > 0 ? solveKepler(o.angle, o.e) : o.angle;
-        const theta = keplerPoint(o.orbitRadius, o.e, o.perihelion, E, o.object.position);
-        if (o.spin && o.rotationDays) o.spin.rotation.y += angularSpeed(o.rotationDays) * delta;
+        let argPeri = o.argPeri;
+        if (o.periRate !== undefined || o.nodeRate !== undefined) {
+          // Precessing elements (the Moon): node and perigee drift with time.
+          const node = o.node + (o.nodeRate ?? 0) * t;
+          const periLon = o.argPeri + o.node + (o.periRate ?? 0) * t;
+          o.pivot.rotation.y = node;
+          argPeri = periLon - node;
+        }
+        const M = o.M0 + o.n * t;
+        const E = o.e > 0 ? solveKepler(((M % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI), o.e) : M;
+        const theta = keplerPoint(o.orbitRadius, o.e, argPeri, E, o.object.position);
+        if (o.spin && o.rotationDays) o.spin.rotation.y = (o.spinPhase ?? 0) + (2 * Math.PI * t) / o.rotationDays;
         // Tidal lock: one rotation per orbit, with the map's centre (+x on the
         // sphere) always pointing back at the parent.
         if (o.tidallyLocked) o.object.rotation.y = theta + Math.PI + (o.faceOffset ?? 0);
@@ -691,7 +746,15 @@ export function SolarSystem({
     // Earth (its spin is driven separately, gated by auto-rotate).
     const earthOrbitRadius = orbitRadiusForAU(EARTH_ORBIT_AU);
     scene.remove(earthSystem);
-    addOrbiter(earthSystem, earthOrbitRadius, EARTH_YEAR_DAYS, 0, 0, undefined, undefined, scene, false, 0, EARTH_ECCENTRICITY, EARTH_PERIHELION_DEG);
+    addOrbiter(earthSystem, earthOrbitRadius, EARTH_YEAR_DAYS, 0, {
+      eccentricity: EARTH_ECCENTRICITY, perihelionDeg: EARTH_PERIHELION_DEG, meanLongitudeDeg: EARTH_MEAN_LONGITUDE_DEG,
+    });
+    // The Moon, in Earth's frame, with its real precessing node and perigee.
+    addOrbiter(moon, MOON_ORBIT_RADIUS, MOON_ORBIT_DAYS, MOON_INCLINATION_DEG, {
+      parent: earthSystem, tidallyLocked: true, eccentricity: MOON_ECCENTRICITY,
+      perihelionDeg: MOON_PERI0, nodeDeg: MOON_NODE0, meanLongitudeDeg: MOON_L0,
+      periRateDegPerDay: MOON_PERI_RATE, nodeRateDegPerDay: MOON_NODE_RATE,
+    });
 
     // Bodies that can be focused (clicked).
     const sunBody: Body = { name: 'Sun', object: sun, visual: sun, radius: SUN_RADIUS, parent: null, systemRadius: earthOrbitRadius, scale: 1 };
@@ -730,7 +793,6 @@ export function SolarSystem({
       // It's a sibling of the moon pivots, so inflating a distant planet never
       // inflates its moons or their orbits along with it.
       const visual = new THREE.Group();
-      mesh.rotation.y = THREE.MathUtils.degToRad(spec.spinPhaseDeg ?? 0);
       visual.add(mesh);
       tilted.add(visual);
       holder.add(tilted);
@@ -761,7 +823,11 @@ export function SolarSystem({
         planetDisposables.push({ geometry: ringGeometry, material: ringMaterial });
       }
       const orbitRadius = orbitRadiusForAU(spec.au);
-      addOrbiter(holder, orbitRadius, spec.periodDays, spec.inclinationDeg, spec.phaseDeg, mesh, spec.rotationDays, scene, false, 0, spec.eccentricity ?? 0, spec.perihelionDeg ?? 0);
+      addOrbiter(holder, orbitRadius, spec.periodDays, spec.inclinationDeg, {
+        spin: mesh, rotationDays: spec.rotationDays, spinPhaseDeg: spec.spinPhaseDeg,
+        eccentricity: spec.eccentricity, perihelionDeg: spec.perihelionDeg, nodeDeg: spec.nodeDeg,
+        meanLongitudeDeg: spec.meanLongitudeDeg, meanAnomalyDeg: spec.phaseDeg,
+      });
       bodies.push({ name: spec.name, object: holder, visual, radius, parent: sunBody, systemRadius: 0, scale: 1, focusRadii: spec.focusRadii });
       outermostOrbit = Math.max(outermostOrbit, orbitRadius);
       if (spec.name === WIDE_VIEW_PLANET) sunBody.systemRadius = orbitRadius;
@@ -792,11 +858,16 @@ export function SolarSystem({
       const orbitRadius = planetBody.radius * spec.orbitPlanetRadii;
       // Table moon inclinations are given to the planet's equator, so they orbit
       // inside the planet's tilted group (Titan then sits in Saturn's ring plane).
-      addOrbiter(mesh, orbitRadius, spec.periodDays, spec.inclinationDeg, spec.phaseDeg, undefined, undefined, tiltedByPlanet.get(spec.planet) ?? planetBody.object, true, spec.faceOffsetDeg);
+      addOrbiter(mesh, orbitRadius, spec.periodDays, spec.inclinationDeg, {
+        parent: tiltedByPlanet.get(spec.planet) ?? planetBody.object, tidallyLocked: true,
+        faceOffsetDeg: spec.faceOffsetDeg, meanAnomalyDeg: spec.phaseDeg,
+      });
       bodies.push({ name: spec.name, object: mesh, visual: mesh, radius, parent: planetBody, systemRadius: 0, scale: 1 });
       planetBody.systemRadius = Math.max(planetBody.systemRadius, orbitRadius);
     }
-    updateOrbiters(0);
+    let simJD = jdNow();
+    simJDRef.current = simJD;
+    updateOrbiters(simJD);
     const earthPosition = new THREE.Vector3();
     earthSystem.getWorldPosition(earthPosition);
     const worldPos = (b: Body, out: THREE.Vector3) => b.object.getWorldPosition(out);
@@ -812,6 +883,9 @@ export function SolarSystem({
     // star ends up just beside the focused body's disc (a little past its
     // angular radius), rather than hidden behind it. Distance is kept.
     let aim: { from: THREE.Vector3; to: THREE.Vector3; t: number; distFrom: number; distTo: number } | null = null;
+    // A plain distance ease (no turn), used by `launch` to pull back from a close-up.
+    let zoomEase: { t: number; distFrom: number; distTo: number } | null = null;
+    const LAUNCH_MIN_RADII = 40; // far enough to watch a craft leave the focused body
     const AIM_SECONDS = 1.0;
     const AIM_MARGIN_RAD = THREE.MathUtils.degToRad(8); // clearance beyond the disc's edge
     // Closer than this the star would land outside the frame (disc ~17 degrees at
@@ -942,7 +1016,9 @@ export function SolarSystem({
     setOrbitStyleRef.current = setOrbitStyle;
 
     controls.target.copy(earthPosition);
-    camera.position.copy(earthPosition).add(new THREE.Vector3(0, 0, DEFAULT_CAMERA_DISTANCE));
+    // Start on the -z side: the pole leans toward -z, so from here it tilts
+    // toward the viewer like a desk globe.
+    camera.position.copy(earthPosition).add(new THREE.Vector3(0, 0, -DEFAULT_CAMERA_DISTANCE));
     controls.update();
     reportFocus(DEFAULT_CAMERA_DISTANCE);
 
@@ -1072,22 +1148,142 @@ export function SolarSystem({
     renderer.domElement.addEventListener('mouseleave', onMouseLeave);
     renderer.domElement.addEventListener('click', onMouseClick);
 
+    // ---- Mission tracking ----
+    // A trajectory is a list of [jd, x, y, z] in AU from JPL Horizons (heliocentric
+    // ecliptic; x = equinox, y = longitude 90, z = north). Scene axes: x, y = z_h,
+    // z = -y_h. The line is drawn up to the simulated date, with a marker at the
+    // tip that is itself a focusable body, so the craft can be followed.
+    type Mission = { spec: (typeof MISSIONS)[number]; points: number[][]; line: THREE.Line; positions: Float32Array; pristine: Float32Array; lastTipIndex: number; marker: THREE.Mesh; body: Body; group: THREE.Group };
+    let mission: Mission | null = null;
+    const toScene = (x: number, y: number, z: number, out: THREE.Vector3) => out.set(x * orbitScale, z * orbitScale, -y * orbitScale);
+    const clearMission = () => {
+      if (!mission) return;
+      mission.group.parent?.remove(mission.group);
+      mission.line.geometry.dispose();
+      (mission.line.material as THREE.Material).dispose();
+      mission.marker.geometry.dispose();
+      (mission.marker.material as THREE.Material).dispose();
+      const i = bodies.indexOf(mission.body);
+      if (i >= 0) bodies.splice(i, 1);
+      if (focus === mission.body) { focus = earthBody; transition = null; }
+      mission = null;
+    };
+    const loadMission = async (id: string | null) => {
+      clearMission();
+      if (!id) return;
+      const spec = MISSIONS.find((m) => m.id === id);
+      if (!spec) return;
+      const res = await fetch(spec.file);
+      if (!res.ok) return;
+      const data = await res.json();
+      const points: number[][] = data.points;
+      const parent = spec.center === 'Earth' ? earthSystem : scene;
+      const group = new THREE.Group();
+      parent.add(group);
+      const positions = new Float32Array(points.length * 3);
+      const v = new THREE.Vector3();
+      points.forEach((p, i) => { toScene(p[1], p[2], p[3], v); positions.set([v.x, v.y, v.z], i * 3); });
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      geometry.setDrawRange(0, 0);
+      const line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: 0x66ccff, transparent: true, opacity: 0.95 }));
+      group.add(line);
+      const markerRadius = EARTH_RADIUS * 0.02; // tiny; the pixel floor keeps it visible as a dot
+      const marker = new THREE.Mesh(new THREE.SphereGeometry(markerRadius, 8, 8), new THREE.MeshBasicMaterial({ color: 0x66ccff }));
+      group.add(marker);
+      const body: Body = { name: spec.name, object: marker, visual: marker, radius: markerRadius, parent: spec.center === 'Earth' ? earthBody : sunBody, systemRadius: 0, scale: 1 };
+      bodies.push(body);
+      mission = { spec, points, line, positions, pristine: positions.slice(), lastTipIndex: -1, marker, body, group };
+      // Start the clock at launch. Focus the craft itself (a cut, not a flight;
+      // it starts at Earth), then ease the camera to the mission's preset: far out
+      // and above the ecliptic, keeping the current azimuth. The camera then
+      // follows the craft for the whole journey. Without a preset, just pull back.
+      dateRequestRef.current = points[0][0];
+      updateMission(points[0][0]); // place the marker at launch before focusing it
+      focus = body;
+      transition = null;
+      aim = null;
+      clearPinnedStar();
+      worldPos(body, focusPoint);
+      const off = camera.position.clone().sub(controls.target);
+      off.setLength(Math.max(off.length(), minDistanceFor(body)));
+      controls.target.copy(focusPoint);
+      camera.position.copy(focusPoint).add(off);
+      const d = camera.position.distanceTo(controls.target);
+      if (spec.view) {
+        const from = camera.position.clone().sub(controls.target).normalize();
+        const azimuth = Math.atan2(-from.z, from.x); // current direction around the ecliptic
+        const el = THREE.MathUtils.degToRad(spec.view.elevationDeg);
+        const to = new THREE.Vector3(Math.cos(el) * Math.cos(azimuth), Math.sin(el), -Math.cos(el) * Math.sin(azimuth));
+        aim = { from, to, t: 0, distFrom: d, distTo: spec.view.distanceAU * orbitScale };
+      } else {
+        const distTo = Math.max(d, focus.radius * LAUNCH_MIN_RADII);
+        if (distTo > d) zoomEase = { t: 0, distFrom: d, distTo };
+      }
+    };
+    trackRef.current = (id) => { loadMission(id); };
+    // Advances the drawn portion of the trajectory to the current date.
+    const updateMission = (jd: number) => {
+      if (!mission) return;
+      const pts = mission.points;
+      // Binary search for the last sample at or before jd.
+      let lo = 0, hi = pts.length - 1;
+      if (jd <= pts[0][0]) hi = 0;
+      else if (jd >= pts[hi][0]) lo = hi;
+      else { while (hi - lo > 1) { const mid = (lo + hi) >> 1; if (pts[mid][0] <= jd) lo = mid; else hi = mid; } hi = lo + 1; }
+      const a = pts[lo], b = pts[Math.min(hi, pts.length - 1)];
+      const f = b[0] === a[0] ? 0 : THREE.MathUtils.clamp((jd - a[0]) / (b[0] - a[0]), 0, 1);
+      toScene(a[1] + (b[1] - a[1]) * f, a[2] + (b[2] - a[2]) * f, a[3] + (b[3] - a[3]) * f, mission.marker.position);
+      // Draw all samples up to `lo`, plus a final segment to the interpolated tip.
+      // The tip temporarily overwrites the next sample's slot; restore the slot we
+      // used last frame so the buffer stays exact once the tip moves on.
+      const n = lo + 1;
+      if (mission.lastTipIndex >= 0 && mission.lastTipIndex !== n) {
+        const k = mission.lastTipIndex * 3;
+        mission.positions.set(mission.pristine.subarray(k, k + 3), k);
+      }
+      mission.lastTipIndex = n;
+      mission.positions.set([mission.marker.position.x, mission.marker.position.y, mission.marker.position.z], n * 3);
+      (mission.line.geometry.attributes.position as THREE.BufferAttribute).needsUpdate = true;
+      mission.line.geometry.setDrawRange(0, Math.min(n + 1, pts.length));
+    };
+    const pendingTrack = usePageStore.getState().trackRequest;
+    if (pendingTrack && pendingTrack.seq !== handledTrackSeqRef.current) {
+      handledTrackSeqRef.current = pendingTrack.seq;
+      loadMission(pendingTrack.id);
+    }
+
+
     // Animation loop
     let lastTime = performance.now();
+    let earthSpinBank = 0;
+    let lastEarthSpinBase = THREE.MathUtils.degToRad(gmstDeg(simJD) - 180);
     const animate = () => {
       animationIdRef.current = requestAnimationFrame(animate);
       const now = performance.now();
       const delta = (now - lastTime) / 1000; // seconds
       lastTime = now;
 
-      // Orbital motion
-      updateOrbiters(delta);
-      sun.rotation.y += angularSpeed(SUN_ROTATION_DAYS) * delta;
-      if (globeRef.current && autoRotateRef.current && !hoverPausedRef.current) {
-        globeRef.current.rotation.y += angularSpeed(EARTH_DAY_DAYS) * delta;
-      }
-      if (moonPivotRef.current) {
-        moonPivotRef.current.rotation.y += angularSpeed(MOON_ORBIT_DAYS) * delta;
+      // The clock. A `date` request jumps it; otherwise it runs at the set rate.
+      const jump = dateRequestRef.current;
+      if (jump !== null) { simJD = jump; dateRequestRef.current = null; }
+      simJD += delta / secondsPerDay;
+      simJDRef.current = simJD;
+
+      // Orbital motion and spins, all from the date.
+      updateOrbiters(simJD);
+      updateMission(simJD);
+      sun.rotation.y = (2 * Math.PI * (simJD - J2000)) / SUN_ROTATION_DAYS;
+      // Earth: Greenwich sidereal time puts lon 0 (local -x on the globe) at the
+      // right direction. A hover or drag pauses the spin; the skipped angle is
+      // banked so it resumes without a jump (the day/night side then lags by it).
+      if (globeRef.current) {
+        const base = THREE.MathUtils.degToRad(gmstDeg(simJD) - 180); // increases with time: prograde
+        if (!(autoRotateRef.current && !hoverPausedRef.current)) {
+          earthSpinBank += base - lastEarthSpinBase; // hold still: bank what the clock advanced
+        }
+        lastEarthSpinBase = base;
+        globeRef.current.rotation.y = base - earthSpinBank;
       }
 
       // Camera focus: the target follows the focused body (easing from the
@@ -1122,13 +1318,22 @@ export function SolarSystem({
         }
         if (transition.t >= 1) transition = null;
       }
+      if (zoomEase) {
+        zoomEase.t = Math.min(1, zoomEase.t + delta / AIM_SECONDS);
+        const k = THREE.MathUtils.smoothstep(zoomEase.t, 0, 1);
+        dist = THREE.MathUtils.lerp(zoomEase.distFrom, zoomEase.distTo, k);
+        offset.setLength(dist);
+        if (zoomEase.t >= 1) zoomEase = null;
+      }
       if (aim) {
         aim.t = Math.min(1, aim.t + delta / AIM_SECONDS);
         const k = THREE.MathUtils.smoothstep(aim.t, 0, 1);
         // Spherical interpolation of the offset direction via a quaternion.
         const q = new THREE.Quaternion().setFromUnitVectors(aim.from, aim.to);
         const step = new THREE.Quaternion().slerp(q, k); // identity -> q
-        dist = THREE.MathUtils.lerp(aim.distFrom, aim.distTo, k); // unchanged if already far enough
+        // Geometric interpolation of distance: a steady visual zoom rate, which
+        // matters when a launch preset pulls back by orders of magnitude.
+        dist = aim.distFrom * Math.pow(aim.distTo / aim.distFrom, k); // unchanged if already there
         offset.copy(aim.from).applyQuaternion(step).setLength(dist);
         if (aim.t >= 1) aim = null;
       }
@@ -1194,7 +1399,12 @@ export function SolarSystem({
       }
 
       renderer.render(scene, camera);
+      if (now - lastDatePublish > 500) {
+        lastDatePublish = now;
+        usePageStore.getState().setSimJD(simJD);
+      }
     };
+    let lastDatePublish = 0;
     animate();
 
     // Keep the canvas sized to its container (only when no fixed size is given).
@@ -1248,8 +1458,8 @@ export function SolarSystem({
       const dec = THREE.MathUtils.degToRad(decDeg);
       return new THREE.Vector3()
         .addScaledVector(new THREE.Vector3(1, 0, 0), Math.cos(dec) * Math.cos(ra))
-        .addScaledVector(new THREE.Vector3(0, Math.sin(e), -Math.cos(e)), Math.cos(dec) * Math.sin(ra))
-        .addScaledVector(new THREE.Vector3(0, Math.cos(e), Math.sin(e)), Math.sin(dec))
+        .addScaledVector(new THREE.Vector3(0, -Math.sin(e), -Math.cos(e)), Math.cos(dec) * Math.sin(ra))
+        .addScaledVector(new THREE.Vector3(0, Math.cos(e), -Math.sin(e)), Math.sin(dec))
         .normalize();
     };
     // Sagittarius A*, the galactic centre: RA 266.4, Dec -29.0 (J2000), beside the Teapot's spout.
@@ -1263,6 +1473,7 @@ export function SolarSystem({
       if (name.toLowerCase() === 'galactic core') aimAtDirection(GALACTIC_CORE_DIR, GALACTIC_CORE);
     };
     aimAtStarRef.current = aimAtStar;
+
     // Restore the view saved by a previous scene (scale switch), if any.
     const saved = savedViewRef.current;
     if (saved) {
@@ -1321,7 +1532,6 @@ export function SolarSystem({
       moonDotsRef.current = [];
       apolloGroupRef.current = null;
       moonTexture.dispose();
-      moonPivotRef.current = null;
       moonMaterialRef.current = null;
       earthSystemRef.current = null;
       sunGeometry.dispose();
@@ -1331,6 +1541,8 @@ export function SolarSystem({
       sunMaterialRef.current = null;
       sunGlowMaterialRef.current = null;
       planetDisposables.forEach(({ geometry, material }) => { geometry.dispose(); material.dispose(); });
+      clearMission();
+      trackRef.current = null;
       starSprites.forEach(({ sprite }) => sprite.material.dispose());
       starTexture.dispose();
       textures.forEach((t) => t.dispose());
@@ -1349,6 +1561,22 @@ export function SolarSystem({
   useEffect(() => {
     setOrbitStyleRef.current?.(orbitsHighlighted);
   }, [orbitsHighlighted]);
+
+  // Trace a mission (terminal `track` command). If the scene isn't built yet
+  // (e.g. a scale switch is rebuilding it), init picks the request up.
+  useEffect(() => {
+    if (!trackRequest || trackRequest.seq === handledTrackSeqRef.current) return;
+    if (!trackRef.current) return;
+    handledTrackSeqRef.current = trackRequest.seq;
+    trackRef.current(trackRequest.id);
+  }, [trackRequest]);
+
+  // Jump the clock (terminal `date` command).
+  useEffect(() => {
+    if (!dateRequest || dateRequest.seq === handledDateSeqRef.current) return;
+    handledDateSeqRef.current = dateRequest.seq;
+    dateRequestRef.current = dateRequest.jd;
+  }, [dateRequest]);
 
   // Apollo landing sites on/off (terminal `apollo` command).
   useEffect(() => {

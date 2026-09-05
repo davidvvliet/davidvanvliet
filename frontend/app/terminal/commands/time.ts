@@ -26,6 +26,7 @@ function describe(seconds: number): string {
 
 const time: Command = {
   name: "time",
+  category: "explore",
   description: "Set how long an Earth day takes",
   execute: (args) => {
     const store = usePageStore.getState();

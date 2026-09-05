@@ -24,6 +24,12 @@ export default function GridPage() {
   const [hoveredBody, setHoveredBody] = useState<string | null>(null);
   const [hoveredStar, setHoveredStar] = useState<{ name: string; lightYears: number; spectral?: string; fact?: string } | null>(null);
   const [focusedBody, setFocusedBody] = useState<string | null>("Earth");
+  // Mission date readout: shown while a mission is launched, as month and year.
+  const missionActive = usePageStore((s) => s.trackRequest?.id != null);
+  const simJD = usePageStore((s) => s.simJD);
+  const missionDate = missionActive && simJD
+    ? new Date((simJD - 2440587.5) * 86400000).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' })
+    : null;
   const leftPanel = usePageStore((s) => s.leftPanel);
 
   useEffect(() => {
@@ -78,6 +84,7 @@ export default function GridPage() {
                     {BODY_FACTS[focusedBody] && <span className={styles.globeLabelFact}>{BODY_FACTS[focusedBody]}</span>}
                   </>
                 ) : null}
+                {missionDate && <span className={styles.missionDate}>{missionDate}</span>}
               </div>
               <div className={styles.globeCanvas}>
                 <SolarSystem dots={dots} onDotClick={setSelectedDot} onDotHover={setHoveredDot} onBodyHover={setHoveredBody} onStarHover={setHoveredStar} onFocusChange={setFocusedBody} dotSizeMultiplier={0.3} />

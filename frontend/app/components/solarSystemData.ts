@@ -10,8 +10,10 @@ export type PlanetSpec = {
   inclinationDeg: number;  // orbit inclination to the ecliptic
   eccentricity?: number;   // orbital eccentricity (0 = circle)
   perihelionDeg?: number;  // longitude of perihelion (J2000), direction of closest approach
+  nodeDeg?: number;        // longitude of the ascending node (J2000)
+  meanLongitudeDeg?: number; // mean longitude at J2000: sets where the planet is on a real date
   color: number;
-  phaseDeg: number;        // starting mean anomaly
+  phaseDeg: number;        // mean anomaly at J2000 (fallback when meanLongitudeDeg is absent)
   solid?: boolean;         // solid sphere instead of wireframe (e.g. cloud-covered)
   texture?: string;        // equirectangular map under /public; implies solid
   focusRadii?: number;     // click fly-in distance in body radii (default: MIN_DISTANCE_RADII * 1.5)
@@ -71,31 +73,31 @@ export const MOONS: MoonSpec[] = [
 // Planets other than Earth (Earth is built separately: it has the continents,
 // the location dots and the Moon). Adding a planet = one row.
 export const PLANETS: PlanetSpec[] = [
-  { name: 'Mercury', au: 0.387, radiusEarths: 0.383, periodDays: 87.97, rotationDays: 58.65, inclinationDeg: 7.0, eccentricity: 0.2056, perihelionDeg: 77.46, axialTiltDeg: 0.03, color: 0x8a847c, phaseDeg: 120, texture: '/mercury.jpg' },
+  { name: 'Mercury', au: 0.387, radiusEarths: 0.383, periodDays: 87.97, rotationDays: 58.65, inclinationDeg: 7.0, eccentricity: 0.2056, perihelionDeg: 77.46, axialTiltDeg: 0.03, nodeDeg: 48.331, meanLongitudeDeg: 252.251, color: 0x8a847c, phaseDeg: 120, texture: '/mercury.jpg' },
   // Venus: retrograde spin expressed as a 177 degree axial tilt (same convention as Uranus and Pluto).
-  { name: 'Venus', au: 0.723, radiusEarths: 0.949, periodDays: 224.7, rotationDays: 243.0, inclinationDeg: 3.39, eccentricity: 0.0068, perihelionDeg: 131.6, axialTiltDeg: 177.4, color: 0xe8dcc0, phaseDeg: 230, texture: '/venus.jpg' },
-  { name: 'Mars', au: 1.524, radiusEarths: 0.532, periodDays: 686.98, rotationDays: 1.026, inclinationDeg: 1.85, eccentricity: 0.0934, perihelionDeg: 336.0, axialTiltDeg: 25.19, color: 0xc1663f, phaseDeg: 40, texture: '/mars.jpg' },
+  { name: 'Venus', au: 0.723, radiusEarths: 0.949, periodDays: 224.7, rotationDays: 243.0, inclinationDeg: 3.39, eccentricity: 0.0068, perihelionDeg: 131.6, axialTiltDeg: 177.4, nodeDeg: 76.68, meanLongitudeDeg: 181.98, color: 0xe8dcc0, phaseDeg: 230, texture: '/venus.jpg' },
+  { name: 'Mars', au: 1.524, radiusEarths: 0.532, periodDays: 686.98, rotationDays: 1.026, inclinationDeg: 1.85, eccentricity: 0.0934, perihelionDeg: 336.0, axialTiltDeg: 25.19, nodeDeg: 49.558, meanLongitudeDeg: 355.453, color: 0xc1663f, phaseDeg: 40, texture: '/mars.jpg' },
   // Ceres: dwarf planet in the asteroid belt. Rotation 9 hours, small 4 degree axial tilt.
-  { name: 'Ceres', au: 2.766, radiusEarths: 0.0737, periodDays: 1682, rotationDays: 0.378, inclinationDeg: 10.59, eccentricity: 0.0785, perihelionDeg: 153.4, color: 0x8f8a84, phaseDeg: 260, axialTiltDeg: 4.0, texture: '/ceres.jpg' },
-  { name: 'Jupiter', au: 5.203, radiusEarths: 10.97, periodDays: 4332.6, rotationDays: 0.4135, inclinationDeg: 1.30, eccentricity: 0.0489, perihelionDeg: 14.7, axialTiltDeg: 3.13, color: 0xc9a37a, phaseDeg: 300, texture: '/jupiter.jpg', focusRadii: 7 },
+  { name: 'Ceres', au: 2.766, radiusEarths: 0.0737, periodDays: 1682, rotationDays: 0.378, inclinationDeg: 10.59, eccentricity: 0.0785, perihelionDeg: 153.4, nodeDeg: 80.305, meanLongitudeDeg: 230.8, color: 0x8f8a84, phaseDeg: 260, axialTiltDeg: 4.0, texture: '/ceres.jpg' },
+  { name: 'Jupiter', au: 5.203, radiusEarths: 10.97, periodDays: 4332.6, rotationDays: 0.4135, inclinationDeg: 1.30, eccentricity: 0.0489, perihelionDeg: 14.7, axialTiltDeg: 3.13, nodeDeg: 100.556, meanLongitudeDeg: 34.404, color: 0xc9a37a, phaseDeg: 300, texture: '/jupiter.jpg', focusRadii: 7 },
   // Saturn: rings span the C ring's inner edge to the A ring's outer edge, in Saturn radii.
-  { name: 'Saturn', au: 9.537, radiusEarths: 9.14, periodDays: 10759, rotationDays: 0.444, inclinationDeg: 2.49, eccentricity: 0.0565, perihelionDeg: 92.6, color: 0xe3d2a6, phaseDeg: 150, focusRadii: 9, axialTiltDeg: 26.7, texture: '/saturn.jpg',
+  { name: 'Saturn', au: 9.537, radiusEarths: 9.14, periodDays: 10759, rotationDays: 0.444, inclinationDeg: 2.49, eccentricity: 0.0565, perihelionDeg: 92.6, nodeDeg: 113.715, meanLongitudeDeg: 49.944, color: 0xe3d2a6, phaseDeg: 150, focusRadii: 9, axialTiltDeg: 26.7, texture: '/saturn.jpg',
     rings: { innerRadii: 1.24, outerRadii: 2.27, color: 0xd8c9a3, opacity: 0.45, texture: '/saturn-ring.png' } },
   // Uranus: axis tilted 97.8 degrees, so it rolls around its orbit on its side. (Spin is
   // about its own tilted axis; the >90 degree tilt is what makes it retrograde to the ecliptic.)
-  { name: 'Uranus', au: 19.19, radiusEarths: 3.98, periodDays: 30687, rotationDays: 0.718, inclinationDeg: 0.77, eccentricity: 0.0457, perihelionDeg: 170.9, color: 0xa9d4d8, phaseDeg: 210, axialTiltDeg: 97.8, texture: '/uranus.jpg',
+  { name: 'Uranus', au: 19.19, radiusEarths: 3.98, periodDays: 30687, rotationDays: 0.718, inclinationDeg: 0.77, eccentricity: 0.0457, perihelionDeg: 170.9, nodeDeg: 74.006, meanLongitudeDeg: 313.232, color: 0xa9d4d8, phaseDeg: 210, axialTiltDeg: 97.8, texture: '/uranus.jpg',
     // Main ring system spans ring 6 to the epsilon ring; dark and narrow, nothing like Saturn's.
     rings: { innerRadii: 1.64, outerRadii: 2.02, color: 0x8a8f93, opacity: 0.35, texture: '/uranus-ring.png' } },
-  { name: 'Neptune', au: 30.07, radiusEarths: 3.86, periodDays: 60190, rotationDays: 0.671, inclinationDeg: 1.77, eccentricity: 0.0113, perihelionDeg: 45.0, color: 0x3f5fbf, phaseDeg: 330, axialTiltDeg: 28.3, texture: '/neptune.jpg' },
+  { name: 'Neptune', au: 30.07, radiusEarths: 3.86, periodDays: 60190, rotationDays: 0.671, inclinationDeg: 1.77, eccentricity: 0.0113, perihelionDeg: 45.0, nodeDeg: 131.784, meanLongitudeDeg: 304.88, color: 0x3f5fbf, phaseDeg: 330, axialTiltDeg: 28.3, texture: '/neptune.jpg' },
   // Pluto: mean distance (its real orbit is eccentric enough to cross Neptune's), steeply
   // inclined, spinning on a 122 degree tilt (so retrograde to the ecliptic). Charon orbits its equator.
   // spinPhaseDeg = Charon's phaseDeg + 180: Pluto's prime meridian (lon 0, the map seam) is defined
   // as the sub-Charon point, so the heart (lon 180, map centre) faces away from Charon. Both turn at
   // the same rate, so this alignment holds: they are mutually locked.
-  { name: 'Pluto', au: 39.48, radiusEarths: 0.1865, periodDays: 90560, rotationDays: 6.387, inclinationDeg: 17.16, eccentricity: 0.2488, perihelionDeg: 224.1, color: 0xc9a98a, phaseDeg: 100, axialTiltDeg: 122.5, texture: '/pluto.jpg', spinPhaseDeg: 180 },
+  { name: 'Pluto', au: 39.48, radiusEarths: 0.1865, periodDays: 90560, rotationDays: 6.387, inclinationDeg: 17.16, eccentricity: 0.2488, perihelionDeg: 224.1, nodeDeg: 110.307, meanLongitudeDeg: 238.929, color: 0xc9a98a, phaseDeg: 100, axialTiltDeg: 122.5, texture: '/pluto.jpg', spinPhaseDeg: 180 },
   // Two more dwarf planets. Their maps are artist's impressions: no spacecraft has visited either.
-  { name: 'Makemake', au: 45.43, radiusEarths: 0.1122, periodDays: 111800, rotationDays: 0.95, inclinationDeg: 28.98, eccentricity: 0.161, perihelionDeg: 14.4, color: 0xb5745f, phaseDeg: 190, texture: '/makemake.jpg' },
-  { name: 'Eris', au: 67.86, radiusEarths: 0.1826, periodDays: 204200, rotationDays: 1.08, inclinationDeg: 44.04, eccentricity: 0.436, perihelionDeg: 187.5, axialTiltDeg: 78, color: 0xd9d9d9, phaseDeg: 300, texture: '/eris.jpg' },
+  { name: 'Makemake', au: 45.43, radiusEarths: 0.1122, periodDays: 111800, rotationDays: 0.95, inclinationDeg: 28.98, eccentricity: 0.161, perihelionDeg: 14.4, nodeDeg: 79.62, meanLongitudeDeg: 99.5, color: 0xb5745f, phaseDeg: 190, texture: '/makemake.jpg' },
+  { name: 'Eris', au: 67.86, radiusEarths: 0.1826, periodDays: 204200, rotationDays: 1.08, inclinationDeg: 44.04, eccentricity: 0.436, perihelionDeg: 187.5, axialTiltDeg: 78, nodeDeg: 35.95, meanLongitudeDeg: 25.1, color: 0xd9d9d9, phaseDeg: 300, texture: '/eris.jpg' },
 ];
 /** A favourite fact per body, shown under the name when the body is in focus. */
 export const BODY_FACTS: Record<string, string> = {
@@ -377,6 +379,18 @@ export const STARS: StarSpec[] = [
   { name: 'Kappa Eridani', raDeg: 36.746, decDeg: -47.704, magnitude: 4.24, spectral: 'B', lightYears: 530 },
   { name: 'Lambda Eridani', raDeg: 77.287, decDeg: -8.754, magnitude: 4.27, spectral: 'B', lightYears: 1000 },
   { name: 'Keid', raDeg: 63.818, decDeg: -7.653, magnitude: 4.43, spectral: 'K', lightYears: 16.3 },
+];
+
+/** Missions whose trajectories can be traced (terminal `track` command). Files under /public/missions. */
+export type MissionSpec = {
+  id: string; name: string; file: string; center: 'Sun' | 'Earth';
+  /** Camera on launch: Earth stays the focus; ease out to this distance (AU) at this elevation above the ecliptic. */
+  view?: { distanceAU: number; elevationDeg: number };
+  /** Clock rate set on launch, real seconds per Earth day. */
+  secondsPerDay?: number;
+};
+export const MISSIONS: MissionSpec[] = [
+  { id: 'voyager1', name: 'Voyager 1', file: '/missions/voyager1.json', center: 'Sun', view: { distanceAU: 8, elevationDeg: 28 }, secondsPerDay: 0.1 },
 ];
 
 /** Apollo landing sites, for the hidden `apollo` command. Selenographic lat/lon (east positive). */

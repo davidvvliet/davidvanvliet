@@ -11,6 +11,7 @@ const COMPACT_MSG = ["A more compact version of the solar system."];
 
 const scale: Command = {
   name: "scale",
+  category: "explore",
   description: "True or compact solar system",
   execute: (args) => {
     const store = usePageStore.getState();

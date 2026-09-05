@@ -1,12 +1,13 @@
 import { Command } from "../types";
 import { register } from "../registry";
 import { usePageStore } from "../../store/pageStore";
-import { BODY_NAMES, STAR_NAMES } from "../../components/solarSystemData";
+import { BODY_NAMES, STAR_NAMES, MISSIONS } from "../../components/solarSystemData";
 
 const findName = (list: string[], input: string) => list.find((n) => n.toLowerCase() === input.toLowerCase());
 
 const fly: Command = {
   name: "fly",
+  category: "explore",
   description: "Fly to a planet or moon, or turn toward a star",
   execute: (args) => {
     if (!args[0]) {
@@ -14,7 +15,8 @@ const fly: Command = {
     }
     const input = args.join(" "); // multi-word names: "fly alpha centauri"
     const store = usePageStore.getState();
-    const body = findName(BODY_NAMES, input);
+    // Launched missions are focusable bodies too (their tip marker).
+    const body = findName([...BODY_NAMES, ...MISSIONS.map((m) => m.name)], input);
     if (body) {
       store.setLeftPanel("");
       store.requestFocus(body);
