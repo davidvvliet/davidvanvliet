@@ -75,6 +75,7 @@ const SCALES: Record<ScaleMode, { orbitScale: number; sunRadius: number; moonOrb
   },
 };
 const EARTH_ORBIT_AU = 1;
+const VIEW_KEY = 'explore-view'; // persisted camera view: focused body + offset in body radii
 const MIN_BODY_PX = 3;                 // Minimum on-screen radius of any body, in pixels
 // A body's enforced size is capped relative to its parent (moons to their
 // planet, planets to the Sun), so it can't outgrow what it orbits as you zoom
@@ -302,6 +303,8 @@ export function SolarSystem({
   // Saved across a scene rebuild (scale switch): which body was focused and the
   // camera's offset from it in body radii, so the view is restored, not reset.
   const savedViewRef = useRef<{ name: string; dir: THREE.Vector3; radii: number } | null>(null);
+  // The same snapshot also persists to localStorage (VIEW_KEY), restored once per page load.
+  const restoredStoredViewRef = useRef(false);
   const aimAtStarRef = useRef<((star: { sprite: THREE.Sprite; px: number; name: string; lightYears: number; spectral: string; fact?: string }) => void) | null>(null);
   const focusRequest = usePageStore((s) => s.focusRequest);
   const starsVisible = usePageStore((s) => s.starsVisible);
@@ -1326,6 +1329,8 @@ export function SolarSystem({
 
     // Animation loop
     let lastTime = performance.now();
+    let lastViewSaveAt = 0;
+    let lastViewSaved = '';
     let earthSpinBank = 0;
     let lastEarthSpinBase = THREE.MathUtils.degToRad(gmstDeg(simJD) - 180);
     const animate = () => {
@@ -1348,6 +1353,16 @@ export function SolarSystem({
       }
       simJDRef.current = simJD;
 
+      // Persist the view (focused body + camera offset) when it has settled and changed.
+      if (now - lastViewSaveAt > 1000 && !transition && !aim && !zoomEase && !(mission && focus === mission.body)) {
+        lastViewSaveAt = now;
+        const dir = camera.position.clone().sub(controls.target).normalize();
+        const snapshot = JSON.stringify({ name: focus.name, dir: dir.toArray().map((x) => Math.round(x * 1e4) / 1e4), radii: Math.round(camera.position.distanceTo(controls.target) / focus.radius * 100) / 100 });
+        if (snapshot !== lastViewSaved) {
+          lastViewSaved = snapshot;
+          try { localStorage.setItem(VIEW_KEY, snapshot); } catch { /* storage unavailable */ }
+        }
+      }
       // Orbital motion and spins, all from the date.
       updateOrbiters(simJD);
       updateMoon(simJD);
@@ -1553,8 +1568,18 @@ export function SolarSystem({
     };
     aimAtStarRef.current = aimAtStar;
 
-    // Restore the view saved by a previous scene (scale switch), if any.
-    const saved = savedViewRef.current;
+    // Restore the view saved by a previous scene (scale switch), else the one
+    // persisted from a previous visit (once per page load).
+    let saved = savedViewRef.current;
+    if (!saved && !restoredStoredViewRef.current) {
+      restoredStoredViewRef.current = true;
+      try {
+        const stored = JSON.parse(localStorage.getItem(VIEW_KEY) ?? 'null');
+        if (stored && typeof stored.name === 'string' && Array.isArray(stored.dir) && typeof stored.radii === 'number') {
+          saved = { name: stored.name, dir: new THREE.Vector3().fromArray(stored.dir).normalize(), radii: stored.radii };
+        }
+      } catch { /* no storage, or nothing usable */ }
+    }
     if (saved) {
       savedViewRef.current = null;
       const body = bodies.find((b) => b.name === saved.name);

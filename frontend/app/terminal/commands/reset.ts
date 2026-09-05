@@ -8,7 +8,8 @@ const reset: Command = {
   description: "Reset all settings",
   execute: () => {
     usePageStore.getState().resetSettings();
-    return ["Settings reset: compact scale, stars off, orbit paths hidden, 10s per day."];
+    try { localStorage.removeItem('explore-view'); } catch { /* storage unavailable */ }
+    return ["Settings reset: compact scale, stars off, orbit paths hidden, 10s per day. The saved view is cleared on next load."];
   },
 };
 

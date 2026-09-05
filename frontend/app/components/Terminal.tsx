@@ -33,6 +33,16 @@ function linkify(text: string): React.ReactNode {
 function VideoLine({ src, restored, onSized }: { src: string; restored?: boolean; onSized: () => void }) {
   const [done, setDone] = useState(!!restored);
   const poster = src.replace(/\.webm$/, ".jpg");
+  // A restored video never loads metadata, so its size arrives with the poster image.
+  // Runs once per mount (onSized is an inline callback and must not retrigger it).
+  const onSizedRef = useRef(onSized);
+  onSizedRef.current = onSized;
+  useEffect(() => {
+    if (!restored) return;
+    const img = new Image();
+    img.onload = () => onSizedRef.current();
+    img.src = poster;
+  }, [restored, poster]);
   return (
     <video
       src={done ? undefined : src}
@@ -234,7 +244,7 @@ export default function Terminal() {
         ) : line.type === "output" && line.text.startsWith("__IMG__") ? (
           <div key={i} className={styles.imageRow}>
             {line.text.slice(7).split(",").map((src, j) => (
-              <img key={j} src={src} alt="" className={styles.poster} onLoad={() => { if (!line.restored) bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }} />
+              <img key={j} src={src} alt="" className={styles.poster} onLoad={() => bottomRef.current?.scrollIntoView({ behavior: "smooth" })} />
             ))}
           </div>
         ) : line.type === "output" && line.text.startsWith("__COL__") ? (

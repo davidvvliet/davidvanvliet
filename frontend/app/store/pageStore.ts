@@ -80,6 +80,7 @@ export const usePageStore = create<PageState>()(
       name: "explore-settings",
       // Only preferences persist. Panel, blog post, focus requests and the clock rate are per-visit.
       partialize: (s) => ({
+        leftPanel: s.leftPanel,
         starsVisible: s.starsVisible,
         orbitsHighlighted: s.orbitsHighlighted,
         scaleMode: s.scaleMode,
