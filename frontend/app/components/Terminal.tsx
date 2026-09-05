@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect, KeyboardEvent } from "react";
 import styles from "./Terminal.module.css";
 import { getCommand, getAllCommands } from "../terminal";
+import { usePageStore } from "../store/pageStore";
 
 type Line = { text: string; type: "input" | "output" };
 
@@ -22,6 +23,21 @@ function linkify(text: string): React.ReactNode {
 
 export default function Terminal() {
   const [lines, setLines] = useState<Line[]>([]);
+  const terminalPush = usePageStore((s) => s.terminalPush);
+  const handledPushSeqRef = useRef(0);
+  useEffect(() => {
+    if (!terminalPush || terminalPush.seq === handledPushSeqRef.current) return;
+    handledPushSeqRef.current = terminalPush.seq;
+    // "__IN__name" renders as an echoed command line ("> name"); everything else is output.
+    setLines((prev) => [
+      ...prev,
+      ...terminalPush.lines.map((text) =>
+        text.startsWith("__IN__")
+          ? { text: `> ${text.slice(6)}`, type: "input" as const }
+          : { text, type: "output" as const }
+      ),
+    ]);
+  }, [terminalPush]);
   const [input, setInput] = useState("");
   const [cursorPos, setCursorPos] = useState(0);
   const bottomRef = useRef<HTMLDivElement>(null);

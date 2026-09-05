@@ -95,18 +95,3 @@
 .statusSolved {
   color: #ffffff;
 }
-
-.next {
-  background: none;
-  border: none;
-  padding: 0;
-  font: inherit;
-  color: rgba(255, 255, 255, 0.5);
-  cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.next:hover {
-  color: #00ff00;
-}

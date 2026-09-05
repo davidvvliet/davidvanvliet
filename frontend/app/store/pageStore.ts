@@ -19,6 +19,9 @@ interface PageState {
   setSecondsPerDay: (seconds: number) => void;
   /** Restore every persisted setting to its default. */
   resetSettings: () => void;
+  /** Lines pushed to the terminal from elsewhere (e.g. the scene). `seq` increments per push. */
+  terminalPush: { lines: string[]; seq: number } | null;
+  pushTerminalLines: (lines: string[]) => void;
   /** Chess: load a new puzzle (query is the Lichess filter string, e.g. "?angle=mate"). */
   puzzleRequest: { query: string; seq: number } | null;
   requestPuzzle: (query: string) => void;
@@ -48,6 +51,9 @@ export const usePageStore = create<PageState>()(
   setScaleMode: (mode) => set({ scaleMode: mode }),
   setSecondsPerDay: (seconds) => set({ secondsPerDay: seconds }),
   resetSettings: () => set({ ...DEFAULT_SETTINGS }),
+  terminalPush: null,
+  pushTerminalLines: (lines) =>
+    set((state) => ({ terminalPush: { lines, seq: (state.terminalPush?.seq ?? 0) + 1 } })),
   puzzleRequest: null,
   requestPuzzle: (query) =>
     set((state) => ({ puzzleRequest: { query, seq: (state.puzzleRequest?.seq ?? 0) + 1 } })),

@@ -14,10 +14,12 @@ const PIECE_IMAGES: { [key: string]: string } = {
 const FILES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 const RANKS = ['8', '7', '6', '5', '4', '3', '2', '1'];
 
-// Lichess random puzzle. The PGN holds initialPly + 1 moves; playing all of
-// them gives the puzzle position, and the solution (UCI moves) starts with
-// the player's move. Verified against the live endpoint.
-const PUZZLE_URL = 'https://lichess.org/api/puzzle/next';
+// Daily puzzle: one of 2,500 vetted Lichess puzzles rated 2000+ (see
+// public/puzzles.json), chosen by the UTC day so everyone sees the same one and
+// it rolls over at midnight UTC. Lichess convention, verified against the
+// database: the FEN has the opponent to move, moves[0] is their setup move,
+// and the solver answers from moves[1].
+const PUZZLES_URL = '/puzzles.json';
 const REPLY_DELAY_MS = 350;
 
 type Puzzle = {
@@ -40,35 +42,45 @@ export default function ChessBoard() {
   const [status, setStatus] = useState<Status>('loading');
   const [wrongSquare, setWrongSquare] = useState<string | null>(null);
   const solutionIndexRef = useRef(0);
+  const loadTokenRef = useRef(0); // ignores stale loads (React dev double-mount, quick retries)
   const puzzleRequest = usePageStore((s) => s.puzzleRequest);
   const handledPuzzleSeqRef = useRef(0);
 
   const refresh = () => setBoard(chess.board());
 
-  const loadPuzzle = useCallback(async (query = '') => {
+  const loadPuzzle = useCallback(async () => {
+    const token = ++loadTokenRef.current;
     setStatus('loading');
     setSelectedSquare(null);
     setValidMoves([]);
     setWrongSquare(null);
     try {
-      const res = await fetch(PUZZLE_URL + query);
+      const res = await fetch(PUZZLES_URL);
+      console.log('[chess] fetched', PUZZLES_URL, res.status);
       if (!res.ok) throw new Error(String(res.status));
-      const data = await res.json();
-      const game = new Chess();
-      for (const san of (data.game.pgn as string).split(' ')) game.move(san);
-      const fen = game.fen();
-      chess.load(fen);
+      const all: { id: string; fen: string; moves: string[]; rating: number }[] = await res.json();
+      const day = Math.floor(Date.now() / 86400000); // UTC day number
+      const data = all[day % all.length];
+      console.log('[chess] day', day, 'index', day % all.length, 'puzzle', data.id, 'rating', data.rating, 'fen', data.fen);
+      // The FEN is the position before the opponent's setup move; apply it in a
+      // scratch instance and load the resulting puzzle position in one step.
+      const setup = data.moves[0];
+      const scratch = new Chess(data.fen);
+      scratch.move({ from: setup.slice(0, 2), to: setup.slice(2, 4), promotion: setup[4] });
+      if (token !== loadTokenRef.current) return; // a newer load took over
+      chess.load(scratch.fen());
       solutionIndexRef.current = 0;
       setPuzzle({
-        id: data.puzzle.id,
-        rating: data.puzzle.rating,
-        solution: data.puzzle.solution,
-        fen,
+        id: data.id,
+        rating: data.rating,
+        solution: data.moves.slice(1),
+        fen: chess.fen(),
         playerColor: chess.turn(),
       });
       setStatus('playing');
-    } catch {
+    } catch (err) {
       // Offline or blocked: fall back to free play from the start position.
+      console.warn('[chess] daily puzzle failed to load, falling back to free play:', err);
       chess.reset();
       setPuzzle(null);
       setStatus('freeplay');
@@ -78,11 +90,11 @@ export default function ChessBoard() {
 
   useEffect(() => { loadPuzzle(); }, [loadPuzzle]);
 
-  // Terminal `puzzle` command.
+  // Terminal `puzzle` command: reload today's puzzle.
   useEffect(() => {
     if (!puzzleRequest || puzzleRequest.seq === handledPuzzleSeqRef.current) return;
     handledPuzzleSeqRef.current = puzzleRequest.seq;
-    loadPuzzle(puzzleRequest.query);
+    loadPuzzle();
   }, [puzzleRequest, loadPuzzle]);
 
   const uci = (m: { from: string; to: string; promotion?: string }) => `${m.from}${m.to}${m.promotion ?? ''}`;
@@ -204,16 +216,12 @@ export default function ChessBoard() {
     status === 'loading' ? 'Loading puzzle...' :
     status === 'freeplay' ? 'Free play' :
     status === 'solved' ? 'Solved' :
-    `${sideToMove} to move`;
+    `Daily puzzle: ${sideToMove} to move`;
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.status}>
         <span className={status === 'solved' ? styles.statusSolved : ''}>{statusText}</span>
-        {puzzle && <span className={styles.statusDim}>{puzzle.rating}</span>}
-        {status !== 'loading' && (
-          <button type="button" className={styles.next} onClick={() => loadPuzzle()}>next</button>
-        )}
       </div>
       <div className={styles.chessBoard}>
         {rows.map((rowIndex) =>

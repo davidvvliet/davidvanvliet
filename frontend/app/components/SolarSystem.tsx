@@ -775,7 +775,7 @@ export function SolarSystem({
     // Turning toward a star: rotates the camera's offset around the focus so the
     // star ends up just beside the focused body's disc (a little past its
     // angular radius), rather than hidden behind it. Distance is kept.
-    let aim: { from: THREE.Vector3; to: THREE.Vector3; t: number; star: (typeof starSprites)[number]; distFrom: number; distTo: number } | null = null;
+    let aim: { from: THREE.Vector3; to: THREE.Vector3; t: number; distFrom: number; distTo: number } | null = null;
     const AIM_SECONDS = 1.0;
     const AIM_MARGIN_RAD = THREE.MathUtils.degToRad(8); // clearance beyond the disc's edge
     // Closer than this the star would land outside the frame (disc ~17 degrees at
@@ -806,8 +806,22 @@ export function SolarSystem({
     // Where the Sun's system fits on screen: its click fly-in, and the basis for the max zoom-out.
     const wideViewDistance = (b: Body) => fitDistance(b.systemRadius + b.radius);
 
-    const setFocus = (next: Body, opts: { zoomTo?: boolean } = {}) => {
+    const shownInTerminal = new Set<string>();
+    const setFocus = (next: Body, opts: { zoomTo?: boolean; fromClick?: boolean } = {}) => {
       hasInteracted = true; // a click or `fly` counts as interaction
+      // Surface photos shown in the terminal the first time a body is focused.
+      const SURFACE_PHOTOS: Record<string, [string, string]> = {
+        Titan: ['/titan-huygens-1.jpg,/titan-huygens-2.jpg,/titan-huygens-3.jpg,/titan-huygens-4.jpg,/titan-huygens-5.jpg,/titan-huygens-6.jpg,/titan-huygens.jpg', "The Huygens lander on Titan, 14 January 2005. My mind was completely blown when I learned we had landed and imaged its surface. One of only four planets or moons we've landed on outside of Earth, the others being the Moon, Mars and Venus."],
+        Venus: ['/venus-venera13.jpg', "Venera 13 on the surface of Venus, 1 March 1982. It survived 127 minutes at 457 degrees C. I find this to be the most impressive accomplishment of the Soviets during the space race."],
+      };
+      const photo = SURFACE_PHOTOS[next.name];
+      if (photo && next !== focus && !shownInTerminal.has(next.name)) {
+        shownInTerminal.add(next.name);
+        // A typed `fly` already echoed its command; a click didn't, so give the
+        // photo the same context the terminal would have printed.
+        const context = opts.fromClick ? [`__IN__${next.name.toLowerCase()}`, `Flying to ${next.name}...`] : [];
+        usePageStore.getState().pushTerminalLines([...context, `__IMG__${photo[0]}`, `__DIM__${photo[1]}`]);
+      }
       clearPinnedStar();
       // Clicking the already-focused body only does something when the camera
       // has drifted far enough away that flying back in is meaningful.
@@ -998,7 +1012,7 @@ export function SolarSystem({
       // 2. A body: make it the reference frame and zoom to it.
       //    Clicking empty space does nothing.
       const body = pickBody(event.clientX, event.clientY);
-      if (body) { setFocus(body, { zoomTo: true }); return; }
+      if (body) { setFocus(body, { zoomTo: true, fromClick: true }); return; }
 
       // 3. A star: turn toward it, same as the terminal.
       const picked = pickStar(event.clientX, event.clientY);
@@ -1164,9 +1178,9 @@ export function SolarSystem({
     // A star: don't travel, turn. The star field is centred on the camera, so a
     // sprite's local position is its direction. Put the camera on the far side
     // of the focus from that direction, so the star sits beside the focused body.
-    const aimAtStar = (star: (typeof starSprites)[number]) => {
+    // Turn toward a sky direction (unit vector in scene space) and pin a label for it.
+    const aimAtDirection = (dir: THREE.Vector3, label: StarInfo) => {
       hasInteracted = true;
-      const dir = star.sprite.position.clone().normalize();
       const from = camera.position.clone().sub(controls.target).normalize();
       // Camera opposite the star would put the star dead behind the body. Tilt
       // that direction by the body's angular radius plus a margin, about an axis
@@ -1178,18 +1192,36 @@ export function SolarSystem({
       let axis = new THREE.Vector3().crossVectors(dir, camera.up).normalize();
       if (axis.lengthSq() < 1e-6) axis = new THREE.Vector3(1, 0, 0);
       const to = dir.clone().negate().applyAxisAngle(axis, -tilt); // negative: star lands above the body
-      aim = { from, to, t: 0, star, distFrom: d, distTo };
-      // Engage the star's label right away, as if hovered. Mouse hover, a drag
-      // or a focus change replaces it as usual.
-      pinnedStar = { name: star.name, lightYears: star.lightYears, spectral: star.spectral, fact: star.fact };
-      hoveredStarRef.current = star.name;
+      aim = { from, to, t: 0, distFrom: d, distTo };
+      // Engage the label right away, as if hovered. Mouse hover, a drag or a
+      // focus change replaces it as usual.
+      pinnedStar = label;
+      hoveredStarRef.current = label.name;
       onStarHover?.(pinnedStar);
     };
+    const aimAtStar = (star: (typeof starSprites)[number]) =>
+      aimAtDirection(star.sprite.position.clone().normalize(), { name: star.name, lightYears: star.lightYears, spectral: star.spectral, fact: star.fact });
+
+    // Equatorial (RA/Dec, degrees) -> scene direction, same frame as the star field.
+    const skyDirection = (raDeg: number, decDeg: number) => {
+      const e = THREE.MathUtils.degToRad(OBLIQUITY_DEG);
+      const ra = THREE.MathUtils.degToRad(raDeg);
+      const dec = THREE.MathUtils.degToRad(decDeg);
+      return new THREE.Vector3()
+        .addScaledVector(new THREE.Vector3(1, 0, 0), Math.cos(dec) * Math.cos(ra))
+        .addScaledVector(new THREE.Vector3(0, Math.sin(e), -Math.cos(e)), Math.cos(dec) * Math.sin(ra))
+        .addScaledVector(new THREE.Vector3(0, Math.cos(e), Math.sin(e)), Math.sin(dec))
+        .normalize();
+    };
+    // Sagittarius A*, the galactic centre: RA 266.4, Dec -29.0 (J2000), beside the Teapot's spout.
+    const GALACTIC_CORE = { name: 'Galactic core', lightYears: 26000, fact: 'This is the direction of the galactic core.' };
+    const GALACTIC_CORE_DIR = skyDirection(266.417, -29.008);
     focusByNameRef.current = (name: string) => {
       const body = bodies.find((b) => b.name.toLowerCase() === name.toLowerCase());
       if (body) { setFocus(body, { zoomTo: true }); return; }
       const star = starSprites.find((s) => s.name.toLowerCase() === name.toLowerCase());
-      if (star) aimAtStar(star);
+      if (star) { aimAtStar(star); return; }
+      if (name.toLowerCase() === 'galactic core') aimAtDirection(GALACTIC_CORE_DIR, GALACTIC_CORE);
     };
     aimAtStarRef.current = aimAtStar;
     // Restore the view saved by a previous scene (scale switch), if any.
