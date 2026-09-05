@@ -5,7 +5,12 @@ import styles from "./Terminal.module.css";
 import { getCommand, getAllCommands } from "../terminal";
 import { usePageStore } from "../store/pageStore";
 
-type Line = { text: string; type: "input" | "output" };
+type Line = { text: string; type: "input" | "output"; restored?: boolean };
+
+// The last few lines and typed commands survive reloads (per browser).
+const HISTORY_KEY = "terminal-history";
+const HISTORY_LINES = 50;
+const HISTORY_COMMANDS = 50;
 
 // Turn bare http(s) URLs in output text into clickable links.
 const URL_RE = /(https?:\/\/[^\s]+)/g;
@@ -48,9 +53,27 @@ export default function Terminal() {
   const historyIndexRef = useRef<number>(0);
   const draftRef = useRef<string>("");
 
+  // Restore the transcript and command history once, then keep them saved.
+  const [hydrated, setHydrated] = useState(false); // saving waits for the restore, so it can't wipe it
+  useEffect(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(HISTORY_KEY) ?? "null");
+      // Replace, don't prepend: React dev mode runs mount effects twice.
+      if (saved?.lines?.length) setLines(saved.lines.map((l: Line) => ({ ...l, restored: true })));
+      if (saved?.commands?.length) { historyRef.current = saved.commands; historyIndexRef.current = saved.commands.length; }
+    } catch { /* no storage, or nothing usable in it */ }
+    setHydrated(true);
+  }, []);
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [lines]);
+    if (!hydrated) return;
+    try {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify({
+        lines: lines.slice(-HISTORY_LINES).map(({ text, type }) => ({ text, type })),
+        commands: historyRef.current.slice(-HISTORY_COMMANDS),
+      }));
+    } catch { /* storage unavailable */ }
+  }, [lines, hydrated]);
 
   const syncCursor = () => {
     const pos = inputRef.current?.selectionStart ?? input.length;
@@ -182,10 +205,28 @@ export default function Terminal() {
   return (
     <div className={styles.terminal} onClick={() => inputRef.current?.focus()}>
       {lines.map((line, i) =>
-        line.type === "output" && line.text.startsWith("__IMG__") ? (
+        line.type === "output" && line.text.startsWith("__VIDEO__") ? (
+          <div key={i} className={styles.imageRow}>
+            <video
+              src={line.text.slice(9)}
+              className={styles.video}
+              autoPlay={!line.restored}
+              muted
+              playsInline
+              preload={line.restored ? "metadata" : "auto"}
+              onLoadedMetadata={(e) => {
+                // Fresh: play at 3x. Restored from a previous visit: park on the last frame.
+                if (line.restored) e.currentTarget.currentTime = Math.max(0, e.currentTarget.duration - 0.05);
+                else e.currentTarget.playbackRate = 3;
+                // The element only gets its height now, after the scroll on push already happened.
+                if (!line.restored) bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+              }}
+            />
+          </div>
+        ) : line.type === "output" && line.text.startsWith("__IMG__") ? (
           <div key={i} className={styles.imageRow}>
             {line.text.slice(7).split(",").map((src, j) => (
-              <img key={j} src={src} alt="" className={styles.poster} />
+              <img key={j} src={src} alt="" className={styles.poster} onLoad={() => { if (!line.restored) bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }} />
             ))}
           </div>
         ) : line.type === "output" && line.text.startsWith("__COL__") ? (

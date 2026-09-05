@@ -1194,7 +1194,7 @@ export function SolarSystem({
     // the simulated date, with a marker at the tip that is itself a focusable body.
     type SegmentCenter = 'Sun' | 'Earth' | 'Moon';
     type Segment = { center: SegmentCenter; points: number[][]; line: THREE.Line; positions: Float32Array; pristine: Float32Array; lastTipIndex: number; group: THREE.Group };
-    type Mission = { spec: (typeof MISSIONS)[number]; segments: Segment[]; active: number; marker: THREE.Mesh; body: Body };
+    type Mission = { spec: (typeof MISSIONS)[number]; segments: Segment[]; active: number; marker: THREE.Mesh; body: Body; arrived: boolean };
     let mission: Mission | null = null;
     const toScene = (x: number, y: number, z: number, out: THREE.Vector3) => out.set(x * orbitScale, z * orbitScale, -y * orbitScale);
     const frameFor = (center: SegmentCenter) => (center === 'Earth' ? earthSystem : center === 'Moon' ? moonFrame : scene);
@@ -1240,7 +1240,7 @@ export function SolarSystem({
       segments[0].group.add(marker);
       const body: Body = { name: spec.name, object: marker, visual: marker, radius: markerRadius, parent: spec.center === 'Earth' ? earthBody : sunBody, systemRadius: 0, scale: 1 };
       bodies.push(body);
-      mission = { spec, segments, active: 0, marker, body };
+      mission = { spec, segments, active: 0, marker, body, arrived: false };
       // Start the clock at the first sample. Focus the craft itself (a cut, not a
       // flight), then ease the camera to the mission's preset: far out and above the
       // ecliptic, keeping the current azimuth. The camera then follows the craft for
@@ -1282,6 +1282,11 @@ export function SolarSystem({
     // Advances the drawn portion of the trajectory to the current date.
     const updateMission = (jd: number) => {
       if (!mission) return;
+      // Arrival footage etc.: pushed to the terminal once, when the clock first reaches the date.
+      if (mission.spec.arrival && !mission.arrived && jd >= mission.spec.arrival.jd) {
+        mission.arrived = true;
+        usePageStore.getState().pushTerminalLines(mission.spec.arrival.lines);
+      }
       // The active segment is the last one that has started; earlier ones are drawn
       // in full, later ones not at all.
       let active = 0;

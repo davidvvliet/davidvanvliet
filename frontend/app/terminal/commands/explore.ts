@@ -12,7 +12,7 @@ const explore: Command = {
       "",
       "__DIM__Credits:",
       "__DIM__JPL Horizons, spacecraft and planet ephemerides: https://ssd.jpl.nasa.gov/horizons/",
-      "__DIM__NASA, JPL and USGS, mission and surface imagery",
+      "__DIM__NASA, JPL and USGS, mission and surface imagery; NASA/JPL-Caltech, Perseverance landing video",
       "__DIM__Apollo Image Archive (ASU), Apollo 17 orbit state vectors: https://apollo.sese.asu.edu/",
       "__DIM__NASA mission reports MSC-02680 and JSC-07904, Apollo 13 and 17 burn and entry conditions",
       "__DIM__John D. Anderson (JPL), Mariner 2 trajectory reconstruction, via Horizons",

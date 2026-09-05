@@ -39,6 +39,13 @@
   border-radius: 0px;
 }
 
+.video {
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  border-radius: 0px;
+}
+
 @media (max-width: 768px) {
   .terminal {
     height: 100%;

@@ -554,6 +554,8 @@ export type MissionSpec = {
   dateFormat?: 'month' | 'day';
   /** Where the path comes from, shown on launch when it is not a plain Horizons ephemeris. */
   note?: string;
+  /** Lines pushed to the terminal once, the first time the clock reaches this date while tracking (e.g. landing footage). */
+  arrival?: { jd: number; lines: string[] };
 };
 export const MISSIONS: MissionSpec[] = [
   { id: 'voyager1', name: 'Voyager 1', file: '/missions/voyager1.json', center: 'Sun', view: { distanceAU: 8, elevationDeg: 28 }, secondsPerDay: 0.1 },
@@ -566,7 +568,9 @@ export const MISSIONS: MissionSpec[] = [
   { id: 'cassini', name: 'Cassini', file: '/missions/cassini.json', center: 'Sun', view: { distanceAU: 8, elevationDeg: 28 }, secondsPerDay: 0.1 },
   { id: 'parker', name: 'Parker Solar Probe', file: '/missions/parker.json', center: 'Sun', view: { distanceAU: 2, elevationDeg: 28 }, secondsPerDay: 0.1 },
   { id: 'mariner2', name: 'Mariner 2', file: '/missions/mariner2.json', center: 'Sun', view: { distanceAU: 2, elevationDeg: 28 }, secondsPerDay: 0.2 },
-  { id: 'perseverance', name: 'Perseverance', file: '/missions/perseverance.json', center: 'Sun', view: { distanceAU: 2, elevationDeg: 28 }, secondsPerDay: 0.2 },
+  { id: 'perseverance', name: 'Perseverance', file: '/missions/perseverance.json', center: 'Sun', view: { distanceAU: 2, elevationDeg: 28 }, secondsPerDay: 0.2,
+    // Touchdown 2021-02-18 20:50 UTC (the trail's last sample on the surface); the clip is 0:13-3:11 of NASA's landing video.
+    arrival: { jd: 2459264.3681, lines: ['Arrival at Mars.', '__VIDEO__/perseverance-landing.webm', '__DIM__Perseverance descending to Jezero Crater, 18 February 2021, at 3x speed. Video: NASA/JPL-Caltech.'] } },
   // No ephemeris exists: integrated from the injection state in JPL TR 32-740, the midcourse burn shot onto the report's encounter table.
   { id: 'mariner4', name: 'Mariner 4', file: '/missions/mariner4.json', center: 'Sun', view: { distanceAU: 2, elevationDeg: 28 }, secondsPerDay: 0.2,
     note: 'Reconstructed from the injection state and encounter conditions in JPL Technical Report 32-740; no tracking data exists.' },
