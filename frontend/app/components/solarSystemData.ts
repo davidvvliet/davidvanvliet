@@ -379,6 +379,16 @@ export const STARS: StarSpec[] = [
   { name: 'Keid', raDeg: 63.818, decDeg: -7.653, magnitude: 4.43, spectral: 'K', lightYears: 16.3 },
 ];
 
+/** Apollo landing sites, for the hidden `apollo` command. Selenographic lat/lon (east positive). */
+export const APOLLO_SITES = [
+  { mission: 'Apollo 11', year: 1969, site: 'Tranquility Base', lat: 0.674, lon: 23.473 },
+  { mission: 'Apollo 12', year: 1969, site: 'Ocean of Storms', lat: -3.012, lon: -23.421 },
+  { mission: 'Apollo 14', year: 1971, site: 'Fra Mauro', lat: -3.646, lon: -17.471 },
+  { mission: 'Apollo 15', year: 1971, site: 'Hadley Rille', lat: 26.132, lon: 3.634 },
+  { mission: 'Apollo 16', year: 1972, site: 'Descartes Highlands', lat: -8.973, lon: 15.501 },
+  { mission: 'Apollo 17', year: 1972, site: 'Taurus-Littrow', lat: 20.191, lon: 30.772 },
+];
+
 /** Every star name, for the terminal's `fly` command (which turns toward stars). */
 export const STAR_NAMES: string[] = STARS.map((s) => s.name);
 

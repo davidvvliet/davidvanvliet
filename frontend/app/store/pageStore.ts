@@ -9,6 +9,8 @@ interface PageState {
   /** Body the solar system should fly to. `seq` increments so repeat requests fire. */
   focusRequest: { name: string; seq: number } | null;
   requestFocus: (name: string) => void;
+  apolloVisible: boolean; // Apollo landing-site dots on the Moon (hidden `apollo` command)
+  setApolloVisible: (visible: boolean) => void;
   starsVisible: boolean;
   setStarsVisible: (visible: boolean) => void;
   orbitsHighlighted: boolean; // orbit rings drawn bright white instead of faint gray
@@ -51,6 +53,8 @@ export const usePageStore = create<PageState>()(
   setScaleMode: (mode) => set({ scaleMode: mode }),
   setSecondsPerDay: (seconds) => set({ secondsPerDay: seconds }),
   resetSettings: () => set({ ...DEFAULT_SETTINGS }),
+  apolloVisible: false,
+  setApolloVisible: (visible) => set({ apolloVisible: visible }),
   terminalPush: null,
   pushTerminalLines: (lines) =>
     set((state) => ({ terminalPush: { lines, seq: (state.terminalPush?.seq ?? 0) + 1 } })),

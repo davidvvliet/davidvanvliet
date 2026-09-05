@@ -12,6 +12,8 @@ const help: Command = {
     return [
       "Available commands:",
       ...commands.map((cmd) => `__COL__${label(cmd)}__COL__${cmd.description}`),
+      "",
+      "__GRAY__There are also hidden commands!",
     ];
   },
 };

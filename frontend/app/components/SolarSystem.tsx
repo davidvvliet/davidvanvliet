@@ -4,7 +4,7 @@ import React, { useRef, useEffect, useCallback, useMemo } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { usePageStore } from '../store/pageStore';
-import { PLANETS, MOONS, STARS, SPECTRAL_COLORS } from './solarSystemData';
+import { PLANETS, MOONS, STARS, SPECTRAL_COLORS, APOLLO_SITES } from './solarSystemData';
 
 interface PersonaDot {
   id: number;
@@ -273,6 +273,9 @@ export function SolarSystem({
   const autoRotateRef = useRef<boolean>(true);
   const hoverPausedRef = useRef<boolean>(false); // Earth's spin pauses while the pointer is over it
   const dotsRef = useRef<THREE.Mesh[]>([]);
+  const moonDotsRef = useRef<THREE.Mesh[]>([]); // Apollo site hitboxes (kept apart from the Earth dots effect)
+  const apolloGroupRef = useRef<THREE.Group | null>(null);
+  const apolloVisible = usePageStore((s) => s.apolloVisible);
   const raycasterRef = useRef<THREE.Raycaster>(new THREE.Raycaster());
   const mouseRef = useRef<THREE.Vector2>(new THREE.Vector2());
   const initializedRef = useRef<boolean>(false);
@@ -407,6 +410,39 @@ export function SolarSystem({
     // points away from Earth here; turn it so the near side faces Earth.
     moon.rotation.y = Math.PI;
     moonPivot.add(moon);
+
+    // Apollo landing sites: green dots on the Moon, like Earth's location dots.
+    // Placed via the sphere's own texture mapping (u = lon, v = lat), so they
+    // sit on the map features regardless of how the mesh is turned.
+    const apolloGroup = new THREE.Group();
+    apolloGroup.visible = usePageStore.getState().apolloVisible;
+    apolloGroupRef.current = apolloGroup;
+    moon.add(apolloGroup);
+    const apolloDisposables: (THREE.BufferGeometry | THREE.Material)[] = [];
+    APOLLO_SITES.forEach((site, i) => {
+      const u = site.lon / 360 + 0.5;
+      const v = (90 - site.lat) / 180;
+      const r = MOON_RADIUS + 0.004;
+      const pos = new THREE.Vector3(
+        -r * Math.cos(u * 2 * Math.PI) * Math.sin(v * Math.PI),
+        r * Math.cos(v * Math.PI),
+        r * Math.sin(u * 2 * Math.PI) * Math.sin(v * Math.PI),
+      );
+      const size = MOON_RADIUS * 0.025;
+      const g = new THREE.SphereGeometry(size, 8, 8);
+      const m = new THREE.MeshBasicMaterial({ color: '#00ff00', transparent: true, opacity: 0.9 });
+      const dot = new THREE.Mesh(g, m);
+      dot.position.copy(pos);
+      apolloGroup.add(dot);
+      const hg = new THREE.SphereGeometry(size * 4, 8, 8);
+      const hm = new THREE.MeshBasicMaterial({ visible: false });
+      const hit = new THREE.Mesh(hg, hm);
+      hit.position.copy(pos);
+      hit.userData = { dot: { id: 1000 + i, lat: site.lat, lon: site.lon, color: '#00ff00', size: 1, label: site.mission, subtitle: String(site.year), description: site.site } };
+      apolloGroup.add(hit);
+      moonDotsRef.current.push(hit);
+      apolloDisposables.push(g, m, hg, hm);
+    });
 
     // Sun: a solid sphere at the origin plus a soft additive glow sprite that
     // always faces the camera.
@@ -946,7 +982,10 @@ export function SolarSystem({
       const raycaster = new THREE.Raycaster();
       raycaster.setFromCamera(mouse, camera);
 
-      const intersects = raycaster.intersectObjects(dotsRef.current, false);
+      const intersects = raycaster.intersectObjects(
+        apolloGroupRef.current?.visible ? [...dotsRef.current, ...moonDotsRef.current] : dotsRef.current,
+        false,
+      );
 
       if (intersects.length > 0 && intersects[0].object.userData.dot) {
         const dot = intersects[0].object.userData.dot as PersonaDot;
@@ -1278,6 +1317,9 @@ export function SolarSystem({
       });
       moonGeometry.dispose();
       moonMaterial.dispose();
+      apolloDisposables.forEach((d) => d.dispose());
+      moonDotsRef.current = [];
+      apolloGroupRef.current = null;
       moonTexture.dispose();
       moonPivotRef.current = null;
       moonMaterialRef.current = null;
@@ -1307,6 +1349,11 @@ export function SolarSystem({
   useEffect(() => {
     setOrbitStyleRef.current?.(orbitsHighlighted);
   }, [orbitsHighlighted]);
+
+  // Apollo landing sites on/off (terminal `apollo` command).
+  useEffect(() => {
+    if (apolloGroupRef.current) apolloGroupRef.current.visible = apolloVisible;
+  }, [apolloVisible]);
 
   // Show/hide the stars (terminal `stars` command).
   useEffect(() => {
