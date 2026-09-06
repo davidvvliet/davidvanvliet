@@ -61,6 +61,7 @@ function VideoLine({ src, restored, onSized }: { src: string; restored?: boolean
 export default function Terminal() {
   const [lines, setLines] = useState<Line[]>([]);
   const terminalPush = usePageStore((s) => s.terminalPush);
+  const transcriptPlaying = usePageStore((s) => s.transcriptPlaying); // prompt hidden while a mission transcript plays
   const handledPushSeqRef = useRef(0);
   useEffect(() => {
     if (!terminalPush || terminalPush.seq === handledPushSeqRef.current) return;
@@ -183,6 +184,7 @@ export default function Terminal() {
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (transcriptPlaying) { e.preventDefault(); return; }
     if (e.key === "Tab") {
       e.preventDefault();
       handleTab();
@@ -280,7 +282,7 @@ export default function Terminal() {
           </div>
         )
       )}
-      <div className={styles.inputRow}>
+      <div className={styles.inputRow} style={transcriptPlaying ? { display: "none" } : undefined}>
         <span className={styles.prompt}>&gt;</span>
         <div className={styles.inputWrapper}>
           <span className={styles.inputText}>{beforeCaret}</span>

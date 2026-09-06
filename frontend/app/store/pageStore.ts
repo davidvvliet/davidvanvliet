@@ -36,6 +36,9 @@ interface PageState {
   /** Lines pushed to the terminal from elsewhere (e.g. the scene). `seq` increments per push. */
   terminalPush: { lines: string[]; seq: number } | null;
   pushTerminalLines: (lines: string[]) => void;
+  /** True while a mission transcript is playing in real time: the terminal hides its prompt. */
+  transcriptPlaying: boolean;
+  setTranscriptPlaying: (on: boolean) => void;
 }
 
 /** Defaults for the settings that persist to local storage. */
@@ -72,6 +75,8 @@ export const usePageStore = create<PageState>()(
   requestDate: (jd) => set((state) => ({ dateRequest: { jd, seq: (state.dateRequest?.seq ?? 0) + 1 } })),
   apolloVisible: false,
   setApolloVisible: (visible) => set({ apolloVisible: visible }),
+  transcriptPlaying: false,
+  setTranscriptPlaying: (on) => set({ transcriptPlaying: on }),
   terminalPush: null,
   pushTerminalLines: (lines) =>
     set((state) => ({ terminalPush: { lines, seq: (state.terminalPush?.seq ?? 0) + 1 } })),

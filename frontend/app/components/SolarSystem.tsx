@@ -1336,6 +1336,7 @@ export function SolarSystem({
     let lastTime = performance.now();
     let lastViewSaveAt = 0;
     let lastViewSaved = '';
+    let transcriptPlaying = false;
     let earthSpinBank = 0;
     let lastEarthSpinBase = THREE.MathUtils.degToRad(gmstDeg(simJD) - 180);
     const animate = () => {
@@ -1350,8 +1351,9 @@ export function SolarSystem({
       const before = simJD;
       // Inside a mission's real-time window the clock runs at one second per second.
       const rt = mission?.spec.realtime;
-      const realtime = rt && before >= rt.fromJD && before < rt.toJD;
-      simJD += delta / (realtime ? 86400 : secondsPerDay);
+      const realtime = !!(rt && before >= rt.fromJD && before < rt.toJD);
+      simJD += delta / (realtime ? 86400 / (rt.speed ?? 1) : secondsPerDay);
+      if (realtime !== transcriptPlaying) { transcriptPlaying = realtime; usePageStore.getState().setTranscriptPlaying(realtime); }
       // A fast clock would step clean over a window of seconds: land on its start instead.
       if (rt && before < rt.fromJD && simJD > rt.fromJD) simJD = rt.fromJD;
       // A tracked mission freezes the clock at its last sample (a `date` past it runs on).
@@ -1383,7 +1385,8 @@ export function SolarSystem({
       // banked so it resumes without a jump (the day/night side then lags by it).
       if (globeRef.current) {
         const base = THREE.MathUtils.degToRad(gmstDeg(simJD) - 180); // increases with time: prograde
-        if (!(autoRotateRef.current && !hoverPausedRef.current)) {
+        // A hover or drag pauses the spin, but not while a mission is running: the clock leads then.
+        if (!mission && !(autoRotateRef.current && !hoverPausedRef.current)) {
           earthSpinBank += base - lastEarthSpinBase; // hold still: bank what the clock advanced
         }
         lastEarthSpinBase = base;
@@ -1658,6 +1661,7 @@ export function SolarSystem({
       sunGlowMaterialRef.current = null;
       planetDisposables.forEach(({ geometry, material }) => { geometry.dispose(); material.dispose(); });
       clearMission();
+      if (transcriptPlaying) usePageStore.getState().setTranscriptPlaying(false);
       trackRef.current = null;
       starSprites.forEach(({ sprite }) => sprite.material.dispose());
       starTexture.dispose();
