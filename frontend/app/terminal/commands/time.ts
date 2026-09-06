@@ -5,15 +5,20 @@ import { usePageStore } from "../../store/pageStore";
 const REAL_SECONDS_PER_DAY = 86400;
 const MIN_SECONDS_PER_DAY = 0.05; // below ~33ms Earth spins more than half a turn per frame at 60 fps and strobes
 
-// "60", "60s", "10ms", "2m", "1h", "real"
+// "60", "60s", "10ms", "2m", "2 minutes", "1.5 hours", "real"
+const UNIT_SECONDS: Record<string, number> = {
+  ms: 0.001, millisecond: 0.001, milliseconds: 0.001,
+  s: 1, sec: 1, secs: 1, second: 1, seconds: 1,
+  m: 60, min: 60, mins: 60, minute: 60, minutes: 60,
+  h: 3600, hr: 3600, hrs: 3600, hour: 3600, hours: 3600,
+};
 function parseSeconds(input: string): number | null {
   if (input === "real") return REAL_SECONDS_PER_DAY;
-  const m = /^(\d+(?:\.\d+)?)\s*(ms|s|m|h)?$/.exec(input);
+  const m = /^(\d+(?:\.\d+)?)\s*([a-z]*)$/.exec(input);
   if (!m) return null;
-  const n = parseFloat(m[1]);
-  const unit = m[2] ?? "s";
-  const factor = unit === "ms" ? 0.001 : unit === "m" ? 60 : unit === "h" ? 3600 : 1;
-  return n * factor;
+  const factor = m[2] ? UNIT_SECONDS[m[2]] : 1;
+  if (factor === undefined) return null;
+  return parseFloat(m[1]) * factor;
 }
 
 function describe(seconds: number): string {
@@ -36,8 +41,9 @@ const time: Command = {
         `One Earth day currently takes ${describe(store.secondsPerDay)}.`,
       ];
     }
-    const seconds = parseSeconds(args[0].toLowerCase());
-    if (seconds === null) return [`Couldn't read "${args[0]}". Use a number with ms, s, m or h, or "real".`];
+    const input = args.join(" ").trim().toLowerCase(); // "2 minutes" arrives as two words
+    const seconds = parseSeconds(input);
+    if (seconds === null) return [`Couldn't read "${input}". Use a number with ms, s, m or h, or "real".`];
     if (seconds < MIN_SECONDS_PER_DAY) return ["That's too fast matey. Minimum is 50ms per day."];
     store.setSecondsPerDay(seconds);
     return [`One Earth day now takes ${describe(seconds)}.`];

@@ -577,7 +577,9 @@ export const MISSIONS: MissionSpec[] = [
   { id: 'mariner4', name: 'Mariner 4', file: '/missions/mariner4.json', center: 'Sun', view: { distanceAU: 2, elevationDeg: 28 }, secondsPerDay: 0.2,
     note: 'Reconstructed from the injection state and encounter conditions in JPL Technical Report 32-740; no tracking data exists.' },
   // Earth-centred: the path is drawn in Earth's moving frame. 0.006 AU is ~2.3 Earth-Moon distances.
-  { id: 'artemis2', name: 'Artemis II', file: '/missions/artemis2.json', center: 'Earth', view: { distanceAU: 0.006, elevationDeg: 28 }, secondsPerDay: 10, dateFormat: 'day' },
+  { id: 'artemis2', name: 'Artemis II', file: '/missions/artemis2.json', center: 'Earth', view: { distanceAU: 0.006, elevationDeg: 28 }, secondsPerDay: 10, dateFormat: 'day',
+    // NASA image art002e012278 ("Sill Life"), taken 2026-04-06 22:10:17 UTC per its EXIF, 49 minutes before closest approach.
+    cues: [{ jd: 2461137.4238, lines: ['__IMG__/artemis2-moon.jpg', '__DIM__Artemis II takes my laptop homescreen photo here. Photo: NASA.'] }] },
   // Apollo: no ephemeris exists. 17: the lunar orbit is the metric-camera state
   // vectors (Apollo Image Archive, ASU) and the translunar legs are integrated between
   // the injection and entry conditions in the NASA mission reports. 13: integrated burn
@@ -599,6 +601,8 @@ export const MISSIONS: MissionSpec[] = [
       { jd: 2440690.63104, lines: ['__TIMED__Lousma [CAPCOM]: Roger. Main B Undervolt.__TIMED__055:55:42'] },
     ] : [
       { jd: 0, lines: ['__IMG__/apollo17-crew.jpg', '__DIM__The Apollo 17 crew: Gene Cernan, Harrison Schmitt and Ron Evans. Photo: NASA.'] },
+      // AS17-134-20384: Cernan's portrait of Schmitt with the flag and Earth, 118:25:54 GET (ALSJ), 1972-12-12 03:58:54 UTC.
+      { jd: 2441663.6659, lines: ['__IMG__/apollo17-flag.jpg', '__DIM__Gene Cernan takes my laptop homescreen photo here. Photo: NASA.'] },
     ],
     // The clock runs at twice true speed from Swigert's call to Lousma's acknowledgement, so the calls land with their real gaps, halved.
     realtime: n === '13' ? { fromJD: 2440690.63078, toJD: 2440690.63104, speed: 2 } : undefined,
