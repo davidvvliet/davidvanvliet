@@ -101,6 +101,20 @@
   flex-shrink: 0;
 }
 
+/* Quote + time: the text wraps within the panel, the time stays in a column on the right. */
+.timedRow {
+  display: flex;
+  gap: 1rem;
+  align-items: baseline;
+}
+
+.timedText {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+}
+
 .prompt {
   color: white;
   flex-shrink: 0;

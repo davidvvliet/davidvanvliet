@@ -1197,7 +1197,7 @@ export function SolarSystem({
     // the simulated date, with a marker at the tip that is itself a focusable body.
     type SegmentCenter = 'Sun' | 'Earth' | 'Moon';
     type Segment = { center: SegmentCenter; points: number[][]; line: THREE.Line; positions: Float32Array; pristine: Float32Array; lastTipIndex: number; group: THREE.Group };
-    type Mission = { spec: (typeof MISSIONS)[number]; segments: Segment[]; active: number; marker: THREE.Mesh; body: Body; arrived: boolean };
+    type Mission = { spec: (typeof MISSIONS)[number]; segments: Segment[]; active: number; marker: THREE.Mesh; body: Body; cuesFired: number };
     let mission: Mission | null = null;
     const toScene = (x: number, y: number, z: number, out: THREE.Vector3) => out.set(x * orbitScale, z * orbitScale, -y * orbitScale);
     const frameFor = (center: SegmentCenter) => (center === 'Earth' ? earthSystem : center === 'Moon' ? moonFrame : scene);
@@ -1243,7 +1243,7 @@ export function SolarSystem({
       segments[0].group.add(marker);
       const body: Body = { name: spec.name, object: marker, visual: marker, radius: markerRadius, parent: spec.center === 'Earth' ? earthBody : sunBody, systemRadius: 0, scale: 1 };
       bodies.push(body);
-      mission = { spec, segments, active: 0, marker, body, arrived: false };
+      mission = { spec, segments, active: 0, marker, body, cuesFired: 0 };
       // Start the clock at the first sample. Focus the craft itself (a cut, not a
       // flight), then ease the camera to the mission's preset: far out and above the
       // ecliptic, keeping the current azimuth. The camera then follows the craft for
@@ -1285,11 +1285,16 @@ export function SolarSystem({
     // Advances the drawn portion of the trajectory to the current date.
     const updateMission = (jd: number) => {
       if (!mission) return;
-      // Arrival footage etc.: pushed to the terminal once, when the clock first reaches the date.
-      if (mission.spec.arrival && !mission.arrived && jd >= mission.spec.arrival.jd) {
-        mission.arrived = true;
-        usePageStore.getState().pushTerminalLines(mission.spec.arrival.lines);
+      // Timed cues (landing footage, radio calls): each pushed once, when the clock first reaches its date.
+      // Several can fall due in one frame; they go out as one push, since the
+      // terminal only sees the last push made within a frame.
+      const cues = mission.spec.cues;
+      const due: string[] = [];
+      while (cues && mission.cuesFired < cues.length && jd >= cues[mission.cuesFired].jd) {
+        due.push(...cues[mission.cuesFired].lines);
+        mission.cuesFired++;
       }
+      if (due.length) usePageStore.getState().pushTerminalLines(due);
       // The active segment is the last one that has started; earlier ones are drawn
       // in full, later ones not at all.
       let active = 0;
@@ -1343,7 +1348,12 @@ export function SolarSystem({
       const jump = dateRequestRef.current;
       if (jump !== null) { simJD = jump; dateRequestRef.current = null; }
       const before = simJD;
-      simJD += delta / secondsPerDay;
+      // Inside a mission's real-time window the clock runs at one second per second.
+      const rt = mission?.spec.realtime;
+      const realtime = rt && before >= rt.fromJD && before < rt.toJD;
+      simJD += delta / (realtime ? 86400 : secondsPerDay);
+      // A fast clock would step clean over a window of seconds: land on its start instead.
+      if (rt && before < rt.fromJD && simJD > rt.fromJD) simJD = rt.fromJD;
       // A tracked mission freezes the clock at its last sample (a `date` past it runs on).
       if (mission) {
         const last = mission.segments[mission.segments.length - 1].points;

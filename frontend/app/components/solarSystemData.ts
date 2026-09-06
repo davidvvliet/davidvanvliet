@@ -554,8 +554,10 @@ export type MissionSpec = {
   dateFormat?: 'month' | 'day';
   /** Where the path comes from, shown on launch when it is not a plain Horizons ephemeris. */
   note?: string;
-  /** Lines pushed to the terminal once, the first time the clock reaches this date while tracking (e.g. landing footage). */
-  arrival?: { jd: number; lines: string[] };
+  /** Timed cues: each set of lines is pushed to the terminal once, the first time the clock reaches its date while tracking. */
+  cues?: { jd: number; lines: string[] }[];
+  /** While the clock is inside this window it runs at true speed (one second per second), whatever `time` is set to. */
+  realtime?: { fromJD: number; toJD: number };
 };
 export const MISSIONS: MissionSpec[] = [
   { id: 'voyager1', name: 'Voyager 1', file: '/missions/voyager1.json', center: 'Sun', view: { distanceAU: 8, elevationDeg: 28 }, secondsPerDay: 0.1 },
@@ -570,7 +572,7 @@ export const MISSIONS: MissionSpec[] = [
   { id: 'mariner2', name: 'Mariner 2', file: '/missions/mariner2.json', center: 'Sun', view: { distanceAU: 2, elevationDeg: 28 }, secondsPerDay: 0.2 },
   { id: 'perseverance', name: 'Perseverance', file: '/missions/perseverance.json', center: 'Sun', view: { distanceAU: 2, elevationDeg: 28 }, secondsPerDay: 0.2,
     // Touchdown 2021-02-18 20:50 UTC (the trail's last sample on the surface); the clip is 0:13-3:11 of NASA's landing video.
-    arrival: { jd: 2459264.3681, lines: ['Arrival at Mars.', '__VIDEO__/perseverance-landing.webm', '__DIM__Perseverance descending to Jezero Crater, 18 February 2021, at 3x speed. Video: NASA/JPL-Caltech.'] } },
+    cues: [{ jd: 2459264.3681, lines: ['Arrival at Mars.', '__VIDEO__/perseverance-landing.webm', '__DIM__Perseverance descending to Jezero Crater, 18 February 2021, at 3x speed. Video: NASA/JPL-Caltech.'] }] },
   // No ephemeris exists: integrated from the injection state in JPL TR 32-740, the midcourse burn shot onto the report's encounter table.
   { id: 'mariner4', name: 'Mariner 4', file: '/missions/mariner4.json', center: 'Sun', view: { distanceAU: 2, elevationDeg: 28 }, secondsPerDay: 0.2,
     note: 'Reconstructed from the injection state and encounter conditions in JPL Technical Report 32-740; no tracking data exists.' },
@@ -581,12 +583,24 @@ export const MISSIONS: MissionSpec[] = [
   // the injection and entry conditions in the NASA mission reports. 13: integrated burn
   // to burn between the mission report's tabulated states (no orbit data exists).
   ...([
-    ['13', 'Every leg is reconstructed between the burn conditions tabulated in the mission report; no tracking data exists. The path starts at translunar injection.'],
-    ['17', undefined],
-  ] as const).map(([n, note]) => ({
+    ['13'], ['17'],
+  ] as const).map(([n]) => ({
     id: `apollo${n}`, name: `Apollo ${n}`, file: `/missions/apollo${n}.json`, center: 'Earth' as const,
     view: { distanceAU: 0.006, elevationDeg: 28 }, secondsPerDay: 10, dateFormat: 'day' as const,
-    note: note ?? 'Lunar orbit from the metric-camera state vectors (Apollo Image Archive). The legs to and from the Moon are reconstructed between the injection and entry conditions in the mission report; the path starts at translunar injection.',
+    // Apollo 13: the oxygen tank rupture (mission report MSC-02680, 55:54:53 GET) and the
+    // air-to-ground calls that followed, verbatim from the Apollo Flight Journal transcript.
+    // Crew portrait at launch (NASA), then for 13 the tank rupture and the calls that followed.
+    cues: n === '13' ? [
+      { jd: 0, lines: ['__IMG__/apollo13-crew.jpg', '__DIM__The Apollo 13 crew: Fred Haise, Jim Lovell and Ken Mattingly. Photo: NASA.'] },
+      { jd: 2440690.63047, lines: ['__DIM__**Oxygen tank 2 ruptures**'] },
+      { jd: 2440690.63078, lines: ["__TIMED__Swigert: Okay, Houston, we've had a problem here.__TIMED__055:55:19"] },
+      { jd: 2440690.63088, lines: ['__TIMED__Lousma: This is Houston. Say again, please.__TIMED__055:55:28'] },
+      { jd: 2440690.63096, lines: ["__TIMED__Lovell: Ah, Houston, we've had a problem. We've had a Main B Bus Undervolt.__TIMED__055:55:35"] },
+    ] : [
+      { jd: 0, lines: ['__IMG__/apollo17-crew.jpg', '__DIM__The Apollo 17 crew: Gene Cernan, Harrison Schmitt and Ron Evans. Photo: NASA.'] },
+    ],
+    // The clock runs at true speed from Swigert's call until just after Lovell's, so the calls land with their real gaps.
+    realtime: n === '13' ? { fromJD: 2440690.63078, toJD: 2440690.63102 } : undefined,
   })),
 ];
 
