@@ -602,7 +602,7 @@ export const MISSIONS: MissionSpec[] = [
     ] : [
       { jd: 0, lines: ['__IMG__/apollo17-crew.jpg', '__DIM__The Apollo 17 crew: Gene Cernan, Harrison Schmitt and Ron Evans. Photo: NASA.'] },
       // AS17-134-20384: Cernan's portrait of Schmitt with the flag and Earth, 118:25:54 GET (ALSJ), 1972-12-12 03:58:54 UTC.
-      { jd: 2441663.6659, lines: ['__IMG__/apollo17-flag.jpg', '__DIM__Gene Cernan takes my laptop homescreen photo here. Photo: NASA.'] },
+      { jd: 2441663.6659, lines: ['__IMG__/apollo17-flag.jpg', '__DIM__Gene Cernan takes my phone\'s homescreen photo here. Photo: NASA.'] },
     ],
     // The clock runs at twice true speed from Swigert's call to Lousma's acknowledgement, so the calls land with their real gaps, halved.
     realtime: n === '13' ? { fromJD: 2440690.63078, toJD: 2440690.63104, speed: 2 } : undefined,
