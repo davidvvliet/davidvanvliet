@@ -119,7 +119,7 @@ for (const name of ['Miranda', 'Ariel', 'Umbriel', 'Titania', 'Oberon']) {
   BODY_FACTS[name] = URANIAN_MOON_FACT;
 }
 
-/** Every focusable body name, for the terminal's `fly` command. */
+/** Every focusable body name, for the terminal's `focus` command. */
 export const BODY_NAMES: string[] = ['Sun', 'Mercury', 'Venus', 'Earth', 'Moon', ...PLANETS.filter((p) => !['Mercury', 'Venus'].includes(p.name)).map((p) => p.name), ...MOONS.map((m) => m.name)];
 
 // --- Stars ---
@@ -615,7 +615,7 @@ export const APOLLO_SITES = [
   { mission: 'Apollo 17', year: 1972, site: 'Taurus-Littrow', lat: 20.191, lon: 30.772 },
 ];
 
-/** Every star name, for the terminal's `fly` command (which turns toward stars). */
+/** Every star name, for the terminal's `focus` command (which turns toward stars). */
 export const STAR_NAMES: string[] = STARS.map((s) => s.name);
 
 // Approximate blackbody colors by spectral class.

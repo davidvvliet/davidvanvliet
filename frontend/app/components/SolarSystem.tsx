@@ -932,7 +932,7 @@ export function SolarSystem({
     // Closer than this the star would land outside the frame (disc ~17 degrees at
     // the close-up + margin > the 25 degree half-height), so ease out to it first.
     const AIM_MIN_RADII = 8;
-    // A star label engaged by `fly` stays pinned until a drag/zoom or focus change;
+    // A star label engaged by `focus` stays pinned until a drag/zoom or focus change;
     // mouse hover can temporarily replace it but not clear it.
     type StarInfo = { name: string; lightYears: number; spectral?: string; fact?: string };
     let pinnedStar: StarInfo | null = null;
@@ -959,7 +959,7 @@ export function SolarSystem({
 
     const shownInTerminal = new Set<string>();
     const setFocus = (next: Body, opts: { zoomTo?: boolean; fromClick?: boolean } = {}) => {
-      hasInteracted = true; // a click or `fly` counts as interaction
+      hasInteracted = true; // a click or `focus` counts as interaction
       // Surface photos shown in the terminal the first time a body is focused.
       const SURFACE_PHOTOS: Record<string, [string, string]> = {
         Titan: ['/titan-huygens-1.jpg,/titan-huygens-2.jpg,/titan-huygens-3.jpg,/titan-huygens-4.jpg,/titan-huygens-5.jpg,/titan-huygens-6.jpg,/titan-huygens.jpg', "The Huygens lander on Titan, 14 January 2005. My mind was completely blown when I learned we had landed and imaged its surface. One of only four planets or moons we've landed on outside of Earth, the others being the Moon, Mars and Venus."],
@@ -968,7 +968,7 @@ export function SolarSystem({
       const photo = SURFACE_PHOTOS[next.name];
       if (photo && next !== focus && !shownInTerminal.has(next.name)) {
         shownInTerminal.add(next.name);
-        // A typed `fly` already echoed its command; a click didn't, so give the
+        // A typed `focus` already echoed its command; a click didn't, so give the
         // photo the same context the terminal would have printed.
         const context = opts.fromClick ? [`__IN__${next.name.toLowerCase()}`, `Flying to ${next.name}...`] : [];
         usePageStore.getState().pushTerminalLines([...context, `__IMG__${photo[0]}`, `__DIM__${photo[1]}`]);
@@ -1529,7 +1529,7 @@ export function SolarSystem({
       resizeObserver.observe(mount);
     }
 
-    // Expose focus-by-name for the terminal's `fly` command, and apply any
+    // Expose focus-by-name for the terminal's `focus` command, and apply any
     // request that arrived before the scene existed (e.g. from another view).
     // A star: don't travel, turn. The star field is centred on the camera, so a
     // sprite's local position is its direction. Put the camera on the far side
