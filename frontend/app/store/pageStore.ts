@@ -43,8 +43,8 @@ interface PageState {
 
 /** Defaults for the settings that persist to local storage. */
 export const DEFAULT_SETTINGS = {
-  starsVisible: false,
-  orbitsHighlighted: false,
+  starsVisible: true,
+  orbitsHighlighted: true,
   scaleMode: "compact" as const,
   secondsPerDay: 10,
 };

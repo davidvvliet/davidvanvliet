@@ -5,7 +5,7 @@ import { usePageStore } from "../../store/pageStore";
 const stars: Command = {
   name: "stars",
   category: "explore",
-  description: "Light the sky",
+  description: "Toggle stars",
   execute: (args) => {
     const store = usePageStore.getState();
     const arg = args[0]?.toLowerCase();

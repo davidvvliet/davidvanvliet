@@ -5,7 +5,7 @@ import { usePageStore } from "../../store/pageStore";
 const orbits: Command = {
   name: "orbits",
   category: "explore",
-  description: "Show orbit paths",
+  description: "Toggle orbit paths",
   execute: (args) => {
     const store = usePageStore.getState();
     const arg = args[0]?.toLowerCase();
