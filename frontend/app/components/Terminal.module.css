@@ -44,6 +44,25 @@
   max-width: 420px;
   height: auto;
   border-radius: 0px;
+  display: block;
+}
+
+.videoWrap {
+  position: relative;
+  display: inline-block;
+  max-width: 420px;
+  width: 100%;
+}
+
+/* Footage left, bottom-right of the video. */
+.videoCountdown {
+  position: absolute;
+  right: 0.4rem;
+  bottom: 0.4rem;
+  font-family: var(--font-roboto-mono);
+  font-size: 0.75rem;
+  color: rgba(0, 255, 0, 0.6);
+  pointer-events: none;
 }
 
 @media (max-width: 768px) {

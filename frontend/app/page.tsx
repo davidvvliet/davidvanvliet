@@ -11,7 +11,8 @@ import AsciiResume from './components/AsciiResume';
 import BlogPost from './components/BlogPost';
 import styles from './page.module.css';
 import { usePageStore } from './store/pageStore';
-import { BODY_FACTS, MISSIONS } from './components/solarSystemData';
+import { BODY_FACTS } from './components/solarSystemData';
+import { MISSIONS } from './missions';
 
 const SolarSystem = dynamic(() => import('./components/SolarSystem').then(mod => mod.SolarSystem), {
   ssr: false,

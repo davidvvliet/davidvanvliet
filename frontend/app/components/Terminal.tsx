@@ -30,9 +30,55 @@ function linkify(text: string): React.ReactNode {
 // when it ends, its source is dropped (releasing the decoder and buffers) and the
 // poster, the last frame, stays. Restored from a previous visit: poster only,
 // nothing is fetched.
-function VideoLine({ src, restored, onSized }: { src: string; restored?: boolean; onSized: () => void }) {
+function VideoLine({ src: spec, restored, onSized }: { src: string; restored?: boolean; onSized: () => void }) {
   const [done, setDone] = useState(!!restored);
+  // Options after "@": a number = free-running at that playback rate (default 3);
+  // "jd:<startJD>" = locked to the simulated clock, whose date the first frame shows;
+  // "sound" = play with audio (works because typing the command counted as a gesture).
+  const [src, ...opts] = spec.split("@");
+  const jdOpt = opts.find((o) => o.startsWith("jd:"));
+  const startJD = jdOpt ? parseFloat(jdOpt.slice(3)) : null;
+  const rateOpt = opts.find((o) => /^[\d.]+$/.test(o));
+  const rate = rateOpt ? parseFloat(rateOpt) : 3;
+  const sound = opts.includes("sound");
   const poster = src.replace(/\.webm$/, ".jpg");
+  const ref = useRef<HTMLVideoElement>(null);
+  // Countdown of the footage left, with milliseconds, on the bottom-right corner.
+  const countRef = useRef<HTMLSpanElement>(null);
+  useEffect(() => {
+    if (done) return;
+    let raf = 0;
+    const tick = () => {
+      const el = ref.current, out = countRef.current;
+      if (el && out && el.duration) {
+        const left = Math.max(0, el.duration - el.currentTime);
+        const m = Math.floor(left / 60), s = Math.floor(left % 60), ms = Math.floor((left % 1) * 1000);
+        out.textContent = `${m}:${String(s).padStart(2, "0")}.${String(ms).padStart(3, "0")}`;
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [done]);
+  // Clock lock: keep the video where the clock says, at the clock's current rate. If the
+  // browser pauses it (scrolled away, tab hidden), it resumes and re-seeks into step.
+  useEffect(() => {
+    if (startJD === null || done) return;
+    let lastJD = usePageStore.getState().simJD, lastAt = performance.now();
+    const id = setInterval(() => {
+      const el = ref.current; if (!el || !el.duration) return;
+      const jd = usePageStore.getState().simJD, now = performance.now();
+      const clockRate = (jd - lastJD) * 86400 / ((now - lastAt) / 1000); // simulated seconds per real second
+      lastJD = jd; lastAt = now;
+      const want = (jd - startJD) * 86400;
+      if (want >= el.duration) { el.pause(); setDone(true); return; }
+      if (want < 0) return;
+      if (clockRate > 0) el.playbackRate = Math.min(16, Math.max(0.25, clockRate));
+      if (Math.abs(el.currentTime - want) > 0.5) el.currentTime = want;
+      if (el.paused) el.play().catch(() => {});
+    }, 500);
+    return () => clearInterval(id);
+  }, [startJD, done]);
   // A restored video never loads metadata, so its size arrives with the poster image.
   // Runs once per mount (onSized is an inline callback and must not retrigger it).
   const onSizedRef = useRef(onSized);
@@ -44,17 +90,25 @@ function VideoLine({ src, restored, onSized }: { src: string; restored?: boolean
     img.src = poster;
   }, [restored, poster]);
   return (
+    <span className={styles.videoWrap}>
     <video
+      ref={ref}
       src={done ? undefined : src}
       poster={poster}
       className={styles.video}
       autoPlay={!done}
-      muted
+      muted={!sound}
       playsInline
       preload={done ? "none" : "auto"}
-      onLoadedMetadata={(e) => { e.currentTarget.playbackRate = 3; onSized(); }}
+      onLoadedMetadata={(e) => {
+        const el = e.currentTarget; el.playbackRate = rate; onSized();
+        // If the browser refuses audio autoplay, fall back to muted rather than not playing.
+        if (sound) el.play().catch(() => { el.muted = true; el.play().catch(() => {}); });
+      }}
       onEnded={() => setDone(true)}
     />
+    {!done && <span ref={countRef} className={styles.videoCountdown} />}
+    </span>
   );
 }
 

@@ -10,7 +10,8 @@ import BlogPost from './BlogPost';
 import styles from './MobilePage.module.css';
 import labelStyles from '../page.module.css'; // the desktop label overlay, reused
 import { usePageStore } from '../store/pageStore';
-import { BODY_FACTS, MISSIONS } from './solarSystemData';
+import { BODY_FACTS } from './solarSystemData';
+import { MISSIONS } from '../missions';
 
 const SolarSystem = dynamic(() => import('./SolarSystem').then(mod => mod.SolarSystem), {
   ssr: false,

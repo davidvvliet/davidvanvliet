@@ -1,14 +1,15 @@
 import { Command } from "../types";
 import { register } from "../registry";
 import { usePageStore } from "../../store/pageStore";
-import { BODY_NAMES, STAR_NAMES, MISSIONS } from "../../components/solarSystemData";
+import { BODY_NAMES, STAR_NAMES } from '../../components/solarSystemData';
+import { MISSIONS } from '../../missions';
 
 const findName = (list: string[], input: string) => list.find((n) => n.toLowerCase() === input.toLowerCase());
 
 const focus: Command = {
   name: "focus",
   category: "explore",
-  description: "Focus on a planet or moon, or turn toward a star",
+  description: "Focus on an object",
   execute: (args) => {
     if (!args[0]) {
       return ["__DIM__Usage: focus <body | star>", "Type a planet or moon and you'll fly there. Type a star and you'll turn toward it."];

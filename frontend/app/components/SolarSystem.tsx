@@ -4,7 +4,8 @@ import React, { useRef, useEffect, useCallback, useMemo } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { usePageStore } from '../store/pageStore';
-import { PLANETS, MOONS, STARS, SPECTRAL_COLORS, APOLLO_SITES, MISSIONS } from './solarSystemData';
+import { PLANETS, MOONS, STARS, SPECTRAL_COLORS, APOLLO_SITES } from './solarSystemData';
+import { MISSIONS, MissionEvent } from '../missions';
 import { moonPositionJ2000Km } from './lunar';
 
 interface PersonaDot {
@@ -958,7 +959,7 @@ export function SolarSystem({
     const wideViewDistance = (b: Body) => fitDistance(b.systemRadius + b.radius);
 
     const shownInTerminal = new Set<string>();
-    const setFocus = (next: Body, opts: { zoomTo?: boolean; fromClick?: boolean } = {}) => {
+    const setFocus = (next: Body, opts: { zoomTo?: boolean; fromClick?: boolean; distance?: number } = {}) => {
       hasInteracted = true; // a click or `focus` counts as interaction
       // Surface photos shown in the terminal the first time a body is focused.
       const SURFACE_PHOTOS: Record<string, [string, string]> = {
@@ -981,9 +982,11 @@ export function SolarSystem({
       transition = {
         from: focus,
         t: 0,
-        distTo: opts.zoomTo
-          ? (next.parent ? Math.max(next.radius * (next.focusRadii ?? MIN_DISTANCE_RADII * 1.5), MIN_CLOSE_DISTANCE * 1.5) : wideViewDistance(next) * 1.1)
-          : null,
+        distTo: opts.distance !== undefined
+          ? Math.max(opts.distance, minDistanceFor(next))
+          : opts.zoomTo
+            ? (next.parent ? Math.max(next.radius * (next.focusRadii ?? MIN_DISTANCE_RADII * 1.5), MIN_CLOSE_DISTANCE * 1.5) : wideViewDistance(next) * 1.1)
+            : null,
         startOffset: camera.position.clone().sub(worldPos(focus, tmpA)),
         seconds: FOCUS_TRANSITION_SECONDS,
       };
@@ -1215,6 +1218,7 @@ export function SolarSystem({
       if (i >= 0) bodies.splice(i, 1);
       if (focus === mission.body) { focus = earthBody; transition = null; }
       mission = null;
+      activeEvent = null; pendingAim = null;
     };
     const loadMission = async (id: string | null) => {
       clearMission();
@@ -1260,6 +1264,14 @@ export function SolarSystem({
       off.setLength(Math.max(off.length(), minDistanceFor(body)));
       controls.target.copy(focusPoint);
       camera.position.copy(focusPoint).add(off);
+      applyMissionView();
+    };
+    // Ease the camera to the mission's preset (far out, above the ecliptic, keeping
+    // the current azimuth), or just pull back if it has none. Used on launch and
+    // when an event's close-up ends.
+    const applyMissionView = () => {
+      if (!mission) return;
+      const spec = mission.spec;
       const d = camera.position.distanceTo(controls.target);
       if (spec.view) {
         const from = camera.position.clone().sub(controls.target).normalize();
@@ -1272,6 +1284,31 @@ export function SolarSystem({
         if (distTo > d) zoomEase = { t: 0, distFrom: d, distTo };
       }
     };
+    // An event's view: fly to the target at the given distance; once there, turn to
+    // look down on the site (if any) at the given elevation.
+    let pendingAim: { to: THREE.Vector3; distTo: number } | null = null;
+    const applyEventView = (view: NonNullable<MissionEvent['view']>) => {
+      if (!mission) return;
+      const body = view.target === 'craft' ? mission.body : bodies.find((b) => b.name === view.target);
+      if (!body) return;
+      const distance = view.distanceKm * (orbitScale / 149597870.7);
+      setFocus(body, { zoomTo: true, distance });
+      let to: THREE.Vector3 | null = null;
+      if (view.siteLat !== undefined && view.siteLon !== undefined && body.name === 'Moon') {
+        // Direction from the Moon's centre to the site, via the same mapping as the Apollo dots.
+        const u = view.siteLon / 360 + 0.5, v = (90 - view.siteLat) / 180;
+        const local = new THREE.Vector3(-Math.cos(u * 2 * Math.PI) * Math.sin(v * Math.PI), Math.cos(v * Math.PI), Math.sin(u * 2 * Math.PI) * Math.sin(v * Math.PI));
+        to = local.applyQuaternion(moon.getWorldQuaternion(new THREE.Quaternion())).normalize();
+        if (view.elevationDeg) to.lerp(new THREE.Vector3(0, 1, 0), Math.sin(THREE.MathUtils.degToRad(view.elevationDeg))).normalize();
+      } else if (view.elevationDeg !== undefined) {
+        const from = camera.position.clone().sub(controls.target).normalize();
+        const azimuth = Math.atan2(-from.z, from.x);
+        const el = THREE.MathUtils.degToRad(view.elevationDeg);
+        to = new THREE.Vector3(Math.cos(el) * Math.cos(azimuth), Math.sin(el), -Math.cos(el) * Math.sin(azimuth));
+      }
+      pendingAim = to ? { to, distTo: Math.max(distance, minDistanceFor(body)) } : null;
+    };
+    let activeEvent: MissionEvent | null = null;
     trackRef.current = (id) => { loadMission(id); };
     // Restores the sample slot a segment's tip last overwrote.
     const restoreTip = (seg: Segment) => {
@@ -1349,13 +1386,23 @@ export function SolarSystem({
       const jump = dateRequestRef.current;
       if (jump !== null) { simJD = jump; dateRequestRef.current = null; }
       const before = simJD;
-      // Inside a mission's real-time window the clock runs at one second per second.
-      const rt = mission?.spec.realtime;
-      const realtime = !!(rt && before >= rt.fromJD && before < rt.toJD);
-      simJD += delta / (realtime ? 86400 / (rt.speed ?? 1) : secondsPerDay);
+      // Inside a mission event the clock runs at the event's multiple of true speed
+      // (if it sets one). The shortest event containing the date wins, so a close-up
+      // can nest inside a longer phase.
+      const containing = (mission?.spec.events ?? []).filter((e) => before >= e.fromJD && before < e.toJD);
+      const ev = containing.length ? containing.reduce((a, b) => (b.toJD - b.fromJD < a.toJD - a.fromJD ? b : a)) : null;
+      const realtime = !!(ev && ev.speed);
+      simJD += delta / (ev && ev.speed ? 86400 / ev.speed : secondsPerDay);
       if (realtime !== transcriptPlaying) { transcriptPlaying = realtime; usePageStore.getState().setTranscriptPlaying(realtime); }
-      // A fast clock would step clean over a window of seconds: land on its start instead.
-      if (rt && before < rt.fromJD && simJD > rt.fromJD) simJD = rt.fromJD;
+      if (ev !== activeEvent) {
+        const leaving = activeEvent;
+        activeEvent = ev;
+        if (ev?.view) applyEventView(ev.view);
+        else if (leaving?.view && !leaving.view.stay) { if (mission) { setFocus(mission.body); applyMissionView(); } }
+      }
+      // A fast clock would step clean over an event of seconds: land on its start instead.
+      const next = mission?.spec.events?.find((e) => before < e.fromJD && simJD > e.fromJD);
+      if (next) simJD = next.fromJD;
       // A tracked mission freezes the clock at its last sample (a `date` past it runs on).
       if (mission) {
         const last = mission.segments[mission.segments.length - 1].points;
@@ -1424,6 +1471,10 @@ export function SolarSystem({
           focusPoint.copy(tmpA).lerp(newBodyPos, k);
         }
         if (transition.t >= 1) transition = null;
+      }
+      if (!transition && pendingAim) {
+        aim = { from: offset.clone().normalize(), to: pendingAim.to, t: 0, distFrom: dist, distTo: pendingAim.distTo };
+        pendingAim = null;
       }
       if (zoomEase) {
         zoomEase.t = Math.min(1, zoomEase.t + delta / AIM_SECONDS);

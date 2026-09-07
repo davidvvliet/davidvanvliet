@@ -1,7 +1,7 @@
 import { Command } from "../types";
 import { register } from "../registry";
 import { usePageStore } from "../../store/pageStore";
-import { MISSIONS } from "../../components/solarSystemData";
+import { MISSIONS } from '../../missions';
 
 const launch: Command = {
   name: "launch",
@@ -42,14 +42,14 @@ const launch: Command = {
     if (store.scaleMode !== "true") store.setScaleMode("true"); // flybys only line up at true scale
     if (!store.orbitsHighlighted) store.setOrbitsHighlighted(true); // paths make the flybys readable
     store.requestTrack(mission.id);
-    const note = mission.note ? [`__GRAY__${mission.note}`] : [];
+    const note = mission.note ? [mission.note] : [];
     if (mission.secondsPerDay) {
       store.setSecondsPerDay(mission.secondsPerDay);
       const ms = Math.round(mission.secondsPerDay * 1000);
       const shown = ms < 1000 ? `${ms}ms` : `${mission.secondsPerDay}s`;
-      return [`Launching ${mission.name}. One Earth day now takes ${shown}. Use "time" to change it.`, ...note];
+      return [`__GRAY__Launching ${mission.name}. One Earth day now takes ${shown}. Use "time" to change it.`, ...note];
     }
-    return [`Launching ${mission.name}. Use "time" to speed up the clock.`, ...note];
+    return [`__GRAY__Launching ${mission.name}. Use "time" to speed up the clock.`, ...note];
   },
   complete: (args) => (args.length <= 1 ? [...MISSIONS.map((m) => m.id), "off"] : []),
 };
