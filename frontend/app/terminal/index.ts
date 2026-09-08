@@ -12,7 +12,7 @@ import "./commands/scale";
 import "./commands/time";
 import "./commands/reset";
 import "./commands/core";
-import "./commands/apollo";
+// import "./commands/apollo"; // temporarily off
 import "./commands/date";
 import "./commands/launch";
 import "./commands/radarcorp";

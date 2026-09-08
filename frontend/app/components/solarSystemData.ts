@@ -19,6 +19,11 @@ export type PlanetSpec = {
   focusRadii?: number;     // click fly-in distance in body radii (default: MIN_DISTANCE_RADII * 1.5)
   axialTiltDeg?: number;   // tilt of the spin axis from the ecliptic pole (rings, if any, lie in the equatorial plane); >90 = retrograde spin
   poleLonDeg?: number;     // ecliptic longitude the pole leans toward (IAU poles from NAIF pck00011; default 180)
+  /** IAU rotation model (pck00011): prime meridian W = w0 + rate*d from the node of the body's equator on the ICRF
+   *  equator, d in days from J2000. With the pole, this puts the map in its true orientation at any date. */
+  primeMeridian?: { w0Deg: number; rateDegPerDay: number; poleRaDeg: number; poleDecDeg: number };
+  /** Marked spots on the surface, shown as green dots while the named mission is running. */
+  sites?: { name: string; lat: number; lon: number; mission: string }[];
   spinPhaseDeg?: number;   // initial rotation about the spin axis (map centre, lon 180, starts on +x at 0)
   rings?: { innerRadii: number; outerRadii: number; color: number; opacity: number; texture?: string }; // in planet radii; texture = radial strip (inner edge at left) with alpha
 };
@@ -77,7 +82,10 @@ export const PLANETS: PlanetSpec[] = [
   { name: 'Mercury', au: 0.387, radiusEarths: 0.383, periodDays: 87.97, rotationDays: 58.65, inclinationDeg: 7.0, eccentricity: 0.2056, perihelionDeg: 77.46, axialTiltDeg: 7.04, poleLonDeg: 318.2, nodeDeg: 48.331, meanLongitudeDeg: 252.251, color: 0x8a847c, phaseDeg: 120, texture: '/mercury.jpg' },
   // Venus: retrograde spin expressed as a 177 degree axial tilt (same convention as Uranus and Pluto).
   { name: 'Venus', au: 0.723, radiusEarths: 0.949, periodDays: 224.7, rotationDays: 243.0, inclinationDeg: 3.39, eccentricity: 0.0068, perihelionDeg: 131.6, axialTiltDeg: 178.76, poleLonDeg: 210.2, nodeDeg: 76.68, meanLongitudeDeg: 181.98, color: 0xe8dcc0, phaseDeg: 230, texture: '/venus.jpg' },
-  { name: 'Mars', au: 1.524, radiusEarths: 0.532, periodDays: 686.98, rotationDays: 1.026, inclinationDeg: 1.85, eccentricity: 0.0934, perihelionDeg: 336.0, axialTiltDeg: 25.4, poleLonDeg: 354.8, nodeDeg: 49.558, meanLongitudeDeg: 355.453, color: 0xc1663f, phaseDeg: 40, texture: '/mars.jpg' },
+  { name: 'Mars', au: 1.524, radiusEarths: 0.532, periodDays: 686.98, rotationDays: 360 / 350.891982443297, inclinationDeg: 1.85, eccentricity: 0.0934, perihelionDeg: 336.0, axialTiltDeg: 25.4, poleLonDeg: 354.8, nodeDeg: 49.558, meanLongitudeDeg: 355.453, color: 0xc1663f, phaseDeg: 40, texture: '/mars.jpg',
+    primeMeridian: { w0Deg: 176.049863, rateDegPerDay: 350.891982443297, poleRaDeg: 317.269202, poleDecDeg: 54.432516 },
+    // Octavia E. Butler Landing, Jezero Crater (NASA).
+    sites: [{ name: 'Perseverance', lat: 18.4447, lon: 77.4508, mission: 'perseverance' }] },
   // Ceres: dwarf planet in the asteroid belt. Rotation 9 hours, small 4 degree axial tilt.
   { name: 'Ceres', au: 2.766, radiusEarths: 0.0737, periodDays: 1682, rotationDays: 0.378, inclinationDeg: 10.59, eccentricity: 0.0785, perihelionDeg: 153.4, nodeDeg: 80.305, meanLongitudeDeg: 160.9, color: 0x8f8a84, phaseDeg: 260, axialTiltDeg: 8.45, poleLonDeg: 11.2, texture: '/ceres.jpg' },
   { name: 'Jupiter', au: 5.203, radiusEarths: 10.97, periodDays: 4332.6, rotationDays: 0.4135, inclinationDeg: 1.30, eccentricity: 0.0489, perihelionDeg: 14.7, axialTiltDeg: 2.22, poleLonDeg: 247.8, nodeDeg: 100.556, meanLongitudeDeg: 34.404, color: 0xc9a37a, phaseDeg: 300, texture: '/jupiter.jpg', focusRadii: 7 },

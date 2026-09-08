@@ -12,6 +12,7 @@ const explore: Command = {
       "",
       "__DIM__Credits:",
       "__DIM__JPL Horizons, spacecraft and planet ephemerides: https://ssd.jpl.nasa.gov/horizons/",
+      "__DIM__VSOP87 (Bretagnon & Francou), the position of Mars",
       "__DIM__NASA, JPL and USGS, mission and surface imagery; NASA/JPL-Caltech, Perseverance landing video; NASA, Apollo 11 landing loop",
       "__DIM__Apollo Image Archive (ASU), Apollo 17 orbit state vectors: https://apollo.sese.asu.edu/",
       "__DIM__NASA mission reports MSC-00171, MSC-02680 and JSC-07904, Apollo 11, 13 and 17 burn and entry conditions",
