@@ -13,7 +13,7 @@ export const voyager2: MissionSpec = {
     { jd: 2444842.6424, lines: ['Closest approach to Saturn, 26 August 1981.'] },
     { jd: 2446455.25, lines: ['Closest approach to Uranus, 24 January 1986.'] },
     { jd: 2446456.0, lines: ['__IMG__/voyager2-uranus-crescent.jpg', "__DIM__Leaving Uranus, 25 January 1986, from 1 million km. Photo: NASA/JPL."] },
-    { jd: 2447763.5799, lines: ['__IMG__/voyager2-neptune-clouds.jpg', "__DIM__Neptune's cloud streaks casting shadows, two hours before closest approach on 25 August 1989. Photo: NASA/JPL."] },
+    { jd: 2447763.5799, lines: ['__IMG__/voyager2-neptune-clouds.jpg', "__DIM__Neptune's clouds, 25 August 1989. Photo: NASA/JPL."] },
     { jd: 2447763.6632, lines: ['Closest approach to Neptune, 25 August 1989.'] },
   ],
 };
