@@ -15,6 +15,9 @@ interface PageState {
   /** Trace a mission's trajectory (id from MISSIONS), or null to clear. */
   trackRequest: { id: string | null; seq: number } | null;
   requestTrack: (id: string | null) => void;
+  /** The clock rate in force before the first `launch`, restored by `launch off`. Null when no mission is running. */
+  clockRateBeforeMission: number | null;
+  setClockRateBeforeMission: (rate: number | null) => void;
   /** Request to jump the clock to a Julian date. */
   dateRequest: { jd: number; seq: number } | null;
   requestDate: (jd: number) => void;
@@ -69,6 +72,8 @@ export const usePageStore = create<PageState>()(
   resetSettings: () => set({ ...DEFAULT_SETTINGS }),
   simJD: 0,
   setSimJD: (jd) => set({ simJD: jd }),
+  clockRateBeforeMission: null,
+  setClockRateBeforeMission: (rate) => set({ clockRateBeforeMission: rate }),
   trackRequest: null,
   requestTrack: (id) => set((state) => ({ trackRequest: { id, seq: (state.trackRequest?.seq ?? 0) + 1 } })),
   dateRequest: null,

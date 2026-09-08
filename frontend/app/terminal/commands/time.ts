@@ -3,7 +3,7 @@ import { register } from "../registry";
 import { usePageStore } from "../../store/pageStore";
 
 const REAL_SECONDS_PER_DAY = 86400;
-const MIN_SECONDS_PER_DAY = 0.05; // below ~33ms Earth spins more than half a turn per frame at 60 fps and strobes
+const MIN_SECONDS_PER_DAY = 0.01; // Earth's spin strobes below ~33ms per day; accepted down to 10ms
 
 // "60", "60s", "10ms", "2m", "2 minutes", "1.5 hours", "real"
 const UNIT_SECONDS: Record<string, number> = {
@@ -44,7 +44,7 @@ const time: Command = {
     const input = args.join(" ").trim().toLowerCase(); // "2 minutes" arrives as two words
     const seconds = parseSeconds(input);
     if (seconds === null) return [`Couldn't read "${input}". Use a number with ms, s, m or h, or "real".`];
-    if (seconds < MIN_SECONDS_PER_DAY) return ["That's too fast matey. Minimum is 50ms per day."];
+    if (seconds < MIN_SECONDS_PER_DAY) return ["That's too fast matey. Minimum is 10ms per day."];
     store.setSecondsPerDay(seconds);
     return [`One Earth day now takes ${describe(seconds)}.`];
   },

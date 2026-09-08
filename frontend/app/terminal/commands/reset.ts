@@ -5,7 +5,7 @@ import { usePageStore } from "../../store/pageStore";
 const reset: Command = {
   name: "reset",
   category: "explore",
-  description: "Reset settings, or everything with \"reset all\"",
+  description: "Reset all settings",
   execute: (args) => {
     if (args[0]?.toLowerCase() === "all") {
       // Back to a first visit: drop everything the site stores, then reload so the
@@ -24,7 +24,6 @@ const reset: Command = {
     try { localStorage.removeItem('explore-view'); } catch { /* storage unavailable */ }
     return ["Settings reset: compact scale, stars on, orbit paths shown, 10s per day. The saved view is cleared on next load."];
   },
-  complete: (args) => (args.length <= 1 ? ["all"] : []),
 };
 
 register(reset);
