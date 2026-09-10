@@ -13,6 +13,7 @@ const launch: Command = {
     if (!arg) {
       // One line per program; missions of the same program list their numbers in the second column.
       const crewed = (m: (typeof MISSIONS)[number]) => /^(apollo|artemis)/.test(m.id);
+      const proposed = (m: (typeof MISSIONS)[number]) => /^lyra/.test(m.id);
       const rows = (list: typeof MISSIONS) => {
         const programs = new Map<string, string[]>();
         for (const m of list) {
@@ -29,7 +30,10 @@ const launch: Command = {
         ...rows(MISSIONS.filter(crewed)),
         "",
         "__DIM__Unmanned:",
-        ...rows(MISSIONS.filter((m) => !crewed(m))),
+        ...rows(MISSIONS.filter((m) => !crewed(m) && !proposed(m))),
+        "",
+        "__DIM__Proposed:",
+        ...rows(MISSIONS.filter(proposed)),
       ];
     }
     if (arg === "off") {

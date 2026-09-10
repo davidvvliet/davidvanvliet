@@ -7,7 +7,7 @@ export const apollo13: MissionSpec = {
   // Crew portrait at launch, then the oxygen tank rupture (mission report, 55:54:53 GET) and the
   // air-to-ground calls that followed, verbatim from the Apollo Flight Journal transcript.
   cues: [
-    { jd: 0, lines: ['__IMG__/apollo13-crew.jpg', '__DIM__The Apollo 13 crew: Fred Haise, Jim Lovell and Ken Mattingly. Photo: NASA.'] },
+    { jd: 0, lines: ['__IMG__/apollo13-crew.jpg', '__DIM__The Apollo 13 crew: Fred Haise, Jim Lovell and Ken Mattingly. Mattingly was replaced by Jack Swigert three days before launch after being exposed to measles. Photo: NASA.'] },
     { jd: 2440690.63047, lines: ['__DIM__**Oxygen tank 2 ruptures**'] },
     { jd: 2440690.63078, lines: ["__TIMED__Swigert: Okay, Houston, we've had a problem here.__TIMED__055:55:19"] },
     { jd: 2440690.63088, lines: ['__TIMED__Lousma [CAPCOM]: This is Houston. Say again, please.__TIMED__055:55:28'] },

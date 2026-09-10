@@ -1265,7 +1265,8 @@ export function SolarSystem({
     // lunar orbit stays a clean loop around the moving Moon. The line is drawn up to
     // the simulated date, with a marker at the tip that is itself a focusable body.
     type SegmentCenter = 'Sun' | 'Earth' | 'Moon';
-    type Segment = { center: SegmentCenter; points: number[][]; line: THREE.Line; positions: Float32Array; pristine: Float32Array; lastTipIndex: number; group: THREE.Group };
+    // A static segment (a target's own path) is drawn in full for the whole mission and never carries the marker.
+    type Segment = { center: SegmentCenter; points: number[][]; line: THREE.Line; positions: Float32Array; pristine: Float32Array; lastTipIndex: number; group: THREE.Group; isStatic: boolean };
     type Mission = { spec: (typeof MISSIONS)[number]; segments: Segment[]; active: number; marker: THREE.Mesh; body: Body; cuesFired: number };
     let mission: Mission | null = null;
     const toScene = (x: number, y: number, z: number, out: THREE.Vector3) => out.set(x * orbitScale, z * orbitScale, -y * orbitScale);
@@ -1295,7 +1296,7 @@ export function SolarSystem({
       const res = await fetch(spec.file);
       if (!res.ok) return;
       const data = await res.json();
-      const raw: { center: SegmentCenter; points: number[][] }[] = data.segments ?? [{ center: spec.center, points: data.points }];
+      const raw: { center: SegmentCenter; points: number[][]; static?: boolean }[] = data.segments ?? [{ center: spec.center, points: data.points }];
       const v = new THREE.Vector3();
       const segments: Segment[] = raw.map((r) => {
         const group = new THREE.Group();
@@ -1305,9 +1306,11 @@ export function SolarSystem({
         const geometry = new THREE.BufferGeometry();
         geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
         geometry.setDrawRange(0, 0);
-        const line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: 0x66ccff, transparent: true, opacity: 0.95 }));
+        // Static segments (a target's own path) in yellow, the craft in blue.
+        const line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: r.static ? 0xffdd44 : 0x66ccff, transparent: true, opacity: 0.95 }));
         group.add(line);
-        return { center: r.center, points: r.points, line, positions, pristine: positions.slice(), lastTipIndex: -1, group };
+        if (r.static) geometry.setDrawRange(0, r.points.length);
+        return { center: r.center, points: r.points, line, positions, pristine: positions.slice(), lastTipIndex: -1, group, isStatic: !!r.static };
       });
       const markerRadius = EARTH_RADIUS * 0.02; // tiny; the pixel floor keeps it visible as a dot
       const marker = new THREE.Mesh(new THREE.SphereGeometry(markerRadius, 8, 8), new THREE.MeshBasicMaterial({ color: 0x66ccff }));
@@ -1404,9 +1407,9 @@ export function SolarSystem({
       // The active segment is the last one that has started; earlier ones are drawn
       // in full, later ones not at all.
       let active = 0;
-      for (let i = 1; i < mission.segments.length; i++) if (mission.segments[i].points[0][0] <= jd) active = i;
+      for (let i = 1; i < mission.segments.length; i++) if (!mission.segments[i].isStatic && mission.segments[i].points[0][0] <= jd) active = i;
       mission.segments.forEach((seg, i) => {
-        if (i === active) return;
+        if (i === active || seg.isStatic) return;
         restoreTip(seg);
         seg.line.geometry.setDrawRange(0, i < active ? seg.points.length : 0);
       });
@@ -1474,7 +1477,7 @@ export function SolarSystem({
       if (next) simJD = next.fromJD;
       // A tracked mission freezes the clock at its last sample (a `date` past it runs on).
       if (mission) {
-        const last = mission.segments[mission.segments.length - 1].points;
+        const last = mission.segments.filter((seg) => !seg.isStatic).slice(-1)[0].points;
         const endJD = last[last.length - 1][0];
         if (before < endJD && simJD > endJD) simJD = endJD;
         else if (before === endJD && jump === null) simJD = endJD;

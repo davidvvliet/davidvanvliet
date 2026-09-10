@@ -19,6 +19,7 @@ const explore: Command = {
       "__DIM__Apollo Flight Journal and Apollo Lunar Surface Journal, transcripts: https://www.apollojournals.org/",
       "__DIM__John D. Anderson (JPL), Mariner 2 trajectory reconstruction, via Horizons",
       "__DIM__JPL Technical Report 32-740, Mariner 4 injection and encounter conditions",
+      "__DIM__Hibberd, Hein and Eubanks (2020) and Hibberd, Hein, Eubanks and Kennedy (2022), Project Lyra mission designs: https://arxiv.org/abs/1902.04935 and https://arxiv.org/abs/2201.04240",
       "__DIM__Solar System Scope, planet and ring textures: https://www.solarsystemscope.com/textures/",
       "__DIM__Björn Jónsson, planetary maps: https://bjj.mmedia.is/data/planetary_maps.html",
     ];

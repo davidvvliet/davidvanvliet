@@ -17,6 +17,8 @@ import { artemis2 } from './artemis2';
 import { apollo11 } from './apollo11';
 import { apollo13 } from './apollo13';
 import { apollo17 } from './apollo17';
+import { lyra1 } from './lyra1';
+import { lyra2 } from './lyra2';
 
 /** Every mission the terminal can `launch`, one file each. */
 export const MISSIONS: MissionSpec[] = [
@@ -36,4 +38,6 @@ export const MISSIONS: MissionSpec[] = [
   apollo11,
   apollo13,
   apollo17,
+  lyra1,
+  lyra2,
 ];
