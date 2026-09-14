@@ -10,7 +10,7 @@ export const apollo11: MissionSpec = {
   // Journal. The clip is locked to the clock (see events below).
   cues: [
     { jd: 0, lines: ['__IMG__/apollo11-crew.jpg', '__DIM__The Apollo 11 crew: Neil Armstrong, Michael Collins and Buzz Aldrin. Photo: NASA.'] },
-    { jd: 2440423.33962, lines: ['Eagle begins its landing.', '__VIDEO__/apollo11-landing.webm@jd:2440423.33962', '__DIM__Powered descent to the Sea of Tranquility, at 10x speed. I cried the first time I watched this. Video: NASA.'] },
+    { jd: 2440423.33962, lines: ['Eagle begins its landing.', '__VIDEO__/apollo11-landing.webm@jd:2440423.33962', '__DIM__Powered descent to the Sea of Tranquility, at 10x speed. Just imagine. We were staring at this massive rock in the sky for thousands of years. Wondering what it was, making up fantasies about it, becoming so used to seeing it that we forgot that it was really out there, waiting to be explored. And here we are, hovering a few hundred meters over the surface, for the first time. There was no turning back. Video: NASA.'] },
     { jd: 2440423.34579, lines: ['__TIMED__Duke [CAPCOM]: We copy you down, Eagle.__TIMED__102:45:57'] },
     { jd: 2440423.34581, lines: ['__TIMED__Armstrong: Houston, Tranquility Base here. The Eagle has landed.__TIMED__102:45:58'] },
     { jd: 2440423.3459, lines: ["__TIMED__Duke [CAPCOM]: Roger, Twan...Tranquility. We copy you on the ground. You got a bunch of guys about to turn blue. We're breathing again. Thanks a lot.__TIMED__102:46:06"] },

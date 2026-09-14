@@ -325,6 +325,11 @@ export default function Terminal() {
                 {linkify(line.text.split("__GRAY__")[0])}
                 <span className={styles.gray}>{linkify(line.text.split("__GRAY__")[1])}</span>
               </>
+            ) : line.text.includes("__SMALL__") ? (
+              <>
+                {linkify(line.text.split("__SMALL__")[0])}
+                <span className={styles.small}>{linkify(line.text.split("__SMALL__")[1])}</span>
+              </>
             ) : line.text.includes("__DIM__") ? (
               <>
                 {linkify(line.text.split("__DIM__")[0])}

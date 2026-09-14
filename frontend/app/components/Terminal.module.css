@@ -96,6 +96,11 @@
   color: rgba(0, 255, 0, 0.6);
 }
 
+.small {
+  color: rgba(0, 255, 0, 0.6);
+  font-size: 0.75rem;
+}
+
 .gray {
   color: rgba(255, 255, 255, 0.4);
 }
