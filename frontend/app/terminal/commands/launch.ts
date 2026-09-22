@@ -17,7 +17,7 @@ const launch: Command = {
       const rows = (list: typeof MISSIONS) => {
         const programs = new Map<string, string[]>();
         for (const m of list) {
-          const match = m.name.match(/^(.*?)\s+([0-9]+|[IVX]+)$/);
+          const match = m.name.match(/^(.*?)\s+([0-9]+[a-z]?|[IVX]+)$/);
           const program = match ? match[1] : m.name;
           programs.set(program, [...(programs.get(program) ?? []), ...(match ? [match[2]] : [])]);
         }

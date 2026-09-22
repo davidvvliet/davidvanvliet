@@ -5,5 +5,5 @@ import { MissionSpec } from './types';
 export const lyra2: MissionSpec = {
   id: 'lyra2', name: 'Project Lyra 2', file: '/missions/lyra2.json', center: 'Sun',
   view: { distanceAU: 8, elevationDeg: 28 }, secondsPerDay: 0.02,
-  note: "A proposal, not a flight: a 2028 launch to 1I/'Oumuamua, the first known interstellar object, with Venus, Earth and Earth flybys, a deep space manoeuvre and a powered Jupiter flyby, arriving in 2054 at 209 AU. Reconstructed from the 2022 Project Lyra paper; 'Oumuamua's path from JPL Horizons.",
+  note: "A proposal, not a flight: a 2028 launch to 1I/'Oumuamua, the first known interstellar object, with Venus, Earth and Earth flybys, a deep space manoeuvre and a powered Jupiter flyby, arriving in 2054 at 209 AU. Reconstructed from the 2022 Project Lyra paper; 'Oumuamua's path from JPL Horizons. Source: Hibberd, Hein, Eubanks and Kennedy (2022), Project Lyra: a mission to 1I/'Oumuamua without solar Oberth manoeuvre, Acta Astronautica 199. https://arxiv.org/abs/2201.04240",
 };

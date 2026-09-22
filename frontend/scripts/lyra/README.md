@@ -16,7 +16,7 @@ Method
 - Inputs: `earth.csv`, `venus.csv`, `jupiter.csv`, `oumuamua.csv` are Horizons VECTORS tables (Sun centre, ecliptic J2000,
   AU and days). 'Oumuamua's own path (JPL#16 solution) is written as a static segment.
 
-## Project Lyra 1 (`lyra1.py`, `public/missions/lyra1.json`)
+## Project Lyra 1a (`lyra1.py`, `public/missions/lyra1a.json`)
 
 Scenario A of Hibberd, Hein & Eubanks (2020), "Project Lyra: catching 1I/'Oumuamua, mission opportunities after 2024"
 (Acta Astronautica 170; arXiv:1902.04935), Table 2: launch 2033 May 08 with C3 121 km²/s², unpowered Jupiter flyby
@@ -27,3 +27,14 @@ Scenario A of Hibberd, Hein & Eubanks (2020), "Project Lyra: catching 1I/'Oumuam
   paper's unpowered flyby (14.10 km/s in, 14.09 out, a 65° turn at 7.6 Jupiter radii) and a 7.3 km/s burn against 7.2.
   Perihelion falls on 2036 Aug 04; the paper gives no date for it.
 The file `lyra2.json` is the 2028 mission described above (the paper's Table 2), renamed.
+
+## Project Lyra 1b (`lyra1b.py`, `public/missions/lyra1b.json`)
+
+Scenario B of the same 2020 paper, E-DSM-E-J-6SR-1I: launch 2030 Jun 09 with C3 50 km²/s², deep space manoeuvre at
+3.2 au, Earth flyby, Jupiter 2034 Jul 12, solar Oberth manoeuvre at 6 solar radii, 'Oumuamua 2052 Jul 29; 8.0 km/s up to
+and including Jupiter and 7.3 after, 15.3 in total.
+- The manoeuvre's date and direction and the Earth flyby date are not published. They are fitted (Nelder–Mead over the
+  four numbers, Lambert arcs between) so the launch C3 matches and the manoeuvre plus flyby ΔV is smallest:
+  manoeuvre 2031 Nov 29 (0.68 km/s), Earth flyby 2033 Apr 14 at the 200 km floor (0.30 km/s), C3 50.5.
+- The Jupiter flyby and solar dive are shot as for 1a; among the converged solutions the smallest burn is taken:
+  perihelion 2036 Jun 11, burn 7.36 km/s against the paper's 7.3, Jupiter 0.10 km/s. Total 15.55 against 15.3.
