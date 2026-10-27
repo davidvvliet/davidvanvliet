@@ -48,9 +48,13 @@ export default function PhotoGrid() {
               className={`${styles.tile} ${pathname === `/photos/${p.n}` ? styles.active : ""}`}
               aria-label={`Photo ${p.n}`}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={p.thumb} alt="" loading="lazy" decoding="async" />
-              {p.video && <span className={styles.play}>▶</span>}
+              {p.thumbVideo ? (
+                // A clip plays in its tile like a GIF: muted, looping, inline.
+                <video src={p.thumbVideo} poster={p.thumb} autoPlay muted loop playsInline preload="auto" />
+              ) : (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={p.thumb} alt="" loading="lazy" decoding="async" />
+              )}
             </Link>
           ))}
         </div>
