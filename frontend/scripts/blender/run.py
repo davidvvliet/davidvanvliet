@@ -6,7 +6,7 @@
 #          [--headless] [--no-export]
 #   run.py all [--headless]         rebuild every probe; fails on a failing check or a
 #                                   sheet that changed against its approved baseline
-#   run.py approve <probe> [--force] copy the last build to public/models and make its
+#   run.py approve <probe> [--force] copy the last build to public/models (with a thumbnail) and make its
 #                                   sheet the baseline
 #   run.py new <probe> ["Title"]    start a probe from the templates
 #   run.py ref <probe> <model>      measure a reference model: sheet + largest pieces
@@ -162,6 +162,14 @@ def cmd_approve(args):
     if not spec.get("fixture"):  # fixtures only guard lib/; they never ship
         os.makedirs(PUBLIC_MODELS, exist_ok=True)
         shutil.copy(entry["glb"], os.path.join(PUBLIC_MODELS, f"{probe}.glb"))
+        # The /models grid shows this image until the live model has loaded.
+        check_version()
+        proc = subprocess.run([BLENDER, "--background", "--factory-startup", "--python-exit-code", "1",
+                               "--python", os.path.join(HERE, "thumbnail.py"), "--",
+                               os.path.join(PUBLIC_MODELS, f"{probe}.glb"), os.path.join(PUBLIC_MODELS, f"{probe}.webp")],
+                              capture_output=True, text=True)
+        if "THUMB_OK" not in proc.stdout:
+            die(proc.stdout[-4000:] + proc.stderr[-4000:])
         # The site's credits list what shapes a published model (its sources' "credit" lines).
         sys.path.insert(0, HERE)
         from lib import sources
@@ -177,7 +185,7 @@ def cmd_approve(args):
     json.dump(status, open(tmp, "w"), indent=1)
     os.replace(tmp, STATUS)
     print(f"Approved {probe}: " + ("baseline updated (fixture, not published)." if spec.get("fixture")
-          else f"public/models/{probe}.glb, baselines/{probe}.png and the site's model credits updated."))
+          else f"public/models/{probe}.glb and .webp, baselines/{probe}.png and the site's model credits updated."))
 
 def cmd_new(args):
     if not args or not re.fullmatch(r"[a-z0-9_]+", args[0]):

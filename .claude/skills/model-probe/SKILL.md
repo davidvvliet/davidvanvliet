@@ -29,7 +29,7 @@ from the repo.
    with the `research-probe` skill, and get the user's review of it before modelling.
 2. Put reference images in `refs/<probe>/` (the dashboard shows them beside the sheet).
 3. Ask the user to start the live session (`npm run blender`) if they want to watch, and to
-   open `localhost:3000/models` (their iTerm2 browser pane works).
+   open `localhost:3000/models?dashboard` (their iTerm2 browser pane works).
 4. Start `npm run model:dev <probe>` in the background so every save rebuilds (the user sees
    each change on the dashboard and in Blender), then write `probes/<probe>.py`. Or build by
    hand with `npm run model <probe>`. Read the check table it prints;

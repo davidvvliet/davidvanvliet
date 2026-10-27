@@ -38,7 +38,7 @@ Python; the command line needs only the system `python3`.
 - `npm run model:status`, `npm run model:watch` (contact sheets inline in iTerm2)
 - `python3 scripts/blender/run.py send <file.py>`: run any Python in the live session
 
-The dev-only dashboard at `localhost:3000/models` follows builds as they happen: progress,
+The dev-only dashboard at `localhost:3000/models?dashboard` follows builds as they happen: progress,
 a 3D view of the export, the contact sheet, references, checks and history. In the 3D view,
 Explode (top left) slides the parts apart; hovering shows a part's name, size and, after
 `model:explode`, its offset from the reference; clicking a part focuses the camera on it
