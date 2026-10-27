@@ -238,7 +238,15 @@
 
 .link {
   color: #00ff00;
-  text-decoration: none;
+  text-decoration: underline;
+  text-decoration-color: rgba(0, 255, 0, 0.35);
+  text-underline-offset: 2px;
+  width: fit-content;
+}
+
+.link:hover {
+  color: #00ff00;
+  text-decoration-color: currentColor;
 }
 
 
