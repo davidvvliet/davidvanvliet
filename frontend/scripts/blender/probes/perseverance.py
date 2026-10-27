@@ -3,9 +3,12 @@
 # Documented sizes come from the spec's dimensions; layout comes from the spec's
 # from_reference_model (measured on NASA's model, which agrees with the documents).
 # Numbers marked "est." are estimated from the reference model's sheet or the photos.
-import math
+import math, os
+import bpy
 from mathutils import Matrix, Vector
-from lib import parts
+from lib import materials, parts
+
+REFS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "refs", "perseverance")
 
 BODY = "white_paint"      # spec materials (sourced from photos)
 BLACK = "anodized_black"
@@ -190,5 +193,29 @@ def build(spec):
         turret = parts.joint("arm_turret", tuple(a["turret"]), axis=(1, 0, 0), parent=wrist)
         parts.box("turret", (0.45, 0.50, 0.26), location=(0.43, -1.0, 1.36), material=BLACK, parent=turret)
         parts.cylinder("turret_drill", 0.04, 0.20, location=(0.39, -1.226, 1.30), material=TI, parent=turret)
+
+    # --- Markings (spec "markings"): image plates; positions in the spec's placement notes --
+    def img(n):
+        return bpy.data.images.load(os.path.join(REFS, f"{n}.png"), check_existing=True)
+    mk = spec["markings"]
+    with parts.assembly("markings"):
+        p = mk["name_chips_placard"]["placement"]
+        n = Vector(p["normal"]).normalized()
+        parts.plate("name_chips_mount", p["size"][0], p["size"][1], 0.03, location=tuple(Vector(p["centre"]) - n * 0.03),
+                    direction=tuple(n), up=(0, 1, 0), material=BODY)
+        parts.plate("name_chips_placard", p["size"][0], p["size"][1], 0.002, location=tuple(p["centre"]), direction=tuple(n),
+                    up=(0, 1, 0), material=materials.image("name_chips_placard", img("name_chips_placard"), metallic=0.3, roughness=0.5))
+        p = mk["sherloc_cal_target"]["placement"]
+        c = Vector(p["centre"])
+        parts.box("sherloc_target_mount", (p["size"][0], 0.02, p["size"][1]), location=tuple(c + Vector((0, 0.01, 0))), material=BLACK)
+        parts.plate("sherloc_cal_target", p["size"][0], p["size"][1], 0.002, location=tuple(c), direction=(0, -1, 0), up=(0, 0, 1),
+                    material=materials.image("sherloc_cal_target", img("sherloc_target"), metallic=0.6, roughness=0.4))
+        p = mk["healthcare_plaque"]["placement"]
+        parts.plate("healthcare_plaque", p["size"][0], p["size"][1], 0.003, location=tuple(p["centre"]), direction=(1, 0, 0),
+                    up=(0, 0, 1), material=materials.image("healthcare_plaque", img("healthcare_plaque"), metallic=0.3, roughness=0.5))
+    with parts.assembly("mast"):
+        p = mk["flag_plate"]["placement"]
+        parts.plate("flag_plate", p["size"][0], p["size"][1], 0.003, location=tuple(p["centre"]), direction=(0, -1, 0),
+                    up=(0, 0, 1), material=materials.image("flag_plate", img("flag_plate"), metallic=0.5, roughness=0.45), parent=deploy)
 
     parts.pose({name: j["angle"] for name, j in spec.get("joints", {}).items()})

@@ -242,6 +242,37 @@ def disc(name, radius, thickness, location=(0, 0, 0), direction=(0, 0, 1), roll_
     mats = [material, hole_material] if hub else material
     return _object(name, bm, mats, frame(location, direction, roll_deg), parent)
 
+def plate(name, width, height, thickness, location=(0, 0, 0), direction=(0, 0, 1), up=(0, 0, 1),
+          material="white_paint", parent=None):
+    """Rectangular plate (placard, plaque, flag plate): back face centred on `location`, front
+    face `thickness` out along `direction`. `up` is the in-plane direction of the image's top
+    (projected onto the plate); `width` runs to the image's right. The front face is UV-mapped
+    onto [0, 1]^2, so an image of the face maps straight on; edges and back use its corner."""
+    n = Vector(direction).normalized()
+    v = Vector(up) - n * Vector(up).dot(n)
+    if v.length < 1e-6:
+        raise ValueError(f"plate {name}: `up` is along the plate's normal")
+    v.normalize()
+    u = v.cross(n)                      # the image's right, seen from the front
+    m = Matrix((u, v, n)).transposed().to_4x4()
+    m.translation = Vector(location)
+    bm = bmesh.new()
+    uv = bm.loops.layers.uv.new("UVMap")
+    w, h = width / 2, height / 2
+    back = [bm.verts.new((x, y, 0.0)) for x, y in ((-w, -h), (w, -h), (w, h), (-w, h))]
+    front = [bm.verts.new((x, y, thickness)) for x, y in ((-w, -h), (w, -h), (w, h), (-w, h))]
+    face = bm.faces.new(front)
+    for loop in face.loops:
+        loop[uv].uv = (loop.vert.co.x / width + 0.5, loop.vert.co.y / height + 0.5)
+    others = [bm.faces.new(list(reversed(back)))]
+    for k in range(4):
+        k2 = (k + 1) % 4
+        others.append(bm.faces.new((back[k], back[k2], front[k2], front[k])))
+    for f in others:
+        for loop in f.loops:
+            loop[uv].uv = (0.01, 0.01)
+    return _object(name, bm, material, m, parent)
+
 def meshes(objs):
     """The mesh parts among `objs` (joints are empties)."""
     return [o for o in objs if o.type == "MESH"]

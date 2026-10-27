@@ -84,6 +84,86 @@
       "licence": "'These assets are free and without copyright.' (repo README)",
       "archive": "https://github.com/nasa/NASA-3D-Resources/tree/37f29296b944f72742a91d601493b774afc030f2/3D%20Models/Mars%202020%20Perseverance%20Rover",
       "credit": "NASA 3D Resources, Mars 2020 Perseverance Rover model (layout reference): https://github.com/nasa/NASA-3D-Resources"
+    },
+    {
+      "id": "nasa_hidden_gems",
+      "title": "NASA/JPL: 5 Hidden Gems Are Riding Aboard NASA's Perseverance Rover",
+      "url": "https://www.nasa.gov/centers-and-facilities/jpl/5-hidden-gems-are-riding-aboard-nasas-perseverance-rover/",
+      "read": "2026-10-27",
+      "licence": "public domain (NASA/JPL-Caltech)",
+      "saved": "refs/perseverance/sources/nasa_hidden_gems.txt"
+    },
+    {
+      "id": "pia_name_chips",
+      "title": "Closeup of 'Send Your Name to Mars' chips on Perseverance rover",
+      "url": "https://science.nasa.gov/photojournal/closeup-of-send-your-name-to-mars-chips-on-perseverance-rover/",
+      "read": "2026-10-27",
+      "licence": "public domain (NASA/JPL-Caltech)",
+      "saved": "refs/perseverance/sources/pia_name_chips.txt"
+    },
+    {
+      "id": "pia_tribute_plate",
+      "title": "A Martian Tribute on Perseverance (WATSON, sol 1548)",
+      "url": "https://science.nasa.gov/photojournal/a-martian-tribute-on-perseverance/",
+      "read": "2026-10-27",
+      "licence": "public domain (NASA/JPL-Caltech)",
+      "saved": "refs/perseverance/sources/pia_tribute_plate.txt"
+    },
+    {
+      "id": "pia23924",
+      "title": "PIA23924: Perseverance Rover with Commemorative Plate",
+      "url": "https://science.nasa.gov/photojournal/perseverance-rover-with-commemorative-plate/",
+      "read": "2026-10-27",
+      "licence": "public domain (NASA/JPL-Caltech)",
+      "saved": "refs/perseverance/sources/pia23924.txt"
+    },
+    {
+      "id": "rover_evolution_plate",
+      "title": "Rover Evolution Plate Artwork",
+      "url": "https://science.nasa.gov/resource/rover-evolution-plate-artwork",
+      "read": "2026-10-27",
+      "licence": "public domain (NASA/JPL-Caltech)",
+      "saved": "refs/perseverance/sources/rover_evolution_plate.txt"
+    },
+    {
+      "id": "pia24178",
+      "title": "PIA24178: Mastcam-Z's Calibration Target",
+      "url": "https://science.nasa.gov/photojournal/mastcam-zs-calibration-target/",
+      "read": "2026-10-27",
+      "licence": "public domain (NASA/JPL-Caltech)",
+      "saved": "refs/perseverance/sources/pia24178.txt"
+    },
+    {
+      "id": "pia24261",
+      "title": "PIA24261: SHERLOC's Calibration Target Aboard the Perseverance Mars Rover",
+      "url": "https://science.nasa.gov/photojournal/sherlocs-calibration-target-aboard-the-perseverance-mars-rover/",
+      "read": "2026-10-27",
+      "licence": "public domain (NASA/JPL-Caltech)",
+      "saved": "refs/perseverance/sources/pia24261.txt"
+    },
+    {
+      "id": "pia26579",
+      "title": "PIA26579: Old Glory on the Red Planet (WATSON, sol 1548)",
+      "url": "https://science.nasa.gov/photojournal/old-glory-on-the-red-planet",
+      "read": "2026-10-27",
+      "licence": "public domain (NASA/JPL-Caltech)",
+      "saved": "refs/perseverance/sources/pia26579.txt"
+    },
+    {
+      "id": "flag_plate_artwork",
+      "title": "United States Flag Plate Artwork",
+      "url": "https://science.nasa.gov/resource/united-states-flag-plate-artwork/",
+      "read": "2026-10-27",
+      "licence": "public domain (NASA/JPL-Caltech)",
+      "saved": "refs/perseverance/sources/flag_plate_artwork.txt"
+    },
+    {
+      "id": "pia26580",
+      "title": "PIA26580: JPL on the Red Planet (WATSON, sol 1548)",
+      "url": "https://science.nasa.gov/photojournal/jpl-on-the-red-planet/",
+      "read": "2026-10-27",
+      "licence": "public domain (NASA/JPL-Caltech)",
+      "saved": "refs/perseverance/sources/pia26580.txt"
     }
   ],
   "reference_model": {
@@ -556,7 +636,8 @@
     "Camera height conflict: Maki 2020 puts the Navcams at ~1.98 m, Bell 2021 puts Mastcam-Z (on the same plate, between the Navcams) at ~2.12 m. NASA's raised model agrees with Maki (1.974 m) and with the 2.2 m height. Proposed: follow Maki and the model; the 2.12 m stays recorded as a conflict.",
     "Arm: only the stowed pose exists anywhere (the model's arm animation never moves). Proposed: model it stowed, segment lengths from the model.",
     "MMRTG 64 cm diameter: with or without fins? The model's RTG object includes its cover and heat-exchanger panels, so it can't settle this. Proposed: model the covered assembly at the model's size and keep 64 x 66 cm for the bare unit inside.",
-    "Wheelbase, track, wheel width, deck height, pivot positions and arm segment lengths come only from the NASA model (no document found). Its documented sizes agree within a few percent, so this seems safe."
+    "Wheelbase, track, wheel width, deck height, pivot positions and arm segment lengths come only from the NASA model (no document found). Its documented sizes agree within a few percent, so this seems safe.",
+    "Markings not confirmed by NASA, left out: a NASA logo, the Mars 2020 mission logo on the rover (design press only), an 'insignia plate on the left front' (one search summary), the exact geocache text '221BBAKER' (Space.com only)."
   ],
   "sheet_frame": {
     "min": [
@@ -712,5 +793,130 @@
       ],
       "radius": 0.7
     }
-  ]
+  ],
+  "markings": {
+    "name_chips_placard": {
+      "value": "plate with three chips (10,932,295 names) in its upper-left corner; laser-etched Earth and Mars joined by the Sun, 'Explore as one' in Morse code in the Sun's rays",
+      "where": "centre of the aft crossbeam, visible to the mast cameras",
+      "source": [
+        "nasa_hidden_gems, 'a metal plate located at the center of Perseverance's aft crossbeam and adorned with a laser-etched graphic depicting Earth and Mars joined by the star that gives light to both'",
+        "pia_name_chips, 'a plate fastened to the rover aft crossbeam (lower right) with three fingernail-sized chips'"
+      ],
+      "size": "not published",
+      "reference_model": "object 'Name_Chips': x -0.104..0.104, y 0.864..0.949, z 1.421..1.499",
+      "placement": {
+        "centre": [
+          0.0,
+          0.9105,
+          1.486
+        ],
+        "normal": [
+          0,
+          -0.34,
+          0.94
+        ],
+        "size": [
+          0.208,
+          0.077
+        ],
+        "source": "nasa_3d_perseverance, faces of 'Name_Chips' textured with the placard (mars_2020_04 px 500-756 x 73-169): x -0.104..0.104, y 0.874..0.947, z 1.473..1.499, tilted up toward the mast; image from that texture region"
+      }
+    },
+    "healthcare_plaque": {
+      "value": "aluminium plaque, Earth supported by the Rod of Asclepius",
+      "where": "left side of the chassis, to the right of the middle wheel seen from below",
+      "size": "3 x 5 in (8 x 13 cm)",
+      "source": [
+        "pia_tribute_plate, 'Located on the left side of the rover chassis, the 3-by-5-inch (8-by-13-centimeter) aluminum plaque'",
+        "pia23924, 'To the right of the middle wheel is the plaque'",
+        "nasa_hidden_gems, 'an image of planet Earth supported by the Rod of Asclepius'"
+      ],
+      "placement": {
+        "centre": [
+          0.573,
+          0.718,
+          0.911
+        ],
+        "size": [
+          0.08,
+          0.13
+        ],
+        "source": "pia_tribute_plate, beside the port HEPA filter grille, portrait, top level with the grille's top; grille from nasa_3d_perseverance (x 0.576, y 0.473..0.651, z 0.842..0.972); gap to the grille est. 2.7 cm from the photo, scaled by the plaque's 8 cm width; image rectified from the photo"
+      }
+    },
+    "rover_evolution_plate": {
+      "value": "etched plate: Sojourner, Spirit and Opportunity, Curiosity, Perseverance, Ingenuity",
+      "where": "on the deck (exact spot not stated)",
+      "size": "not published",
+      "source": "rover_evolution_plate, 'This artwork is etched onto a metal plate attached to the deck of the Mars Perseverance rover.'"
+    },
+    "mastcam_z_cal_target": {
+      "value": "colour swatches and shadow post; perimeter: fern, Apatosaurus, man and woman waving, rocket Earth to Mars, 'Two Worlds, One Beginning', inner solar system, DNA helix, cyanobacteria",
+      "where": "not stated",
+      "size": "not published",
+      "source": "pia24178, 'Symbols and mottos relevant to the mission are included around the target's perimeter'"
+    },
+    "sherloc_cal_target": {
+      "value": "meteorite slice, spacesuit samples, laser maze; helmet-visor sample inscribed with Sherlock Holmes's address (geocache)",
+      "where": "not stated",
+      "size": "not published",
+      "source": "pia24261, 'inscribed with the address of the fictional detective Sherlock Holmes, it doubles as a geochache for the public'",
+      "placement": {
+        "centre": [
+          -0.488,
+          -1.228,
+          0.8795
+        ],
+        "size": [
+          0.15,
+          0.061
+        ],
+        "source": "nasa_3d_perseverance, object 'calibration_target' (front face y -1.228, x -0.563..-0.413, z 0.849..0.91), textured with a two-row sample plate matching pia24261's layout; image from that texture region"
+      }
+    },
+    "flag_plate": {
+      "value": "aluminium plate with the United States flag",
+      "where": "base of the remote sensing mast",
+      "size": "not published",
+      "source": [
+        "pia26579, 'This flag artwork is located on an aluminum plate mounted on the base of Perseverance's remote sensing mast.'",
+        "flag_plate_artwork, 'This plate is located at the base of Perseverance's remote sensing mast.'"
+      ],
+      "placement": {
+        "centre": [
+          -0.557,
+          -0.778,
+          1.4
+        ],
+        "size": [
+          0.1,
+          0.0704
+        ],
+        "source": "pia26579, on the lower mast tube above its base; size est. (aspect from flag_plate_artwork, width about 0.7 of the tube's width in the photo); faces forward, est. (the arm imaged it); image: flag_plate_artwork"
+      }
+    },
+    "jpl_logo": {
+      "value": "JPL logo",
+      "where": "bolted to the chassis (exact spot not stated)",
+      "size": "not published",
+      "source": "pia26580, 'This close-up view of the JPL logo – bolted to the chassis of NASA's Perseverance'"
+    },
+    "supercam_cal_target": {
+      "value": "calibration target including a Martian meteorite that flew to the ISS and back",
+      "where": "on the mast",
+      "size": "not published",
+      "source": "nasa_hidden_gems, SuperCam meteorite calibration target (PIA24179 caption)"
+    }
+  },
+  "mounts": {
+    "healthcare_plaque": {
+      "on": "body"
+    },
+    "name_chips_placard": {
+      "on": "name_chips_mount"
+    },
+    "sherloc_cal_target": {
+      "on": "sherloc_target_mount"
+    }
+  }
 }
