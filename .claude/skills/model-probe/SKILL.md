@@ -82,6 +82,12 @@ from the repo.
 - Look at the wheels and suspension in close-ups from the side and from below: a wheel off the
   ground or a beam through a wheel is a few pixels on the sheet.
 
+## Materials
+- Use the spec's `materials` for the probe's own finishes and the shared names in
+  `lib/materials.py` for the rest. Don't add a probe's colour to the shared list: a shared
+  entry changes every probe (run `model:all` if you must).
+- Don't invent a colour in the probe script. An unsourced finish goes in `open_questions`.
+
 ## When the user corrects something
 Fix it at the level it belongs: a wrong number in the spec (with a better source), a
 part's shape in `lib/parts.py`, a look in `lib/materials.py`. If the lesson applies to

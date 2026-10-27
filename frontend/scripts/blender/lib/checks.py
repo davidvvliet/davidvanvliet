@@ -294,3 +294,40 @@ def textures(objs, glb):
     if exported < len(images):
         problems.append(f"export carries {exported} of {len(images)} images")
     return problems
+
+MATERIAL_TOL = 2e-3
+
+def materials(spec, objs, glb, problems=()):
+    """Problems with materials: spec entries without a source (fixtures excepted), and any
+    material whose colour, metallic or roughness differs between Blender and the export
+    (what the site shows). `problems`: from materials.use(). [] when fine."""
+    problems = list(problems)
+    if not spec.get("fixture"):
+        for name, e in spec.get("materials", {}).items():
+            if not e.get("source"):
+                problems.append(f"{name}: no source")
+    exported = {m.get("name"): m for m in _glb_json(glb).get("materials", [])}
+    used = {m for o in objs for m in o.data.materials if m and m.node_tree}
+    for mat in sorted(used, key=lambda m: m.name):
+        bsdf = next((n for n in mat.node_tree.nodes if n.type == "BSDF_PRINCIPLED"), None)
+        if bsdf is None:
+            problems.append(f"{mat.name}: no Principled BSDF (won't export)")
+            continue
+        g = exported.get(mat.name)
+        if g is None:
+            problems.append(f"{mat.name}: not in the export")
+            continue
+        pbr = g.get("pbrMetallicRoughness", {})
+        want = {"metallic": bsdf.inputs["Metallic"].default_value,
+                "roughness": bsdf.inputs["Roughness"].default_value}
+        got = {"metallic": pbr.get("metallicFactor", 1.0), "roughness": pbr.get("roughnessFactor", 1.0)}
+        if not bsdf.inputs["Base Color"].is_linked:  # image colours are checked by `textures`
+            want["colour"] = tuple(bsdf.inputs["Base Color"].default_value)[:3]
+            got["colour"] = tuple(pbr.get("baseColorFactor", (1, 1, 1, 1)))[:3]
+        for k in want:
+            w = want[k] if k == "colour" else (want[k],)
+            v = got[k] if k == "colour" else (got[k],)
+            if any(abs(a - b) > MATERIAL_TOL for a, b in zip(w, v)):
+                fmt = lambda t: ", ".join(f"{x:.3f}" for x in t)
+                problems.append(f"{mat.name}: {k} {fmt(w)} in Blender, {fmt(v)} exported")
+    return problems

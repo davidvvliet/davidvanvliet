@@ -16,5 +16,8 @@
     "arm_j2": {"angle": 40, "min": 0, "max": 150, "source": "design value"},
     "mast_j1": {"angle": 0, "min": -5, "max": 95, "source": "design value"}
   },
+  "materials": {
+    "body_paint": {"hex": "#d9d4c7", "metallic": 0.0, "roughness": 0.6, "source": "design value"}
+  },
   "budget": {"triangles": 50000, "glb_bytes": 1500000}
 }

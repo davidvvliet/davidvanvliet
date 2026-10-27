@@ -70,6 +70,10 @@ wrong before any document was opened (the documents later agreed, the claim was 
    the same photo, and noted as such.
    - Check what is actually visible before sizing it: a part can hide inside a cover
      (Voyager's "12-inch record" is seen as its aluminium cover, which is 30.7 cm).
+   - Finishes go in the spec's `materials`: a hex colour sampled from a photo (lit, not
+     blown out, no strong colour cast; several spots averaged), metallic and roughness, and
+     the photo and where it was sampled as the `source`. A reference model's material colours
+     are a second opinion, not a source.
    - Images used as textures need their licence quoted from the file page (NASA work is
      usually public domain; a redrawn copy says so separately). Keep only what the build needs
      in `refs/` (drawing, fit, line image) and link large photos in the spec.
@@ -78,6 +82,7 @@ wrong before any document was opened (the documents later agreed, the claim was 
      `quote`, and optional `also` (agreeing sources) and `conflict` (disagreeing ones).
    - `facts`: counts, angles and layout that aren't checked automatically, each with a source.
    - `from_reference_model`: what only the reference model gives, with how it was measured.
+   - `materials`: sourced finishes (see step 5).
    - `open_questions`: conflicts and gaps, for the user to decide.
    - `reference_model`: its URL and how it compares to the documents.
 7. **Report**: a short table of verified values with sources, the conflicts and what they

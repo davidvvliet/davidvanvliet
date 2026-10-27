@@ -76,6 +76,8 @@ def build(probe, export=True):
         entry["title"] = spec.get("title", probe)
 
         _step(status, probe, "model")
+        from lib import materials
+        material_problems = materials.use(spec.get("materials"))
         parts.clear()
         _load_probe(probe).build(spec)
         all_objs = list(parts.collection().objects)  # parts and joints
@@ -116,6 +118,10 @@ def build(probe, export=True):
                 results.append({"name": "textures", "ok": not tex, "measured": "ok" if not tex else "broken",
                                 "expected": "images + UVs", "unit": "",
                                 "detail": "; ".join(tex) or "images present, UVs inside, all exported"})
+            mat = checks.materials(spec, objs, glb, material_problems)
+            results.append({"name": "materials", "ok": not mat, "measured": "ok" if not mat else "off",
+                            "expected": "sourced, exported", "unit": "",
+                            "detail": "; ".join(mat) or "spec materials sourced; colour, metal, roughness exported as built"})
             bpy.ops.wm.save_as_mainfile(filepath=os.path.join(out_dir, f"{probe}.blend"), copy=True)
 
         entry["checks"] = results

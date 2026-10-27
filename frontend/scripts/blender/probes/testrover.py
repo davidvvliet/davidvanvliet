@@ -10,7 +10,7 @@ WHEEL_Y = {"front": 0.6, "middle": 0.0, "rear": -0.6}
 
 def build(spec):
     with parts.assembly("body", core=True):
-        parts.box("body", (1.0, 1.4, 0.4), location=(0, 0, 0.75), material="white_paint")
+        parts.box("body", (1.0, 1.4, 0.4), location=(0, 0, 0.75), material="body_paint")
 
     for sign, side in parts.sides():
         x_arm = sign * 0.55

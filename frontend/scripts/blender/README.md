@@ -6,10 +6,10 @@ Python; the command line needs only the system `python3`.
 
 ## Layout
 - `lib/parts.py`: shared parts (dish, prism bus, box, truss/rod boom, RTG, panel, cylinder, strut, disc with UVs and hub, lathe, wheel, bent tube), assemblies, joints and poses, in metres
-- `lib/materials.py`: shared materials (foil, paint, metal, solar cells) and `image()` (image colour + normal map), Principled BSDF only
+- `lib/materials.py`: the shared material list (foil, paint, metal, solar cells), merged with a spec's `materials`, and `image()` (image colour + normal map), Principled BSDF only
 - `lib/textures.py`: textures made at build time from `refs/` data (`engraved()`: colour + normal map from a line image)
 - `lib/rig.py`: review rig and contact sheet (front, three-quarter / side, top; metric grid on the orthographic views)
-- `lib/checks.py`: dimension checks measured from the built geometry, `attached`, `mounted`, `ground`, `joints`, `textures`, triangle and file-size budgets
+- `lib/checks.py`: dimension checks measured from the built geometry, `attached`, `mounted`, `ground`, `joints`, `materials`, `textures`, triangle and file-size budgets
 - `probes/<probe>.py`: one script per probe, `build(spec)` using `lib/`
 - `specs/<probe>.json`: dimensions with sources and tolerances, budgets, reference model
 - `refs/<probe>/`: reference images, shown on the dashboard
@@ -83,6 +83,27 @@ Specs for these probes can also use:
 
 `testrover` is the rover fixture: a body, rocker-bogie suspension, six wheels, a mast and a
 two-joint arm, with made-up values.
+
+## Materials
+
+A part asks for a material by name (`material="dark_metal"`). The names come from the shared
+list in `lib/materials.py` plus the spec's `materials`, which add finishes or override a shared
+one for that probe only:
+
+```json
+"materials": {
+  "body_paint": {"hex": "#d9d4c7", "metallic": 0.0, "roughness": 0.6,
+                 "source": "photo URL; sampled on the lit side of the deck"}
+}
+```
+
+`hex` is sRGB, as sampled from a photo (or `color`: linear RGB, 0-1). `metallic` and `roughness`
+default to the shared entry of the same name. Every spec material needs a `source`, like a
+dimension (fixtures excepted). The shared list's values were set by eye for Voyager; a probe
+that cares about a shared finish overrides it with a sourced one.
+
+Every build checks `materials`: spec entries have sources, and each material's colour, metallic
+and roughness in the export match Blender's (what the site shows is what was built).
 
 ## Engraved plates (textures)
 

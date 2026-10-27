@@ -7,5 +7,8 @@
   "dimensions": {
     "example_dish_diameter": {"value": 1.0, "object": "dish", "measure": "diameter", "source": ""}
   },
+  "materials": {
+    "example_paint": {"hex": "#ffffff", "metallic": 0.0, "roughness": 0.5, "source": "photo URL, where it was sampled"}
+  },
   "budget": {"triangles": 50000, "glb_bytes": 1500000}
 }
