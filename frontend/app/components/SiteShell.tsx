@@ -9,6 +9,7 @@ import Navbar from './Navbar';
 import MobilePage from './MobilePage';
 import Terminal from './Terminal';
 import ViewPanel from './ViewPanel';
+import PhotoGrid from './PhotoGrid';
 import { useIsMobile } from './useIsMobile';
 import styles from '../page.module.css';
 import { usePageStore } from '../store/pageStore';
@@ -154,15 +155,7 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
               </div>
             </div>
             <div className={styles.cell5}>
-              <a href="https://tryradar.ai" target="_blank" rel="noopener noreferrer">
-                <Image 
-                  src="/radar-full-logo.png" 
-                  alt="Radar Logo" 
-                  width={150} 
-                  height={150}
-                  className={styles.radarLogo}
-                />
-              </a>
+              <PhotoGrid />
             </div>
           </div>
           <div className={styles.cell4}>

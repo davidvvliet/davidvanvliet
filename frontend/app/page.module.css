@@ -158,13 +158,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height: 0;
+  overflow: hidden;
 }
 
-.radarLogo {
-  max-width: 100%;
-  height: auto;
-  object-fit: contain;
-}
 
 .globeWrapper {
   position: relative;
