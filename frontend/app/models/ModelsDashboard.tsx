@@ -1,6 +1,6 @@
 "use client";
 
-import { Component, ReactNode, Suspense, useEffect, useState } from "react";
+import { Component, ReactNode, Suspense, useEffect, useRef, useState } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { Environment, Lightformer, OrbitControls, useGLTF } from "@react-three/drei";
@@ -90,11 +90,13 @@ export default function ModelsDashboard() {
   const [status, setStatus] = useState<Status | null>(null);
   const [error, setError] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
-  const [sheetOverride, setSheetOverride] = useState<string | null>(null);
+  const [showRef, setShowRef] = useState(false);
   const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
-    try { setSelected(localStorage.getItem(SELECTED_KEY)); } catch { /* storage unavailable */ }
+    const fromUrl = new URLSearchParams(window.location.search).get("probe");
+    if (fromUrl) setSelected(fromUrl);
+    else try { setSelected(localStorage.getItem(SELECTED_KEY)); } catch { /* storage unavailable */ }
     let alive = true;
     const poll = async () => {
       try {
@@ -110,146 +112,106 @@ export default function ModelsDashboard() {
     return () => { alive = false; clearInterval(id); };
   }, []);
 
-  // Follow the probe being built, so the page shows whatever is happening now.
+  // Follow a probe when a build of it starts, so the page shows whatever is happening
+  // now; the build that was already finished when the page loaded doesn't count.
   const currentProbe = status?.current?.probe;
   const currentAt = status?.current?.at;
+  const seenAt = useRef<number | null | undefined>(undefined);
   useEffect(() => {
-    if (currentProbe) { setSelected(currentProbe); setSheetOverride(null); }
+    if (currentAt === undefined) return;
+    if (seenAt.current === undefined) { seenAt.current = currentAt; return; }
+    if (currentAt !== seenAt.current && currentProbe) { setSelected(currentProbe); setShowRef(false); }
+    seenAt.current = currentAt;
   }, [currentProbe, currentAt]);
 
   const choose = (name: string) => {
     setSelected(name);
-    setSheetOverride(null);
+    setShowRef(false);
     try { localStorage.setItem(SELECTED_KEY, name); } catch { /* storage unavailable */ }
   };
 
-  if (!status) return <main className={styles.page}><div className={styles.empty}>{error ? "Cannot reach /api/models/status." : "Loading…"}</div></main>;
-
-  const probe = status.probes.find((p) => p.name === selected) ?? status.probes[0];
-  const cur = status.current;
-  const running = cur?.state === "running";
+  const probe = status?.probes.find((p) => p.name === selected) ?? status?.probes[0];
+  const cur = status?.current?.probe === probe?.name ? status?.current : null;
   const b = probe?.build;
-  const sheetUrl = sheetOverride ?? (b?.sheet ? file(`out/${probe.name}/sheet.png`, b.started) : null);
-  const glbUrl = b?.glb ? file(`out/${probe.name}/${probe.name}.glb`, b.started) : null;
+  const hasRef = !!probe?.refs.includes("reference-sheet.png");
+  // Until a probe has its own build, its reference sheet is all there is to show.
+  const sheetUrl = probe && (hasRef && (showRef || !b?.sheet)
+    ? file(`refs/${probe.name}/reference-sheet.png`)
+    : b?.sheet ? file(`out/${probe.name}/sheet.png`, b.started) : null);
+  const glbUrl = probe && b?.glb ? file(`out/${probe.name}/${probe.name}.glb`, b.started) : null;
+  const state = !status ? (error ? "offline" : "") : cur?.state === "running" ? "building"
+    : b?.error ? "error" : b ? (b.ok ? "pass" : "fail") : "not built";
+  const dot = cur?.state === "running" ? styles.running : b?.ok ? styles.ok : b ? styles.bad : "";
+
+  const live = status?.current?.probe === probe?.name ? status?.current ?? null : null; // telemetry follows the tab
+  const running = live?.state === "running";
+  const anyRunning = status?.current?.state === "running";
+  const passed = b?.checks?.filter((c) => c.ok).length ?? 0;
 
   return (
     <main className={styles.page}>
       <header className={styles.header}>
-        <div className={styles.title}>Probe models <span className={styles.dim}>· dev</span></div>
-        {cur ? (
-          <div className={styles.current}>
-            <span className={`${styles.dot} ${running ? styles.running : cur.state === "done" ? styles.ok : styles.bad}`} />
-            <b>{cur.probe}</b>
-            <span className={styles.steps}>
-              {STEPS.map((s) => {
-                const i = STEPS.indexOf(s), at = STEPS.indexOf(cur.step);
-                const cls = cur.step === "error" ? (s === "done" ? styles.stepBad : "") : i < at || (i === at && !running) ? styles.stepDone : i === at ? styles.stepNow : "";
-                return <span key={s} className={cls}>{s}</span>;
-              })}
-            </span>
-            <span className={styles.dim}>{cur.message ?? ""} · {cur.session} · {ago(cur.at, now)}</span>
-          </div>
-        ) : <div className={styles.dim}>No builds yet. Run: npm run model &lt;probe&gt;</div>}
-        {error && <div className={styles.bad}>Lost contact with the dev server.</div>}
-      </header>
-
-      <nav className={styles.tabs}>
-        {status.probes.map((p) => (
-          <button key={p.name} onClick={() => choose(p.name)} className={`${styles.tab} ${p.name === probe?.name ? styles.tabActive : ""}`}>
-            <span className={`${styles.dot} ${!p.build ? "" : p.build.ok ? styles.ok : styles.bad}`} />
-            {p.title}{p.fixture && <span className={styles.dim}> (fixture)</span>}
-          </button>
-        ))}
-      </nav>
-
-      {probe && (
-        <>
-          {probe.note && <p className={styles.note}>{probe.note}</p>}
-          <section className={styles.grid}>
-            <div className={styles.panel}>
-              <div className={styles.panelHead}>3D <span className={styles.dim}>drag to orbit · scroll to zoom</span></div>
-              <div className={styles.viewer}>{glbUrl ? <Viewer url={glbUrl} /> : <div className={styles.empty}>No export yet.</div>}</div>
-            </div>
-            <div className={styles.panel}>
-              <div className={styles.panelHead}>
-                Contact sheet <span className={styles.dim}>front · ¾ / side · top
-                  {b?.grid_m && ` · grid ${Object.entries(b.grid_m).map(([v, m]) => `${v} ${m} m`).join(", ")}`}</span>
-              </div>
-              {sheetUrl ? <img className={styles.sheet} src={sheetUrl} alt={`${probe.title} contact sheet`} /> : <div className={styles.empty}>No render yet.</div>}
-              {sheetOverride && <button className={styles.link} onClick={() => setSheetOverride(null)}>← back to latest</button>}
-            </div>
-          </section>
-
-          {probe.refs.length > 0 && (
-            <section className={styles.panel}>
-              <div className={styles.panelHead}>Reference</div>
-              <div className={styles.refs}>
-                {probe.refs.map((r) => <a key={r} href={file(`refs/${probe.name}/${r}`)} target="_blank" rel="noreferrer"><img src={file(`refs/${probe.name}/${r}`)} alt={r} /></a>)}
-              </div>
-            </section>
+        <nav className={styles.tabs}>
+          {status?.probes.map((p) => (
+            <button key={p.name} onClick={() => choose(p.name)} className={p.name === probe?.name ? styles.active : ""}>
+              <span className={`${styles.dot} ${live?.probe === p.name && running ? styles.running : !p.build ? "" : p.build.ok ? styles.ok : styles.bad}`} />
+              {p.name}
+            </button>
+          ))}
+        </nav>
+        <div className={styles.telemetry}>
+          {live && running ? (
+            <span className={styles.stepNow}>building {Math.max(1, STEPS.indexOf(live.step) + 1)}/{STEPS.length}</span>
+          ) : live?.step === "error" ? (
+            <span className={styles.bad}>build error</span>
+          ) : null}
+          {b ? (
+            <>
+              {b.checks && <span className={passed === b.checks.length ? styles.ok : styles.bad}>{passed}/{b.checks.length} checks</span>}
+              <span className={styles.dim}>
+                {b.seconds !== undefined ? `${b.seconds}s build · ` : ""}{ago(b.started, now)}{live ? ` · ${live.session}` : ""}
+              </span>
+            </>
+          ) : probe ? <span className={styles.dim}>not built yet{hasRef ? " · showing reference" : ""}</span> : null}
+          {anyRunning && status?.current?.probe !== probe?.name && (
+            <span className={styles.dim}>building {status?.current?.probe}</span>
           )}
-
-          <section className={styles.panel}>
-            <div className={styles.panelHead}>
-              Checks {b && <span className={b.ok ? styles.ok : styles.bad}>{b.ok ? "all pass" : "failing"}</span>}
-              {b?.seconds !== undefined && <span className={styles.dim}> · built in {b.seconds}s, {ago(b.started, now)}</span>}
-              {b?.approved && <span className={styles.dim}> · approved {ago(b.approved, now)}</span>}
+          {error && <span className={styles.bad}>offline</span>}
+        </div>
+      </header>
+      <div className={styles.grid}>
+        <div className={styles.viewCell}>
+          {glbUrl ? <Viewer url={glbUrl} /> : <div className={styles.empty}>{probe ? "no export" : ""}</div>}
+        </div>
+        <div className={styles.side}>
+          <div className={styles.sheetCell}>
+            {sheetUrl ? <img className={styles.sheet} src={sheetUrl} alt="" /> : <div className={styles.empty}>no sheet</div>}
+            {hasRef && b?.sheet && (
+              <button className={styles.toggle} onClick={() => setShowRef((v) => !v)}>{showRef ? "reference" : "build"}</button>
+            )}
+          </div>
+          <div className={styles.statusCell}>
+            <div className={styles.statusLine}>
+              <span className={`${styles.dot} ${dot}`} />
+              <span>{probe?.name ?? "—"}</span>
+              <span className={styles.dim}>{state}{b && cur?.state !== "running" ? ` · ${ago(b.started, now)}` : ""}</span>
             </div>
-            {b?.error && <pre className={styles.error}>{b.error}</pre>}
+            {b?.error && <pre className={styles.error}>{b.error.trim().split("\n").slice(-3).join("\n")}</pre>}
             {b?.checks && (
-              <table className={styles.table}>
-                <thead><tr><th /><th>check</th><th>measured</th><th>spec</th><th /><th>source</th></tr></thead>
+              <table className={styles.checks}>
                 <tbody>
                   {b.checks.map((c) => (
-                    <tr key={c.name}>
-                      <td className={c.ok ? styles.ok : styles.bad}>{c.ok ? "✓" : "✗"}</td>
-                      <td>{c.name}</td>
-                      <td>{fmt(c.measured, c.unit)}</td>
-                      <td>{fmt(c.expected, c.unit)}</td>
-                      <td className={styles.dim}>{c.detail}</td>
-                      <td className={styles.dim}>{c.source?.startsWith("http") ? <a href={c.source} target="_blank" rel="noreferrer">link</a> : c.source}</td>
+                    <tr key={c.name} className={c.ok ? "" : styles.bad}>
+                      <td>{c.ok ? "✓" : "✗"}</td><td>{c.name}</td><td>{fmt(c.measured, c.unit)}</td><td className={styles.dim}>{fmt(c.expected, c.unit)}</td>
                     </tr>
                   ))}
-                  {b.baseline && (
-                    <tr>
-                      <td className={b.baseline.changed ? styles.bad : styles.ok}>{b.baseline.changed ? "✗" : "✓"}</td>
-                      <td>baseline</td><td colSpan={2}>{b.baseline.changed ? "sheet changed" : "unchanged"}</td>
-                      <td className={styles.dim}>diff {b.baseline.diff}</td><td />
-                    </tr>
-                  )}
+                  {b.baseline?.changed && <tr className={styles.bad}><td>✗</td><td>baseline</td><td colSpan={2}>changed</td></tr>}
                 </tbody>
               </table>
             )}
-          </section>
-
-          {b?.history && b.history.length > 1 && (
-            <section className={styles.panel}>
-              <div className={styles.panelHead}>History <span className={styles.dim}>click to compare</span></div>
-              <div className={styles.history}>
-                {[...b.history].reverse().map((h) => {
-                  const url = file(`out/${probe.name}/history/${h}`);
-                  return (
-                    <button key={h} onClick={() => setSheetOverride(url)} className={sheetOverride === url ? styles.historyActive : ""}>
-                      <img src={url} alt={h} />
-                      <span>{h.replace(/^(\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})(\d{2})\.png$/, "$4:$5:$6")}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </section>
-          )}
-
-          {(probe.sources.some((s) => s.url) || probe.referenceModel?.url) && (
-            <section className={styles.panel}>
-              <div className={styles.panelHead}>Sources</div>
-              <ul className={styles.sources}>
-                {probe.referenceModel?.url && <li><a href={probe.referenceModel.url} target="_blank" rel="noreferrer">Reference model</a> <span className={styles.dim}>{probe.referenceModel.note}</span></li>}
-                {probe.sources.filter((s) => s.url).map((s) => <li key={s.url}><a href={s.url} target="_blank" rel="noreferrer">{s.title || s.url}</a></li>)}
-              </ul>
-            </section>
-          )}
-        </>
-      )}
+          </div>
+        </div>
+      </div>
     </main>
   );
 }
