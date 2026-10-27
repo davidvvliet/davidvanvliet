@@ -16,8 +16,17 @@
   position: relative;
   display: block;
   overflow: hidden;
-  outline: 1px solid transparent;
-  outline-offset: -1px;
+}
+
+/* The highlight is its own layer above the photo or video, so neither can
+   cover it, and it has no transition, so it shows the moment you hover. */
+.tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid transparent;
+  z-index: 1;
+  pointer-events: none;
 }
 
 .tile img,
@@ -37,7 +46,7 @@
   opacity: 1;
 }
 
-.tile:hover,
-.active {
-  outline-color: #00ff00;
+.tile:hover::after,
+.active::after {
+  border-color: #00ff00;
 }
