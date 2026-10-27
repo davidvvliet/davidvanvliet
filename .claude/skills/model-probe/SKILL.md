@@ -14,7 +14,7 @@ from the repo.
   document and page). A value estimated from a reference image says so in its source
   ("estimated from refs/<probe>/<file>, scaled by the 3.66 m dish").
 - Look for an official NASA 3D model first (NASA's 3D Resources) and record it in
-  `reference_model`. Use it to measure against; say so before deriving geometry from it.
+  `reference_model`. Measure it with `npm run model:ref`; say so before deriving geometry from it.
 - Model in metres at real size. Stay within the budgets (default 50k triangles, 1.5 MB).
 - Build from `lib/parts.py`. When a probe needs a part twice or another probe will want
   it, add it to `lib/` instead of writing it in the probe script.
@@ -25,9 +25,8 @@ from the repo.
   (see "From Blender to the site" in the README, including the scale problem).
 
 ## Loop
-1. `npm run model:new <probe> "Title"` (from `frontend/`), then fill in the spec: sources,
-   reference model, the dimensions that define the craft's silhouette, each with its part
-   name and measure.
+1. `npm run model:new <probe> "Title"` (from `frontend/`), then research and fill in the spec
+   with the `research-probe` skill, and get the user's review of it before modelling.
 2. Put reference images in `refs/<probe>/` (the dashboard shows them beside the sheet).
 3. Ask the user to start the live session (`npm run blender`) if they want to watch, and to
    open `localhost:3000/models` (their iTerm2 browser pane works).

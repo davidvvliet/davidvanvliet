@@ -15,6 +15,7 @@ Python; the command line needs only the system `python3`.
 - `baselines/<probe>.png`: the approved contact sheet, for regression checks
 - `templates/`: what `new` copies
 - `addon/live_server.py`: runs inside Blender's GUI so builds land in the open session
+- `ref.py`: reference-model measuring (same rig, pieces with sizes and main-axis lengths)
 - `build.py`: the build itself (spec → model → checks → render → export), headless or live
 - `run.py`: the command line
 - `blender.json`: pinned Blender version, path and live-server port
@@ -26,6 +27,7 @@ Python; the command line needs only the system `python3`.
 - `npm run model:all`: rebuild every probe; fails on a failing check or a sheet that changed against its baseline
 - `npm run model:approve <probe>`: copy the last passing build to `public/models/` and make its sheet the baseline
 - `npm run model:new <probe> "Title"`: start a probe from the templates
+- `npm run model:ref <probe> <model.glb>`: measure a reference model (sheet in `refs/<probe>/`, largest pieces in `out/<probe>/ref/parts.json`)
 - `npm run model:status`, `npm run model:watch` (contact sheets inline in iTerm2)
 - `python3 scripts/blender/run.py send <file.py>`: run any Python in the live session
 

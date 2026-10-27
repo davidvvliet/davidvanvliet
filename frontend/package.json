@@ -11,6 +11,7 @@
     "model:all": "python3 scripts/blender/run.py all",
     "model:new": "python3 scripts/blender/run.py new",
     "model:approve": "python3 scripts/blender/run.py approve",
+    "model:ref": "python3 scripts/blender/run.py ref",
     "model:status": "python3 scripts/blender/run.py status",
     "model:watch": "python3 scripts/blender/run.py watch"
   },

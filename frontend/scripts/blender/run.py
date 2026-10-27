@@ -9,6 +9,7 @@
 #   run.py approve <probe> [--force] copy the last build to public/models and make its
 #                                   sheet the baseline
 #   run.py new <probe> ["Title"]    start a probe from the templates
+#   run.py ref <probe> <model>      measure a reference model: sheet + largest pieces
 #   run.py send <file.py | ->       run Python in the live session
 #   run.py status                   print the last build of every probe
 #   run.py watch                    show each new contact sheet in iTerm2 (imgcat)
@@ -182,6 +183,28 @@ def cmd_new(args):
     os.makedirs(os.path.join(HERE, "refs", probe), exist_ok=True)
     print(f"Put reference images in refs/{probe}/, fill in the spec, then: run.py build {probe}")
 
+def cmd_ref(args):
+    if len(args) != 2:
+        die("usage: run.py ref <probe> <model.glb|.gltf|.obj|.fbx|.stl>")
+    probe, model = args[0], os.path.abspath(args[1])
+    if not os.path.exists(model):
+        die(f"{model} not found")
+    check_version()
+    proc = subprocess.run([BLENDER, "--background", "--factory-startup", "--python-exit-code", "1",
+                           "--python", os.path.join(HERE, "ref.py"), "--", probe, model],
+                          capture_output=True, text=True)
+    line = next((l for l in proc.stdout.splitlines() if l.startswith("REF_OK ")), None)
+    if not line:
+        die(proc.stdout[-4000:] + proc.stderr[-4000:])
+    info = json.loads(line[7:])
+    parts = os.path.join(OUT, probe, "ref", "parts.json")
+    print(f"{info['model']}: {info['triangles']:,} tris, size {info['size_m']} m, {info['pieces']} pieces")
+    print(f"  grid {info['grid_m']}")
+    print(f"  sheet: {os.path.join(HERE, 'refs', probe, 'reference-sheet.png')}")
+    print(f"  pieces (largest first): {parts}")
+    for r in json.load(open(parts))["largest_pieces"][:12]:
+        print(f"    {r['main_length']:>7} m  size {r['size']}  centre {r['centre']}  {r['material']}")
+
 def cmd_status(args):
     status = read_status()
     cur = status.get("current")
@@ -213,7 +236,7 @@ def cmd_watch(args):
         time.sleep(0.5)
 
 COMMANDS = {"blender": cmd_blender, "build": cmd_build, "all": cmd_all, "approve": cmd_approve,
-            "new": cmd_new, "send": cmd_send, "status": cmd_status, "watch": cmd_watch}
+            "new": cmd_new, "ref": cmd_ref, "send": cmd_send, "status": cmd_status, "watch": cmd_watch}
 
 if __name__ == "__main__":
     if len(sys.argv) < 2 or sys.argv[1] not in COMMANDS:
