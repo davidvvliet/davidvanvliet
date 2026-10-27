@@ -57,6 +57,16 @@
 .toggle button { background: none; border: none; padding: 0; color: #666; font: inherit; cursor: pointer; }
 .toggle .active { color: #ededed; }
 
+.explode {
+  position: absolute; top: 0.5rem; left: 0.75rem; z-index: 1;
+  background: none; border: none; padding: 0; color: #777; font: inherit; cursor: pointer;
+}
+.explode:hover, .explode.active { color: #ededed; }
+/* Info for the hovered or focused part: fixed under the Explode button, never over the part. */
+.partLabel {
+  position: absolute; top: 2rem; left: 0.75rem; z-index: 1; pointer-events: none;
+  display: flex; flex-direction: column; gap: 0.15rem; white-space: nowrap;
+}
 .statusCell { padding: 0.75rem; overflow: auto; min-height: 0; display: flex; flex-direction: column; gap: 0.5rem; }
 .statusLine { display: flex; align-items: center; gap: 0.5rem; }
 
