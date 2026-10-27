@@ -1,4 +1,5 @@
 import { Command } from "../types";
+import { run } from "../run";
 import { register } from "../registry";
 import { getAllPosts, getPost } from "../../writing";
 import { usePageStore } from "../../store/pageStore";
@@ -16,13 +17,13 @@ const writing: Command = {
         "__DIM__Usage: writing | w <post>",
         "",
         "Writing:",
-        ...posts.map((p) => `  ${p.slug.padEnd(maxSlug)}    __GRAY__${p.title}  ${p.date}`),
+        ...posts.map((p) => `  ${run(`writing ${p.slug}`, p.slug)}${" ".repeat(maxSlug - p.slug.length)}    __GRAY__${p.title}  ${p.date}`),
       ];
     }
 
     const slug = args[0].toLowerCase();
     const post = getPost(slug);
-    if (!post) return [`Unknown post: ${slug}. Type "writing" to see available posts.`];
+    if (!post) return [`Unknown post: ${slug}. Type "${run("writing")}" to see available posts.`];
 
     usePageStore.getState().setBlogPost(slug);
     usePageStore.getState().setLeftPanel("blog");

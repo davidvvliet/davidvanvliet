@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect, KeyboardEvent } from "react";
 import styles from "./Terminal.module.css";
 import { getCommand, getAllCommands } from "../terminal";
+import { run, RUN_SPLIT } from "../terminal/run";
 import { usePageStore } from "../store/pageStore";
 
 type Line = { text: string; type: "input" | "output"; restored?: boolean };
@@ -25,6 +26,34 @@ function linkify(text: string): React.ReactNode {
     )
   );
 }
+
+// Output text with clickable commands (see terminal/run.ts); the rest is linkified.
+function rich(text: string, onRun: (command: string) => void): React.ReactNode {
+  const parts = text.split(new RegExp(RUN_SPLIT.source, "g"));
+  if (parts.length === 1) return linkify(text);
+  const out: React.ReactNode[] = [];
+  for (let i = 0; i < parts.length; i += 3) {
+    if (parts[i]) out.push(<React.Fragment key={i}>{linkify(parts[i])}</React.Fragment>);
+    if (i + 1 < parts.length) {
+      const command = parts[i + 1];
+      out.push(
+        <span
+          key={i + 1}
+          role="button"
+          tabIndex={-1}
+          className={styles.run}
+          onClick={(e) => { e.stopPropagation(); onRun(command); }}
+        >{parts[i + 2]}</span>
+      );
+    }
+  }
+  return out;
+}
+
+// Typing speed for a clicked command: about a quarter second in all.
+const TYPE_TOTAL_MS = 250;
+const TYPE_MIN_STEP_MS = 12;
+const TYPE_MAX_STEP_MS = 35;
 
 // A video line. Fresh: autoplays at 3x and scrolls into view once it has a size;
 // when it ends, its source is dropped (releasing the decoder and buffers) and the
@@ -221,7 +250,12 @@ export default function Terminal() {
       setLines((prev) => [
         ...prev,
         { text: `> ${input}`, type: "input" },
-        { text: matches.join("  "), type: "output" },
+        {
+          text: matches
+            .map((m) => run(isCommandWord ? m : [...words.slice(0, -1), m].join(" "), m))
+            .join("  "),
+          type: "output",
+        },
       ]);
     }
   };
@@ -238,7 +272,7 @@ export default function Terminal() {
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (transcriptPlaying) { e.preventDefault(); return; }
+    if (transcriptPlaying || typingRef.current) { e.preventDefault(); return; }
     if (e.key === "Tab") {
       e.preventDefault();
       handleTab();
@@ -251,41 +285,75 @@ export default function Terminal() {
       return;
     }
 
-    if (e.key === "Enter") {
-      const trimmed = input.trim();
-      if (!trimmed) {
-        setLines((prev) => [...prev, { text: ">", type: "input" }]);
-        setInput("");
-        setCursorPos(0);
-        return;
-      }
+    if (e.key === "Enter") runCommand(input);
+  };
 
-      // Record in history (skip consecutive duplicates) and reset browsing.
-      const history = historyRef.current;
-      if (history[history.length - 1] !== trimmed) history.push(trimmed);
-      historyIndexRef.current = history.length;
-      draftRef.current = "";
-
-      const [name, ...args] = trimmed.split(" ");
-      const command = getCommand(name.toLowerCase());
-
-      const output = command
-        ? command.execute(args)
-        : [`Unknown command: ${name}. Type "help" for available commands.`];
-
-      if (output.includes("__CLEAR__")) {
-        setLines([]);
-      } else {
-        setLines((prev) => [
-          ...prev,
-          { text: `> ${trimmed}`, type: "input" },
-          ...output.map((text) => ({ text, type: "output" as const })),
-        ]);
-      }
+  // Run a command line, exactly as pressing Enter does: echo, history, output.
+  const runCommand = (line: string) => {
+    const trimmed = line.trim();
+    if (!trimmed) {
+      setLines((prev) => [...prev, { text: ">", type: "input" }]);
       setInput("");
       setCursorPos(0);
+      return;
     }
+
+    // Record in history (skip consecutive duplicates) and reset browsing.
+    const history = historyRef.current;
+    if (history[history.length - 1] !== trimmed) history.push(trimmed);
+    historyIndexRef.current = history.length;
+    draftRef.current = "";
+
+    const [name, ...args] = trimmed.split(" ");
+    const command = getCommand(name.toLowerCase());
+
+    const output = command
+      ? command.execute(args)
+      : [`Unknown command: ${name}. Type "${run("help")}" for available commands.`];
+
+    if (output.includes("__CLEAR__")) {
+      setLines([]);
+    } else {
+      setLines((prev) => [
+        ...prev,
+        { text: `> ${trimmed}`, type: "input" },
+        ...output.map((text) => ({ text, type: "output" as const })),
+      ]);
+    }
+    setInput("");
+    setCursorPos(0);
   };
+
+  // A clicked command: type it into the prompt, then press Enter. Clicks and keys
+  // are ignored while it types. The prompt keeps focus only with a mouse, so a tap
+  // on a phone doesn't open the keyboard.
+  const typingRef = useRef(false);
+  const typeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => { if (typeTimerRef.current) clearTimeout(typeTimerRef.current); }, []);
+  const typeAndRun = (command: string) => {
+    if (typingRef.current || transcriptPlaying) return;
+    typingRef.current = true;
+    if (window.matchMedia("(pointer: fine)").matches) inputRef.current?.focus();
+    const step = Math.min(TYPE_MAX_STEP_MS, Math.max(TYPE_MIN_STEP_MS, TYPE_TOTAL_MS / command.length));
+    let typed = 0;
+    const tick = () => {
+      typed++;
+      setInput(command.slice(0, typed));
+      setCursorPos(typed);
+      if (typed < command.length) {
+        typeTimerRef.current = setTimeout(tick, step);
+      } else {
+        typeTimerRef.current = setTimeout(() => {
+          typingRef.current = false;
+          runCommand(command);
+        }, step * 2);
+      }
+    };
+    setInput("");
+    setCursorPos(0);
+    typeTimerRef.current = setTimeout(tick, step);
+  };
+  const r = (text: string) => rich(text, typeAndRun);
 
   const beforeCaret = input.slice(0, cursorPos);
   const afterCaret = input.slice(cursorPos);
@@ -305,13 +373,13 @@ export default function Terminal() {
           </div>
         ) : line.type === "output" && line.text.startsWith("__TIMED__") ? (
           <div key={i} className={styles.timedRow}>
-            <span className={`${styles.timedText} ${styles.output}`}>{line.text.split("__TIMED__")[1]}</span>
-            <span className={styles.dim}>{line.text.split("__TIMED__")[2]}</span>
+            <span className={`${styles.timedText} ${styles.output}`}>{r(line.text.split("__TIMED__")[1])}</span>
+            <span className={styles.dim}>{r(line.text.split("__TIMED__")[2])}</span>
           </div>
         ) : line.type === "output" && line.text.startsWith("__COL__") ? (
           <div key={i} className={styles.colRow}>
-            <span className={`${styles.colLeft} ${styles.output}`}>{line.text.split("__COL__")[1]}</span>
-            <span className={styles.dim}>{line.text.split("__COL__")[2]}</span>
+            <span className={`${styles.colLeft} ${styles.output}`}>{r(line.text.split("__COL__")[1])}</span>
+            <span className={styles.dim}>{r(line.text.split("__COL__")[2])}</span>
           </div>
         ) : (
           <div key={i} className={`${styles.line} ${line.type === "output" ? styles.output : ""}`}>
@@ -322,21 +390,21 @@ export default function Terminal() {
               </>
             ) : line.text.includes("__GRAY__") ? (
               <>
-                {linkify(line.text.split("__GRAY__")[0])}
-                <span className={styles.gray}>{linkify(line.text.split("__GRAY__")[1])}</span>
+                {r(line.text.split("__GRAY__")[0])}
+                <span className={styles.gray}>{r(line.text.split("__GRAY__")[1])}</span>
               </>
             ) : line.text.includes("__SMALL__") ? (
               <>
-                {linkify(line.text.split("__SMALL__")[0])}
-                <span className={styles.small}>{linkify(line.text.split("__SMALL__")[1])}</span>
+                {r(line.text.split("__SMALL__")[0])}
+                <span className={styles.small}>{r(line.text.split("__SMALL__")[1])}</span>
               </>
             ) : line.text.includes("__DIM__") ? (
               <>
-                {linkify(line.text.split("__DIM__")[0])}
-                <span className={styles.dim}>{linkify(line.text.split("__DIM__")[1])}</span>
+                {r(line.text.split("__DIM__")[0])}
+                <span className={styles.dim}>{r(line.text.split("__DIM__")[1])}</span>
               </>
             ) : (
-              linkify(line.text)
+              r(line.text)
             )}
           </div>
         )

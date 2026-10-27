@@ -1,4 +1,5 @@
 import { Command } from "../types";
+import { run } from "../run";
 import { register } from "../registry";
 import { usePageStore } from "../../store/pageStore";
 
@@ -17,7 +18,7 @@ const scale: Command = {
     const store = usePageStore.getState();
     const arg = args[0]?.toLowerCase();
     if (!arg) {
-      return ["__DIM__Usage: scale true | compact", `Currently: ${store.scaleMode}`];
+      return [`__DIM__Usage: scale ${run("scale true", "true")} | ${run("scale compact", "compact")}`, `Currently: ${store.scaleMode}`];
     }
     if (arg !== "true" && arg !== "compact") {
       return [`Unknown scale: ${arg}. Use "true" or "compact".`];

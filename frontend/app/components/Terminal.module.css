@@ -111,6 +111,18 @@
   text-underline-offset: 2px;
 }
 
+.run {
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: rgba(0, 255, 0, 0.35);
+  text-underline-offset: 2px;
+}
+
+.run:hover {
+  color: #00ff00;
+  text-decoration-color: currentColor;
+}
+
 .link:hover {
   color: #00ff00;
 }

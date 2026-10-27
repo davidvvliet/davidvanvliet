@@ -1,4 +1,5 @@
 import { Command } from "../types";
+import { run } from "../run";
 import { register } from "../registry";
 import { usePageStore } from "../../store/pageStore";
 
@@ -37,7 +38,7 @@ const time: Command = {
     const store = usePageStore.getState();
     if (!args[0]) {
       return [
-        "__DIM__Usage: time <duration> | real",
+        `__DIM__Usage: time <duration> | ${run("time real", "real")}`,
         `One Earth day currently takes ${describe(store.secondsPerDay)}.`,
       ];
     }

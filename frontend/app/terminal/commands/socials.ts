@@ -1,4 +1,5 @@
 import { Command } from "../types";
+import { run } from "../run";
 import { register } from "../registry";
 
 const links: Record<string, string> = {
@@ -17,13 +18,13 @@ const socials: Command = {
     if (!input) {
       return [
         "__DIM__Usage: socials | s <platform>",
-        `Available: ${Object.keys(links).join(", ")}`,
+        `Available: ${Object.keys(links).map((k) => run(`socials ${k}`, k)).join(", ")}`,
       ];
     }
 
     const key = Object.keys(links).find((k) => k.toLowerCase() === input);
     if (!key) {
-      return [`Unknown platform: ${input}. Available: ${Object.keys(links).join(", ")}`];
+      return [`Unknown platform: ${input}. Available: ${Object.keys(links).map((k) => run(`socials ${k}`, k)).join(", ")}`];
     }
 
     window.open(links[key], "_blank");
