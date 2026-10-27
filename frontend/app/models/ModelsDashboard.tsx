@@ -38,39 +38,80 @@ function ago(t: number, now: number) {
 // Part family, as explode.py groups them: rtg_1 and rtg_1_fins -> rtg, feed_leg_3 -> feed_leg.
 const family = (name: string) => name.replace(/_fins$/, "").replace(/_\d+$/, "");
 
-type Part = { node: THREE.Object3D; rest: THREE.Vector3; family: string; meshes: THREE.Mesh[] };
+// A part's group: the assembly it was built in (glTF extras, from parts.assembly), else for
+// untagged models its top-level node's name family.
+const tagged = (o: THREE.Object3D) => {
+  for (let x: THREE.Object3D | null = o; x; x = x.parent) if (typeof x.userData.assembly === "string") return x;
+  return null;
+};
+function groupOf(o: THREE.Object3D, scene: THREE.Object3D) {
+  const t = tagged(o);
+  if (t) return t.userData.assembly as string;
+  while (o.parent && o.parent !== scene) o = o.parent;
+  return family(o.name);
+}
 
-// Every top-level node of the export is one part. Each family is pushed away from the bus
-// centre: a fixed step plus a share of its distance, capped so the 13 m booms stay in view.
+// A unit is one node that moves when exploding: an assembly's outermost node (its parent
+// is in another assembly or is the scene), or a top-level node of an untagged model.
+type Unit = { node: THREE.Object3D; rest: THREE.Vector3; group: string; local: THREE.Vector3 };
+type Part = { group: string; meshes: THREE.Mesh[] };
+
+// Each group is pushed away from the core (the assembly tagged core, else "bus", else the
+// largest group): a fixed step plus a share of its distance, capped so parts stay in view.
 function useParts(scene: THREE.Object3D) {
   return useMemo(() => {
-    const parts: Part[] = scene.children.map((node) => {
-      const meshes: THREE.Mesh[] = [];
-      node.traverse((o) => {
-        const m = o as THREE.Mesh;
-        if (!m.isMesh) return;
-        // Parts share materials ("black" etc.): give each mesh its own so a highlight stays on one part.
-        m.material = Array.isArray(m.material) ? m.material.map((x) => x.clone()) : m.material.clone();
-        meshes.push(m);
-      });
-      return { node, rest: node.position.clone(), family: family(node.name), meshes };
-    });
+    scene.updateMatrixWorld(true);
+    const parts = new Map<string, Part>();
     const boxes = new Map<string, THREE.Box3>();
-    for (const p of parts) {
-      const box = boxes.get(p.family) ?? new THREE.Box3();
-      boxes.set(p.family, box.union(new THREE.Box3().setFromObject(p.node)));
-    }
-    const busBox = boxes.get("bus") ?? new THREE.Box3().setFromObject(scene);
-    const bus = busBox.getCenter(new THREE.Vector3());
-    const step = busBox.getSize(new THREE.Vector3()).length() * 1.0;
+    let core: string | null = null;
+    scene.traverse((o) => {
+      if (o.userData.core && typeof o.userData.assembly === "string") core = o.userData.assembly;
+      const m = o as THREE.Mesh;
+      if (!m.isMesh) return;
+      // Parts share materials ("black" etc.): give each mesh its own so a highlight stays on one part.
+      m.material = Array.isArray(m.material) ? m.material.map((x) => x.clone()) : m.material.clone();
+      const g = groupOf(m, scene);
+      const p = parts.get(g) ?? { group: g, meshes: [] };
+      p.meshes.push(m);
+      parts.set(g, p);
+      const box = boxes.get(g) ?? new THREE.Box3();
+      boxes.set(g, box.union(new THREE.Box3().setFromObject(m)));
+    });
+    let largest = "", size = -1;
+    for (const [g, b] of boxes) { const l = b.getSize(new THREE.Vector3()).length(); if (l > size) { size = l; largest = g; } }
+    const centreGroup: string = core ?? (boxes.has("bus") ? "bus" : largest);
+    const coreBox = boxes.get(centreGroup) ?? new THREE.Box3().setFromObject(scene);
+    const centre = coreBox.getCenter(new THREE.Vector3());
+    const step = coreBox.getSize(new THREE.Vector3()).length() * 1.0;
+    const reach = new THREE.Box3().setFromObject(scene).getBoundingSphere(new THREE.Sphere()).radius * 1.1;
     const offsets = new Map<string, THREE.Vector3>();
-    for (const [fam, box] of boxes) {
-      const d = box.getCenter(new THREE.Vector3()).sub(bus);
+    for (const [g, box] of boxes) {
+      const d = box.getCenter(new THREE.Vector3()).sub(centre);
       const len = d.length();
-      if (fam === "bus" || len < 1e-6) { offsets.set(fam, new THREE.Vector3()); continue; }
-      offsets.set(fam, d.normalize().multiplyScalar(step + Math.min(len, step * 2) * 0.8));
+      if (g === centreGroup || len < 1e-6) { offsets.set(g, new THREE.Vector3()); continue; }
+      // Keep exploded parts near the assembled model's bounds so they stay in view.
+      const push = Math.min(step + Math.min(len, step * 2) * 0.8, Math.max(reach - len, step * 0.3));
+      offsets.set(g, d.normalize().multiplyScalar(push));
     }
-    return { parts, offsets, boxes };
+    // Units, and each unit's offset in its parent's frame, less what it inherits from an
+    // ancestor unit that moves too.
+    const units: Unit[] = [];
+    const zero = new THREE.Vector3();
+    const visit = (o: THREE.Object3D, inherited: THREE.Vector3) => {
+      for (const c of o.children) {
+        const g = c.userData.assembly as string | undefined;
+        const outer = typeof g === "string" ? g !== (tagged(o)?.userData.assembly) : o === scene;
+        if (!outer) { visit(c, inherited); continue; }
+        const group = typeof g === "string" ? g : groupOf(c, scene);
+        const want = offsets.get(group) ?? zero;
+        const world = want.clone().sub(inherited);
+        const inv = new THREE.Matrix3().setFromMatrix4(o.matrixWorld).invert();
+        units.push({ node: c, rest: c.position.clone(), group, local: world.applyMatrix3(inv) });
+        visit(c, want);
+      }
+    };
+    visit(scene, zero);
+    return { parts: [...parts.values()], units, offsets, boxes };
   }, [scene]);
 }
 
@@ -90,7 +131,7 @@ function Model({ url, exploded, focus, setFocus, onLabel }: {
   onLabel: (label: { name: string; size: THREE.Vector3 } | null) => void;
 }) {
   const { scene } = useGLTF(url);
-  const { parts, offsets, boxes } = useParts(scene);
+  const { parts, units, offsets, boxes } = useParts(scene);
   const [hover, setHover] = useState<string | null>(null);
   const t = useRef(0);
   const camera = useThree((s) => s.camera) as THREE.PerspectiveCamera;
@@ -133,7 +174,7 @@ function Model({ url, exploded, focus, setFocus, onLabel }: {
           mat.userData.restOpacity = mat.opacity;
           mat.userData.restTransparent = mat.transparent;
         }
-        const fade = !!focus && p.family !== focus;
+        const fade = !!focus && p.group !== focus;
         mat.transparent = fade || mat.userData.restTransparent;
         mat.opacity = fade ? FADED : mat.userData.restOpacity;
         mat.depthWrite = !fade;
@@ -146,7 +187,7 @@ function Model({ url, exploded, focus, setFocus, onLabel }: {
     const goal = exploded ? 1 : 0;
     if (Math.abs(goal - t.current) < 1e-4) { t.current = goal; } else t.current += (goal - t.current) * Math.min(1, dt * 5);
     const k = smooth(t.current);
-    for (const p of parts) p.node.position.copy(p.rest).addScaledVector(offsets.get(p.family)!, k);
+    for (const u of units) u.node.position.copy(u.rest).addScaledVector(u.local, k);
     if (!controls || !home.current) return;
     const f = flight.current;
     let goalTarget: THREE.Vector3, goalPos: THREE.Vector3;
@@ -188,19 +229,18 @@ function Model({ url, exploded, focus, setFocus, onLabel }: {
       const mat = m.material as THREE.MeshStandardMaterial;
       if (!mat.emissive) continue;
       if (!mat.userData.rest) mat.userData.rest = mat.emissive.clone();
-      mat.emissive.copy(p.family === hover ? HIGHLIGHT : mat.userData.rest);
+      mat.emissive.copy(p.group === hover ? HIGHLIGHT : mat.userData.rest);
     }
   }, [hover, parts]);
-  const top = (o: THREE.Object3D) => { while (o.parent && o.parent !== scene) o = o.parent; return o; };
   const onMove = (e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation();
-    const fam = family(top(e.object).name);
+    const fam = groupOf(e.object, scene);
     setHover(focus && fam !== focus ? null : fam); // faded parts don't react
   };
   const onClick = (e: ThreeEvent<MouseEvent>) => {
     if (e.delta > 4) return; // the end of an orbit drag, not a click
     e.stopPropagation();
-    const fam = family(top(e.object).name);
+    const fam = groupOf(e.object, scene);
     if (focus && fam !== focus) return; // clicks through faded parts: ignore
     setFocus(fam === focus ? null : fam);
   };
@@ -355,11 +395,11 @@ export default function ModelsDashboard() {
   const glbUrl = probe && b?.glb ? file(`out/${probe.name}/${probe.name}.glb`, b.started) : null;
 
   // The reference breakdown, if `run.py explode` has been run for this probe; re-read every
-  // few seconds since it is written outside the build.
+  // few seconds since it is written outside the build. Needs a measured reference model.
   const [breakdown, setBreakdown] = useState<Breakdown | null>(null);
   const probeName = probe?.name;
   useEffect(() => {
-    if (!probeName) return;
+    if (!probeName || !hasRef) return;
     let alive = true;
     const load = async () => {
       try {
@@ -371,7 +411,7 @@ export default function ModelsDashboard() {
     load();
     const id = setInterval(load, 5000);
     return () => { alive = false; clearInterval(id); setBreakdown(null); };
-  }, [probeName]);
+  }, [probeName, hasRef]);
   const stale = !!breakdown && !!b && breakdown.build_started !== b.started;
   const state = !status ? (error ? "offline" : "") : cur?.state === "running" ? "building"
     : b?.error ? "error" : b ? (b.ok ? "pass" : "fail") : "not built";

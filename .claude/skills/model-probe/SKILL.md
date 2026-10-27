@@ -71,6 +71,17 @@ from the repo.
   explanatory drawings space their parts differently. Build with `parts.disc` +
   `textures.engraved` (see the README's "Engraved plates").
 
+## Rovers, landers and capsules
+- Build in a standing frame: z up, ground at z = 0, forward and left as the spec's `note` says.
+- Declare structure while building: every part inside a `with parts.assembly(...)` block (the
+  body with `core=True`), moving parts parented to `parts.joint`s, arms and masts with
+  `parts.chain`. Explode and the dashboard group by assembly.
+- Pose once, after building, from the spec's `joints` (`parts.pose`), each angle with a source
+  and limits. Give the spec a `ground` (wheels or footpads as contacts) and `distance`
+  dimensions for wheelbase, track, clearance and mast height. `testrover` shows all of it.
+- Look at the wheels and suspension in close-ups from the side and from below: a wheel off the
+  ground or a beam through a wheel is a few pixels on the sheet.
+
 ## When the user corrects something
 Fix it at the level it belongs: a wrong number in the spec (with a better source), a
 part's shape in `lib/parts.py`, a look in `lib/materials.py`. If the lesson applies to

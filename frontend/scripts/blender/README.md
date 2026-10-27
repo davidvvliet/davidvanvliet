@@ -5,11 +5,11 @@ renders a contact sheet and exports `.glb` files for the site. Runs on Blender's
 Python; the command line needs only the system `python3`.
 
 ## Layout
-- `lib/parts.py`: shared parts (dish, prism bus, box, truss/rod boom, RTG, panel, cylinder, strut, disc with UVs and hub), in metres
+- `lib/parts.py`: shared parts (dish, prism bus, box, truss/rod boom, RTG, panel, cylinder, strut, disc with UVs and hub, lathe, wheel, bent tube), assemblies, joints and poses, in metres
 - `lib/materials.py`: shared materials (foil, paint, metal, solar cells) and `image()` (image colour + normal map), Principled BSDF only
 - `lib/textures.py`: textures made at build time from `refs/` data (`engraved()`: colour + normal map from a line image)
 - `lib/rig.py`: review rig and contact sheet (front, three-quarter / side, top; metric grid on the orthographic views)
-- `lib/checks.py`: dimension checks measured from the built geometry, `attached`, `mounted`, `textures`, triangle and file-size budgets
+- `lib/checks.py`: dimension checks measured from the built geometry, `attached`, `mounted`, `ground`, `joints`, `textures`, triangle and file-size budgets
 - `probes/<probe>.py`: one script per probe, `build(spec)` using `lib/`
 - `specs/<probe>.json`: dimensions with sources and tolerances, budgets, reference model
 - `refs/<probe>/`: reference images, shown on the dashboard
@@ -40,7 +40,49 @@ The dev-only dashboard at `localhost:3000/models` follows builds as they happen:
 a 3D view of the export, the contact sheet, references, checks and history. In the 3D view,
 Explode (top left) slides the parts apart; hovering shows a part's name, size and, after
 `model:explode`, its offset from the reference; clicking a part focuses the camera on it
-(click again, click empty space or press Escape to return).
+(click again, click empty space or press Escape to return). Parts are grouped by assembly
+when the model has them (see "Assemblies, joints and poses"), else by name family.
+
+## Assemblies, joints and poses
+
+Rovers, landers and capsules have moving parts, so their scripts declare structure as they build:
+
+- `with parts.assembly("arm"):` tags every part made inside the block with its assembly (and
+  `core=True` for the body the rest hangs off). The tag is exported as glTF extras. Explode
+  (`model:explode` and the dashboard) groups by assembly and pushes groups away from the core;
+  models without assemblies group by name family, and a part named `bus` is the core.
+- `parts.joint(name, location, axis, parent)` is an empty with a turning axis; parts parented
+  to it turn with it. `parts.chain(name, base, direction, links)` builds an arm or mast: a joint
+  then a link per entry (`<name>_j1`, `<name>_1`, ...).
+- `parts.pose({"arm_j1": -20, ...})` turns joints by name, in degrees about each joint's axis.
+  Angles are absolute, so posing again replaces the earlier pose. Pose after building, from
+  the spec's `joints`, so the posed angle is a sourced number.
+- `parts.sides()` gives `(1, "left"), (-1, "right")` for building a mirrored pair.
+- Shapes: `lathe` (a profile of `(r, z)` points turned about an axis: heads, cans, nozzles),
+  `wheel` (tyre with rim, cleats, spokes and hub) and `tube` (a path of points with rounded
+  bends: rocker and bogie beams, pipes).
+
+Frame for anything standing on a surface: z up, ground at z = 0, and the spec's `note` says which
+way is forward and which is left (the fixture: forward +y, left +x).
+
+Specs for these probes can also use:
+
+```json
+"wheelbase": {"value": 1.2, "measure": "distance", "from": {"object": "wheel_left_front"},
+              "to": {"object": "wheel_left_rear"}, "axis": "y", "source": "..."},
+"ground": {"z": 0.0, "contacts": ["wheel_*"]},
+"joints": {"arm_j1": {"angle": -20, "min": -90, "max": 10, "source": "..."}}
+```
+
+- `distance` measures between two points: `{"object": name, "at": "centre" | "bottom" | "top" |
+  "origin"}` (default centre of its bounds) or the name of a spec `points` entry. With `axis`
+  (`x`, `y` or `z`) it is the distance along that axis, else the straight distance.
+- `ground`: every part matching a `contacts` glob touches z (within 5 mm, `tolerance`), nothing
+  goes through it, and no other part reaches it.
+- `joints`: every listed joint exists and its posed angle is inside `min`..`max`.
+
+`testrover` is the rover fixture: a body, rocker-bogie suspension, six wheels, a mast and a
+two-joint arm, with made-up values.
 
 ## Engraved plates (textures)
 
@@ -113,5 +155,5 @@ A spec's `sheet_frame` (`{"min": [x, y, z], "max": [...]}`) fixes the contact-sh
 both the build and `model:ref`, so the two sheets overlay exactly (the dashboard's build/reference
 toggle then works as a blink comparator). Build the probe in the reference model's frame.
 
-`testprobe` is a fixture (`"fixture": true`), not a spacecraft: one of every part with made-up
-values, so changes to `lib/` show against its baseline. Fixtures are never published.
+`testprobe` and `testrover` are fixtures (`"fixture": true`), not spacecraft: one of every part
+with made-up values, so changes to `lib/` show against their baselines. Fixtures are never published.

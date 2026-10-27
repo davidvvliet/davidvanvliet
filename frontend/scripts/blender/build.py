@@ -18,8 +18,8 @@ import bpy
 
 def _lib():
     # Reload so the live session picks up edits to the library without a restart.
-    from lib import materials, parts, rig, checks
-    for m in (materials, parts, rig, checks):
+    from lib import materials, parts, rig, checks, textures
+    for m in (materials, textures, parts, rig, checks):
         importlib.reload(m)
     return parts, rig, checks
 
@@ -78,12 +78,13 @@ def build(probe, export=True):
         _step(status, probe, "model")
         parts.clear()
         _load_probe(probe).build(spec)
-        objs = list(parts.collection().objects)
+        all_objs = list(parts.collection().objects)  # parts and joints
+        objs = parts.meshes(all_objs)
         if not objs:
             raise RuntimeError("the probe script built no objects")
 
         _step(status, probe, "checks")
-        results = checks.run(spec, objs)
+        results = checks.run(spec, all_objs)
 
         _step(status, probe, "render")
         entry.update(rig.contact_sheet(objs, out_dir, spec.get("sheet_frame")))
@@ -102,11 +103,12 @@ def build(probe, export=True):
             _step(status, probe, "export")
             for o in bpy.context.view_layer.objects:
                 o.select_set(False)
-            for o in objs:
+            for o in all_objs:
                 o.select_set(True)
             glb = os.path.join(out_dir, f"{probe}.glb")
+            # Extras carry each part's assembly (and joints' axes) to the dashboard.
             bpy.ops.export_scene.gltf(filepath=glb, export_format="GLB", use_selection=True,
-                                      export_apply=True, export_yup=True)
+                                      export_apply=True, export_yup=True, export_extras=True)
             entry["glb"] = glb
             results.append(checks.file_size(glb, spec))
             tex = checks.textures(objs, glb)

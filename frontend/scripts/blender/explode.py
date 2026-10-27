@@ -32,6 +32,10 @@ def family(name):
     """Part family for grouping tiles: rtg_1, rtg_1_fins -> rtg; feed_leg_3 -> feed_leg."""
     return re.sub(r"_\d+$", "", re.sub(r"_fins$", "", name))
 
+def group_of(obj):
+    """A part's group: its declared assembly (parts.assembly), else its name family."""
+    return obj.get("assembly") or family(obj.name)
+
 def _world_mesh(o):
     mw = o.matrix_world
     verts = [mw @ v.co for v in o.data.vertices]
@@ -223,11 +227,11 @@ def main(probe, path):
 
     fams = {}
     for o in ours:
-        fams.setdefault(family(o.name), []).append(o.name)
+        fams.setdefault(group_of(o), []).append(o.name)
     claimed = {}
     for pc, part in owner.items():
         if part:
-            claimed.setdefault(family(part), []).append(pc)
+            claimed.setdefault(group_of(bpy.data.objects[part]), []).append(pc)
     unclaimed = [pc for pc, part in owner.items() if part is None]
     groups = group_unclaimed(unclaimed, info)
 
@@ -250,9 +254,11 @@ def main(probe, path):
         else:
             row["ref"] = None
         report["families"][fam] = row
+    # Centre the overviews push away from: the core assembly (parts.assembly(core=True)), else "bus".
+    core = [o.name for o in ours if o.get("core")] or [n for n in ("bus",) if n in our_boxes]
     bus = np.array([0.0, 0.0, 0.0])
-    if "bus" in our_boxes:
-        bus = (our_boxes["bus"][0] + our_boxes["bus"][1]) / 2
+    if core:
+        bus = (np.min([our_boxes[n][0] for n in core], 0) + np.max([our_boxes[n][1] for n in core], 0)) / 2
     for g in sorted(groups, key=lambda g: -np.linalg.norm(np.subtract(*ref_box(g)[::-1]))):
         lo, hi = ref_box(g)
         c = (lo + hi) / 2

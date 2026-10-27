@@ -19,6 +19,14 @@ wrong before any document was opened (the documents later agreed, the claim was 
 1. **List what defines the silhouette** (usually 10-15 dimensions): main dish, bus shape and
    size, every boom (length, direction, angle), power units (count, size), long antennas,
    instrument platforms. Plus the frame: which way the dish and each boom point.
+   For rovers, landers and capsules, also: wheel diameter and width, wheelbase (front to rear
+   axle), track (wheel centre to centre across), ground clearance, body box, deck height, mast
+   height (and the camera height above ground, often the only mast number published), arm
+   segment lengths and stowed pose, suspension pivot positions, leg span and footpad size,
+   heat-shield diameter and cone angle. Note which state a published size is for (mast up or
+   stowed, arm in or out, legs deployed).
+   The frame for anything standing: z up, ground at z = 0, and which way is forward and left.
+   Mission frame kernels (NAIF `fk/*.tf`) state the vehicle's own axes; write how ours maps to them.
 2. **Reference model first** (fast, gives layout):
    - NASA 3D Resources on GitHub. List folders with
      `gh api "repos/nasa/NASA-3D-Resources/contents/3D Models" -q '.[].name' | grep -i <name>`,
@@ -76,6 +84,16 @@ wrong before any document was opened (the documents later agreed, the claim was 
    change, what is only from the model, what wasn't found. Ask the user to decide the
    conflicts before modelling.
 
+## No reference model, or one that isn't to scale
+- Check a reference model's scale before using it: compare its overall size with two or three
+  documented sizes (Blender exports are not always in metres). Scale it once, say by what.
+- Without one, the layout comes from photos: pick near-orthographic shots (side, front, top),
+  scale each by a documented size visible in it (wheel diameter, dish), and label every
+  derived number "estimated from <photo>, scaled by <size>". Prefer several photos agreeing.
+- Joint angles and pivot positions are rarely published: pose from photos and say so.
+
 ## Known dead ends
 Searches for exact boom lengths, dish depth or blanket colours rarely return primary sources.
 Get those from the reference model and photos instead, and label them that way.
+Rover mobility numbers (wheelbase, track, clearance, wheel width, pivot positions) are not in
+press kits or the mission pages; try mobility-subsystem papers on NTRS, then the reference model.

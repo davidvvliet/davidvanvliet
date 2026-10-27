@@ -8,8 +8,16 @@
 #   x, y, z     world-space extent
 #   length      extent along the (first) object's local Z axis
 #   diameter    twice the largest distance from that axis
-import json, os, struct
+#   distance    between two points, "from" and "to" (no "object"); each is
+#               {"object": name, "at": "centre" | "bottom" | "top" | "origin"} or a spec
+#               `points` name; "axis": "x" | "y" | "z" measures along one axis only
+#               (wheelbase, track width, deck height)
+#
+# Also: `ground` (parts that stand on z = ground: contacts touch it, nothing goes through,
+# nothing else touches) and `joints` (posed angles inside their sourced limits).
+import fnmatch, json, os, struct
 import bpy
+from mathutils import Vector
 from mathutils.bvhtree import BVHTree
 
 DEFAULT_TOLERANCE = 0.03  # relative
@@ -41,6 +49,66 @@ def measure(objs, kind):
     if kind == "diameter":
         return 2 * max(((p - origin) - axis * (p - origin).dot(axis)).length for p in pts)
     raise ValueError(f"unknown measure '{kind}'")
+
+def _point(ref, by_name, spec):
+    """World point for a distance end: a spec `points` name, or {"object", "at"}."""
+    if isinstance(ref, str):
+        ref = spec.get("points", {})[ref]
+    o = by_name[ref["object"]]
+    at = ref.get("at", "centre")
+    if at == "origin":
+        return o.matrix_world.translation.copy()
+    pts = _points([o])
+    lo = Vector([min(p[i] for p in pts) for i in range(3)])
+    hi = Vector([max(p[i] for p in pts) for i in range(3)])
+    c = (lo + hi) / 2
+    if at == "bottom":
+        c.z = lo.z
+    elif at == "top":
+        c.z = hi.z
+    elif at != "centre":
+        raise ValueError(f"unknown point 'at': {at}")
+    return c
+
+def distance(dim, by_name, spec):
+    a, b = _point(dim["from"], by_name, spec), _point(dim["to"], by_name, spec)
+    if "axis" in dim:
+        i = "xyz".index(dim["axis"])
+        return abs(a[i] - b[i])
+    return (a - b).length
+
+GROUND_TOUCH = 0.005  # m
+
+def ground(spec, objs):
+    """Problems with standing on the ground: [] when fine."""
+    g = spec["ground"]
+    z0, tol = g.get("z", 0.0), g.get("tolerance", GROUND_TOUCH)
+    contacts = [o for o in objs if any(fnmatch.fnmatch(o.name, pat) for pat in g["contacts"])]
+    problems = []
+    if not contacts:
+        problems.append("no part matches ground.contacts")
+    for o in objs:
+        low = min(p.z for p in _points([o]))
+        if o in contacts and abs(low - z0) > tol:
+            problems.append(f"{o.name} {'above' if low > z0 else 'below'} ground by {abs(low - z0) * 1000:.0f} mm")
+        elif o not in contacts and low < z0 + tol:
+            problems.append(f"{o.name} {'touches' if low >= z0 - tol else 'goes through'} the ground")
+    return problems
+
+def joints(spec, all_objs):
+    """Posed joints outside their limits, or missing: [] when fine."""
+    by_name = {o.name: o for o in all_objs}
+    problems = []
+    for name, j in spec.get("joints", {}).items():
+        o = by_name.get(name)
+        if o is None or "joint_axis" not in o:
+            problems.append(f"no joint {name}")
+            continue
+        a = o.get("angle_deg", 0.0)
+        lo, hi = j.get("min", -360), j.get("max", 360)
+        if not lo - 1e-6 <= a <= hi + 1e-6:
+            problems.append(f"{name} at {a:.1f}° outside {lo}..{hi}°")
+    return problems
 
 def triangles(objs):
     dg = bpy.context.evaluated_depsgraph_get()
@@ -130,8 +198,11 @@ def mounted(part, host):
     return problems
 
 def run(spec, objs):
-    """Returns a list of check results: {name, ok, measured, expected, unit, detail}."""
-    by_name = {o.name: o for o in objs}
+    """Returns a list of check results: {name, ok, measured, expected, unit, detail}.
+    `objs` may include joints (empties); geometry checks use the meshes."""
+    all_objs = objs
+    objs = [o for o in objs if o.type == "MESH"]
+    by_name = {o.name: o for o in all_objs}
     results = []
     for name, dim in spec.get("dimensions", {}).items():
         target = dim.get("object", "*")
@@ -139,11 +210,15 @@ def run(spec, objs):
         sel = objs if names == ["*"] else [by_name[n] for n in names if n in by_name]
         res = {"name": name, "expected": dim["value"], "unit": dim.get("unit", "m"),
                "source": dim.get("source")}
+        if dim.get("measure") == "distance":
+            ends = [dim["from"], dim["to"]]
+            names = [(spec.get("points", {}).get(e, {}) if isinstance(e, str) else e).get("object", "?") for e in ends]
         missing = [n for n in names if n != "*" and n not in by_name]
         if missing:
             res.update(ok=False, measured=None, detail=f"missing object {', '.join(missing)}")
         else:
-            got = measure(sel, dim.get("measure", "length"))
+            got = (distance(dim, by_name, spec) if dim.get("measure") == "distance"
+                   else measure(sel, dim.get("measure", "length")))
             tol = dim.get("tolerance", DEFAULT_TOLERANCE)
             err = (got - dim["value"]) / dim["value"] if dim["value"] else got
             res.update(ok=abs(err) <= tol, measured=round(got, 4),
@@ -163,6 +238,15 @@ def run(spec, objs):
             res.update(ok=not problems, measured="flush" if not problems else "not flush",
                        detail="; ".join(problems) or f"back face on {m['on']}, nothing buried")
         results.append(res)
+    if "ground" in spec:
+        g = ground(spec, objs)
+        results.append({"name": "ground", "ok": not g, "measured": "ok" if not g else "off", "unit": "",
+                        "expected": "contacts on the ground", "detail": "; ".join(g) or
+                        f"{', '.join(spec['ground']['contacts'])} on z = {spec['ground'].get('z', 0)}, nothing else down there"})
+    if "joints" in spec:
+        j = joints(spec, all_objs)
+        results.append({"name": "joints", "ok": not j, "measured": len(spec["joints"]) - len(j), "unit": "joints",
+                        "expected": len(spec["joints"]), "detail": "; ".join(j) or "every posed joint inside its limits"})
     budget = spec.get("budget", {})
     tris = triangles(objs)
     max_tris = budget.get("triangles", 50000)
