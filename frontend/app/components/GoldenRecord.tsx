@@ -20,7 +20,7 @@ const RETURN_RATE = 4; // per second: how fast a released disc settles back
 const LIGHT_TILT = 0.7;
 
 // Pointer drag, in radians: yaw (sideways) and pitch (tilt). Read every frame, so it lives in a ref.
-type Drag = { active: boolean; yaw: number; pitch: number };
+type Drag = { active: boolean; hover: boolean; yaw: number; pitch: number };
 
 function Record({ spin, drag }: { spin: boolean; drag: React.RefObject<Drag> }) {
   const { scene } = useGLTF(URL);
@@ -35,8 +35,8 @@ function Record({ spin, drag }: { spin: boolean; drag: React.RefObject<Drag> }) 
   useFrame((_, dt) => {
     const d = drag.current;
     if (!held.current || !turn.current) return;
-    // The spin pauses while held; on release the drag eases back to zero and the spin carries on.
-    if (spin && !d.active) turn.current.rotation.y += (dt * 2 * Math.PI) / TURN_SECONDS;
+    // The spin pauses while hovered or held; on release the drag eases back to zero and the spin carries on.
+    if (spin && !d.active && !d.hover) turn.current.rotation.y += (dt * 2 * Math.PI) / TURN_SECONDS;
     if (!d.active) {
       const k = Math.exp(-dt * RETURN_RATE);
       d.yaw *= k;
@@ -62,7 +62,7 @@ export default function GoldenRecord() {
     q.addEventListener("change", set);
     return () => q.removeEventListener("change", set);
   }, []);
-  const drag = useRef<Drag>({ active: false, yaw: 0, pitch: 0 });
+  const drag = useRef<Drag>({ active: false, hover: false, yaw: 0, pitch: 0 });
   const last = useRef<{ x: number; y: number } | null>(null);
   const travel = useRef(0); // pointer distance since the press, px: a click barely moves
   const [grabbing, setGrabbing] = useState(false);
@@ -96,7 +96,8 @@ export default function GoldenRecord() {
   };
   return (
     <div onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={release}
-      onLostPointerCapture={release} role="link" aria-label="Voyager model"
+      onLostPointerCapture={release}
+      onPointerEnter={() => (drag.current.hover = true)} onPointerLeave={() => (drag.current.hover = false)} role="link" aria-label="Voyager model"
       style={{ width: "100%", height: "100%", touchAction: "none", cursor: grabbing ? "grabbing" : "pointer" }}>
     <Canvas camera={{ fov: 30, position: [0, 0, 0.66], near: 0.05, far: 5 }} dpr={[1, 2]}
       gl={{ alpha: true, antialias: true }} aria-label="Voyager golden record cover">
