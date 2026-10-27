@@ -3,7 +3,7 @@ import { MissionSpec } from './types';
 // No ephemeris exists: integrated burn to burn between the states tabulated in mission report MSC-02680.
 export const apollo13: MissionSpec = {
   id: 'apollo13', name: 'Apollo 13', file: '/missions/apollo13.json', center: 'Earth',
-  view: { distanceAU: 0.006, elevationDeg: 28 }, secondsPerDay: 10, dateFormat: 'day',
+  view: { distanceAU: 0.006, elevationDeg: 28 }, secondsPerDay: 3, dateFormat: 'day',
   // Crew portrait at launch, then the oxygen tank rupture (mission report, 55:54:53 GET) and the
   // air-to-ground calls that followed, verbatim from the Apollo Flight Journal transcript.
   cues: [

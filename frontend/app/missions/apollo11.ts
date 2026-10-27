@@ -4,7 +4,7 @@ import { MissionSpec } from './types';
 // the lunar orbit propagated between the tabulated CSM states.
 export const apollo11: MissionSpec = {
   id: 'apollo11', name: 'Apollo 11', file: '/missions/apollo11.json', center: 'Earth',
-  view: { distanceAU: 0.006, elevationDeg: 28 }, secondsPerDay: 10, dateFormat: 'day',
+  view: { distanceAU: 0.006, elevationDeg: 28 }, secondsPerDay: 3, dateFormat: 'day',
   // The descent: the flight director's loop from 102:37:03 GET (aligned on four transcript anchors,
   // "Contact light" at 8:36, where the clip now ends), with the landing calls verbatim from the Lunar Surface
   // Journal. The clip is locked to the clock (see events below).
