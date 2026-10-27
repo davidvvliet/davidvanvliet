@@ -1,6 +1,6 @@
 "use client";
 
-import { Component, ReactNode, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { Component, ReactNode, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Canvas, ThreeEvent, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { Environment, Lightformer, OrbitControls, useGLTF } from "@react-three/drei";
@@ -132,6 +132,9 @@ function Model({ url, exploded, focus, setFocus, onLabel }: {
   onLabel: (label: { name: string; size: THREE.Vector3 } | null) => void;
 }) {
   const { scene } = useGLTF(url);
+  // Suspense hides the shown model while the next one loads, and it is unmounted still hidden;
+  // useGLTF caches the scene, so showing that model again would reuse the hidden copy.
+  useLayoutEffect(() => { scene.visible = true; }, [scene]);
   const { parts, units, offsets, boxes } = useParts(scene);
   const [hover, setHover] = useState<string | null>(null);
   const t = useRef(0);
