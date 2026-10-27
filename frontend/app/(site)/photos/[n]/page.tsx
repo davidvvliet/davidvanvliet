@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { PHOTOS, getPhoto } from "../../../photos";
+import { getPhotos } from "../../../photos";
 import PhotoView from "../../../components/PhotoView";
 
 type Props = { params: Promise<{ n: string }> };
@@ -8,7 +8,7 @@ type Props = { params: Promise<{ n: string }> };
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  return PHOTOS.map((p) => ({ n: String(p.n) }));
+  return getPhotos().map((p) => ({ n: String(p.n) }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -18,7 +18,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function PhotoPage({ params }: Props) {
   const { n } = await params;
-  const num = Number(n);
-  if (!getPhoto(num)) notFound();
-  return <PhotoView n={num} />;
+  const photos = getPhotos();
+  const photo = photos[Number(n) - 1];
+  if (!photo) notFound();
+  return <PhotoView photo={photo} count={photos.length} />;
 }

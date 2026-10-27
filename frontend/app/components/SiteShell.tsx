@@ -10,6 +10,7 @@ import MobilePage from './MobilePage';
 import Terminal from './Terminal';
 import ViewPanel from './ViewPanel';
 import PhotoGrid from './PhotoGrid';
+import type { Photo } from '../photoTypes';
 import { useIsMobile } from './useIsMobile';
 import styles from '../page.module.css';
 import { usePageStore } from '../store/pageStore';
@@ -22,7 +23,7 @@ const SolarSystem = dynamic(() => import('./SolarSystem').then(mod => mod.SolarS
 
 // The home grid. The URL decides the left panel: "/" is the solar system,
 // any other route (resume, a post) is that page, with a way back to explore.
-export default function SiteShell({ children }: { children: React.ReactNode }) {
+export default function SiteShell({ children, photos }: { children: React.ReactNode; photos: Photo[] }) {
   const isMobile = useIsMobile();
   const pathname = usePathname();
   const router = useRouter();
@@ -31,6 +32,7 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
   // Terminal commands ask for a route through the store; the store also mirrors
   // the current one so commands can tell where they are.
   useEffect(() => { usePageStore.getState().setView(pathname); }, [pathname]);
+  useEffect(() => { usePageStore.getState().setPhotoCount(photos.length); }, [photos.length]);
   const navRequest = usePageStore((s) => s.navRequest);
   const handledNavSeq = useRef(0);
   useEffect(() => {
@@ -155,7 +157,7 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
               </div>
             </div>
             <div className={styles.cell5}>
-              <PhotoGrid />
+              <PhotoGrid photos={photos} />
             </div>
           </div>
           <div className={styles.cell4}>

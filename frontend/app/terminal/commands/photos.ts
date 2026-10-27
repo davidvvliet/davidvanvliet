@@ -2,23 +2,25 @@ import { Command } from "../types";
 import { run } from "../run";
 import { register } from "../registry";
 import { usePageStore } from "../../store/pageStore";
-import { PHOTOS, getPhoto } from "../../photos";
 
 const photos: Command = {
   name: "photos",
   aliases: ["p"],
   description: "Look through some photos",
   execute: (args) => {
+    const count = usePageStore.getState().photoCount;
+    if (count === 0) return ["No photos yet."];
+    const numbers = Array.from({ length: count }, (_, i) => i + 1);
     if (!args[0]) {
       usePageStore.getState().openPath("/photos/1");
-      return [`Photos: ${PHOTOS.map((p) => run(`photos ${p.n}`, String(p.n))).join(" ")}`];
+      return [`Photos: ${numbers.map((n) => run(`photos ${n}`, String(n))).join(" ")}`];
     }
     const n = Number(args[0]);
-    if (!getPhoto(n)) return [`No photo ${args[0]}. There are ${PHOTOS.length}.`];
+    if (!Number.isInteger(n) || n < 1 || n > count) return [`No photo ${args[0]}. There are ${count}.`];
     usePageStore.getState().openPath(`/photos/${n}`);
-    return [`Photo ${n} of ${PHOTOS.length}.`];
+    return [`Photo ${n} of ${count}.`];
   },
-  complete: (args) => (args.length <= 1 ? PHOTOS.map((p) => String(p.n)) : []),
+  complete: (args) => (args.length <= 1 ? Array.from({ length: usePageStore.getState().photoCount }, (_, i) => String(i + 1)) : []),
 };
 
 register(photos);

@@ -3,14 +3,15 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { PHOTOS } from "../photos";
+import Image from "next/image";
+import type { Photo } from "../photoTypes";
 import styles from "./PhotoGrid.module.css";
 
 const GAP_PX = 2;
 
 // Square thumbnails filling the cell: picks the column count that gives the
 // biggest tiles for the cell's current size. A click opens /photos/<n>.
-export default function PhotoGrid() {
+export default function PhotoGrid({ photos }: { photos: Photo[] }) {
   const ref = useRef<HTMLDivElement>(null);
   const [layout, setLayout] = useState({ cols: 5, size: 0 });
   const pathname = usePathname();
@@ -21,8 +22,8 @@ export default function PhotoGrid() {
     const fit = () => {
       const { width, height } = el.getBoundingClientRect();
       let best = { cols: 1, size: 0 };
-      for (let cols = 1; cols <= PHOTOS.length; cols++) {
-        const rows = Math.ceil(PHOTOS.length / cols);
+      for (let cols = 1; cols <= photos.length; cols++) {
+        const rows = Math.ceil(photos.length / cols);
         const size = Math.floor(Math.min((width - GAP_PX * (cols - 1)) / cols, (height - GAP_PX * (rows - 1)) / rows));
         if (size > best.size) best = { cols, size };
       }
@@ -32,7 +33,7 @@ export default function PhotoGrid() {
     const ro = new ResizeObserver(fit);
     ro.observe(el);
     return () => ro.disconnect();
-  }, []);
+  }, [photos.length]);
 
   return (
     <div ref={ref} className={styles.wrap}>
@@ -41,19 +42,18 @@ export default function PhotoGrid() {
           className={styles.grid}
           style={{ gridTemplateColumns: `repeat(${layout.cols}, ${layout.size}px)`, gridAutoRows: `${layout.size}px`, gap: GAP_PX }}
         >
-          {PHOTOS.map((p) => (
+          {photos.map((p) => (
             <Link
               key={p.n}
               href={`/photos/${p.n}`}
               className={`${styles.tile} ${pathname === `/photos/${p.n}` ? styles.active : ""}`}
               aria-label={`Photo ${p.n}`}
             >
-              {p.thumbVideo ? (
+              {p.video ? (
                 // A clip plays in its tile like a GIF: muted, looping, inline.
-                <video src={p.thumbVideo} poster={p.thumb} autoPlay muted loop playsInline preload="auto" />
+                <video src={p.video} poster={p.image} autoPlay muted loop playsInline />
               ) : (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={p.thumb} alt="" loading="lazy" decoding="async" />
+                <Image src={p.image!} alt="" fill sizes="96px" />
               )}
             </Link>
           ))}
