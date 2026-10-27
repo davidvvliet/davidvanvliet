@@ -17,6 +17,8 @@ type Probe = {
   name: string; title: string; fixture: boolean; note: string | null;
   sources: { title?: string; url?: string }[]; referenceModel: { url?: string; note?: string } | null;
   refs: string[]; build: Build | null;
+  // Never approved: null. Else what changed since approve (scripts/blender/lib/published.py).
+  published: { own: string[]; shared: string[] } | null;
 };
 // out/<probe>/ref/explode.json, written by `run.py explode` (the reference split into our parts).
 type Breakdown = {
@@ -140,6 +142,19 @@ function Model({ url, exploded, focus, setFocus, onLabel }: {
   const t = useRef(0);
   const camera = useThree((s) => s.camera) as THREE.PerspectiveCamera;
   const controls = useThree((s) => s.controls) as unknown as Controls | null;
+  const gl = useThree((s) => s.gl);
+  // Sharpest texture filtering the GPU offers: the default blurs textures seen at an angle.
+  useEffect(() => {
+    const max = gl.capabilities.getMaxAnisotropy();
+    gltf.scene.traverse((o) => {
+      const mats = (o as THREE.Mesh).material;
+      for (const m of (Array.isArray(mats) ? mats : mats ? [mats] : []) as THREE.MeshStandardMaterial[]) {
+        for (const tex of [m.map, m.normalMap, m.roughnessMap, m.metalnessMap]) {
+          if (tex && tex.anisotropy !== max) { tex.anisotropy = max; tex.needsUpdate = true; }
+        }
+      }
+    });
+  }, [gltf.scene, gl]);
   const home = useRef<{ pos: THREE.Vector3; target: THREE.Vector3; near: number } | null>(null);
   const flight = useRef({ flying: false, dir: new THREE.Vector3(), last: new THREE.Vector3() });
 
@@ -350,6 +365,15 @@ function fmt(v: number | null, unit: string) {
   return `${v} ${unit}`;
 }
 
+// The live site's copy of this probe: current, behind (its own files changed since approve), or
+// possibly behind (shared harness code changed: a rebuild shows whether the model differs).
+function Published({ p }: { p: Probe["published"] }) {
+  if (!p) return <span className={styles.dim}>not published</span>;
+  if (p.own.length) return <span className={styles.bad} title={p.own.join("\n")}>live version behind ({p.own.length} files)</span>;
+  if (p.shared.length) return <span className={styles.stepNow} title={p.shared.join("\n")}>shared code changed since approve</span>;
+  return <span className={styles.ok}>live version current</span>;
+}
+
 export default function ModelsDashboard() {
   const [status, setStatus] = useState<Status | null>(null);
   const [error, setError] = useState(false);
@@ -461,6 +485,7 @@ export default function ModelsDashboard() {
               </span>
             </>
           ) : probe ? <span className={styles.dim}>not built yet{hasRef ? " · showing reference" : ""}</span> : null}
+          {probe && !probe.fixture && <Published p={probe.published} />}
           {anyRunning && status?.current?.probe !== probe?.name && (
             <span className={styles.dim}>building {status?.current?.probe}</span>
           )}

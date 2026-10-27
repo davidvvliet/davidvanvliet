@@ -14,7 +14,8 @@
 #                                   comparison and the pieces none of our parts claim
 #   run.py dev [probe] [--headless] rebuild on every save of a probe script, spec or lib/
 #   run.py send <file.py | ->       run Python in the live session
-#   run.py status                   print the last build of every probe
+#   run.py status                   print the last build of every probe, and whether its
+#                                   published version is behind the repo
 #   run.py watch                    show each new contact sheet in iTerm2 (imgcat)
 import glob, json, math, os, re, shutil, socket, subprocess, sys, time
 
@@ -178,6 +179,8 @@ def cmd_approve(args):
         with open(MODEL_CREDITS, "w") as f:
             json.dump(dict(sorted(credits.items())), f, indent=2, ensure_ascii=False)
             f.write("\n")
+        from lib import published
+        published.record(probe)  # what this published model was built from (see lib/published.py)
     shutil.copy(entry["sheet"], os.path.join(HERE, "baselines", f"{probe}.png"))
     entry["approved"] = time.time()
     entry["baseline"] = {"diff": 0.0, "changed": False}
@@ -299,8 +302,21 @@ def cmd_status(args):
     cur = status.get("current")
     if cur:
         print(f"last step: {cur['probe']} {cur['step']} ({cur['state']}) {cur.get('message') or ''}")
+    sys.path.insert(0, HERE)
+    from lib import published
     for p, entry in sorted(status.get("probes", {}).items()):
         print_entry(p, entry)
+        changed = published.behind(p)
+        if changed is None:
+            continue
+        mine = [c for c in changed if published.own(p, c)]
+        shared = [c for c in changed if not published.own(p, c)]
+        if not changed:
+            print("  ✓ published version is current")
+        if mine:
+            print(f"  ✗ published version is behind: {', '.join(mine)} changed since approve")
+        if shared:
+            print(f"  ! shared harness code changed since approve ({', '.join(shared)}): rebuild to see if it differs")
 
 def cmd_watch(args):
     imgcat = shutil.which("imgcat") or "/Applications/iTerm.app/Contents/Resources/utilities/imgcat"

@@ -1,0 +1,38 @@
+{
+ "perseverance": {
+  "approved": "2026-10-27 17:26",
+  "inputs": {
+   "specs/perseverance.json": "6353e7f601e2cd34",
+   "probes/perseverance.py": "923a5a3972a6c094",
+   "build.py": "e7b462e72ab08d7c",
+   "blender.json": "7bbc071b6e396ec4",
+   "lib/__init__.py": "e3b0c44298fc1c14",
+   "lib/checks.py": "bc7ebe21b8fc211b",
+   "lib/materials.py": "ae6b4a62f6bc1ae8",
+   "lib/parts.py": "6014e44d41773175",
+   "lib/rig.py": "87431e5e6051f10e",
+   "lib/sources.py": "4ddbad4d784fab9f",
+   "lib/textures.py": "02b2e1b14100938c"
+  }
+ },
+ "voyager": {
+  "approved": "2026-10-27 18:50",
+  "inputs": {
+   "specs/voyager.json": "3b971f626c619939",
+   "probes/voyager.py": "a5c5f30ee74256d9",
+   "build.py": "e7b462e72ab08d7c",
+   "blender.json": "7bbc071b6e396ec4",
+   "lib/__init__.py": "e3b0c44298fc1c14",
+   "lib/checks.py": "bc7ebe21b8fc211b",
+   "lib/materials.py": "ae6b4a62f6bc1ae8",
+   "lib/parts.py": "6fb5266857f8407f",
+   "lib/rig.py": "87431e5e6051f10e",
+   "lib/sources.py": "4ddbad4d784fab9f",
+   "lib/textures.py": "02b2e1b14100938c",
+   "refs/voyager/record-cover-fit.json": "358b646cedb84579",
+   "refs/voyager/record-cover-lines.png": "78558182cf65be34",
+   "refs/voyager/record-cover.svg": "d119497467798282",
+   "refs/voyager/reference-sheet.png": "15632716b17c6fc4"
+  }
+ }
+}

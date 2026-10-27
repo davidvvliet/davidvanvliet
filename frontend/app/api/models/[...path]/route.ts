@@ -2,6 +2,7 @@
 //   /api/models/status          build status, plus each probe's spec summary and refs
 //   /api/models/file/<path>     a file under out/, refs/ or baselines/
 // Returns 404 in production, where the harness output does not exist.
+import { execFile } from "child_process";
 import { promises as fs } from "fs";
 import path from "path";
 import { NextRequest } from "next/server";
@@ -24,7 +25,24 @@ async function listImages(dir: string) {
   try { return (await fs.readdir(dir)).filter((f) => IMAGE.test(f)).sort(); } catch { return []; }
 }
 
+// Whether each published model is behind the repo (scripts/blender/lib/published.py), cached
+// briefly: the dashboard polls status often and this hashes every input file.
+type Behind = Record<string, { own: string[]; shared: string[] }>;
+let behindCache: { at: number; value: Behind } | null = null;
+function behind(): Promise<Behind> {
+  if (behindCache && Date.now() - behindCache.at < 5000) return Promise.resolve(behindCache.value);
+  return new Promise((resolve) => {
+    execFile("python3", ["-I", path.join(ROOT, "lib", "published.py")], { timeout: 10000 }, (err, out) => {
+      let value: Behind = {};
+      try { if (!err) value = JSON.parse(out); } catch {}
+      behindCache = { at: Date.now(), value };
+      resolve(value);
+    });
+  });
+}
+
 async function status() {
+  const published = await behind();
   const build = (await readJson(path.join(ROOT, "out", "status.json"))) ?? { current: null, probes: {} };
   const names = (await fs.readdir(path.join(ROOT, "specs"))).filter((f) => f.endsWith(".json")).map((f) => f.slice(0, -5)).sort();
   const probes = await Promise.all(names.map(async (name) => {
@@ -38,6 +56,7 @@ async function status() {
       referenceModel: spec.reference_model ?? null,
       refs: await listImages(path.join(ROOT, "refs", name)),
       build: build.probes?.[name] ?? null,
+      published: published[name] ?? null,
     };
   }));
   return Response.json({ updated: build.updated ?? null, current: build.current ?? null, probes }, {
