@@ -44,6 +44,16 @@ def _step(status, probe, step, state="running", message=None):
     _write_status(status)
     print(f"[{probe}] {step}" + (f": {message}" if message else ""), flush=True)
 
+# Each build replaces the probe's last entry. Only the approval carries over; a failed
+# build also keeps the last good sheet and export to look at, but not their checks.
+CARRY = ("approved",)
+CARRY_ON_FAILURE = ("sheet", "glb", "history", "grid_m", "size_m", "baseline")
+
+def _carry(status, probe, entry, failed):
+    prev = status.get("probes", {}).get(probe, {})
+    keep = CARRY + (CARRY_ON_FAILURE if failed else ())
+    return {**{k: prev[k] for k in keep if k in prev and k not in entry}, **entry}
+
 def _load_probe(name):
     path = os.path.join(PROBES, f"{name}.py")
     spec = importlib.util.spec_from_file_location(f"probe_{name}", path)
@@ -104,12 +114,12 @@ def build(probe, export=True):
         entry["ok"] = all(r["ok"] for r in results)
         entry["seconds"] = round(time.time() - started, 1)
         failed = [r["name"] for r in results if not r["ok"]]
-        status.setdefault("probes", {})[probe] = {**status.get("probes", {}).get(probe, {}), **entry}
+        status.setdefault("probes", {})[probe] = _carry(status, probe, entry, failed=False)
         _step(status, probe, "done", "done" if not failed else "failed",
               "all checks pass" if not failed else "failing: " + ", ".join(failed))
     except Exception as e:
         entry.update(ok=False, error="".join(traceback.format_exception(e)))
-        status.setdefault("probes", {})[probe] = {**status.get("probes", {}).get(probe, {}), **entry}
+        status.setdefault("probes", {})[probe] = _carry(status, probe, entry, failed=True)
         _step(status, probe, "error", "failed", f"{type(e).__name__}: {e}")
         if bpy.app.background:
             raise
