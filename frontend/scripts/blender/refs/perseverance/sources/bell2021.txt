@@ -1,0 +1,2091 @@
+Space Sci Rev (2021) 217:24
+https://doi.org/10.1007/s11214-020-00755-x
+
+
+
+
+The Mars 2020 Perseverance Rover Mast Camera Zoom
+(Mastcam-Z) Multispectral, Stereoscopic Imaging
+Investigation
+
+J.F. Bell III1 · J.N. Maki2 · G.L. Mehall1 · M.A. Ravine3 · M.A. Caplinger3 ·
+Z.J. Bailey2 · S. Brylow3 · J.A. Schaffner3 · K.M. Kinch4 · M.B. Madsen4 ·
+A. Winhold1 · A.G. Hayes5 · P. Corlies5 · C. Tate5 · M. Barrington5 · E. Cisneros1 ·
+E. Jensen3 · K. Paris1 · K. Crawford1 · C. Rojas1 · L. Mehall1 · J. Joseph5 ·
+J.B. Proton6 · N. Cluff1 · R.G. Deen2 · B. Betts7 · E. Cloutis8 · A.J. Coates9 ·
+A. Colaprete10 · K.S. Edgett3 · B.L. Ehlmann2,11 · S. Fagents12 · J.P. Grotzinger11 ·
+C. Hardgrove1 · K.E. Herkenhoff13 · B. Horgan14 · R. Jaumann15 · J.R. Johnson16 ·
+M. Lemmon17 · G. Paar18 · M. Caballo-Perucha18 · S. Gupta19 · C. Traxler20 ·
+F. Preusker21 · M.S. Rice22 · M.S. Robinson1 · N. Schmitz20 · R. Sullivan5 · M.J. Wolff17
+
+Received: 22 May 2020 / Accepted: 25 September 2020 / Published online: 15 February 2021
+© The Author(s) 2020
+
+
+The Mars 2020 Mission
+Edited by Kenneth A. Farley, Kenneth H. Williford and Kathryn M. Stack
+
+B J.F. Bell III
+     Jim.Bell@asu.edu
+1    Arizona State Univ., Tempe, AZ, USA
+2    JPL/Caltech, Pasadena, CA, USA
+3    Malin Space Science Systems, Inc., San Diego, CA, USA
+4    Univ. of Copenhagen, Copenhagen, Denmark
+5    Cornell Univ., Ithaca, NY, USA
+6    Opscode LLC, Healdsburg, CA, USA
+7    The Planetary Society, Pasadena, CA, USA
+8    Univ. of Winnipeg, Winnipeg, Canada
+9    Mullard Space Science Laboratory, Univ. College, London, UK
+10   NASA/Ames Research Center, Moffett Field, CA, USA
+11   Caltech, Pasadena, CA, USA
+12   Univ. of Hawaii, Honolulu, HI, USA
+13   USGS Astrogeology Science Center, Flagstaff, AZ, USA
+14   Purdue Univ., South Bend, IN, USA
+15   Inst. of Geological Sciences, Free University Berlin, Berlin, Germany
+16   APL/Johns Hopkins Univ., Laurel, MD, USA
+17   Space Science Inst., Boulder, CO, USA
+18   Joanneum Research, Graz, Austria
+19   Imperial College, London, UK
+20   VRVis Research Center, Vienna, Austria
+21   DLR/German Aerospace Center, Berlin, Germany
+22   Western Washington Univ., Bellingham, WA, USA
+24   Page 2 of 40                                                                J.F. Bell III et al.
+
+Abstract Mastcam-Z is a multispectral, stereoscopic imaging investigation on the Mars
+2020 mission’s Perseverance rover. Mastcam-Z consists of a pair of focusable, 4:1 zoomable
+cameras that provide broadband red/green/blue and narrowband 400-1000 nm color imaging
+with fields of view from 25.6° × 19.2° (26 mm focal length at 283 µrad/pixel) to 6.2° × 4.6°
+(110 mm focal length at 67.4 µrad/pixel). The cameras can resolve (≥ 5 pixels) ∼0.7 mm
+features at 2 m and ∼3.3 cm features at 100 m distance. Mastcam-Z shares significant her-
+itage with the Mastcam instruments on the Mars Science Laboratory Curiosity rover. Each
+Mastcam-Z camera consists of zoom, focus, and filter wheel mechanisms and a 1648 × 1214
+pixel charge-coupled device detector and electronics. The two Mastcam-Z cameras are
+mounted with a 24.4 cm stereo baseline and 2.3° total toe-in on a camera plate ∼2 m above
+the surface on the rover’s Remote Sensing Mast, which provides azimuth and elevation actu-
+ation. A separate digital electronics assembly inside the rover provides power, data process-
+ing and storage, and the interface to the rover computer. Primary and secondary Mastcam-Z
+calibration targets mounted on the rover top deck enable tactical reflectance calibration.
+Mastcam-Z multispectral, stereo, and panoramic images will be used to provide detailed
+morphology, topography, and geologic context along the rover’s traverse; constrain miner-
+alogic, photometric, and physical properties of surface materials; monitor and characterize
+atmospheric and astronomical phenomena; and document the rover’s sample extraction and
+caching locations. Mastcam-Z images will also provide key engineering information to sup-
+port sample selection and other rover driving and tool/instrument operations decisions.
+
+Keywords Mars · Mars 2020 mission · Perseverance rover · Jezero crater · Space
+instrumentation · Space imaging
+
+
+1 Introduction
+
+Mars was a habitable world. That profound and stunning finding is a product of the past ∼25
+years of strategic exploration using robotic orbiters, landers, and rovers that have revolution-
+ized our understanding of the Red Planet. A series of fantastically successful missions have
+acquired the key global, regional, and local-scale data sets necessary to map the planet’s
+geology, chemistry, and mineralogy, and to interpret those results in the context of Mar-
+tian geologic and environmental history (e.g., Malin and Edgett 2001; Squyres et al. 2004;
+Grotzinger et al. 2014; Ehlmann and Edwards 2014). Most of these new missions, experi-
+ments, and investigations were guided by the results of their predecessors, and some of these
+missions continue to operate to this day.
+    The scientific discoveries from the Mars Exploration Rovers (MER) Spirit and Op-
+portunity, and from the Mars Science Laboratory (MSL) rover Curiosity, in particular,
+tell a story of a planet hypothesized to have had a more Earthlike (though never the
+same as Earth) early history. The details and timing of the transition from the early Mar-
+tian Noachian climate through the transitional Hesperian and into the modern, cold and
+arid Amazonian are the subject of intense debate within the science community. Sig-
+nificantly, MER, MSL, and orbiter science results from several missions indicate that
+sub-surface diagenetic and hydrothermal fluids, near-surface groundwater, and even sur-
+face liquid water altered primarily basaltic precursor crustal materials, leaving behind
+tell-tale evidence of the alteration environment’s properties, such as pH and water-to-
+rock ratio, in the form of diverse, widespread hydrated minerals like sulfates, carbon-
+ates, and phyllosilicates (see, e.g., reviews in Bell 2008; Ehlmann and Edwards 2014;
+Bishop et al. 2020).
+The Mars 2020 Perseverance Rover Mast Camera Zoom. . .                        Page 3 of 40   24
+
+    The Mars 2020 mission and its rover, Perseverance, will build on these discoveries and
+be the critical next step in NASA’s strategic Mars exploration program (Farley et al. 2020).
+Collection of data essential to addressing the mission’s scientific goals (Table 1) requires
+observations by a visible color, multispectral, and stereo imaging system with the capabil-
+ity to conduct lateral and stratigraphic surveys and analyses at multiple spatial scales on
+many targets, as well as to assist in rover navigation. Imager system mission roles include
+characterizing the geological context along the rover traverse to help select locations for
+further in-depth analyses and sampling by arm-mounted instruments and documenting and
+validating the success of those arm-related activities (Mustard et al. 2013).
+    The Perseverance rover’s Mast Camera Zoom (Mastcam-Z) instrument and science/ope-
+rations investigation is designed to provide these essential imaging observations to help meet
+the Mars 2020 mission’s goals. Mastcam-Z is a high-heritage imaging system based directly
+on the successful MSL Mastcam investigation (Malin et al. 2017) with all of the capabilities
+of the MSL Mastcam instruments but augmented by a 4:1 zoom capability that will signif-
+icantly enhance its stereoscopic imaging performance for science, rover navigation, and in
+situ instrument and tool placement support. The Mastcam-Z camera heads are a matched
+pair of zoomable, focusable, charge-coupled device (CCD) cameras that can each collect
+broad-band red/green/blue (RGB) or narrow-band visible/near-infrared (VNIR) color data
+as well as direct solar images using neutral density filters. Each camera has a selectable
+field of view ranging from ∼7.7° to ∼31.9° diagonally, with the ability to resolve features
+∼0.7 mm in size in the near field and ∼3.3 cm in size at 100 m distance (assuming that
+“resolve” requires those features to be ≥5 pixels in size) from its position ∼2 m above the
+surface on the Perseverance Remote Sensing Mast (RSM).
+    Mastcam-Z will observe textural, mineralogical, structural, and morphologic details in
+rocks and fines at the rover’s field site in Jezero crater (Stack et al. 2020). Imaging from
+Mastcam-Z and many of the 23 other cameras on the rover and its systems (Maki et al.
+2020) will permit the science team to constrain rock type (e.g., sedimentary vs. igneous) and
+texture, and to assemble a geologic history of the site from stratigraphic clues in outcrops
+and regolith. The Mastcam-Z cameras will also document dynamic processes and events
+via video (e.g., aeolian sand movement, dust devils, cloud motions, and astronomical phe-
+nomena) at video rates of 4 frames/sec or faster for subframes, observe the Sun and sky for
+atmospheric science, and contribute imaging and video data to rover navigation and target
+selection for investigations by the rover’s mobility, coring, and sample caching subsystems
+as well as other instruments.
+    Because of Mastcam-Z’s MSL heritage, no new technologies were developed for this en-
+hanced Perseverance hardware implementation. Rather, we leveraged high-heritage parts,
+designs, and accommodation solutions from MSL, as well as science and operational
+lessons-learned from that mission and others, to maximize the overall science return for
+Mars 2020 (including detailed documentation and context of the potentially-returnable sam-
+ples being cached) with only modest modifications to the specific implementation of existing
+MSL-flown technologies. The capability to zoom (which is new), focus, acquire data at high-
+speed, perform limited onboard data processing within the system’s own flight software, and
+store large amounts of data in the system’s own internal buffers provides numerous options
+to maximize operational efficiency. These capabilities also permit investigators to examine
+targets in detail that are otherwise out of the rover’s reach, and to view near-field rocks,
+sedimentary and igneous structures, and fines (regolith, aeolian deposits) at a pixel scale as
+small as ∼133 µm/pixel at a distance of 2 m.
+    Here we describe the Mastcam-Z imaging system, the flight hardware of which consists
+of two camera heads mounted on the rover’s altitude/azimuth actuated RSM, one Digital
+24   Page 4 of 40                                                              J.F. Bell III et al.
+
+Electronics Assembly (DEA) within the rover body, and two small grayscale and color cal-
+ibration targets mounted on the rover’s deck. We also describe the specific scientific in-
+vestigation that will directly support Mars 2020 mission objectives and rover engineering
+operations, and our plans to acquire, process, and calibrate Mastcam-Z images and archive
+all image data in the NASA Planetary Data System (PDS). Companion papers provide sub-
+stantial, additional details on the performance and pre-flight calibration of the Mastcam-Z
+cameras (Hayes et al. 2021) and on the design, pre-flight characterization, and intended uses
+of the Mastcam-Z Primary and Secondary calibration targets (Kinch et al. 2020a).
+
+
+2 Mastcam-Z Investigation Goals
+
+2.1 High-Level Goals
+
+Mastcam-Z investigation goals (Table 1) and associated observational objectives (Table 2)
+respond directly to and will support the achievement of Objectives A-D of the NASA Mars
+2020 mission (Farley et al. 2020). Achieving the Mastcam-Z goals and objectives will also
+enable the collection and analysis of data sets that can provide substantial ground truth for
+and/or synergy with current and planned Mars orbiter science investigations of the surface
+and atmosphere, near-term planned landed investigations like that of the European Space
+Agency’s 2022 ExoMars rover (Vago et al. 2017) and others, and future orbiters and lan-
+ders/rovers that would be engaged in the planned Mars Sample Return campaign designed
+to bring back to Earth the samples collected and cached by the Mars 2020 mission (e.g.,
+Grady 2020).
+    The specific high-level goals of the Mastcam-Z investigation are:
+    Goal 1: Characterize the overall landscape geomorphology, processes, and the nature
+of the geologic record (mineralogy, texture, structure, and stratigraphy) at the rover field
+site. Mastcam-Z observations will provide data necessary for a full description of the to-
+pography, geomorphology, geologic setting, and the nature of past and present geologic
+processes in Jezero crater, especially as they pertain to habitability. This includes observa-
+tions of rocks and outcrops to help determine morphology, texture, structure, stratigraphy
+and stratigraphic sequence, rock type, mineralogy, depositional or erosional history, and any
+associated diagenetic and weathering characteristics. Meeting this goal also requires obser-
+vations of fine-grained regolith (soil, aeolian sand and dust) to help evaluate the nature of
+their physical and chemical alteration, depositional/erosional processes, and stratigraphy,
+texture, and mineralogy.
+    Goal 2: Assess current atmospheric and astronomical conditions, events, and surface-
+atmosphere interactions and processes. This will be achieved by observations of clouds,
+dust-raising events, properties of suspended aerosols (dust, ice crystals), tracking of dust
+deposition and removal history on calibration targets, astronomical phenomena, and active
+aeolian transport of fines. This goal also encompasses characterization of potential ice- or
+frost-related (periglacial) geomorphic features (if present) and the characterization of any
+seasonal frost or ice and its influence on rocks and fines.
+    Goal 3: Provide operational support and scientific context for rover navigation, contact
+science, sample selection, extraction, and caching, as well as imaging support for other
+Mars 2020 instruments and rover tools. Mastcam-Z images will assist rover navigation by
+enabling the more accurate determination of the location of the Sun and of horizon features,
+and by providing information pertinent to rover traversability (e.g., nature of distant haz-
+ards, higher-resolution terrain meshes, etc.). This goal also includes observations enabling
+The Mars 2020 Perseverance Rover Mast Camera Zoom. . .                                    Page 5 of 40     24
+
+Table 1 The Mastcam-Z Investigation and Mars 2020 Mission Objectives
+
+Mars 2020 mission objectivesa                 Mastcam-Z goalsb    Rationale
+
+A. Characterize the processes that formed   1. Geomorphology, Identifying geomorphic features and their
+and modified the geologic record within a   Processes,        constituent igneous and sedimentary
+field exploration area on Mars selected for Geologic Record   structures at both coarse and fine scales
+evidence of an astrobiologically-relevant                     helps to reconstruct the local and regional
+ancient environment and geologic diversity                    paleoenvironment, as well as reveal the
+                                                              role that water played in its evolution.
+                                              2. Current          Documenting surface/atmospheric
+                                              Atmospheric and     interactions, including aeolian processes
+                                              Astronomical        and meteorologic events (e.g., dust
+                                              Conditions and      storms and clouds) provides essential
+                                              Events              context for interpreting geologic
+                                                                  structures and assessing habitability.
+                                              3. Operational      Characterizing potential target materials
+                                              Support             and their geologic context provides
+                                                                  essential complementary data to other
+                                                                  instrument investigations as well as
+                                                                  tactical operations.
+
+B. Perform the 1. Determine the               1. Geomorphology, Identifying textures and compositional
+following         habitability of an          Processes,        changes in rocks and outcrops from
+astrobiologically ancient environment         Geologic Record   previously water-rich environments
+relevant          2. For ancient                                provides essential context for determining
+investigations on environments                                  the history of deposition, diagenesis, and
+the geologic      interpreted to have been                      erosion required to determine habitability
+materials at the habitable, search for                          and biosignature preservation potential.
+landing site:     materials with high
+                  biosignature                3. Operational      Characterizing target materials and their
+                  preservation potential      Support             surrounding terrain provides essential
+                  3. Search for potential                         context to complementary instrument
+                  evidence of past life                           investigations. Remote identification of
+                  using the observations                          targets facilitates tactical operation of
+                  regarding habitability                          analytical and contact instruments.
+                  and preservation as a
+                  guide
+C. Assemble a      1. Obtain samples that     1. Geomorphology, Documenting the geologic features found
+returnable cache   are scientifically         Processes,        in the vicinity of cached samples is
+of samples for     selected, for which the    Geologic Record   essential to the interpretation of
+possible future    field context is                             measurements made by analytic and/or
+return to Earth    documented, that                             contact instruments, as well as potential
+                   contain the most                             laboratory studies following sample
+                   promising samples                            retrieval.
+                   identified in Objective
+                   B and that represent the   2. Current          Atmospheric monitoring (e.g., aeolian
+                   geologic diversity of      Atmospheric and     activity, clouds, aerosols) provides
+                   the field site             Astronomical        engineering constraints for potential
+                   2. Ensure compliance       Conditions and      cache retrieval and document the
+                   with future needs in the   Events              conditions the cache apparatus will be
+                   areas of planetary                             subjected to prior to recovery.
+                   protection and             3. Operational      Characterizing target materials and their
+                   engineering so that the    Support             surrounding terrain provides essential
+                   cache could be returned                        context to complementary instrument
+                   in the future if NASA                          investigations. Documenting the
+                   chooses to do so                               three-dimensional structure of the cache
+                                                                  area is essential to the design of a
+                                                                  potential recovery mission.
+24   Page 6 of 40                                                                            J.F. Bell III et al.
+
+Table 1 (Continued)
+
+Mars 2020 mission objectivesa                  Mastcam-Z goalsb     Rationale
+
+D. Contribute to 1. Demonstration of           1. Geomorphology, Observing the properties and dominant
+the preparation      In-Situ Resource          Processes, Geologic transport processes affecting local fines,
+for human            Utilization (ISRU)        Record              frost, and ice provides environmental
+exploration of       technologies to enable                        constraints for surface systems associated
+Mars by making propellant and                                      with human exploration.
+significant          consumable oxygen
+progress towards production from the           2. Current           Tracking atmospheric and meteorological
+filling at least one Martian atmosphere for    Atmospheric and      events / processes (e.g., dust events,
+major Strategic      future exploration        Astronomical         clouds, aerosols, etc.) both provides
+Knowledge Gap 2. Characterization of           Conditions and       ground-truth for general circulation
+                     atmospheric dust size     Events               models and documents environmental
+                     and morphology to                              conditions relevant to human exploration.
+                     understands its effects   3. Operational       Monitoring and characterizing Helicopter
+                     on the operation of       Support              and MOXIE experiments or
+                     surface systems and                            demonstrations helps document
+                     human health                                   instrument health and provide temporal
+                     3. Surface weather                             context for the interpretation of results.
+                     measurements to
+                     validate global
+                     atmospheric models
+
+a See Farley et al. 2020.
+
+b See Sect. 2.2 for the full descriptions of Mastcam-Z investigation goals.
+
+
+
+
+other Mars 2020 science instruments to identify and characterize potential materials to be
+collected for in situ analyses, coring, and caching, or other purposes (e.g., rover hardware
+monitoring).
+
+2.2 Mastcam-Z Detailed Investigation Goals and Objectives
+
+2.2.1 Goal 1: Landscape Geomorphology and Processes (Objectives 1-a Through 1-g)
+
+Mastcam-Z images will detect tonal, textural, and spectroscopic signatures that occur at the
+millimeter to decameter scale and will contribute to studies of the morphology and texture
+of rocks and fines; coatings and weathering rinds on rocks and crusts on fines; sedimen-
+tary, igneous, and potentially biogenic structures; the stratigraphic placement of rock out-
+crops and regolith clasts and fines, and their inferred geologic history; and mineralogy and
+composition of rocks and fines. These properties can be used to assess not only the geo-
+logic and climatic history but also potential habitability and biogeological interactions at
+the Mars 2020 landing site and along the rover’s traverse path (e.g., Mustard et al. 2013;
+Noffke et al. 2013), and to select the optimal samples for coring and caching, the first stages
+of a longer-term Mars sample return campaign.
+
+Grain Size, Morphology, and Texture Mastcam-Z will document the textural attributes
+of rocks and fines at granular (hundreds of µm) to outcrop and bedform (cm to m) scales.
+For example, oriented flutes, pits, scoops, and gouges in rocks often indicate abrasion by
+wind-driven sand and the direction of the most energetic winds when abrasion occurred (e.g.,
+Sharp 1949; Laity and Bridges 2009; Bridges et al. 2014; Sullivan et al. 2008; Schieber et al.
+2020). Observations of spall fragments can indicate expansion/contraction due to thermal,
+The Mars 2020 Perseverance Rover Mast Camera Zoom. . .                                   Page 7 of 40      24
+
+Table 2 Mastcam-Z detailed goals and objectives
+
+Mastcam-Z goals                            Mastcam-Z detailed investigation objectives
+
+1. Characterize the overall landscape      1-a. Characterize the morphology, texture, and multispectral
+geomorphology, processes, and the          properties of rocks and outcrops to assess emplacement
+nature of the geologic record              history, variability of composition, and physical properties.
+(mineralogy, texture, structure,
+                                           1-b. Determine the structure and orientation of stratigraphic
+stratigraphy) at the rover field site
+                                           boundaries, layers, and other key morphologic features to
+                                           investigate emplacement and modification history.
+                                           1-c. Characterize the position, size, morphology, texture, and
+                                           multispectral properties of rocks and fines to constrain
+                                           provenance and weathering history.
+                                           1-d. Observe and monitor terrains disturbed by rover wheels
+                                           and other hardware elements to assess surface to physical and
+                                           chemical weathering.
+                                           1-e. Distinguish among bedform types within the vicinity of
+                                           the rover to evaluate the modification history of the landscape.
+                                           1-f. Identify diagnostic sedimentary structures to determine
+                                           emplacement history.
+                                           1-g. Characterize finer scale color/spectral variation (e.g.,
+                                           cm-scale veins, post-depositional concretions) to constrain
+                                           provenance and diagenetic history.
+
+2. Assess current atmospheric and          2-a. Observe the Sun for rover navigation and atmospheric
+astronomical conditions, events, and       science purposes.
+surface-atmosphere interactions and
+                                           2-b. Observe the sky and surface/atmosphere boundary layer
+processes
+                                           to measure atmospheric aerosol/cloud properties and transient
+                                           atmospheric/astronomical events.
+
+3. Provide operational support and         3-a. Acquire stereo images for navigation, instrument
+scientific context for rover navigation,   deployment, and other operational purposes on a tactical
+contact science, sample selection,         timescale.
+extraction, caching, and other Mars
+                                           3-b. Acquire sub-mm/pixel scale images of targets close to the
+2020 investigations
+                                           rover.
+                                           3-c. Resolve morphology and color/multispectral properties of
+                                           distant geologic features and topography for longer-term
+                                           science and localization/navigation planning purposes.
+
+
+
+freeze-thaw, or salt weathering processes (e.g., Malin 1976; Anderson and Anderson 2011;
+Eppes et al. 2015). Clast size and roundness can provide information about fluvial trans-
+port velocity and the rapidity of sedimentation, crucial for understanding the potential for
+biosignature preservation (e.g., Pettijohn 1975; Grotzinger et al. 2005, 2006, 2014; Williams
+et al. 2013) (Fig. 1). Igneous rock textures, grain sizes, and colors can constrain composi-
+tion, formation conditions, and volatile content (e.g., McSween et al. 2006a,b). Breccias
+with poorly sorted angular clasts could indicate pyroclastic origins (fall deposits or density
+current deposits) or impact processes; other textural observations (e.g., clast vesicularity and
+lithology) can help to distinguish between volcanic and impact origins (e.g., Cas and Wright
+1987).
+
+Rock Coatings, Weathering Rinds, and Crusts Weathering rinds result from chemi-
+cal alteration in the presence of water. Based on optical scattering (including glints) and
+24   Page 8 of 40                                                                           J.F. Bell III et al.
+
+
+
+
+Fig. 1 Did water flow on the surface/subsurface of Mars? Like MSL/Mastcam, Mastcam-Z’s resolution
+can discriminate (A) conglomerates formed in high-energy streams (Williams et al. 2013), (B) cross-bedded
+sandstones formed in less energetic flows (Edgar et al. 2018), and (C) lake-deposited mudstones with post-de-
+positional circulation of subsurface fluids (Kronyak et al. 2019). These kinds of features provide context in
+the Mars 2020 search for habitable environments.
+
+
+spectral/compositional properties, coatings were inferred on rocks at the Viking Lander 1,
+Viking Lander 2, and Mars Pathfinder sites (e.g., Guinness et al. 1997; Johnson et al. 1999;
+Murchie et al. 2004). Evidence for rock coatings was ubiquitous in MER Pancam images
+of rocks in the Gusev plains (e.g., Bell et al. 2004a; McSween et al. 2006a, 2006b; Johnson
+et al. 2008; Fig. 2) and in the sedimentary rocks of Meridiani Planum (e.g., Bell et al. 2004b;
+Farrand et al. 2007, 2008; Weitz et al. 2010) and has also been reported in Gale crater rocks
+(Ollila et al. 2014; Lanza et al. 2015).
+
+Structure Sedimentary structures in rocks and regolith record atmospheric and geologic
+processes through a variety of primary features such as bedding, as well as post-depositional
+deformation of these features via diagenesis, all detectable at Mastcam-Z resolution (e.g.,
+Stow 2005). In subaqueous environments, current ripples indicate higher energy deposition
+than finer-grained, uniform laminations, and can be used to constrain flow depth and in-
+fer aspects of the style and direction of sediment transport (e.g., Herkenhoff et al. 2004;
+Grotzinger et al. 2005, 2006). Resolving such structures in stereo is particularly impor-
+tant for removing ambiguities caused by geometric effects (e.g., Grotzinger et al. 2006;
+Hayes et al. 2011). In igneous rocks, structures include a range of features regarding the
+nature and cooling of lava flows, pyroclastic events, and intrusive processes (e.g., Smith and
+Katzman 1991; Valentine and Fisher 1999), such as interpreted by the examples imaged by
+MER/Pancam at Home Plate in Gusev crater (e.g., Squyres et al. 2007; Lewis et al. 2008;
+Manga et al. 2012).
+
+Stratigraphy Stratified deposits chronicle paleoenvironments and provide glimpses into
+the broader history of early Mars (e.g., Malin and Edgett 2000; Grotzinger et al. 2005, 2015).
+Mastcam-Z stereo images and panoramas of the rover’s field site will be crucial for recon-
+structing the time-series of emplacement events by helping to direct rover in situ measure-
+ments and sampling to key boundaries in space and time in the rock record. Mastcam-
+Z’s high-resolution and stereo Digital Terrain Model (DTM) capabilities can be used
+to map and interpret stratigraphy along the rover’s traverse (e.g., Arvidson et al. 2008;
+Crumpler et al. 2011; Grotzinger et al. 2014; Stein et al. 2020) and to investigate small-scale
+layering in fine regolith materials (such as those exposed by wheel trenching; Arvidson et al.
+2008, 2011; Sullivan et al. 2008, 2011), and in outcrops to search for evidence of subaque-
+ous deposition (e.g., Grotzinger et al. 2006) and stratigraphic variations in cross-bedding ge-
+The Mars 2020 Perseverance Rover Mast Camera Zoom. . .                                         Page 9 of 40    24
+
+
+
+
+Fig. 2 Mastcam-Z’s near-UV, visible, and near-IR filters (Table 3) enable false color composite representa-
+tions like these to detect (A) ferric/ferrous variations in coated vs. abraded surfaces (Farrand et al. 2007); (B)
+hematite in diagenetic concretions (Bell et al. 2004b); (C) 1000-nm absorption in hydrated soils in natural or
+disturbed surfaces (Johnson et al. 2007)
+
+
+ometries that document paleo-wind directions and other processes (e.g., Hayes et al. 2011;
+Banham et al. 2018; Barnes et al. 2018).
+
+Mineralogy Mineral identification is a key component of habitability assessment, espe-
+cially evidence for water, redox gradients or electron donors (e.g., Fe2+ vs. Fe3+ , Mn),
+or the presence of astrobiologically relevant elements (e.g., Hazen et al. 2008; Summons
+et al. 2011; Ehrenfreund et al. 2011). Past Mars surface mission experience shows that even
+low spectral resolution RGB color and multispectral imaging with carefully-selected wave-
+lengths can help investigators decide strategically and tactically along the traverse where
+to invest in resource-intensive arm-related or other rover activities, and to understand more
+clearly the context of mineralogic phases identified by other payload elements (e.g., Bell
+et al. 2008, 2020; Farrand et al. 2008; Blake et al. 2013; Vaniman et al. 2014). In addition,
+fine-scale compositional imaging can help to constrain the mineralogy of small features.
+Examples from previous missions include mm- and cm-scale veins (Squyres et al. 2012;
+Nachon et al. 2017; Kronyak et al. 2019) and mm-scale diagenetic ridges seen by Curiosity
+at Yellowknife Bay (Grotzinger et al. 2014). Thus, while Mastcam-Z is not a spectrome-
+ter, the multispectral capability of Mastcam-Z still addresses important mineralogic context
+requirements.
+    Specifically, as with previous science imaging systems on Mars Pathfinder, MER,
+Phoenix, and MSL, the Mars 2020 Mastcam-Z will use narrowband filters (Table 3) to pro-
+vide low spectral resolution sampling of materials in up to 11 distinct wavelengths (plus
+broadband RGB color) in the ∼400–1000 nm range. Relatively broad mineral spectral sig-
+natures in this range (Fig. 3) include those due to important Fe2+ -bearing silicates such
+as high and/or low calcium pyroxenes and olivine in relatively unaltered rocks and fines
+(e.g., Adams 1975; Cloutis and Gaffey 1991; Bibring et al. 2005; Mustard et al. 2005;
+Clenet et al. 2013). Additional mineral features observed in this range are characteristic
+of Fe3+ -bearing alteration products, including a number of specific iron oxides, oxyhydrox-
+ides, phyllosilicates, and oxyhydroxysulfates (e.g., Morris et al. 1985), as well as some hy-
+drated minerals (e.g., silica, H2 O ice, some sulfates, phyllosilicates, carbonates and hydrated
+perchlorates) that show a narrower and weak H2 O and/or OH absorption feature near 950–
+1000 nm (Wang et al. 2008; Rice et al. 2010). While many of the filters used for Mastcam-Z
+are close to or essentially the same as those used for MER/Pancam and MSL/Mastcam as
+well as those planned for the PanCam instrument on the 2022 ExoMars Rosalind Franklin
+rover (Coates et al. 2017), the Mastcam-Z filter set additionally features different position-
+24   Page 10 of 40                                                               J.F. Bell III et al.
+
+Fig. 3 Lab spectra (solid line;
+Clark et al. 2007) of
+Mars-relevant hydrated minerals,
+ferric sulfate, iron oxide, and
+ferrous silicates convolved to the
+Mastcam-Z narrowband and
+RGB filters (open circles). Black
+circles: heritage MSL/Mastcam
+filters (Bell et al. 2017)
+
+
+
+
+ing of several narrowband filters that, based on laboratory data as well as MER and MSL
+experience, could enable better detection of hydrated minerals and iron-bearing phases than
+previously used filters (e.g., Rice et al. 2010, 2020; Gunn and Cousins 2016), as well as
+better potential detectability of the mineral diversity specifically expected in and around
+Jezero crater, as detected from orbit (e.g., Ehlmann et al. 2008, 2009; Murchie et al. 2009;
+Horgan et al. 2020). Mastcam-Z will also address mineralogy indirectly through investiga-
+tions of shape, cleavage, color, and luster of mineral grains and fragments (e.g., Herkenhoff
+et al. 2004, 2019; Bell et al. 2008; Yingst et al. 2013). Collectively, Mastcam-Z’s RGB
+and narrowband filters should allow certain compositional variations to be rapidly mapped
+along the rover traverse. This will help direct the science team’s tactical and strategic at-
+tention to the most valuable locations for sampling activities that will inform most effec-
+tively about the history of Mars, including ancient aqueous, potentially habitable environ-
+ments.
+
+2.2.2 Goal 2: Atmospheric, Meteorological, and Astronomical Observations
+      (Objectives 2-a,b)
+
+Mastcam-Z will directly characterize multiple aspects of atmospheric aerosols to under-
+stand the current climate of Mars and potential hazards for future exploration (Tables 1
+and 2). For example, Mastcam-Z’s direct solar imaging capability (with Neutral Density
+filters sampling four different VNIR colors: RGB+880 nm; Table 3) offers the most accu-
+rate method available for measuring column-integrated aerosol abundances (e.g., Smith and
+Lemmon 1999; Lemmon et al. 2004, 2015, 2019). These opacity data will be combined with
+the high radiometric fidelity of (diffuse) sky observations to constrain the particle size and
+other macrophysical properties of the dust (e.g., single scattering albedo; Pollack et al. 1995;
+Tomasko et al. 1999; Lemmon et al. 2004; Bell et al. 2006a; Wolff et al. 2006). In ad-
+dition, Mastcam-Z will extend the record of continuous ground-truth observations dat-
+The Mars 2020 Perseverance Rover Mast Camera Zoom. . .                                      Page 11 of 40   24
+
+                 Table 3 Mastcam-Z Left (L) and Right (R) filtersa
+
+
+
+
+                 a Red text means new performance compared to MSL/Mastcam.
+
+                 bλ
+                    eff is the effective band center wavelength, calculated as the
+                 weighted average of the normalized system spectral response (includ-
+                 ing optics, filter, and CCD) and the solar radiance at the top of the
+                 Martian atmosphere. HWHM is the half-width of the bandpass at half-
+                 maximum for each filter.
+                 c Filters L7 and R7 are for direct imaging of the Sun using Neutral Den-
+
+                 sity (ND) coatings that attenuate the flux by factors of 106 (ND6) and
+                 105 (ND5), respectively. Filter L7 enables 3-color (RGB) Bayer filter
+                 color imaging of the Sun at the same effective band center wavelengths
+                 as the L0 and R0 filters.
+                 See Hayes et al. (2021) for details on these derived values.
+
+
+ing back to 2004 that are leveraged for planet-wide, orbiter-based studies (e.g., Wolff
+et al. 2009, 2010, 2019; Tamppari et al. 2010). Direct solar imaging will also enable
+occasional observations of solar transits of Phobos and Deimos, improving knowledge
+of their ephemerides and physical properties (e.g., Bell et al. 2005; Lainey et al. 2007;
+Jacobson 2010; Lemmon et al. 2013). Twilight or night-time imaging also offers op-
+portunities for extending knowledge of dust optical depth values to a full diurnal cycle
+through imaging of stars or other astronomical targets, as well as the potential for in-
+creasing our knowledge of the present-day meteoroid flux at Mars (e.g., Domokos et al.
+2007).
+    Local sources of dust will be investigated through dust devil monitoring (e.g., Ferri
+et al. 2003; Greeley et al. 2010), and the rate and properties of dust sedimentation on
+the rover will be tracked with rover deck calibration target and other monitoring (e.g.,
+Landis and Jenkins 2000; Kinch et al. 2015, 2020a; Drube et al. 2010; Vicente-Retortillo
+et al. 2018), producing a temporal record of aerosol properties that can affect both surface
+and atmospheric heating rates and thus atmospheric dynamics (e.g., Fenton et al. 2007;
+Madeleine et al. 2011). Additionally, sky imaging of water and/or CO2 ice clouds can
+constrain microphysical and dynamical models (e.g., Colaprete et al. 2003; Madeleine
+et al. 2012; Wolff et al. 2017, 2019). Finally, we will investigate the magnitude of mod-
+ern surface-atmosphere interactions (e.g., hydration, desiccation) by monitoring tonal,
+color, and spectroscopic changes at locations where the rover has freshly exposed rock
+interiors or subsurface materials (e.g., Wang and Ling 2011; Rice et al. 2011, 2013;
+Wang et al. 2013), comparing them to laboratory experiments (e.g., Cloutis et al. 2008;
+Altheide et al. 2009).
+24   Page 12 of 40                                                             J.F. Bell III et al.
+
+2.2.3 Goal 3: Mastcam-Z Operational Support (Objectives 3a Through 3-c)
+
+As summarized in Tables 1 and 2, the Mastcam-Z investigation also includes significant
+operational support objectives. These include high-fidelity and rapidly-processed images,
+mosaics, and other derived products (e.g., DTMs and videos) designed to support rover
+driving decisions, dust removal, abrasion, and coring tool placement, contact science in-
+strument positioning, and assessment/anomaly diagnostics on the state of rover compo-
+nents visible to either or both Mastcam-Z cameras. Past experience from Mars landers and
+rovers provides ample examples of the ways that high-resolution and/or multispectral imag-
+ing capabilities can enhance the operational efficiency or fidelity of surface missions. For
+example, the science cameras on the Mars Pathfinder lander (Smith et al. 1997) and on
+the MER Spirit and Opportunity rovers (Bell et al. 2006b; Herkenhoff et al. 2019) fre-
+quently provided tactically-useful higher-resolution and color imaging data for rover nav-
+igation and instrument targeting decisions, augmenting information available from lower
+resolution and monochrome rover engineering cameras. Similar support by the Mastcam
+instruments has augmented engineering camera (Hazcams and Navcams) observations on
+the MSL Curiosity rover as well (Maki et al. 2012; Malin et al. 2017). On Perseverance,
+the engineering cameras will have RGB color capability and the potential for higher spa-
+tial resolution than the engineering cameras on Curiosity (Maki et al. 2020). Regardless,
+we anticipate that imaging from Mastcam-Z will be used to substantially enhance the in-
+formation needed for rover driving or engineering-related decisions because its resolution
+and color capabilities still exceed those of the upgraded Perseverance engineering cam-
+eras.
+
+2.3 Design Considerations, Requirements, and Heritage
+
+High-resolution panoramic, stereoscopic, and color/multispectral context images are among
+the measurement types generally agreed by the Mars science community to constitute
+threshold requirements to efficiently characterize the geology of a site, to assess its past
+habitability, to search for biosignatures, and to assist with sample caching (including de-
+tailed assessment of the context of cached samples) and strategic knowledge gap (SKG)
+filling activities (e.g., Mustard et al. 2013). While multispectral imagers alone cannot meet
+all of those community-identified requirements, their data can contribute significantly to
+geologic characterization, the characterization of some potential biosignatures, and plan-
+ning and implementation of operational activities like sample caching. In addition, data
+from multispectral imagers can provide significant support and guidance to other instru-
+ment investigations that are specifically focused on meeting habitability and SKG-filling
+goals.
+     In Table 4, we trace the connections between Mastcam-Z investigation goals and ob-
+jectives (Tables 1 and 2) to a subsequent set of observational requirements and instrument
+functional requirements that enable the system to meet both the investigation and relevant
+mission requirements. To facilitate tactical relevance, our geologic and operational observ-
+ing objectives in Table 4 are separated into near-field (∼1 to 5 m range) and mid-field (∼5 to
+100 m) based on past mission experience and expected typical rover drive distances. Atmo-
+spheric and astronomical objectives will be met with predominantly far-field observations
+(>100 m to infinity).
+     As outlined in Table 4, Mastcam-Z must be able to provide RGB color panoramic ca-
+pability, sufficient resolution in the far-field (resolving ∼3-4 cm features at 100 m) and in
+the near field (resolving ∼1 mm features in the arm’s work volume in front of the rover),
+The Mars 2020 Perseverance Rover Mast Camera Zoom. . .                                                         Page 13 of 40   24
+
+
+
+Table 4 Mars 2020 Mastcam-Z science traceability to observational and functional requirements
+
+Mastcam-Z                  Mastcam-Z                     Observation requirements              Instrument functional
+goalsa                     objectivesb                                                         requirements
+
+1. Characterize                                    1-a   • Acquire color monoscopic or         • Cameras must be mounted as a
+the overall                                              stereo images and panoramas of        stereo pair capable of
+landscape                                          1-b   extended regions around the rover     near-simultaneous (<1 s) imaging
+                                                                                               • System must have an
+
+
+
+
+                      Mid-field ∼5 to 100 m away
+geomorphology,                                     1-c   under near-constant illumination
+processes, and                                           conditions                            Instantaneous Field of View
+the nature of the                                  1-d   • Acquire 360° contextual             (IFOV) of ≤75 µrad/pix at full
+geologic record                                          panoramas at key locations along      zoom (high resolution) and ≤3
+(mineralogy,                                             the traverse to document geologic     mrad/pixel at wide angle
+texture, structure,                                      context and to assess stratigraphic   (low-resolution)
+and stratigraphy)                                        boundaries                            • System must be able to buffer
+at the rover                                             • Tactically assemble DTMs            ≥1 Gbit of data within internal
+landing site and                                         • Resolve cm-size bedding planes,     (non-rover) Non-Volatile Random
+along the rover’s                                        contact geometries, rocks, veins,     Access Memory (NVRAM)
+traverse                                                 and nodules up to 60 m from the       • System must be capable of
+                                                         rover                                 imaging at any time during the
+                                                         • Spectrally discriminate among       day or night
+                                                         expected Mars surface materials       • Cameras must have RGB color
+                                                         to help assess redox state and to     imaging and high resolution
+                                                         choose best in situ and coring        bandpass filters to interrogate the
+                                                         targets                               ferric absorption edge (<
+                                                                                               600 nm), ferric/ferrous spectral
+                                                   1-e   • Acquire individual color            slopes/bands in the near-infrared
+                                                         monoscopic or stereo images that      (700-1000 nm), and near-IR
+                                                   1-f   can resolve mm-size bedding           hydration band (965 nm)
+                                                         planes, contact                       Relevant Requirements on Remote
+                                                         geometries, rocks, veins, and         Sensing Mast
+                                                         nodules within about 1.5 to 4         • Cameras must be able to be
+                                                         meters of the rover                   pointed to enable 360° azimuth
+                                                         • Repeat images of a scene at         coverage and −90° to +90°
+                                                         multiple illumination angles for      elevation coverage
+
+
+
+
+                      Near-field ∼1 to 5 m away
+                                                         photometric studies                   • System must be able to acquire a
+                                                                                               360° panorama of the surrounding
+                                                                                               terrain at MER/Pancam scale or
+                                                                                               better (≤273 µrad/pix) in <1 hour
+                                                   1-g   • Use RGB color images to             • Image through specific RGB and
+                                                         discriminate visual color             narrowband (10-20 nm width)
+                                                         differences of bulk materials         filters in specific visible to
+                                                         • Use narrowband color filter         near-infrared (400-1000 nm)
+                                                         images to detect and discriminate     wavelengths (Table 3) that enable
+                                                         among major Fe-bearing silicates,     dust cover to be assessed and
+                                                         ferric oxides, ferric                 diagnostic Fe-bearing and
+                                                         oxyhydroxides, and selected           hydrated and/or hydroxylated
+                                                         hydrated and/or hydroxylated          minerals to be detected and
+                                                         minerals and to identify cm- to       distinguished
+                                                         dm-scale signs of alteration in
+                                                         outcrop
+24   Page 14 of 40                                                                                        J.F. Bell III et al.
+
+Table 4 (Continued)
+
+Mastcam-Z               Mastcam-Z                Observation requirements               Instrument functional
+goalsa                  objectivesb                                                     requirements
+
+2. Assess current       2-a                      • Image the Sun in at least 2          • Acquire direct images of the
+atmospheric and                                  colors sufficient to distinguish       Sun near 440 and 880 nm using
+astronomical                                     atmospheric dust and water ice         neutral density (ND) filters
+conditions,                                      aerosols
+events, and             2-b                      • Acquire images of the sky at         • Use narrowband filters near 440
+surface-                                         wavelengths that constrain aerosol     and 880 nm to ≈ match solar
+atmosphere                                       physical and radiative properties      filters, span ≈2x in wavelength,
+interactions and                                 • Use camera temp. sensors to          and include low and high band
+processes                                        estimate environmental                 wavelengths
+                                                 temperature at camera height           • Acquire temperature
+                                                 above ground                           measurements with an accuracy of
+                                                                                        ±2 °C using instrument temp.
+                                                                                        sensors
+                                                 • Acquire rapid (≥2 fps) ≤2 min • RGB high-definition video at a
+                                                 videos with ≥ MSL-M100             rate of at least 2 frames/second
+                                                 resolution over 5° FOV for
+                                                 transits; and ≤10 min color videos
+                                                 at ≥1/3 fps with at least Pancam
+                                                 resolution and FOV for dust devils
+                                                 and clouds
+
+3. Provide                                 3-a   • Acquire stereo images, mosaics,      • Resolve driving hazards
+operational                                      or panoramas of extended regions       comparable to the size of a rover
+support and                                      around the rover under                 wheel radius (25 cm) at 100 m
+scientific context                               near-constant illumination             • Generate near-field terrain
+for rover                                        conditions                             meshes with a range error of
+                                                 • Acquire images of rover
+
+
+
+
+                     Mid-field ∼5 −100 m
+navigation,                                                                             <5 mm
+contact science,                                 hardware and arm workspace at          • Acquire in-focus images that
+sample selection,                                varying spatial scales sufficient to   resolve features from ≤3 mm size
+extraction, and                                  assess configuration, dustiness,       at 1.5 m (calibration target, deck)
+caching, and                                     basic wear, etc.                       to ≤10 cm size at 100 m range
+other selected                             3-b   • Resolve (identify and
+Mars 2020                                        characterize) rocks or other
+investigations                                   potential rover driving obstacles
+                                                 as well as potential fiducials for
+                                                 locations from orbiters
+                                           3-c   • Acquire multispectral                • Image in specific RGB and
+                                                 (color-contrasting) images of          narrow (10-20 nm) wavelengths
+                                                 soils, clasts, and rocks/outcrop       that enable assessment of dust
+                                                 close to the rover under relatively    cover and diagnostic Fe-bearing
+
+
+
+
+                     Near-field ∼1.5-5 m
+                                                 high-Sun illumination                  and hydrated minerals to be
+                                                                                        detected and distinguished
+                                                 • Resolve medium to coarse             • Acquire in-focus images at a
+                                                 sand-sized grains and clasts in the    pixel scale of 150 µm/pix at 2 m
+                                                 in-situ instrument work volume,        range
+                                                 providing context for fine-scale       • System must be able to acquire
+                                                 imaging investigation and              images at varying spatial
+                                                 selection of samples for caching       resolutions
+                                                 • Acquire images at varying
+                                                 spatial scales
+
+a See Sect. 2.1 for detailed definitions of Mastcam-Z Investigation Goals.
+
+b See Table 2 for detailed definitions of Mastcam-Z Investigation Objectives.
+The Mars 2020 Perseverance Rover Mast Camera Zoom. . .                         Page 15 of 40   24
+
+and visible to short-wave near-IR (∼400–1000 nm) multispectral capability to distinguish
+more dusty from less/not dusty materials and to provide important insights into the min-
+eralogy of iron-bearing silicates, oxides, and oxyhydroxides, as well as some classes of
+diagnostic hydrated minerals. Mastcam-Z images are required to have a Signal-to-Noise
+Ratio (SNR) of at least 30:1 for all filters at an exposure duration of 0.015 seconds for low
+albedo (0.1 in red) targets at high solar incidence (80°) at aphelion on Mars. The Modulation
+Transfer Function (MTF), which incorporates contrast and resolution to determine the total
+resolution performance of the camera, is required (as on MSL/Mastcam) to be >0.2 at the
+maximum sampling (Nyquist) frequency for the entire camera system (optics + filters +
+CCD).
+   In addition, Mastcam-Z must have improved stereo imaging capabilities compared to the
+MSL/Mastcams and MER/Pancams to be able to substantially augment the navigational and
+instrument placement capabilities of the Perseverance engineering cameras and to support
+and enhance Mars 2020 driving and coring/sampling capabilities. Specifically, Mastcam-Z
+DTMs must be able to resolve driving hazards at ranges several times greater than nominal
+Navcam data allow, and facilitate finer-position planning of arm deployment for contact
+science than nominally capable using Navcam or Hazcam data. Mastcam-Z DTMs thus are
+designed to exceed the nominally recommended range resolution of 1 mm at 2 m range,
+or a resolution of 2 cm at 10 m distance (e.g., Mustard et al. 2013). Finally, to support
+expected Mars 2020 operational timelines, based on MSL/Mastcam experience and heritage,
+Mastcam-Z must be able to acquire RGB color 360° × 70° wide angle (26 mm focal length;
+0.28 mrad/pix) panoramas in ≤1 hour, and downlink those data in ≤2 sols. As described
+below and in Hayes et al. (2021), the as-built Mastcam-Z cameras exceed these requirements
+by healthy margins.
+
+
+3 Instrument Description
+
+The Mars 2020 rover Mastcam-Z flight hardware consists of 5 elements (Fig. 4): two camera
+heads, mounted on the camera plate on the rover’s Remote Sensing Mast (RSM); one Digital
+Electronics Assembly (DEA) with two electronics cards (one per camera head) mounted
+into a single housing located inside the rover chassis, and two passive calibration targets,
+mounted on top of the Rover Pyro Firing Assembly (RPFA) box on the rover deck, close to
+the same location used for the Curiosity Mastcam calibration target (Bell et al. 2017). The
+Mastcam-Z camera heads each consist of an optomechanical lens assembly (with focus and
+zoom actuators), a filter wheel (with actuator), and a focal plane assembly and its electronics.
+Table 5 summarizes the Mastcam-Z instrument characteristics.
+
+3.1 Focal Plane Array and Electronics
+
+The Mastcam-Z focal plane array (FPA) and electronics (Fig. 5) are essentially build-
+to-print copies of the heritage MSL Mastcam FPA (Malin et al. 2017); only obsoles-
+cent parts have been replaced with modern equivalents. The Mastcam-Z FPA is designed
+around an ON Semiconductor (formerly Truesense Imaging, and before that, Kodak) KAI-
+2020CM interline transfer CCD sensor. Details of the sensor, electronics, and timing sig-
+nals for the FPA are identical to those described for MSL Mastcam (Malin et al. 2017;
+Bell et al. 2017) and are thus only summarized here. The sensor has 1600 × 1200 photoac-
+tive pixels of 7.4 × 7.4 µm size with no cover glass but with superimposed red, green, blue
+(RGB) filtered microlenses arranged in a Bayer pattern (see Hayes et al. 2021 for details).
+24   Page 16 of 40                                                                          J.F. Bell III et al.
+
+
+
+
+Fig. 4 Mars 2020 Perseverance rover Mastcam-Z flight hardware. (Left) Flight Camera Heads (identical to
+each other except for different color filters in their filter wheels; Table 3), shown upside-down on temporary
+carrying plates. (Upper right) Flight Digital Electronics Assembly (DEA), on a temporary carrying plate. For
+scale, the pocket knife in the photos is 3.5 inches (88.9 mm) long. (Lower right) Flight Primary (top) and
+Secondary (lower) Calibration Targets, mounted on the rover deck. For scale, the primary target is 3.1 × 3.1
+inches (8 × 8 cm) across
+
+
+The microlenses improve detector quantum efficiency, which has a peak of ∼40% in the
+red, green, and blue Bayer filters. The output from the CCD is AC-coupled, amplified, and
+digitized by an analog-to-digital converter (ADC) at a maximum rate of 10 Mpix/s. For each
+pixel, both reset and video levels are digitized and then subtracted in the digital domain to
+perform Correlated Double Sampling (CDS), resulting in 11-bits of dynamic range (raw
+image Data Number (DN) values of 0-2047).
+    The camera head electronics are laid out as a single 3-section rigid-flex printed circuit
+board, with sections sandwiched between housings that provide mechanical support and
+radiation shielding; the interconnecting flexible cables are enclosed in metal covers. Cam-
+era head functions are supervised by a single Actel RTSX Field-Programmable Gate Array
+(FPGA). In response to commands from the DEA, the FPGA generates the CCD clocks,
+reads samples from the ADC and performs digital Correlated Double-Sampling (CDS), and
+transmits the pixels to the DEA. The FPGA is also responsible for operating the small brush-
+less DC stepper motors that drive the focus, zoom, and filter wheel mechanisms. The camera
+head uses regulated +5 V and ±15 V power provided by the DEA. A Platinum Resistance
+Thermometer (PRT) on the electronic board near the CCD provides temperature knowledge
+for radiometric calibration. An additional pair of PRTs and redundant etched-foil Kapton
+heaters are attached to the outside of the camera head and thermostatically controlled by the
+rover to warm the mechanism for operation when needed. On Mars, the camera head tem-
+peratures will be restricted to be nominally operated at temperatures of −40 °C to +40 °C.
+The heaters can draw up to 72 W of power to bring the cameras above their operational
+allowable flight temperature from the worst-case (nighttime) cold conditions in just over 1
+hour. This design has been verified during pre-flight testing to be able to survive more than
+two Mars years of diurnal temperature cycles (down to –130 °C) without any heating issues.
+The Mars 2020 Perseverance Rover Mast Camera Zoom. . .                                  Page 17 of 40   24
+
+Table 5 Mars 2020 Perseverance rover Mastcam-Z instrument characteristics
+
+Optics                            Description
+
+Focus                             Adjustable; Working distances 0.5–1.0 m to ∞
+MTF                               >0.35 at Nyquist (optics + filters + CCD)
+Filter bandpasses                 Two 8-position filter wheels: see Table 3
+Zoom-Dependent:                   Widest Field                       Narrowest Field
+FOV (1600 × 1200 pix)             25.6° × 19.2°                      6.2° × 4.6°
+IFOV                              283 µrad                           67.4 µrad
+Focal ratio                       f /6.7                             f /9.5
+Effective focal length            26 mm                              110 mm
+Detector & Electronics            Description
+CCD                               ON Semi (Kodak) KAI-2020CM interline transfer
+Color                             Red, Green, Blue microfilters, Bayer pattern
+Array size                        1600 × 1200 photoactive pixels (1648 × 1214 total)
+Pixel size                        7.4 µm (square pixels)
+Gain, Read Noise, Full Well       15.6/15.6 e– /DN; 22/21 e– ; 21826/21818 e– (Left/Right)
+Digitization                      11 bits/pixel; single gain, no offset states
+Data Interface                    Synchronous LVDS: 8 Mbit/sec
+Command Interface                 2 Mbit/sec serial link
+Memory                            128 MB SDRAM and 8 GB flash buffer for each camera
+Power                             7.5 W standby and 11.8 W imaging, per camera
+Exposure                          Description
+Duration                          0 to 838.8 sec; commanded in units of 0.1 msec
+Auto-exposure                     Based on MSL and MER auto-exposure algorithm (Maki et al. 2003)
+Onboard Compression               Description
+Uncompressed                      11-bit data; No compression; No color interpolation
+Lossless                          ∼1.7:1 lossless compression; no color interpolation
+Lossy                             Realtime JPEG; color interpolation or grayscale; commandable color
+                                  subsampling Y:CR :CB (4:4:4 or 4:2:2) and compression quality (1–100)
+Video Group of Pictures (GOP)     JPEG-compressed color-interpolated GOPs, ≤2 MB file size and ≤16
+                                  frames/GOP; commandable color subsampling and compression quality
+Deferred compression              Image can be stored onboard the Mastcam-Z DEA uncompressed;
+                                  specified compression can be performed at a later time for transmission
+                                  to Earth
+Z-Stacking for focus merges,      Reduce as many as eight 1600 × 1200 raw images to a single
+range mapping                     1600 × 1200 best-focus color JPEG plus a grayscale JPEG range image
+Companding                        11-bit to 8-bit square-root encoding/decoding via lookup tables
+Physical                          Description
+DEA Dimensions                    22 × 12 × 5 cm
+Camera Head                       11 × 12 × 26 cm (each camera)
+Primary Cal Target                98 × 98 × 8 mm base, plus 37.5 mm high gnomon
+Secondary Cal Target              80 × 30 × 16 mm (width × height × depth)
+Stereo Baseline                   24.4 cm; toe-in angle between cameras: 2.3°
+Mass: Camera Head                 1.38 kg each
+Mass: DEA                         1.47 kg
+Mass: Cal Targets                 Primary: 103 g; Secondary: 15 g
+24   Page 18 of 40                                                                 J.F. Bell III et al.
+
+
+
+
+Fig. 5 Mastcam-Z Camera Head (Left) and DEA (Right) block diagram.
+
+
+
+
+Fig. 6 CAD model renderings of the Mastcam-Z optomechanical subsystems. Inset shows the full Camera
+Head.
+
+
+Performance has also been verified by (as of this writing) nearly 3000 sols (more than 8
+Earth years) of successful operation of the Curiosity Mastcam instruments on Mars.
+
+3.2 Optomechanical Design
+
+The optomechanical assembly for each Mastcam-Z camera head consists of an electronics
+box, filter wheel, zoom lens, and focus mechanism subsystem assemblies, plus a short light
+shade with baffles to mitigate stray light (Fig. 6). Two independent cameras enable stereo
+imaging and block redundancy on the zoom capability. The design is a modification of the
+focus/zoom/filter wheel assembly that had originally been proposed for MSL Mastcam, but
+which was ultimately descoped to the two fixed-focal length but variable-focus cameras
+actually flown on Curiosity to Mars (Malin et al. 2017). For Mastcam-Z, a zoom design
+with a more limited range and less stringent tolerances was fabricated. Specifically, the
+zoom range has been reduced from the ∼16:1 (6.2 mm to 100.4 mm focal length) range
+The Mars 2020 Perseverance Rover Mast Camera Zoom. . .                             Page 19 of 40   24
+
+
+
+
+Fig. 7 (Top) Cross-sectional view of the Mastcam-Z Camera Head and optics; (Bottom) Ray trace of the
+Mastcam-Z optics. The movable Zoom Groups and movable Focus Lens are shown here as set at a mid-range
+focal length of ∼64 mm
+
+
+of the originally proposed MSL zoom (DiBiase et al. 2012) to ∼4:1 (26 mm to 110 mm),
+meeting spatial resolution requirements while simplifying the optical design, reducing the
+sensitivity to positional variances of the lens elements, and greatly reducing the risks of
+problems during the manufacturing and assembly of the optics.
+    The zoom is an all-refractive design consisting of one moving focus group and two mov-
+ing zoom groups, three stationary groups, and a plano element (the filters) (Fig. 7). The lens
+can focus as close as 0.5 m at focal lengths of 26 to ∼50 mm and as close as 1.0 m for focal
+lengths of ∼50 to 110 mm. The focal ratio ranges from f /9.5 at 110 mm down to f /6.7 at
+26 mm. The optics design itself has an MTF of >0.4 at the Nyquist frequency of the detector
+(68 l.p./mm) over the range of focal lengths and from wavelengths of 400–1000 nm, and the
+overall camera system MTF (including filters and detector) is >0.35, exceeding the >0.2
+requirement.
+    The optics and all moving parts are sealed within the optomechanical lens housing to pre-
+vent dust contamination. Three Cobham (formerly Aeroflex) 10 mm stepper motors drive
+the Mastcam-Z mechanisms: one each for the focus, zoom, and filter wheel. The focus mo-
+tor drives a lead screw to provide a 9 mm range of travel for the focus group. The zoom
+motor drives the integral gear of a cam tube, driving the two zoom groups along linear bear-
+ings under the control of cam follower pins. For both of these mechanisms, end-of-travel
+sensing is provided by a Hall-effect sensor and magnet pairs on the moving component. The
+filter wheel motor uses a pinion-spur arrangement to drive the outer circumference of the
+filter wheel, which rides on an integral bearing along its inner circumference. Each of these
+mechanisms was qualified on MSL, via pre-flight life testing and, for the focus and filter
+wheel mechanisms, by their actual performance on Mars.
+    Each filter wheel has eight filter positions (Table 3). The only modifications of the filter
+wheel from MSL are that the circular, 12.6 mm diameter filters used for those cameras have
+24   Page 20 of 40                                                               J.F. Bell III et al.
+
+been replaced with rectangular 13.4 × 10.1 mm filters (to make full use of the rectangular
+CCD’s field of view), several of the filters have slightly different bandpass characteristics
+(see Sect. 3.4), and the near-IR stereo imaging wavelength has been changed to 800 nm to
+provide increased SNR. Otherwise, the filter wheel components are build-to-print copies of
+the MSL Mastcam design.
+
+3.3 Digital Electronics Assembly (DEA)
+
+The DEA is essentially a copy of the DEA built for the MSL Mastcams (Malin et al. 2017),
+but with a smaller aluminum enclosure that packages just the two Mastcam-Z Printed Circuit
+Boards (PCBs), rather than the four PCBs packaged in the DEA housing for the four MSL
+science cameras (i.e., Edgett et al. 2012; Malin et al. 2017).
+
+3.3.1 DEA Hardware
+
+The DEA electronics are laid out on a single rectangular PCB per camera head. The DEA
+interfaces the camera head with the Perseverance rover avionics, which are very similar to
+the avionics on the Curiosity rover. All data interfaces are synchronous (dedicated clock and
+sync signals) and use low-voltage differential signaling (LVDS). Each (redundant) rover in-
+terface comprises two flow-controlled serial links, one running at 2 Mb/s from the rover to
+the DEA and another at 8 Mb/s from the DEA to the rover. The DEA transmits commands
+to the camera heads using a 2 Mb/s serial link and receives image data from the camera
+heads on a 30/60/120 Mb/s selectable aggregate throughput 6-bit parallel link. The DEA is
+powered from the rover’s +28 V power bus and provides switched regulated power to each
+camera head. Each PCB also contains a PRT for temperature monitoring. The core function-
+ality of the DEA is implemented in a Xilinx Virtex-2 FPGA. All interface, compression, and
+timing functions are implemented as logic peripherals of a Microblaze soft-processor core
+in the FPGA. The DEA provides an onboard image-processing pipeline that includes 11-
+to-8-bit companding (a term for compression, then later expanding; e.g., Bell et al. 2017),
+horizontal sub-framing, and optionally lossless predictive (Huffman-encoded; Malin et al.
+2013) or lossy JPEG compression. The latter also requires the Bayer pattern raw image to
+be interpolated and reordered into luminance/chrominance block format. The JPEG inter-
+polation scheme used for Mastcam-Z is identical to the scheme used for MSL/Mastcam
+(described in Sect. 5.2.1 of Bell et al. 2017), except for the slightly different choice of which
+interpolation scheme is used for which camera and filter combination (Table 6) because of
+the different filters on Mastcam-Z. The onboard image-processing pipeline can run at the
+camera head’s full speed, writing the processed data stream directly into DEA memory,
+which contains 128 MB of Synchronous Dynamic Random-Access Memory (SDRAM) and
+8 GB of non-volatile NAND flash memory per camera organized as a large image buffer,
+allowing images to be acquired without use of rover memory resources at the maximum
+camera data rate. The SDRAM is typically used as scratch space and to store file system
+information but can also be used as a small image buffer.
+
+3.3.2 DEA Flight Software
+
+DEA hardware functions are coordinated by the DEA instrument flight software (iFSW),
+which runs on the Microblaze. The DEA iFSW receives commands generated on Earth as
+dispatched through the rover, executes commands, and transmits any resulting data. The
+iFSW also implements onboard autofocus and “Z-stack” algorithms (for focus merges and
+The Mars 2020 Perseverance Rover Mast Camera Zoom. . .                                      Page 21 of 40    24
+
+Table 6 Bayer pattern interpolation scheme used for lossy JPEG-compressed Mastcam-Z data.
+
+Camera      Filter 0      Filter 1    Filter 2      Filter 3     Filter 4     Filter 5     Filter 6    Filter 7
+
+Left        Malvara       Redb        Red           Red          Red          Greend       Bluee       Identity
+Right       Malvar        Red         Identityc     Identity     Identity     Identity     Identity    Identity
+
+a Malvar means that interpolation using the algorithm of Malvar et al. (2004) is performed.
+
+b Red means that bilinear interpolation of red Bayer pixels is performed; blue and green pixels are discarded.
+c Identity means that no interpolation is performed; image is returned as a monochrome JPEG that was com-
+pressed from raw data with as-is Bayer values (because the Bayer filters are transparent at near-IR wave-
+lengths; see Bell et al. 2017, Fig. 3).
+d Green means that bilinear interpolation of green Bayer pixels is performed; red and blue pixels are discarded.
+e Blue means that bilinear interpolation of blue Bayer pixels is performed; red and green pixels are discarded.
+
+
+
+
+range mapping; Edgett et al. 2012) and auto-exposure (Maki et al. 2003) for image acquisi-
+tion, performs error correction on the contents of flash memory, and implements mechanism
+control and fault protection. The iFSW is essentially a copy of the DEA iFSW originally
+developed for the MSL Mastcam. The only software changes for the Mars 2020 implemen-
+tation have been minor bug fixes, some enhancements to the autofocus algorithm, support for
+the specifics of the zoom and focus mechanisms, and the addition of a 2 × 2 pixel summing
+capability. The iFSW consists of about 10,000 lines of ANSI C code.
+
+
+3.4 Multispectral Filters
+
+In addition to the Bayer RGB filters bonded onto the CCD and used to obtain “true color”
+(simulating human vision) by imaging through a broadband near-IR cut-off filter known as
+“Filter 0”, each Mastcam-Z filter wheel has 7 additional filters available for specific color ap-
+plications (Table 3). The filters are interference filters made from Corning 7980 HPFS glass
+and were manufactured by Materion Precision Optics (formerly Barr Associates), the same
+manufacturer of the filters for MSL Mastcam. Band center wavelengths, band widths, peak
+in-band transmission, rejection band performance, and mechanical dimensions, flatness, ir-
+regularity, durability, scratch/dig specifications, and pinhole tolerances were all defined by
+the Mastcam-Z science and engineering teams. All filters have met their required specifi-
+cations, as reported in detail in the companion Mastcam-Z pre-flight characterization and
+calibration paper (Hayes et al. 2021).
+
+
+3.5 Calibration Targets
+
+Mastcam-Z uses two passive calibration targets, mounted on the RPFA box on the rover deck
+(Fig. 8), to enable tactical color calibration of the images. The targets provide a relative re-
+flectance calibration technique similar to that employed on Mars Pathfinder (Reid et al. 1999;
+Bell et al. 2000), MER (Bell et al. 2003; 2006) and MSL (Bell et al. 2017), using sim-
+ilar kinds of passive targets with calibrated grayscale and color materials and a shadow-
+casting central gnomon. Imaging of the targets under similar viewing conditions (time, so-
+lar incidence angle) as images of surface scenes enables the rapid generation of tactically-
+useful relative reflectance calibration of the images for direct comparison with laboratory
+24   Page 22 of 40                                                                     J.F. Bell III et al.
+
+
+
+
+Fig. 8 The Mars 2020 mission’s Perseverance rover, in testing at the Jet Propulsion Laboratory in July
+2019. The inset shows the top of the rover’s Remote Sensing Mast assembly, with the Mastcam-Z left (ML)
+and right (MR) cameras as well as the rover’s two Navcams (NL, NR) and the mast unit of the SuperCam
+(SC) instrument, including the aperture for the Remote Micro-Imager (RMI) and other SuperCam systems
+(Maurice et al. 2020; Wiens et al. 2020). The red arrow shows the location of the Mastcam-Z Primary and
+Secondary calibration targets on the rover deck (see Fig. 4 and Kinch et al. 2020a)
+
+
+reflectance data without the need for a rigorous atmospheric correction. Based on lessons-
+learned from MER and MSL, a simple L-bracket Secondary Calibration Target (with a sub-
+set of identically-colored horizontal and vertical color patches) was added to Perseverance
+to allow better characterization of the rate and spectral influence of dust accumulation on the
+deck and targets. In addition, the Primary Calibration Target has strong embedded magnets
+under each color patch that repel airfall dust from the center of each patch (a heritage design
+used on Phoenix and MSL; see Leer et al. (2008) and Bell et al. (2017), respectively) to en-
+able the properties of the most “clean” surfaces to be monitored. More details on the design,
+testing, fabrication, rover location and viewing angles, tactical use, expected level of cali-
+bration fidelity, and education/public outreach embellishments of the Mastcam-Z calibration
+targets can be found in Kinch et al. (2020a) and Kinch et al. (2020b).
+
+3.6 Integration and Articulation
+
+The two Mastcam-Z camera heads are mounted onto a camera plate on the rover’s azimuth-
+elevation articulated Remote Sensing Mast (RSM; Fig. 8), which is a copy of the RSM used
+on the MSL Curiosity rover (Warner et al. 2016). The cameras are connected to the DEA
+by flex cabling that runs down the RSM and into the rover’s body (also known as the Warm
+Electronics Box, WEB). By convention, the “left” cameras are on the left side of the bar as
+seen by a viewer standing behind the “head” of the RSM (corresponding to -Y in the rover
+navigation or RNAV coordinate frame). The left and right Mastcam-Z instruments stereo
+baseline is 24.4 cm (Hayes et al. 2021), which will yield hyperstereo images for scientific
+and navigation purposes (for reference, the stereo separation or interpupillary distance be-
+tween human eyes is ∼5 to 7 cm) and are inboard of the rover’s two Navigation Cameras
+The Mars 2020 Perseverance Rover Mast Camera Zoom. . .                        Page 23 of 40   24
+
+(Maki et al. 2020). Because of the heritage RSM design, the cameras are not spaced sym-
+metrically about the RSM azimuth rotation axis; the left Mastcam-Z is ∼0.5 cm farther from
+the axis than the right Mastcam-Z (Fig. 8). The Mastcam-Z camera heads are positioned rel-
+ative to each other with a net toe-in angle of 2.3° (1.15° per camera), which, at 110 mm
+focal length, results in 100% image overlap at ∼6.1 m from the cameras and ∼63% overlap
+at infinity. The RSM provides the ability to point the cameras over ±181° in azimuth and
+−87° to +91° in elevation. When the RSM is deployed after landing and the camera plate
+is positioned in its nominal horizon-viewing elevation (0°), the Mastcam-Z cameras will be
+∼2.12 m above the Martian surface.
+    While the Mastcam-Z camera optics and mechanisms are sealed and protected from con-
+tamination by dust and debris, there are no covers over the outermost optical surfaces (the
+leftmost fixed lens in Fig. 7) and light shade. During the cruise and entry, descent, and land-
+ing (EDL) phases of the mission, the ends of the light shades are stowed in a protective
+camera housing on the rover deck to help prevent contamination of the front lenses. After
+RSM deployment and during the mission, dust mitigation on the front lenses is achieved
+operationally by always pointing the cameras downward when not in use. Experience from
+MER and MSL shows that the front lenses and light shades will still get dusty and could
+accumulate material over time, but also that wind gusts will occasionally clean some or all
+of the dust off the lenses. Small drain holes have been added to the light shade to mitigate
+accumulation of dust or windborne particles in that volume. Expectation of variable dust
+contamination on the front optics is one of the motivators for periodic acquisition of new
+flat field calibration data using the Martian sky as a “flat” source (e.g., Bell et al. 2017).
+
+
+4 Pre-Flight Verification, Validation, and Calibration
+
+The Mastcam-Z flight model Camera Heads, DEA, and Calibration Targets each went
+through rigorous environmental and lifetime requirements verification and validation testing
+(V&V) at the “standalone” level prior to integration with the rover, and then went through a
+subset of V&V testing again together at the “system” level along with all of the other instru-
+ments and subsystems on the rover. In addition, the flight model camera heads went through
+a rigorous science calibration at the standalone level prior to integration with the rover
+(Hayes et al. 2021). V&V was performed at Malin Space Science Systems, Inc. (MSSS)
+for the Camera Heads and Electronics, and science calibration of the camera heads was also
+conducted at MSSS. V&V and spectroscopic/goniometric characterization of the Calibra-
+tion Targets was conducted at the University of Copenhagen (Kinch et al. 2020a).
+
+4.1 Instrument-Level Testing
+
+In addition to the flight model (FM) Mastcam-Z camera heads and DEA, two engineering
+qualification model (EQM) camera heads, two testbed unit (TBU) camera heads, and one
+TBU and one EQM DEA were built and delivered to JPL for development and qualification
+testing purposes. The TBU systems used non-flight grade electronics and other subsystems
+and were primarily for early software testing. The EQM camera heads consist of a flight-
+like opto-mechanical zoom and focus lens assembly, a flight-like filter wheel, and flight
+spare camera head electronics, all matching the flight design in form, fit, and function. The
+first EQM was used as a pathfinder for the FM camera head assembly and was subjected
+to functional testing, imaging performance testing at Earth-ambient and Mars-operational
+temperatures and pressures, pyroshock qualification testing, and mechanism life testing (to
+24   Page 24 of 40                                                                       J.F. Bell III et al.
+
+
+
+
+Fig. 9 Examples of characterization and calibration images taken by the flight Mastcam-Z cameras during
+pre-launch testing in 2019 and 2020. (Upper left) Part of an MTF test target imaged at 100 mm focal length
+from a range of 7 m. The central “bow tie” feature is 5.6 cm tall; (Lower left) Part of a 57-cm diameter
+“Siemens star” MTF test target imaged at 34 mm focal length from a range of 5 m. (Upper and lower middle)
+Examples of distant targets imaged at 26 mm and 110 mm focal lengths. The houses on the top of the distant
+ridge are approximately 1 km away. (Right) Example 34 mm focal length 360° downward-pointing mosaic of
+the Perseverance rover’s deck, assembled from 53 individual 34 mm focal length images taken during ATLO
+testing at KSC in March 2020 for geometric mapping and RSM pointing verification
+
+
+>2x expected mission life cycles). Both EQMs are being used for flight-like camera testing
+in the Mars 2020 Vehicle System Testbed at JPL.
+    The flight model camera heads and DEA also went through rigorous acceptance test-
+ing of their various subassemblies (electronics, optics/mechanisms, and software) prior to
+integration into the cameras and DEA, followed by the standard flow of random vibration
+testing, thermal vacuum testing, and instrument science calibration.
+    Science calibration of the Mastcam-Z camera heads measured, as a function of tempera-
+ture and focal length where appropriate and possible: (1) absolute radiometric response; (2)
+system noise; (3) geometric distortion; (4) focus quality (MTF) over the field of view; (5)
+spectral response; (6) stray light susceptibility; (7) focus stepper motor count as a function
+of focus distance; and (8) zoom stepper motor count with image scale. Seven specific focal
+lengths were characterized in the most detail: 26, 34, 48, 63, 79, 100, and 110 mm. The cal-
+ibration effort, the results of which are described in detail in the companion paper by Hayes
+et al. (2021), was a close collaboration among the Mastcam-Z science and engineering teams
+and relied on many of the procedures and software originally developed for MER/Pancam
+and MSL/Mastcam, fine-tuned to the specific requirements of the Mars 2020 Mastcam-Z
+investigation. For geometric and stereo data analyses, the team also utilized software devel-
+oped for the European ExoMars 2022 Mission’s PanCam (Coates et al. 2017) and CLUPI
+(Josset et al. 2017) instruments. Examples of pre-launch characterization and calibration im-
+ages taken with the Mastcam-Z flight cameras are shown in Fig. 9, and details on the results
+of Mastcam-Z pre-flight calibration tests are presented in Hayes et al. (2021).
+
+4.2 ATLO Testing
+
+The flight model Mastcam-Z DEA was delivered to JPL in April 2019, followed by the cam-
+era heads and calibration targets in late May 2019. Upon receipt at JPL, the flight hardware
+The Mars 2020 Perseverance Rover Mast Camera Zoom. . .                           Page 25 of 40   24
+
+underwent standalone vacuum bakeout, planetary protection bioassay, and functional testing
+prior to delivery to the Mars 2020 Assembly, Test, and Launch Operations (ATLO) team for
+integration with the rover.
+    During summer 2019, the Mastcam-Z hardware was mechanically and electrically inte-
+grated with the rover (Fig. 8). After integration, the cameras underwent additional functional
+testing using the full range of camera capabilities (focus and zoom lens motion, imaging tar-
+gets at different focus and zoom positions and different RSM azimuths and elevations, video
+commanding, exercising of compression options, etc.). Particular to the Mastcam-Z investi-
+gation, ATLO tests included geometric calibrations that established Mastcam-Z pointing as
+a function of distance, focus, and zoom in the rover’s reference coordinate frame (including
+with reference to fiducial marks on the rover deck; Fig. 9) as well as determination (to the ex-
+tent possible) of the position of other RSM-mounted instrument fields of view in Mastcam-Z
+images In fall 2019 the cameras also participated in rover system thermal vacuum test-
+ing to establish functional performance with relevant thermal boundary conditions, as well
+as rover surface Electromagnetic Interference/Electromagnetic Compatibility (EMI/EMC)
+tests to characterize the effects of potential sources of image data noise (Hayes et al. 2021).
+Just before delivery of the rover to the Kennedy Space Center (KSC) in Florida, EMI/EMC
+from/with other instruments (e.g., helicopter, telecom subsystem, etc.) was characterized
+and found to be undetectable or acceptably low. Additional “baseline tests” (acquiring dark
+frame images) were conducted throughout the ATLO campaign, including before and after
+transport of the rover to KSC for launch preparations in February 2020, and with the flight
+Radioisotope Thermoelectric Generator (RTG) installed; all of these tests showed nominal
+performance of the instruments. Final inspection and cleaning of the front optics was per-
+formed at KSC in late March 2020 prior to the final stowing of the RSM for launch, which
+occurred successfully on July 30, 2020.
+
+
+
+5 Mission Operations and Data Products
+
+5.1 Operational Considerations
+
+While images at any focal length between 26 mm and 110 mm can be commanded, the ex-
+pectation during Mars surface operations is that images will nominally be acquired at one of
+the seven well-calibrated zoom settings noted in Sect. 4.1. Additionally, for nominal stereo
+or full-filter multispectral imaging, both cameras will be set to the same zoom position. In
+situations where images are to be acquired with only one camera, neither is intrinsically
+preferable. Rather, other considerations would dictate the choice of which camera to use
+(e.g., desire for a specific multispectral or solar filter; desire for the closer alignment of the
+left camera to the SuperCam RMI field of view, etc.)
+    Mastcam-Z uplink, downlink, and archiving operations will be led from the Mastcam-Z
+Science Operations Center (SOC) at Arizona State University (ASU) in Tempe, Arizona.
+Downlink operations and data archive development work will be performed at ASU. Uplink
+operations will be performed at MSSS in San Diego, California. Dedicated operations staff
+at ASU and MSSS will fill the primary uplink, downlink, and archiving roles associated
+with both tactical and strategic operational planning, instrument health assessment, and data
+analysis, but their work will be augmented by the significant involvement of trained science
+co-investigators and collaborators on the team, including many undergraduate and graduate
+students and postdocs at ASU and other team institutions.
+24   Page 26 of 40                                                              J.F. Bell III et al.
+
+   The Mars 2020 Project is considering co-locating instrument operations, science team
+members, and rover engineering teams at JPL in Pasadena during the first 3-4 months after
+landing on February 18, 2021. However, the 2020 CoVID-19 pandemic could modify those
+co-location plans. Regardless of their physical locations on Earth, many of these personnel
+will likely be living on “Mars time” (on the 24 hour, 39 minute Martian diurnal cycle) to
+maximize operational efficiency while conducting the initial assessment of the rover and
+the landing site. After that initial period, the entire operations team will transition to con-
+ducting operations remotely from their home institutions. Mastcam-Z operational facilities
+are already developed at ASU and MSSS and have been used for Mars 2020 initial opera-
+tions tests. Many of these facilities were recently used for MER/Pancam operations and are
+currently being used for MSL MAHLI, Mastcam, and MARDI rover operations, as well as
+operations for other missions.
+   Mastcam-Z is expected to participate in all five types of “sol templates” currently envi-
+sioned by the Mars 2020 Project’s operations team (Stack et al. 2020): (1) traverse and ap-
+proach, (2) site reconnaissance (remote sensing science), (3) arm manipulation and contact
+science, (4) coring/caching and contact science, and (5) recharge/telecom. Mastcam-Z sci-
+ence team members and their collaborators will support the overall Mars 2020 investigation
+through participation in sol-to-sol tactical operations planning and downlink assessment,
+and/or strategic planning for drive paths and regions of interest in which to focus future
+potential in situ sampling and coring/caching.
+
+5.2 Commanding, Sequencing, and Downlink Assessment
+
+The Mastcam-Z operations staff will perform the critical engineering tasks involved with
+Mastcam-Z uplink sequencing/commanding and downlink data processing and reporting.
+This work includes the actual writing of command sequences, checking for flight rule vi-
+olations, monitoring instrument health and performance, and processing data to be passed
+along to the science and engineering teams. Additional staff tasks include: strategic op-
+erations planning for Mastcam-Z usage on subsequent sols; potentially testing new se-
+quences/techniques in the rover testbed at JPL; and validation and archiving of Mastcam-Z
+data for the NASA Planetary Data System (PDS). The Mastcam-Z Ground Data System
+(GDS) hardware and software leverage developments and refinements of the GDS from op-
+erating the MER Pancam and MSL Mastcam cameras, as well as many of the software tools
+developed for MER Pancam and MSL Mastcam, MAHLI, and MARDI at ASU and MSSS.
+Software tools developed or refined for Mastcam-Z will enable rapid image calibration as
+well as creation of other derived products (e.g., false-color images made from the near-UV
+and/or near-IR filters in Table 3), mosaics, and stereo anaglyphs) all on a tactical timeline
+(i.e., within minutes to a few hours of the receipt of each downlink) to help inform deci-
+sions by the science and engineering teams. Other software tools developed or updated for
+Mastcam-Z enable stereo data visualization, and streamline data validation for public release
+and archival purposes.
+
+5.3 In-Flight Calibration Plans
+
+The Mastcam-Z cameras have undergone simple instrument check-outs (bias and dark cur-
+rent assessment) that have verified instrument health health during the ∼7-month cruise to
+Mars. Once on the Martian surface, functional tests to verify camera performance and ini-
+tial Mastcam-Z scene imaging will occur as early as possible during the Surface Operations
+Transition (known as “SOX”) phase of the mission. Early images will include verification of
+The Mars 2020 Perseverance Rover Mast Camera Zoom. . .                         Page 27 of 40   24
+
+the pre-flight bias and dark current, multispectral characterization of the calibration targets
+(prior to significant dust accumulation), and characterization of the geometric, focus, and
+zoom performance of the cameras as a function of object distance and camera temperature,
+including imaging of geometric fiducial targets on the rover deck. Occasional calibration
+images, such as flatfields using the Martian sky as a target, stray light characterization using
+images of the sky near the Sun, and dark current/hot pixel monitoring sequences, will be
+conducted on a semi-regular cadence, based on previous MSL and MER experience (e.g.,
+Bell et al. 2006a, 2006b, 2017). Calibration target images will typically be acquired close in
+time with every narrowband multispectral imaging sequence that they are designed to help
+calibrate.
+
+5.4 Data Processing and Products
+
+5.4.1 Raw Data Products and Formats
+
+Mastcam-Z science data consist of full-frame and sub-framed images, thumbnail images
+(about 1/64th the number of pixels of a full frame), Z-stack products, or compressed video
+Groups of Pictures (GOPs) stored in DEA flash memory. There is enough DEA space to
+store up to ∼4,000 uncompressed full-frame Mastcam-Z images for each camera. Raw
+data are expected to be transferred to the rover and downlinked in four primary formats:
+(1) Color JPEG images and thumbnails: Bayer pattern interpolated, 8-bit companded files
+in standard JPEG format (band-separated, YCbCr components in 8×8 coefficient blocks);
+(2) Losslessly-compressed images: predictive losslessly-compressed, band-sequential 8-bit
+companded raster images, without Bayer pattern interpolation; (3) Compressed color videos:
+Bayer pattern interpolated, 8-bit companded, lossy JPEG-compressed images concatenated
+into 16-frame motion-JPEG GOPs (termed a “video”); (4) Raw 11-bit images: 11-bit raster
+files (stored in 16-bit format) with no compression or interpolation applied. Bell et al. (2017)
+provide additional details on these data types, which are the same as the data product types
+created by the Mastcam, MAHLI, and MARDI cameras on MSL. All images will include
+instrument and spacecraft telemetry headers.
+    The baseline operating procedure for Mastcam-Z, based on MSL Mastcam experience,
+will be to acquire and store each image uncompressed in the DEA, giving the science team
+many options for the eventual downlink of those images. If expected downlink data volumes
+are low and an image is needed for tactical planning, a medium quality JPEG can be re-
+turned; later, when downlink data volumes are higher, a higher-quality JPEG or a losslessly-
+compressed version of the same image can be returned. We expect most data downlinked to
+be compressed JPEG images with Quality Factors from 65 to 95 (based on MSL/Mastcam
+experience) and thumbnails. The Mastcam-Z operations team will manage the contents of
+the DEA’s onboard storage volume, act on requests from the Mars 2020 Science Team to
+downlink stored data (or re-downlink at higher fidelity), and alert the science and engineer-
+ing teams when data are going to be deleted.
+
+5.4.2 Onboard Data Processing
+
+The Mastcam-Z instrument flight software is based on the same software used by the MSL
+Mastcams. In addition to the capabilities listed in Sect. 3.3.2, we will also use the existing
+MSL Mastcam software to control RSM pointing and gather rover/spacecraft metadata, and
+the Mars 2020 mission’s GDS to catalog and downlink images to Earth.
+24   Page 28 of 40                                                               J.F. Bell III et al.
+
+5.4.3 Data Quantity
+
+The quality and quantity of images to be downlinked from Mastcam-Z are highly de-
+pendent on the details of the mission’s field site, the cadence of mission activities, and
+its downlink bandwidth capabilities. The latter is being designed to be largely dependent
+upon data relay through orbiting assets such as the Mars Reconnaissance Orbiter (MRO),
+MAVEN, and Trace Gas Orbiter (TGO). A typical “day in the life” of Mastcam-Z could
+include drive-direction color mosaics, images of the Sun for atmospheric opacity, remote
+sensing (e.g., multispectral imaging through narrowband filters) of science targets seen in
+Navcam images, images of the Mastcam-Z calibration targets, and perhaps a 180° to 360°
+color panorama. Mastcam-Z will also provide context imaging for other payload elements
+and vehicle assessment imaging for rover engineers. In case of off-nominal downlink ca-
+pabilities (such as the potential ∼15 Mbits/sol for downlink communications scenarios
+that involve only the use of the rover’s High Gain Antenna), the outstanding performance
+of the MSL heritage JPEG compressor at lower quality factors (e.g., Malin et al. 2017;
+Bell et al. 2017), along with the use of color thumbnail images, should still enable sufficient
+imaging to conduct tactical rover science operations.
+    Because of high-level investigation goal similarities, one way to estimate how many im-
+ages Mastcam-Z will acquire and return to Earth is by analogy to MSL Mastcam down-
+link, scaled to the 669 sol Mars 2020 Prime Mission plus 20% margin to account for the
+enhanced stereo capabilities of Mastcam-Z that are expected be used to support rover op-
+erations. Based on PDS-archived data from MSL, this suggests that, over the course of the
+Mars 2020 Prime Mission, Mastcam-Z could acquire ∼32,000 thumbnails, ∼25,000 RGB
+full-frame images and ∼6800 narrowband multispectral images, for a total estimated prime
+mission raw data volume of ∼120 Gbits (∼175 Mbit/sol).
+
+5.4.4 Rapid Data Products for the Mars 2020 Team, the Public, and the Scientific
+      Community
+
+The Mastcam-Z team is committed to the rapid release of high-fidelity color images and
+mosaics to the Mars 2020 science team as well as to the general public. Planned derived
+data products for use by the science and engineering teams include: (a) RGB and multi-
+spectral color panoramas and mosaics; (b) red/blue anaglyphs, stereo mosaics, stereo pairs,
+DTMs, terrain meshes, and contour maps; (c) measurements and analyses of reflectance
+‘spectra’ from multispectral observations of surface targets; (d) quick-look multispectral
+parameter images/mosaics of potential Fe-bearing and hydrated mineral detections; (e) an-
+notated mosaics indicating textural, structural, and stratigraphic relations and interpretations
+of outcrops, rocks, and fines; (f) 3D geologic annotations and measurements to quantita-
+tively characterize the 3D geometry of sedimentary rock outcrops and sedimentary struc-
+tures (e.g., Fig. 10; Barnes et al. 2018; Banham et al. 2018); (g) measurements and analyses
+of atmospheric opacity, dust properties, airfall dust deposition levels on calibration targets
+and other rover deck instruments (e.g., MOXIE, MEDA), and meteorological and astro-
+nomical phenomena; and (h) time-lapse and motion videos of the Perseverance rover, its
+Ingenuity technology-demonstration helicopter, and their immediate environs. If downlink
+data volume constraints allow, it should also be possible to achieve higher than nominal
+spatial resolution on Mastcam-Z targets of interest using dithering or other relevant “super
+resolution” techniques (e.g., Bell et al. 2006b).
+    Mastcam-Z raw images (as JPEGs) will also automatically be made available to the pub-
+lic using the Mars 2020 Project’s web site, within minutes of their arrival on Earth. In ad-
+dition, the Mastcam-Z team will supplement these raw publicly released JPEGs with other
+The Mars 2020 Perseverance Rover Mast Camera Zoom. . .                                      Page 29 of 40    24
+
+
+
+
+Fig. 10 Example of reconstructed and geologically interpreted 3-D stereo measurements using MSL Curios-
+ity rover Mastcam images of the Whale Rock target at the Pahrump Hills outcrop in Gale crater. Stereo data
+sets like this enable the assessment of quantitative sedimentological parameters like strikes, dips, and bedding
+plane orientation and thicknesses that can directly inform specific past geologic origins and environments.
+The reconstruction here was generated using the same data visualization and analysis tools to be used for
+geologic interpretations of Mastcam-Z stereo image products (“PRo3D”; Barnes et al. 2018). Mastcam-Z can
+obtain stereo data at up to 4 times higher spatial resolution than MSL/Mastcam.
+
+
+derived data products (e.g., false color images, mosaics, stereo anaglyphs) posted onto a
+publicly accessible Mastcam-Z web site at ASU (http://mastcam-z.asu.edu). The Mars 2020
+mission’s main web sites at JPL and NASA will also host captioned Mastcam-Z images and
+press releases, as appropriate.
+   The archival science products of the Mastcam-Z investigation will be time-ordered in-
+dividual images, compliant with the most recent PDS standards. The Mastcam-Z team will
+archive validated raw and derived data products as soon as feasible, but no later than 6
+months after a given data product is received on Earth. In addition, all other images acquired
+by the flight cameras (from preflight calibration and testing, ATLO, and cruise), along with
+appropriate documentation, will be archived in the PDS.
+
+
+6 Summary
+The NASA Perseverance rover’s Mastcam-Z variable focal length, multispectral, and stereo-
+scopic imaging investigation is designed to help achieve a variety of Mars 2020 mission
+goals related to the geology, composition, current environment, and past habitability of the
+rover’s field site in Jezero crater. The Mastcam-Z investigation’s three main goals are: (1) to
+characterize the overall landscape geomorphology, processes, and the nature of the geologic
+record (mineralogy, texture, structure, and stratigraphy) at the rover field site, especially as
+they pertain to past or present habitability; (2) to assess current atmospheric and astronomi-
+cal conditions, events, and surface-atmosphere interactions and processes; and (3) to provide
+operational support and scientific context for rover navigation, contact science, sample se-
+lection, extraction, and caching, as well as high-resolution imaging and video support for
+the other selected Mars 2020 investigations. We have defined 12 specific detailed investiga-
+tion objectives associated with these goals (Table 2). These 12 objectives motivated specific
+24   Page 30 of 40                                                                            J.F. Bell III et al.
+
+observations to be obtained and instrument functional requirements that guided the design,
+testing, and calibration of the flight hardware.
+    Mastcam-Z hardware consists of dual camera heads separated by 24.4 cm and toed-in by
+1.15° each, mounted on the rover’s fully-actuatable Remote Sensing Mast ∼2.12 m above
+a flat horizontal plane defined by the bottom of the rover’s wheels; a Digital Electronics
+Assembly mounted inside the rover body that provides the camera heads with power, com-
+manding, data processing, data storage, and an interface to the rover computer; and two
+passive grayscale/color calibration targets mounted on the rover’s deck.
+    The camera heads are an essentially identical pair of focusable, 4:1 zoomable 1648×1214
+pixel CCD imagers that provide broadband red/green/blue (RGB), and narrowband 400-
+1000 nm data in 11 unique narrow bands as well as color solar imaging capabilities. The
+cameras provide continuously variable fields of view ranging from 25.6° × 19.2° (26 mm
+focal length at 280 µrad/pixel) to 6.2° × 4.6° (110 mm focal length at 66.7 µrad/pixel) and
+are thus capable of resolving (≥5 pixels across) features larger than ∼0.7 mm in size at 2 m
+and ∼3.3 cm in size at 100 meters.
+    This contribution has provided details on the goals, objectives, requirements, designs,
+fabrication, testing, integration, and expected operations and data products for the Mastcam-
+Z instrument. Companion papers by Kinch et al. (2020a) and Hayes et al. (2021) provide
+details regarding the Mastcam-Z calibration targets and pre-flight characterization and cali-
+bration.
+
+Acknowledgements The Mastcam-Z team has benefitted enormously from the technical, management,
+financial, and administrative support of the Mars 2020 Project, Payload, and Science Offices at JPL; from
+the Business Offices at ASU, JPL, and Malin Space Science Systems (MSSS); and from an outstanding and
+dedicated team of engineering and technical support staffers at MSSS, Ghaemi Optical Engineering, Motiv
+Space Systems, Optimax Systems, and Materion Precision Optics. We would specifically like to acknowledge
+the supporting contributions of Mars 2020 Project Review Board members Dave Braun, Todd Cetti, Gun-
+Shing Chen, Ann Devereaux, Tom Glavich, Alan Lee, Jackie Lyra, Steve Macenka, Bill Mateer, Jack Mustard,
+Glenn Reeves, Jose Rivera, Jeff Simmonds, Mark Underwood, Ken Williford, and Mike Wilson, as well as
+Calibration Peer Review Board members Peter Smith, Jason Soderblom, Joe Tansock, and Robert West. We
+also want to specifically acknowledge our gratitude for exemplary contributions to Mastcam-Z development
+and testing from Kevin Clark, Tim Clark, Elizabeth Cordoba, Tony Ghaemi, Barbara Hesselgesser, Stephanie
+Holaday, Emily Lakdawalla, Søren Nørvang Madsen, Mike Malin, Mike Mullenniex, Gerrard Panahon, Claire
+Quinto, Kim Saxton, Nicole Spanovich, Art Thompson, and Lisa Whelan.
+
+Author contribution All authors contributed to the study conception and design, as well as to material
+preparation, data collection and analysis. The first draft of the manuscript was written by Jim Bell and all au-
+thors commented on previous versions of the manuscript. All authors read and approved the final manuscript.
+
+Funding information This work was supported by funding from: the U.S. National Aeronautics and Space
+Administration (NASA), NASA’s Jet Propulsion Laboratory (JPL) at the California Institute of Technology,
+NASA’s Ames Research Center, the United States Geological Survey, the European Space Agency (ESA)
+PRODEX Programme, the Austrian Research Promotion Agency (FFG), the Canadian Space Agency, the
+United Kingdom Space Agency, the German Aerospace Center (DLR), the Free University of Berlin, the Dan-
+ish Research Agency, the Carlsberg Foundation of Denmark, the Natural Sciences and Engineering Research
+Council of Canada (NSERC), the Canadian Space Agency (CSA), the Canada Foundation for Innovation
+(CFI), the Manitoba Research Innovation Fund (MRIF), and the University of Winnipeg.
+
+Data availability Data and material described here are either already in the public domain, are being
+published via Open Access, or are being archived in the NASA Planetary Data System for general community
+and public access.
+
+Code availability    Not applicable.
+
+Conflicts of interest/Competing interests      The authors declare that they have no conflict of interest.
+The Mars 2020 Perseverance Rover Mast Camera Zoom. . .                                      Page 31 of 40    24
+
+Publisher’s Note Springer Nature remains neutral with regard to jurisdictional claims in published maps
+and institutional affiliations.
+
+Open Access This article is licensed under a Creative Commons Attribution 4.0 International License,
+which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as
+you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons
+licence, and indicate if changes were made. The images or other third party material in this article are in-
+cluded in the article’s Creative Commons licence, unless indicated otherwise in a credit line to the material.
+If material is not included in the article’s Creative Commons licence and your intended use is not permitted
+by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the
+copyright holder. To view a copy of this licence, visit http://creativecommons.org/licenses/by/4.0/.
+
+
+
+References
+J.B. Adams, Interpretation of visible and near-infrared diffuse reflectance spectra of pyroxenes and other rock-
+      forming minerals, in Infrared and Raman Spectroscopy of Lunar and Terrestrial Minerals, ed. by C. Karr
+      (Academic Press, New York, 1975), pp. 91–116. https://doi.org/10.1016/B978-0-12-399950-4.50009-4
+T. Altheide, V. Chevrier, C. Nicholson, J. Denson, Experimental investigation of the stability and evapora-
+      tion of sulfate and chloride brines on Mars. Earth Planet. Sci. Lett. 282(1–4), 69–78 (2009). https://
+      doi.org/10.1016/j.epsl.2009.03.002
+R.S. Anderson, S.P. Anderson, Geomorphology: The Mechanics and Chemistry of Landscapes (Cambridge
+      University Press, Cambridge, 2011). https://doi.org/10.1017/CBO9780511794827. 637 pp.
+R.E. Arvidson, S.W. Ruff, R.V. Morris, D.W. Ming, L.S. Crumpler, A.S. Yen, S.W. Squyres, R.J. Sullivan, J.F.
+      Bell III, N.A. Cabrol, B.C. Clark, W.H. Farrand, R. Gellert, R. Greenberger, J.A. Grant, E.A. Guinness,
+      K.E. Herkenhoff, J.A. Hurowitz, J.R. Johnson, G. Klingelhöfer, K.W. Lewis, R. Li, T.J. McCoy, J.
+      Moersch, H.Y. McSween, S.L. Murchie, M. Schmidt, C. Schröder, A. Wang, S. Wiseman, M.B. Madsen,
+      W. Goetz, S.M. McLennan, Spirit Mars Rover Mission to the Columbia Hills, Gusev Crater: mission
+      overview and selected results from the Cumberland Ridge to Home Plate. J. Geophys. Res. 113, E12S33
+      (2008). https://doi.org/10.1029/2008JE003183
+R.E. Arvidson, J.W. Ashley, J.F. Bell, M. Chojnacki, J. Cohen, T.E. Economou, W.H. Farrand, R. Fergason,
+      I. Fleischer, P. Geissler, R. Gellert, M.P. Golombek, J.P. Grotzinger, E.A. Guinness, R.M. Haberle, K.E.
+      Herkenhoff, J.A. Herman, K.D. Iagnemma, B.L. Jolliff, J.R. Johnson, G. Klingelhöfer, A.H. Knoll,
+      A.T. Knudson, R. Li, S.M. McLennan, D.W. Mittlefehldt, R.V. Morris, T.J. Parker, M.S. Rice, C.
+      Schröder, L.A. Soderblom, S.W. Squyres, R.J. Sullivan, M.J. Wolff, Opportunity Mars Rover mission:
+      overview and selected results from Purgatory ripple to traverses to Endeavour crater. J. Geophys. Res.
+      116, E00F15 (2011). https://doi.org/10.1029/2010JE003746
+S.G. Banham, S. Gupta, D. Rubin, J. Watkins, K.S. Edgett, D. Sumner, J. Grotzinger, K. Lewis, L. Edgar, K.
+      Stack, R. Barnes, J.F. Bell III, M. Day, R. Ewing, M.G. Lapôtre, F. Rivera-Hernandez, A.R. Vasavada,
+      Ancient Martian aeolian processes and palaeomorphology reconstructed from the Stimson formation
+      on the lower slope of Aeolis Mons, Gale crater, Mars. Sedimentology 65, 993–1042 (2018). https://
+      doi.org/10.1111/sed.12469
+R. Barnes, S. Gupta, C. Traxler, T. Ortner, A. Bauer, G. Hesina, G. Paar, B. Huber, K. Juhart, L. Fritz, B.
+      Nauschnegg, J.-P. Muller, Yu. Tao, Geological analysis of Martian rover-derived Digital Outcrop Models
+      using the 3D visualisation tool, Planetary Robotics 3D Viewer – PRo3D. Earth Space Sci. 5, 285–307
+      (2018). https://doi.org/10.1002/2018EA000374
+J.F. Bell III (ed.), The Martian Surface: Composition, Mineralogy, and Physical Properties (Cam-
+      bridge University Press, Cambridge, 2008). https://doi.org/10.1017/CBO9780511536076. ISBN-13:
+      9780521866989, 688 pp.
+J.F. Bell III, H.Y. McSween Jr., J.A. Crisp, R.V. Morris, S.L. Murchie, N.T. Bridges, J.R. Johnson, D.T. Britt,
+      M.P. Golombek, H.J. Moore, A. Ghosh, J.L. Bishop, R.C. Anderson, J. Brückner, T. Economou, J.P.
+      Greenwood, H.P. Gunnlaugsson, R.M. Hargraves, S. Hviid, J.M. Knudsen, M.B. Madsen, R. Reid, R.
+      Rieder, L. Soderblom, Mineralogic and compositional properties of Martian soil and dust: results from
+      Mars pathfinder. J. Geophys. Res. 105, 1721–1755 (2000). https://doi.org/10.1029/1999JE001060
+J.F. Bell III, S.W. Squyres, K.E. Herkenhoff, J.N. Maki, H.M. Arneson, D. Brown, S.A. Collins, A. Dingizian,
+      S.T. Elliot, E.C. Hagerott, A.G. Hayes, M.J. Johnson, J.R. Johnson, J. Joseph, K. Kinch, M.T. Lemmon,
+      R.V. Morris, L. Scherr, M. Schwochert, M.K. Shepard, G.H. Smith, J.N. Sohl-Dickstein, R. Sullivan,
+      W.T. Sullivan, M. Wadsworth, The Mars Exploration Rover Athena Panoramic Camera (Pancam) inves-
+      tigation. J. Geophys. Res. 108(E12), 8063 (2003). https://doi.org/10.1029/2003JE002070
+24   Page 32 of 40                                                                             J.F. Bell III et al.
+
+J.F. Bell III, S.W. Squyres, R.E. Arvidson, H.M. Arneson, D. Bass, D. Blaney, N. Cabrol, W. Calvin, J.
+      Farmer, W.H. Farrand, W. Goetz, M. Golombek, J.A. Grant, R. Greeley, E. Guinness, A.G. Hayes,
+      M.Y.H. Hubbard, K.E. Herkenhoff, M.J. Johnson, J.R. Johnson, J. Joseph, K.M. Kinch, M.T. Lemmon,
+      R. Li, M.B. Madsen, J.N. Maki, M. Malin, E. McCartney, S. McLennan, H.Y. McSween Jr., D.W. Ming,
+      J.E. Moersch, R.V. Morris, E.Z. Noe Dobrea, T.J. Parker, J. Proton, J.W. Rice Jr., F. Seelos, J. Soderblom,
+      L.A. Soderblom, J.N. Sohl-Dickstein, R.J. Sullivan, M.J. Wolff, A. Wang, Pancam multispectral imag-
+      ing results from the Spirit rover at Gusev crater. Science 305, 800–806 (2004a). https://doi.org/
+      10.1126/science.1100175
+J.F. Bell III, S.W. Squyres, R.E. Arvidson, H.M. Arneson, D. Bass, W. Calvin, W.H. Farrand, W. Goetz, M.
+      Golombek, R. Greeley, J. Grotzinger, E. Guinness, A.G. Hayes, M.Y.H. Hubbard, K.E. Herkenhoff,
+      M.J. Johnson, J.R. Johnson, J. Joseph, K.M. Kinch, M.T. Lemmon, R. Li, M.B. Madsen, J.N. Maki,
+      M. Malin, E. McCartney, S. McLennan, H.Y. McSween Jr., D.W. Ming, R.V. Morris, E.Z. Noe Dobrea,
+      T.J. Parker, J. Proton, J.W. Rice Jr., F. Seelos, J. Soderblom, L.A. Soderblom, J.N. Sohl-Dickstein, R.J.
+      Sullivan, C. Weitz, M.J. Wolff, Pancam multispectral imaging results from the Opportunity rover at
+      Meridiani Planum. Science 306, 1703–1709 (2004b). https://doi.org/10.1126/science.1105245
+J.F. Bell III, M.T. Lemmon, T.C. Duxbury, M.Y.H. Hubbard, M.J. Wolff, S.W. Squyres, L. Craig, J.M. Lud-
+      winsky, Solar eclipses of Phobos and Deimos observed from the surface of Mars. Nature 436, 55–57
+      (2005). https://doi.org/10.1038/nature03437
+J.F. Bell III, D. Savransky, M.J. Wolff, Chromaticity of the Martian sky as observed by the Mars
+      Exploration Rover Pancam instruments. J. Geophys. Res. 111, E12S05 (2006a). https://doi.org/
+      10.1029/2006JE002687
+J.F. Bell III, J. Joseph, J.N. Sohl-Dickstein, H.M. Arneson, M.J. Johnson, M.T. Lemmon, D. Savransky,
+      In-flight calibration and performance of the Mars Exploration Rover Panoramic Camera (Pancam) In-
+      struments. J. Geophys. Res. 111, E02S03 (2006b). https://doi.org/10.1029/2005JE002444
+J.F. Bell III, W.M. Calvin, W. Farrand, R. Greeley, J.R. Johnson, B. Jolliff, R.V. Morris, R.J. Sullivan, S.
+      Thompson, A. Wang, C. Weitz, S.W. Squyres, Mars Exploration Rover Pancam multispectral imaging
+      of rocks, soils, and dust in Gusev crater and meridiani planum, in The Martian Surface: Composition,
+      Mineralogy, and Physical Properties, ed. by J.F. Bell III (Cambridge University Press, Cambridge,
+      2008), pp. 281–314. https://doi.org/10.1017/CBO9780511536076.014. Chap. 13
+J.F. Bell III, A. Godber, S. McNair, M.C. Caplinger, J.N. Maki, M.T. Lemmon, J. Van Beek, M.C. Malin,
+      D. Wellington, K.M. Kinch, M.B. Madsen, C. Hardgrove, M.A. Ravine, E. Jensen, D. Harker, R.B.
+      Anderson, K.E. Herkenhoff, R.V. Morris, E. Cisneros, R.G. Deen, The Mars Science Laboratory Cu-
+      riosity rover Mast Camera (Mastcam) instruments: pre-flight and in-flight calibration, validation, and
+      data archiving. Earth Space Sci. 4, 396–452 (2017). https://doi.org/10.1002/2016EA000219
+J.F. Bell III, W.H. Farrand, J.R. Johnson, K. Kinch, M. Lemmon, M. Parente, M.S. Rice, D.F. Wellington,
+      Compositional and mineralogic analyses of Mars using multispectral imaging on the Mars Exploration
+      Rover, Phoenix, and Mars Science Laboratory missions, in Remote Compositional Analysis: Techniques
+      for Understanding Spectroscopy, Mineralogy, and Geochemistry of Planetary Surfaces, ed. by J.L.
+      Bishop, J. Moersch, J.F. Bell III (Cambridge University Press, Cambridge, 2020), pp. 513–537. https://
+      doi.org/10.1017/9781316888872.028. Chap. 26
+J.P. Bibring, Y. Langevin, A. Gendrin, B. Gondet, F. Poulet, M. Berthé, A. Soufflot, R. Arvidson, N. Mangold,
+      J. Mustard, P. Drossart, Mars surface diversity as revealed by the OMEGA/Mars Express observations.
+      Science 307, 1576–1581 (2005). https://doi.org/10.1126/science.1108806
+J.L. Bishop, J. Moersch, J.F. Bell III (eds.), Remote Compositional Analysis: Techniques for Understand-
+      ing Spectroscopy, Mineralogy, and Geochemistry of Planetary Surfaces. (Cambridge University Press,
+      Cambridge, 2020). https://doi.org/10.1017/978131688887. ISBN-13: 978-1107186200, 632 pp.
+D.F. Blake, R.V. Morris, G. Kocurek, S.M. Morrison, R.T. Downs, D. Bish, D.W. Ming, K.S. Ed-
+      gett, D. Rubin, W. Goetz, M.B. Madsen, R. Sullivan, R. Gellert, I. Campbell, A.H. Treiman,
+      S.M. McLennan, A.S. Yen, J. Grotzinger, D.T. Vaniman, S.J. Chipera, C.N. Achil-les, E.B.
+      Rampe, D. Sumner, P.-Y. Meslin, S. Maurice, O. Forni, O. Gasnault, M. Fisk, M. Schmidt, P.
+      Mahaffy, L.A. Leshin, D. Glavin, A. Steele, C. Freissinet, R. Navarro-González, R.A. Yingst,
+      L.C. Kah, N. Bridges, K.W. Lewis, T.F. Bristow, J.D. Farmer, J.A. Crisp, E.M. Stolper,
+      D.J. Des Marais, P. Sarrazin, MSL Science Team, Curiosity at Gale Crater, Mars: charac-
+      terization and analysis of the Rocknest Sand Shadow. Science 27, 1239505 (2013). https://
+      doi.org/10.1126/science.1239505
+N.T. Bridges, F.J. Calef, B. Hallet, K.E. Herkenhoff, N.L. Lanza, S. Le Mouélic, C.E. Newman, D.L. Blaney,
+      M.A. de Pablo, G.A. Kocurek, Y. Langevin, K.W. Lewis, N. Mangold, S. Maurice, P.-Y. Meslin, P. Pinet,
+      N.O. Renno, M.S. Rice, M.E. Richardson, V. Sautter, R.S. Sletten, R.C. Wiens, R.A. Yingst, The rock
+      abrasion record at Gale crater: Mars Science Laboratory results from Bradbury Landing to Rocknest. J.
+      Geophys. Res., Planets 119, 1374–1389 (2014). https://doi.org/10.1002/2013JE004579
+The Mars 2020 Perseverance Rover Mast Camera Zoom. . .                                      Page 33 of 40    24
+
+R.A.F. Cas, J.V. Wright, Volcanic Successions: Modern and Ancient (Chapman & Hall, London, 1987).
+     https://doi.org/10.1007/978-94-009-3167-1. 528 pp.
+R.N. Clark, G.A. Swayze, R. Wise, E. Livo, T. Hoefen, R. Kokaly, S.J. Sutley, USGS Digital Spectral Library
+     splib06a. U.S. Geological Survey Digital Data Series, vol. 231 (2007). https://doi.org/10.3133/ds231
+H. Clenet, P. Pinet, G. Ceuleneer, Y. Daydou, F. Heuripeau, C. Rssemberg, J.-P. Bibring, G. Bellucci, F.
+     Altieri, B. Gondet, A systematic mapping procedure based on the Modified Gaussian Model to charac-
+     terize magmatic units from olivine/pyroxenes mixtures: application to the Syrtis Major volcanic shield
+     on Mars. J. Geophys. Res., Planets 118, 1632–1655 (2013). https://doi.org/10.1002/jgre.20112
+E.A. Cloutis, M.J. Gaffey, Pyroxene spectroscopy revisited: spectral-compositional correlations and
+     relationship to geothermometry. J. Geophys. Res. 96, 22,809–22,826 (1991). https://doi.org/
+     10.1029/91JE02512
+E.A. Cloutis, M.A. Craig, R.V. Kruzelecky, W.R. Jamroz, A. Scott, F.C. Hawthorne, S.A. Mertzman, Spectral
+     reflectance properties of minerals exposed to simulated Mars surface conditions. Icarus 195, 140–168
+     (2008). https://doi.org/10.1016/j.icarus.2007.10.028
+A.J. Coates, R. Jaumann, A.D. Griffiths, C.E. Leff, N. Schmitz, J.-L. Josset, G. Paar, M. Gunn, E. Hauber,
+     C.R. Cousins, R.E. Cross, P. Grindrod, J.C. Bridges, M. Balme, S. Gupta, I.A. Crawford, P. Irwin, R.
+     Stabbins, D. Tirsch, J.L. Vago, T. Theodorou, M. Caballo-Perucha, G.R. Osinski the PanCam team,
+     The PanCam instrument for the ExoMars rover. Astrobiology 17, 511–541 (2017). https://doi.org/
+     10.1089/ast.2016.1548
+A. Colaprete, R.M. Haberle, O.B. Toon, Formation of convective carbon dioxide clouds near the South pole
+     of Mars. J. Geophys. Res. Planets, 108 (2003). https://doi.org/10.1029/2003JE002053
+L.S. Crumpler, R.E. Arvidson, S.W. Squyres, T. McCoy, A. Yingst, S. Ruff, W. Farrand, Y. McSween, M.
+     Powell, D.W. Ming, R.V. Morris, J.F. Bell III, J. Grant, R. Greeley, D. DesMarais, M. Schmidt, N.A.
+     Cabrol, A. Haldemann, K.W. Lewis, A.E. Wang, C. Schröder, D. Blaney, B. Cohen, A. Yen, J. Farmer,
+     R. Gellert, E.A. Guinness, K.E. Herkenhoff, J.R. Johnson, G. Klingelhöfer, A. McEwen, J.W. Rice Jr.,
+     M. Rice, P. deSouza, J. Hurowitz, Field reconnaissance geologic mapping of the Columbia Hills, Mars,
+     based on Mars Exploration Rover Spirit and MRO HiRISE observations. J. Geophys. Res. Planets, 116
+     (2011). https://doi.org/10.1029/2010JE003749
+D. DiBiase, J. Bardis, R. Billing, A zoom lens for the MSL mast cameras: mechanical design and develop-
+     ment, in Aerospace Mechanisms Symposium 41, NASA Conf. Proc. NASA/CP-2012-217653 (2012),
+     pp. 293–310
+A. Domokos, J.F. Bell III, P. Brown, M.T. Lemmon, R. Suggs, J. Vaubaillon, W. Cooke, Measurement of the
+     meteoroid flux at Mars. Icarus 191, 141–150 (2007). https://doi.org/10.1016/j.icarus.2007.04.017
+L. Drube, K. Leer, W. Goetz, H.P. Gunnlaugsson, M.P. Haspang, N. Lauritsen, M.B. Madsen, L.K.D.
+     Sørensen, M.D. Ellehoj, M.T. Lemmon, R.V. Morris, D. Blaney, R.O. Reynolds, P.H. Smith, Magnetic
+     and optical properties of airborne dust and dettling rates of dust at the Phoenix Landing Site. J. Geophys.
+     Res. 115, E00E23 (2010). https://doi.org/10.1029/2009JE003419
+L.A. Edgar, S. Gupta, D.M. Rubin, K.W. Lewis, G.A. Kocurek, R.B. Anderson, J.F. Bell III, G. Dromart,
+     K.S. Edgett, J.P. Grotzinger, C. Hardgrove, Shaler: in situ analysis of a fluvial sedimentary deposit on
+     Mars. Sedimentology 65, 96–122 (2018). https://doi.org/10.1111/sed.12370
+K.S. Edgett, R.A. Yingst, M.A. Ravine, M.A. Caplinger, J.N. Maki, F.T. Ghaemi, J.A. Schaffner, J.F. Bell
+     III., L.J. Edwards, K.E. Herkenhoff, E. Heydari, L.C. Kah, M.T. Lemmon, M.E. Minitti, T.S. Olson,
+     T.J. Parker, S.K. Rowland, J. Schieber, R.J. Sullivan, D.Y. Sumner, P.C. Thomas, E.H. Jensen, J.J. Sim-
+     monds, A.J. Sengstacken, R.G. Willson, W. Goetz, Curiosity’s Mars Hand Lens Imager (MAHLI) in-
+     vestigation. Space Sci. Rev. 170, 259–317 (2012). https://doi.org/10.1007/s11214-012-9910-4
+B.L. Ehlmann, C.S. Edwards, Mineralogy of the Martian surface. Annu. Rev. Earth Planet. Sci. 42, 291–315
+     (2014). https://doi.org/10.1146/annurev-earth-060313-055024
+B.L. Ehlmann, J. Mustard, C. Fassett, S.C. Schon, J. Head, D. Des Marais, J. Grant, S. Murchie, Clay min-
+     erals in delta deposits and organic preservation potential on Mars. Nat. Geosci. 1, 355–358 (2008).
+     https://doi.org/10.1038/ngeo207
+B.L. Ehlmann et al., Identification of hydrated silicate minerals on Mars using MRO-CRISM: geologic con-
+     text near Nili Fossae and implications for aqueous alteration. J. Geophys. Res. 114, E00D08 (2009).
+     https://doi.org/10.1029/2009JE003339
+P. Ehrenfreund, W.F.M. Röling, C.S. Thiel, R. Quinn, M.A. Sephton, C. Stoker, J.M. Kotler, S.O.L. Direito,
+     Z. Martins, G.E. Orzechowska, R.D. Kidd, C.A. van Sluis, B.H. Foing, Astrobiology and habitability
+     studies in preparation for future Mars missions: trends from investigating minerals, organics and biota.
+     Int. J. Astrobiol. 10, 239–253 (2011). https://doi.org/10.1017/S1473550411000140
+M. Eppes, A. Willis, J. Molaro, S. Abernathy, B. Zhou, Cracks in Martian boulders exhibit preferred ori-
+     entations that point to solar-induced thermal stress. Nat. Commun. 6, 6712 (2015). https://doi.org/
+     10.1038/ncomms7712
+24   Page 34 of 40                                                                          J.F. Bell III et al.
+
+K.A. Farley, K.H. Williford, K.M. Stack, R. Bhartia, A. Chen, M. de la Torre, K. Hand, Y. Goreva, C.D.K.
+      Herd, R. Hueso, Y. Liu, J.N. Maki, G. Martinez, R.C. Moeller, A. Nelessen, C.E. Newman, D. Nunes,
+      A. Ponce, N. Spanovich, P.A. Willis, L.W. Beegle, J.F. Bell III., A.J. Brown, S.-E. Hamran, J.A.
+      Hurowitz, S. Maurice, D.A. Paige, J.A. Rodriguez-Manfredi, M. Schulte, R.C. Wiens, Mars 2020 mis-
+      sion overview. Space Sci. Rev. (2020). https://doi.org/10.1007/s11214-020-00762-y
+W.H. Farrand, J.F. Bell III, J.R. Johnson, B.L. Jolliff, A.H. Knoll, S.M. McLennan, S.W. Squyres, W.M.
+      Calvin, J.P. Grotzinger, R.V. Morris, J. Soderblom, S.D. Thompson, W.A. Watters, A.S. Yen, Visible
+      and near-infrared multispectral analysis of rocks at Meridiani Planum, Mars, by the Mars Exploration
+      Rover Opportunity. J. Geophys. Res. 112, E06S02 (2007). https://doi.org/10.1029/2006JE002773
+W.H. Farrand, J.F. Bell III, J.R. Johnson, J.L. Bishop, R.V. Morris, Multispectral imaging from Mars
+      Pathfinder, in The Martian Surface: Composition, Mineralogy, and Physical Properties, ed. by
+      J.F. Bell III (Cambridge University Press, Cambridge, 2008), pp. 265–280. https://doi.org/10.1017/
+      CBO9780511536076.013. Chap. 12
+L. Fenton, P. Geissler, R. Haberle, Global warming and climate forcing by recent albedo changes on Mars.
+      Nature 446, 646–649 (2007). https://doi.org/10.1038/nature05718
+F. Ferri, P.H. Smith, M.T. Lemmon, N. Renno, Dust devils as observed by Mars Pathfinder. J. Geophys. Res.
+      108, E12.7–E12.1 (2003). https://doi.org/10.1029/2000JE001421
+M.M. Grady, Exploring Mars with returned samples. Space Sci. Rev. 216, 57 (2020). https://doi.org/
+      10.1007/s11214-020-00676-9
+R. Greeley, D. Waller, N. Cabrol, G. Landis, M.T. Lemmon, L. Neakrase, M.P. Hoffer, S. Thompson, P. Whel-
+      ley, G. Crater, Mars: observations of three dust devil seasons. J. Geophys. Res. 115, E00F02 (2010).
+      https://doi.org/10.1029/2010JE003608
+J.P. Grotzinger, R.E. Arvidson, J.F. Bell III, W. Calvin, B.C. Clark, D.A. Fike, M. Golombek, R. Greeley,
+      A. Haldemann, K.E. Herkenhoff, B.L. Jolliff, A.H. Knoll, M. Malin, S.M. McLennan, T. Parker, L.
+      Soderblom, J.N. Sohl-Dickstein, S.W. Squyres, N.J. Tosca, W.A. Watters, Stratigraphy and sedimentol-
+      ogy of a dry to wet eolian depositional system, Burns formation, Meridiani Planum, Mars. Earth Planet.
+      Sci. Lett. 240, 11–72 (2005). https://doi.org/10.1016/j.epsl.2005.09.039
+J.P. Grotzinger, J.F. Bell III, K. Herkenhoff, J. Johnson, A. Knoll, E. McCartney, S. McLennan, J. Metz, J.
+      Moore, S. Squyres, R. Sullivan, O. Ahronson, R. Arvidson, B. Joliff, M. Golombek, K. Lewis, T. Parker,
+      J. Soderblom, Sedimentary textures formed by aqueous processes, Erebus crater, Meridiani Planum,
+      Mars. Geology 34, 1085 (2006). https://doi.org/10.1130/G22985A.1
+J.P. Grotzinger, D.Y. Sumner, L.C. Kah, K. Stack, S. Gupta, L. Edgar, D. Rubin, K. Lewis, J. Schieber, N.
+      Mangold, R. Milliken, P.G. Conrad, D. DesMarais, J. Farmer, K. Siebach, F. Calef III, J. Hurowitz,
+      S.M. McLennan, D. Ming, D. Vaniman, J. Crisp, A. Vasavada, K.S. Edgett, M. Malin, D. Blake, R.
+      Gellert, P. Mahaffy, R.C. Wiens, S. Maurice, J.A. Grant, S. Wilson, R.C. Anderson, L. Beegle, R.
+      Arvidson, B. Hallet, R.S. Sletten, M. Rice, J. Bell III, J. Griffes, B. Ehlmann, R.B. Anderson, T.F.
+      Bristow, W.E. Dietrich, G. Dromart, J. Eigenbrode, A. Fraeman, C. Hardgrove, K. Herkenhoff, L. Jan-
+      dura, G. Kocurek, S. Lee, L.A. Leshin, R. Leveille, D. Limonadi, J. Maki, S. McCloskey, M. Meyer, M.
+      Minitti, H. Newsom, D. Oehler, A. Okon, M. Palucis, T. Parker, S. Rowland, M. Schmidt, S. Squyres, A.
+      Steele, E. Stolper, R. Summons, A. Treiman, R. Williams, A. Yingst MSL Science Team, A habitable
+      fluvio-lacustrine environment at Yellowknife Bay, Gale Crater, Mars. Science 343, 1242777 (2014).
+      https://doi.org/10.1126/science.1242777
+J.P. Grotzinger, S. Gupta, M.C. Malin, D.M. Rubin, J. Schieber, K. Siebach, D.Y. Sumner, K.M. Stack, A.R.
+      Vasavada, R.E. Arvidson, F. Calef III, L. Edgar, W.F. Fischer, J.A. Grant, J. Griffes, L.C. Kah, M.P.
+      Lamb, K.W. Lewis, N. Mangold, M.E. Minitti, M. Palucis, M. Rice, R.M.E. Williams, R.A. Yingst, D.
+      Blake, D. Blaney, P. Conrad, J. Crisp, W.E. Dietrich, G. Dromart, K.S. Edgett, R.C. Ewing, R. Gellert,
+      J.A. Hurowitz, G. Kocurek, P. Mahaffy, M.J. McBride, S.M. McLennan, M. Mischna, D. Ming, R.
+      Milliken, H. Newsom, D. Oehler, T.J. Parker, D. Vaniman, R.C. Wiens, S.A. Wilson, Deposition, ex-
+      humation, and paleoclimate of an ancient lake deposit, Gale crater, Mars. Science 350, aac7575 (2015).
+      https://doi.org/10.1126/science.aac7575
+E.A. Guinness, R.E. Arvidson, I.H.D. Clark, M.K. Shepard, Optical scattering properties of terrestrial var-
+      nished basalts compared with rocks and soils at the Viking Lander sites. J. Geophys. Res. 102, 28687–
+      28703 (1997). https://doi.org/10.1029/97JE03018
+M.D. Gunn, C.R. Cousins, Mars surface context cameras past, present, and future. Earth Space Sci. (2016).
+      https://doi.org/10.1002/2016EA000166
+A.G. Hayes, J. Grotzinger, L. Edgar, W. Watters, S. Squyres, J. Sohl-Dickstein, Reconstruction of ancient
+      eolian bed forms and paleo-currents from cross-bedded strata at Meridiani Planum, Mars. J. Geophys.
+      Res. 116, E00F21 (2011). https://doi.org/10.1029/2010JE003688
+A.G. Hayes, P. Corlies, C. Tate, J.F. Bell III., J.N. Maki, M. Caplinger, K.M. Kinch, K. Herkenhoff, B.
+      Horgan, J. Johnson, G. Parr, M.S. Rice, E. Jensen, T.M. Kubacki, E. Cloutis, B. Ehlmann, E. Lakdawalla,
+      R. Sullivan, A. Winhold, M. Barrington, A. Parkinson, J. van Beek, P. Caballo-Perucha, E. Cisneros, D.
+The Mars 2020 Perseverance Rover Mast Camera Zoom. . .                                    Page 35 of 40    24
+
+      Dixon, C. Donaldson, O.B. Jensen, J. Kuik, K. Lapo, A. Magee, Pre-flight calibration of the Mars
+      2020 Rover Mastcam Zoom (Mastcam-Z) multispectral, stereoscopic imager. Space Sci. Rev. (2021).
+      https://doi.org/10.1007/s11214-021-00795-x
+R.M. Hazen, D. Papineau, W. Bleeker, R.T. Downs, J.M. Ferry, T.J. McCoy, D.A. Sverjensky, H. Yang,
+      Mineral evolution. Am. Mineral. 93(11–12), 1693–1720 (2008). https://doi.org/10.2138/am.2008.2955
+K.E. Herkenhoff, S.W. Squyres, R. Arvidson, D.S. Bass, J.F. Bell III, P. Bertelsen, B.L. Ehlmann, W. Farrand,
+      L. Gaddis, R. Greeley, J. Grotzinger, A.G. Hayes, S.F. Hviid, J.R. Johnson, B. Jolliff, K.M. Kinch, A.H.
+      Knoll, M.B. Madsen, J.N. Maki, S.M. McLennan, H.Y. McSween, D.W. Ming, J.W. Rice Jr., L. Richter,
+      M. Sims, P.H. Smith, L.A. Soderblom, N. Spanovich, R. Sullivan, S. Thompson, T. Wdowiak, C. Weitz,
+      P. Whelley, Evidence from opportunity’s microscopic imager for water on Meridiani Planum. Science
+      306, 1727–1730 (2004). https://doi.org/10.1126/science.1105286
+K.E. Herkenhoff, S.W. Squyres, R. Arvidson, S. Cole, R. Sullivan, A. Yingst, N. Cabrol, E.M. Lee, J. Richie,
+      B. Sucharski, J.F. Bell III, F. Calef, M. Chapman, L. Edgar, B. Franklin, P. Geissler, J. Hurowitz, E.
+      Jensen, J.R. Johnson, R. Kirk, P. Lanagan, C. Leff, J. Maki, K. Mullins, B. Redding, M. Rice, M. Sims,
+      L. Soderblom, N. Spanovich, R. Springer, A. Sunda, A. Vaughan, Overview of spirit microscopic imager
+      results. J. Geophys. Res. (2019). https://doi.org/10.1029/2018JE005774
+B.H.N. Horgan, R.B. Anderson, G. Dromart, E.S. Amador, M.S. Rice, The mineral diversity of jezero
+      crater: evidence for possible lacustrine carbonates on Mars. Icarus 339, 113526 (2020). https://doi.org/
+      10.1016/j.icarus.2019.113526
+R.A. Jacobson, The orbits and masses of the martian satellites and the libration of Phobos. Astron. J. 139,
+      668 (2010). https://doi.org/10.1088/0004-6256/139/2/668
+J.R. Johnson, R. Kirk, L.A. Soderblom, L. Gaddis, R.J. Reid, D.T. Britt, P. Smith, M. Lemmon, N. Thomas,
+      J.F. Bell III, N.T. Bridges, R. Anderson, K.E. Herkenhoff, J. Maki, S. Murchie, A. Dummel, R. Jau-
+      mann, F. Trauthan, G. Arnold, Preliminary results on photometric properties of materials at the Sagan
+      Memorial Station, Mars. J. Geophys. Res. 104, 8809–8830 (1999). https://doi.org/10.1029/98JE02247
+J.R. Johnson, J.F. Bell III, E.A. Cloutis, M. Staid, W. Farrand, M. Rice, A. Wang, A. Yen, Mineralogic
+      constraints on sulfur-rich soils from Pancam spectra at Gusev Crater, Mars. Geophys. Res. Lett. 34,
+      L13202 (2007). https://doi.org/10.1029/2007GL029894
+J.R. Johnson, J.F. Bell III, P. Geissler, W.M. Grundy, E.A. Guinness, P.C. Pinet, J. Soderblom, Physical prop-
+      erties of the martian surface from spectrophotometric observations, in The Martian Surface: Composi-
+      tion, Mineralogy, and Physical Properties, ed. by J.F. Bell III (Cambridge University Press, Cambridge,
+      2008), pp. 428–450. https://doi.org/10.1017/CBO9780511536076.020. Chap. 19
+J.L. Josset, F. Westall, B.A. Hofmann, J. Spray, C. Cockell, S. Kempe, A.D. Griffiths, M.C. De Sanctis, L.
+      Colangeli, D. Koschny, K. Foellmi, E. Verrecchia, L. Diamond, M. Josset, E.J. Javaux, F. Esposito,
+      M. Gunn, A.L. Souchon-Leitner, T.R.R. Bontognali, O. Korablev, S. Erkman, G. Paar, S. Ulamec, F.
+      Foucher, P. Martin, A. Verhaeghe, M. Tanevski, J.L. Vago, The Close-Up Imager onboard the ESA
+      ExoMars Rover: objectives, description, operations, and science validation activities. Astrobiology 17,
+      595–611 (2017). https://doi.org/10.1089/ast.2016.1546
+K.M. Kinch, J.F. Bell III, W. Goetz, J.R. Johnson, J. Joseph, M.B. Madsen, J. Sohl-Dickstein, Dust deposition
+      on the decks of the Mars Exploration Rovers: 10 years of dust dynamics on the Panoramic Camera
+      calibration targets. Earth Space Sci. 2, 144–172 (2015). https://doi.org/10.1002/2014EA000073
+K.M. Kinch, M.B. Madsen, J.F. Bell III., J.N. Maki, Z. Bailey, A.G. Hayes, O.B. Jensen, M. Merusi, M.H.
+      Bernth, A.N. Sørensen, M. Hilverda, E. Cloutis, D. Applin, E. Mateo-Marti, J.A. Manrique, G. Lopez-
+      Reyes, A. Bello-Arufe, B. Ehlmann, J. Buz, A. Pommerol, N. Thomas, L. Affolter, K. Herkenhoff, J.R.
+      Johnson, M. Rice, P. Corlies, C. Tate, M. Caplinger, E. Jensen, T. Kubacki, E. Cisneros, K. Paris, A.
+      Winhold, D. Wellington, Radiometric calibration targets for the Mastcam-Z Camera on the Mars 2020
+      Rover mission. Space Sci. Rev. (2020a). https://doi.org/10.1007/s11214-020-00774-8
+K.M. Kinch, M. Hilverda, M.B. Madsen, J.F. Bell III., Calibrating Mars the Planetary Report 40(4), 19–22
+      (2020b)
+R.E. Kronyak, L.C. Kah, K.S. Edgett, S.J. VanBommel, L.M. Thompson, R.C. Wiens, V.Z. Sun, M. Nachon,
+      Mineral-filled fractures as indicators of multigenerational fluid flow in the Pahrump Hills member of
+      the Murray formation, Gale crater, Mars. Earth Space Sci. 6, 238–265 (2019). https://doi.org/10.1029/
+      2018EA000482
+V. Lainey, V. Dehant, M. Pätzold, First numerical ephemerides of the Martian moons. Astron. Astrophys.
+      465, 1075–1084 (2007). https://doi.org/10.1051/0004-6361:20065466
+J.E. Laity, N.T. Bridges, Ventifacts on Earth and Mars: analytical, field, and laboratory studies sup-
+      porting sand abrasion and windward feature development. Geomorphology 105, 202–217 (2009).
+      https://doi.org/10.1016/j.geomorph.2008.09.014
+G.A. Landis, P.P. Jenkins, Measurement of the settling rate of atmospheric dust on Mars by the MAE
+      instrument on Mars Pathfinder. J. Geophys. Res. 105, 1855–1857 (2000). https://doi.org/10.1029/
+      1999JE001029
+24   Page 36 of 40                                                                           J.F. Bell III et al.
+
+N.L. Lanza, A.M. Ollila, A. Cousin, R.C. Wiens, S. Clegg, N. Mangold, N. Bridges, D. Cooper, M. Schmidt,
+      J. Berger et al., Understanding the signature of rock coatings in laser-induced breakdown spectroscopy
+      data. Icarus 249, 62–73 (2015). https://doi.org/10.1016/j.icarus.2014.05.038
+K. Leer, P. Bertelsen, C.S. Binau, L.D. Olsen, L. Drube, T.V. Falkenberg, M.P. Haspang, M.B. Madsen, M.
+      Olsen, H. Sykulska, S. Vijendran, W.T. Pike, U. Staufer, D. Parrat, M. Lemmon, M.H. Hecht, C.T. Mo-
+      gensen, M.A. Gross, W. Goetz, J. Marshall, D. Britt, P. Smith, C. Shinohara, P. Woida, R. Woida, R.
+      Tanner, R. Reynolds, A. Shaw, Magnetic properties experiments and the Surface Stereo Imager calibra-
+      tion target onboard the Mars Phoenix 2007 Lander: design, calibration, and science goals. J. Geophys.
+      Res., Planets 113, E00A16 (2008). https://doi.org/10.1029/2007JE003014
+M.T. Lemmon, M.J. Wolff, M.D. Smith, R.T. Clancy, D. Banfield, G.A. Landis, A. Ghosh, P.H. Smith, N.
+      Spanovich, B. Whitney, P. Whelley, R. Greeley, S. Thompson, J.F. Bell III, S.W. Squyres, Atmospheric
+      imaging results from the Mars Exploration Rovers: spirit and opportunity. Science 306, 1753–1756
+      (2004). https://doi.org/10.1126/science.1104474
+M.T. Lemmon, J.F. Bell III, M.C. Malin, K.M. Bean, M.J. Wolff, A. Vasavada, F.J. Martín-Torres, M.-P.
+      Zorzano-Mier the MSL Science Team, Astrometric observations of Phobos and Deimos during solar
+      transits imaged by the Curiosity Mastcam, in 44th Lunar and Planetary Science Conf., Abstract #1787
+      (2013)
+M.T. Lemmon, M.J. Wolff, J.F. Bell III, M.D. Smith, B.A. Cantor, P.H. Smith, Dust aerosol, clouds, and the
+      atmospheric optical depth record over 5 Mars years of the Mars Exploration Rover mission. Icarus 251,
+      96–111 (2015). https://doi.org/10.1016/j.icarus.2014.03.029
+M.T. Lemmon, S.D. Guzewich, T. McConnochie, A. de Vicente-Retortillo, G. Martinez, M.D. Smith, J.F.
+      Bell III, D. Wellington, S. Jacob, Martian dust aerosol size variability seen during the 2018 global dust
+      event by the Curiosity rover. Geophys. Res. Lett. (2019). https://doi.org/10.1029/2019GL084407
+K.W. Lewis, O. Aharonson, J.P. Grotzinger, S.W. Squyres, J.F. Bell III, L.S. Crumpler, M.E. Schmidt, Struc-
+      ture and stratigraphy of Home Plate from the Spirit Mars Exploration Rover. J. Geophys. Res. 113,
+      E12S36 (2008). https://doi.org/10.1029/2007JE003025
+J.-B. Madeleine, F. Forget, E. Millour, L. Montabone, M.J. Wolff, Revisiting the radiative impact of dust
+      on Mars using the LMD Global Climate Model. J. Geophys. Res. 116, E11010 (2011). https://doi.org/
+      10.1029/2011JE003855
+J.-B. Madeleine, F. Forget, E. Millour, T. Navarro, A. Spiga, The influence of radiatively active water
+      ice clouds on the Martian climate. Geophys. Res. Lett. 39, L23202 (2012). https://doi.org/10.1029/
+      2012GL053564
+J.N. Maki, J.F. Bell III, K.E. Herkenhoff, S.W. Squyres, A. Kiely, M. Klimesh, M. Schwochert, T. Litwin,
+      R. Willson, A. Johnson, M. Maimone, E. Baumgartner, A. Collins, M. Wadsworth, S.T. Elliot, A. Din-
+      gizian, D. Brown, E.C. Hagerott, L. Scherr, R. Deen, D. Alexander, J. Lorre, Mars exploration rover
+      engineering cameras. J. Geophys. Res. 108, 8071 (2003). https://doi.org/10.1029/2003JE002077
+J. Maki, D. Thiessen, A. Pourangi, P. Kobzeff, T. Litwin, L. Scherr, S. Elliott, A. Dingizian, M. Maimone,
+      The Mars Science Laboratory engineering cameras. Space Sci. Rev. 170, 77–93 (2012). https://doi.org/
+      10.1007/s11214-012-9882-4
+J.N. Maki, D. Gruel, C. McKinney, M.A. Ravine, M. Morales, D. Lee, R. Willson, D. Copley-Woods, M.
+      Valvo, T. Goodsall, J. McGuire, R.G. Sellar, J.A. Schaffner, M.A. Caplinger, J.M. Shamah, A.E. John-
+      son, H. Ansari, K. Singh, T. Litwin, R. Deen, A. Culver, N. Ruoff, D. Petrizzo, D. Kessler, C. Basset, T.
+      Estlin, F. Alibay, A. Nelessen, S. Algermissen, The Mars 2020 Engineering Cameras and microphone on
+      the perseverance rover: A next-generation imaging system for Mars exploration. Space Sci. Rev. (2020).
+      https://doi.org/10.1007/s11214-020-00765-9
+M.C. Malin, Salt weathering on Mars. J. Geophys. Res. 79(26), 3888–3894 (1976). https://doi.org/10.1029/
+      JB079i026p03888
+M.C. Malin, K.S. Edgett, Sedimentary rocks of early Mars. Science 290, 1927–1937 (2000). https://doi.org/
+      10.1126/science.290.5498.1927
+M.C. Malin, K.S. Edgett, Mars global surveyor Mars Orbiter Camera: interplanetary cruise through primary
+      mission. J. Geophys. Res. 106, 23,429–23,570 (2001). https://doi.org/10.1029/2000JE001455
+M.C. Malin, K. Edgett, E. Jensen, L. Lipkaman, Mars Science Laboratory Project Software Interface
+      Specification (SIS): Mast Camera (Mastcam), Mars Hand Lens Imager (MAHLI), and Mars De-
+      scent Imager (MARDI) Experiment Data Record (EDR), Reduced Data Record (RDR), and PDS
+      Data Products,” Version 1.2, JPL D-75410, Oct. 29, 2013. http://pds-imaging.jpl.nasa.gov/data/msl/
+      MSLMST_0001/DOCUMENT/MSL_MMM_EDR_RDR_DPSIS.PDF
+M.C. Malin, M.A. Ravine, M.A. Caplinger, F.T. Ghaemi, J.A. Schaffner, J.N. Maki, J.F. Bell III, J.F.
+      Cameron, W.E. Dietrich, K.S. Edgett, L.J. Edwards, J.B. Garvin, B. Hallet, K.E. Herkenhoff, E. Hey-
+      dari, L.C. Kah, M.T. Lemmon, M.E. Minitti, T.S. Olson, T.J. Parker, S.K. Rowland, J. Schieber, R.
+      Sletten, R.J. Sullivan, D.Y. Sumner, R.A. Yingst, B.M. Duston, S. McNair, E.H. Jensen, The Mars Sci-
+      ence Laboratory (MSL) mast cameras and descent imager: I. Investigation and instrument descriptions.
+      Earth Space Sci. 4, 506–539 (2017). https://doi.org/10.1002/2016EA000252
+The Mars 2020 Perseverance Rover Mast Camera Zoom. . .                                    Page 37 of 40    24
+
+H.S. Malvar, L. He, R. Cutler, High-Quality Linear Interpolation for Demosaicing of Bayer-Patterned Color
+      Images. Acoustics, Speech, and Signal Processing, 2004. Proceedings, IEEE International Conference,
+      vol. 3 (IEEE Press, New York, 2004). https://doi.org/10.1109/ICASSP.2004.1326587
+M. Manga, A. Patel, J. Dufek, E.S. Kite, Wet surface and dense atmosphere on early Mars suggested by
+      the bomb sag at Home Plate, Mars. Geophys. Res. Lett. 39, L01202 (2012). https://doi.org/10.1029/
+      2011GL040192
+S. Maurice et al., The SuperCam instrument suite on the Mars 2020 rover: Science objectives and Mast-Unit
+      description. Space Sci. Rev. (2020), this issue
+H.Y. McSween, M.B. Wyatt, R. Gellert, J.F. Bell III, R.V. Morris, K.E. Herkenhoff, L.S. Crumpler, K.A.
+      Milam, K.R. Stockstill, L.L. Tornabene, R.E. Arvidson, P. Bartlett, D. Blaney, N.A. Cabrol, P.R. Chris-
+      tensen, B.C. Clark, J.A. Crisp, D.J. Des Marais, T. Economou, J.D. Farmer, W. Farrand, A. Ghosh,
+      M. Golombek, S. Gorevan, R. Greeley, V.E. Hamilton, J.R. Johnson, B.L. Joliff, G. Klingelhöfer, A.T.
+      Knudson, S. McLennan, D. Ming, J.E. Moersch, R. Rieder, S.W. Ruff, C. Schröder, P.A. de Souza Jr.,
+      S.W. Squyres, H. Wänke, A. Wang, A. Yen, J. Zipfel, Characterization and petrologic interpretation
+      of olivine-rich basalts at Gusev Crater, Mars. J. Geophys. Res. 111, E02S10 (2006a). https://doi.org/
+      10.1029/2005JE002477
+H.Y. McSween, S.W. Ruff, R.V. Morris, J.F. Bell III, K. Herkenhoff, R. Gellert, K.R. Stockstill, L.L. Torn-
+      abene, S.W. Squyres, J.A. Crisp, P.R. Christensen, T.J. McCoy, D.W. Mittlefehldt, M. Schmidt, Alkaline
+      volcanic rocks from the Columbia Hills, Gusev Crater, Mars. J. Geophys. Res. 111, E09S91 (2006b).
+      https://doi.org/10.1029/2006JE002698
+R.V. Morris, H. Lauer, C. Lawson, E. Gibson, G. Nace, C. Stewart, Spectral and other physiochem-
+      ical properties of submicron powders of hematite (α-Fe2 O3 ), maghemite (γ -Fe2 O3 ), magnetite
+      (Fe3 O4 ), goethite (α-FeOOH), and lepidocroicite (γ -FeOOH). J. Geophys. Res. 90, 3126–3144 (1985).
+      https://doi.org/10.1029/JB090iB04p03126
+S. Murchie, O. Barnouin-Jha, K. Barnouin-Jha, J. Bishop, J. Johnson, H. McSween, R.V. Morris, Old desert
+      varnish-like coatings and young breccias at the Mars Pathfinder landing site, in Lunar Planet. Sci.,
+      XXXV, Abstract #1740 (Lunar and Planetary Science Institute, Houston, 2004)
+S.L. Murchie, J.F. Mustard, B.L. Ehlmann, R.E. Milliken, J.L. Bishop, N.K. McKeown, E.Z.N. Dobrea, F.P.
+      Seelos, D.L. Buczkowski, S.M. Wiseman, R.E. Arvidson, J.J. Wray, G. Swayze, R.N. Clark, D.J. Des
+      Marais, A.S. McEwen, J.-P. Bibring, A synthesis of Martian aqueous mineralogy after 1 Mars year of ob-
+      servations from the Mars Reconnaissance Orbiter. J. Geophys. Res. 114, E00D06 (2009). https://doi.org/
+      10.1029/2009JE003342
+J.F. Mustard, F. Poulet, A. Gendrin, J-P. Bibring, Y. Langevin, B. Gondet, N. Mangold, G. Bellucci,
+      F. Altieri, Olivine and pyroxene diversity in the crust of Mars. Science 307, 1594–1597 (2005).
+      https://doi.org/10.1126/science.1109098
+J.F. Mustard, M. Adler, A. Allwood, D.S. Bass, D.W. Beaty, J.F. Bell III, W.B. Brinckerhoff, M. Carr, D.J.
+      Des Marais, B. Drake, K.S. Edgett, J. Eigenbrode, L.T. Elkins-Tanton, J.A. Grant, S.M. Milkovich,
+      D. Ming, C. Moore, S. Murchie, T.C. Onstott, S.W. Ruff, M.A. Sephton, A. Steele, A. Treiman,
+      Report of the Mars 2020 Science Definition Team (SDT), 154 pp., posted July, 2013, by the
+      Mars Exploration Program Analysis Group (MEPAG) (2013). http://mepag.jpl.nasa.gov/reports/MEP/
+      Mars_2020_SDT_Report_Final.pdf
+M. Nachon, N. Mangold, O. Forni, L.C. Kah, A. Cousin, R.C. Wiens, R. Anderson, D. Blaney, J.G. Blank, F.
+      Calef, S.M. Clegg, C. Fabre, M.R. Fisk, O. Gasnault, J.P. Grotzinger, R. Kronyak, N.L. Lanza, J. Lasue,
+      L. Le Deit, S. Le Mouélic, S. Maurice, P.-Y. Meslin, D.Z. Oehler, V. Payré, W. Rapin, S. Schröder,
+      K. Stack, D. Sumner, Chemistry of diagenetic features analyzed by ChemCam at Pahrump Hills, Gale
+      crater, Mars. Icarus 281, 121–136 (2017). https://doi.org/10.1016/j.icarus.2016.08.026
+N. Noffke, D. Christian, D. Wacey, R.M. Hazen, Microbially induced sedimentary structures recording an
+      ancient ecosystem in the ca. 3.48 billion-year-old Dresser Formation, Pilbara, Western Australia. Astro-
+      biology 13, 1–22 (2013). https://doi.org/10.1089/ast.2013.1030
+A. Ollila, H.E. Newsom, B. Clark III, R.C. Wiens, A. Cousin, J.G. Blank, N. Mangold, V. Sautter, S. Mau-
+      rice, S.M. Clegg, O. Gasnault, O. Forni, R. Tokar, E. Lewin, M.D. Dyar, J. Lasue, R. Anderson, S.M.
+      McLennan, J. Bridges, D. Vaniman, N. Lanza, C. Fabre, N. Melikechi, G.M. Perrett, J.L. Campbell,
+      P.L. King, B. Barraclough, D. Delapp, S. Johnstone, P.-Y. Meslin, A. Rosen-Gooding, J. Williams the
+      MSL Science Team, Trace element geochemistry (Li, Ba, Sr, and Rb) using Curiosity’s ChemCam: early
+      results for Gale crater from Bradbury Landing Site to Rocknest. J. Geophys. Res. 119, 18–31 (2014).
+      https://doi.org/10.1002/2013JE004517
+F.J. Pettijohn, Sedimentary Rocks, 3rd edn. (Harper and Row, New York, 1975). 628 pp.
+J.B. Pollack, M.E. Ockert-Bell, M.K. Shepard, Viking Lander image analysis of Martian atmospheric dust. J.
+      Geophys. Res. 100, 5235–5250 (1995). https://doi.org/10.1029/94JE02640
+R.J. Reid, P.H. Smith, M. Lemmon, R. Tanner, M. Burkland, E. Wegryn, J. Weinberg, R. Marcialis, D.T.
+      Britt, N. Thomas, R. Kramm, A. Dummel, D. Crowe, B.J. Bos, J.F. Bell III, P. Rueffer, F. Gliem, J.R.
+24   Page 38 of 40                                                                            J.F. Bell III et al.
+
+      Johnson, J.N. Maki, K.E. Herkenhoff, R.B. Singer, Imager for Mars Pathfinder (IMP) image calibration.
+      J. Geophys. Res. 104, 8907–8926 (1999). https://doi.org/10.1029/1998JE900011
+M.S. Rice, J.F. Bell III, E.A. Cloutis, A. Wang, S. Ruff, M.A. Craig, D.T. Bailey, J.R. Johnson, P.A. de
+      Souza Jr., W.H. Farrand, Silica-rich deposits and hydrated minerals at Gusev Crater, Mars: vis-NIR
+      spectral characterization and regional mapping. Icarus 205, 375–395 (2010). https://doi.org/10.1016/
+      j.icarus.2009.03.035
+M.S. Rice, J.F. Bell III, E.A. Cloutis, J.J. Wray, K.E. Herkenhoff, R. Sullivan, J.R. Johnson, R.B. Anderson,
+      Temporal observations of bright soil exposures at Gusev Crater, Mars. J. Geophys. Res. 116, E00F14
+      (2011). https://doi.org/10.1029/2010JE003683
+M.S. Rice, E.A. Cloutis, J.F. Bell III, D.L. Bish, B.H. Horgan, S.A. Mertzman, M.A. Craig, R.W. Re-
+      naut, B. Gautason, B. Mountain, Reflectance spectra diversity of silica-rich materials: sensitivity to
+      environment and implications for detections on Mars. Icarus 223, 499–533 (2013). https://doi.org/
+      10.1016/j.icarus.2012.09.021
+M.S. Rice, J.R. Johnson, J.F. Bell III, J.N. Maki, M. Barrington, E. Cisneros, E. Cloutis, P. Corlies, N. Cluff,
+      K. Crawford, D. Dixon, B. Ehlmann, C. Hardgrove, A. Hayes, B.N. Horgan, S. Jacob, E. Jensen, K.M.
+      Kinch, E. Lakdawalla, K. Lapo, M.T. Lemmon, M.B. Madsen, L. Mehall, J. Mollerup, K. Paris, C.
+      Rojas, E. Scheller, N. Schmitz, N. Scudder, C. Seeger, M. Starr, C. Tate, D. Wellington, A. Winhold,
+      The Mastcam-Z filter set and plans for multispectral imaging with Mars 2020 at Jezero crater, in 51st
+      Lunar and Planetary Science Conf., Abstract #2930 (2020)
+J. Schieber, M.E. Minitti, R. Sullivan, K.S. Edgett, M.C. Malin, T. Parker, F. Calef, Engraved on the rocks –
+      aeolian abrasion of Martian mudstone exposures and their relationship to modern wind patterns in Gale
+      Crater, Mars. Depos. Rec. 6, 625–647 (2020). https://doi.org/10.1002/dep2.110
+R.P. Sharp, Pleistocene ventifacts east of the Big Horn Mountains, Wyoming. J. Geol. 57(2), 175–195 (1949).
+      https://doi.org/10.1086/625596
+G.A. Smith, D. Katzman, Discrimination of eolian and pyroclastic-surge processes in the generation of
+      cross-bedded tuffs, Jemez Mountains volcanic field, New Mexico. Geology 19, 465–468 (1991).
+      https://doi.org/10.1130/0091-7613(1991)019<0465:DOEAPS>2.3.CO;2.
+P.H. Smith, M.T. Lemmon, Opacity of the Mars atmosphere measured by the Imager for Mars Pathfinder. J.
+      Geophys. Res. 104, 8975–8985 (1999). https://doi.org/10.1029/1998JE900017
+P.H. Smith, J.F. Bell III, N.T. Bridges, D.T. Britt, L. Gaddis, R. Greeley, H.U. Keller, K.E. Herkenhoff, R.
+      Jaumann, J.R. Johnson, R.L. Kirk, M. Lemmon, J.N. Maki, M.C. Malin, S.L. Murchie, J. Oberst, T.J.
+      Parker, R.J. Reid, L.A. Soderblom, C. Stoker, R. Sullivan, N. Thomas, M.G. Tomasko, E. Wegryn,
+      Results from the Mars Pathfinder camera. Science 278, 1758–1765 (1997). https://doi.org/10.1126/
+      science.278.5344.1758
+S.W. Squyres, R.E. Arvidson, J.F. Bell III, J. Brückner, N.A. Cabrol, W. Calvin, M.H. Carr, P.R. Christensen,
+      B.C. Clark, L. Crumpler, D.J. Des Marais, C. d’Uston, T. Economou, J. Farmer, W. Farrand, W. Folkner,
+      M. Golombek, S. Gorevan, J.A. Grant, R. Greeley, J. Grotzinger, L. Haskin, K.E. Herkenhoff, S. Hviid,
+      J. Johnson, G. Klingelhöfer, A. Knoll, G. Landis, M. Lemmon, R. Li, M.B. Madsen, M.C. Malin, S.M.
+      McLennan, H.Y. McSween, D.W. Ming, J. Moersch, R.V. Morris, T. Parker, J.W. Rice Jr., L. Richter, R.
+      Rieder, M. Sims, M. Smith, P. Smith, L.A. Soderblom, R. Sullivan, H. Wänke, T. Wdowiak, M. Wolff,
+      A. Yen, The Spirit Rover’s Athena science investigation at Gusev Crater, Mars. Science 305, 794–799
+      (2004). https://doi.org/10.1126/science.3050794
+S.W. Squyres, O. Aharonson, B.C. Clark, B.A. Cohen, L. Crumpler, P.A. de Souza, W.H. Farrand, P. Gellert,
+      J. Grant, J.P. Grotzinger, A.F.C. Haldemann, J.R. Johnson, G. Klingelhöfer, K.W. Lewis, R. Li, T. Mcoy,
+      A.S. McEwen, H.Y. McSween, D.W. Ming, J.M. Moore, R.V. Morris, T.J. Parker, J.W. Rice Jr., S. Ruff,
+      M. Schmidt, C. Schröder, L.A. Soderblom, A. Yen, Pyroclastic activity at Home Plate in Gusev crater,
+      Mars. Science 316(5825), 738–742 (2007). https://doi.org/10.1126/science.1139045
+S.W. Squyres, R.E. Arvidson, J.F. Bell III, F. Calef III, B.C. Clark, B.A. Cohen, L.A. Crumpler, P.A. de Souza
+      Jr., W.H. Farrand, R. Gellert, J. Grant, K.E. Herkenhoff, J.A. Hurowitz, J.R. Johnson, B.L. Jolliff, A.H.
+      Knoll, R. Li, S.M. McLennan, D.W. Ming, D.W. Mittlefehldt, T.J. Parker, G. Paulsen, M.S. Rice, S.W.
+      Ruff, C. Schröder, A.S. Yen, K. Zacny, Ancient impact and aqueous processes at Endeavour Crater,
+      Mars. Science 336, 570–576 (2012). https://doi.org/10.1126/science.1220476
+K.M. Stack, N.R. Williams, F. Calef III, V. Sun, K.H. Williford, K.A. Farley, S. Eide, D. Flannery, C. Hughes,
+      S.R. Jacob, L.C. Kah, F. Meyen, A. Molina, C. Quantin Nataf, M. Rice, P. Russell, E. Scheller, C.H.
+      Seeger, W.J. Abbey, J.B. Adler, H. Amundsen, R.B. Anderson, S.M. Angel, G. Arana, J. Atkins, M. Bar-
+      rington, T. Berger, R. Borden, B. Boring, A. Brown, B.L. Carrier, P. Conrad, H. Dypvik, S.A. Fagents,
+      Z.E. Gallegos, B. Garczynski, K. Golder, F. Gomez, Y. Goreva, S. Gupta, S. Hamran, T. Hicks, E.D.
+      Hinterman, B.N. Horgan, J. Hurowitz, J.R. Johnson, J. Lasue, R.E. Kronyak, Y. Liu, J.M. Madariaga,
+      N. Mangold, J. McClean, N. Miklusicak, D. Nunes, C. Rojas, K. Runyon, N. Schmitz, N. Scudder, E.
+      Shaver, J. SooHoo, R. Spaulding, E. Stanish, L.K. Tamppari, M.M. Tice, N. Turenne, P.A. Willis, R.A.
+      Yingst, Photogeologic map of the perseverance rover field site in Jezero Crater constructed by the Mars
+      2020 Science Team. Space Sci. Rev. (2020). https://doi.org/10.1007/s11214-020-00739-x
+The Mars 2020 Perseverance Rover Mast Camera Zoom. . .                                    Page 39 of 40    24
+
+N.T. Stein, D.P. Quinn, J.P. Grotzinger, C. Fedo, B.L. Ehlmann, K.M. Stack et al., Regional structural
+     orientation of the Mount Sharp group revealed by in situ dip measurements and stratigraphic cor-
+     relations on the Vera Rubin ridge. J. Geophys. Res., Planets 125, e2019JE006298 (2020). https://
+     doi.org/10.1029/2019JE006298
+D.A.V. Stow, Sedimentary Rocks in the Field: A Colour Guide (Manson Publishing, London, 2005). 320 pp.
+R. Sullivan, R. Arvidson, J.F. Bell III, R. Gellert, M. Golombek, R. Greeley, K. Herkenhoff, J. Johnson, S.
+     Thompson, P. Whelley, J. Wray, Wind-driven particle mobility on Mars: insights from MER observa-
+     tions at “El Dorado” and surroundings at Gusev crater. J. Geophys. Res. 113, E06S07 (2008). https://
+     doi.org/10.1029/2008JE003101
+R. Sullivan, R. Anderson, J. Biesiadecki, T. Bond, H. Stewart, Cohesions, friction angles, and other phys-
+     ical properties of Martian regolith from Mars Exploration Rover wheel trenches and wheel scuffs. J.
+     Geophys. Res., Planets 116, E02006 (2011). https://doi.org/10.1029/2010JE003625
+R.E. Summons, J.P. Amend, D. Bish, R. Buick, G.D. Cody, D.J. Des Marais, G. Dromart, J.L. Eigenbrode,
+     A.H. Knoll, D.Y. Sumner, Preservation of Martian organic and environmental records: final report of the
+     Mars biosignature working group. Astrobiology 11, 2 (2011). https://doi.org/10.1089/ast.2010.0506
+L.K. Tamppari, D. Bass, B. Cantor, I. Daubar, C. Dickinson, D. Fisher, K. Fujii, H.P. Gunnlauggson, T.L.
+     Hudson, D. Kass, A. Kleinböhl, L. Komguem, M.T. Lemmon, M. Mellon, J. Moores, A. Pankine, M.
+     Searls, F. Seelos, M.D. Smith, S. Smrekar, P. Taylor, C. von Holstein-Rathlou, W. Weng, J. Whiteway,
+     M. Wolff, Phoenix and MRO coordinated atmospheric measurements. J. Geophys. Res. 115, E00E17
+     (2010). https://doi.org/10.1029/2009JE003415
+M.G. Tomasko, L.R. Doose, M.T. Lemmon, P.H. Smith, E. Wegryn, Properties of dust in the martian atmo-
+     sphere from the Imager for Mars Pathfinder. J. Geophys. Res. 104, 8987–9007 (1999). https://doi.org/
+     10.1029/1998JE900016
+J.L. Vago, F. Westall, A.J. Coates, R. Jaumann, O. Korablev, V. Ciarletti, I. Mitrofanov, J.-J. Josset, M.C.
+     De Sanctis, J.-P. Bibring, F. Rull, F. Goesmann, H. Steininger, W. Goetz, W. Brinckerhoff, C. Szopa,
+     F. Raulin, H.G.M. Edwards, L.G. Whyte, A.G. Fairen, J. Bridges, E. Hauber, G.G. Ori, S. Werner, D.
+     Loizeau, R.O. Kuzmin, R.M.E. Williams, J. Flahaut, F. Forget, D. Rodionov, O. Korablev, H. Svedhem,
+     E. Sefton-Nash, G. Kminek, L. Lorenzoni, L. Joudrier, V. Mikhailov, A. Zashchirinskiy, S. Alexashkin,
+     F. Calantropio, A. Merlo, P. Poulakis, O. Witasse, O. Bayle, S. Bayon, U. Meierhenrich, J. Carter, J.M.
+     Garcia-Ruiz, P. Baglioni, A. Haldemann, A.J. Ball, A. Debus, R. Lindner, F. Haessig, D. Monteiro,
+     R. Trautner, C. Voland, P. Rebeyre, D. Goulty, F. Didot, S. Durrant, E. Zekri, D. Koschny, A. Toni, G.
+     Visentin, M. Zwick, M. van Winnendael, M. Azkarate, C. Carreau, the ExoMars project team, Habitabil-
+     ity on Early Mars and the search for biosignatures with the ExoMars rover. Astrobiology 17, 471–510
+     (2017). https://doi.org/10.1089/ast.2016.1533
+G.A. Valentine, R.V. Fisher, Pyroclastic surges and blasts, in Encyclopedia of Volcanoes, ed. by H. Sigurdsson
+     et al. (Academic Press, San Diego, 1999), pp. 571–580
+D.T. Vaniman, D.L. Bish, D.W. Ming, T.F. Bristow, R.V. Morris, D.F. Blake, S.J. Chipera, S.M. Morrison,
+     A.H. Treiman, E.B. Rampe, M. Rice, C.N. Achilles, J. Grotzinger, S.M. McLennan, J. Williams, J.
+     Bell III., H. Newsom, R.T. Downs, S. Maurice, P. Sarrazin, A.S. Yen, J.M. Morookian, J.D. Farmer, K.
+     Stack, R.E. Milliken, B. Ehlmann, D.Y. Sumner, G. Berger, J.A. Crisp, J.A. Hurowitz, R. Anderson,
+     D. DesMarais, E.M. Stolper, K.S. Edgett, S. Gupta, N. Spanovich MSL Science Team, Mineralogy
+     of a Mudstone at Yellowknife Bay, Gale Crater, Mars. Science 343, 1243480 (2014). https://doi.org/
+     10.1126/science.1243480
+Á. Vicente-Retortillo, G.M. Martínez, N. Renno, C.E. Newman, I. Ordonez-Etxeberria, M.T. Lemmon, M.I.
+     Richardson, R. Hueso, A. Sánchez-Lavega, Seasonal deposition and lifting of dust on Mars as observed
+     by the Curiosity rover. Sci. Rep. 8, 17576 (2018). https://doi.org/10.1038/s41598-018-35946-8
+A. Wang, Z.C. Ling, Ferric sulfates on Mars: a combined mission data analysis of salty soils at Gusev
+     crater and laboratory experimental investigations. J. Geophys. Res. 116, E00F17 (2011). https://doi.org/
+     10.1029/2010JE003665
+A. Wang, J.F. Bell III., R. Li, J.R. Johnson, W. Farrand, R.E. Arvidson, L. Crumpler, S.W. Squyres, K.E.
+     Herkenhoff, A. Knudson, W. Chen, the MER/Athena Science Team, Light-toned salty soils and co-
+     existing silica-rich species discovered by the Mars Exploration Rover Spirit in Columbia Hills. J. Geo-
+     phys. Res. 113, E12S40 (2008). https://doi.org/10.1029/2008JE003126
+A. Wang, W.C. Feldman, M.T. Mellon, M. Zheng, The preservation of subsurface sulfates with
+     mid-to-high degree of hydration in equatorial regions on Mars. Icarus 226(1), 980–991 (2013).
+     https://doi.org/10.1016/j.icarus.2013.07.020
+N. Warner, M. Silverman, J. Samuels, L. DeFlores, A. Sengstacken, J. Maki, A. Scodary, S. Peters, T.
+     Litwin, B. Metz, The Mars Science Laboratory Remote Sensing Mast, in IEEE Aerospace Conf. (2016).
+     https://doi.org/10.1109/AERO.2016.7500554
+C.M. Weitz, W.H. Farrand, J.R. Johnson, I. Fleischer, C. Schröder, A. Yingst, B. Jolliff, R. Gellert, J. Bell,
+     K.E. Herkenhoff, G. Klingelhöfer, B. Cohen, W. Calvin, M. Rutherford, J. Ashley, Visible and near-
+24   Page 40 of 40                                                                          J.F. Bell III et al.
+
+     infrared multispectral analysis of geochemically measured rock fragments at the Opportunity landing
+     site in Meridiani Planum. J. Geophys. Res. 115, E00F10 (2010). https://doi.org/10.1029/2010JE003660
+R. Wiens et al., The SuperCam instrument suite on the NASA Mars rover: Body unit and combined system
+     tests. Space Sci. Rev. (2020). https://doi.org/10.1007/s11214-020-00777-5
+R.M.E. Williams, J.P. Grotzinger, W.E. Dietrich, S. Gupta, D.Y. Sumner, R.C. Wiens, N. Mangold, M.C.
+     Malin, K.S. Edgett, S. Maurice, O. Forni, O. Gasnault, A. Ollila, H.E. Newsom, G. Dromart, M.C.
+     Palucis, R.A. Yingst, R.B. Anderson, K.E. Herkenhoff, S. Le Mouélic, W. Goetz, M.B. Madsen, A.
+     Koefoed, J.K. Jensen, J.C. Bridges, S.P. Schwenzer, K.W. Lewis, K.M. Stack, D. Rubin, L.C. Kah, J.F.
+     Bell III, J.D. Farmer, R. Sullivan, T. Van Beek, D.L. Blaney, O. Pariser, R.G. Deen (the MSL Science
+     Team), Martian fluvial conglomerates at Gale crater. Science 340, 1068–1072 (2013). https://doi.org/
+     10.1126/science.1237317
+M.J. Wolff, M.D. Smith, R.T. Clancy, N. Spanovich, B.A. Whitney, M.T. Lemmon, J. Bandfield, D. Banfield,
+     A. Ghosh, G. Landis, P. Christensen, J.F. Bell III, S. Squyres, Atmospheric results from Mars Global Sur-
+     veyor overflights of the Mars Exploration Rovers. J. Geophys. Res. 111, E12S17 (2006). https://doi.org/
+     10.1029/2006JE002786
+M.J. Wolff, M.D. Smith, R.T. Clancy, R. Arvidson, M. Kahre, F. Seelos IV., S. Murchie, H. Savijärvi, Wave-
+     length dependence of dust aerosol single scattering albedo as observed by the Compact Reconnaissance
+     Imaging Spectrometer. J. Geophys. Res. 114, E00D04 (2009). https://doi.org/10.1029/2009JE003350
+M.J. Wolff, R.T. Clancy, J.D. Goguen, M.C. Malin, B.A. Cantor, Ultraviolet dust aerosol properties as ob-
+     served by MARCI. Icarus 208, 143–155 (2010). https://doi.org/10.1016/j.icarus.2010.01.010
+M.J. Wolff, M. Lopéz-Valverde, J.-B. Madeleine, R.J. Wilson, M.D. Smith, T. Fouchet, R.W. Zurek, Ra-
+     diative processes: techniques and applications, in The Atmosphere and Climate of Mars, ed. by
+     R.M. Haberle (Cambridge University Press, Cambridge, 2017), pp. 76–105. https://doi.org/10.1017/
+     9781139060172.006
+M.J. Wolff, R.T. Clancy, M.A. Kahre, R.M. Haberle, F. Forget, B.A. Cantor, M.C. Malin, Mapping wa-
+     ter ice clouds on Mars with MRO/MARCI. Icarus 332, 24–49 (2019). https://doi.org/10.1016/j.icarus.
+     2019.05.041
+R.A. Yingst, L.C. Kah, M. Palucis, R.M.E. Williams, J. Garvin, J.C. Bridges, N. Bridges, R.G. Deen, J.
+     Farmer, O. Gasnault, W. Goetz, V.E. Hamilton, V. Hipkin, J.K. Jensen, P.L. King, A. Koefoed, S.P.
+     Le Mouélic, M.B. Madsen, N. Mangold, J. Martinez-Frias, S. Maurice, E.M. McCartney, H. Newsom,
+     O. Pariser, V.H. Sautter, R.C. Wiens, Characteristics of pebble- and cobble-sized clasts along the Cu-
+     riosity rover traverse from Bradbury Landing to Rocknest. J. Geophys. Res. 118, 2361–2380 (2013).
+     https://doi.org/10.1002/2013JE004435
+

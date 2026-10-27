@@ -1,0 +1,2973 @@
+      P R E S S   K I T
+
+
+
+
+January 2021              www.nasa.gov
+                             Table of Contents
+
+Introduction
+
+
+   7 Things to Know About the Mars 2020 Perseverance Mission ............                        03
+
+Media Services ..........................................................................        07
+
+Quick Facts ...............................................................................      12
+
+Mission
+
+
+   Overview ...............................................................................      16
+
+   Spacecraft .............................................................................      28
+
+   Science .................................................................................     52
+
+   Landing Site ...........................................................................      63
+
+Management .............................................................................         65
+
+More About Mars
+
+
+   Gallery ...................................................................................   66
+
+   Historical Mars Missions ...........................................................          69
+
+
+
+
+                                                   2
+Introduction
+NASA’s Mars 2020 Perseverance rover will land on Mars on Feb. 18, 2021. Perseverance is the most
+sophisticated rover NASA has ever sent to the Red Planet, with a name that embodies NASA’s passion, and
+our nation’s capability, to take on and overcome challenges. It will collect carefully selected and documented
+rock and sediment samples for future return to Earth, search for signs of ancient microbial life, characterize
+the planet’s geology and climate, and pave the way for human exploration beyond the Moon.
+
+
+Perseverance is also ferrying several cutting-edge technologies to the surface of Mars – including a helicopter
+named Ingenuity, the first aircraft to attempt powered, controlled flight on another planet.
+
+
+
+
+7 Things to Know About the
+Mars 2020 Perseverance Mission
+Very soon, the Perseverance rover, built at NASA’s Jet Propulsion Laboratory in Southern California,
+will become the next robotic inhabitant of Mars, joining another rover, a lander, and multiple orbiters
+currently at work on or around the Red Planet. What sets this explorer apart?
+
+
+1. Perseverance is searching for signs of ancient life.
+                                                 Previous NASA missions have discovered evidence that
+                                                 Mars once hosted running water before becoming a frozen
+                                                 desert. Earlier in its history, Mars had warmer environments
+                                                 at the surface that could have supported microbial life.
+                                                 Perseverance aims to take the next step, seeking, as
+                                                 a primary goal, to answer one of the key questions of
+                                                 astrobiology: Are there signs (or biosignatures) of past
+                                                 microbial life on Mars?
+
+Image credit: NASA/JPL-Caltech
+                                                 This demanding science goal requires a new suite of cutting-
+                                                 edge instruments to tackle the question from many angles.
+
+
+
+                                                        3
+                                                                                                         Introduction
+
+
+
+
+Two of them will play a particularly important role in the search for potential signs of past life: SHERLOC
+(short for Scanning Habitable Environments with Raman & Luminescence for Organics & Chemicals), which
+can detect organic matter and minerals, and PIXL (short for Planetary Instrument for X-ray Lithochemistry),
+which maps the chemical composition of rocks and sediments. The instruments will allow scientists to
+analyze these features together at a higher level of detail than any Mars rover has done before.
+
+
+Perseverance will also be able to use some instruments to gather science data from a distance:
+Mastcam-Z’s cameras can zoom in on rock textures from as far away as a soccer field, while SuperCam
+will use a laser to zap rock and regolith (broken rock and dust) to study their composition in the resulting
+vapor. RIMFAX (short for Radar Imager for Mars’ Subsurface Experiment) will use radar waves to probe
+geological features underground.
+
+2. The rover is landing in a place with a high potential for finding these signs of
+past microbial life.
+                                                Terrain that is interesting to scientists can be challenging
+                                                to land on. Thanks to new technologies that enable
+                                                Perseverance to target its landing site more accurately and
+                                                avoid landing hazards autonomously, the spacecraft can
+                                                safely touch down in an intriguing ancient river delta with
+                                                steep cliffs, sand dunes, and boulder fields.
+
+
+                                                Jezero Crater is a 28-mile-wide (45-kilometer-wide) basin
+                                                located in the Martian northern hemisphere. Sometime
+Image credit: ESA/DLR/FU-Berlin
+                                                around 3.5 billion years ago, a river there flowed into a body
+                                                of water about the size of Lake Tahoe, depositing sediments
+                                                in a fan shape known as a delta. The Perseverance science
+                                                team believes this ancient river delta and lake deposits could
+                                                have collected and preserved organic molecules and other
+                                                potential signs of microbial life.
+
+
+3. Perseverance is also collecting important data about Mars’ geology and
+climate.
+                                                Context is everything. Mars orbiters have been collecting
+                                                images and data from Jezero Crater from about 200 miles
+                                                (322 kilometers) above, but finding signs of ancient life on
+                                                the surface requires much closer inspection. It requires a
+                                                rover like Perseverance. Understanding Mars’ past climate
+                                                conditions and reading the geological history embedded
+                                                in its rocks will give scientists a richer sense of what
+                                                the planet was like in its distant past. Studying the Red
+                                                Planet’s geology and climate could also give us a sense
+Image credit: NASA/JPL-Caltech
+                                                of why Earth and Mars – despite some early similarities –
+                                                ended up so different.
+
+
+
+                                                      4
+                                                                                                             Introduction
+
+
+
+
+4. The Perseverance rover embodies the NASA – and the scientific – spirit of
+overcoming challenges.
+                                                  Getting the spacecraft to the launch pad during a pandemic,
+                                                  searching for signs of ancient life, collecting samples, and
+                                                  proving new technologies are no easy feats. Nor is a soft
+                                                  touchdown on Mars: Only about 50% of Martian landing
+                                                  attempts, by any space agency, have been successful.
+
+
+                                                  The mission team draws inspiration from the name of its
+                                                  rover, with particular awareness of the challenges the entire
+                                                  world is experiencing at this time. With that in mind, the
+Image credit: NASA/JPL-Caltech
+                                                  mission installed a special plate to honor the dedication and
+                                                  hard work of the medical community and first responders
+                                                  around the globe. The team hopes to inspire the entire
+                                                  world, and future explorers, to forge new paths and make
+                                                  discoveries on which the next generation can build.
+
+5. Perseverance is the first leg of a round trip to Mars.
+                                                  The verification of ancient life on Mars carries an enormous
+                                                  burden of proof. Perseverance is the first rover to bring a
+                                                  sample caching system to Mars that will package promising
+                                                  samples for return to Earth by a future mission.
+
+
+                                                  Rather than pulverizing rock the way Curiosity’s drill does,
+                                                  Perseverance’s drill will cut intact rock cores that are about
+                                                  the size of a piece of chalk and will place them in sample
+                                                  tubes that it will store until the rover reaches an appropriate
+Image credit: NASA/JPL-Caltech
+                                                  drop-off location on Mars. The rover could also potentially
+                                                  deliver the samples to a lander that is part of the planned
+                                                  Mars sample return campaign by NASA and ESA (the
+                                                  European Space Agency).
+
+
+                                                  Once the samples are here on Earth we can examine them
+                                                  more precisely with instruments too large and complex to
+                                                  send to Mars, providing far more information about them
+                                                  than even the most sophisticated rover could.
+
+6. Perseverance carries instruments and technology that will help pave the way
+for future human missions to the Moon and Mars.
+Among the future-looking technologies on the Mars 2020 Perseverance mission that will benefit human exploration
+is Terrain-Relative Navigation. As part of the spacecraft’s landing system, Terrain-Relative Navigation is the main
+reason Perseverance can explore a place as interesting as Jezero Crater. It will enable the descending spacecraft
+to quickly and autonomously comprehend its location over the Martian surface and modify its trajectory. This
+technology will provide invaluable assistance for both robotic and crewed missions landing on the Moon.
+
+
+                                                         5
+                                                                                                          Introduction
+
+
+
+
+                                                Perseverance will also have more autonomy on the
+                                                surface than any other rover, including self-driving smarts
+                                                that allow it to cover more ground in a day’s operations
+                                                with fewer instructions from engineers on Earth. This
+                                                fast-traverse capability (courtesy of upgraded sensors,
+                                                computers, and algorithms) can translate into more
+                                                science over the length of the mission. What’s more, it will
+                                                make exploration of the Moon, Mars, and other celestial
+                                                bodies more efficient for other vehicles.
+Image credit: NASA
+
+
+
+
+In addition, Perseverance carries a technology demonstration – a proof-of-concept experiment – called Mars
+Oxygen In-Situ Resource Utilization Experiment (MOXIE). This instrument will produce oxygen from Mars’
+carbon dioxide atmosphere, demonstrating a way that future explorers might produce oxygen for rocket
+propellant as well as for breathing.
+
+
+Two other instruments will help engineers design systems for future human explorers to land and survive
+on Mars: The MEDLI2 (Mars Entry, Descent, and Landing Instrumentation 2) package is a next-generation
+version of what flew on the Mars Science Laboratory mission that delivered the Curiosity rover, while the
+MEDA (Mars Environmental Dynamics Analyzer) instrument suite provides information about weather, climate,
+and surface ultraviolet radiation and dust.
+
+
+7. You will get to ride along.
+                                                The Mars 2020 Perseverance mission carries more cameras
+                                                than any interplanetary mission in history, with 19 cameras
+                                                on the rover itself and four on other parts of the spacecraft
+                                                involved in entry, descent, and landing. As with previous
+                                                Mars missions, the Mars 2020 Perseverance mission
+                                                plans to make raw and processed images available on the
+                                                mission’s website.
+
+
+                                                If all goes well, the public will be able to experience in high-
+Image credit: NASA/JPL-Caltech
+                                                definition what it’s like to land on Mars – and hear the sounds
+                                                of landing for the first time with an off-the-shelf microphone
+
+affixed to the side of the rover. Another microphone on SuperCam will help scientists understand the property
+of rocks the instrument is examining and can also listen to the wind.
+
+
+If you are among the 10.9 million people who signed up to send your name to Mars, your name is stenciled
+on one of three silicon chips embedded on a plate on the rover that carries the words “Explore as one” in
+Morse code.
+
+
+You can also follow Perseverance’s adventure on social media via @NASAPersevere and @NASAMars on
+Twitter and Facebook, and the hashtag #CountdownToMars.
+
+
+
+                                                      6
+Media Services
+Media Contacts
+Policy/Program Management                                 Mars 2020 Perseverance Mission
+NASA Headquarters, Washington                             NASA’s Jet Propulsion Laboratory, Southern California
+
+Grey Hautaluoma                                           DC Agle
+202-358-0668                                              818-393-9011
+grey.hautaluoma-1@nasa.gov                                agle@jpl.nasa.gov
+
+
+Alana Johnson                                             Andrew Good
+202-358-1501                                              818-393-2433
+alana.r.johnson@nasa.gov                                  626-840-4291 (cell)
+                                                          andrew.c.good@jpl.nasa.gov
+Joshua Handal
+202-358-2307                                              Jia-Rui Cook
+joshua.a.handal@nasa.gov                                  818-354-0724
+                                                          626-524-6483 (cell)
+                                                          jccook@jpl.nasa.gov
+
+
+Payload Instruments
+Mastcam-Z                                                 Mars Environmental Dynamics Analyzer (MEDA)
+Arizona State University, Tempe                           Centro de Astrobiología, Madrid, Spain
+
+Karin Valentine                                           Juan Angel Vaquerizo Gallego
+480-965-9345                                              011-34-915201630
+karin.valentine@asu.edu                                   jvaquerizog@cabinta-csic.es
+
+Mars Oxygen In Situ Resource Utilization Experiment       Planetary Instrument for X-ray Lithochemistry
+(MOXIE, a Technology Demonstration)                       (PIXL)
+Massachusetts Institute of Technology, Cambridge          NASA’s Jet Propulsion Laboratory, Southern California
+
+Nancy Wolfe Kotary                                        Andrew Good
+617-715-3490                                              818-393-2433
+nwk@mit.edu                                               626-840-4291 (cell)
+                                                          andrew.c.good@jpl.nasa.gov
+
+
+                                                      7
+                                                                                                          Media Services
+
+
+
+
+Radar Imager for Mars’ Subsurface Experiment             Scanning Habitable Environments with Raman &
+(RIMFAX)                                                 Luminescence for Organics & Chemicals (SHERLOC)
+University of Oslo, Norway
+
+Mette Johnsrud                                           NASA’s Jet Propulsion Laboratory, Southern California
++47 22842203                                             Andrew Good
+mette.johnsrud@its.uio.no                                818-393-2433
+                                                         626-840-4291 (cell)
+                                                         andrew.c.good@jpl.nasa.gov
+
+SuperCam
+Los Alamos National Laboratory, New Mexico
+
+Laura Ann Mullane
+505-667-6012
+mullane@lanl.gov
+
+
+
+Technology
+Mars Science Laboratory Entry, Descent and Landing       Ingenuity Mars Helicopter (Technology
+Instrumentation 2 (MEDLI2)                               Demonstration)
+NASA Langley Research Center, Hampton, Va.               NASA’s Jet Propulsion Laboratory, Southern California
+
+Kristyn Damadeo                                          DC Agle
+757-864-1090                                             818-393-9011
+kristyn.damadeo@nasa.gov                                 agle@jpl.nasa.gov
+
+
+                                                         Andrew Good
+                                                         818-393-2433
+                                                         626-840-4291 (cell)
+                                                         andrew.c.good@jpl.nasa.gov
+
+
+                                                         Jia-Rui Cook
+                                                         818-354-0724
+                                                         626-524-6483 (cell)
+                                                         jccook@jpl.nasa.gov
+
+
+
+
+                                                     8
+                                                                                                      Media Services
+
+
+
+
+Products and Events
+News Releases, Features, and Status Reports
+Mission news, updates, and feature stories about the Mars 2020 Perseverance mission will be available at
+nasa.gov/perseverance and mars.nasa.gov/perseverance
+
+
+The latest information about landing activities can be found on the mission’s landing page.
+
+
+Video and Images
+A Mars 2020 Perseverance mission media reel is available at the NASA Image and Video Library at https://
+go.nasa.gov/perseverance-b-roll.
+A collection of Perseverance rover and Ingenuity Mars Helicopter videos is also available at https://vimeo.
+com/showcase/7377243.
+
+
+Additional images related to the Perseverance rover are available at the NASA Image and Video Library, the
+mission website’s gallery, and Planetary Photojournal.
+
+
+The NASA image use policy is available here.
+The JPL image use policy is available here.
+
+
+Media Events
+The most up-to-date information about upcoming Mars 2020 Perseverance mission media events and
+where they may be viewed can be found on the Mars 2020 Landing Toolkit page. More information on NASA
+Television and streaming channels can be found below in the Watch Online section.
+
+Briefings and Availabilities
+A virtual news conference previewing the Mars landing will take place on Jan. 27, 2021, at 4:30 p.m. EST
+(1:30 p.m. PST). Members of the media may dial into a telecon line to ask questions by contacting Rexana
+Vizza, rexana.v.vizza@jpl.nasa.gov. Members of the public can submit questions via social media with the tag
+#CountdownToMars.
+
+
+Pre-landing news conferences open to accredited news media are scheduled for Feb. 16 and 17, originating
+from JPL. Because of the ongoing coronavirus pandemic, media participation in these briefings will be
+virtual. Members of the media interested in asking questions during the briefing should contact Rexana Vizza,
+rexana.v.vizza@jpl.nasa.gov.
+
+
+A post-landing news conference at JPL is expected to begin approximately an hour and a half after landing.
+
+
+Additional news conferences after landing will be scheduled as events warrant.
+
+
+All news briefings will be broadcast and streamed.
+
+
+Interviews with mission team members may be arranged by calling the JPL newsroom at 818-354-5011 or
+filling out the form at https://bit.ly/mars-landing-media.
+
+
+                                                      9
+                                                                                                          Media Services
+
+
+
+
+Live Landing Feed
+A live video feed of key landing activities and commentary from the mission control areas at JPL will be
+broadcast. This live commentary show is expected to begin at 2:15 p.m. EST (11:15 a.m. PST) and last for
+about two hours.
+
+
+A Spanish-language simulcast will also be available on the NASA en Español YouTube channel.
+
+
+On-Site Media Logistics
+News media representatives who would like to cover the Mars 2020 Perseverance landing in person at JPL
+must be accredited in advance.
+
+
+Due to the ongoing COVID-19 pandemic, JPL will be credentialing a limited number of media for on-site
+access. State and local restrictions, as well as federal guidelines, will determine the scope of and rules for in-
+person activities and are subject to change. Only U.S. citizens or green card holders representing U.S. media
+outlets and U.S.-based reporters for international outlets will be considered for credentials. Requests must
+have been submitted by Jan. 14, 2021, to Rexana Vizza, rexana.v.vizza@jpl.nasa.gov.
+
+
+NASA will provide ample opportunities for members of the media to cover the landing remotely, including
+virtual participation in news briefings.
+
+
+Members of the media interested in in-person interviews (subject to coronavirus restrictions) may call the JPL
+newsroom at 818-354-5011.
+
+
+
+
+How to Watch (Live and On Demand)
+News briefings and landing commentary will be streamed on NASA TV, NASA.gov/live, and YouTube.
+com/NASA. (On-demand recordings will also be available after the live events have finished on YouTube.)
+Any additional feeds or streams will be listed in the Watch Online section of the Mars 2020 Perseverance
+mission website.
+
+
+NASA TV channels are digital C-band signals carried by QPSK/DVB-S modulation on satellite Galaxy-13,
+transponder 11, at 127 degrees west longitude, with a downlink frequency of 3920 MHz, vertical polarization,
+data rate of 38.80 MHz, symbol rate of 28.0681 Mbps and 3/4 FEC. A Digital Video Broadcast-compliant
+Integrated Receiver Decoder is needed for reception. For more information about NASA TV’s programming
+schedule, visit http://www.nasa.gov/ntv.
+
+
+A clean feed of mission activities will also be available on the NASA TV media channel and YouTube.com/JPLRaw.
+
+
+
+
+                                                        10
+                                                                                                         Media Services
+
+
+
+
+Eyes on the Solar System
+Follow the journey of Mars 2020 Perseverance in real time through NASA’s Eyes on the Solar System.
+
+
+
+
+Follow along as Perseverance lands on mars at https://eyes.nasa.gov/apps/mars2020.
+
+
+
+
+Additional Resources on the Web
+Online and PDF versions of this press kit are available at go.nasa.gov/perseverance-landing-press-kit.
+The Ingenuity Mars helicopter press kit is available at go.nasa.gov/ingenuity-press-kit.
+Additional detailed information about the Perseverance rover is available on the mission’s website.
+
+
+Social Media
+Join the conversation and get mission updates from the Perseverance rover, the Ingenuity Mars Helicopter,
+JPL, and NASA via these accounts:
+
+        Twitter: @NASAPersevere, @NASAJPL, @NASAMars, @NASA
+        Facebook: /NASAPersevere, /NASAJPL, /NASAMars, /NASA
+        Instagram: @NASAJPL, @NASA
+
+
+
+                                                      11
+Quick Facts
+
+                                Mission Names
+
+
+
+
+      Mars 2020                                     Rover
+      The overall name of the mission,              Perseverance, submitted by Alex
+      which includes the rover.                     Mather of Lake Braddock Secondary
+                                                    School in Burke, Virginia.
+
+
+
+
+Spacecraft
+                                         Mars 2020 Perseverance mission major
+                                         components
+                                         Perseverance rover, cruise stage (to fly to Mars), aeroshell
+                                         (which includes the back shell and heat shield to protect the
+                                         rover as it descends toward the surface), and descent stage
+                                         (which performs the sky crane maneuver to lower the rover
+                                         to the surface).
+
+                                         Image credit: NASA/JPL-Caltech/KSC
+
+
+
+
+                                              12
+                                                                                                       Quick Facts
+
+
+
+
+Perseverance Rover
+Weight: About 2,260 pounds (1,025 kilograms) on
+Earth, including the robotic arm with a 99-pound
+(45-kilogram) turret at the end, and about 866
+pounds (393 kilograms) on Mars.
+
+
+Dimensions: About 10 feet long (not including the
+arm), 9 feet wide, and 7 feet tall (about 3 meters
+long, 2.7 meters wide, and 2.2 meters tall); the
+robotic arm is about 7 feet (2.1 meters) long.
+
+
+Payload Instruments: 130 pounds (59 kilograms) for
+seven instruments: Mastcam-Z, Mars Environmental      Image credit: NASA/JPL-Caltech
+Dynamics Analyzer (MEDA), Mars Oxygen In-Situ
+Resource Utilization Experiment (MOXIE), Planetary
+Instrument for X-ray Lithochemistry (PIXL), Radar Imager for Mars’ Subsurface Experiment (RIMFAX),
+Scanning Habitable Environments with Raman & Luminescence for Organics & Chemicals (SHERLOC), and
+SuperCam.
+
+
+Sample Caching System: One bit carousel with 9 drill bits for sample acquisition and surface abrasion,
+one 1.6-foot-long (0.5-meters-long) internal sample handling arm, and 43 sample collection tubes,
+including 5 “witness” tubes.
+
+
+Power: Multi-Mission Radioisotope Thermoelectric Generator (MMRTG) provided by the U.S. Department of
+Energy that uses the heat from the radioactive decay of plutonium-238 to generate a steady flow of about 110
+watts of electricity. Two lithium-ion rechargeable batteries are available to meet power and energy demands
+during rover activities and are recharged by the MMRTG’s electrical output during quiescent periods.
+
+
+Microphones: One on SuperCam to support instrument science and one on the port side of the rover for
+entry, descent, and landing, surface engineering, and public engagement.
+
+
+
+
+Cameras
+The Mars 2020 mission is ferrying 25 cameras
+to the Red Planet – the most ever flown in the
+history of deep-space exploration. Twenty-three
+are part of the Mars 2020 spacecraft and 2 are
+on the Ingenuity Mars Helicopter.
+
+
+
+
+                                                      Image credit: NASA/JPL-Caltech
+
+
+
+                                                     13
+                                                                                                          Quick Facts
+
+
+
+
+19 cameras on the rover: 9 color cameras for engineering; 3 cameras for entry, descent, and landing
+(1 black-and-white dedicated to Terrain-Relative Navigation and 2 color for public engagement and
+engineering reconstruction of entry, descent, and landing); 2 color cameras with zoom for Mastcam-Z;
+1 color camera for SuperCam; 2 color cameras for SHERLOC; 1 for black-and-white with some color
+capabilities for PIXL; and 1 black-and-white for MEDA.
+
+
+3 color cameras on the back shell, looking up to capture parachute inflation.
+
+1 color camera on the descent stage, looking down to view the rover from above.
+
+
+Mission
+
+        Launch: July 30, 2020, 7:50 a.m. EDT (4:50 a.m. PDT).
+
+        Launch site: Space Launch Complex 41, Cape Canaveral Air Force Station, Florida.
+
+        Launch vehicle: United Launch Alliance (ULA) Atlas V 541.
+
+        Spacecraft’s distance to travel, Earth to Mars (July 30 launch): 293 million miles
+
+        (471 million kilometers).
+
+
+
+
+Surface Mission
+                                                          Time of Mars landing: Feb. 18, 2021, 3:55 p.m.
+                                                          EDT (12:55 p.m. PDT). The time of day at the
+                                                          landing site will be 3:53 p.m. local mean solar time.
+                                                          Landing site: Jezero Crater, about 18 degrees north
+                                                          latitude, 77 degrees longitude
+
+
+                                                          One-way light time (the time it takes radio
+                                                          signals to travel): Mars to Earth, on Feb. 18, 2021:
+                                                          about 11 minutes, 22 seconds.
+
+Image credit: NASA/JPL-Caltech
+                                                          Prime mission duration: One Mars year (about
+                                                          687 Earth days).
+
+                                                          Sampling capability: More than 30 samples.
+
+
+
+
+                                                     14
+                                                                                                           Quick Facts
+
+
+
+
+Mars
+                                                          Size: About half the diameter of Earth but twice
+                                                          the diameter of Earth’s Moon. As a desert planet,
+                                                          Mars has about the same amount of surface area
+                                                          as the dry land on Earth.
+
+
+                                                          Mass: About 10% that of Earth
+
+
+                                                          Gravity: About 38% as strong as Earth’s
+
+
+                                                          Orbit: Elliptical and about 1.5 times farther from
+                                                          the Sun than Earth is (about 141.5 million miles or
+                                                          227.7 million kilometers from the Sun, on average)
+
+
+                                                          Year: 1 Mars year (1 revolution about the Sun)
+                                                          takes 687 Earth days
+
+
+                                                          Day: 1 Mars day or sol (1 rotation) is 1.027
+                                                          longer than an Earth day (24 hours, 39 minutes,
+Image credit: NASA/JPL-Caltech
+                                                          35 seconds)
+
+
+Atmosphere: About 1% the density of Earth’s atmosphere at the surface
+
+
+Temperature: Surface temperature averages minus 64 degrees Fahrenheit (minus 53 degrees Celsius); varies
+from minus 199 degrees Fahrenheit (minus 128 degrees Celsius) during polar night to 80 degrees Fahrenheit
+(27 degrees Celsius) at equator during midday at the closest point in orbit to the Sun
+
+
+Distance from Earth on Feb. 18, 2021: 127 million miles (205 million kilometers).
+
+
+
+
+Program
+       NASA has invested approximately $2.4 billion to build and launch the Mars 2020 Perseverance
+       mission. The estimate to land and operate the rover during its prime mission is approximately
+       $300 million.
+
+
+
+
+                                                     15
+Mission: Overview
+The Mars 2020 mission spacecraft, carrying the Perseverance rover, launched from Cape Canaveral, Florida,
+on July 30, 2020. The spacecraft will arrive at Mars about six-and-a-half months later, on Feb. 18, 2021.
+
+
+Key phases of the Mars 2020 mission are launch, cruise, arrival (also known as entry, descent, and landing),
+and Mars surface operations.
+
+
+During a prime mission that will last one Mars year (about 687 Earth days), Perseverance’s exploration of
+Jezero Crater will address high-priority science goals for Mars exploration. A key objective for Perseverance’s
+mission on Mars is astrobiology, including the search for signs of ancient microbial life. The rover will also
+characterize the planet’s climate and geology, pave the way for human exploration of the Red Planet, and be
+the first planetary mission to collect and cache Martian rock and regolith (broken rock and dust).
+
+
+The Ingenuity Mars Helicopter, a technology demonstration, is also riding along to Mars, attached to the belly
+of Perseverance. More information about its mission is in the helicopter’s press kit.
+
+
+
+
+Launch
+The Mars 2020 spacecraft, with the Perseverance rover and the Ingenuity Mars Helicopter inside, lifted off
+from Space Launch Complex 41 at Cape Canaveral Air Force Base on July 30, 2020, at 7:50 a.m. EDT (4:50
+a.m. PDT) aboard a two-stage United Launch Alliance (ULA) Atlas V 541 launch vehicle.
+
+                                                                              Image credit: NASA/Joel Kowsky
+
+
+
+
+                                                        16
+                                                                                                       Mission: Overview
+
+
+
+Why did Perseverance launch in the summer of 2020? As Earth and Mars race around the Sun, with Earth
+on the inside track, Earth laps Mars about once every 26 months. Launch opportunities to Mars occur at
+the same frequency, when the planets are positioned so that a spacecraft launched from Earth will be on a
+relatively short track to Mars (taking on the order of months rather than years to arrive at Mars). This planetary
+clockwork, plus the launch vehicle’s lift capability, the spacecraft’s mass, and the desired geometry and
+timing for the landing on Mars were all factors in determining the range of possible launch dates.
+
+
+One priority for choosing this launch period and arrival date was to make sure Perseverance could land
+when NASA orbiters at Mars will be passing over the landing site. Such scheduling allows the orbiters
+to receive radio transmissions from the spacecraft carrying Perseverance during its descent through the
+atmosphere and landing. Landing on Mars is always difficult, and NASA prioritizes communications during
+this critical event.
+
+
+
+
+Interplanetary Cruise
+
+
+
+
+Image credit: NASA/JPL-Caltech
+
+
+Perseverance requires 203 days to travel about 293 million miles (471 million kilometers) from Earth
+to Mars. This is the cruise phase of the mission. The final 45 days of the cruise phase make up the
+approach subphase.
+
+
+During cruise, the Perseverance rover and its descent stage are protected inside a capsule known as an
+aeroshell, which is attached to the ring-shaped, solar-powered cruise stage. For more information about the
+cruise stage, aeroshell, and descent stage, visit the Spacecraft section of this press kit.
+
+
+
+
+                                                        17
+                                                                                                        Mission: Overview
+
+
+
+
+During cruise, engineers perform a series of events to check the spacecraft subsystems and instruments.
+They also plan to execute four trajectory correction maneuvers. For these feats of navigation, mission team
+members estimate where the Mars 2020 spacecraft is and where it will be, and precisely fire the cruise stage
+thrusters to alter its path to make sure it arrives at a particular location at the top of the Martian atmosphere.
+These trajectory correction maneuvers will not significantly change the time Perseverance lands on Mars.
+
+
+The final 45 days leading up to landing constitute the approach subphase, which focuses primarily on
+navigation activities and preparing the vehicle for entry, descent, and landing. Two trajectory correction
+maneuvers are planned during this subphase for any last adjustments (if needed) to the entry target.
+
+
+
+
+Entry, Descent, and Landing
+
+
+
+
+Image credit: NASA/JPL-Caltech
+
+
+
+The intense entry, descent, and landing (EDL) phase begins when the spacecraft reaches the top of the
+Martian atmosphere, traveling at about 12,100 mph (19,500 kph). EDL ends about seven minutes later, with
+the rover stationary on the Martian surface. Many engineers refer to the time it takes to land on Mars as
+the “seven minutes of terror.” Not only is the choreography of EDL complex, but the time delay involved in
+communicating with Earth means that the spacecraft has to accomplish this choreography all by itself.
+
+
+While all landings on Mars are difficult, Perseverance is landing in the most challenging terrain ever targeted.
+Jezero Crater is a 28-mile-wide (45-kilometer-wide) impact basin with an intriguing ancient river delta as
+well as steep cliffs, sand dunes, boulder fields, and smaller impact craters. Landing at Jezero Crater is only
+possible because of new EDL technologies such as Range Trigger and Terrain-Relative Navigation. (Find more
+information on both below.)
+
+
+
+
+                                                        18
+                                      Mission: Overview
+
+
+
+
+  Entry, Descent, and Landing
+  Imperial
+
+Image credit: NASA/JPL-Caltech
+
+
+
+
+  Entry, Descent, and Landing
+  Metric
+
+Image credit: NASA/JPL-Caltech
+
+
+
+
+                                 19
+                                                                                                    Mission: Overview
+
+
+
+
+Key EDL Milestones
+If all goes as planned, engineers expect to receive notice of Perseverance’s completion of these
+milestones at the times below. Landing time may vary by plus or minus one minute because of a variety
+of factors in the dynamic environment of a Mars landing, such as uncertainties about the Red Planet’s
+atmosphere. Because of the distances the signals have to travel from Mars to Earth, these events take
+place on the actual spacecraft at Mars (known as spacecraft event time) 11 minutes and 22 seconds
+earlier than what is noted here.
+
+
+
+
+  Milestone                                   EST                               PST
+
+  Cruise stage separation                     3:38 p.m.                         12:38 p.m.
+
+  Atmospheric entry                           3:48 p.m.                         12:48 p.m.
+
+  Peak heating                                3:49 p.m.                         12:49 p.m.
+
+  Parachute deployment                        3:52 p.m.                         12:52 p.m.
+
+  Heat shield separation                      3:52 p.m.                         12:52 p.m.
+                                              (20 seconds after                 (20 seconds after
+                                               parachute deployment)            parachute deployment)
+
+  Back shell separation                       3:54 p.m.                         12:54 p.m.
+
+  Rover touchdown                             3:55 p.m.                         12:55 p.m.
+
+
+
+
+Atmospheric Entry
+At about 3:38 p.m. EST (12:38 p.m. PST) – 10 minutes before entering the Martian atmosphere – the Mars
+2020 spacecraft will shed the cruise stage that helped fly Perseverance and Ingenuity to Mars. The spacecraft
+will manipulate its descent into Mars’ atmosphere using a technique called guided entry to reduce the size
+of the targeted ellipse-shaped landing area on Mars while compensating for variations in the density of the
+Martian atmosphere and drag on the vehicle. During guided entry, small thrusters on the back of the aeroshell
+will adjust the angle and direction of lift, enabling the spacecraft to control how far downrange it is flying.
+
+
+Peak heating occurs about 75 seconds after atmospheric entry, when the temperature at the external
+surface of the heat shield will reach about 2,370 degrees Fahrenheit (about 1,300 degrees Celsius).
+About three minutes later, Perseverance’s parachute is expected to deploy with the help of a new
+technique called Range Trigger.
+
+
+
+
+                                                      20
+                                                                                                   Mission: Overview
+
+
+
+
+New EDL Technologies
+
+During EDL, Range Trigger will autonomously update the deployment time for the parachute based
+on navigation position. It will calculate the spacecraft’s distance to the landing target and open the
+parachute at the ideal time for the spacecraft to hit its mark. The result: a smaller, more precise
+landing ellipse, or target landing area. The landing ellipse for Perseverance is 10 times smaller in
+area than the Curiosity rover’s in 2012 and almost 300 times smaller than that of the first Mars rover,
+Sojourner, in 1997.
+
+
+
+
+                           Image credit: NASA/JPL-Caltech
+
+The parachute, which is 70.5 feet (21.5 meters) in diameter, deploys about 240 seconds after entry,
+at an altitude of about 7 miles (11 kilometers) and a velocity of about 940 mph (1,512 kph). Twenty
+seconds after parachute deployment, the heat shield separates and drops away, revealing a radar
+and cameras that feed into the other new landing technology, called Terrain-Relative Navigation.
+Terrain-Relative Navigation is a kind of autopilot that can quickly figure out the spacecraft’s location
+over the Martian surface and select the best reachable safe landing target.
+
+
+
+
+                      Image credit: NASA/JPL-Caltech
+
+
+
+
+                                                   21
+                                                                                                Mission: Overview
+
+
+
+
+Previous Mars missions have relied on radar to help the spacecraft determine how far they are
+from the ground and how fast they are going during landing. Perseverance has data from a radar
+and something new called the Lander Vision System. The radar actively pings the ground from the
+time the heat shield comes off (about 4 to 5 miles, or 7 to 8 kilometers, above the surface) all the
+way to touchdown. The Lander Vision System, part of the Terrain-Relative Navigation technology,
+operates when the spacecraft is between about 2.6 to 1.4 miles, or 4.2 to 2.2 kilometers, above
+the ground. Terrain-Relative Navigation can change the rover’s touchdown point by up to 2,000
+feet (600 meters).
+
+
+The Lander Vision System’s job is to determine the rover’s position, handling different possible
+terrain conditions, within an accuracy of about 130 feet (40 meters) in less than 10 seconds. It has
+a downward-facing camera that takes image after image of the ground rushing up to meet the
+rover and an onboard computer (the Vision Compute Element) that processes the images and spits
+out locations. After the camera turns on, the Lander Vision System uses an initial 5 seconds to
+take three images and process them to calculate a rough position relative to the Martian surface.
+Then, using that initial location solution, it takes additional images and processes them every
+second, deriving locations on a finer scale. The Vision Compute Element sends a stream of these
+location calculations to the main rover brain (the Rover Compute Element). (More detail about these
+computers is in the Spacecraft section of this press kit.) Around the same time the rover separates
+from the back shell (and its parachute), the Rover Compute Element uses the last accurate location
+calculation from the Lander Vision System to pick the safest reachable landing site, thereby
+completing Terrain-Relative Navigation activities.
+
+
+At the time the powered descent vehicle – the combination of the descent stage and the rover –
+separates from the back shell it is about 1.3 miles (2.1 kilometers) above the surface.
+
+
+
+
+                     Image credit: NASA/JPL-Caltech
+
+The eight throttleable retrorockets on the descent stage, called Mars landing engines, not only
+help the spacecraft fly to a safe landing site, but also help slow the spacecraft. When the powered
+descent phase begins, the spacecraft is traveling at about 190 mph (306 kph) 6,900 feet (2,100
+meters) above the ground. It slows to 1.7 mph (2.7 kph) by the time it’s about 66 feet (20 meters)
+above the surface.
+
+
+
+
+                                                 22
+                                                                                                       Mission: Overview
+
+
+
+
+    When the descent stage determines it is 65 feet (20 meters) over the landing area designated by
+    Terrain-Relative Navigation, it initiates the sky crane maneuver: Nylon cords spool out to lower
+    the rover 25 feet (7.6 meters) below the descent stage. When the spacecraft senses the rover has
+    touched down in Jezero Crater, pyrotechnically fired blades sever the cords, and the descent stage
+    flies a safe distance away before impacting the Martian surface.
+
+
+
+
+Confirmation of Landing Milestones
+NASA’s Mars Reconnaissance Orbiter (MRO) will be flying overhead during Perseverance’s landing on Mars. If
+the communications relay system from Mars to Earth works as expected, MRO will receive telemetry (detailed
+engineering data) from the lander and then relay it to NASA’s Deep Space Network (DSN) antennas on Earth.
+This will allow mission controllers to confirm the spacecraft has touched down at around 3:55 p.m. EST
+(12:55 p.m. PST). MRO has been newly configured to send telemetry to Earth throughout the landing timeline
+in 5-second packets, with about a 16-second latency. (For more on this special relay system, called “pseudo
+bent pipe,” read the Telecommunications section of this press kit.) The DSN’s antenna complex near Madrid,
+Spain, will be lead during entry, descent, and landing, with the complex in Goldstone, California, providing
+support.
+
+
+Perseverance will also be sending tones (simpler signals without detailed engineering data) in the X-band
+frequency and an ultrahigh frequency (UHF) dial-tone-like carrier signal directly back to Earth. The tones will
+enable the engineers to determine that the rover has completed some key milestones, and the carrier signal
+will enable engineers to determine that the spacecraft is still functioning. The X-band tones will be received
+by DSN antennas. The UHF carrier signal is expected to be received directly from the rover by the Green
+Bank Observatory in West Virginia and the Effelsberg Observatory in Germany.
+
+
+Because the rover is landing at a time of day when the landing site (Jezero Crater) doesn’t have a direct line
+of sight back to Earth, both of these direct-to-Earth transmissions are expected to end a little after back shell
+separation, about one minute before touchdown.
+
+
+NASA engineers always have backup plans, so they have scheduled MRO to replay the detailed engineering
+data 10 and 15 minutes after landing for additional chances to study the information. NASA’s Mars
+Atmosphere and Volatile EvolutioN (MAVEN) orbiter will also be flying by when Perseverance is landing and
+receiving the same detailed engineering data as MRO. Unlike MRO, MAVEN is not configured to be able to
+receive data from Mars and transmit it to Earth immediately, however. What’s more, it captures the data in a
+form that requires additional processing when they reach Earth. As a result, mission controllers expect the
+MAVEN data to be readable on Earth for the first time about 10 hours after landing.
+
+
+
+
+                                                       23
+                                                                                                     Mission: Overview
+
+
+
+
+Surface Phase
+                                                                            Image credit: NASA/JPL-Caltech
+
+
+
+
+The rover is expected to touch down in the Martian afternoon – at 3:53 p.m. local mean solar time. Soon after,
+the rover’s computer switches from entry, descent, and landing mode to surface mode. This initiates a series
+of autonomous activities for the first Martian day on the surface of the Red Planet.
+
+
+
+First Images
+One of Perseverance’s first activities in surface mode is to take a pair of pictures with the engineering
+cameras – known as the Hazard Cameras, or Hazcams – on the front and rear of the rover. Hazcams
+have clear covers over their lenses to protect them from dust that gets kicked up during landing. The first
+two images – front and rear Hazcam images – will be taken through these dust covers within minutes
+after landing. The reduced-resolution version of these images, known as “thumbnails,” are expected to
+become available the same day. Depending on the terrain where Perseverance lands, MRO, the rover’s
+communications relay, may move below the horizon from the rover’s point of view shortly after landing,
+limiting communications with that satellite.
+
+
+
+
+A low-resolution thumbnail image taken by the               A low-resolution thumbnail image transmitted by the
+Perseverance engineering model’s front Hazcam               Perseverance engineering model’s rear Hazcam during
+during a practice landing session.                          a practice landing session.
+Image credit: NASA/JPL-Caltech                              Image credit: NASA/JPL-Caltech
+
+
+
+
+                                                       24
+                                                                                                     Mission: Overview
+
+
+
+
+Later on landing day, quarter-resolution versions and stereo images from the Hazcams with the covers open
+will become available. By the following morning, a high-resolution image of the wheels from the Hazcams and
+one image from a camera looking down at the rover from the descent stage are expected to be available.
+
+
+Over the next couple days and through the weekend, Perseverance will take additional pictures of the landing
+site and rover hardware, including from the Navigation Cameras (Navcams) and Mastcam-Z on the remote
+sensing mast (the rover’s “head”). The rover is also expected to be transmitting additional images from the
+EDL cameras and microphone, allowing the public to see and hear what it was like to land on Mars.
+
+
+More information about the cameras is in the Spacecraft section.
+
+
+Checkout
+Perseverance’s first Martian day on the surface of the Red Planet is known as Sol 0.
+
+
+A sol is a Martian day, which is 24 hours, 39 minutes, 35.244 seconds. (Perseverance team members tend to
+refer to sols rather than Earth days during operations since the rover will be working during the Martian day
+and “sleeping” during the Martian night.) The prime mission for the Perseverance rover is one Martian year on
+the surface. One Martian year is 687 Earth days, or 669 sols.
+
+
+Perseverance’s first images are part of a planned 90-sol initial checkout period. The mission team will perform
+tests of all the rover’s parts and science instruments to ensure everything – including the team – is ready for
+surface operations. For about 90 sols, the operations team will be working on Mars time, which means they
+will be setting their clocks to the Martian day. This allows them to respond quickly to any issue the rover may
+have during its workday and to make sure revised instructions are ready for the next sol.
+
+
+Working on Mars time also means that team members will move their start times 40 minutes later each day.
+Eventually, team members will be waking up in the middle of the night to start their shifts. Because living on
+Mars time makes daily life on Earth much more challenging, the team does this only for a limited period.
+The first part of the checkout period is called the commissioning phase. During this period, the rover unpacks
+its instruments, upgrades its software, and goes for a test drive.
+
+
+
+
+    Here’s what to expect in the first 30 sols after landing:
+
+    •   Images of the rover’s wheels just after touching down (first with dust covers on,
+        then with covers off).
+    •   Deployment of mast and high-gain antenna.
+    •    Images of the landing site and the rover’s deck.
+    •   Update of rover flight software.
+    •   Health checks performed on all instruments.
+    •   Short, approximately 16-foot (5-meter) drive test.
+    •   Unstowing of the robotic arm and “calisthenics,” testing its movement.
+
+
+
+
+                                                      25
+                                                                                                        Mission: Overview
+
+
+
+
+    •   Jettisoning of the belly pan beneath the rover, which protects the sampling system and internal
+        robotic arm during landing.
+    •   PIXL and SHERLOC instrument images of their calibration targets.
+    •   Deployment of the sample-tube-handling robotic arm inside the rover’s body and system
+        checkouts.checkouts
+
+
+    The commissioning phase is expected to end about 30 sols after landing, depending on how
+    well the activities go. Milestones after that include:
+    •   Driving to the helicopter flight zone.
+    •   Jettisoning of the debris shield, which protects the Ingenuity helicopter during landing.
+
+
+
+
+Helicopter Flight Testing
+
+
+
+
+             Image credit: NASA/JPL-Caltech
+
+
+
+After mission controllers have determined that rover systems are functioning as desired, Perseverance will
+find a flat area to serve as a helipad for the Ingenuity Mars Helicopter technology demonstration. In the
+first months after landing, if all goes well, the rover will deploy Ingenuity in the center of this area and drive
+a safe distance (about 330 feet, or 100 meters) away from it. The helicopter’s team will then have up to 30
+sols to perform a series of flight tests on Mars, the first time powered, controlled flight has been attempted
+on another planet.
+
+
+The rover will act as a communications relay between Ingenuity, Mars orbiters, and mission controllers on
+Earth. Perseverance’s MEDA instrument will provide meteorological information (including data on airborne
+dust), while its Mastcam-Z and Navigation Cameras will collect still images of Ingenuity – and possibly a video
+or two. The rover’s two microphones (one located on the SuperCam instrument; the other, on its chassis) will
+attempt to pick up the sounds of the flight operations.
+
+
+                                                        26
+                                                                                                      Mission: Overview
+
+
+
+
+During the Helicopter Deployment Phase and the subsequent 30-sol technology demonstration window, there
+will likely be segments of time where no direct support of helicopter operations is required of the rover. During
+these periods, the Mars 2020 mission team will pursue science opportunities with its other instruments.
+
+
+Find more information in the Ingenuity Mars Helicopter press kit: http://go.nasa.gov/ingenuity-press-kit.
+
+
+Surface Operations
+At the end of these experimental helicopter flights, Perseverance will begin its surface operations phase,
+when the team will carry out its ambitious science mission: searching for signs of ancient microbial life,
+characterizing the climate and geology of Mars, and collecting carefully selected and documented samples
+for future return to Earth. Find more about Perseverance’s science objectives in the Science section of this
+press kit.
+
+
+Exploration of the Martian surface is led by the rover’s science team. To maximize the science being
+conducted in the time available, the mission team plans a science strategy in advance while building in the
+flexibility to respond to new discoveries as scientists study the data. The science team has a variety of tools
+at its disposal, starting with data from NASA’s Mars orbiters. The science team has studied Jezero Crater
+extensively for years with these tools, mapping out key places, called campaign locations, they want to study
+with Perseverance. Campaign locations include individual outcrops, or rover stops. As data comes in with
+finer and finer resolution from the rover’s science instruments, the science team will make progressively more
+detailed decisions about what data to collect, what samples to cache, and where to go next.
+
+
+Perseverance is expected to cover more ground than any previous Mars rover. Much of its driving operations
+will be automated, streamlining the process for navigating around rocks and sand traps. Perseverance is
+designed to drive on average about 650 feet (200 meters) per Martian day. To put that into perspective, the
+longest drive in a single Martian day was 702 feet (214 meters), a record set by NASA’s Opportunity rover.
+Perseverance is designed to regularly drive at nearly the current planetwide record drive distance in a day.
+
+
+More information about the rover’s driving capabilities is available in this story.
+
+
+
+
+                                                         27
+Mission:
+Spacecraft                    Perseverance Rover
+
+
+
+ Perseverance Rover
+ Perseverance will be the fifth rover NASA has sent to Mars. Each of these rovers has carried cameras and
+ other instruments to study the Martian surface. As opposed to stationary landers, like InSight and Phoenix,
+ rovers can drive into craters, up slopes, and along sand dunes, allowing scientists and engineers to more fully
+ explore the planet. All of NASA’s Mars rovers have been built at the agency’s Jet Propulsion Laboratory.
+
+
+
+
+ For an interactive 3D experience of the rover, visit:
+ http://mars.nasa.gov/mars2020/spacecraft/rover/
+ Image credit: NASA/JPL-Caltech
+
+
+
+
+                                                         28
+                                                                                                      Mission: Spacecraft
+
+
+
+
+Heavier and More Capable
+The car-size Perseverance rover is about 10 feet long (not including the robotic arm arm), 9 feet wide, and
+7 feet tall (about 3 meters long, 2.7 meters wide, and 2.2 meters tall). It weighs about 2,260 pounds (1,025
+kilograms) on Earth.
+
+
+The Perseverance rover and other major Mars 2020 mission hardware (such as the cruise stage, descent
+stage, back shell, and heat shield) build upon the success of NASA’s Curiosity rover (part of the Mars
+Science Laboratory mission) and include many heritage components. So how much bigger and heavier is
+Perseverance than Curiosity? Perseverance’s chassis is about 5 inches (3 centimeters) longer, and the rover is
+about 278 pounds (126 kilograms) heavier than Curiosity.
+
+
+
+
+           Image credit: NASA/JPL-Caltech
+
+
+
+Curiosity is equipped with a robotic arm that extends 7 feet (2 meters) and wields a rotating 65-pound
+(30-kilogram) turret – a kind of robotic “hand” equipped with a scientific camera, chemical analyzers, and rock
+drill. Like Curiosity, Perseverance’s robotic arm is equipped with a rotating turret, which includes a rock drill,
+science instruments, and a camera. But while Perseverance’s arm is 7 feet (2 meters), just like Curiosity’s, its
+turret weighs more – 99 pounds (45 kilograms) – because it carries larger instruments and a larger drill, which
+will cut intact rock cores. Those cores will then be placed in sample tubes via a complex storage system.
+(Curiosity, on the other hand, pulverizes rock for its instruments to study.)
+
+
+
+
+                                                       29
+                                                                                                   Mission: Spacecraft
+
+
+
+
+           Image credit: NASA/JPL-Caltech
+
+
+Perseverance also has a six-wheel rocker-bogie design derived from earlier NASA Mars rovers that helps
+to maintain a relatively constant weight on each of the rover’s wheels and minimizes tilt. The wheels on
+Perseverance are slightly narrower and taller than Curiosity’s. But the wheels of both rovers are machined
+out of a rigid, lightweight aluminum alloy and lined with grousers – raised treads specially designed for the
+Martian desert. Curiosity’s have a pointed chevron pattern for climbing rocks, a design that made them
+more vulnerable to wheel damage. Perseverance’s grousers are nearly straight with a gentle curve, and
+each wheel has twice the number of treads as Curiosity’s (48 versus 24). The wheel skin is also twice as
+thick as Curiosity’s. During testing, the mobility team found this improved both damage tolerance and wheel
+performance over rocks and sand.
+
+
+Just like Curiosity, Perseverance has two main computers, or “brains”: One is active at any given time, while
+the other serves as a backup. Both use radiation-hardened RAD750 computers, and together, they’re referred
+to as Rover Compute Element A and B.
+
+
+Another RAD750 serves as a third “brain,” on Perseverance. Called the Vision Compute Element, it is
+equipped with a special card for analyzing images. This card has a Virtex-5 field programmable gate array
+(FPGA) and is the driving force behind Terrain-Relative Navigation and the Lander Vision System, which
+analyzes images of the landing site during descent and compares them to an onboard map to determine the
+rover’s position relative to the ground.
+
+
+After landing, the Vision Compute Element is reprogrammed to analyze images of the Martian terrain so that
+the rover can autonomously navigate around obstacles more efficiently.
+
+
+For more on the distinctions between Curiosity and Perseverance, read the feature story Two Rovers to Roll
+on Mars Again.
+
+
+Find more on the rover’s science instruments in the Science section of this press kit.
+
+
+
+                                                      30
+                                                                                                  Mission: Spacecraft
+
+
+
+
+Sample Caching System
+The Perseverance rover’s Sample Caching System is made of three robotic components that will
+work in concert to collect samples of rock and regolith (broken rock and dust), seal them in sample
+tubes, and deposit those tubes on the surface of Mars for retrieval by a future mission.
+
+
+Robotic Arm
+The first robot involved with the Sample Caching System is the 7-foot-long (2-meter-long) robotic
+arm with its drill and instrument-laden turret. Bolted to the front of the rover’s chassis, the five-
+jointed arm can be manipulated so that the turret is placed in close proximity to interesting geologic
+features on the surface. The turret contains the coring tool: a rotary-percussive device designed to
+acquire rock core and regolith samples. A small tank of pressurized nitrogen can be used to blow
+dust and other particles off targets prior to analysis by two science instruments also located on the
+turret: the ultraviolet Raman spectrometer SHERLOC and the X-ray fluorescence spectrometer PIXL.
+
+
+If the Perseverance science team determines rock or regolith is worthy of sampling, it will command
+the arm to place either a coring or regolith bit, with a sample tube inside, into the coring tool and
+then place the drill bit against the target. When coring, the drill – using either rotary mode (where
+a hole is produced using a drill bit under constant pressure) or percussive mode (where the rotary
+motion is supplemented with swift hammerlike blows to propel the drill bit forward) – obtains a
+cylindrical sample about 0.5 inches (13 millimeters) in diameter and 2.4 inches (60 millimeters) long
+in a sample tube in the center of the bit. This chalk-size sample amounts to an average of 0.35-0.53
+ounces (10-15 grams) of Martian material. A similar process is used with the regolith bit to collect
+regolith samples.
+
+Adaptive Caching Assembly
+The adaptive caching assembly consists of the sample handling arm, sample tube assemblies,
+tube seals, and processing stations for a variety of activities. When the bit carousel transfers a filled
+sample tube to the adaptive caching assembly, the 1.6-foot-long (0.5-meter-long) sample handling
+arm then moves the tube to the processing stations. The stations measure the volume and take an
+image of the sample, install, and activate a tube seal, and place the tube in storage. Later, when
+the rover reaches a suitable location, the sample handling arm retrieves the sealed tubes and drops
+them to the surface of Mars for retrieval by a future mission. Perseverance may also be able to store
+them internally and transport them to a future return mission’s lander.
+
+
+In addition to these functions, the Sample Caching System must also maintain unprecedented
+biological cleanliness to protect the sample from possible Earth-based contamination. The
+combination of these two factors makes it the most complex integrated robotic subsystem ever
+built for Mars.
+
+
+This video shows how the Sample Caching System works
+
+
+
+
+                                                   31
+                                                                                                   Mission: Spacecraft
+
+
+
+
+Seeing and Hearing Mars
+
+                                                                                      Image credit:
+                                                                                      NASA/JPL-Caltech
+
+
+
+
+The Mars 2020 mission carries more cameras to Mars than any interplanetary mission in history, with 23
+spread throughout the components of the Mars 2020 spacecraft. The Perseverance rover itself has 19
+cameras that will deliver images of the landscape in breathtaking detail. Those include nine cameras for
+engineering; seven for science; and three for entry, descent, and landing (EDL).
+
+
+Cameras for EDL are also installed on the aeroshell and descent stage. Find more information about the
+two cameras on the Ingenuity Mars Helicopter in the Ingenuity press kit.
+
+
+
+Mars 2020 Cameras and Their Capabilities
+
+  Camera Type                         Number      Color or BW      Resolution         Location
+
+  Engineering Cameras                 9           Color            20 megapixel       Various locations on
+                                                                                      the rover
+
+
+  Navigation Cameras                  2           Color            20 megapixel       Rover mast
+  (Navcams)
+
+
+  Hazard Avoidance Cameras            6           Color            20 megapixel       4 on front of rover,
+  (Hazcams, fisheye)                                                                  2 on rear
+
+
+
+  Sample Caching System               1           Color            20 megapixel       In Sample Caching
+  Camera (CacheCam)                                                                   System
+
+
+
+
+                                                      32
+                                                                                              Mission: Spacecraft
+
+
+
+
+Camera Type            Number    Color or BW            Resolution      Location
+
+EDL Camera Suite       7         6 color, 1 black-      1.3 or 3.1      On back shell, descent
+                                 and-white              megapixels      stage, and rover
+
+
+Parachute Uplook       3         Color                  1.3 megapixel   Back shell
+Cameras (PUC)
+
+Descent Stage          1         Color                  3.1 megapixel   Descent stage
+Downlook Camera
+(DDC)
+Rover Uplook Camera    1         Color                  1.3 megapixel   Rover deck
+(RUC)
+
+Rover Downlook         1         Color                  1.3 megapixel   Front left corner
+Camera (RDC)                                                            beneath rover
+
+Lander Vision System   1         Black-and-white        1.3 megapixel   Front right corner
+Camera (LCAM)                                                           beneath rover
+
+
+
+
+Camera Type            Number            Color or BW             Resolution        Location
+
+Science Cameras        7                 2 color, 1 black-and-   .43 to 4          Various locations
+                                         white, 1 black-and-     megapixels        on rover
+                                         white with some
+                                         color capability
+
+
+Mastcam-Z (ZCAM)       2                 Color                   2 megapixels      Left and right side
+instrument suite                                                                   of rover mast
+
+
+SuperCam Remote        1                 Color                   4 megapixels      Rover mast
+Micro-Imager (RMI)
+
+
+SHERLOC camera         2 (WATSON         Color (WATSON) and      2 megapixels      Rover turret
+suite                  and Autofocus     black-and-white (ACI)
+                       and Context
+                       Imager)
+
+
+PIXL Micro Context     1                 Black-and-white, with   .43 megapixel     Rover turret
+Camera (MCC)                             some color capability
+
+
+MEDA SkyCam            1                 Black-and-white         About 1           Rover deck
+(fisheye)                                                        megapixel
+
+
+
+                                                 33
+                                                                                                    Mission: Spacecraft
+
+
+
+
+The six color, off-the-shelf cameras that capture Perseverance’s EDL are for public engagement and for
+engineers to reconstruct what happened during the landing.
+
+
+Of those six, three are on the bell-shaped back shell, looking up to capture the parachute opening. One on
+the descent stage looks down at the rover and surface below. One on the rover looks up at descent stage
+operations, and the other on the rover looks down at the Martian surface.
+
+
+
+
+  Image credit: NASA/JPL-Caltech
+
+
+
+
+One black-and-white camera dedicated to Terrain-Relative Navigation as part of the Lander Vision System
+plays a key role in the landing itself. (Find more details about its role in the Entry, Descent, and Landing
+section of this press kit.)
+
+
+
+
+                                                      34
+                                                                                                 Mission: Spacecraft
+
+
+
+
+            Image credit: NASA/JPL-Caltech
+
+
+
+The Perseverance rover also has two microphones: one to record the sounds of a Mars landing for the first
+time, and one that is part of the SuperCam science instrument.
+
+
+The EDL microphone is a commercial, off-the-shelf part on an aft-side panel. It is intended for public
+engagement and later EDL analysis, but there is no guarantee what exactly it will record. Wind and engine
+sounds could overwhelm the microphone. But the rover’s team is hoping to capture some of the following:
+
+
+   •   Parachute mortar firing
+   •   Heat shield separation bolts firing
+   •   Wind noise
+   •   Landing-thruster noise
+   •   The rover touching down on the Martian surface
+   •   Ambient Mars noise
+   •   The faint sound of the descent stage impacting the surface after delivering Perseverance to the
+       surface and flying away
+
+
+Depending on how the microphone works after landing, it may be used to occasionally record sounds on the
+Martian surface.
+
+
+Separately, a microphone on the SuperCam instrument on the remote sensing mast will record the sound
+of the instrument’s laser zaps against the Martian surface. The sounds will help scientists understand the
+property of the rocks SuperCam is examining, including their hardness. SuperCam’s microphone can also can
+also listen to the wind.
+
+
+
+
+                                                     35
+                                                                                                      Mission: Spacecraft
+
+
+
+
+Your Name Is on Its Way to Mars
+Another special feature on the rover can be found on the aft crossbeam: a plate that contains three silicon
+chips stenciled with the names of approximately 10.9 million people from around the world who participated
+in the “Send Your Name to Mars” online campaign from May to September 2019. The fingernail-size chips
+also contain the essays of 155 finalists in NASA’s “Name the Rover” essay contest.
+
+
+
+
+             This placard commemorating NASA’s “Send Your Name to Mars” campaign
+             was installed on the Perseverance Mars rover on Mar. 16, 2020, at NASA’s
+             Kennedy Space Center in Florida. | Image credit: NASA/JPL-Caltech
+
+
+The chips share space on the plate with a laser-etched graphic depicting Earth (the circle on the left in the
+image above) and Mars (the circle on the right) joined by the star that gives light to both and a Morse code
+message in the Sun’s rays: “Explore as one.”
+
+
+The rover also features some additional elements – from practical to playful – that are part of a tradition of
+“festooning” that harks back to the early space age.
+
+
+
+
+                                                        36
+Mission:
+Spacecraft                  Getting to Mars
+
+
+
+ Getting to Mars
+ Cruise Stage
+                                                                               Image credit: NASA/JPL-Caltech
+
+
+
+
+ Perseverance is traveling to Mars in an almost identical way to NASA’s Curiosity rover, which landed in 2012.
+ Three major components of the flight system will deliver the new rover safely to the surface of the Red Planet:
+ the cruise stage, aeroshell, and descent stage.
+
+
+ After separating from the rocket, the ring-shaped cruise stage flies the aeroshell, and Perseverance within
+ it, through interplanetary space to Mars. To remain stable throughout cruise, the combined spacecraft spins
+ at about 2 rpm during the journey. The cruise stage features eight thrusters that receive commands to fire
+ at specific times during the six-and-a-half-month journey to help shape the spacecraft’s trajectory to Mars
+ (these are called trajectory correction maneuvers).
+
+
+ The cruise stage also has solar arrays that provide power in addition to the rover’s main power source, the
+ Multi-Mission Radioisotope Thermoelectric Generator. And it is equipped with an assortment of antennas for
+ communicating with Earth. Find more information in the Telecommunications section of this press kit.
+
+
+                                                       37
+                                                                                                         Mission: Spacecraft
+
+
+
+
+Aeroshell
+
+
+
+
+Image credit: LMS
+
+
+
+This capsule protects the rover and descent stage as they plummet through the Martian atmosphere toward
+the surface of the Red Planet. Built by Lockheed Martin Space in Denver, the aeroshell has two parts: the
+bell-shaped back shell and, at its base, a heat shield. The heat shield is covered with tiles of a material
+called phenolic impregnated carbon ablator (PICA) that was invented at NASA’s Ames Research Center in
+California’s Silicon Valley. Engineers estimate the spacecraft could be exposed to temperatures as high as
+about 2,370 degrees Fahrenheit (about 1,300 degrees Celsius) from the friction generated as it descends
+through the Martian atmosphere. The job of the heat shield is to carry most of this heat away from the
+Perseverance rover.
+
+
+The back shell contains several components critical to landing the rover: weights that alter the spacecraft’s
+center of mass so it can fly correctly, a parachute, and antennas both for communicating directly with Earth
+and for communicating with orbiters at Mars that can relay messages to Earth. In addition, the back shell and
+heat shield have a sensor suite known as the Mars Entry, Descent, and Landing Instrumentation 2 (MEDLI2).
+Since the back shell will also get hot – though not as hot as the heat shield – it, too, sports a protective
+covering, in this case made of a material known as SLA-561V.
+
+
+Atmospheric friction will slow the entry vehicle to about 540 mph (865 kph) by the time it is about 7 miles
+(11 kilometers) in altitude above Mars. At around this point, the spacecraft will use a technique called Range
+Trigger, to determine whether it is in an optimal position relative to the landing target. If it is, the spacecraft
+will command the deployment of the parachute, which inherits its design from the Mars Viking missions
+of the 1970’s but is scaled up to 70.5 feet (21.5 meters) in diameter and strengthened to accommodate
+Perseverance’s greater mass.
+
+
+As the parachute inflation slows Perseverance further, the heat shield will be jettisoned so that a radar and
+a new, specially developed Terrain-Relative Navigation system can help guide the rover to a safe landing in
+Jezero Crater.
+
+
+
+                                                         38
+                                                                                                   Mission: Spacecraft
+
+
+
+
+The back shell with the parachute will separate from what is known as the powered descent vehicle (which
+includes the rover and the descent stage, a rocket-powered structure that helps the spacecraft land) about 60
+seconds before touchdown.
+
+
+The aeroshell also features the MEDLI2 sensor suite to collect data during EDL. More on this suite can be
+found in the Experimental Technologies section.
+
+
+
+
+Descent Stage
+                                                          Think of the descent stage as a kind of jetpack with
+                                                          eight engines that safely lowers the spacecraft to
+                                                          the ground. The descent stage slows down until
+                                                          it’s hovering over the surface, then slowly winches
+                                                          Perseverance down with nylon cords as part of the
+                                                          sky crane maneuver.
+
+
+                                                          When the rover is safely on the ground,
+                                                          pyrotechnically activated blades will cut the cords
+                                                          connecting it to the descent stage. The descent
+                                                          stage flies off to make its own uncontrolled
+                                                          landing on the surface a safe distance away from
+                                                          Perseverance.
+
+
+
+
+Image credit: NASA/JPL-Caltech
+
+
+
+
+                                                     39
+Mission:
+Spacecraft                   Power
+
+
+
+ Power
+
+
+
+
+ Image credit: NASA/JPL-Caltech
+
+ The Perseverance rover requires electrical power to operate. The dependable flow of electricity for the rover
+ comes from a power system known as a Multi-Mission Radioisotope Thermoelectric Generator (MMRTG),
+ provided to NASA by the U.S. Department of Energy (DOE).
+
+
+
+
+ What Is an MMRTG?
+ Perseverance’s power system works essentially like a nuclear battery. The MMRTG converts heat from the
+ natural radioactive decay of plutonium-238 into a steady flow of electricity. The power system will reliably
+ produce about 110 watts (similar to a light bulb) at the start of Perseverance’s mission, declining a few
+ percent each year in a very predictable way. The MMRTG doesn’t just power the rover; excess heat is
+ collected in a fluid loop system. The warm fluid is routed around the vehicle to keep its sensitive electronics
+ warm during the cold Martian nights.
+
+
+                                                        40
+                                                                                                       Mission: Spacecraft
+
+
+
+
+The MMRTG also charges two lithium-ion batteries, which are used during daily operations and when the
+demand temporarily exceeds the usual electrical output levels. Perseverance’s power demand can reach 900
+watts during science activities.
+
+
+The MMRTG, located at the aft of the rover, weighs about 99 pounds (45 kilograms) altogether. It contains
+10.6 pounds (4.8 kilograms) of plutonium dioxide as its heat source.
+
+
+The two batteries weigh a total of 58.4 pounds (26.5 kilograms) and each has a capacity of about 43
+amp-hours.
+
+
+More details on the MMRTG can be found on the mission’s electrical power page and NASA’s radioisotope
+power systems website.
+
+
+
+
+Why Does This Mission Use an MMRTG?
+The Perseverance rover needs to operate extremely efficiently to accomplish its prime mission. An MMRTG
+allows the rover to work free of limitations associated with solar panels, such as the daily and seasonal
+variations of sunlight on Mars and the accumulation of fine Martian dust.
+
+
+The advantages of MMRTG power give Perseverance greater mobility over a range of lighting conditions at
+different latitudes and surface locations. It also provides engineers with valuable flexibility in operating the
+rover (e.g., communications, mobility, or science throughout the day and night).
+
+
+Overall, the MMRTG enables the Perseverance team to maximize the operational capabilities of the rover and
+its science instruments.
+
+
+
+
+How Reliable Is an MMRTG?
+Perseverance’s power system is identical to the one that the Curiosity rover has been using successfully
+since its launch in 2011.
+
+
+The MMRTG is expected to operate for at least 14 years, significantly beyond Perseverance’s prime mission
+duration (at least one Mars year, or about two Earth years).
+
+
+NASA has used similar radioisotope thermoelectric generators (RTGs) successfully for five decades, including
+on the Apollo missions to the Moon and the Viking missions to Mars. They have also been used on spacecraft
+that flew to the outer planets and Pluto, such as during the Pioneer, Voyager, Ulysses, Galileo, Cassini, and
+New Horizons missions.
+
+
+
+
+                                                        41
+Mission:
+Spacecraft                  Telecommunications
+
+
+
+ Telecommunications: How Perseverance Talks to Earth
+ Cruise
+
+
+
+
+ Image credit: NASA/JPL-Caltech
+
+
+ For the first two months of the journey to Mars, the Mars 2020 spacecraft communicates using a low-gain
+ antenna on the aeroshell’s parachute cone, which is exposed through the center of the cruise stage.
+
+
+ As the spacecraft gets farther from Earth, a stronger, medium-gain antenna located on the cruise stage
+ takes over. This antenna provides higher data rates but requires more accurate pointing toward Deep Space
+ Network dishes on Earth.
+
+
+                                                     42
+                                                                                                   Mission: Spacecraft
+
+
+
+
+Landing
+During landing, the spacecraft switches between several antennas. Some use ultrahigh frequency (UHF)
+transmission, communicating with orbiting spacecraft, like the Mars Reconnaissance Orbiter (MRO), which
+then relay the information back to Earth. Other antennas use more powerful X-band transmissions, talking
+directly to Earth with simple tones that provide basic, but limited, spacecraft health and status.
+
+
+
+
+    X-band
+    EDL communications begin with the same low-gain antenna – located on the aeroshell’s parachute
+    cone – used at the start of the cruise phase. As the spacecraft performs banking maneuvers
+    during its guided entry into the Martian atmosphere, it shifts to a tilted low-gain antenna on the
+    spacecraft’s back shell. After separation from the back shell, a low-gain antenna on the powered
+    descent stage takes over. NASA’s Deep Space Network sites located in Goldstone, California, and
+    Madrid, Spain, will be listening for these X-band signals until Perseverance loses its direct line of
+    sight back to Earth.
+
+
+    UHF
+    A UHF antenna mounted on the back shell starts transmitting during cruise stage separation. It
+    continues transmitting until the back shell separates from the powered descent stage, at which
+    point a UHF antenna on the descent stage will take over. For the rover’s final descent to the surface,
+    it will use its cylindrical UHF low-gain antenna. Green Bank Observatory in Green Bank, West
+    Virginia, and the Effelsberg Observatory in Germany will be listening for a dial-tone-like UHF signal
+    called a carrier signal until Perseverance loses its direct line of sight back to Earth.
+
+
+
+
+Perseverance will also use the UHF antennas to communicate detailed information during landing by
+transmitting data to MRO and the Mars Atmosphere Volatile EvolutioN (MAVEN) spacecraft. MRO is
+expected to relay EDL data to Earth in near-real-time, while MAVEN is expected to return its data within
+hours after landing.
+
+
+MRO launched more than 15 years ago without this near-real-time relay capability. Real-time relay is often
+referred to as a “bent pipe” transmission. In the past year, a near-real-time relay capability, called “pseudo-
+bent pipe,” has been added to the veteran orbiter so it can send telemetry (detailed engineering data) to Earth
+throughout landing in 5-second packets, with about a 16-second latency. This required updates to MRO’s
+software as well as to ground data systems on Earth. These updates, combined with special maneuvers to
+point the spacecraft’s antenna to Deep Space Network dishes, ensure consistent data flow from Mars to
+Earth. Along with the near-real-time transmission, the data is recorded by MRO for later playback, which is
+scheduled to be transmitted to Earth several minutes after landing.
+
+
+
+
+                                                      43
+                                                                                                  Mission: Spacecraft
+
+
+
+
+MAVEN will provide a recording of this landing data in a less processed file format. MAVEN is scheduled
+to transmit its data several hours after touchdown and its data also takes more time to process once it
+is on the ground. More detail on the transmission time table is available in the Confirmation of Landing
+Milestones section.
+
+
+
+
+Surface
+
+
+
+
+Image credit: NASA/JPL-Caltech
+
+
+
+Once Perseverance is wheels-down on Mars, it will begin communicating using antennas on its deck.
+Communication will resume through the cylindrical, paint-can-shaped UHF low-gain antenna at the back of
+the rover. During surface operations, 99.9% of science data is communicated through this antenna to passing
+orbiters, including MAVEN and MRO, as well as ESA’s (European Space Agency’s) Trace Gas Orbiter.
+
+
+Commands sent from Earth will routinely be received by Perseverance’s X-band high-gain antenna, the
+rotatable hexagonal paddle toward the back of the rover. While the antenna is also capable of transmitting
+data back to Earth, it is limited.
+
+
+If the views and distance to the Earth are favorable, Perseverance can also use an X-band low-gain antenna
+(a chess-piece-shaped antenna behind the high-gain antenna).
+
+
+
+
+                                                     44
+Mission:
+Spacecraft                  Biological Cleanliness
+
+
+
+ Biological Cleanliness
+ The Mars 2020 mission has two primary motivations for keeping the spacecraft biologically clean. The
+ first, called “planetary protection,” is to avoid harmful contamination of Mars, which could confound future
+ searches for life. The second, referred to as “returned sample science cleanliness,” is to limit Earth-based
+ contamination in the samples that the mission will collect for science purposes.
+
+
+
+
+ Planetary Protection
+
+                                                            The United States has obligations under the
+                                                            international 1967 Outer Space Treaty to explore
+                                                            space in a manner that avoids the harmful
+                                                            contamination of celestial bodies while also not
+                                                            adversely affecting Earth’s environment with the
+                                                            return of any extraterrestrial matter. To help meet
+                                                            these obligations, NASA’s Planetary Protection
+                                                            Office draws up cleanliness standards known as
+                                                            planetary protection requirements. Flight hardware
+                                                            for the Mars 2020 Perseverance mission and the
+                                                            Ingenuity Mars Helicopter have been designed and
+                                                            built to meet requirements limiting the amount of
+ Image credit: NASA/JPL-Caltech
+                                                            Earth-sourced biological material they carry to Mars.
+
+
+                                                            NASA’s primary strategy for limiting Earth-based
+                                                            contamination of Mars is to be sure that all hardware
+                                                            going to the planet is biologically clean.
+
+
+
+
+                                                       45
+Engineers assemble spacecraft in “clean rooms,” where powerful air filters limit dust particles and where
+surfaces are frequently treated with strong cleaning solutions to kill and remove living microbes. Mission
+hardware is cleaned using techniques that have proven effective on many previous missions without
+damaging the spacecraft. These include wiping down the hardware with special sterile cloths and alcohol
+wipes, and heating durable parts to high temperatures (230 to 392 degrees Fahrenheit, or 110 to 200
+degrees Celsius). The Mars 2020 Perseverance mission also used innovative new cleaning methods,
+such as employing hydrogen peroxide vapor to clean some spacecraft parts that couldn’t be treated with
+other methods.
+
+
+At launch, the entire payload going to Mars (the Perseverance rover, Ingenuity Mars Helicopter, cruise stage,
+aeroshell, and descent stage) carried fewer than 500,000 bacterial spores (dormant forms of bacteria). This is
+a tiny number as far as spores go and wouldn’t even cover a typical smartphone camera lens. Of this number,
+the parts of the Mars 2020 spacecraft intended to land on Mars – including the rover, the parachute, and the
+descent stage – had no more than 300,000 spores in total. The rover itself was allowed to have just 41,000
+spores, spread out over the vehicle’s entire surface area.
+
+
+Another way to avoid transporting unwanted Earth materials to Mars is to keep hardware that does not meet
+cleanliness standards from going to Mars accidentally. Because only some portions of the Atlas V rocket
+ferrying the Mars 2020 Perseverance spacecraft into space could be cleaned as thoroughly as the spacecraft,
+the rocket was initially pointed along a trajectory that did not intercept Mars. After the spacecraft separated
+from the launch vehicle’s upper stage, Perseverance was redirected toward landing on Mars. This technique,
+known as “trajectory biasing,” was intended to ensure that the launch vehicle has less than a 1 in 10,000
+chance of accidentally encountering Mars for 50 years after launch.
+
+
+
+
+Avoiding Sensitive Areas
+ Places on Mars where Earth organisms would be likely to replicate, or that could have a high potential for
+the existence of Martian life forms, are known as “special regions.” These include regions on Mars that could
+have water ice or liquid water in some form within 16 feet (5 meters) of the surface.
+
+
+A key goal of Perseverance’s mission is to seek signs of ancient microbial life, not current, or extant, life. The
+rover does not need to visit a special region, and its landing site – Jezero Crater – is not considered one.
+
+
+
+
+Returned Sample Science
+Because one of the mission’s key goals is to search for signs of ancient microbial life on Mars, scientists want
+to be confident that any signs of ancient life they might observe in samples returned to Earth are from Mars,
+not Earth. Perseverance’s Sample Caching System is therefore the cleanest set of components humankind
+has ever launched into space.
+
+
+
+
+                                                        46
+                                                                                                        Mission: Spacecraft
+
+
+
+
+Because samples collected by the Perseverance rover are intended to be brought back to Earth for scientific
+analysis, the project must adhere to additional cleanliness standards beyond what’s required of missions
+solely intended to explore the surface of Mars.
+
+
+The elements of the Perseverance rover involved in sample collection are handled with extra care. They have
+been assembled in aseptic spaces (a clean room within a clean room), which provide the increased level of
+stringency for cleanliness that some sample collection hardware must meet. These parts are also thoroughly
+sterilized, exceeding the cleanliness standards of tools that doctors use in surgery.
+
+
+The critical components of the Sample Caching System were integrated only shortly before launch at
+Kennedy Space Center in Florida. The sample caching elements are enclosed behind a door on the rover’s
+belly that will unseal and detach only after landing. An additional barrier behind this door will limit the flow of
+unwanted material into the parts that will touch the samples and should remain clean.
+
+
+Mission teams also identified and kept track of any known materials that remained on the spacecraft after
+thorough cleaning. This helps maintain a list of what’s known to be on board before the sample tubes left
+Earth, which can be compared with future measurements of the samples. Perseverance’s sampling system
+also carries “witness” tubes that record the state of the environment within the sampling system, including
+any terrestrial contamination that may have been on the rover before it left Earth and remains on board after
+touchdown on Mars.
+
+
+This approach should result in the most pristine, well-documented planetary samples ever obtained that are
+ready for imaging and analysis on Earth, where scientific specialists from around the world can apply the full
+breadth of terrestrial laboratory capabilities.
+
+
+For more information, read this fact sheet on Perseverance’s biological cleanliness.
+
+
+
+
+                                                         47
+Mission:
+Spacecraft                  Experimental Technologies
+
+
+
+ Experimental Technologies
+ Several brand new or next-generation technologies are riding aboard the Mars 2020 spacecraft. Two of
+ these (MOXIE and the Ingenuity Mars Helicopter) are officially designated technology demonstrations –
+ experiments that seek to prove a first-of-their-kind capability, with limited scope. Previous examples of these
+ groundbreaking experimental technologies include the Mars Pathfinder mission and its rover (Sojourner), the
+ Mars Cube One (MarCO) CubeSats that flew by Mars, and the NASA-sponsored rocket planes and lifting
+ body vehicles that paved the way for the space shuttle. The success of these technology demonstrations is
+ not connected to the overall success of the Perseverance rover and the Mars 2020 mission.
+
+
+
+
+ MOXIE (Mars Oxygen ISRU Experiment)
+                                                             Located inside the body of the Perseverance rover,
+                                                             MOXIE will test technology that converts carbon
+                                                             dioxide in the Martian atmosphere into oxygen. The
+                                                             “I” in MOXIE stands for “in-situ resource utilization,”
+                                                             or ISRU – the concept of using resources found
+                                                             where a spacecraft lands rather than bringing those
+                                                             resources from Earth.
+
+
+                                                             More information about MOXIE is available in the
+                                                             Payload Instruments section of this press kit.
+
+
+ Image credit: NASA/JPL-Caltech
+
+
+
+
+                                                        48
+                                                                                                Mission: Spacecraft
+
+
+
+
+MEDLI2 (Mars Entry, Descent, and Landing Instrumentation 2)
+
+
+
+
+Image credit: LMS
+
+
+Based on an instrument flown on NASA’s Mars Science Laboratory (MSL) mission, which landed the Curiosity
+rover in 2012, MEDLI2 is a next-generation sensor suite that collects temperature, pressure, and heating
+measurements on the heat shield and back shell during entry, descent, and landing. Data collected by
+MEDLI2 will help engineers validate their models for designing future systems (both robotic and crewed) for
+entry, descent, and landing systems.
+
+
+MEDLI2 is a Game Changing Development project led by NASA’s Space Technology Mission Directorate, with
+support from the Human Exploration and Operations Mission Directorate and Science Mission Directorate.
+The project is managed at NASA Langley Research Center in Hampton, Virginia, and implemented in
+partnership with NASA’s Ames Research Center in California’s Silicon Valley and NASA’s Jet Propulsion
+Laboratory in Southern California.
+
+
+Find more information about MEDLI2 in this story.
+
+
+
+
+                                                    49
+                                                                                                      Mission: Spacecraft
+
+
+
+
+Ingenuity Mars Helicopter
+
+
+
+
+              Image credit: NASA/JPL-Caltech
+
+
+Weighing just about 4 pounds (1.8 kilograms), the Ingenuity Mars Helicopter is a small, autonomous
+rotorcraft designed to test – for the first time – powered, controlled flight in the thin Martian atmosphere.
+This lightweight helicopter does not carry any science instruments.
+
+
+Ingenuity’s performance during its experimental test flights will help NASA make decisions about small
+helicopters for future Mars missions, where they could perform in a support role as robotic scouts, surveying
+terrain from above, or as full standalone science craft carrying instrument payloads. Taking to the air would
+give scientists a new perspective of a region’s geology and allow them to peer into areas too steep or slippery
+to send a rover. In the distant future, they might even help astronauts explore Mars.
+
+
+
+
+              The Mars Helicopter Delivery System holds the Ingenuity Mars Helicopter to
+              the underside of Perseverance | Image credit: NASA/JPL-Caltech
+
+
+
+                                                       50
+                                                                                                     Mission: Spacecraft
+
+
+
+
+The Mars Helicopter Delivery System – designed collaboratively by Lockheed Martin Space and JPL’s Mars
+2020 and helicopter teams – attaches the helicopter to the belly of the rover for the journey to the Red Planet.
+This system protects Ingenuity from debris during landing and will deploy the helicopter onto the Martian
+surface in the months after landing.
+
+
+                                                            Also installed in Perseverance is the Mars
+                                                            Helicopter Base Station. This station carries
+                                                            computers that monitor and regulate helicopter
+                                                            systems while it is attached to the rover and
+                                                            the communications gear that – once the
+                                                            helicopter deploys to the surface – stores and
+                                                            routes communications between Ingenuity,
+                                                            Perseverance, and Earth.
+
+
+                                                            For more on Ingenuity, read the Ingenuity press kit.
+
+
+
+
+Image credit: NASA/JPL-Caltech
+
+
+
+
+                                                       51
+Mission: Science
+
+Why This Mission
+
+
+
+
+Image credit: NASA/JPL-Caltech
+
+
+Billions of years ago, Earth and Mars were more similar than they are today. Both had liquid water at the
+surface; both had magnetic fields to protect their surface from the Sun’s radiation. Life developed on Earth at
+that time, so could it also have developed on Mars?
+
+
+NASA has sent rovers, landers, and orbiters to the Red Planet to investigate that key astrobiological question.
+Scientists can study rocks and sediment on the Martian surface to learn what environments once existed,
+whether and for how long liquid water was once present, and what the climate was like in the past. This
+record can reveal when and where Mars had the ideal conditions for life.
+
+
+But Perseverance is different: It’s the first Mars rover designed to collect samples that will one day be
+returned to Earth. Despite the immense technical capabilities of the rover’s science instruments, there are far
+
+
+
+
+                                                       52
+                                                                                                   Mission: Science
+
+
+
+
+more powerful laboratories and science tools on our planet than we could hope to send to Mars. As with the
+Moon samples returned by the Apollo missions, Mars samples would benefit future generations of scientists
+who will study them using advanced technology, some of which hasn’t been invented yet.
+
+
+The Mars 2020 mission also looks ahead to the day when astronauts travel to Mars. It carries technologies
+that could help land humans or equipment on the planet and even help produce rocket propellant and
+breathable oxygen. These efforts, detailed below, will feed into NASA’s plans for sending humans to Mars,
+with the Artemis program returning astronauts to the Moon as the first step.
+
+
+
+
+Science Goals
+Perseverance will contribute to the overarching goals of
+NASA’s Mars Exploration Program:
+
+                                GOAL 1
+                                Determine whether life ever existed
+
+
+                                GOAL 2
+                                Characterize the climate
+
+
+                                GOAL 3
+                                Characterize the geology
+
+
+                                GOAL 4
+                                Prepare for human exploration
+
+
+To reach the first three goals, NASA has determined the following more specific
+science objectives for Perseverance:
+   •   Understand the geology of the field site explored by the Perseverance rover.
+   •   Determine whether Perseverance’s landing site, Jezero Crater, could have supported microbial life
+       in the distant past, and search for evidence that such ancient life may have left behind.
+   •   Select and collect samples representing the geologic diversity of the Perseverance field site,
+       focusing on materials with the highest potential to preserve signs of life and planetary evolution.
+       Keep these samples pristine, isolating them from Earth-sourced contaminants.
+
+
+                                                     53
+                                                                                                      Mission: Science
+
+
+
+
+NASA has also tasked the Mars 2020 team with a mission objective to prepare for
+future human exploration by conducting the following investigations:
+    •   With the MOXIE experiment, demonstrate a technology that converts carbon dioxide in the Martian
+        atmosphere into oxygen. In the future, oxygen generated this way could be used by astronauts for
+        rocket propellant and for breathing. More on MOXIE below.
+    •   With data from the MEDA instrument, study how atmospheric dust could affect future technology,
+        including human life support systems.
+    •   Study how Mars weather could affect human explorers. More on MEDA below.
+    •   With MEDLI2, use sensors in the rover’s heat shield and back shell to better understand entry
+        into the Martian atmosphere. This can help spacecraft engineers design safe landings for future
+        astronauts traveling to Mars. More information on MEDLI2 is here.
+
+
+
+
+Payload Instruments
+
+
+
+
+Several instruments on Perseverance involve international partners | Image credit: NASA/JPL-Caltech
+
+
+Perseverance’s science instruments are state-of-the-art tools for acquiring information about Martian geology,
+atmosphere, environmental conditions, and potential signs of life (biosignatures) from the past. The mission’s
+science supports the field of astrobiology, which aims to understand the origin, evolution, and distribution of
+life in the universe.
+
+
+Perseverance has seven primary payload instruments.
+
+
+                                                       54
+                                                                                                    Mission: Science
+
+
+
+
+Mastcam-Z
+                                                                               Image credit: NASA/JPL-Caltech
+
+
+
+
+Principal Investigator:
+Jim Bell, Arizona State University, Tempe
+
+Mastcam-Z is a pair of next-generation science cameras on Perseverance’s remote sensing mast, or “head.”
+This pair of zoomable cameras can be used to shoot video and to create high-resolution, color stereo/3D
+panoramas of the Martian landscape in multiple spectra of light. These images also help rover operators drive
+and position the rover’s arm instruments. Analysis of the landing site’s geology viewed in Mastcam-Z images
+will help scientists determine the history of the landing site region.
+
+
+
+
+    Mastcam-Z
+
+        •   Serves as Perseverance’s primary scientific “eyes.”
+        •   At maximum zoom, can see a feature as small as a house fly from as far away as the length
+            of a soccer field.
+        •   Can build 360-degree color and stereo panoramas for science and rover driving.
+
+
+
+
+                                                     55
+                                                                                                          Mission: Science
+
+
+
+
+MEDA (Mars Environmental Dynamics Analyzer)
+                                                                                   MEDA wind sensors on
+                                                                                   Perseverance’s mast.
+                                                                                   Image credit: NASA/JPL-Caltech
+
+
+
+
+Principal Investigator:
+Jose Rodriguez-Manfredi, Centro de Astrobiología, at the Instituto Nacional
+de Técnica Aeroespacial, Madrid, Spain
+
+MEDA is a set of sensors distributed over Perseverance’s mast and body that measures wind speed and
+direction, air pressure, relative humidity, ambient temperature, and solar radiation. Solar radiation affects the
+surface environment and is important to understand more fully before sending humans to Mars. A skyward-
+facing camera, SkyCam measures how tiny airborne particles, or aerosols, such as dust and ice can affect
+sunlight reaching the surface.
+
+
+This set of sensors was built by an international team led by Spain’s Centro de Astrobiología.
+
+
+
+
+    MEDA
+
+         •   Measures how Martian weather changes within one day and across the seasons.
+         •   Helps scientists understand how dust responds to environmental changes and when its
+             properties change, or if it influences engineering systems and the interpretation of other
+             instruments’ observations.
+         •   Through SkyCam, studies types and abundances of clouds.
+
+
+
+
+                                                        56
+                                                                                                         Mission: Science
+
+
+
+
+MOXIE (Mars Oxygen ISRU Experiment)
+                                                                                   Image credit: NASA/JPL-Caltech
+
+
+
+
+Principal Investigator:
+Michael Hecht, Massachusetts Institute of Technology, Cambridge
+
+MOXIE is a technology demonstration that will show whether such technology could be used to help launch
+rockets off the surface of Mars in the future. (The “I” in MOXIE stands for “in-situ resource utilization,” or ISRU
+– the concept of using resources found where a spacecraft lands rather than bringing those resources from
+Earth.) MOXIE converts carbon dioxide in the Martian atmosphere into oxygen, which is required in massive
+quantities in order to launch rockets. To burn enough rocket fuel to launch themselves back to Earth, future
+astronauts will require tens of metric tons of liquid oxygen. The MOXIE experiment aboard Perseverance
+is about the size of a car battery and can produce enough oxygen to sustain a small dog. A system that
+produces breathing oxygen for human missions would need to be about 200 times larger.
+
+
+This set of sensors was built by an international team led by Spain’s Centro de Astrobiología.
+
+
+
+
+    MOXIE
+
+         •   Weighs about 38 pounds (17 kilograms).
+         •   Is designed to produce 0.022 pounds of oxygen per hour (10 grams of oxygen per hour).
+
+
+
+
+                                                        57
+                                                                                                     Mission: Science
+
+
+
+
+PIXL (Planetary Instrument for X-ray Lithochemistry)
+                                                                                Image credit: NASA/JPL-Caltech
+
+
+
+
+Principal Investigator:
+Abigail Allwood, NASA’s Jet Propulsion Laboratory, Southern California
+
+Located on the end of Perseverance’s robotic arm, PIXL aims a tiny but powerful X-ray beam at rocks. This
+produces a different “glow,” or fluorescence, depending on the rock’s elemental chemistry. PIXL creates
+postage stamp-size “maps,” revealing how and where these chemicals are positioned relative to each other
+as well as to a rock’s textures and structures. That information can help scientists determine how these
+features formed, including whether they were biological in nature.
+
+
+
+
+    PIXL
+
+        •   Can detect over 20 chemical elements.
+        •   Takes just 10 seconds to perform a highly accurate analysis of a single point as small as a
+            grain of sand.
+        •   Uses a hexapod, a device that features six mechanical legs connecting PIXL to the robotic
+            arm and that is guided by artificial intelligence to get the most accurate aim.
+
+
+
+
+                                                     58
+                                                                                                       Mission: Science
+
+
+
+
+RIMFAX (Radar Imager for Mars’ Subsurface Experiment)
+                                                                                 The white box with cutouts
+                                                                                 on the right side of the rover’s
+                                                                                 underside is part of the
+                                                                                 RIMFAX instrument.
+                                                                                 Image credit: NASA/JPL-Caltech
+
+
+
+
+Principal Investigator:
+Svein-Erik Hamran, University of Oslo, Norway
+
+RIMFAX is the first ground-penetrating radar to be carried by a rover or lander to Mars. Such radar systems
+have been used by orbiting spacecraft, but bringing them to the surface offers much higher-resolution data.
+RIMFAX determines how different layers of the Martian surface formed over time.
+
+
+The Norwegian Defense Research Establishment (FFI) in Kjeller, Norway, provided the instrument.
+
+
+
+
+    RIMFAX
+
+        •   Is based on the design of ground-penetrating radar used to study rock and ice at Earth’s poles.
+        •   Takes its name from “Hrímfaxi,” the horse in Norse mythology that faithfully brings the night.
+        •   Helps pave way for future generations of RIMFAX that could detect water ice deposits for
+            use by astronauts. (Jezero Crater, however, is too warm to harbor subsurface water ice.)
+
+
+
+
+                                                      59
+                                                                                                     Mission: Science
+
+
+
+
+SHERLOC (Scanning Habitable Environments with Raman
+& Luminescence for Organics & Chemicals)
+                                                                                The SHERLOC instrument
+                                                                                is circled in black in
+                                                                                this illustration of the
+                                                                                Perseverance rover.
+                                                                                Image credit: NASA/JPL-Caltech
+
+
+
+
+Principal Investigator:
+Luther Beegle, JPL
+
+SHERLOC is located near PIXL on Perseverance’s robotic arm. As PIXL looks for elemental chemistry,
+SHERLOC looks for organic molecules and minerals. While the presence of organic molecules helps
+scientists determine which samples to collect for future return to Earth, the presence of different minerals
+helps explain how a sample was formed. SHERLOC flashes an ultraviolet laser over surface material, which
+emits a subtly different glow depending on which organic compounds and minerals are present. SHERLOC
+also has a camera for taking microscopic images of rock grains and surface textures.
+
+
+
+
+    SHERLOC
+
+        •   Features a camera called WATSON (Wide Angle Topographic Sensor for Operations
+            and eNgineering).
+        •   Has a calibration target that includes five spacesuit materials and a sample of a
+            Martian meteorite.
+
+
+
+
+                                                      60
+                                                                                                       Mission: Science
+
+
+
+
+SuperCam
+                                                                                 SuperCam’s laser looks like an
+                                                                                 eye on Perseverance’s mast.
+                                                                                 Image credit: NASA/JPL-Caltech
+
+
+
+
+Principal Investigator:
+Roger Wiens, Los Alamos National Laboratory, New Mexico
+
+This next-generation version of Curiosity’s ChemCam instrument is located on Perseverance’s mast. Like
+its predecessor, SuperCam uses a pulsed laser to study the chemistry of rocks and sediment. It also uses
+three new techniques to probe the mineral content of its targets and the hardness of the rocks. One of these
+techniques heats small amounts of the target to around 18,000 degrees Fahrenheit (10,000 degrees Celsius),
+creating a bright “spark.” SuperCam can then determine the chemical makeup of these rocks from the
+plasma generated by the laser zaps.
+
+
+SuperCam is a collaboration between Los Alamos National Laboratory and France’s Institut de Recherche
+en Astrophysique et Planétologie (IRAP), which provided key parts of the instrument, including a special
+microphone. Spain built and tested the SuperCam calibration target assembly. The Spanish contributions
+were supported by the Spanish Ministry of Science and Innovation (MICINN), and by the University of
+Valladolid as well as local and regional governments.
+
+
+
+
+    SuperCam
+
+        •   Can analyze material from up to 20 feet (7 meters) away with its laser.
+        •   Records the sound of laser zaps up to 12 feet (4 meters) away with a microphone. The
+            sounds will help scientists understand the property of the rocks, including their hardness.
+        •   Can use artificial intelligence to identify and zap rock targets (in addition to the targets
+            chosen by scientists) as the rover awaits new instructions from Earth.
+
+
+
+
+                                                      61
+                                                 Mission: Science
+
+
+
+
+Science Team Leadership
+
+Project Scientist:
+Ken Farley, Caltech, Pasadena, California
+
+
+Deputy Project Scientists:
+Katie Stack Morgan, JPL
+Ken Williford, JPL
+
+
+
+
+                                            62
+Mission: Landing Site
+
+Landing Site
+
+
+
+
+Location where Perseverance will land, with the locations of other successful
+NASA Mars landings. | Image credit: NASA/JPL-Caltech
+
+
+
+Perseverance will land in Jezero Crater, located on the western edge of Isidis Planitia, a giant impact basin
+just north of the Martian equator at about 18 degrees north latitude, 77 degrees longitude. Perseverance’s
+core goal is astrobiological – to seek signs of ancient microbial life – and the rover will be landing in a place
+with high potential for finding these signs. Western Isidis presents some of the oldest and most scientifically
+interesting landscapes Mars has to offer. Mission scientists believe the 28-mile-wide (45-kilometer) crater
+was home to a lake about 3.5 billion years ago – the word “Jezero” in several slavic languages means “lake”
+– as well as to an ancient river delta. Together, they could have collected and preserved ancient organic
+molecules and other potential signs of microbial life from the water and sediments that flowed into the crater
+billions of years ago.
+
+
+
+                                                       63
+                                                                                                     Mission: Landing Site
+
+
+
+
+                llustration of a wet Jezero Crater in the ancient past.
+                Image credit: NASA/JPL-Caltech
+
+
+Jezero Crater’s ancient lake-delta system offers many promising sampling targets. Parts of Jezero may be
+especially rich in carbonates, minerals that, on Earth, can preserve fossilized signs of ancient life and can be
+associated with biological processes. And new landing technologies will allow Perseverance to touch down
+even closer to the most promising locations than any Mars mission before it.
+
+
+
+
+                Image credit: NASA/JPL-Caltech/MSSS/JHU-APL/ESA
+
+
+For more, visit the mission’s landing site page.
+
+
+
+
+                                                         64
+Management
+
+
+                                      NASA Leadership
+At NASA Headquarters in Washington, Steve Jurczyk is the agency’s acting administrator. Thomas
+Zurbuchen is the associate administrator for NASA’s Science Mission Directorate and Lori Glaze is the
+director of the Planetary Science Division. Eric Ianson is the acting director of the Mars Exploration Program
+and Michael Meyer is the chief Mars scientist at headquarters.
+
+
+
+
+                       Mars 2020 Perseverance Mission
+  George Tahu is the program executive and Mitch Schulte is the program scientist for the Mars 2020
+  Perseverance mission at NASA Headquarters.
+
+
+  NASA’s Jet Propulsion Laboratory, a division of Caltech in Pasadena, California, built and will manage
+  operations for the Perseverance rover for NASA’s Science Mission Directorate. At JPL, John McNamee
+  is the Mars 2020 Perseverance project manager. Matt Wallace and Jennifer Trosper are deputy project
+  managers. Ken Farley of Caltech is the project scientist. Katie Stack Morgan and Ken Williford of JPL
+  are the deputy project scientists.
+
+
+  For more detail on team members, visit the Mars 2020 mission team page.
+
+
+
+
+                                                      65
+More About Mars:
+Gallery
+
+Images
+
+
+
+
+NASA Images and Video Library      Mars 2020 Mission Website           Planetary Photojournal
+go.nasa.gov/perseverance-media-    https://go.nasa.gov/perseverance-   go.nasa.gov/perseverance-media-
+collection                         images                              collection
+
+
+
+
+Perseverance Naming                NASA Headquarters Flickr Feed
+Announcement                       https://www.flickr.com/photos/
+https://bit.ly/perseverance-name   nasahqphoto/
+
+
+
+
+                                                   66
+                                                                                                 More About Mars: Gallery
+
+
+
+
+Web Videos
+
+
+
+
+Perseverance Arrives at Mars            Perseverance Launches                   Perseverance Rover Equipped with
+(Mission Trailer)                       http://bit.ly/perseverance-launch-      Ultra-Clean Sample Tubes
+http://bit.ly/perseverance-lands-       video                                   http://bit.ly/perseverance-sample-
+trailer                                                                         tube
+
+
+
+
+Perseverance’s Test                     Perseverance: Road to Launch            NASA’s Latest Rover Has a
+Rover on Earth                          https://bit.ly/perseverance-            Name (Recap Video)
+http://bit.ly/perseverance-test-rover   coronavirus                             https://bit.ly/perseverance-name-
+                                                                                video
+
+
+
+
+First Drive Test of NASA’s              Mars Science Teams Investigate          Building NASA’s
+Perseverance Rover                      Ancient Life in Australia               Perseverance Rover
+https://bit.ly/perseverance-drive       https://bit.ly/mars-science-australia   https://bit.ly/building-perseverance
+
+
+
+
+                                                          67
+                                                                                            More About Mars: Gallery
+
+
+
+
+Testing Perseverance                  Preparing to Land Perseverance        Behind the Spacecraft
+https://bit.ly/testing-perseverance   http://bit.ly/perseverance-landing-   (Team Member Profiles)
+                                      prep                                  https://bit.ly/3eaLSPz
+
+
+
+
+Mars Playlist
+https://bit.ly/mars-playlist
+
+
+
+Animations and Raw Video
+
+
+
+
+Perseverance B-Roll Media Reel        NASA Announces Mars 2020              Mars 2020 Perseverance
+https://go.nasa.gov/perseverance-     Rover Name Video File                 Animations Media Reel
+b-roll                                https://go.nasa.gov/perseverance-     go.nasa.gov/perseverance-landing-
+                                      name-video-file                       animations
+
+
+
+
+                                                        68
+More About Mars:
+Historical Mars Missions
+ In addition to NASA’s Mars 2020 Perseverance rover and the Ingenuity Mars Helicopter, humankind’s
+ other missions to Mars are listed below. Each item includes mission name, country, launch date,
+ purpose, and results.
+
+
+ Marsnik 1: USSR; Oct. 10, 1960; flyby; did not reach Earth orbit
+
+
+ Marsnik 2: USSR; Oct. 14, 1960; flyby; did not reach Earth orbit
+
+
+ Sputnik 22: USSR; Oct. 24, 1962; flyby; achieved Earth orbit only
+
+
+ Mars 1: USSR; Nov. 1, 1962; flyby, radio failed at 65.9 million miles (106 million kilometers)
+
+
+ Sputnik 24: USSR; Nov. 4, 1962; flyby; achieved Earth orbit only
+
+
+ Mariner 3: U.S.; Nov. 5, 1964; flyby; shroud failed to jettison
+
+
+ Mariner 4: U.S.; Nov. 28, 1964; first successful flyby July 14, 1965; returned 21 photos
+
+
+ Zond 2: USSR; Nov. 30, 1964; flyby; passed Mars but radio failed, returned no planetary data
+
+
+ Mariner 6: U.S.; Feb. 24, 1969; flyby July 31, 1969; returned 75 photos
+
+
+ Mariner 7: U.S.; March 27, 1969; flyby Aug. 5, 1969; returned 126 photos
+
+
+ Mars 1969A: USSR; March 27, 1969; orbiter; did not reach Earth orbit
+
+
+ Mars 1969B: USSR; April 2, 1969; orbiter; failed during launch
+
+
+ Mariner 8: U.S.; May 8, 1971; orbiter; failed during launch
+
+
+ Kosmos 419: USSR; May 10, 1971; lander; achieved Earth orbit only
+
+
+ Mars 2: USSR; May 19, 1971; orbiter and lander; arrived Nov. 27, 1971; no useful data, lander burned up due
+ to steep entry
+
+
+                                                         69
+                                                                                  More About Mars: Historical Mars Missions
+
+
+
+
+Mars 3: USSR; May 28, 1971; orbiter and lander; arrived Dec. 3, 1971; lander operated on surface for 20
+seconds before failing
+
+
+Mariner 9: U.S.; May 30, 1971; orbiter; operated in orbit Nov. 13, 1971 to Oct. 27, 1972; returned 7,329
+photos
+
+
+Mars 4: USSR; July 21, 1973; orbiter; flew past Mars Feb. 10, 1974 and collected some data, but did not
+achieve Mars orbit
+
+
+Mars 5: USSR; July 25, 1973; orbiter; arrived Feb. 12, 1974, lasted a few days
+
+
+Mars 6: USSR; Aug. 5, 1973; flyby module and lander; arrived March 12, 1974, lander failed due to fast
+impact
+
+
+Mars 7: USSR; Aug. 9, 1973; flyby module and lander; arrived March 9, 1974, lander missed the planet
+
+
+Viking 1: U.S.; Aug. 20, 1975; orbiter and lander; entered orbit June 19, 1976, and operated until Aug. 7,
+1980; landed July 20, 1976, and operated until Nov. 11, 1982
+
+
+Viking 2: U.S.; Sept. 9, 1975; orbiter and lander; entered orbit Aug. 7, 1976, and operated until July 25, 1978;
+landed Sept. 3, 1976, and operated until April 11, 1980; combined, the Viking orbiters and landers returned
+more than 50,000 photos
+
+
+Phobos 1: USSR; July 7, 1988; Mars orbiter and Phobos lander; lost August 1988 en route to Mars
+
+
+Phobos 2: USSR; July 12, 1988; Mars orbiter and Phobos lander; lost March 1989 near Phobos
+
+
+Mars Observer: U.S.; Sept. 25, 1992; orbiter; lost just before Mars arrival Aug. 21, 1993
+
+
+Mars Global Surveyor: U.S.; Nov. 7, 1996; orbiter; arrived Sept. 12, 1997; mapped in high detail through
+January 2000, completed its third extended mission in September 2006 and last communicated Nov. 2, 2006
+
+
+Mars 96: Russia; Jan. 16, 1996; orbiter, two landers, and two penetrators; launch vehicle failed
+
+
+Mars Pathfinder: U.S.; Dec. 4, 1996; lander and rover; landed July 4, 1997, completed prime mission and
+began extended mission Aug. 3, 1997, and last communicated Sept. 27, 1997
+
+
+Nozomi: Japan; July 4, 1998; orbiter; failed to enter orbit December 2003
+
+
+Mars Climate Orbiter: U.S.; Dec. 11, 1998; orbiter; lost upon arrival Sept. 23, 1999
+
+
+Mars Polar Lander/Deep Space 2: U.S.; Jan. 3, 1999; lander and two penetrators; lost on arrival Dec. 3, 1999
+
+
+Mars Odyssey: U.S.; March 7, 2001; orbiter; entered orbit Oct. 24, 2001, completed prime mission Aug. 24,
+2004, currently conducting extended mission of science collection and communication relay
+
+
+
+
+                                                       70
+                                                                               More About Mars: Historical Mars Missions
+
+
+
+
+Mars Express/Beagle 2: Europe; June 2, 2003; orbiter and lander; orbiter completed prime mission
+November 2005, currently in extended mission; lander lost on arrival Dec. 25, 2003
+
+
+Mars Exploration Rover-A (Spirit): U.S.; June 10, 2003; rover; landed Jan. 4, 2004 for three-month prime
+mission inside Gusev Crater, completed several extended missions, last communicated March 22, 2010,
+mission declared complete May 25, 2011
+
+
+Mars Exploration Rover-B (Opportunity): U.S.; July 7, 2003; rover; landed Jan. 25, 2004 for three-month
+prime mission in Meridiani Planum region, completed several extended missions, last communicated June 10,
+2018, mission declared complete on Feb. 13, 2019
+
+
+Mars Reconnaissance Orbiter: U.S.; Aug. 12, 2005; orbiter; entered orbit March 12, 2006, completed prime
+mission Sept. 26, 2010, currently conducting extended mission of science collection and communication
+relay
+
+
+Phoenix Mars Lander: U.S.; Aug. 4, 2007; lander; landed May 25, 2008, completed prime mission and began
+extended mission Aug. 26, 2008, last communicated Nov. 2, 2008
+
+
+Phobos-Grunt/Yinghuo 1: Russia/China; Nov. 8, 2011; Phobos lander with sample return and Mars orbiter;
+achieved Earth orbit only
+
+
+Mars Science Laboratory (Curiosity rover): U.S.; Nov. 26, 2011; rover; landed Aug. 6, 2012, completed
+prime mission, currently conducting extended science mission
+
+
+Mars Atmosphere and Volatile Evolution MissioN (MAVEN): U.S.; Nov. 18, 2013; orbiter; entered orbit
+Sept. 21, 2014; completed prime mission, currently conducting extended science mission
+
+
+Mars Orbiter Mission (Mangalyaan): India; Nov. 5, 2013; orbiter; entered orbit Sept. 14, 2014, completed
+prime mission, currently conducting extended mission
+
+
+ExoMars 2016 (Trace Gas Orbiter and Schiaparelli module): Europe; March 14, 2016; orbiter and landing-
+demonstration module; entered orbit Oct. 19, 2016, currently conducting prime mission; unsuccessful Mars
+impact of Schiaparelli module Oct. 19, 2016
+
+
+InSight Lander: U.S., May 5, 2018; lander; landed Nov. 26, 2018; completed prime mission, currently
+conducting extended science mission
+
+
+Mars Cube One: U.S.; May 5, 2018; two-CubeSat data relay for InSight Lander; flew by Mars and completed
+relay Nov. 26, 2018, concluded operations Feb. 2, 2020
+
+
+Emirates Mars Mission (Hope probe): United Arab Emirates; July 19, 2020; orbiter; expected to enter orbit
+February 2021
+
+
+Mars Global Remote Sensing Orbiter and Small Rover (Tianwen-1): China; July 23, 2020; orbiter and
+rover; expected to enter orbit February 2021 and land the rover April 2021
+
+
+
+
+                                                     71
+                                                                                 More About Mars: Historical Mars Missions
+
+
+
+
+                                                    Future
+ESA (European Space Agency) and Russia’s space agency (Roscosmos) expect to launch the ExoMars
+2022 mission in late September 2022 to deliver a European rover (Rosalind Franklin) and a Russian surface
+platform (Kazachok) to Mars June 2023.
+
+
+
+
+                   Image credit: NASA/JPL-Caltech
+
+
+NASA and ESA are solidifying concepts for a Mars Sample Return campaign that begins with NASA’s
+Perseverance rover collecting rock and other samples and storing them in sealed tubes to be left on the
+planet’s surface for future retrieval and return to Earth.
+
+
+According to the current concept, NASA and ESA expect to undertake two launches as early as 2026: a
+NASA lander and an ESA orbiter. Under this schedule, ESA’s orbiter would arrive in orbit at Mars in 2027;
+subsequently NASA’s lander would arrive in 2028, carrying a NASA rocket (the Mars Ascent Vehicle) and
+ESA’s Sample Fetch Rover. The fetch rover’s job is to retrieve the cached samples and deliver them to the
+lander for transfer to the ascent vehicle; Perseverance could also deliver samples to the lander.
+The ascent vehicle will then launch a special container holding the samples into Mars orbit. The ESA orbiter
+will rendezvous with and capture the orbiting samples in a NASA-provided payload that will further prepare
+the orbiting sample container for return to Earth. The ESA orbiter will fly back to Earth and the NASA Earth
+Entry System will land the samples on Earth.
+
+
+
+
+                                                      72
+

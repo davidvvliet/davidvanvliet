@@ -1,0 +1,716 @@
+{
+  "title": "Perseverance (Mars 2020)",
+  "note": "Frame: the NASA reference model's. z up, ground (wheel bottoms) at z = 0, forward -y (arm end; the RTG is at +y), left (port) +x. NAIF rover frame (naif_fk) M2020_ROVER is +X forward, +Y right, +Z down, origin between the middle wheels on their axle: ours x = -Y, y = -X, z = -Z + 0.263 m, with the middle axle at y = 0.09 here.",
+  "sources": [
+    {
+      "id": "nasa_components",
+      "title": "NASA Science: Perseverance rover components",
+      "url": "https://science.nasa.gov/mission/mars-2020-perseverance/rover-components/",
+      "read": "2026-10-27",
+      "licence": "public domain (NASA)",
+      "saved": "refs/perseverance/sources/nasa_components.txt"
+    },
+    {
+      "id": "landing_kit",
+      "title": "Mars 2020 landing press kit (NASA/JPL, 2021)",
+      "url": "https://assets.science.nasa.gov/content/dam/science/psd/mars/downloadable_items/4/5/45585_mars_2020_landing_press_kit.pdf",
+      "read": "2026-10-27",
+      "licence": "public domain (NASA)",
+      "saved": "refs/perseverance/sources/landing_kit.txt"
+    },
+    {
+      "id": "launch_kit",
+      "title": "Mars 2020 launch press kit (NASA/JPL, 2020)",
+      "url": "https://www.jpl.nasa.gov/news/press_kits/mars_2020/download/mars_2020_launch_press_kit.pdf",
+      "read": "2026-10-27",
+      "licence": "public domain (NASA/JPL)",
+      "saved": "refs/perseverance/sources/launch_kit.txt"
+    },
+    {
+      "id": "bell2021",
+      "title": "Bell, J.F. III et al. 2021, The Mars 2020 Perseverance rover Mast Camera Zoom (Mastcam-Z) multispectral, stereoscopic imaging investigation, Space Sci. Rev. 217:24, doi:10.1007/s11214-020-00755-x",
+      "url": "https://link.springer.com/content/pdf/10.1007/s11214-020-00755-x.pdf",
+      "read": "2026-10-27",
+      "licence": "CC BY 4.0 (© The Author(s) 2020); text kept with this attribution",
+      "saved": "refs/perseverance/sources/bell2021.txt"
+    },
+    {
+      "id": "maki2020",
+      "title": "Maki, J.N. et al. 2020, The Mars 2020 Engineering Cameras and Microphone on the Perseverance Rover, Space Sci. Rev. 216:137, doi:10.1007/s11214-020-00765-9",
+      "url": "https://link.springer.com/content/pdf/10.1007/s11214-020-00765-9.pdf",
+      "read": "2026-10-27",
+      "licence": "CC BY 4.0 (© The Author(s) 2020); text kept with this attribution",
+      "saved": "refs/perseverance/sources/maki2020.txt"
+    },
+    {
+      "id": "verma2023",
+      "title": "Verma, V. et al. 2023, Results from the First Year and a Half of Mars 2020 Robotic Operations, IEEE Aerospace Conference",
+      "url": "https://www-robotics.jpl.nasa.gov/media/documents/IEEE_AERO_2023_RO_final_230110.pdf",
+      "read": "2026-10-27",
+      "licence": "©2022 California Institute of Technology / ©2023 IEEE: quoted, not kept",
+      "archive": "http://web.archive.org/web/20250624144823/https://www-robotics.jpl.nasa.gov/media/documents/IEEE_AERO_2023_RO_final_230110.pdf"
+    },
+    {
+      "id": "naif_fk",
+      "title": "NAIF Mars 2020 frames kernel m2020_v04.tf",
+      "url": "https://naif.jpl.nasa.gov/pub/naif/MARS2020/kernels/fk/m2020_v04.tf",
+      "read": "2026-10-27",
+      "licence": "public domain (NASA/JPL NAIF)",
+      "saved": "refs/perseverance/sources/naif_fk.txt"
+    },
+    {
+      "id": "pia24045",
+      "title": "PIA24045: Port Side of Perseverance (JPL clean room, Nov. 16, 2019)",
+      "url": "https://science.nasa.gov/photojournal/port-side-of-perseverance/",
+      "read": "2026-10-27",
+      "licence": "public domain (NASA/JPL-Caltech)",
+      "saved": "refs/perseverance/sources/pia24045.txt",
+      "credit": "Material colours sampled from NASA/JPL-Caltech photo PIA24045"
+    },
+    {
+      "id": "pia23499",
+      "title": "PIA23499: first driving test in the JPL clean room, Dec. 17, 2019",
+      "url": "https://www.jpl.nasa.gov/news/nasas-mars-2020-rover-completes-its-first-drive/",
+      "read": "2026-10-27",
+      "licence": "public domain (NASA/JPL-Caltech)",
+      "archive": "http://web.archive.org/web/20260615042234/https://www.jpl.nasa.gov/news/nasas-mars-2020-rover-completes-its-first-drive/",
+      "credit": "Material colours sampled from NASA/JPL-Caltech photo PIA23499"
+    },
+    {
+      "id": "nasa_3d_perseverance",
+      "title": "NASA 3D Resources: Mars 2020 Perseverance Rover (.glb)",
+      "url": "https://github.com/nasa/NASA-3D-Resources/tree/master/3D%20Models/Mars%202020%20Perseverance%20Rover",
+      "read": "2026-10-27",
+      "licence": "'These assets are free and without copyright.' (repo README)",
+      "archive": "https://github.com/nasa/NASA-3D-Resources/tree/37f29296b944f72742a91d601493b774afc030f2/3D%20Models/Mars%202020%20Perseverance%20Rover",
+      "credit": "NASA 3D Resources, Mars 2020 Perseverance Rover model (layout reference): https://github.com/nasa/NASA-3D-Resources"
+    }
+  ],
+  "reference_model": {
+    "url": "https://github.com/nasa/NASA-3D-Resources/tree/master/3D%20Models/Mars%202020%20Perseverance%20Rover",
+    "note": "NASA 3D Resources 'Mars 2020 Perseverance Rover' (.glb, 4.99 MB, ~200k tris, Blender 4.2 export, metres). Repo README: 'These assets are free and without copyright.' Matches documents: wheel diameter 0.525 m (doc 52.5 cm), width 2.705 m (doc 2.7 m), length without arm 3.09 m (doc 'about 3 meters'), HGA mid-aft on the port side. Mast and arm are stowed (cruise pose). Contains a 2 m 'Icosphere' at the origin that is not part of the rover: ignore it. The file carries animations: the mast animation (frames ~100-300) raises the mast, and that raised pose is used here (from_reference_model.mast_raised). The arm animations hold the stowed pose throughout, so the model has no deployed arm. Raised, the model agrees with Maki 2020: camera plate (Navcams) centre z 1.974 vs '~1.98 meters'; front Hazcams centre z ~0.75 vs '0.73 meters'; top of the mast head z 2.233 vs the press kit's 2.2 m tall.",
+    "source": "nasa_3d_perseverance"
+  },
+  "dimensions": {
+    "wheel_diameter": {
+      "value": 0.525,
+      "object": "wheel_left_front",
+      "measure": "diameter",
+      "source": "nasa_components",
+      "quote": "20.7 inches (52.5 centimeters) in diameter",
+      "also": "NASA model 0.525 m; the same page's figure caption says 52.6 cm."
+    },
+    "width": {
+      "value": 2.7,
+      "object": "*",
+      "measure": "x",
+      "source": "landing_kit",
+      "quote": "about 3 meters long, 2.7 meters wide, and 2.2 meters tall",
+      "also": "NASA model 2.705 m (outer faces of the middle wheels)."
+    },
+    "length": {
+      "value": 3.0,
+      "object": "*",
+      "measure": "y",
+      "tolerance": 0.05,
+      "source": "landing_kit",
+      "quote": "About 10 feet long (not including the arm) ... about 3 meters long",
+      "also": [
+        {
+          "source": "nasa_3d_perseverance",
+          "quote": "3.09 m without the arm (front wheels to RTG), 3.11 m with the stowed arm"
+        },
+        {
+          "source": "launch_kit",
+          "quote": "With a chassis about 10 feet (3 meters) long"
+        }
+      ],
+      "note": "'about': 5% tolerance."
+    },
+    "height": {
+      "value": 2.2,
+      "object": "*",
+      "measure": "z",
+      "tolerance": 0.05,
+      "source": "landing_kit",
+      "quote": "about 3 meters long, 2.7 meters wide, and 2.2 meters tall",
+      "note": "Mast raised: the NASA model with its mast raised (its own animation) is 2.233 m tall at the top of the mast head (1.5% over); stowed it is 1.85 m. So 2.2 m is the mast-up height."
+    },
+    "rtg_diameter": {
+      "value": 0.64,
+      "object": "rtg",
+      "measure": "diameter",
+      "tolerance": 0.05,
+      "source": "nasa_components",
+      "quote": "25 inches (64 centimeters) in diameter by 26 inches (66 centimeters) long",
+      "note": "Whether 64 cm includes the fins is not stated (see open_questions)."
+    },
+    "rtg_length": {
+      "value": 0.66,
+      "object": "rtg",
+      "measure": "length",
+      "tolerance": 0.05,
+      "source": "nasa_components",
+      "quote": "25 inches (64 centimeters) in diameter by 26 inches (66 centimeters) long"
+    },
+    "hga_diameter": {
+      "value": 0.3,
+      "object": "hga",
+      "measure": "diameter",
+      "tolerance": 0.1,
+      "source": "nasa_components",
+      "quote": "Hexagonally shaped, 1 foot (0.3 meters) in diameter",
+      "note": "'1 foot': rounded, 10% tolerance."
+    },
+    "navcam_height": {
+      "value": 1.98,
+      "measure": "distance",
+      "from": {
+        "object": "wheel_left_front",
+        "at": "bottom"
+      },
+      "to": {
+        "object": "navcam_left",
+        "at": "centre"
+      },
+      "axis": "z",
+      "tolerance": 0.03,
+      "source": "maki2020, Table 2 p.17",
+      "quote": "Height above nominal surface viewing horizon: ∼ 1.98 meters when [Mounted to pan/tilt RSM] (Table 2, p. 17)",
+      "also": "NASA model, mast raised: Navcams and Mastcam-Z centre z 1.974 (both on the camera plate, z 1.92-2.03). Maki 2020 p. 20: 'The Navcams are mounted to the underside of the camera plate on the Remote Sensing Mast'.",
+      "conflict": [
+        {
+          "source": "bell2021, p.23",
+          "quote": "the Mastcam-Z cameras will be ∼2.12 m above the Martian surface"
+        },
+        {
+          "source": "bell2021, summary",
+          "quote": "∼2.12 m above a flat horizontal plane defined by the bottom of the rover's wheels"
+        }
+      ]
+    },
+    "front_hazcam_height": {
+      "value": 0.73,
+      "measure": "distance",
+      "from": {
+        "object": "wheel_left_front",
+        "at": "bottom"
+      },
+      "to": {
+        "object": "hazcams_front",
+        "at": "centre"
+      },
+      "axis": "z",
+      "tolerance": 0.05,
+      "source": "maki2020, Table 2 p.17",
+      "quote": "Height above nominal surface viewing horizon ... 0.73 meters (Front Hazcam column, Table 2, p. 17)",
+      "also": "NASA model: front Hazcam assembly z 0.67-0.83, centre ~0.75."
+    }
+  },
+  "ground": {
+    "z": 0.0,
+    "contacts": [
+      "wheel_*"
+    ],
+    "source": "nasa_3d_perseverance, every wheel's lowest point at z 0.001-0.002"
+  },
+  "facts": {
+    "wheel_count": {
+      "value": 6,
+      "source": "nasa_components, 'Perseverance has six wheels, each with its own motor.'"
+    },
+    "steering": {
+      "value": "front and rear wheels steer",
+      "source": "nasa_components, 'The two front and two rear wheels also have individual steering motors, to turn in place a full 360 degrees.'"
+    },
+    "wheel_build": {
+      "value": "aluminium wheel, 48 cleats, curved titanium spokes",
+      "source": "nasa_components, 'Made of aluminum, with cleats for traction and curved titanium spokes for springy support.' and 'Each wheel has an aggressive tread with 48 grousers (or cleats)'; landing kit: 'grousers are nearly straight with a gentle curve'"
+    },
+    "wheel_turn": {
+      "value": 1.65,
+      "unit": "m",
+      "source": "nasa_components, 'One full turn of the wheels with no slippage drives the rover 65 inches (1.65 meters).' (pi x 0.525 = 1.649 m: consistent)"
+    },
+    "suspension": {
+      "value": "rocker-bogie with a differential bar across the deck",
+      "source": "nasa_components, 'Differential: A pivot in the top deck's center connects it to the left and right rockers and the rover body. Rocker: ... Connecting the front wheel to the differential and bogie in the rear. Bogie: Connects middle and rear wheels to the rocker.'"
+    },
+    "arm": {
+      "value": "2.1 m, 5 joints (shoulder azimuth, shoulder elevation, elbow, wrist, turret), bolted to the front",
+      "source": "nasa_components, 'The 7-foot-long (2.1 meters) robotic arm'; '...shoulder azimuth joint, shoulder elevation joint, elbow joint, wrist joint, and turret joint.'; launch kit: 'Bolted to the front of the rover's chassis'"
+    },
+    "rtg_position": {
+      "value": "aft end",
+      "source": "nasa_components, 'Location: Aft end of the rover'"
+    },
+    "hga_position": {
+      "value": "mid-aft, port side of the deck",
+      "source": "nasa_components, 'Mounted mid-aft portside of Mars 2020 deck (\"back\")'; NASA model: at x +0.42, y +0.39 (port = +x here)"
+    },
+    "low_gain_antennas": {
+      "value": "UHF: cylinder at the back; X-band LGA: 'chess-piece' behind the HGA",
+      "source": "landing_kit, 'the cylindrical, paint-can-shaped UHF low-gain antenna at the back of the rover' and 'an X-band low-gain antenna (a chess-piece-shaped antenna behind the high-gain antenna)'"
+    },
+    "mast_head": {
+      "value": "SuperCam in the head (large round opening), Mastcam-Z below it, Navcams outboard of those",
+      "source": "nasa_components, 'The mast head contains the SuperCam instrument (its lens is in the large circular opening). In the gray boxes beneath mast head are the two Mastcam-Z imagers. On the exterior sides of those imagers are the rover's two navigation cameras.'"
+    },
+    "mastcam_baseline": {
+      "value": 0.244,
+      "unit": "m",
+      "source": "bell2021, 'stereo baseline is 24.4 cm'"
+    },
+    "navcam_separation": {
+      "value": 0.42,
+      "unit": "m",
+      "source": "nasa_components, 'left and right \"eyes\" are about 16.5 inches (42 centimeters) apart'"
+    },
+    "body": {
+      "value": "warm electronics box (WEB) closed on top by the Rover Equipment Deck",
+      "source": "nasa_components, 'The Perseverance rover's body is called the warm electronics box, or \"WEB\" for short.' 'The warm electronics box is closed on the top by a piece called the Rover Equipment Deck.'"
+    },
+    "obstacle_height": {
+      "value": 0.4,
+      "unit": "m",
+      "source": "nasa_components, 'drive over knee-high rocks up to 15.75 inches (40 centimeters)'"
+    },
+    "mast_pointing": {
+      "value": "azimuth ±181°, elevation −87° to +91°",
+      "source": "bell2021, 'The RSM provides the ability to point the cameras over ±181° in azimuth and −87° to +91° in elevation.' (p. 23)"
+    },
+    "camera_plate_layout": {
+      "value": "Navcams under the camera plate, Mastcam-Z between them, SuperCam above",
+      "source": "maki2020, 'the Mastcam-Z cameras ... located between the Navcams, and the SuperCam ... located above the Navcams' (Fig. 17 caption, p. 23)"
+    },
+    "navcam_baseline": {
+      "value": 0.424,
+      "unit": "m",
+      "source": "maki2020, 'Stereo baseline 42.4 cm' (Table 2)"
+    },
+    "hazcams": {
+      "value": "front pair 24.8 cm apart, 28° below the horizon, canted out 10° each; rear pair 93.4 cm apart, 45° below the horizon",
+      "source": "maki2020, Table 2 and §3.1.2"
+    },
+    "arm_reach": {
+      "value": "2 m from the front of the chassis; stowed across the front for driving",
+      "source": "verma2023, 'The Perseverance Robotic Arm (RA) extends two meters from the front of the rover chassis.' and 'The robotic arm is stowed for driving.' (Verma et al. 2023, p. 6)"
+    },
+    "rover_frame": {
+      "value": "M2020_ROVER: +X forward (away from the RTG), +Z down, +Y right; origin between the middle wheels on their axle. Ours: x = -Y, y = -X, z = -Z + 0.263 m.",
+      "source": "naif_fk, 'M2020 Rover Frames': '+X points to the front of the rover, away from RTG', '+Z points down', 'the origin on this frame is between the rover middle wheels'"
+    }
+  },
+  "from_reference_model": {
+    "wheel_width": {
+      "value": 0.336,
+      "note": "x extent of each wheel group incl. hub, NASA model; no document gives a number (components page: 'narrower' than Curiosity's)"
+    },
+    "wheel_centres": {
+      "value": {
+        "front_y": -1.095,
+        "middle_y": 0.09,
+        "rear_y": 1.165,
+        "front_rear_x": 1.062,
+        "middle_x": 1.184,
+        "axle_z": 0.263
+      },
+      "note": "wheel mesh split into loose pieces, bounds per wheel. Wheelbase 2.26 m; track 2.12 m front/rear, 2.37 m middle (middle wheels sit further out)"
+    },
+    "web_box": {
+      "value": {
+        "width": 1.146,
+        "length": 1.707,
+        "z": [
+          0.674,
+          1.134
+        ]
+      },
+      "note": "WEB side panels (faces at x ±0.573, y -0.878 and +0.829, 0.459 m tall); body bottom z 0.674 = ground clearance under the WEB"
+    },
+    "deck_z": {
+      "value": 1.134,
+      "note": "lowest z of the deck-mounted parts (differential bar, mast base, HGA, deck boxes)"
+    },
+    "differential_bar": {
+      "value": {
+        "width": 1.324,
+        "centre": [
+          0.0,
+          0.079,
+          1.166
+        ]
+      },
+      "note": "suspension mesh, largest deck piece"
+    },
+    "suspension_pieces": {
+      "value": "rocker beams centred x ±0.93, y -0.56 (front) and x ±0.85, y 0.26; bogie x ±0.995, y 0.82; bearing-like cylinders at x ±0.906, y 0.54, z 0.664",
+      "note": "suspension mesh split by touch; which bearing is the rocker or bogie pivot is not settled (open_questions)"
+    },
+    "mast_stowed": {
+      "value": {
+        "base": [
+          -0.403,
+          -0.625,
+          1.229
+        ],
+        "head_centre": [
+          0.058,
+          -0.263,
+          1.267
+        ]
+      },
+      "note": "mast lies on the deck at the front left, head pointing to the right and back"
+    },
+    "hga": {
+      "value": {
+        "centre": [
+          0.418,
+          0.394,
+          1.284
+        ],
+        "size": [
+          0.336,
+          0.551,
+          0.3
+        ]
+      },
+      "note": "antenna_hg incl. gimbal"
+    },
+    "uhf_antenna": {
+      "value": {
+        "centre": [
+          -0.505,
+          1.083,
+          1.64
+        ],
+        "diameter": 0.208,
+        "height": 0.412
+      }
+    },
+    "rtg_assembly": {
+      "value": {
+        "centre": [
+          0.0,
+          1.249,
+          1.156
+        ],
+        "size": [
+          1.15,
+          0.974,
+          0.932
+        ]
+      },
+      "note": "rtg object incl. its cover and heat-exchanger panels, not the bare MMRTG"
+    },
+    "mast_raised": {
+      "value": {
+        "deploy_hinge": {
+          "at": [
+            -0.475,
+            -0.839,
+            1.245
+          ],
+          "axis": [
+            0.54,
+            -0.84,
+            0.0
+          ],
+          "turn_deg": 90
+        },
+        "mast_tube": {
+          "x": [
+            -0.65,
+            -0.453
+          ],
+          "y": [
+            -0.82,
+            -0.557
+          ],
+          "z": [
+            1.168,
+            1.691
+          ]
+        },
+        "azimuth_axis": {
+          "at": [
+            -0.557,
+            -0.713,
+            1.793
+          ],
+          "axis": [
+            0,
+            0,
+            1
+          ]
+        },
+        "elevation_pivot": {
+          "at": [
+            -0.724,
+            -0.456,
+            1.922
+          ],
+          "axis": [
+            -0.54,
+            0.84,
+            0.0
+          ]
+        },
+        "upper_mast": {
+          "z": [
+            1.691,
+            1.982
+          ]
+        },
+        "head": {
+          "min": [
+            -0.837,
+            -0.996,
+            1.765
+          ],
+          "max": [
+            -0.327,
+            -0.427,
+            2.233
+          ]
+        },
+        "camera_plate_z": [
+          1.92,
+          2.03
+        ]
+      },
+      "note": "NASA model's own mast animation, frame 200 (raised, head level). Pivots are the model's rig objects: deploy hinge 'Cylinder', azimuth 'top', elevation 'Cylinder.002'. Turn of the deploy hinge measured between frames 1 and 200."
+    },
+    "suspension_pivots": {
+      "value": {
+        "rocker_pivot": {
+          "at": [
+            0.8,
+            -0.214,
+            0.894
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "note": "axle from the body side x 0.50 to 0.88"
+        },
+        "differential_link": "vertical rod at x ±0.638, y -0.214, z 0.92-1.19, joined to the deck bar's end (bar at y 0.144, z 1.168) by a link along y",
+        "rocker_front_arm": "pivot to the front steering actuator at x ±1.06, y -1.095, z 0.62-0.86 (tube about 8 cm across)",
+        "rocker_rear_arm": "pivot to the bogie pivot (tube about 8 cm across)",
+        "bogie_pivot": {
+          "at": [
+            0.87,
+            0.54,
+            0.664
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "note": "axle x 0.75-0.99"
+        },
+        "bogie_arms": "forward and down to the middle wheel hub (0.98, 0.107, 0.343); back to the rear steering actuator at x ±1.06, y 1.165, z 0.62-0.86 (tubes about 6 cm across)",
+        "wheel_legs": "front and rear: steering actuator above the wheel, leg down the inside to the hub at x ±0.83"
+      },
+      "note": "suspension mesh split into loose pieces, left side (x > 0); the right side mirrors it. Positions match a side render of the model."
+    },
+    "arm_stowed": {
+      "value": {
+        "shoulder": [
+          0.451,
+          -1.176,
+          0.915
+        ],
+        "joint_2": [
+          0.285,
+          -1.098,
+          0.823
+        ],
+        "elbow": [
+          -0.501,
+          -1.076,
+          1.051
+        ],
+        "wrist": [
+          0.251,
+          -1.057,
+          1.076
+        ],
+        "turret": [
+          0.427,
+          -0.996,
+          1.228
+        ]
+      },
+      "note": "origins of the model's arm chain (arm.003 > arm.002 > arm > arm.004 > turret_obj), stowed across the front. Whether each origin sits on the real joint axis is unchecked; segment lengths from these: 0.82 m (joint 2 to elbow), 0.75 m (elbow to wrist). No document gives segment lengths (Moeller et al. 2021 could not be downloaded)."
+    },
+    "ground_clearance": {
+      "value": 0.674,
+      "note": "WEB bottom z (see web_box). MSL's catalogue gives 'Clearance under the rover's body on flat ground is 66 cm.' (PDS hostMSL.cat, MSL not M2020): consistent."
+    }
+  },
+  "open_questions": [
+    "Camera height conflict: Maki 2020 puts the Navcams at ~1.98 m, Bell 2021 puts Mastcam-Z (on the same plate, between the Navcams) at ~2.12 m. NASA's raised model agrees with Maki (1.974 m) and with the 2.2 m height. Proposed: follow Maki and the model; the 2.12 m stays recorded as a conflict.",
+    "Arm: only the stowed pose exists anywhere (the model's arm animation never moves). Proposed: model it stowed, segment lengths from the model.",
+    "MMRTG 64 cm diameter: with or without fins? The model's RTG object includes its cover and heat-exchanger panels, so it can't settle this. Proposed: model the covered assembly at the model's size and keep 64 x 66 cm for the bare unit inside.",
+    "Wheelbase, track, wheel width, deck height, pivot positions and arm segment lengths come only from the NASA model (no document found). Its documented sizes agree within a few percent, so this seems safe."
+  ],
+  "sheet_frame": {
+    "min": [
+      -1.45,
+      -1.5,
+      0.0
+    ],
+    "max": [
+      1.45,
+      1.85,
+      2.3
+    ]
+  },
+  "budget": {
+    "triangles": 50000,
+    "glb_bytes": 1500000
+  },
+  "materials": {
+    "white_paint": {
+      "hex": "#dcd6ce",
+      "metallic": 0.0,
+      "roughness": 0.55,
+      "source": [
+        "pia24045, body side panels #e5decd and #d9d1c6 (warm clean-room light)",
+        "pia23499, mast head top #dfdad9 and a white arm tube #d4cecb (cooler light); the four averaged"
+      ]
+    },
+    "anodized_black": {
+      "hex": "#3a3936",
+      "metallic": 0.0,
+      "roughness": 0.45,
+      "source": [
+        "pia24045, suspension tube #2e302f and #3d3d3d",
+        "pia23499, wheel tread #4d4944 and #312c29; averaged, black with a soft sheen"
+      ]
+    },
+    "bare_titanium": {
+      "hex": "#beb3a7",
+      "metallic": 1.0,
+      "roughness": 0.35,
+      "source": [
+        "pia23499, lit face of a front-wheel spoke (spread under 10)",
+        "nasa_components, 'curved titanium spokes'"
+      ]
+    }
+  },
+  "decided": [
+    "No Ingenuity (user, 2026-10-27).",
+    "Mast raised (user had no preference, 2026-10-27); NASA model's own raised pose."
+  ],
+  "joints": {
+    "mast_deploy": {
+      "angle": 0,
+      "min": -95,
+      "max": 5,
+      "source": "nasa_3d_perseverance, mast animation: 0 = raised (frame 200), stowed about 90° away (frame 1); stow sign not yet checked"
+    },
+    "mast_azimuth": {
+      "angle": 0,
+      "min": -181,
+      "max": 181,
+      "source": "bell2021, p.23: 'point the cameras over ±181° in azimuth'. 0 = the model's raised azimuth"
+    },
+    "mast_elevation": {
+      "angle": 0,
+      "min": -87,
+      "max": 91,
+      "source": "bell2021, p.23: '−87° to +91° in elevation'. 0 = head level in the model"
+    }
+  },
+  "closeups": [
+    {
+      "name": "left suspension",
+      "target": [
+        0.9,
+        0.0,
+        0.5
+      ],
+      "look": [
+        -1,
+        0,
+        0
+      ],
+      "radius": 1.5
+    },
+    {
+      "name": "underside",
+      "target": [
+        0,
+        0,
+        0.5
+      ],
+      "look": [
+        0.3,
+        0.2,
+        1
+      ],
+      "radius": 1.6
+    },
+    {
+      "name": "front wheel",
+      "target": [
+        1.06,
+        -1.095,
+        0.45
+      ],
+      "look": [
+        -1,
+        0.6,
+        -0.3
+      ],
+      "radius": 0.5
+    },
+    {
+      "name": "mast head",
+      "target": [
+        -0.557,
+        -0.713,
+        1.98
+      ],
+      "look": [
+        0.6,
+        -1,
+        -0.3
+      ],
+      "radius": 0.45
+    },
+    {
+      "name": "arm and turret",
+      "target": [
+        0.0,
+        -1.1,
+        1.1
+      ],
+      "look": [
+        0.2,
+        1,
+        -0.4
+      ],
+      "radius": 0.9
+    },
+    {
+      "name": "rtg",
+      "target": [
+        0,
+        1.25,
+        1.25
+      ],
+      "look": [
+        -0.6,
+        -1,
+        -0.4
+      ],
+      "radius": 0.7
+    }
+  ]
+}

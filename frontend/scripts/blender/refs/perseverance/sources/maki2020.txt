@@ -1,0 +1,1832 @@
+Space Sci Rev (2020) 216:137
+https://doi.org/10.1007/s11214-020-00765-9
+
+
+
+
+The Mars 2020 Engineering Cameras and Microphone
+on the Perseverance Rover: A Next-Generation Imaging
+System for Mars Exploration
+
+J.N. Maki1 · D. Gruel1 · C. McKinney1 · M.A. Ravine2 · M. Morales1 · D. Lee1 ·
+R. Willson1 · D. Copley-Woods1 · M. Valvo1 · T. Goodsall1 · J. McGuire1 · R.G. Sellar1 ·
+J.A. Schaffner2 · M.A. Caplinger2 · J.M. Shamah2 · A.E. Johnson1 · H. Ansari1 ·
+K. Singh1 · T. Litwin1 · R. Deen1 · A. Culver1 · N. Ruoff1 · D. Petrizzo1 · D. Kessler1 ·
+C. Basset1 · T. Estlin1 · F. Alibay1 · A. Nelessen1 · S. Algermissen1
+Received: 8 June 2020 / Accepted: 9 November 2020 / Published online: 24 November 2020
+© The Author(s) 2020
+
+
+Abstract The Mars 2020 Perseverance rover is equipped with a next-generation engineer-
+ing camera imaging system that represents an upgrade over previous Mars rover missions.
+These upgrades will improve the operational capabilities of the rover with an emphasis on
+drive planning, robotic arm operation, instrument operations, sample caching activities, and
+documentation of key events during entry, descent, and landing (EDL). There are a total of
+16 cameras in the Perseverance engineering imaging system, including 9 cameras for surface
+operations and 7 cameras for EDL documentation. There are 3 types of cameras designed
+for surface operations: Navigation cameras (Navcams, quantity 2), Hazard Avoidance Cam-
+eras (Hazcams, quantity 6), and Cachecam (quantity 1). The Navcams will acquire color
+stereo images of the surface with a 96◦ × 73◦ field of view at 0.33 mrad/pixel. The Hazcams
+will acquire color stereo images of the surface with a 136◦ × 102◦ at 0.46 mrad/pixel. The
+Cachecam, a new camera type, will acquire images of Martian material inside the sample
+tubes during caching operations at a spatial scale of 12.5 microns/pixel. There are 5 types of
+EDL documentation cameras: The Parachute Uplook Cameras (PUCs, quantity 3), the De-
+scent stage Downlook Camera (DDC, quantity 1), the Rover Uplook Camera (RUC, quan-
+tity 1), the Rover Descent Camera (RDC, quantity 1), and the Lander Vision System (LVS)
+Camera (LCAM, quantity 1). The PUCs are mounted on the parachute support structure and
+will acquire video of the parachute deployment event as part of a system to characterize
+parachute performance. The DDC is attached to the descent stage and pointed downward,
+it will characterize vehicle dynamics by capturing video of the rover as it descends from
+the skycrane. The rover-mounted RUC, attached to the rover and looking upward, will cap-
+ture similar video of the skycrane from the vantage point of the rover and will also acquire
+video of the descent stage flyaway event. The RDC, attached to the rover and looking down-
+ward, will document plume dynamics by imaging the Martian surface before, during, and
+
+The Mars 2020 Mission
+Edited by Kenneth A. Farley, Kenneth H. Williford and Kathryn M. Stack
+
+B J.N. Maki
+    Justin.N.Maki@jpl.nasa.gov
+1   Jet Propulsion Laboratory, California Institute of Technology, Pasadena, CA, USA
+2   Malin Space Science Systems, San Diego, CA, USA
+137   Page 2 of 48                                                                J.N. Maki et al.
+
+after rover touchdown. The LCAM, mounted to the bottom of the rover chassis and pointed
+downward, will acquire 90◦ × 90◦ FOV images during the parachute descent phase of EDL
+as input to an onboard map localization by the Lander Vision System (LVS). The rover also
+carries a microphone, mounted externally on the rover chassis, to capture acoustic signatures
+during and after EDL. The Perseverance rover launched from Earth on July 30th, 2020, and
+touchdown on Mars is scheduled for February 18th, 2021.
+
+Keywords Mars · Remote sensing · Planetary exploration · Rovers · Cameras ·
+Space exploration
+
+
+1 Introduction
+
+The National Aeronautics and Space Administration (NASA) Mars 2020 Perseverance rover
+launched from Earth on July 30th, 2020 and is scheduled to land on Mars on February 18th,
+2021. The rover is designed to drive across the surface and collect samples of surface mate-
+rial for possible return to Earth by a follow-on mission (Farley et al. 2020). To help achieve
+this task the Mars 2020 Rover is equipped with a next-generation engineering camera imag-
+ing system that represents a significant upgrade over the engineering camera systems flown
+on previous missions. The Mars 2020 upgrades are focused on three key areas. The first area
+is rover surface operations, including activities such as rover driving, robotic arm operations,
+and science instrument operations. The second area includes documentation of sample pro-
+cessing and handling operations inside the rover Adaptive Caching Assembly (ACA). The
+third area includes documentation of the performance and operation of the Entry, Descent,
+and Landing (EDL) system. Collectively the Perseverance next-generation imaging system
+will improve the capabilities of the Mars 2020 mission and help to enhance the mission sci-
+ence return relative to previous missions. This paper describes the Mars 2020 engineering
+camera hardware and associated flight and ground software.
+
+1.1 Scope
+
+1.1.1 Engineering Cameras
+
+This paper describes the 16 engineering cameras on the Mars 2020 rover. For the purposes
+of this paper the Mars 2020 engineering cameras are divided into three groups, based on
+the three separate development teams that designed, built, and delivered the hardware to
+the Mars 2020 ATLO (Assembly, Test, and Launch Operations) team. The first group of
+cameras is comprised of nine cameras dedicated to surface operations and includes the Nav-
+igation cameras (Navcams, quantity 2), the Front Hazard Avoidance cameras (Front Haz-
+cams, quantity 4), the Rear Hazard Avoidance cameras (Rear Hazcams, quantity 2), and
+the sample Cache camera (Cachecam, quantity 1). The second group is comprised of six
+cameras dedicated to EDL documentation and includes a Parachute Uplook Camera (PUC,
+quantity 3), a Descent stage Downlook Camera (DDC, quantity 1), a Rover Uplook Cam-
+era (RUC, quantity 1), and a Rover Downlook Camera (RDC, quantity 1). The third group
+includes the LCAM (quantity 1), dedicated to providing critical image data to the Lander
+Vision System (LVS) during the parachute descent phase of EDL. Data from all 16 cameras
+will be available for use by the Perseverance science and engineering teams during the mis-
+sion. Data from the engineering cameras will also be archived in NASA’s Planetary Data
+System.
+The Mars 2020 Engineering Cameras                                           Page 3 of 48   137
+
+1.1.2 Science Cameras
+
+In addition to the 16 engineering cameras described in this paper, there are seven cameras
+on the rover dedicated to specific scientific investigations. The Mastcam-Z cameras (quan-
+tity 2) acquire color stereo images with matching variable focal lengths using a zoom lens
+(Bell et al. 2020). The SuperCam camera uses a next-generation Remote Microscopic Im-
+ager (RMI), described in Maurice et al. (2020), to acquire context images for spectrometer
+observations. The PIXL (Planetary Instrument for X-ray Lithochemistry) instrument uses
+a Micro Context Camera (MCC) to acquire context images and images of projected laser
+fiducial markings (Allwood et al. 2020). The SHERLOC (Scanning Habitable Environments
+with Raman & Luminescence for Organics & Chemicals) instrument contains two cameras:
+the Advanced Context Imager (ACI) for context imaging, and the WATSON (Wide Angle
+Topographic Sensor for Operations and eNgineering) camera acquires image for general
+documentation and context (Bhartia et al. 2020). The MEDA SkyCam acquires images of
+the Martian sky as part of a larger atmospheric science instrument package (Rodriguez-
+Manfredi et al. 2020).
+    The Navcam and Hazcam cameras provide targeting support and context imaging for
+these science cameras. Images from the science cameras will be co-registered to the Navcam
+and Hazcam images using calibration data acquired during Mars 2020 ATLO.
+
+1.1.3 Summary of Perseverance Imaging System
+
+There are a total of 23 cameras on the Perseverance mission (16 engineering cameras and 7
+science cameras). Table 1 lists the cameras and locations. Of the 23 cameras, 19 are rover-
+mounted and 4 cameras are mounted to the entry vehicle. Of the 19 rover-mounted cameras,
+16 of the cameras are designed for use during the nominal surface mission.
+
+1.2 Background
+
+1.2.1 Navcams, Hazcams, and Cachecam
+
+The first Mars rover engineering cameras flew on the Mars Pathfinder Sojourner microrover
+(Moore et al. 1997). The Sojourner rover flew three body-mounted cameras for traverse as-
+sessment and documentation of vehicle state, augmented by a pair of pan/tilt mast-mounted
+stereo color cameras on the Mars Pathfinder lander (Smith et al. 1997). The Spirit and Op-
+portunity rovers standardized these camera types into an integrated imaging system, with
+pan/tilt cameras (Navcams) and body-mounted cameras (Hazcams), as described in Maki
+et al. 2003. The same Navcam and Hazcam designs were carried forward to the Mars Sci-
+ence Laboratory (MSL) Curiosity rover, which flew identical copies of the MER cameras
+(Maki et al. 2012).
+    The MER engineering cameras were designed and developed as part of a single camera
+production effort with four Pancam cameras (Bell et al. 2003) and two Microscopic Imager
+cameras (Herkenhoff et al. 2003). All 20 of the MER cameras shared the identical electronics
+and detector design, with different lenses determining the camera type. The Mars Phoenix
+mission flew two MER flight spare camera electronics and detector assemblies as part of the
+Surface Stereo Imager camera system (Lemmon et al. 2008). The Mars Science Laboratory
+(MSL) program ran a second production run of build-to-print copies of the MER Navcams
+and Hazcams. A total of 14 of these cameras were flown on MSL (Maki et al. 2012). The
+Mars InSight mission flew two MSL flight spare cameras, slightly modified with color filter
+137      Page 4 of 48                                                                        J.N. Maki et al.
+
+Table 1 List of cameras on the Perseverance rover and entry vehicle
+
+Camera name              Quantity    Location              Reference                            Type
+
+Navcam                   2           Rover (mast)          Maki et al. (2020) (this paper)      Engineering
+Front Hazcam             4           Rover (body)          Maki et al. (2020) (this paper)      Engineering
+Rear Hazcam              2           Rover (body)          Maki et al. (2020) (this paper)      Engineering
+Cachecam                 1           Rover (internal)      Maki et al. (2020) (this paper)      Engineering
+PUCa                     3           Parachute structure   Maki et al. (2020) (this paper)      Engineering
+DDCa                     1           Descent stage         Maki et al. (2020) (this paper)      Engineering
+RUCb                     1           Rover (top deck)      Maki et al. (2020) (this paper)      Engineering
+RDCb                     1           Rover (body)          Maki et al. (2020) (this paper)      Engineering
+LCAMc                    1           Rover (body)          Maki et al. (2020) (this paper)      Engineering
+
+Mastcam-Z                2           Rover (mast)          Bell et al. (2020)                   Science
+SuperCam RMI             1           Rover (mast)          Maurice et al. (2020)                Science
+PIXL MCC                 1           Rover (arm)           Allwood et al. (2020)                Science
+SHERLOC ACI              1           Rover (arm)           Bhartia et al. (2020)                Science
+SHERLOC WATSON           1           Rover (arm)                                                Science
+MEDA SkyCam              1           Rover (top deck)      Rodriguez-Manfredi et al. (2020)     Science
+
+Totals                   23 total: 19 rover-mounted + 4 mounted to the entry vehicle
+
+a Discarded during rover landing event
+
+b Commandable after landing, but not designed to withstand surface environment
+c Not commandable after landing
+
+
+
+arrays added to the detectors (Maki et al. 2018). A third MSL flight spare unit will fly on
+the Mars 2020 Perseverance rover as part of the MEDA Skycam (Rodriguez-Manfredi et al.
+2020).
+   A total of 36 individual flight unit cameras from the MER and MSL missions have flown
+to Mars as of this writing. With an additional MSL flight spare camera flying on the Perse-
+verance rover in 2020, the era for the MER/MSL cameras is coming to a close. The original
+camera design from MER is now over 20 years old, and electronics parts obsolescence has
+precluded any additional production runs without significant redesigns. Additionally, signif-
+icant advancements in electronics and detector designs have occurred since MER, opening
+up the possibility of improvements over the original designs.
+   In early 2013 an internal Mars 2020 project study was commissioned to examine the
+possibility of modernizing the MER/MSL camera designs. After a prototyping phase, the
+project baselined a set of new Navcam and Hazcam cameras in October 2014, along with
+Cachecam, a new camera type. Detailed design began in 2015, and the next-generation en-
+gineering cameras were delivered to the Mars 2020 ATLO in the summer of 2019. During
+hardware development the next-generation engineering camera task was referred to as the
+Enhanced Engineering Camera (EECAM) task. Once integrated onto the rover the engineer-
+ing cameras assume the traditional ECAM name, along with the individual “cam” names of
+Navcams, Front Hazcams, Rear Hazcams, and the newly designed Cachecam.
+   The Mars 2020 Navcams and Hazcams offer three primary improvements over MER
+and MSL. The first improvement is an upgrade to a detector with 3-channel, red/green/blue
+(RGB) color capability that will enable better contextual imaging capabilities than the pre-
+vious engineering cameras, which only had a black/white capability. The second improve-
+The Mars 2020 Engineering Cameras                                           Page 5 of 48   137
+
+ment is that the Perseverance cameras have wider fields of view than previous versions,
+which improves the quality of mosaics and increases downlink efficiency. The third im-
+provement is that the Perseverance cameras have finer pixel scale (mrad/pixel) and are able
+to resolve more detail than the MER/MSL cameras. All of the Navcam and Hazcam cam-
+eras for MER, MSL, and Mars 2020 were built at the Jet Propulsion Laboratory/California
+Institute of Technology, in Pasadena, CA.
+    The Mars 2020 rover carries a new camera type, the Cachecam, a fixed-focus imager
+dedicated to sample inspection and documentation. Cachecam images will be used by the
+sample operations teams to document and verify the processing of the sample material dur-
+ing caching operations. The same images will also serve to document the tube contents
+prior to sealing. The closest previous-mission analog to the Cachecam is the fixed-focus
+Microscopic Imager (MI) flown on the MER mission (Herkenhoff et al. 2003). The MER
+MI was mounted on a robotic arm and was placed into position by the arm for imaging. The
+Cachecam, also a fixed-focus imager, is hard mounted inside the rover chassis. A robotic arm
+inside the ACA brings sample tubes to the Cachecam for imaging operations. The Cachecam
+was built at the Jet Propulsion Laboratory/California Institute of Technology as part of the
+Navcam and Hazcam production run.
+
+1.2.2 EDLCAMs
+
+In 2014 the Mars 2020 project began to investigate options for improving knowledge of
+Entry, Descent, and Landing (EDL) system performance using a video imaging system to
+document key EDL events. Of particular interest were the parachute deployment, skycrane
+deployment, rover touchdown, and lander rocket plume dynamics. The proposed solution
+involved qualifying commercial off the shelf (COTS) hardware with an emphasis on low
+cost and ease of system integration. In June of 2015 the Mars 2020 project added the EDL
+cameras (EDLCAMs) to the project baseline. The EDLCAMs were delivered to ATLO in
+the fall of 2019.
+   The EDLCAM system includes four new camera types, along with a rover chassis-
+mounted microphone for recording audio. Three Parachute Uplook Cameras (PUCs) will
+monitor parachute deployment. A Descent stage Downlook Camera (DDC) will record the
+rover as it descends from the skycrane, while the Rover Uplook Camera (RUC) simultane-
+ously records the descent stage as seen from the rover. The Rover Downlook Camera (RDC)
+will image Mars as the rover touches down onto Mars. Video and audio from the EDLCAM
+system will be relayed to Earth in the subsequent sols after the rover is safely on Mars. The
+EDLCAM system was built with commercially available hardware, slightly modified for use
+on Mars 2020, and integrated/tested at the Jet Propulsion Laboratory/California Institute of
+Technology.
+
+1.2.3 LCAM
+
+The first camera sent to Mars for descent imaging was the Mars Descent Imager (MARDI),
+which flew on the Mars Polar Lander (MPL) mission in 1998 (Malin et al. 2001). The MPL
+spacecraft was lost during EDL and no image data were returned (Casani et al. 2000).
+   In 2004 the MER Descent Motion Estimation System (DIMES) system returned images
+during EDL as part of a system to detect and remove excess horizontal velocity during EDL
+(Johnson et al. 2007). The DIMES system acquired three images per rover at a rate of one
+image every 3.75 seconds, using a modified Navcam camera as a descent imager (Maki
+et al. 2003). The DIMES system successfully determined the horizontal velocity on both
+137   Page 6 of 48                                                               J.N. Maki et al.
+
+vehicles and triggered a successful velocity reduction on Spirit (no correction was required
+on Opportunity).
+   In 2008 the Mars Phoenix mission flew a second version of the MPL MARDI to Mars,
+along with a microphone. Phoenix MARDI data were not acquired during EDL due to last-
+minute concerns that the data transfer from the camera to the lander might interfere with the
+EDL system.
+   In 2012 the MSL Curiosity Mars Descent Imager (MARDI) successfully acquired images
+during EDL (Malin et al. 2017). Although the Curiosity MARDI had heritage from the
+earlier MPL and Phoenix MARDI designs, the Phoenix experience motivated a different
+data handling architecture for MSL. Rather than relying on the spacecraft for the readout
+and storage of MARDI images, the camera included its own non-volatile flash memory,
+making data acquisition and storage independent of the spacecraft during EDL. The MSL
+MARDI was developed along with the MSL Mastcam (Malin et al. 2017) and MAHLI
+cameras (Edgett et al. 2012) and incorporates a number of other improvements relative to
+the MPL and Phoenix versions of MARDI: a larger format (1600 × 1200 pixels), color
+(Bayer pattern filter) detector, transform-based lossy image compression (Joint Photographic
+Experts Group, JPEG) and a higher frame rate (∼ 4 frames/second). The Curiosity MARDI
+improved the frame rate by 15× over the MER descent imager.
+   In 2016 the Mars 2020 project incorporated the Lander Vision System (LVS) system into
+the Mars 2020 EDL design. A key component of the LVS is the LVS Camera (LCAM),
+which acquires images of the surface during parachute descent. The LVS determines the
+vehicle location by acquiring and correlating LCAM images to an onboard reference map.
+The onboard map is generated using data from the Mars Reconnaissance Orbiter (MRO)
+Context camera (CTX, Malin et al. 2007) and preloaded onto the vehicle prior to EDL.
+The spacecraft uses the LVS localization to determine a landing target that avoids hazards
+identified a-priori using MRO HiRISE (McEwen et al. 2007) imagery. The spacecraft flies
+down to this safe target during the powered descent phase of EDL. LVS has heritage from
+the MER Descent Motion Estimation System (DIMES) system. The technique employed by
+the Mars 2020 LVS is called Terrain Relative Navigation (TRN).
+   The LCAM is required to acquire and send global shutter images immediately upon
+command by the LVS with low time latency. Because these timing requirements could not be
+met with any existing space-qualified flight imaging systems, Malin Space Science Systems
+(MSSS) was selected to develop, build, and test a new system. LCAM has heritage from
+the earlier MARDI designs, and also incorporates features of other MSSS imaging systems
+(Ravine et al. 2016).
+
+
+2 Instrument Objectives and Requirements
+
+2.1 ECAMs
+
+2.1.1 ECAM Objectives
+
+The high-level objectives and requirements of the Perseverance engineering cameras are
+largely unchanged from the original Spirit and Opportunity requirements. The Navcams are
+designed to survey the terrain around the rover with a 360◦ field of regard by acquiring im-
+ages from atop a pan/tilt mast mounted on the top deck of the rover. Navcam images are
+used for traverse planning, science target identification and selection, robotic arm operation,
+and rover auto-navigation. Additionally, the Navcams will document the state of the vehicle
+The Mars 2020 Engineering Cameras                                           Page 7 of 48   137
+
+by acquiring images of rover hardware and determine the rover attitude in the local Mars
+frame by acquiring images of the sun. The Hazcams are designed to image the areas imme-
+diately fore/aft of the vehicle, particularly in areas that do not have Navcam coverage due
+to occlusion by the rover body. The Hazcams support robotic arm operation and rover nav-
+igation. They also support inspection of the front/rear wheels the contact interface between
+the wheels and the terrain. The Cachecam will document the material in the sample tubes
+during sample processing.
+
+2.1.2 ECAM Requirements, Improvements over Previous Generations
+
+The Perseverance engineering camera design upgrades were based on lessons learned from
+rover surface operations on Mars, including the Spirit rover mission, active from 2004–
+2010, the Opportunity rover mission, active from 2004–2018, and the Curiosity rover, active
+from 2012 to present. Three primary limitations of the original MER/MSL designs have
+emerged over the course of over 16 years of continuous rover operations on Mars. The first
+is that the MER/MSL Navcam field of view (FOV) is too narrow to efficiently image the
+Martian landscape around the rover. The second limitation is that the MER/MSL engineering
+cameras provide a limited capability for the assessment of vehicle state and Martian terrain
+due to lack of color information. The third limitation is that the low angular pixel scale of
+the MER/MSL engineering cameras limit blind drive designations to approximately 40–50
+meters and provide a limited ability to assess the state of vehicle hardware. The original
+MER camera designs were designed for a 90-Sol nominal surface mission. By improving
+on the original designs the Perseverance engineering cameras will help to improve mission
+performance over predecessor missions.
+
+2.1.3 Field of View
+
+The MER/MSL Navcam FOV is 45◦ × 45◦ at 0.82 mrad/pixel. While a relatively wide field
+of view compared to Pancam (16◦ × 16◦ at 0.27 mrad/pixel, Bell et al. 2003) or Mastcam
+(20◦ × 15◦ at 0.218 mrad/pixel, Malin et al. 2017), the MER/MSL Navcam FOV is too
+narrow to allow simultaneous imaging of both the near field and far field terrain in a single
+image. A total of 10 MSL Navcam images must be acquired to cover the full 360◦ field of
+regard. To cover both the near and far field terrain, two tiers of MSL Navcam panoramas (10
+images wide × 2 images high) must be mosaicked together, creating image-to-image seams
+at the interfaces between the images (Fig. 1). Parallax effects between adjacent overlapping
+images within a panorama create imperfections within the final assembled mosaic.
+    The Perseverance Navcam field of view was chosen to be 90◦ × 70◦ . The 90◦ horizontal
+FOV allows a 360◦ Navcam panorama to be acquired with 5 overlapping images (compared
+to 10 overlapping Navcam images on MSL). Additionally, the 70◦ vertical FOV enables a
+single Navcam image to cover the terrain from the area immediately near the rover all the
+way out to the horizon. The larger Navcam FOV also requires less data volume to cover the
+same terrain, saving between 5% and 10%, due to fewer overlap regions, as described in the
+next section (Field of View, Image-to-Image spacing, and Mosaic Coverage Efficiency).
+    The Perseverance Hazcam FOV requirement was expanded slightly to > 130◦ horizontal,
+compared to 124◦ in the MER/MSL Hazcam design, to enable better coverage of the rover
+wheels.
+137   Page 8 of 48                                                                        J.N. Maki et al.
+
+
+
+
+Fig. 1 MSL Navcam mosaic. The mosaic as shown above covers a total field of approximately 90◦ × 70◦ ,
+and required portions of 6 individual Navcam images (∼ 2.75 images wide by ∼ 1.75 images high) to cover
+the field. The Perseverance Navcams will cover the same field of view in a single image. Reducing the
+image-to-image overlap in a mosaic improves the quality of a mosaic by reducing the number of seams. The
+reduction in overlap also reduces downlinked data volume by eliminating the redundant data in the overlap
+regions
+
+
+
+Field of View, Image-to-Image spacing, and Mosaic Coverage Efficiency When imag-
+ing the terrain with a pan/tilt imaging system, the field of view of the camera is an important
+consideration in determining the angular (azimuth/elevation) spacing between adjacent im-
+ages. This image-to-image spacing is also called the center-to-center spacing, i.e., the dis-
+tance between the centers of adjacent images. In the ideal case where objects are infinitely
+far away from a perfect camera rotating about an idealized pinhole viewpoint, the center-
+to-center distance can theoretically be exactly equal to 100% of the FOV of the camera. In
+the case of a stereo pan/tilt system where the cameras rotate and translate about the pan/tilt
+axes, parallax effects require that the spacing between adjacent images be less than 100%
+of the FOV. Additionally, stereo coverage in a single stereo pair is not 100% due to par-
+allax effects caused by the separation of the left/right eyes of a stereo pair. As a general
+rule, a center-to-center spacing of 80% of the camera FOV robustly ensures sufficient stereo
+coverage throughout an entire mosaic for virtually all scenes.
+    The spacing between the images in a mosaic can be expressed numerically with a spacing
+factor α variable multiplied by the FOV, where the value of α in this analysis ranges from
+0.5 (50% spacing between images) to 1.0 (100% of the FOV) spacing between images).
+The mosaic coverage efficiency (MCE) can be expressed as the ratio of the total number of
+pixels acquired in a mosaic with spacing factor α, including redundant pixels in the overlap
+The Mars 2020 Engineering Cameras                                                  Page 9 of 48   137
+
+
+
+
+Fig. 2 Individual image coverage efficiency of images within a 10 × 1, 360-degree mosaic with spacing
+factor α = 0.8. The total cumulative mosaic coverage efficiency is shown in Fig. 3
+
+
+regions, divided by the number of pixels in the same mosaic with no overlap (α = 1). For
+the case of a single mosaic image (N = 1), the MCE is 100%.
+   The equation for the MCE of a partial 360◦ single tier mosaic containing n images (n × 1)
+each with areal coverage A is:
+
+                                          A1 + α(A2 + A3 + · · · + An )
+                          MCEpartial =
+                                                    A×n
+where A1 , A2 , A3 , etc. are the individual areal coverages of each image in the mosaic (ig-
+noring parallax effects) and α is the spacing factor.
+   Because the areal coverages are the same, the above equation simplifies to:
+
+                                                  1 + α(N − 1)
+                                  MCEpartial =
+                                                       N
+In the case of an idealized full 360◦ mosaic, ideally spaced so that n images fit symmetrically
+into a 360◦ panorama and the last (nth) image overlaps the first, the MCE is:
+
+                                A1 + α(A2 + A3 + · · · + An−1 ) + An (2α − 1))
+               MCEf ull 360 =
+                                                  A×n
+In the above equation, the first image, A0 has 100% efficiency (no overlap), while subsequent
+images have an efficiency of α. The very last image in a 360-degree mosaic is the least
+efficient, with an efficiency of 2α − 1 due to the fact that it is wrapping around to the first
+image in mosaic and thus covering redundant areas on both sides of the image, as shown in
+Fig. 2. This is equivalent to all of the images having an efficiency equal to α, and the above
+equation can be simplified to show that the MCE of a full 360-degree mosaic is equal to the
+spacing factor:
+                                         MCEf ull 360 = α
+One interesting result from this analysis is that the MCE for an idealized, complete 360◦
+single-tier mosaic is equal to the spacing factor α regardless of the FOV of the camera.
+A small FOV camera will have many seams, but as long as the panorama covers 360◦ it will
+have the same mosaic coverage efficiency as a large FOV camera. Conversely, for partial
+panoramas, a camera with a wider FOV will generally give higher mosaic coverage efficien-
+cies than smaller FOV cameras. The above analysis is idealized, but the results are generally
+the same, even for non-idealized panoramas.
+   The plot in Fig. 3 shows how the mosaic coverage efficiency for a single tier MSL Nav-
+cam mosaic starts at 100% for the first image, decreases to 90% for the 2 × 1 mosaic, 86.7%
+for the 3 × 1, and so on, finally dropping to α as the mosaic forms a complete 10 × 1, 360◦
+panorama. Figure 4 shows a MCE plot for a 5 × 1, 360◦ Mars 2020 Navcam panorama.
+137   Page 10 of 48                                                           J.N. Maki et al.
+
+Fig. 3 Mosaic coverage
+efficiency for an MSL 10 × 1
+Navcam 360◦ mosaic, plotted as
+a function of the number of
+images (horizontal FOV = 45◦ ,
+α = 0.8, m = 10). The variable m
+represents the number of images
+required for a full 360◦ mosaic
+
+
+
+
+Fig. 4 Mosaic coverage
+efficiency for a Perseverance
+5 × 1 Navcam 360◦ Navcam
+mosaic, plotted as a function of
+the number of images (horizontal
+FOV = 90◦ , α = 0.8, m = 5).
+The variable m represents the
+number of images required for a
+full 360◦ mosaic
+
+
+
+
+With the same α value of 0.8, the MCE values for the Mars 2020 Navcam are identical to
+the MSL Navcam values for the first 4 images. The fifth image in the Mars 2020 Navcam
+completes the 360◦ panorama, which drops the MCE for the full 5 × 1 panorama to 0.8,
+while the efficiency of the 5 × 1 MSL Navcam panorama is 84%. The difference however
+is that the MSL Navcam panorama only covers 180◦ , while the Mars 2020 panorama covers
+the full 360◦ . This is more easily shown in Fig. 5, which compares the MCE values of four
+different camera FOVs.
+    By increasing the FOV of the Navcam from 45◦ (MSL) to 90◦ (Perseverance), the mosaic
+coverage efficiency improves across the whole range of azimuths. Of particular interest are
+the partial panoramas covering between 90◦ and 180◦ , which are often acquired as part
+of a drive direction or arm workspace images. For these types of panoramas, the mosaic
+coverage efficiency for the Perseverance Navcams is typically 90%, compared to ∼ 85%
+for the corresponding MSL Navcam. For panoramas less than 90◦ , the Perseverance MCE
+values are 100%, compared to the comparable Navcam MCE values of ∼ 90%.
+The Mars 2020 Engineering Cameras                                            Page 11 of 48   137
+
+Fig. 5 The MCE for several
+camera types, plotted as a
+function of azimuth. For
+coverage less than 360◦ , a wider
+FOV camera will have a higher
+mosaic coverage efficiency than a
+camera with a smaller FOV. The
+variable m represents the number
+of images in a full 360◦ mosaic
+
+
+
+
+    The higher Perseverance Navcam efficiency results in a typical data volume savings of
+approximately 5% when compared to the MSL Navcams. When tallied over the entire nom-
+inal mission, such a data volume savings corresponds to the equivalent of several thousand
+Navcam images.
+    The MCE analysis can be extended into two dimensions with a similar conclusion: cam-
+eras with wider fields of view use downlink bandwidth more efficiently than narrower FOV
+cameras when acquiring partial panoramas.
+    In addition to better mosaics with higher coverage efficiency, the wider Perseverance
+Navcam FOV means that the onboard navigation software (visodom and autonav) only needs
+a single stereo Navcam image acquisition rather than the 3 stereo Navcam images required
+on MSL. This allows the Perseverance Navcams to be pointed once and left there during a
+drive, saving actuator usage, Remote Sensing Mast (RSM) slew time, and image acquisition
+time. This time savings can instead be spent directly on rover driving, which improves drive
+distance per sol.
+
+2.1.4 ECAM Pixel Scale
+
+The MER/MSL Navcams have a pixel scale of 0.8 milliradians/pixel at the center of the
+FOV, and the MER/MSL Hazcams have a pixel scale of 2.1 milliradians/pixel at the center
+of the FOV. While these pixel scales are sufficient for basic context and planning, the limited
+MSL Navcam pixel scale prevents drive planning beyond approximately 50 meters on MSL,
+depending on the terrain. Additionally, the ability to resolve details of rover hardware with
+the MSL Navcams is often insufficient, particularly when imaging the turret hardware on the
+robotic arm. During surface operations the Curiosity rover engineering team often requests
+images from the Mastcams, with a pixel scale of 0.218 mrad/pixel, for drive planning (Fig. 6)
+and engineering inspection of hardware. The Perseverance Navcams and Hazcams were
+required to have pixel scales of ≤ 0.4 mrad/pixel to allow better drive planning and hardware
+inspection capabilities.
+
+ECAM Color The MER/MSL engineering cameras acquire single-channel greyscale im-
+ages, with a visible bandpass covering 600–800 nm. The lack of color information often
+hampers the ability of ground operators to assess the state of the vehicle during surface
+137   Page 12 of 48                                                                       J.N. Maki et al.
+
+
+
+
+Fig. 6 Drive direction imaging with the MSL Navcams (greyscale, 0.8 milliradians/pixel) and the left Mast-
+cam (color, ∼ 0.2 mrad/pixel, inset in top image, and bottom image). The Perseverance Navcams have a pixel
+scale of ∼ 0.3 mrad/pixel
+
+
+
+
+Fig. 7 Distinguishing two types of Martian material against metallic surfaces is challenging when using
+only luminance information (left), while the same assessment is relatively straightforward with 3-channel
+color (right). This image is from the MSL Mastcam (Malin et al. 2017). All of the Perseverance engineering
+cameras are color cameras
+
+
+operations. One particularly challenging area involves assessing the level of dustiness of
+rover hardware. When assessing the quantity of dust, soil, and drilled rock material against
+anodized aluminum and other shiny metallic surfaces, the use of grayscale images for this
+assessment is challenging even for experienced human operators (Fig. 7).
+   Color also improves the ability of operators and algorithms to distinguish between terrain
+types, in particular areas that contain dust and soil versus areas that contain more rocky
+materials. Because Martian soil/dust is a distinct yellowish brown in color (Huck et al. 1977;
+The Mars 2020 Engineering Cameras                                           Page 13 of 48   137
+
+Maki et al. 1999), it is readily identified in color images in ways that are not possible with
+greyscale images (Maki et al. 2018). Because of this advantage over grayscale, all of the
+Perseverance engineering camera designs were required to have color (RGB) detectors.
+
+2.1.5 Other ECAM Design Considerations
+
+As part of the Perseverance engineering camera design effort, all previous engineering cam-
+era requirements from MER/MSL were either to be met or exceeded. During the design
+phase, the MER/MSL cameras were used as the minimum performance threshold, with the
+performance of the new ECAMs being capabilities-driven above that threshold, within a
+project-defined cost constraint.
+
+Interface As part of the upgrade to the next-generation designs, one of the key require-
+ments on the Perseverance engineering camera design was that it maintain near 100% com-
+patibility with the heritage MER/MSL interface, including electronics interface, data, power,
+and mechanical interface. This was driven by the fact that the engineering camera interface
+card inside the rover body is a build-to-print copy of the MSL card. Memory inside the
+Perseverance Rover Compute Element (RCE) is also unchanged. This constraint drove the
+design of the Perseverance ECAM tiling scheme, discussed in detail in Sect. 3. The Perse-
+verance ECAM design team was given the goal of designing a camera that was as close to
+“plug and play” compatible with the MSL and MER interfaces as possible.
+
+Thermal The MER/MSL camera thermal design isolated the camera head electronics
+from the focal plane array electronics by placing them in separate housings/boxes, in an
+effort to minimize the amount of energy required to heat the cameras. During surface op-
+erations use however, the energy required to heat the engineering cameras on MER/MSL
+was negligible. In fact, the MER/MSL engineering camera thermal design was so efficient
+that it created overheat risk due to the fast warmup of the cameras when the camera heater
+switches were turned on. Because of this lesson learned the Perseverance ECAM thermal
+design combines the camera head electronics and focal plane array electronics into a single
+mechanical package, thermally isolated from the bracket/mounting interface using titanium
+standoffs. Unlike the focal planes used in the MER/MSL cameras, the Perseverance ECAM
+focal planes are operated in the same temperature range as the main camera electronics.
+The electronics boards for the Perseverance ECAMs are thermally coupled to the camera
+housings. This thermally isolates the electronics from the mounting brackets and reduces
+the amount of energy required to heat the electronics to operating temperature. A relatively
+small amount of energy is required to energize the film heaters on the exterior of the camera
+housings, which heats the enclosure and ultimately the electronics.
+
+2.2 EDLCAMs
+
+2.2.1 EDLCAM Objectives
+
+The objectives of the EDLCAM imaging system are to record key events during EDL. The
+first event, parachute deployment, will be recorded by three Parachute Uplook Cameras
+(PUCs). The PUCs will record the deployment, inflation, and operational dynamics of the
+parachute from just prior to mortar fire until backshell separation. The second event, sky
+crane deployment, will be recorded by the Descent stage Downlook Camera (DDC) and the
+Rover Uplook Camera (RUC). The DDC will record rover dynamics and ground interaction
+137   Page 14 of 48                                                                     J.N. Maki et al.
+
+
+
+
+Fig. 8 Location, approximate boresight location and direction, and notional image examples for the EDL-
+CAMs
+
+
+with the sky crane plume through touchdown. The RUC will record the descent stage dy-
+namics through touchdown as seen from the rover and will also capture the flyaway of the
+sky crane. The sixth camera, the Rover Downlook Camera (RDC), will capture the rover
+dynamics and plume interaction with the ground as the rover touches down onto Mars.
+   Additionally, the EDLCAM system includes a microphone, designed to capture acoustic
+events from parachute deploy to touchdown. Figure 8 shows the locations and notional fields
+of view of the cameras. The EDLCAM recording phases are shown in Fig. 9.
+
+2.2.2 EDLCAM Requirements
+
+The EDLCAMs were developed with a minimal number of key requirements. The first re-
+quirement was that the EDLCAMs must not interfere with the flight system during the crit-
+ical EDL phase of the mission. This requires that the EDLCAM imaging system have zero
+or near zero interaction with the MSL-heritage flight system elements during EDL. Data
+for the EDLCAMs must be stored offline from the main rover computer during EDL, to
+be retrieved after the vehicle is safely on the surface, much in the same way that the MSL
+MARDI cameras operated (Malin et al. 2017). The EDLCAM system was specifically de-
+signed to not impose significant changes to heritage hardware or software on the MSL flight
+system. The frame rates for the camera video were driven by a minimum frame rate require-
+ment of 30 frames per second (fps) for parachute imaging. All other EDLCAM performance
+attributes are capabilities driven. The EDL camera system was categorized as a technology
+demonstration during development, and the system uses a significant amount of commer-
+cially available hardware, qualified and modified for EDL use.
+
+2.3 LCAM
+
+2.3.1 Objectives
+
+LCAM will acquire images during the parachute descent stage of EDL for the LVS. Fig-
+ure 10 shows how LCAM images are matched to a basemap during EDL.
+The Mars 2020 Engineering Cameras                                                    Page 15 of 48   137
+
+
+
+
+Fig. 9 EDLCAM recording sequence, showing the approximate coverage of the data acquisition phases of
+the EDLCAM system. The acquisition frame rates of the cameras are listed in frames per second (fps), and
+the acquisition durations are listed on the bottom. The PUC frame rate listed in the yellow box is 75 fps
+
+
+2.3.2 LCAM Requirements
+
+The key LCAM requirements were for a field of view 90◦ by 90◦ , a format of 1024 by 1024
+pixels, a detector with a global shutter, a frame latency of less than 100 ms between the
+camera image trigger and the last pixel output of the image, a frame rate of up to 2 Hz, and
+SNR of > 80:1 with ∼ 1 millisecond exposure time under Martian illumination conditions.
+
+
+3 Instrument Description and Performance
+
+3.1 ECAMs
+
+All of the Perseverance engineering cameras share the same detector and camera body de-
+signs. This approach helps reduce development costs and greatly simplifies integration and
+137   Page 16 of 48                                                                          J.N. Maki et al.
+
+
+
+
+Fig. 10 LCAM images are used by LVS to match features against a basemap. These feature matches are sent
+to an Extended Kalman Filter (EKF) that estimates the vehicle position. The vehicle attitude is propagated by
+an Inertial Measurement Unit (IMU). For details on the LVS see Johnson et al. 2017. Figure from Johnson
+et al. 2017
+
+
+test activities, the software and image processing architecture, and camera operation. Ta-
+ble 2 lists the characteristics of the Navcam, Hazcam, and Cachcam cameras. A total of
+23 cameras were built in the Perseverance engineering camera production run, including
+9 flight model units (FM), 9 engineering model (EM) units, 4 flight spare (kits), and one
+qualification model (QM). The ECAM lenses were designed and manufactured by Jenoptik.
+
+3.1.1 Detector
+
+The Perseverance engineering cameras use a CMV-20000 detector (Fig. 11), a global shut-
+ter CMOS (Complimentary Metal Oxide Semiconductor) device with 5120 × 3840 pixels,
+built by AMS (formerly CMOSIS). The image array has 6.4 micron × 6.4 micron sized
+pixels, digitized at 12 bits/pixel. The detector has a full-frame optical size of 32.77 mm by
+24.58 mm with a Bayer pattern color filter array (Bayer 1976). The CMV-20000 was chosen
+due to the large optical format, the relatively high dynamic range, and high frame rate ca-
+pability. The Perseverance engineering cameras have a commandable exposure time range
+of 410.96 microseconds to 3.277161 seconds, in 50 microsecond steps. The detector has
+been radiation tested to 20 kRad, RDF (Radiation Design Factor) = 2 and meets total dose
+mission performance requirements.
+
+3.1.2 Electronics
+
+The camera electronics consist of 3 electronics PWBs (printed wiring boards) connected via
+rigid flex polyimide film layers built into the inner layers of the boards. This integrated ap-
+proach simplifies the design and manufacturing, and follows the approach used on MER and
+MSL. The three PWBs are folded into the camera body mechanical housing. The electron-
+ics are connected to the rover interface using a 37-pin microD connector. Figure 12 shows
+the functional block diagram for the ECAM electronics. The pixel transfer rate between the
+camera and the RCE was increased to 500,000 pixels/second without changing the heritage
+The Mars 2020 Engineering Cameras                                                       Page 17 of 48     137
+
+
+Table 2 Perseverance Navcam, Hazcam, and Cachecam characteristics
+
+                   Navcam                         Hazcam                        Cachecam
+
+Horizontal FOV 96◦                                136◦                          ∼ 50 mm diameter circle
+Vertical FOV       73◦                            102◦                          at the plane of focus
+Diagonal FOV       120◦                           172◦
+Focal ratio        f/12                           f/12                          N/A
+Focal length       19.1 mm                        14.0 mm                       0.51 magnification
+                                                                                (measured)
+Best focus         3.5 meters                     0.9 meters                    ∼ 140 mm below
+                                                                                illuminator mirror and
+                                                                                ∼ 130 mm below exit
+                                                                                aperture window
+                                                                                Depth of field ±5 mm
+Pixel scale     0.33 mrad/pixel                   0.46 mrad/pixel               ∼ 12.5 microns/pixel at
+(center of FOV)                                                                 plane of focus
+Mass               411 grams                      498 grams                     397 grams (camera)
+(per camera)                                                                    398 grams (vision station)
+Volume             74 mm × 88 mm × 125 mm         74 mm × 88 mm × 140 mm        74 mm × 88 mm × 143 mm
+Stereo baseline    42.4 cm                        Front: 24.8 cm                N/A
+                                                  Rear: 93.4 cm
+Angle between      < 0.4◦ (parallel)              Front: 20◦                    N/A
+left/right                                        Rear: < 1◦ (parallel)
+boresights
+Boresight          Mounted to pan/tilt RSM,       Front: 28◦ below nominal      Pointed downward inside of
+mounting           left/right camera boresights   horizon, left/right cameras   the ACA. Samples are
+orientation        are parallel                   are canted outward by 10◦     brought up to the vision
+                                                  each                          station by the SHA (Sample
+                                                  Rear: 45◦ below the           Handling Assembly)
+                                                  nominal horizon, left/right
+                                                  camera boresights are
+                                                  parallel
+Height above    ∼ 1.98 meters when                0.73 meters                   0.73 meters
+nominal surface viewing horizon
+
+Detector characteristics
+
+Pixel format                      5120 × 3840
+Pixel pitch                       6.4 µm × 6.4 µm
+Optical format                    Full frame (32.77 mm × 24.58 mm)
+Pixel type                        Global shutter with correlated double sampling
+Shutter type                      Pipelined global shutter
+Full well                         15,000 e-
+Pixel dark noise                  8 e- RMS
+Conversion gain                   0.24 DN/e-
+Readout time                      237 milliseconds
+Exposure time (commandable)       410.96 microseconds to 3.277161 seconds, in 50 microsecond steps using
+                                  autoexposure algorithm from Maki et al. (2003)
+Responsivity                      0.29 A/W @ 55 nm with microlenses
+Maximum SNR                       41.8 dB
+137   Page 18 of 48                                                                    J.N. Maki et al.
+
+Table 2 (Continued)
+
+Detector characteristics
+
+Dynamic Range                                                  66 dB
+Color Filters                                                  RGB Bayer color filter array (CFA)
+QE                                                             64.5% @ 55 nm with microlenses
+Camera interface to rover
+Command and data interface                                     LVDS
+Protocol                                                       MER/MSL
+Power Input                                                    +4.3 Volts to +5.9 Volts
+Data Rate                                                      500,000 pixels/second
+Power                                                          3 Watts (single camera, imaging mode)
+                                                               1 Watt (single camera, idle)
+Memory                                                         1 Gbit SDRAM
+FPGA                                                           MicroSemi Rad-Tolerant ProASIC3
+Radiation Tolerance                                            20 kRad TID, RDF = 2
+Temperature Range                                              −55 ◦ C to +50 ◦ C (operational)
+                                                               −135 ◦ C to +70 ◦ C (survival)
+
+
+
+
+Fig. 11 A CMV-20000 detector undergoing prototype testing in 2014 at JPL. The active imaging area is
+32.77 mm × 24.58 mm
+
+
+LVDS clock rate by inserting less space between pixel waveforms. The MER/MSL pixel
+transfer rate is ∼ 200,000 pixels per/second.
+
+3.1.3 Hazcams
+
+The Hazcam lenses have a focal ratio of f/12 and a best focus distance of approximately
+0.9 meters, optimized for the robotic arm workspace and views of the rover wheels. Each
+Hazcam lens assembly contains 10 individual lens elements and a fused silica UV and IR
+The Mars 2020 Engineering Cameras                                               Page 19 of 48   137
+
+
+
+
+Fig. 12 Perseverance camera electronics block diagram
+
+
+blocking filter mounted inside the lens assembly between the third and fourth elements. The
+cameras are body-mounted to the fore and aft of the rover. The FOV of the Hazcams is
+136◦ (horizontal) by 102◦ (vertical), with a 173◦ diagonal. Figure 13 shows a set of flight
+Hazcams.
+
+Front Hazcams There are four Hazcams hard-mounted to the rover front chassis (Fig. 14).
+The Front Hazcams form two stereo pairs: one pair is connected to RCE-A, and the second
+pair is connected to RCE-B. The Front Hazcam stereo baseline for each pair is 24.8 cm;
+the A/B cameras are interleaved to maximize the stereo baseline between the left and right
+cameras. The Front Hazcams are pointed downward 28◦ from the nominal horizon to allow
+better coverage in the area immediately in front of the rover. Additionally, the left and right
+Front Hazcam boresights are each angled outwards by 10◦ (the left cameras are angled 10◦
+to the left and the right cameras are angled 10◦ to the right) to allow better viewing of the
+rover wheels.
+    The Front Hazcams have a sun visor mounted above the cameras to prevent sunlight from
+falling directly onto the lenses. This helps reduce lens flare and other scattered light artifacts.
+To maximize sun shading during late afternoon imaging the visor extends into the top of the
+camera FOV slightly. These upper regions of the FOV will typically be cropped (subframed)
+out of the image before being sent for downlink.
+    The Front Hazcams are protected during EDL by a camera cover assembly. The camera
+covers have transparent Lexan windows, which allow useable images to be acquired while
+the covers are closed. The covers are released shortly after touchdown on Mars using a
+non-explosive actuator (NEA). Once released, the covers flip open using a spring loaded-
+mechanism and stay in the open position for the remainder of the mission.
+
+Rear Hazcams There are two Hazcams mounted on the rear of the rover, one on each side
+of MMRTG (Multi-mission Radioisotope Thermoelectric Generator). The stereo baseline
+137   Page 20 of 48                                                            J.N. Maki et al.
+
+
+
+
+Fig. 13 Flight Hazcam cameras
+
+
+between the two Rear Hazcam cameras is 93.4 cm. Unlike the Front Hazcams, the Rear
+Hazcams are connected to both RCEs. The Rear Hazcams are pointed 45◦ below the nominal
+horizon. Each of the Rear Hazcams has a deployable cover assembly similar in design to
+the Front Hazcams. The Rear Hazcam covers are opened shortly after touchdown on Mars
+in a similar fashion to the Front Hazcams. Unlike the Front Hazcams, the Rear Hazcams
+do not have sun visors. Figure 15 shows a picture of the Rear Hazcams mounted on the
+rover. The proximity of the Rear Hazcams to the RTG exposes these cameras to a slightly
+higher radiation dose than the Navcams and Front Hazcams. Over the course of the prime
+mission, the cumulative effects of radiation on the Rear Hazcam detectors will result in
+higher dark current levels. Additionally, waste heat from the RTG warms the Rear Hazcams
+by 10 ◦ C to 20 ◦ C relative to the Front Hazcams, further raising the Rear Hazcam dark
+current levels. Both of these effects are also seen with the Curiosity rover Rear Hazcams. As
+with the Curiosity Rear Hazcams, these effects are not expected to impact the useability of
+the Perseverance Rear Hazcam images in any appreciable way during the prime mission. As
+the dark current increases over time, operational considerations may be made to acquire Rear
+Hazcam images during the cooler times of the day to reduce thermal dark current effects.
+
+3.1.4 Navcams
+
+The Navcam lenses have a focal ratio of f/12 and a best focus distance of approximately
+3.5 meters. Each lens assembly contains six individual lens elements and a fused silica UV
+and IR blocking filter mounted between the powered elements and the detector. The Navcam
+The Mars 2020 Engineering Cameras                                              Page 21 of 48   137
+
+
+
+
+Fig. 14 Perseverance Front Hazcams. L = left, R = right, A = RCE-A, B = RCE-B. Also shown are the
+Left/Right Navcams
+
+
+
+
+Fig. 15 Perseverance Rear Hazcams
+137   Page 22 of 48                                                            J.N. Maki et al.
+
+
+
+
+Fig. 16 Flight Navcam cameras
+
+
+field of view is 96◦ (horizontal) by 73◦ (vertical), with a diagonal FOV of 120◦ . The Navcam
+cameras are shown in Fig. 16. The Navcams are mounted to the underside of the camera plate
+on the Remote Sensing Mast (RSM) (Fig. 17).
+
+3.1.5 Cachecam
+
+The Cachecam has a fixed focus, 0.51 magnification lens with a depth of field of ±5 mm and
+a pixel scale of 12.5 microns/pixel. The Cachecam FOV forms a 50 mm diameter circle at the
+plane of focus. The Cachecam lens contains six individual lens elements. The Cachecam has
+no IR blocking filter because the LED illuminator has no output in the IR. At the end of the
+lens is an integrated illuminator assembly, which contains a mirror that redirects incoming
+light at an angle of 90◦ . The front of the illuminator is sealed with a fused silica window.
+The illuminator has a set of three light emitting diodes (LEDs) which allow the sample to
+be illuminated during imaging. The LEDs are powered whenever camera power is applied.
+The LEDs are made by Luxeon, part number LXZ1-4070, are white light LEDs with a CCT
+(correlated color temperature) of 4000 K.
+   Figure 18 shows the flight Cachecam camera. The Cachecam is integrated into a sub-
+assembly called the Vision Assessment Station (Fig. 19). The Vision Assessment Station
+(VAS) contains a cylindrical shaped baffle sub-assembly. The VAS is placed into a larger
+assembly, the Adaptive Cache Assembly (ACA), which is inside the rover body (Fig. 20).
+   Due to the small depth of field of the Cachecam, the sample tube must be moved in and
+out of the plane of focus of the camera in small mm-sized vertical steps, with an image
+acquisition occurring at each step. The small depth of field was chosen to help estimate
+The Mars 2020 Engineering Cameras                                                       Page 23 of 48    137
+
+
+
+
+Fig. 17 Closeup view of the Navcams mounted on the Remote Sensing Mast (RSM), a pan/tilt mast that
+points the cameras to targets of interest. The Navcams have a 42.4 cm stereo baseline. Also shown in the pic-
+ture are the Mastcam-Z cameras (Bell et al. 2020, this issue) located between the Navcams, and the SuperCam
+(Wiens et al. 2020, this issue), located above the Navcams
+
+
+
+the height of the sample in the sample tube. The movement of the tube is done with the
+Sample Handling Assembly (SHA) robot arm. The SHA robot arm brings the tube over
+to the Vision Assessment Station and moves the sample tube through focus. The resulting
+set images form a Z-stack data set. The individual images are downlinked to Earth and
+processed. Information about the sample is extracted from this data set, including sample
+depth within the tube, sample texture, and estimates of the sample volume.
+
+3.1.6 Camera Hardware Processing
+
+ECAM Readout Modes The MER/MSL camera data interface supports an image size of
+1024 × 1024 pixels, and the available image buffer sizes in the RCE RAM are limited to the
+MER/MSL heritage sizes. In order to use the heritage interface and memory allocation, a 20
+Megapixel Perseverance ECAM image must be sent to the rover as a series of smaller sub-
+images (tiles). After an ECAM camera acquires an image, it stores the entire 20 Megapixel
+image temporarily in camera memory and returns individual, smaller sub-images to the rover
+upon command. The individual sub-image tiles are nominally 1280 × 960 pixels in size, and
+a total of 16 tiles must be transferred to copy an entire 5120×3840 pixel image into the rover
+computer. Smaller-sized sub-image tiles can be requested if desired. Larger tiles can also be
+requested, but they cannot be larger than 1296 × 976 pixels due to memory limitations in
+the RCE. The tile starting location can be arbitrarily placed within an image as long as the
+137   Page 24 of 48                                                                   J.N. Maki et al.
+
+
+
+
+Fig. 18 Flight Cachecam camera assembly, including the lens, illuminator, and camera body. This photo
+shows the view looking directly into the Cachecam entrance aperture
+
+
+entire tile fits within the boundaries of the larger image and the starting locations are even
+multiples of 8.
+   The Perseverance cameras are also capable of reducing the pixel scale of an image prior
+to transmission by performing a pixel summing operation. There are four possible pixel
+scales available: full-scale (1 × 1, or no spatial downsampling), half-scale (2 × 2 spatial
+downsampling), quarter-scale (4 × 4 spatial downsampling), and one-eighth scale (8 × 8
+spatial downsampling). In all modes the resulting subimage tiles are nominally 1280 × 960
+pixels, with the exception of the 8 × 8 downsampling mode, which always produces 640 ×
+480 pixel images.
+   In addition to spatial downsampling modes, the Perseverance ECAMs also allow the sep-
+arate readout of individual red, green, and blue color channels. Depending on the requested
+mode, the camera either subsamples the Bayer cells by sending only the requested color,
+or it averages all of the pixels of the same color together. The camera can also average all
+of the pixels together and return a panchromatic image. In the 8 × 8 mode, the camera al-
+ways returns a panchromatic image by averaging all 64 pixels together into a single pixel.
+Table 3 lists all 10 available hardware processing modes, and Fig. 21 depicts the modes
+schematically.
+
+Image Co-adding The ECAM hardware allows in-camera co-adding of 2, 4, 8, or 16 im-
+ages to improve the signal to noise ratio of the image. This capability may be useful when
+imaging shadowed surfaces and acquiring images under low-light conditions such as night-
+time imaging of the surface, nighttime atmospheric imaging, and astronomy observations.
+During a co-add operation, the camera exposes an image, adds it to an image accumulator
+buffer, acquires the next image, and continues until the desired number of images have been
+The Mars 2020 Engineering Cameras                                                   Page 25 of 48   137
+
+
+
+
+Fig. 19 The Perseverance Vision Assessment Station, which includes the Cachecam camera and cylindrical
+baffle. Sample tubes are presented to the camera by a Sample Handling Assembly (SHA), a small robot
+arm that brings sample tubes into the baffle from the bottom (the SHA is not shown in this picture). The
+illuminator assembly contains 3 LEDs that shine down onto the sample tube from the top. The camera looks
+down into the tube and acquires images of the top of the material within the tube
+
+
+co-added. In all cases the camera returns the final co-added image and discards the interme-
+diate images. During the transmission of the image data to the RCE, the camera divides the
+image by the number of co-added images by performing a bit-shift operation and returning
+the most significant 12-bits of the co-added pixel data.
+
+3.2 EDLCAMs
+
+3.2.1 EDLCAM Cameras
+
+The EDLCAM camera bodies were manufactured by FLIR (formerly Point Grey). They
+have CS type lens mounts, which mate with custom lenses designed and manufactured by
+Universe Kogaku America. The PUC, RUC, and RDC lenses are identical in design and
+each contain 6 lens elements, including a front window, have a focal ratio of f/2.8, and a
+focal length of 9.5 mm. The DDC lens assembly contains 7 lens elements, including a front
+137    Page 26 of 48                                                                      J.N. Maki et al.
+
+
+
+
+Fig. 20 Location of the Cachecam within the Adaptive Caching Assembly (ACA), looking upwards from
+below the rover chassis. A portion of the Front Hazcam cover mechanism spring assembly can be seen in the
+upper right of the image
+
+
+Table 3 The 10 available color/pixel scale readout modes for the Perseverance ECAMs
+
+Mode        Sub-image pixel scale     Sub-image tile size (pixels)     Description
+
+0                      1×1                    1280 × 960               RGB, Raw Bayer pattern
+                                                                                               
+                                                                                                   G
+1                      2×2                    1280 × 960               2 Green Pixel Average ( 2 )
+2                      2×2                    1280 × 960               Red Pixel Subsample
+3                      2×2                    1280 × 960               Blue Pixel Subsample
+                                                                                               
+                                                                                                R,G,B
+4                      2×2                    1280 × 960               4 Pixel RGB Average (     4    )
+                                                                                               
+                                                                                                 G
+5                      4×4                    1280 × 960               8 Green Pixel Average ( 8 )
+                                                                                             
+                                                                                               R
+6                      4×4                    1280 × 960               4 Red Pixel Average ( 4 )
+                                                                                             
+                                                                                               B
+7                      4×4                    1280 × 960               4 Blue Pixel Average ( 4 )
+                                                                                               
+                                                                                                 R,G,B
+8                      4×4                    1280 × 960               16 Pixel RGB Average ( 16 )
+                                                                                               
+                                                                                                 R,G,B
+9                      8×8                     640 × 480               64 Pixel RGB Average ( 64 )
+
+
+
+window. The DDC lens has a focal ratio of f/5.6 and has a focal length of 8 mm. See Table 4
+for a summary of the EDLCAM camera types. The EDLCAM hardware is shown in Fig. 22,
+and the locations of the DDC, RUC, and RDC on the rover are shown in Figs. 23, 24 and 25.
+The Mars 2020 Engineering Cameras                                                           Page 27 of 48    137
+
+
+
+
+Fig. 21 Schematic representation of the 10 available ECAM readout modes: a) full-scale (1 × 1, upper left),
+b) half-scale (2 × 2, upper right), c) quarter-scale (lower left), and d) 1/8th scale (lower right). In modes 0
+through 8, all image tiles returned from the cameras are nominally 1280 × 960 pixels in size. In mode 9 the
+image tiles are 640 × 480 pixels in size. In the above figure the 1 × 1 and 2 × 2 tiles are shown aligned on
+even multiples of 1280 × 960 for simplicity. In actuality the location of tiles can be located anywhere on the
+sensor as long as the entire tile is inside the larger source image and the starting locations are even multiples
+of 8
+
+
+3.2.2 Microphone
+
+The EDLCAM system contains an omnidirectional microphone capsule for the capturing of
+sound during EDL. The microphone capsule was manufactured by DPA Microphones, part
+number MMC4006. The microphone capsule is connected to a DPA digitizer electronics
+board (part number MMA-A) that was repackaged into a custom aluminum chassis by the
+EDLCAM hardware development team. The digitizer board has two audio channels but the
+EDLCAM system only has one microphone capsule. The only key requirement on the mi-
+crophone system was that it provided a simple interface to the EDLCAM DSU. The acous-
+tic performance of the microphone system was not a key requirement – it has a frequency
+response from 20 Hz to 20 KHz (±2 dB). The digitizer is connected to the EDLCAM sub-
+system rover DSU via a USB2 connection. The microphone has a custom field grid that
+was modified for the Martian acoustic environment. The grid controls the behavior of sound
+waves on the diaphragm of the microphone while also minimizing the penetration of Martian
+dust into the diaphragm. Figure 26 shows the microphone capsule and microphone digitizer
+assembly. The microphone is mounted externally on the rover (Fig. 27).
+    Because the EDLCAM microphone is attached to the rover body, it will be commandable
+after landing. If the microphone survives the diurnal temperature cycles, it could be used
+137   Page 28 of 48                                                        J.N. Maki et al.
+
+
+
+
+Fig. 22 EDLCAM flight hardware
+
+
+
+
+Fig. 23 Location of the DDC on the descent stage
+
+
+
+to record Martian ambient sounds on the surface, mechanism movements such as wheel
+motions and coring operations, and other items of interest. The microphone could also be
+used in collaboration with the SuperCam microphone described in Murdoch et al. (2019),
+Chide et al. (2019), and Maurice et al. (2020).
+The Mars 2020 Engineering Cameras          Page 29 of 48   137
+
+
+
+
+Fig. 24 Location of the RUC on the rover
+
+
+
+
+Fig. 25 Location of the RDC on the rover
+137   Page 30 of 48                                                                  J.N. Maki et al.
+
+
+
+
+Fig. 26 The EDLCAM microphone (left, with bracket) and digitizer assembly (right). The microphone is
+approximately 42 mm × 40 × 19 mm and weighs 52 grams. The digitizer assembly is approximately 56 mm
+in diameter and weighs approximately 50 grams
+
+
+
+
+Fig. 27 Location of the EDLCAM microphone on the Perseverance Rover. The microphone is located on
+the port side (Y-axis, rover coordinate frame) of the rover body, above the middle wheel
+The Mars 2020 Engineering Cameras                                                     Page 31 of 48    137
+
+Table 4 EDLCAM properties and estimated operating modes
+
+Item                  PUC (quantity 3)       RUC                   RDC                DDC
+
+Horizontal FOV        35◦ ± 3◦               35◦ ± 3◦              35◦ ± 3◦           48◦ ± 3◦
+Vertical FOV          30◦ ± 3◦               30◦ ± 3◦              30◦ ± 3◦           37◦ ± 3◦
+Pixel scale           ∼ 0.5 mrad/pixel       ∼ 0.5 mrad/pixel      ∼ 0.5 mrad/pixel   ∼ 0.4 mrad/pixel
+Focal ratio           f/7                    f/7                   f/7                f/5.6
+Focal length          9.5 mm                 9.5 mm                9.5 mm             8 mm
+Image Size (pixels)   1280 × 1024            1280 × 1024           1280 × 1024        2048 × 1536
+Pixel Size            4.8 microns            4.8 microns           4.8 microns        3.45 microns
+Camera type           CM3-U3-13Y3C-CS CM3-U3-13Y3C-CS CM3-U3-13Y3C-CS CM3-U3-31S4C-CS
+Detector              On Semi P1300          On Semi P1300         On Semi P1300      Sony IMX265
+                      (RGB color)            (RGB color)           (RGB color)        (RGB color)
+Mass (with lens)      80 grams               80 grams              80 grams           140 grams
+Expected Frame Rate 75 fps for parachute 30 fps                    30 fps             12 fps
+(and duration)      deployment           (∼ 140 seconds)           (∼ 260 seconds)    (∼ 75 seconds)
+                    (∼ 30 seconds)
+                      30 fps until
+                      backshell separation
+                      (∼ 98 seconds)
+Estimated number      5,190 per PUC (×3) 4,200                     7,800              900
+of total images
+Estimated total                                                 28,470
+number of images
+from all cameras
+
+
+3.2.3 Data Storage Unit (DSU)
+In addition to six cameras and a microphone, the EDLCAM system includes two data stor-
+age units (DSUs) and two USB3 hubs. The DSU is an off-the-shelf computer-on-module
+(CoM) from CompuLab Ltd with an Intel Atom processor and solid-state memory. The
+DSU runs the Linux operating system, along with additional software to communicate with
+the EDLCAM sensors, perform the EDL data collection sequence, manage the data storage
+and compress the collected data files. The DSU uses a high-density connector to provide
+connectivity to the high-speed USB3, USB2, gigabit ethernet and SATA interfaces.
+    The main DSU is located inside the rover body. A second DSU, the descent stage DSU,
+is located on the descent stage. In both DSUs the CoM is connected to a custom electronics
+board that provides connectivity for all the USB devices. The two DSUs are almost identical
+to each other and communicate with each other through a gigabit ethernet link. The rover
+DSU includes a 480 GB solid-state flash memory drive (SSD) for data storage, provides a
+gigabit Ethernet link between both DSUs, and implements the high-speed serial communi-
+cation protocol to communicate to the rover computer.
+    The DDC streams data to the descent stage DSU over USB3, and the descent stage DSU
+streams data back to the rover DSU in real time over the ethernet link. The three Parachute
+Uplook Cameras (PUCs) connect to two USB3 hubs in series, which merge the USB3 stream
+into one port on the rover DSU and also acts as a USB repeater, allowing the data signals to
+travel beyond 5 meters. The RUC, RDC, and the microphone are USB2 devices and connect
+directly to the rover DSU. After the rover touches down on Mars, data saved on the rover
+DSU are available to be copied from the 480 GB NVM SSD into the RCE for subsequent
+downlink. Figure 28 shows a functional block diagram of the EDLCAM system.
+137   Page 32 of 48                                                           J.N. Maki et al.
+
+
+
+
+Fig. 28 EDLCAM functional block diagram
+
+
+3.2.4 Data Acquisition
+
+A key feature of the design of the EDLCAM system is the requirement to not interfere with
+the safety of the vehicle during EDL. To meet this requirement the communication lines
+between the EDLCAM system and the rover are disabled at the hardware interface level
+during EDL to prevent spurious signals. The EDLCAM system runs autonomously once
+power is applied to the DSUs by the flight system. The application of power to the DSU
+and cameras is driven by external EDL events, as sensed by the flight system. Because the
+external triggering depends on the EDL system performance the exact number of images
+expected from each of the cameras is unknown in advance and can only be estimated. See
+Table 4 for the estimated number of images expected. The PUCs and DDC are jettisoned
+with the backshell and skycrane, but the RDC, RUC, and microphone remain on the rover
+and will continue to acquire data after touchdown.
+
+PUCs The three PUCs start to acquire image data immediately before parachute deploy-
+ment at a frame rate of 75 fps (frames per second). After 30 seconds the frame rate drops
+to 30 fps until backshell separation, expected to occur approximately 98 seconds later. The
+total number of expected PUC images is ∼ 5,190 images per PUC, or 15,570 total images.
+
+DDC The DDC will start acquiring image data just before the rover separates from the
+descent stage and continues acquiring data through rover touchdown on the surface. The
+DDC acquires data at 12 fps for ∼ 75 seconds and is expected to acquire approximately 900
+images.
+
+RDC The RDC will start acquiring data just before heatshield separation and will continue
+acquiring data through touchdown on the surface. The RDC acquires data at 30 fps for
+approximately 260 seconds and is expected to acquire approximately 7,800 images.
+The Mars 2020 Engineering Cameras                                             Page 33 of 48   137
+
+Table 5 LCAM characteristics
+
+Horizontal FOV                          90◦
+Vertical FOV                            90◦
+Diagonal FOV                            118◦
+Focal ratio                             f/2.7
+Focal length                            5.8 mm
+Best focus                              2 meters to infinity
+Pixel scale                             1.67 mrad (2 × 2 summed pixels)
+Mass                                    880 grams
+Volume                                  82 mm × 102 mm × 154 mm
+Boresight mounting direction            -Z (pointed straight down)
+Detector Type                           On Semiconductor Python 5000
+Pixel format                            1024 × 1024 pixels (2 × 2 summed mode), windowed from
+                                        a total format of 2592 × 2048 pixels
+Pixel pitch                             9.6 microns (2 × 2 summing of 4.8 micron pixels)
+Optical format                          9.83 mm × 9.83 mm
+Pixel type                              global shutter with CDS
+Full well                               33,925 e- (effective with 2 × 2 summing, gain 1)
+System noise                            32.6 e-
+Conversion gain                         139.4 e-/DN (2 × 2 summing)
+Maximum SNR                             45 dB
+Dynamic range                           60 dB
+Filter                                  480 nm to 720 nm
+QE                                      55% peak
+Command/data interface                  LVDS/ChannelLink
+Voltages                                4.25 V to 5.5 V
+Data rate                               480 Mbps video output
+Power                                   3.7 Watts
+Memory                                  32 Gbytes flash
+FPGA                                    MicroSemi Rad-tolerant (RTAX-SL)
+Radiation tolerance                     TID RDF > 10
+Temperature range                       −25 ◦ C to +50 ◦ C (operational)
+                                        −40 ◦ C to +70 ◦ C (survival)
+
+
+
+RUC The RUC will start acquiring data just before the rover separates from the descent
+stage and continues acquiring data through rover touchdown on the surface. The RUC ac-
+quires data at 30 fps for approximately 140 seconds and is expected to generate approxi-
+mately 4,200 images.
+
+Microphone The microphone will acquire data from immediately before parachute de-
+ployment through post-touchdown. The expected data acquisition duration is approximately
+287 seconds. The microphone records at a sampling rate of 48 kHz, digitized at 24 bits.
+
+3.3 LCAM
+
+The LCAM characteristics are listed in Table 5.
+137   Page 34 of 48                                                         J.N. Maki et al.
+
+Fig. 29 The LCAM flight unit,
+just prior to delivery to ATLO
+
+
+
+
+Fig. 30 Location of the LCAM on the rover
+
+
+   An image of the flight LCAM is shown in Fig. 29. Figure 30 shows the LCAM mounting
+location on the Perseverance rover.
+
+3.3.1 Optics
+
+The LCAM lens is a 9-element, all-refractive lens with a nominal horizontal and vertical
+FOV of 90 × 90 and an effective focal length of 5.785 mm. The nominal on-axis f/# is 2.7.
+The Mars 2020 Engineering Cameras                                       Page 35 of 48   137
+
+The LCAM lens was fabricated at Collins Aerospace with design support from Synopsys
+Optical Design Services.
+
+3.3.2 Detector
+
+The detector is an On Semiconductor Python 5000, a global-shutter CMOS image sensor
+with 2592 × 2048 × 4.8 µm pixels and on-chip 8-bit or 10-bit digitization. LCAM uses the
+monochrome version of the sensor.
+
+3.3.3 Electronics
+
+The LCAM electronics design is derived from two previous camera designs by MSSS: the
+VSS (Vision Sensor System) camera on the NASA Goddard Space Flight Center (GSFC)
+Restore-L Mission and the P50 camera on the Naval Research Laboratory (NRL) Robotic
+Servicing of Geosynchronous Satellites (RSGS) Mission. Both of these cameras used the On
+Semiconductor Python 5000 detector. The LCAM electronics includes three printed circuit
+assemblies: the Interface Adaptor (IFA), Digital Module (DM), and Focal Plane Assembly
+(FPA).
+   The IFA connects to the LVS via a 25-pin Micro-D interface connector and commu-
+nicates using asynchronous command and telemetry interface signals (LVDS), a discrete
+LVDS trigger, and a ChannelLink video interface. The DM contains a Microsemi RTAX
+FPGA and four NAND flash banks, which for LCAM are only used to store redundant
+copies of non-volatile operating parameters. The FPA contains three Line Current Limiter
+(LCL) modules that control the three power supplies to the sensor.
+
+3.3.4 LVS Interface
+
+In response to trigger signals, LCAM acquires each image, optionally sums it 2 × 2, and
+transmits it to the Vision Compute Element (VCE) component of the LVS. Images are al-
+ways summed 2 × 2 and sent with 8-bit pixel depth. The ChannelLink clock is run at 35 MHz
+by default, with an optional mode at 17.5 MHz. Two pixels are sent in each ChannelLink
+cycle.
+
+
+
+4 Flight and Ground Software
+
+4.1 ECAM Flight Software
+
+The ECAM flight software runs in the RCE. The software is a copy of the MER ECAM
+IMG software module described in Maki et al. (2003), Litwin and Maki (2005), modified
+for MSL (Maki et al. 2012), and subsequently modified for Mars 2020. The flight software
+handles camera control, command handling, and the post-processing of camera images after
+they are transferred over to the RCE. The software is mostly identical to the MER/MSL
+versions, and because of this the reader is referred to the above manuscripts for a more
+detailed description. Key changes for Mars 2020 are described here.
+137   Page 36 of 48                                                              J.N. Maki et al.
+
+4.1.1 Image Acquisition and Readout
+
+Perseverance ECAM images are exposed using either manual or auto exposure, using the
+methods described in Maki et al. (2003). On Mars 2020 the resulting full-scale image re-
+mains stored in camera memory until a new image is acquired or the camera is powered
+off. As described in Sect. 3.1.6, the Perseverance engineering cameras do not send back the
+entire 5120 × 3840 pixel image in a single image transfer due to limitations available RAM
+for image buffers. Instead, image data are sent back in nominally-sized 1280 × 960 pixel
+sub-images (tiles). In order to read out a full-scale image, 16 individual image acquisition
+commands must be sent to the camera, with each command resulting in the transfer of a
+single 1280 × 960 pixel image tile to the RCE. The 16 individual image tiles are saved as 16
+separate files and sent back to Earth. The individual image files are reassembled back into
+the original full-scale image using ground software.
+    The image tiling architecture imposes a requirement that the image acquisition com-
+mands must distinguish the difference between exposing the sensor and reading out a
+previously-exposed image from camera memory. The Mars 2020 ECAM flight software
+accommodates this difference by repurposing the “NONE” exposure type from MER and
+MSL. On the MER/MSL rovers, an exposure type of NONE would power on the cameras
+and prepare for acquisition, perform any necessary pan/tilt pointing if applicable, but not ac-
+quire an image. On Perseverance, the NONE exposure type is used to perform the transfer
+of an image tile from a previously-exposed image. The flight software supports two modes
+of camera hardware operation: 1) acquire an image and immediately transmit a tile, and
+2) transmit a tile from the current image in camera memory without re-exposing the sensor.
+    Full-scale image acquisition with the Mars 2020 IMG FSW will typically be performed
+in the following way: the first IMG_ACQUIRE command will request an exposure type of
+AUTO, in camera mode 6, which corresponds to a 4 × 4 downsampled, full FOV, red channel
+image. This will expose the sensor to the scene of interest using autoexposure over the full
+field of view. The exposure command would be followed by 16 subsequent IMG_ACQUIRE
+commands, each requesting an exposure type of NONE (readout only) in mode 0, which
+would transmit a full-scale image tile (1 × 1 downsampling, Raw Bayer) from camera mem-
+ory into the RCE.
+    Alternatively, a user may require that the 16 image tiles be autoexposed individually. This
+would be performed by requesting 16 separate autoexposure commands, each with different
+tile coordinates. The FSW allows any of the 10 available camera hardware modes to be used
+for tile readout. Autoexposure can be run using any of the 10 available readout modes. This
+enables the autoexposure of an image based on a single color channel in the 2 × 2 and 4 × 4
+modes. Images can also be autoexposed in all color channels individually. Alternatively,
+a single panchromatic autoexposure could be used to set the exposure time for the image,
+with a subsequent readout of the red, green, and blue channels. A detailed discussion of
+exposure strategies is beyond the scope of this manuscript, but it is expected that different
+use cases will employ different exposure and readout strategies.
+
+4.1.2 Image Compression
+
+In addition to the ICER wavelet and LOCO compression used in Maki et al. (2003) and
+described by Klimesh et al. (2001) and Kiely and Klimesh (2003), the Perseverance IMG
+module inherits a lossy JPEG (Joint Photographic Experts Group) compressor from the Mars
+InSight lander imaging system (Maki et al. 2018). ICER and LOCO support 8-bit or 12-
+bit pixels. The JPEG compressor supports both greyscale and color image compression,
+The Mars 2020 Engineering Cameras                                         Page 37 of 48   137
+
+selectable compression quality, and selectable chroma subsampling for color images. The
+JPEG code supports 8-bit pixels only. The JPEG code is originally from the Independent
+JPEG Group (http://ijg.org) modified by InSight to run in the VxWorks environment. Mars
+2020 inherited the JPEG code from InSight.
+    Color images are typically compressed using color JPEG compression, although the FSW
+allows the individual color channels to be compressed separately if desired. Compressing
+individual color channels separately is done via greyscale compression (ICER or JPEG) on
+each of the individual channels, and incurs a significant (∼ 3×) data volume penalty over
+JPEG color compression. JPEG color compression is much more efficient: most of the com-
+pressed data volume of a color JPEG image (typically 90% or more) is the luminance data,
+with the color data comprising 10% or less of the total volume. In some cases, when a high-
+quality, full-scale image is desired, the raw Bayer pattern can be compressed using LOCO
+lossless compression. The FSW allows many combinations of acquisition and compression
+to cover the various use cases during surface operations. Demosaicking of raw Bayer tiles
+is done using the algorithm by Malvar et al. (2004), using software code inherited from the
+Mars InSight lander imaging system (Maki et al. 2018).
+
+4.2 EDLCAM FSW
+
+All EDL camera images and sound files are saved as raw data in the DSU. The raw data
+can be compressed and saved separately in the DSU as compressed files. Either compressed
+or raw data can be copied into the rover. Data can be compressed multiple times if desired
+and saved to separate files for later transmission. Most video data will be compressed using
+MPEG (Moving Picture Experts Group) video compression. Individual images will gener-
+ally be compressed using lossy JPEG compression.
+    The EDLCAM DSU runs a custom-built version of Linux that has been tailored to max-
+imize data throughput from the USB cameras to the rover DSU non-volatile storage (SSD).
+The application layer consists of two modules that determine the two operating modes: com-
+mand mode and EDL mode. Upon power-on, the system waits for commands from the rover
+flight software. If no commands are received after a pre-determined timeout, the EDLCAM
+software transitions to EDL and begins autonomously collecting data from the cameras.
+Because the DSU does not receive any commands from the rover during EDL, the entire
+EDL sequence is autonomous. If the DSU receives a command before transitioning to EDL
+mode, the EDLCAM software transitions to command mode. While in command mode the
+DSU sits idle until additional incoming commands are received from the rover. During sur-
+face operations, commands will be sent to the DSU to initiate internal data compression and
+subsequent file transfer into the RCE.
+    The core EDL data processing and compression engine is powered by FFMPEG
+(ffmpeg.org). The JPL-developed custom software application layer is comprised of ap-
+proximately 20,000 lines of code. All other functionality is provided by open-source soft-
+ware projects. The total software storage footprint is less than 100 MB. During the 7-minute
+EDL sequence, the EDLCAM system is expected to generate and store more than 40 GB of
+camera and microphone data.
+
+4.3 LCAM
+
+LCAM has no software; all of the software for LVS is resident in the VCE. LCAM images
+are exposed using exposure times computed in advance based on predictions of the signal
+level under the expected illumination conditions. The VCE has the capability to dynamically
+change the exposure time should the images appear too bright or too dark.
+137   Page 38 of 48                                                             J.N. Maki et al.
+
+
+
+
+Fig. 31 The Mars 2020 web-based image viewing and data search tool
+
+
+
+4.4 Ground Software
+
+The Perseverance ground image processing system is largely inherited from Mars Pathfinder
+(LaVoie et al. 1999) and MER (Alexander et al. 2006), with subsequent updates for MSL and
+the Mars InSight mission (Abarca et al. 2019). Many of the updates for Mars 2020 include
+adding capabilities specific to the handling and assembly of the individual image tiles into
+the larger original images. Another improvement to the heritage ground system involves the
+development of web browser-based image viewing and cataloging tools (Fig. 31).
+
+
+
+5 Calibration and Test
+
+5.1 ECAMs
+
+The Navcams, Hazcams, and Cachecam underwent instrument-level acceptance testing,
+functional testing, and calibration prior to delivery to ATLO (Fig. 32). Calibration of the
+ECAM cameras included the characterization of MTF (Modulation Transfer Function), SNR
+(signal to noise ratio), boresight location, FOV, flat field, dark current, and color response
+function.
+
+5.1.1 Stereo Imaging Tests
+
+The Mars 2020 stereo image processing system has been tested with data from the flight unit
+cameras and flightlike prototype cameras. Because the Perseverance ECAMs are capable of
+generating images at four different pixel scales, a preprocessing system re-assembles the
+image tiles back into larger images (as applicable) prior to running the stereo matching
+software on the stereo pairs. The pre-processing system generates several versions of the
+reassembled images, resulting in a set of images with different pixel scales and use cases.
+A typical example is shown in Fig. 33. A full description of the image products will be
+included in the archive delivery to the NASA Planetary Data System (PDS).
+The Mars 2020 Engineering Cameras                                             Page 39 of 48   137
+
+
+
+
+Fig. 32 Instrument-level thermal vacuum testing of the Perseverance Hazcams
+
+
+
+5.1.2 Solar Imaging Tests
+
+Navcam images of the sun are used to autonomously determine the sun location in the local
+Mars coordinate frame. The derived sun location is subsequently used by the rover FSW to
+determine the rover three-axis attitude. There are three primary methods to determine the
+vector to the sun with the Navcam: 1) sun find, 2) sun update, and 3) sun gaze. All three
+methods use a disk centroiding algorithm to identify the location of the Sun in a Navcam
+image. A preprocessing algorithm identifies the brightest area in the image (see Fig. 34)
+over which to search for the sun centroid.
+    A sun find is requested when the location of the sun is poorly known and multiple Nav-
+cam images may be required to perform a sky search and locate the sun. A sun update is
+typically performed when the sun location is approximately known. A sun update uses the
+estimated sun vector to acquire an image of the Sun, refine the sun position and improve the
+rover azimuth knowledge based on the results. Finally, a sun gaze is used when the sun is at
+a high elevation. A sun gaze acquires multiple images of the sun over a specified time period
+to derive the vector of sun motion. The motion vector technique is used to avoid poor sun
+location solutions that may arise when the sun is near zenith.
+137   Page 40 of 48                                                                             J.N. Maki et al.
+
+
+
+
+Fig. 33 Results of stereo processing on a pair of 20 Megapixel prototype Navcam images in the JPL
+Marsyard. The higher pixel scale of the M2020 Navcams (compared to MSL) allows denser stereo maps
+at the same camera-to-object distance. The space between XYZ contours in the above figure is 10 cm. The
+red contour lines represent distance in the X direction of the local site coordinate frame and the green contours
+represent the distance in Y. The purple contours represent the distance in Z (height)
+
+
+
+
+Fig. 34 Examples of Navcam outdoor solar image testing, conducted with a flight-like Navcam. The left
+image was acquired in quarter-scale (4 × 4) mode, and the image on the right was acquired in full-scale
+(1 × 1) mode. The image on the right is cropped to show detail
+
+
+
+   On Mars 2020 the sun update and sungaze methods have the ability to process saturated
+Navcam images. When a Navcam acquires an image the sensor exposes the pixel and sub-
+tracts a background level (correlated double sampling). However, the sun is so bright that it
+The Mars 2020 Engineering Cameras                                                   Page 41 of 48   137
+
+
+
+
+Fig. 35 Front Left Hazcam Image. Note the top of the image is obscured by a sun visor. During operations
+the sun visor region of the image will not typically be returned
+
+
+
+often saturates both the exposed pixel and the background level. Subtracting these images
+often creates a “black sun” image that is not adequate for centroiding. To solve this prob-
+lem the camera has a mode that bleeds off charge from the background signal so that it is
+only partially saturated. When using this mode, subtraction of the background signal from
+the exposed image results in an image this is properly saturated (non-zero). This causes the
+Sun to appear in the image as a bright spot surrounded by a ring, as shown in Fig. 34. De-
+spite the ring artifacts the centroiding algorithm achieves high enough accuracy to meet the
+requirements and reduce the rover pointing error even at high sun elevations.
+
+
+5.1.3 ATLO
+
+After the flight cameras were mounted on the rover in ATLO the locations and relative
+alignments of the ECAM cameras were measured in the rover navigation coordinate frame
+by performing a machine vision calibration similar to the calibration performed on the MER
+and MSL cameras (Maki et al. 2003, and Maki et al. 2012). The results of the geomet-
+ric calibration are recorded in the CAHVORE camera model system of Yakimovsky and
+Cunningham (1978) and Gennery (2001, 2006). The cameras also participated in functional
+tests, including System-level Thermal Testing (STT) and other system testing, where a total
+of over 6,000 ECAM images (tiles) were acquired. Figures 35, 36, 37 and 38 show example
+images from these functional tests.
+137   Page 42 of 48                                                           J.N. Maki et al.
+
+
+
+
+Fig. 36 Rear Hazcam image
+
+
+5.2 EDLCAMs
+
+The EDLCAMs underwent extensive functional testing prior to delivery to ATLO. Video
+tests were performed with live mortar firings (Fig. 39), demonstrating the ability of the
+DSU and cameras to acquire video of high-speed external events. After the EDLCAMs
+were integrated onto the rover in ATLO, they participated in functional and system testing,
+including EDL test runs.
+
+5.3 LCAM
+
+Prior to delivery, LCAM was calibrated using a typical flow to measure its radiometric re-
+sponse, geometric properties, and behavior over temperature. An MTF test image from this
+testing is shown in Fig. 40. An extensive program of realistic imaging testing was performed
+using flight-like EM hardware imaging from a helicopter (Johnson et al. 2020). After inte-
+gration with the spacecraft in ATLO, imaging testing was performed with the flight LCAM
+to verify functionality in the integrated system (Fig. 41) and to determine LCAM pointing
+in the rover coordinate system.
+
+
+6 Operations and Data Archiving
+Operations of the ECAMs and EDLCAMs will be performed by the ECAM operations team
+at JPL in Pasadena, CA. The operations team members, software tools, and processes draw
+on heritage from the MER and MSL operations teams.
+The Mars 2020 Engineering Cameras                                             Page 43 of 48   137
+
+
+
+
+Fig. 37 Navcam image acquired during System Thermal Vacuum testing
+
+
+6.1 ECAMs
+
+The ECAM hardware modes described in Sect. 3.1.6 allow operators to request images of
+differing pixel scales from the same 20 Megapixel source image. This new capability allows
+higher-scale image tiles to be inset into lower-scale tiles, offering a combination of wider
+coverage at lower scale for context and higher scale tiles targeted on particular areas of in-
+terest. This context/targeted strategy can be used to significantly reduce overall data volume.
+Figure 42 shows how this capability might be used for a drive direction planning panorama.
+The Fig. 42 example includes two quarter-scale frames (1 and 8), 4 half-scale frames (2, 4,
+6, and 7), and 2 full-scale frames (3 and 5). Because images 2 through 7 all come from the
+same original source image, no repointing is required, although re-exposure could occur on
+frames 2 through 7 if optimal exposure was desired on all frames. The example in Fig. 43
+shows how the multi-scale capability might be used for a 360◦ survey panorama. In that
+example the farther field terrain covered by the full-scale tiles will have a spatial scale more
+comparable to the near-field spatial scale covered by the lower-scale tiles.
+
+6.2 EDLCAMs
+
+EDLCAM operation during the surface phase of the mission will be focused primarily on the
+cataloging and prioritization of the over 15,000 images expected to be acquired during EDL.
+During the early phase of the mission, low-resolution videos, audio files, and still frame
+images will be downlinked. After review and analysis by the EDL teams, higher-resolution
+data may be requested and subsequently downlinked over the course of the surface mission.
+EDLCAM data will also be available to the science teams.
+137   Page 44 of 48                                                                         J.N. Maki et al.
+
+
+
+
+Fig. 38 Flight Cachecam image acquired during ATLO testing. The remove-before-flight cover shown in
+this image has a diameter of approximately 46.4 mm. The spatial scale of this image is approximately 12.5
+microns/pixel (the cover is not exactly at the best focus distance)
+
+
+
+
+Fig. 39 EDLCAM testing. Indoor mortar firing test (left), outdoor mortar firing test (center), and simulated
+parachute image testing (right)
+
+
+6.3 LCAM
+
+The LCAM takes images at variable rates during descent to reduce data storage require-
+ments. Images are taken at 0.3 Hz starting just prior to heat shield separation down to the
+start of localization. During localization, which occurs between 4200 meters and 500 me-
+ters, images are taken at around 1 Hz. From 500 meters to the surface, images are taken at
+0.3 Hz. All images will be downlinked to Earth later on during the surface mission for post-
+EDL analysis and assessment. These images (along with the RDC images) will be made
+available to the science team for potential landing site topography studies using structure-
+The Mars 2020 Engineering Cameras                                          Page 45 of 48   137
+
+Fig. 40 An MTF test image
+taken with the LCAM flight unit
+in the MSSS Cleanroom. This
+image was acquired unsummed
+and over the full format of the
+detector
+
+
+
+
+Fig. 41 LCAM image of the
+ceiling in the JPL Spacecraft
+Assembly Facility (SAF) taken
+after integration with the flight
+rover. This image was acquired in
+the flight mode (2 × 2 summed
+with windowing to give a
+1024 × 1024 pixel format)
+
+
+
+
+from-motion techniques (Garvin et al. 2017, 2019) or other investigations. After landing,
+LCAM image acquisition will not be possible because the camera interface FPGA will be
+reconfigured to support stereo vision and visual odometry processing tasks.
+
+6.4 Archiving
+
+All of the raw images from the Perseverance engineering cameras will be archived in the
+NASA Planetary Data System (PDS) within 6 months of receipt of the data on Earth. Ad-
+ditionally, all of the derived geometric, radiometric, and stereo data products from the Nav-
+cams and Hazcam cameras will be also be archived, along with additional derived products
+from the other engineering cameras. Microphone data will also be archived.
+137   Page 46 of 48                                                                           J.N. Maki et al.
+
+
+
+
+Fig. 42 Notional Navcam operations sequence for a rover “drive direction” planning panorama, acquiring
+nine Navcam images of varying pixel scale. The background image for this figure (and Fig. 43) is from an
+MSL Mastcam panorama (Malin et al. 2017)
+
+
+
+
+Fig. 43 Notional Navcam 360◦ survey panorama, comprised of a 5 × 1 quarter-scale portion (images 1
+through 5, shown in red), and a full-scale 360◦ inset panorama (16 × 1 full-scale tiles, shown in green)
+
+7 Summary
+The Perseverance rover carries a next-generation imaging system that will improve the op-
+erational capabilities of the Mars 2020 mission. EDLCAM video of key EDL events will
+document the performance of the Mars 2020 system and inform the design for future EDL
+systems. The LVS/LCAM system will enable more targeted landing capabilities. Recorded
+audio from the rover microphone may reveal new acoustic signatures that were unknown
+prior to Mars 2020. If the microphone continues to operate during the surface mission,
+recorded sounds of the rover mechanisms may have diagnostic value for assessing the state
+of rover hardware. The next-generation Navcams and Hazcams will acquire images of Mars
+with wider fields of view and higher pixel scale than versions on previous missions. The
+Cachecam will acquire 12.5 micron/pixel images of the cached samples in the sample tubes.
+Images from the cameras will play an important role during the operational phase of the
+mission and will become part of the permanent record of the Perseverance mission. These
+same images will also become a key component of any future sample return mission.
+Acknowledgements This work was performed by the Mars 2020 project at the Jet Propulsion Laboratory,
+California Institute of Technology, under contract with NASA. The authors thank the efforts of the entire Mars
+2020 project team, including Matt Wallace, John McNamee, Rick Paynter, Mark Underwood, Cate Harris,
+Jeff Srinivasan, Gun-Shing Chen, Jerry Mulder, Nicole Spanovich, Katie Stack-Morgan, Ken Farley, Ken
+Williford, Sarah Milkovich, Jason Van Beek, Sabrina Feldman, Zach Ousnamer, Ben Riggs, Tony Ganino,
+Ryan Van Schilfgaarde, Chris Chatellier, Mark Thompson, Hung Nguyen, Gene Poyorena, Ken Herkenhoff,
+and many others.
+
+Publisher’s Note Springer Nature remains neutral with regard to jurisdictional claims in published maps
+and institutional affiliations.
+
+Open Access This article is licensed under a Creative Commons Attribution 4.0 International License,
+which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as
+The Mars 2020 Engineering Cameras                                                        Page 47 of 48    137
+
+you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons
+licence, and indicate if changes were made. The images or other third party material in this article are in-
+cluded in the article’s Creative Commons licence, unless indicated otherwise in a credit line to the material.
+If material is not included in the article’s Creative Commons licence and your intended use is not permitted
+by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the
+copyright holder. To view a copy of this licence, visit http://creativecommons.org/licenses/by/4.0/.
+
+
+
+References
+H. Abarca, R. Deen, G. Hollins et al., Image and data processing for InSight Lander operations and science.
+      Space Sci. Rev. 215, 22 (2019). https://doi.org/10.1007/s11214-019-0587-9
+D.A. Alexander, R. Deen, P. Andres, P. Zamani, H. Mortensen, A. Chen, M. Cayanan, J. Hall, V. Klochko, O.
+      Pariser, C. Stanley, C. Thompson, G. Yagi, Processing of Mars Exploration Rover imagery for science
+      and operations planning. J. Geophys. Res. 111, E02S02 (2006). https://doi.org/10.1029/2005JE002462
+A.C. Allwood, L.A. Wade, M.C. Foote et al., PIXL: Planetary Instrument for X-Ray Lithochemistry. Space
+      Sci. Rev. 216, 134 (2020). https://doi.org/10.1007/s11214-020-00767-7
+B.E. Bayer, Color Imaging Array, United States Patent # 3,971,065 (1976)
+J.F. Bell III, S.W. Squyres, K.E. Herkenhoff, J.N. Maki, H.M. Arneson, D. Brown, S.A. Collins, A. Din-
+      gizian, S.T. Elliot, E.C. Hagerott, A.G. Hayes, M.J. Johnson, J.R. Johnson, J. Joseph, K. Kinch, M.T.
+      Lemmon, R.V. Morris, L. Scherr, M. Schwochert, M.K. Shepard, G.H. Smith, J.N. Sohl-Dickstein, R.
+      Sullivan, W.T. Sullivan, M. Wadsworth, Mars Exploration Rover Athena Panoramic Camera (Pancam)
+      investigation. J. Geophys. Res. 108(E12), 8063 (2003). https://doi.org/10.1029/2003JE002070
+J.F. Bell III et al., The Mars 2020 Perseverance rover Mast Camera Zoom (Mastcam-Z) multispec-
+      tral, stereoscopic imaging investigation. Space Sci. Rev. (2020, this issue). https://doi.org/10.1007/
+      s11214-020-00755-x
+R. Bhartia et al., Perseverance’s Scanning Habitable Environments with Raman and Luminescence for Or-
+      ganics and Chemicals (SHERLOC) investigation. Space Sci. Rev. (2020, this issue)
+J. Casani et al., Report on the loss of the Mars Polar Lander and Deep Space 2 missions. JPL Special Review
+      Board, JPL D-18709 (2000)
+B. Chide et al., Listening to laser sparks: a link between Laser-Induced Breakdown Spectroscopy, acoustic
+      measurements and crater morphology. Spectrochim. Acta, Part B, At. Spectrosc. 153, 50–60 (2019).
+      https://doi.org/10.1016/j.sab.2019.01.008
+K.S. Edgett, R.A. Yingst, M.A. Ravine et al., Curiosity’s Mars Hand Lens Imager (MAHLI) investigation.
+      Space Sci. Rev. 170, 259–317 (2012). https://doi.org/10.1007/s11214-012-9910-4
+K.A. Farley et al., Mars 2020 mission overview. Space Sci. Rev. (2020, this issue). https://doi.org/10.1007/
+      s11214-020-00762-y
+J.B. Garvin, M.C. Malin, M.A. Ravine, Descent imaging of sub-meter topography from vertical baseline
+      stereo analysis of Curiosity MARDI images, Gale Crater, Mars, in 48th Lunar and Planetary Science
+      Conference #2526 (2017)
+J.B. Garvin, R. Dotson, N. Williams, J. Maki, R. Deen et al., Microtopopgraphy of the Mars InSight Landing
+      Site: geological implications, in 50th Lunar and Planetary Science Conference #1705 (2019)
+D.B. Gennery, Least-squares camera calibration including lens distortion and automatic editing of calibra-
+      tion points, in Calibration and Orientation of Cameras in Computer Vision, ed. by A. Grun, T. Huang
+      (Springer, Berlin, 2001), pp. 123–136. Chap. 5. ISBN 3-540-65283-3
+D.B. Gennery, Generalized camera calibration including fish-eye lenses. Int. J. Comput. Vis. 68(3), 239–266
+      (2006). https://doi.org/10.1007/s11263-006-5168-1
+K.E. Herkenhoff, S.W. Squyres, J.F. Bell III, J.N. Maki et al., Athena Microscopic Imager investigation.
+      J. Geophys. Res. 108(E12), 8065 (2003). https://doi.org/10.1029/2003JE002076
+F.O. Huck, D.J. Jobson, S.K. Park, S.D. Wall, R.E. Arvidson, W.R. Patterson, W.D. Benton, Spectropho-
+      tometric and color estimates of the Viking Lander sites. J. Geophys. Res. 82(28), 4401–4411 (1977).
+      https://doi.org/10.1029/JS082i028p04401
+A. Johnson, R. Willson, Y. Cheng, J. Goguen, C. Leger, M. SanMartin, L. Matthies, Design through operation
+      of an image-based velocity estimation system for Mars landing. Int. J. Comput. Vis. 74(3), 319–341
+      (2007)
+A. Johnson, S. Aaron, J. Chang, Y. Cheng, J. Montgomery, S. Mohan, S. Schroeder, B. Tweddle, N. Trawny,
+      J. Zheng, The Lander Vision System for Mars 2020 entry descent and landing, in Proc. AAS Guidance
+      Navigation and Control Conference (AAS-17-038) (2017)
+A. Johnson, N. Villaume, C. Umsted, A. Kourchians, D. Sternberg, N. Trawny, Y. Cheng, E. Giepel, J. Mont-
+      gomery, The Mars 2020 Lander Vision System field test, in Proc. AAS Guidance Navigation and Control
+      Conference (AAS-20-105) (2020)
+137   Page 48 of 48                                                                           J.N. Maki et al.
+
+A. Kiely, M. Klimesh, The ICER progressive wavelet image compressor. Jet Propulsion Laboratory IPN
+     progress report, 42-155, 2003. http://ipnpr.jpl.nasa.gov/
+M. Klimesh, V. Stanton, D. Watola, Hardware implementation of a lossless image compression algo-
+     rithm using a field programmable gate array, Jet Propulsion Laboratory TMO progress report 42-
+     144, October–December 2000, pp. 1–11, February 15, 2001. http://tmo.jpl.nasa.gov/progress_report/
+     42-144/144H.pdf
+S.K. LaVoie, W.B. Green, A.J. Runkle, D.A. Alexander, P.A. Andres, E.M. DeJong, E.D. Duxbury, D.J.
+     Freda, Z. Gorjian, J.R. Hall, F.R. Hartman, S.R. Levoe, J.L. Lorre, J.M. McAuley, S. Suzuki, P.J.
+     Woncik, J.R. Wright, Processing and analysis of Mars Pathfinder science data at the Jet Propulsion
+     Laboratory’s Science Data Processing Systems Section. J. Geophys. Res. 104(E4), 8831–8852 (1999)
+     https://doi.org/10.1029/1998JE900014
+M. Lemmon, P. Smith, C. Shinohara, R. Tanner, P. Woida, A. Shaw, J. Hughes, R. Reynolds, R. Woida, J.
+     Penegor, C. Oquest, S.F. Hviid, M. Madsen, M. Olsen, K. Leer, L. Drube, R.V. Morris, D. Britt, The
+     Phoenix Surface Stereo Imager (SSI) investigation. Lunar Planet. Sci. XXXIX (2008), 2156.pdf
+T.E. Litwin, J.N. Maki, Imaging services flight software on the Mars Exploration Rovers, in 2005 IEEE
+     International Conference on Systems, Man and Cybernetics, Waikoloa, HI, vol. 1 (2005), pp. 895–902.
+     https://doi.org/10.1109/ICSMC.2005.1571260
+M.C. Malin, M.A. Caplinger, M.H. Carr, S. Squyres, P. Thomas, J. Veverka, Mars Descent Im-
+     ager (MARDI) on the Mars Polar Lander. J. Geophys. Res. 106(E8), 17635–17650. (2001).
+     https://doi.org/10.1029/1999JE001144
+J.N. Maki, J.J. Lorre, P.H. Smith, R.D. Brandt, D.J. Steinwand, The color of Mars: measurements from the
+     Pathfinder Landing Site. J. Geophys. Res., Planets 104(E4), 8781–8794 (1999). https://doi.org/10.1029/
+     98JE01767
+J.N. Maki, J.F. Bell III, K.E. Herkenhoff, S.W. Squyres, A. Kiely, M. Klimesh, M. Schwochert, T. Litwin,
+     R. Willson, A. Johnson, M. Maimone, E. Baumgartner, A. Collins, M. Wadsworth, S.T. Elliott, A.
+     Dingizian, D. Brown, E.C. Hagerott, L. Scherr, R. Deen, D. Alexander, J. Lorre, Mars Exploration Rover
+     engineering cameras. J. Geophys. Res. 108(E12), 8071 (2003). https://doi.org/10.1029/2003JE002077
+J.N. Maki, D. Thiessen, A. Pourangi, P. Kobzeff, T. Litwin, L. Scherr, S. Elliott, A. Dingizian, M. Maimone,
+     The Mars Science Laboratory engineering cameras. Space Sci. Rev. 170, 77–93 (2012). https://doi.org/
+     10.1007/s11214-012-9882-4
+J.N. Maki, M. Golombek, R. Deen et al., The color cameras on the InSight Lander. Space Sci. Rev. 214, 105
+     (2018). https://doi.org/10.1007/s11214-018-0536-z
+M.C. Malin et al., Context camera investigation on board the Mars Reconnaissance Orbiter. J. Geophys. Res.
+     112, E05S04 (2007). https://doi.org/10.1029/2006JE002808
+M.C. Malin, M. Ravine, M. Caplinger, T. Ghaemi, J. Schaffner, J. Maki et al., The Mars Science Laboratory
+     (MSL) Mast cameras and Descent imager: investigation and instrument descriptions. Earth Space Sci.
+     4, 506–539 (2017). https://doi.org/10.1002/2016EA000252
+H.S. Malvar, L. He, R. Cutler, High-quality linear interpolation for demosaicing of Bayer-patterned color
+     images, in 2004 IEEE International Conference on Acoustics, Speech, and Signal Processing, vol. 3
+     (2004). https://doi.org/10.1109/ICASSP.2004.1326587
+Maurice et al., The SuperCam Instrument suite on the Mars 2020 Rover: science objectives and Mast-Unit
+     Description. Space Sci. Rev. (2020, this issue)
+A.S. McEwen et al., Mars Reconnaissance Orbiter’s High Resolution Imaging Science Experiment (HiRISE).
+     J. Geophys. Res. 112, E05S02 (2007). https://doi.org/10.1029/2005JE002605
+H.J. Moore, J.R. Matijevic, D.B. Bickler et al., The Mars Pathfinder Microrover. J. Geophys. Res. 102, 3989–
+     4001 (1997). 1997
+N. Murdoch, B. Chide et al., Laser-induced breakdown spectroscopy acoustic testing of the Mars 2020 mi-
+     crophone. Planet. Space Sci. 165, 260–271 (2019). https://doi.org/10.1016/j.pss.2018.09.009
+M.A. Ravine, J.A. Schaffner, M.A. Caplinger, ECAM, a modular spaceflight imaging system – first flight
+     deliveries, in 3rd International Workshop on Instrumentation for Planetary Missions (2016)
+J.A. Rodriguez-Manfredi et al., MEDA: the Mars environmental dynamics analyzer. A suite of sensors for
+     the Mars 2020 mission. Space Sci. Rev. (2020, this issue)
+P.H. Smith et al., The imager for Mars Pathfinder experiment. J. Geophys. Res. 102(E2), 4003–4025 (1997)
+G.H. Smith, E.C. Hagerott, L.M. Scherr, K.E. Herkenhoff, J.F. Bell III, Optical designs for the Mars ’03 rover
+     cameras, in Current Developments in Lens Design and Optical Engineering II, ed. by R.E. Fischer, R.B.
+     Johnson, W.J. Smith. Proc. SPIE, vol. 4441 (2001), p. 118
+Wiens et al., SuperCam. Space Sci. Rev. (2020, this issue)
+Y. Yakimovsky, R. Cunningham, A system for extracting three-dimensional measurements from a stereo pair
+     of TV cameras. Comput. Graph. Image Process. 7, 195–210 (1978)
+
