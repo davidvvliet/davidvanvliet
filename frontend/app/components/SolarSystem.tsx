@@ -191,6 +191,10 @@ const REFOCUS_FACTOR = 20 / MIN_DISTANCE_RADII;        // ~5.8x close-up: beyond
 const FOCUS_TRANSITION_SECONDS = 0.9;  // base duration; fly-ins add time per decade of distance covered
 const FOCUS_SECONDS_PER_DECADE = 0.45; // Earth -> Moon ~1.6 s, Earth -> Pluto ~3.5 s
 const RESTORE_FLY_IN_FACTOR = 50;      // on reload, the saved view is flown into from this many times its distance
+// The reload fly-in starts on the far side of the body, looking toward the Sun,
+// nudged sideways and up so the Sun shows beside the body instead of behind it.
+const RESTORE_SUN_SIDE_DEG = 10;
+const RESTORE_SUN_UP_DEG = 4;
 const PICK_MIN_PX = 12;                // click tolerance floor, in pixels
 const PICK_RADIUS_MULTIPLE = 4;        // tolerance = drawn radius * this (capped: big bodies use their outline)
 const PICK_CAP_PX = 30;                // above this drawn radius, the outline itself is the hitbox
@@ -976,7 +980,9 @@ export function SolarSystem({
     // For zoomTo transitions, `startOffset` is the camera's offset from the old
     // body at the start; the camera then flies straight toward the new body
     // along the line of sight, so it never passes through the parent.
-    let transition: { from: Body; t: number; distTo: number | null; startOffset: THREE.Vector3; seconds: number } | null = null;
+    // `dirTo` (reload fly-in): the line of sight also swings from the start
+    // direction to this one, in step with the zoom.
+    let transition: { from: Body; t: number; distTo: number | null; startOffset: THREE.Vector3; seconds: number; dirTo?: THREE.Vector3 } | null = null;
     // Turning toward a star: rotates the camera's offset around the focus so the
     // star ends up just beside the focused body's disc (a little past its
     // angular radius), rather than hidden behind it. Distance is kept.
@@ -1524,7 +1530,19 @@ export function SolarSystem({
           const startDist = Math.max(toStart.length(), 1e-6);
           const endDist = transition.distTo;
           const d = startDist * Math.pow(endDist / startDist, k);
-          camera.position.copy(newBodyPos).addScaledVector(toStart.normalize(), d);
+          const dir = toStart.normalize();
+          if (transition.dirTo) {
+            // Same k as the distance, which shrinks log-evenly, so the turn keeps pace with the zoom.
+            const from = transition.startOffset.clone().normalize();
+            if (from.dot(transition.dirTo) < -0.999) {
+              // Opposite directions: swing around the ecliptic pole, not some arbitrary axis.
+              dir.copy(from).applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * k);
+            } else {
+              const q = new THREE.Quaternion().setFromUnitVectors(from, transition.dirTo);
+              dir.copy(from).applyQuaternion(new THREE.Quaternion().slerp(q, k));
+            }
+          }
+          camera.position.copy(newBodyPos).addScaledVector(dir, d);
           const travelled = startDist === endDist ? 1 : (startDist - d) / (startDist - endDist);
           worldPos(transition.from, tmpA);
           focusPoint.copy(tmpA).lerp(newBodyPos, THREE.MathUtils.clamp(travelled, 0, 1));
@@ -1731,10 +1749,19 @@ export function SolarSystem({
           // rather than opening on the close-up. A scale switch restores in place.
           const systemMax = Math.max(MAX_CAMERA_DISTANCE, fitDistance(outermostOrbit + sunBody.radius) * 1.5);
           const far = Math.max(d, Math.min(d * RESTORE_FLY_IN_FACTOR, systemMax));
-          const startOffset = saved.dir.clone().multiplyScalar(far);
+          // Start on the far side of the body, facing the Sun (the Sun itself keeps the saved line).
+          const startDir = saved.dir.clone();
+          if (body !== sunBody && focusPoint.lengthSq() > 0) {
+            startDir.copy(focusPoint).normalize(); // Sun at the origin: Sun -> body, extended past the body
+            const up = new THREE.Vector3(0, 1, 0);
+            startDir.applyAxisAngle(up, THREE.MathUtils.degToRad(RESTORE_SUN_SIDE_DEG));
+            const side = new THREE.Vector3().crossVectors(up, startDir).normalize();
+            startDir.applyAxisAngle(side, -THREE.MathUtils.degToRad(RESTORE_SUN_UP_DEG));
+          }
+          const startOffset = startDir.multiplyScalar(far);
           camera.position.copy(focusPoint).add(startOffset);
           const decades = Math.log10(far / d);
-          transition = { from: body, t: 0, distTo: d, startOffset, seconds: FOCUS_TRANSITION_SECONDS + FOCUS_SECONDS_PER_DECADE * decades };
+          transition = { from: body, t: 0, distTo: d, startOffset, seconds: FOCUS_TRANSITION_SECONDS + FOCUS_SECONDS_PER_DECADE * decades, dirTo: saved.dir.clone() };
           restoreTransition = transition;
           restoreTarget = { name: body.name, dir: saved.dir.clone(), radii: saved.radii, intro: saved.intro };
         } else {
