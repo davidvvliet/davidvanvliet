@@ -30,7 +30,9 @@ from the repo.
 2. Put reference images in `refs/<probe>/` (the dashboard shows them beside the sheet).
 3. Ask the user to start the live session (`npm run blender`) if they want to watch, and to
    open `localhost:3000/models` (their iTerm2 browser pane works).
-4. Write `probes/<probe>.py`, then `npm run model <probe>`. Read the check table it prints;
+4. Start `npm run model:dev <probe>` in the background so every save rebuilds (the user sees
+   each change on the dashboard and in Blender), then write `probes/<probe>.py`. Or build by
+   hand with `npm run model <probe>`. Read the check table it prints;
    fix failing checks before looking at images.
 5. Read `out/<probe>/sheet.png` (one image, four views, metric grid) against the
    references. Fix proportions, then details. Repeat 4-5.

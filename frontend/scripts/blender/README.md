@@ -24,6 +24,7 @@ Python; the command line needs only the system `python3`.
 ## Commands (from `frontend/`)
 - `npm run blender`: open Blender with the live server (127.0.0.1 only)
 - `npm run model <probe>`: build in the live session if one is open, else headless (`-- --headless` to force)
+- `npm run model:dev [probe]`: rebuild on every save of a probe script, spec or `lib/` file (a `lib/` change rebuilds the given probe, or the last one built)
 - `npm run model:all`: rebuild every probe; fails on a failing check or a sheet that changed against its baseline
 - `npm run model:approve <probe>`: copy the last passing build to `public/models/` and make its sheet the baseline
 - `npm run model:new <probe> "Title"`: start a probe from the templates

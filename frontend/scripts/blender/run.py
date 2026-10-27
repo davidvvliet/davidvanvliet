@@ -10,6 +10,7 @@
 #                                   sheet the baseline
 #   run.py new <probe> ["Title"]    start a probe from the templates
 #   run.py ref <probe> <model>      measure a reference model: sheet + largest pieces
+#   run.py dev [probe] [--headless] rebuild on every save of a probe script, spec or lib/
 #   run.py send <file.py | ->       run Python in the live session
 #   run.py status                   print the last build of every probe
 #   run.py watch                    show each new contact sheet in iTerm2 (imgcat)
@@ -205,6 +206,42 @@ def cmd_ref(args):
     for r in json.load(open(parts))["largest_pieces"][:12]:
         print(f"    {r['main_length']:>7} m  size {r['size']}  centre {r['centre']}  {r['material']}")
 
+def cmd_dev(args):
+    names = [a for a in args if not a.startswith("--")]
+    headless = "--headless" in args
+    watched = lambda: {p: os.path.getmtime(p) for d in ("probes", "specs", "lib")
+                       for p in glob.glob(os.path.join(HERE, d, "*.py" if d != "specs" else "*.json"))}
+    target = names[0] if names else None
+    if target and target not in probes():
+        die(f"No spec for '{target}'. Known: {', '.join(probes())}")
+    sys.stdout.reconfigure(line_buffering=True)
+    where = "the live session" if not headless and live_available() else "headless Blender"
+    print(f"Rebuilding {target or 'the probe you save'} on every save, in {where} (Ctrl+C to stop)...")
+    seen = watched()
+    while True:
+        time.sleep(0.3)
+        now = watched()
+        changed = [p for p, t in now.items() if seen.get(p) != t]
+        seen = now
+        if not changed:
+            continue
+        time.sleep(0.2)  # let an editor finish writing
+        seen = watched()
+        own = {os.path.splitext(os.path.basename(p))[0] for p in changed if not p.startswith(os.path.join(HERE, "lib"))}
+        if target:
+            todo = [target]  # lib/ changes and the target's own files both rebuild it
+        elif own:
+            todo = sorted(own & set(probes()))
+        else:  # lib/ changed: rebuild whatever was built last
+            last = (read_status().get("current") or {}).get("probe")
+            todo = [last] if last in probes() else []
+        print(f"\n{time.strftime('%H:%M:%S')}  changed: {', '.join(os.path.relpath(p, HERE) for p in changed)}")
+        for probe in todo:
+            try:
+                build(probe, headless=headless)
+            except SystemExit:
+                pass  # build() already printed why; keep watching
+
 def cmd_status(args):
     status = read_status()
     cur = status.get("current")
@@ -236,7 +273,7 @@ def cmd_watch(args):
         time.sleep(0.5)
 
 COMMANDS = {"blender": cmd_blender, "build": cmd_build, "all": cmd_all, "approve": cmd_approve,
-            "new": cmd_new, "ref": cmd_ref, "send": cmd_send, "status": cmd_status, "watch": cmd_watch}
+            "new": cmd_new, "ref": cmd_ref, "dev": cmd_dev, "send": cmd_send, "status": cmd_status, "watch": cmd_watch}
 
 if __name__ == "__main__":
     if len(sys.argv) < 2 or sys.argv[1] not in COMMANDS:

@@ -8,6 +8,7 @@
     "start": "next start",
     "blender": "python3 scripts/blender/run.py blender",
     "model": "python3 scripts/blender/run.py build",
+    "model:dev": "python3 scripts/blender/run.py dev",
     "model:all": "python3 scripts/blender/run.py all",
     "model:new": "python3 scripts/blender/run.py new",
     "model:approve": "python3 scripts/blender/run.py approve",
