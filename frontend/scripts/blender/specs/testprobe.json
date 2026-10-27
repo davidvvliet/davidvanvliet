@@ -1,0 +1,14 @@
+{
+  "title": "Test probe",
+  "fixture": true,
+  "note": "Harness fixture, not a real spacecraft: one of every shared part, with design values chosen here. It exists to prove the pipeline and catch regressions in lib/.",
+  "sources": [],
+  "dimensions": {
+    "dish_diameter": {"value": 3.0, "object": "dish", "measure": "diameter", "source": "design value"},
+    "bus_height": {"value": 0.5, "object": "bus", "measure": "length", "source": "design value"},
+    "boom_length": {"value": 4.0, "object": "boom", "measure": "length", "source": "design value"},
+    "rtg_length": {"value": 1.1, "object": "rtg", "measure": "length", "source": "design value"},
+    "overall_span": {"value": 7.41, "object": "*", "measure": "x", "tolerance": 0.05, "source": "design value"}
+  },
+  "budget": {"triangles": 50000, "glb_bytes": 1500000}
+}
