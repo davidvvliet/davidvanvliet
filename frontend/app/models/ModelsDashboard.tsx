@@ -11,6 +11,7 @@ type Build = {
   started: number; ok?: boolean; error?: string; seconds?: number; checks?: Check[];
   sheet?: string; glb?: string; grid_m?: Record<string, number>; size_m?: number[];
   history?: string[]; baseline?: { diff: number; changed: boolean } | null; approved?: number;
+  closeups?: string[];
 };
 type Probe = {
   name: string; title: string; fixture: boolean; note: string | null;
@@ -90,7 +91,7 @@ export default function ModelsDashboard() {
   const [status, setStatus] = useState<Status | null>(null);
   const [error, setError] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
-  const [showRef, setShowRef] = useState(false);
+  const [view, setView] = useState<"build" | "reference" | "close-ups">("build");
   const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
@@ -120,13 +121,13 @@ export default function ModelsDashboard() {
   useEffect(() => {
     if (currentAt === undefined) return;
     if (seenAt.current === undefined) { seenAt.current = currentAt; return; }
-    if (currentAt !== seenAt.current && currentProbe) { setSelected(currentProbe); setShowRef(false); }
+    if (currentAt !== seenAt.current && currentProbe) setSelected(currentProbe);
     seenAt.current = currentAt;
   }, [currentProbe, currentAt]);
 
   const choose = (name: string) => {
     setSelected(name);
-    setShowRef(false);
+    setView("build");
     try { localStorage.setItem(SELECTED_KEY, name); } catch { /* storage unavailable */ }
   };
 
@@ -135,9 +136,13 @@ export default function ModelsDashboard() {
   const b = probe?.build;
   const hasRef = !!probe?.refs.includes("reference-sheet.png");
   // Until a probe has its own build, its reference sheet is all there is to show.
-  const sheetUrl = probe && (hasRef && (showRef || !b?.sheet)
-    ? file(`refs/${probe.name}/reference-sheet.png`)
-    : b?.sheet ? file(`out/${probe.name}/sheet.png`, b.started) : null);
+  const views = [b?.sheet && "build", hasRef && "reference", b?.closeups?.length && "close-ups"]
+    .filter(Boolean) as ("build" | "reference" | "close-ups")[];
+  const shown = views.includes(view) ? view : views[0];
+  const sheetUrl = !probe ? null
+    : shown === "reference" ? file(`refs/${probe.name}/reference-sheet.png`)
+    : shown === "close-ups" ? file(`out/${probe.name}/closeups.png`, b?.started)
+    : b?.sheet ? file(`out/${probe.name}/sheet.png`, b.started) : null;
   const glbUrl = probe && b?.glb ? file(`out/${probe.name}/${probe.name}.glb`, b.started) : null;
   const state = !status ? (error ? "offline" : "") : cur?.state === "running" ? "building"
     : b?.error ? "error" : b ? (b.ok ? "pass" : "fail") : "not built";
@@ -186,8 +191,12 @@ export default function ModelsDashboard() {
         <div className={styles.side}>
           <div className={styles.sheetCell}>
             {sheetUrl ? <img className={styles.sheet} src={sheetUrl} alt="" /> : <div className={styles.empty}>no sheet</div>}
-            {hasRef && b?.sheet && (
-              <button className={styles.toggle} onClick={() => setShowRef((v) => !v)}>{showRef ? "reference" : "build"}</button>
+            {views.length > 1 && (
+              <div className={styles.toggle}>
+                {views.map((v) => (
+                  <button key={v} onClick={() => setView(v)} className={v === shown ? styles.active : ""}>{v}</button>
+                ))}
+              </div>
             )}
           </div>
           <div className={styles.statusCell}>

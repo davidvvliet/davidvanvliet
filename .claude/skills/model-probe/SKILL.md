@@ -35,7 +35,10 @@ from the repo.
    hand with `npm run model <probe>`. Read the check table it prints;
    fix failing checks before looking at images.
 5. Read `out/<probe>/sheet.png` (one image, four views, metric grid) against the
-   references. Fix proportions, then details. Repeat 4-5.
+   references for proportions, then `out/<probe>/closeups.png` for joints and small parts:
+   at sheet scale a bent boom or a floating part is a few pixels (both slipped through on
+   Voyager until the user spotted them). Give the spec `closeups` for every joint and boom
+   end. Fix proportions, then details. Repeat 4-5.
 6. When checks pass and the sheet matches, show the user the sheet and ask for approval.
    On approval: `npm run model:approve <probe>`.
 

@@ -47,7 +47,7 @@ def _step(status, probe, step, state="running", message=None):
 # Each build replaces the probe's last entry. Only the approval carries over; a failed
 # build also keeps the last good sheet and export to look at, but not their checks.
 CARRY = ("approved",)
-CARRY_ON_FAILURE = ("sheet", "glb", "history", "grid_m", "size_m", "baseline")
+CARRY_ON_FAILURE = ("sheet", "glb", "history", "grid_m", "size_m", "baseline", "closeups")
 
 def _carry(status, probe, entry, failed):
     prev = status.get("probes", {}).get(probe, {})
@@ -87,6 +87,7 @@ def build(probe, export=True):
 
         _step(status, probe, "render")
         entry.update(rig.contact_sheet(objs, out_dir, spec.get("sheet_frame")))
+        entry["closeups"] = rig.closeups(objs, out_dir, spec.get("closeups"))
         stamp = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
         hist = os.path.join(out_dir, "history")
         os.makedirs(hist, exist_ok=True)

@@ -195,3 +195,59 @@ def compare(a_path, b_path):
     if a.shape != b.shape:
         return 1.0
     return float(np.abs(a[..., :3] - b[..., :3]).mean())
+
+CLOSEUP_PX = 512
+
+def closeups(objs, out_dir, views=None):
+    """Perspective close-ups for checking joints and small parts at a readable size.
+    `views`: [{"name", "target": [x, y, z], "look": [x, y, z], "radius": m}] from the spec;
+    without them, one view of the craft's core (every part but the long booms and rods)."""
+    scene = bpy.context.scene
+    if not views:
+        lo, hi = bounds(objs)
+        span = (hi - lo).length
+        core = [o for o in objs if max(o.dimensions) < span * 0.25] or objs
+        clo, chi = bounds(core)
+        views = [{"name": "core", "target": list((clo + chi) / 2), "look": [-1, 1, -0.6],
+                  "radius": max((chi - clo).length / 2, 0.05)}]
+    os.makedirs(os.path.join(out_dir, "closeups"), exist_ok=True)
+    keep = (scene.render.resolution_x, scene.render.resolution_y, scene.render.film_transparent)
+    scene.render.resolution_x = scene.render.resolution_y = CLOSEUP_PX
+    scene.render.film_transparent = False  # opaque: the world colour is the background
+    names = []
+    hidden = [o for o in scene.objects if o.type in ("MESH", "LIGHT") and o not in objs
+              and o not in set(_collection().objects) and not o.hide_render]
+    for o in hidden:
+        o.hide_render = True
+    try:
+        for v in views:
+            look = Vector(v["look"]).normalized()
+            cam = bpy.data.cameras.new(f"Close_{v['name']}")
+            obj = bpy.data.objects.new(f"Close_{v['name']}", cam)
+            _collection().objects.link(obj)
+            up = Vector((0, 0, 1)) if abs(look.z) < 0.95 else Vector((0, 1, 0))
+            obj.matrix_world = _aim(look, up)
+            cam.lens = 50
+            fov = 2 * math.atan(cam.sensor_width / (2 * cam.lens))
+            dist = v["radius"] * 1.1 / math.sin(fov / 2)
+            obj.location = Vector(v["target"]) - look * dist
+            cam.clip_start, cam.clip_end = dist * 0.01, dist * 50
+            bpy.context.view_layer.update()
+            scene.camera = obj
+            scene.render.filepath = os.path.join(out_dir, "closeups", f"{v['name']}.png")
+            bpy.ops.render.render(write_still=True)
+            names.append(v["name"])
+    finally:
+        for o in hidden:
+            o.hide_render = False
+        scene.render.resolution_x, scene.render.resolution_y, scene.render.film_transparent = keep
+    # One image to review: tiles three to a row, in spec order, top-left first.
+    tiles = [_load(os.path.join(out_dir, "closeups", f"{n}.png")) for n in names]
+    cols = min(3, len(tiles))
+    blank = np.zeros_like(tiles[0])
+    blank[..., 3] = 1
+    while len(tiles) % cols:
+        tiles.append(blank)
+    rows = [np.concatenate(tiles[i:i + cols], axis=1) for i in range(0, len(tiles), cols)]
+    save_png(np.concatenate(rows[::-1], axis=0), os.path.join(out_dir, "closeups.png"))
+    return names

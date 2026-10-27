@@ -195,5 +195,92 @@
       9.2
     ],
     "note": "fixed framing shared by our sheet and the reference sheet, so the two overlay; union of both models' bounds"
-  }
+  },
+  "closeups": [
+    {
+      "name": "bus",
+      "target": [
+        0,
+        -0.6,
+        0.4
+      ],
+      "look": [
+        -1,
+        0.5,
+        -0.35
+      ],
+      "radius": 1.6,
+      "note": "bus, boom roots, whip base"
+    },
+    {
+      "name": "dish",
+      "target": [
+        0,
+        0,
+        1.1
+      ],
+      "look": [
+        -0.6,
+        0.8,
+        -0.9
+      ],
+      "radius": 2.0
+    },
+    {
+      "name": "rtg",
+      "target": [
+        0,
+        -2.9,
+        -0.1
+      ],
+      "look": [
+        -1,
+        0.2,
+        -0.3
+      ],
+      "radius": 1.1
+    },
+    {
+      "name": "mag_tip",
+      "target": [
+        0,
+        -12.7,
+        8.9
+      ],
+      "look": [
+        -1,
+        -0.3,
+        -0.3
+      ],
+      "radius": 0.6
+    },
+    {
+      "name": "scan",
+      "target": [
+        0,
+        3.6,
+        0.5
+      ],
+      "look": [
+        -1,
+        -0.4,
+        -0.3
+      ],
+      "radius": 0.9
+    },
+    {
+      "name": "whip_tips",
+      "target": [
+        0,
+        -5.3,
+        -5.5
+      ],
+      "look": [
+        0,
+        1,
+        0
+      ],
+      "radius": 7.5
+    }
+  ]
 }

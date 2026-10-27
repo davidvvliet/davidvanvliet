@@ -61,6 +61,10 @@ largest distance from that axis). Tolerance is relative, default 3%.
 Every build also checks `attached`: each part must touch (within 2 cm) or sit inside another,
 so nothing floats. A spec can list checks to skip in `skip_checks` (only the fixture does).
 
+Each build also renders close-ups (`out/<probe>/closeups.png`, tiled three to a row) for joints
+and small parts. A spec's `closeups` lists them: `{"name", "target": [x, y, z], "look": [x, y, z],
+"radius": m}`; without it there is one view of the craft's core (everything but the long booms).
+
 A spec's `sheet_frame` (`{"min": [x, y, z], "max": [...]}`) fixes the contact-sheet framing for
 both the build and `model:ref`, so the two sheets overlay exactly (the dashboard's build/reference
 toggle then works as a blink comparator). Build the probe in the reference model's frame.
