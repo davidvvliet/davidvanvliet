@@ -1,35 +1,14 @@
 import * as THREE from 'three';
 
 // The Sun in white light, as a telescope with a solar filter sees it: a
-// near-white disc that darkens and warms toward the limb, a fine granulation,
-// and a few sunspots. All procedural, so it stays sharp at any zoom.
+// near-white disc that darkens and warms toward the limb, with a fine
+// granulation. All procedural, so it stays sharp at any zoom.
 
 // Limb darkening: I(mu)/I(1) = 1 - u - v + u*mu + v*mu^2 (Allen, Astrophysical
 // Quantities). u, v from SolarSoft darklimb_u/darklimb_v at 6500/5500/4500 A,
 // standing in for the R/G/B channels. Blue darkens most, so the limb reddens.
 const LIMB_U = new THREE.Vector3(0.802, 0.9139, 0.9782);
 const LIMB_V = new THREE.Vector3(-0.1982, -0.2145, -0.164);
-
-// Sunspots in the Sun's own frame (they turn with it). Latitudes sit in the
-// activity belts; layout and sizes are illustrative, not a real day's map.
-// radius: angular radius of the whole spot (penumbra) in radians.
-const SPOTS: { latDeg: number; lonDeg: number; radius: number }[] = [
-  { latDeg: 14, lonDeg: 20, radius: 0.030 },
-  { latDeg: 12.5, lonDeg: 26, radius: 0.014 },
-  { latDeg: 15.5, lonDeg: 30, radius: 0.009 },
-  { latDeg: -18, lonDeg: 110, radius: 0.022 },
-  { latDeg: -16, lonDeg: 116, radius: 0.010 },
-  { latDeg: 22, lonDeg: 205, radius: 0.018 },
-  { latDeg: -9, lonDeg: 260, radius: 0.012 },
-  { latDeg: 27, lonDeg: 300, radius: 0.008 },
-];
-
-const spotUniforms = SPOTS.map(({ latDeg, lonDeg, radius }) => {
-  const lat = THREE.MathUtils.degToRad(latDeg);
-  const lon = THREE.MathUtils.degToRad(lonDeg);
-  // Sphere geometry's pole is +y, matching the Sun's spin axis (rotation.y).
-  return new THREE.Vector4(Math.cos(lat) * Math.cos(lon), Math.sin(lat), -Math.cos(lat) * Math.sin(lon), radius);
-});
 
 const vertexShader = /* glsl */ `
 #include <common>
@@ -50,12 +29,10 @@ void main() {
 const fragmentShader = /* glsl */ `
 #include <common>
 #include <logdepthbuf_pars_fragment>
-#define SPOT_COUNT ${SPOTS.length}
 uniform vec3 uColor;
 uniform vec3 uLimbU;
 uniform vec3 uLimbV;
 uniform float uTime;
-uniform vec4 uSpots[SPOT_COUNT];
 varying vec3 vObj;
 varying vec3 vNormalV;
 varying vec3 vViewPos;
@@ -159,27 +136,6 @@ void main() {
   g += 0.025 * detail(14.0) * snoise(n * 14.0 - uTime * 0.05);  // large-scale unevenness
   float intensity = 1.0 + g * foreshorten;
 
-  // Sunspots: dark umbra, filamentary penumbra, and faculae (bright patches
-  // around active regions that show best near the limb).
-  float faculae = 0.0;
-  for (int i = 0; i < SPOT_COUNT; i++) {
-    vec3 c = uSpots[i].xyz;
-    float r = uSpots[i].w;
-    float cosA = dot(n, c);
-    if (cosA < 0.9) continue;
-    float d = length(n - c);
-    d *= 1.0 + 0.22 * snoise(n * 90.0 + float(i) * 7.3) + 0.12 * snoise(n * 260.0);
-    vec3 t = normalize(n - c * cosA + 1e-6);
-    float fil = 0.5 + 0.5 * snoise(t * 18.0 + c * 50.0 + vec3(0.0, 0.0, d * 400.0));
-    float penumbra = 1.0 - smoothstep(r * 0.92, r * 1.08, d);
-    float umbra = 1.0 - smoothstep(r * 0.36, r * 0.46, d);
-    float spot = mix(1.0, mix(0.68, 0.84, fil), penumbra);
-    spot = mix(spot, 0.22, umbra);
-    intensity *= spot;
-    float halo = (1.0 - smoothstep(r, r * 3.5, d)) * (1.0 - penumbra);
-    faculae += halo * (0.5 + 0.5 * snoise(n * 140.0 + float(i)));
-  }
-  intensity *= 1.0 + 0.22 * faculae * pow(1.0 - mu, 1.5) * detail(140.0);
 
   vec3 limb = 1.0 - uLimbU - uLimbV + uLimbU * mu + uLimbV * mu * mu;
   gl_FragColor = vec4(uColor * limb * intensity, 1.0);
@@ -196,7 +152,6 @@ export function createSunMaterial(color: THREE.ColorRepresentation): THREE.Shade
       uLimbU: { value: LIMB_U },
       uLimbV: { value: LIMB_V },
       uTime: { value: 0 },
-      uSpots: { value: spotUniforms },
     },
   });
 }
