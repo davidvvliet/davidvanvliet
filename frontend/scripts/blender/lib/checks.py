@@ -10,6 +10,7 @@
 #   diameter    twice the largest distance from that axis
 import os
 import bpy
+from mathutils.bvhtree import BVHTree
 
 DEFAULT_TOLERANCE = 0.03  # relative
 
@@ -52,6 +53,44 @@ def triangles(objs):
         ev.to_mesh_clear()
     return n
 
+ATTACH_GAP = 0.02  # m: parts closer than this count as touching
+
+def attached(objs):
+    """Names of the parts not connected (through touching parts) to the largest group."""
+    dg = bpy.context.evaluated_depsgraph_get()
+    trees, pts, boxes = {}, {}, {}
+    for o in objs:
+        ev = o.evaluated_get(dg)
+        mesh = ev.to_mesh()
+        mw = ev.matrix_world
+        verts = [mw @ v.co for v in mesh.vertices]
+        mesh.calc_loop_triangles()
+        trees[o.name] = BVHTree.FromPolygons(verts, [t.vertices[:] for t in mesh.loop_triangles])
+        pts[o.name] = verts
+        boxes[o.name] = ([min(v[i] for v in verts) for i in range(3)], [max(v[i] for v in verts) for i in range(3)])
+        ev.to_mesh_clear()
+    names = list(pts)
+    def near(a, b):
+        (alo, ahi), (blo, bhi) = boxes[a], boxes[b]
+        if any(alo[i] > bhi[i] + ATTACH_GAP or blo[i] > ahi[i] + ATTACH_GAP for i in range(3)):
+            return False
+        if trees[a].overlap(trees[b]):
+            return True
+        for x, y in ((a, b), (b, a)):
+            for v in pts[x]:
+                hit, normal, _, dist = trees[y].find_nearest(v)
+                # touching, or inside the other part (behind its nearest face; parts are closed)
+                if hit is not None and (dist <= ATTACH_GAP or (v - hit).dot(normal) < 0):
+                    return True
+        return False
+    groups = []
+    for n in names:  # union of touching parts
+        joined = [g for g in groups if any(near(n, m) for m in g)]
+        merged = {n}.union(*joined) if joined else {n}
+        groups = [g for g in groups if g not in joined] + [merged]
+    main = max(groups, key=len)
+    return sorted(n for n in names if n not in main)
+
 def run(spec, objs):
     """Returns a list of check results: {name, ok, measured, expected, unit, detail}."""
     by_name = {o.name: o for o in objs}
@@ -72,6 +111,11 @@ def run(spec, objs):
             res.update(ok=abs(err) <= tol, measured=round(got, 4),
                        detail=f"{err * 100:+.1f}% (tolerance ±{tol * 100:.0f}%)")
         results.append(res)
+    loose = [] if "attached" in spec.get("skip_checks", []) else attached(objs)
+    if "attached" not in spec.get("skip_checks", []):
+        results.append({"name": "attached", "ok": not loose, "measured": len(objs) - len(loose),
+                        "expected": len(objs), "unit": "parts",
+                        "detail": "floating: " + ", ".join(loose) if loose else "every part touches the craft"})
     budget = spec.get("budget", {})
     tris = triangles(objs)
     max_tris = budget.get("triangles", 50000)

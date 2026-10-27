@@ -1,6 +1,7 @@
 {
   "title": "Test probe",
   "fixture": true,
+  "skip_checks": ["attached"],
   "note": "Harness fixture, not a real spacecraft: one of every shared part, with design values chosen here. It exists to prove the pipeline and catch regressions in lib/.",
   "sources": [],
   "dimensions": {
