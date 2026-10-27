@@ -8,6 +8,7 @@ import { PLANETS, MOONS, STARS, SPECTRAL_COLORS, APOLLO_SITES } from './solarSys
 import { MISSIONS, MissionEvent } from '../missions';
 import { marsPositionJ2000AU } from './marsEphemeris';
 import { moonPositionJ2000Km } from './lunar';
+import { createSunMaterial, createSunGlowTexture } from './sunShader';
 
 interface PersonaDot {
   id: number;
@@ -322,7 +323,7 @@ export function SolarSystem({
   const handledFocusSeqRef = useRef<number>(0);
   const isPointerDownRef = useRef<boolean>(false);
   const moonMaterialRef = useRef<THREE.MeshBasicMaterial | null>(null);
-  const sunMaterialRef = useRef<THREE.MeshBasicMaterial | null>(null);
+  const sunMaterialRef = useRef<THREE.ShaderMaterial | null>(null);
   const sunGlowMaterialRef = useRef<THREE.SpriteMaterial | null>(null);
 
   // Memoize dots comparison to prevent unnecessary updates
@@ -459,29 +460,15 @@ export function SolarSystem({
       apolloDisposables.push(g, m, hg, hm);
     });
 
-    // Sun: a solid sphere at the origin plus a soft additive glow sprite that
+    // Sun: a white-light photosphere shader (sunShader.ts) plus an additive glow sprite that
     // always faces the camera.
-    const sunGeometry = new THREE.SphereGeometry(SUN_RADIUS, 48, 48);
-    const sunMaterial = new THREE.MeshBasicMaterial({
-      color: SUN_COLOR,
-      transparent: true,
-      opacity: 1,
-    });
+    const sunGeometry = new THREE.SphereGeometry(SUN_RADIUS, 96, 96);
+    const sunMaterial = createSunMaterial(SUN_COLOR);
     sunMaterialRef.current = sunMaterial;
     const sun = new THREE.Mesh(sunGeometry, sunMaterial);
     scene.add(sun);
 
-    const glowCanvas = document.createElement('canvas');
-    glowCanvas.width = glowCanvas.height = 256;
-    const glowCtx = glowCanvas.getContext('2d')!;
-    const gradient = glowCtx.createRadialGradient(128, 128, 0, 128, 128, 128);
-    gradient.addColorStop(0, 'rgba(255, 244, 232, 1)');
-    gradient.addColorStop(0.3, 'rgba(255, 244, 232, 0.85)');
-    gradient.addColorStop(0.6, 'rgba(255, 236, 214, 0.3)');
-    gradient.addColorStop(1, 'rgba(255, 236, 214, 0)');
-    glowCtx.fillStyle = gradient;
-    glowCtx.fillRect(0, 0, 256, 256);
-    const glowTexture = new THREE.CanvasTexture(glowCanvas);
+    const glowTexture = createSunGlowTexture(1 / SUN_GLOW_SCALE);
     const sunGlowMaterial = new THREE.SpriteMaterial({
       map: glowTexture,
       blending: THREE.AdditiveBlending,
@@ -1502,6 +1489,7 @@ export function SolarSystem({
       updateMoon(simJD);
       updateMission(simJD);
       sun.rotation.y = (2 * Math.PI * (simJD - J2000)) / SUN_ROTATION_DAYS;
+      sunMaterial.uniforms.uTime.value = now / 1000 * 0.04; // granulation evolves on real time, not the sim clock
       // Earth: Greenwich sidereal time puts lon 0 (local -x on the globe) at the
       // right direction. A hover or drag pauses the spin; the skipped angle is
       // banked so it resumes without a jump (the day/night side then lags by it).
