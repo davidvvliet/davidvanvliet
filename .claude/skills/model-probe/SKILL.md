@@ -21,7 +21,8 @@ from the repo.
 - A change to `lib/` affects every probe: run `npm run model:all` and look at any sheet
   flagged as changed before calling the change done.
 - Never run `model:approve` without the user's go-ahead: it writes `public/models/` and
-  resets the baseline. Wiring a model into the solar-system scene is a separate change.
+  resets the baseline. Wiring a model into the solar-system scene is a separate change
+  (see "From Blender to the site" in the README, including the scale problem).
 
 ## Loop
 1. `npm run model:new <probe> "Title"` (from `frontend/`), then fill in the spec: sources,

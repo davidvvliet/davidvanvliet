@@ -32,6 +32,20 @@ Python; the command line needs only the system `python3`.
 The dev-only dashboard at `localhost:3000/models` follows builds as they happen: progress,
 a 3D view of the export, the contact sheet, references, checks and history.
 
+## From Blender to the site
+1. Every build exports `out/<probe>/<probe>.glb` (ignored by git), so nothing reaches the site.
+2. `npm run model:approve <probe>` copies the last passing build to `public/models/<probe>.glb`;
+   once committed and deployed it is served at `/models/<probe>.glb`.
+3. Not built yet: the scene loading it. A mission's craft is drawn as a small blue sphere
+   (`marker` in `app/components/SolarSystem.tsx`, where the mission is set up). The plan is
+   to load the `.glb` with three's glTF loader and show it in place of the sphere when the
+   camera is close, keeping the dot further out.
+   Scale: models are in real metres, but scene units are Earth radii x 1.3 (`EARTH_RADIUS`),
+   so a 3.7 m dish at true scale is invisible. The craft must be drawn enlarged up close, as
+   the dot already is far out.
+   This step is the only one that changes the existing scene: it is its own change, made
+   with the user's go-ahead.
+
 ## Spec dimensions
 ```json
 "dish_diameter": {"value": 3.66, "object": "dish", "measure": "diameter",
