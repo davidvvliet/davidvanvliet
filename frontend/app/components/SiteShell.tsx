@@ -17,6 +17,8 @@ import { usePageStore } from '../store/pageStore';
 import { BODY_FACTS } from './solarSystemData';
 import { MISSIONS } from '../missions';
 
+const GoldenRecord = dynamic(() => import('./GoldenRecord'), { ssr: false });
+
 const SolarSystem = dynamic(() => import('./SolarSystem').then(mod => mod.SolarSystem), {
   ssr: false,
 });
@@ -114,25 +116,19 @@ export default function SiteShell({ children, photos }: { children: React.ReactN
           <div className={styles.linksContainer}>
             <div className={styles.linksTop}>
               <div className={styles.cell6}>
-                <a href="https://github.com/davidvvliet" target="_blank" rel="noopener noreferrer" className={styles.link}>
-                  github
-                </a>
-                <a href="https://www.linkedin.com/in/davidvvliet/" target="_blank" rel="noopener noreferrer" className={styles.link}>
-                  linkedin
-                </a>
-                <a href="https://x.com/deepfieldnorth" target="_blank" rel="noopener noreferrer" className={styles.link}>
-                  X
-                </a>
+                <GoldenRecord />
               </div>
               <div className={styles.linksTopRight}>
                 <div className={styles.cell7}>
-                  <Image 
-                    src="/pulsar-map.png" 
-                    alt="Pulsar Map" 
-                    width={2000} 
-                    height={2000}
-                    className={styles.pulsarMap}
-                  />
+                  <a href="https://github.com/davidvvliet" target="_blank" rel="noopener noreferrer" className={styles.link}>
+                    github
+                  </a>
+                  <a href="https://www.linkedin.com/in/davidvvliet/" target="_blank" rel="noopener noreferrer" className={styles.link}>
+                    linkedin
+                  </a>
+                  <a href="https://x.com/deepfieldnorth" target="_blank" rel="noopener noreferrer" className={styles.link}>
+                    X
+                  </a>
                 </div>
                 <div className={styles.linksTopRightBottom}>
                   <div className={styles.cell8}>

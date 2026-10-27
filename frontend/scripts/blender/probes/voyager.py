@@ -80,7 +80,7 @@ def build(spec):
                                      os.path.join(HARNESS, "out", "voyager", "textures"), base=tuple(ref["record_gold"]))
     parts.disc("golden_record", radius=d["record_diameter"] / 2, thickness=d["record_depth"] - hub["height"],
                location=(flat_r * n[0], flat_r * n[1], rc["z"]), direction=n, roll_deg=ref["record_roll_deg"],
-               hub=hub, material=materials.image("golden_record_cover", base, normal, metallic=1.0, roughness=0.35))
+               hub=hub, material=materials.image("golden_record_cover", base, normal, metallic=1.0, roughness=ref["record_roughness"]))
 
     # Magnetometer boom: a support truss from the bus out to the boom interface, then the
     # 13 m Astromast at the reference model's elevation. Lattice widths are estimated from

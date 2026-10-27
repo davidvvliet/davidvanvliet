@@ -117,6 +117,7 @@ function useParts(scene: THREE.Object3D) {
 
 const HIGHLIGHT = new THREE.Color("#1d4f66");
 const FADED = 0.12; // opacity of the other parts while one is focused
+const HOVER_FADED = 0.35; // a faded part under the pointer
 const smooth = (t: number) => t * t * (3 - 2 * t);
 
 type Controls = { target: THREE.Vector3; update: () => void };
@@ -226,23 +227,31 @@ function Model({ url, exploded, focus, setFocus, onLabel }: {
 
   useEffect(() => {
     for (const p of parts) for (const m of p.meshes) {
-      const mat = m.material as THREE.MeshStandardMaterial;
-      if (!mat.emissive) continue;
-      if (!mat.userData.rest) mat.userData.rest = mat.emissive.clone();
-      mat.emissive.copy(p.group === hover ? HIGHLIGHT : mat.userData.rest);
+      for (const mat of (Array.isArray(m.material) ? m.material : [m.material]) as THREE.MeshStandardMaterial[]) {
+        // A hovered faded part shows a little more of itself, so it reads as clickable.
+        if (focus && p.group !== focus && mat.userData.restOpacity !== undefined)
+          mat.opacity = p.group === hover ? HOVER_FADED : FADED;
+        if (!mat.emissive) continue;
+        if (!mat.userData.rest) mat.userData.rest = mat.emissive.clone();
+        mat.emissive.copy(p.group === hover ? HIGHLIGHT : mat.userData.rest);
+      }
     }
-  }, [hover, parts]);
+  }, [hover, focus, parts]);
+  // The part under the pointer. While one is focused, the others are see-through, so a ray
+  // that reaches the focused part picks it even through faded parts in front of it.
+  const pick = (e: ThreeEvent<PointerEvent | MouseEvent>) => {
+    const groups = e.intersections.map((i) => groupOf(i.object, scene));
+    return focus && groups.includes(focus) ? focus : groups[0] ?? groupOf(e.object, scene);
+  };
   const onMove = (e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation();
-    const fam = groupOf(e.object, scene);
-    setHover(focus && fam !== focus ? null : fam); // faded parts don't react
+    setHover(pick(e));
   };
   const onClick = (e: ThreeEvent<MouseEvent>) => {
     if (e.delta > 4) return; // the end of an orbit drag, not a click
     e.stopPropagation();
-    const fam = groupOf(e.object, scene);
-    if (focus && fam !== focus) return; // clicks through faded parts: ignore
-    setFocus(fam === focus ? null : fam);
+    const g = pick(e);
+    setFocus(g === focus ? null : g); // another part moves the focus to it
   };
   // The label is drawn by the Viewer in a fixed panel, so it never covers the part.
   const label = hover ?? focus;
@@ -284,9 +293,11 @@ class ViewerBoundary extends Component<{ children: ReactNode; resetKey: string }
   render() { return this.state.failed ? <div className={styles.empty}>Could not load the model.</div> : this.props.children; }
 }
 
-function Viewer({ url, breakdown, stale }: { url: string; breakdown: Breakdown | null; stale: boolean }) {
+export function Viewer({ probe, url, breakdown, stale }: { probe: string; url: string; breakdown: Breakdown | null; stale: boolean }) {
   const [exploded, setExploded] = useState(false);
   const [focus, setFocus] = useState<string | null>(null);
+  // Another model starts from its overview; a rebuild of the same one keeps the focus.
+  useEffect(() => setFocus(null), [probe]);
   const [label, setLabel] = useState<{ name: string; size: THREE.Vector3 } | null>(null);
   const down = useRef<{ x: number; y: number } | null>(null);
   useEffect(() => {
@@ -455,7 +466,7 @@ export default function ModelsDashboard() {
       </header>
       <div className={styles.grid}>
         <div className={styles.viewCell}>
-          {glbUrl ? <Viewer url={glbUrl} breakdown={breakdown} stale={stale} /> : <div className={styles.empty}>{probe ? "no export" : ""}</div>}
+          {glbUrl ? <Viewer probe={probe!.name} url={glbUrl} breakdown={breakdown} stale={stale} /> : <div className={styles.empty}>{probe ? "no export" : ""}</div>}
         </div>
         <div className={styles.side}>
           <div className={styles.sheetCell}>
