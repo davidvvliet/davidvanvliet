@@ -76,7 +76,7 @@ def build(probe, export=True):
         results = checks.run(spec, objs)
 
         _step(status, probe, "render")
-        entry.update(rig.contact_sheet(objs, out_dir))
+        entry.update(rig.contact_sheet(objs, out_dir, spec.get("sheet_frame")))
         stamp = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
         hist = os.path.join(out_dir, "history")
         os.makedirs(hist, exist_ok=True)

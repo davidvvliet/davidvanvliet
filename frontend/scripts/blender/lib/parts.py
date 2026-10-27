@@ -133,18 +133,23 @@ def boom(name, length, width, location=(0, 0, 0), direction=(1, 0, 0), truss=Tru
     return _object(name, bm, material, frame(location, direction), parent)
 
 def rtg(name, length, radius, fins=6, fin_span=None, location=(0, 0, 0), direction=(0, 0, 1),
-        material="dark_metal", parent=None):
+        material="dark_metal", parent=None, separate_fins=False):
     """Radioisotope generator: a cylinder with radial cooling fins. `fin_span` is the
-    overall fin tip-to-tip diameter (default 2.2x the body)."""
+    overall fin tip-to-tip diameter (default 2.2x the body). With `separate_fins` the fins
+    are their own object, `<name>_fins`, so the body can be checked on its own."""
     fin_span = fin_span or radius * 4.4
     fin_len = fin_span / 2 - radius
     bm = bmesh.new()
     _cyl(bm, radius, length, 24)
+    fb = bmesh.new() if separate_fins else bm
     for k in range(fins):
         a = 2 * math.pi * k / fins
         m = Matrix.Rotation(a, 4, "Z") @ Matrix.Translation((radius + fin_len / 2, 0, length / 2))
-        _box(bm, (fin_len, max(radius * 0.08, 0.004), length * 0.96), m)
-    return _object(name, bm, material, frame(location, direction), parent)
+        _box(fb, (fin_len, max(radius * 0.08, 0.004), length * 0.96), m)
+    body = _object(name, bm, material, frame(location, direction), parent)
+    if separate_fins:
+        _object(f"{name}_fins", fb, material, frame(location, direction), parent)
+    return body
 
 def panel(name, width, height, thickness=0.03, location=(0, 0, 0), direction=(0, 0, 1),
           roll_deg=0.0, material="solar_cell", parent=None):

@@ -87,7 +87,9 @@ def main(probe, path):
         tris += len(o.data.loop_triangles)
     out = os.path.join(HERE, "out", probe, "ref")
     os.makedirs(out, exist_ok=True)
-    sheet = rig.contact_sheet(meshes, out)
+    spec_path = os.path.join(HERE, "specs", f"{probe}.json")
+    frame = json.load(open(spec_path)).get("sheet_frame") if os.path.exists(spec_path) else None
+    sheet = rig.contact_sheet(meshes, out, frame)  # same framing as the probe's own sheet
     refs = os.path.join(HERE, "refs", probe)
     os.makedirs(refs, exist_ok=True)
     shutil.copy(sheet["sheet"], os.path.join(refs, "reference-sheet.png"))

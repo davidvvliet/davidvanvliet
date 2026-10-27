@@ -91,7 +91,8 @@
       "tolerance": 0.05,
       "source": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1977-084A",
       "quote": "Each RTG unit, contained in a beryllium outer case, was 40.6 cm in diameter, 50.8 cm in length, and weighed 39 kg.",
-      "conflict": "Cataldo & Bennett (NTRS 20120000731, Fig. 8): 'overall diameter was 39.73 cm'. NSSDCA chosen by the user."
+      "conflict": "Cataldo & Bennett (NTRS 20120000731, Fig. 8): 'overall diameter was 39.73 cm'. NSSDCA chosen by the user.",
+      "note": "taken as the body (case) diameter: the NASA model's fins span 0.63 m around a ~0.45 m body, so 40.6 cm is not the fin span"
     },
     "rtg_length": {
       "value": 0.508,
@@ -126,27 +127,73 @@
     }
   },
   "from_reference_model": {
+    "frame_bus_top_z": {
+      "value": 0.604,
+      "note": "NASA model bus top plate height; our model uses the same frame so sheets overlay"
+    },
     "hga_depth": {
       "value": 0.54,
       "note": "rim to vertex, NASA model (no document found)"
     },
-    "mag_boom_elevation_deg": {
-      "value": 43,
-      "note": "boom axis vs the bus plane, NASA model; no document angle found"
+    "hga_vertex_above_bus": {
+      "value": 0.25,
+      "note": "dish shell bottom z 0.853 vs bus top 0.604, NASA model"
     },
-    "rtg_boom_tip_from_axis": {
-      "value": 3.9,
-      "note": "outer end of the RTG stack from the bus axis, boom ~15 deg below the bus plane, NASA model; no document length found"
+    "mag_boom_elevation_deg": {
+      "value": 37.0,
+      "note": "PCA of the outer boom only (y < -5 m, z > 2 m, 4482 points), NASA model. Earlier 43 deg was skewed by the RTG stack in the measured region"
+    },
+    "mag_boom_interface": {
+      "value": [
+        0.0,
+        -2.33,
+        1.1
+      ],
+      "note": "13 m (Behannon) back from the NASA model's boom tip (0.1, -12.7, 8.92) along that line; sits on the boom support truss"
+    },
+    "rtg_stack_inner_y": {
+      "value": -2.2,
+      "note": "slices of the NASA model along y"
+    },
+    "rtg_stack_outer_y": {
+      "value": -3.95,
+      "note": "slices of the NASA model along y"
+    },
+    "rtg_stack_droop_deg": {
+      "value": 9.0,
+      "note": "slope of the slice centres from y -2.6 to -3.7, NASA model"
+    },
+    "rtg_stack_centre_z_at_inner": {
+      "value": -0.05,
+      "note": "slice centre at y -2.6, NASA model"
+    },
+    "rtg_fin_span": {
+      "value": 0.63,
+      "note": "x extent of the RTG slices, NASA model (body ~0.45 there)"
     }
   },
   "open_questions": [
-    "RTG boom length and angle, HGA depth, magnetometer boom angle: only from the NASA model so far.",
     "Scan platform size and layout: not found; would come from the NASA model and photos.",
     "Surface finishes (gold/black blankets, bare metal): no document; photos needed.",
-    "Whip directions relative to the booms: PRA paper Fig. 5 text unreadable; needs a visual check."
+    "Whip directions relative to the booms: PRA paper Fig. 5 text unreadable; needs a visual check.",
+    "RTG boom geometry, HGA depth, magnetometer boom angle and support truss: only from the NASA model.",
+    "MHW-RTG fin span: only from the NASA model (0.63 m)."
   ],
   "budget": {
     "triangles": 50000,
     "glb_bytes": 1500000
+  },
+  "sheet_frame": {
+    "min": [
+      -7.2,
+      -12.9,
+      -5.8
+    ],
+    "max": [
+      7.2,
+      4.4,
+      9.2
+    ],
+    "note": "fixed framing shared by our sheet and the reference sheet, so the two overlay; union of both models' bounds"
   }
 }

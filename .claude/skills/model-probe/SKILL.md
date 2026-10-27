@@ -39,6 +39,15 @@ from the repo.
 6. When checks pass and the sheet matches, show the user the sheet and ask for approval.
    On approval: `npm run model:approve <probe>`.
 
+## Lessons from Voyager
+- Build in the reference model's frame and give the spec a `sheet_frame` (the union of both
+  models' bounds), then re-run `model:ref`: identical framing makes differences obvious.
+- Measure a part from points that can only belong to it (Voyager's boom angle was first
+  skewed by the RTG stack inside the region). Cross-check: does the documented length,
+  laid back from the measured tip, land somewhere physically sensible?
+- Check what a document's number refers to against the reference model (Voyager's
+  "40.6 cm RTG diameter" is the body; the fins span 0.63 m).
+
 ## When the user corrects something
 Fix it at the level it belongs: a wrong number in the spec (with a better source), a
 part's shape in `lib/parts.py`, a look in `lib/materials.py`. If the lesson applies to

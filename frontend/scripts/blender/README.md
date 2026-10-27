@@ -58,5 +58,9 @@ a 3D view of the export, the contact sheet, references, checks and history.
 or `z` (world extent), `length` (along the first object's local Z) or `diameter` (twice the
 largest distance from that axis). Tolerance is relative, default 3%.
 
+A spec's `sheet_frame` (`{"min": [x, y, z], "max": [...]}`) fixes the contact-sheet framing for
+both the build and `model:ref`, so the two sheets overlay exactly (the dashboard's build/reference
+toggle then works as a blink comparator). Build the probe in the reference model's frame.
+
 `testprobe` is a fixture (`"fixture": true`), not a spacecraft: one of every part with made-up
 values, so changes to `lib/` show against its baseline. Fixtures are never published.

@@ -218,6 +218,11 @@ def cmd_dev(args):
     where = "the live session" if not headless and live_available() else "headless Blender"
     print(f"Rebuilding {target or 'the probe you save'} on every save, in {where} (Ctrl+C to stop)...")
     seen = watched()
+    if target:  # build once now, so a save made while starting up isn't missed
+        try:
+            build(target, headless=headless)
+        except SystemExit:
+            pass
     while True:
         time.sleep(0.3)
         now = watched()

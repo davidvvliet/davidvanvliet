@@ -144,12 +144,14 @@ def _grid(cam, center):
                     rgb[p, :] = np.maximum(rgb[p, :], val)
     return rgb, step
 
-def contact_sheet(objs, out_dir):
-    """Render the four views of `objs` and tile them; returns info for the status file."""
+def contact_sheet(objs, out_dir, frame=None):
+    """Render the four views of `objs` and tile them; returns info for the status file.
+    `frame` ({"min": [x, y, z], "max": [...]}) fixes the framing, so a probe's sheet and its
+    reference sheet line up exactly; otherwise the views fit `objs`."""
     clear()
     _setup_scene()
     scene = bpy.context.scene
-    lo, hi = bounds(objs)
+    lo, hi = (Vector(frame["min"]), Vector(frame["max"])) if frame else bounds(objs)
     center, size = (lo + hi) / 2, hi - lo
     radius = max(size.length / 2, 1e-3)
     os.makedirs(os.path.join(out_dir, "views"), exist_ok=True)
