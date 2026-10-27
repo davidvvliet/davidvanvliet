@@ -5,7 +5,14 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "blender": "python3 scripts/blender/run.py blender",
+    "model": "python3 scripts/blender/run.py build",
+    "model:all": "python3 scripts/blender/run.py all",
+    "model:new": "python3 scripts/blender/run.py new",
+    "model:approve": "python3 scripts/blender/run.py approve",
+    "model:status": "python3 scripts/blender/run.py status",
+    "model:watch": "python3 scripts/blender/run.py watch"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.6",

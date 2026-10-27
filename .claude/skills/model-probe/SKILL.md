@@ -1,0 +1,43 @@
+---
+name: model-probe
+description: Model a spacecraft (probe, lander, rocket stage) in Blender for the site with the harness in frontend/scripts/blender. Use when asked to model, build, fix or refine a probe's 3D model, add a new probe model, or change the shared Blender parts.
+---
+
+# Modelling a probe
+
+The harness lives in `frontend/scripts/blender` (read its README first). Every model is a
+script plus a sourced spec; nothing is modelled by hand in the GUI, so every model rebuilds
+from the repo.
+
+## Rules
+- Never type a dimension from memory. Every number in a spec has a `source` (a URL, or a
+  document and page). A value estimated from a reference image says so in its source
+  ("estimated from refs/<probe>/<file>, scaled by the 3.66 m dish").
+- Look for an official NASA 3D model first (NASA's 3D Resources) and record it in
+  `reference_model`. Use it to measure against; say so before deriving geometry from it.
+- Model in metres at real size. Stay within the budgets (default 50k triangles, 1.5 MB).
+- Build from `lib/parts.py`. When a probe needs a part twice or another probe will want
+  it, add it to `lib/` instead of writing it in the probe script.
+- A change to `lib/` affects every probe: run `npm run model:all` and look at any sheet
+  flagged as changed before calling the change done.
+- Never run `model:approve` without the user's go-ahead: it writes `public/models/` and
+  resets the baseline. Wiring a model into the solar-system scene is a separate change.
+
+## Loop
+1. `npm run model:new <probe> "Title"` (from `frontend/`), then fill in the spec: sources,
+   reference model, the dimensions that define the craft's silhouette, each with its part
+   name and measure.
+2. Put reference images in `refs/<probe>/` (the dashboard shows them beside the sheet).
+3. Ask the user to start the live session (`npm run blender`) if they want to watch, and to
+   open `localhost:3000/models` (their iTerm2 browser pane works).
+4. Write `probes/<probe>.py`, then `npm run model <probe>`. Read the check table it prints;
+   fix failing checks before looking at images.
+5. Read `out/<probe>/sheet.png` (one image, four views, metric grid) against the
+   references. Fix proportions, then details. Repeat 4-5.
+6. When checks pass and the sheet matches, show the user the sheet and ask for approval.
+   On approval: `npm run model:approve <probe>`.
+
+## When the user corrects something
+Fix it at the level it belongs: a wrong number in the spec (with a better source), a
+part's shape in `lib/parts.py`, a look in `lib/materials.py`. If the lesson applies to
+future probes, add it to the rules above.
