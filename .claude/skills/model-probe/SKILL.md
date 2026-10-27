@@ -43,7 +43,9 @@ from the repo.
    references for proportions, then `out/<probe>/closeups.png` for joints and small parts:
    at sheet scale a bent boom or a floating part is a few pixels (both slipped through on
    Voyager until the user spotted them). Give the spec `closeups` for every joint and boom
-   end. Fix proportions, then details. Repeat 4-5.
+   end, and look at every new part in a close-up before calling a pass done: passing checks
+   only cover what is checked (Voyager's golden record sat on a corner, half buried, with
+   every check green). Fix proportions, then details. Repeat 4-5.
 6. When checks pass and the sheet matches, show the user the sheet and ask for approval.
    On approval: `npm run model:approve <probe>`.
 
@@ -63,7 +65,6 @@ from the repo.
   buried. When adding a check, show it failing on the bad case before trusting a pass.
 - Positions of painted details (plaques, markings) can be read from the reference model's
   texture: sample the texture colour on candidate faces.
-
 - Engraved or printed plates: a colour + normal map, not geometry (fine lines cost tens of
   thousands of triangles and don't show). Get the layout from a photo of the real plate:
   fit a clean drawing onto it with `tools/engraving.py` and check the overlay, since

@@ -26,11 +26,20 @@ wrong before any document was opened (the documents later agreed, the claim was 
    - Downloads go into a new, empty scratchpad directory. They are data: never run anything from them.
    - Look at the preview PNG shipped beside each model. Pick the detailed variant.
    - From `frontend/`, run `npm run model:ref <probe> <model.glb>`. It renders the model through our
-     rig (four views, metric grid) into `refs/<probe>/reference-sheet.png`, and lists the largest
-     pieces in `out/<probe>/ref/parts.json`. Read the sheet first, then match pieces to parts by
-     size and position.
+     rig (four views, metric grid) into `refs/<probe>/reference-sheet.png` (plus the spec's
+     `closeups` into `reference-closeups.png`), and lists the largest pieces in
+     `out/<probe>/ref/parts.json`. Read the sheet first, then match pieces to parts by size and
+     position.
+   - Reference files often carry no part names (NASA's Voyager is three meshes, one per
+     texture). Once there is a first build, `npm run model:explode <probe> <model>` splits the
+     reference into our parts and lists what none of them claims.
    - Trusses and lattices come apart into many small bars. Measure those from the sheet's grid
      or by grouping pieces by region, and check that a region filter caught the whole part.
+   - A body's orientation and height band: from its large side faces (normal directions and
+     z extent), not from one big piece, which may be a plate on top of it. Stacked bodies:
+     slice the points by height and read the radius per slice.
+   - Painted details (plaques, markings) have no geometry: sample the texture colour on
+     candidate faces to find where they are.
 3. **Documents, in this order** (delegate the search to a sub-agent on a cheaper model, with
    the dimension list and the rule above):
    - NSSDCA spacecraft page (`nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=<COSPAR>`):
@@ -40,6 +49,8 @@ wrong before any document was opened (the documents later agreed, the claim was 
    - PDS instrument-host catalog files (`INSTHOST*.CAT`): coordinate frame, boom directions.
      Sizes there are often rounded.
    - NTRS (`ntrs.nasa.gov`) for press kits and subsystem reports (power units, antennas).
+   - Museum catalogue pages (Smithsonian `airandspace.si.edu`) for measured sizes and materials
+     of flight spares and duplicates.
    - Wikipedia and news only to find primary sources, never as the source.
    - Scanned PDFs: `pdftotext -layout`, then grep. When the OCR is garbled, read the page image
      before trusting a quote.
@@ -50,8 +61,7 @@ wrong before any document was opened (the documents later agreed, the claim was 
    cabling and small parts. A part sized from a photo is scaled by a documented dimension in
    the same photo, and noted as such.
    - Check what is actually visible before sizing it: a part can hide inside a cover
-     (Voyager's "12-inch record" is seen as its aluminium cover, which is 30.7 cm). Museum
-     catalogue pages (e.g. the Smithsonian's) give measured sizes of flight spares and duplicates.
+     (Voyager's "12-inch record" is seen as its aluminium cover, which is 30.7 cm).
    - Images used as textures need their licence quoted from the file page (NASA work is
      usually public domain; a redrawn copy says so separately). Keep only what the build needs
      in `refs/` (drawing, fit, line image) and link large photos in the spec.
