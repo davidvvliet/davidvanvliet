@@ -25,3 +25,26 @@ def get(name):
     bsdf.inputs["Roughness"].default_value = roughness
     mat.diffuse_color = (*color, 1.0)  # viewport solid-mode colour
     return mat
+
+def image(name, base, normal=None, metallic=1.0, roughness=0.35):
+    """Principled material with an image base colour and optional normal map, in the node
+    layout the glTF exporter turns into baseColorTexture / normalTexture."""
+    mat = bpy.data.materials.get(name)
+    if mat is not None:
+        bpy.data.materials.remove(mat)
+    mat = bpy.data.materials.new(name)
+    mat.use_nodes = True
+    nt = mat.node_tree
+    bsdf = next(n for n in nt.nodes if n.type == "BSDF_PRINCIPLED")
+    bsdf.inputs["Metallic"].default_value = metallic
+    bsdf.inputs["Roughness"].default_value = roughness
+    tex = nt.nodes.new("ShaderNodeTexImage")
+    tex.image = base
+    nt.links.new(tex.outputs["Color"], bsdf.inputs["Base Color"])
+    if normal is not None:
+        ntex = nt.nodes.new("ShaderNodeTexImage")
+        ntex.image = normal
+        nmap = nt.nodes.new("ShaderNodeNormalMap")
+        nt.links.new(ntex.outputs["Color"], nmap.inputs["Color"])
+        nt.links.new(nmap.outputs["Normal"], bsdf.inputs["Normal"])
+    return mat

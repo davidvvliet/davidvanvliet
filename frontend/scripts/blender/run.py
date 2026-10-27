@@ -10,11 +10,13 @@
 #                                   sheet the baseline
 #   run.py new <probe> ["Title"]    start a probe from the templates
 #   run.py ref <probe> <model>      measure a reference model: sheet + largest pieces
+#   run.py explode <probe> <model>  break the reference model into our parts: per-part
+#                                   comparison and the pieces none of our parts claim
 #   run.py dev [probe] [--headless] rebuild on every save of a probe script, spec or lib/
 #   run.py send <file.py | ->       run Python in the live session
 #   run.py status                   print the last build of every probe
 #   run.py watch                    show each new contact sheet in iTerm2 (imgcat)
-import glob, json, os, re, shutil, socket, subprocess, sys, time
+import glob, json, math, os, re, shutil, socket, subprocess, sys, time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 FRONTEND = os.path.dirname(os.path.dirname(HERE))
@@ -206,6 +208,34 @@ def cmd_ref(args):
     for r in json.load(open(parts))["largest_pieces"][:12]:
         print(f"    {r['main_length']:>7} m  size {r['size']}  centre {r['centre']}  {r['material']}")
 
+def cmd_explode(args):
+    if len(args) != 2:
+        die("usage: run.py explode <probe> <model.glb|.gltf|.obj|.fbx|.stl>  (after a build)")
+    probe, model = args[0], os.path.abspath(args[1])
+    if not os.path.exists(model):
+        die(f"{model} not found")
+    check_version()
+    proc = subprocess.run([BLENDER, "--background", "--factory-startup", "--python-exit-code", "1",
+                           "--python", os.path.join(HERE, "explode.py"), "--", probe, model],
+                          capture_output=True, text=True)
+    if not any(l.startswith("EXPLODE_OK ") for l in proc.stdout.splitlines()):
+        die(proc.stdout[-4000:] + proc.stderr[-4000:])
+    out = os.path.join(OUT, probe, "ref")
+    rep = json.load(open(os.path.join(out, "explode.json")))
+    print(f"{rep['model']}: {rep['claimed']}/{rep['pieces']} pieces claimed by our parts")
+    print(f"  {'part':<16}{'ref pieces':>11}  centre off (cm)   ref size / ours (m)")
+    for fam, r in rep["families"].items():
+        if r["ref"]:
+            off = math.sqrt(sum(x * x for x in r["centre_offset"])) * 100
+            print(f"  {fam:<16}{r['ref']['pieces']:>11}  {off:>15.0f}   {r['ref']['size']} / {r['ours']['size']}")
+        else:
+            print(f"  {fam:<16}{'none':>11}")
+    print("  unclaimed groups (largest first):")
+    for i, u in enumerate(rep["unclaimed"][:12]):
+        print(f"    {i:>2}: {u['pieces']:>4} pieces  size {u['size']}  centre {u['centre']}  "
+              f"{u['nearest_m'] * 100:.0f} cm from {u['nearest_part']}")
+    print(f"  image: {os.path.join(out, 'explode.png')}")
+
 def cmd_dev(args):
     names = [a for a in args if not a.startswith("--")]
     headless = "--headless" in args
@@ -278,7 +308,7 @@ def cmd_watch(args):
         time.sleep(0.5)
 
 COMMANDS = {"blender": cmd_blender, "build": cmd_build, "all": cmd_all, "approve": cmd_approve,
-            "new": cmd_new, "ref": cmd_ref, "dev": cmd_dev, "send": cmd_send, "status": cmd_status, "watch": cmd_watch}
+            "new": cmd_new, "ref": cmd_ref, "explode": cmd_explode, "dev": cmd_dev, "send": cmd_send, "status": cmd_status, "watch": cmd_watch}
 
 if __name__ == "__main__":
     if len(sys.argv) < 2 or sys.argv[1] not in COMMANDS:

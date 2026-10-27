@@ -244,8 +244,8 @@ def closeups(objs, out_dir, views=None):
     # One image to review: tiles three to a row, in spec order, top-left first.
     tiles = [_load(os.path.join(out_dir, "closeups", f"{n}.png")) for n in names]
     cols = min(3, len(tiles))
-    blank = np.zeros_like(tiles[0])
-    blank[..., 3] = 1
+    blank = np.empty_like(tiles[0])
+    blank[:] = tiles[0][0, 0]  # fill spare tiles with the background, not black
     while len(tiles) % cols:
         tiles.append(blank)
     rows = [np.concatenate(tiles[i:i + cols], axis=1) for i in range(0, len(tiles), cols)]

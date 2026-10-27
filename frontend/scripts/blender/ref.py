@@ -93,6 +93,10 @@ def main(probe, path):
     refs = os.path.join(HERE, "refs", probe)
     os.makedirs(refs, exist_ok=True)
     shutil.copy(sheet["sheet"], os.path.join(refs, "reference-sheet.png"))
+    views = json.load(open(spec_path)).get("closeups") if os.path.exists(spec_path) else None
+    if views:  # the probe's own close-up views, for part-by-part comparison
+        rig.closeups(meshes, out, views)
+        shutil.copy(os.path.join(out, "closeups.png"), os.path.join(refs, "reference-closeups.png"))
     pieces = _pieces(meshes)
     report = {"model": os.path.basename(path), "triangles": tris,
               "size_m": np.round(P.max(0) - P.min(0), 3).tolist(),

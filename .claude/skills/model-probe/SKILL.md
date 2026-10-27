@@ -34,7 +34,12 @@ from the repo.
    each change on the dashboard and in Blender), then write `probes/<probe>.py`. Or build by
    hand with `npm run model <probe>`. Read the check table it prints;
    fix failing checks before looking at images.
-5. Read `out/<probe>/sheet.png` (one image, four views, metric grid) against the
+5. With a reference model, run `npm run model:explode <probe> <model>` after each pass: it
+   splits the reference into our parts and prints each part's centre offset and size against
+   the reference, plus the reference pieces none of our parts claim (missing or misplaced
+   parts). Read `out/<probe>/ref/explode.png`. Work down the unclaimed list and the largest
+   offsets.
+   Read `out/<probe>/sheet.png` (one image, four views, metric grid) against the
    references for proportions, then `out/<probe>/closeups.png` for joints and small parts:
    at sheet scale a bent boom or a floating part is a few pixels (both slipped through on
    Voyager until the user spotted them). Give the spec `closeups` for every joint and boom
@@ -50,6 +55,14 @@ from the repo.
   laid back from the measured tip, land somewhere physically sensible?
 - Check what a document's number refers to against the reference model (Voyager's
   "40.6 cm RTG diameter" is the body; the fins span 0.63 m).
+- Measure the main body's orientation and height band from the reference model's side faces
+  (normal directions, z extent), not from one large piece: Voyager's bus was first placed on
+  a plate above it and turned 18°, which put the golden record on a corner, half buried.
+- Every part that sits on a surface (plaques, sensors, horns) goes in the spec's `mounts`.
+  The `mounted` check fails when its back face isn't on the host everywhere or when it is
+  buried. When adding a check, show it failing on the bad case before trusting a pass.
+- Positions of painted details (plaques, markings) can be read from the reference model's
+  texture: sample the texture colour on candidate faces.
 
 ## When the user corrects something
 Fix it at the level it belongs: a wrong number in the spec (with a better source), a

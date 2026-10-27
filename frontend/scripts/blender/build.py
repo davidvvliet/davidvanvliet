@@ -109,6 +109,11 @@ def build(probe, export=True):
                                       export_apply=True, export_yup=True)
             entry["glb"] = glb
             results.append(checks.file_size(glb, spec))
+            tex = checks.textures(objs, glb)
+            if tex is not None:
+                results.append({"name": "textures", "ok": not tex, "measured": "ok" if not tex else "broken",
+                                "expected": "images + UVs", "unit": "",
+                                "detail": "; ".join(tex) or "images present, UVs inside, all exported"})
             bpy.ops.wm.save_as_mainfile(filepath=os.path.join(out_dir, f"{probe}.blend"), copy=True)
 
         entry["checks"] = results

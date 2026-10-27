@@ -37,8 +37,10 @@ def _object(name, bm, material, matrix, parent=None, smooth=False):
     bm.free()
     if smooth:
         mesh.shade_smooth()
-    if material:
-        mesh.materials.append(materials.get(material))
+    # `material`: a palette name, a bpy Material, or a list of either (face material_index
+    # picks from the list).
+    for m in (material if isinstance(material, (list, tuple)) else [material] if material else []):
+        mesh.materials.append(m if isinstance(m, bpy.types.Material) else materials.get(m))
     obj = bpy.data.objects.new(name, mesh)
     collection().objects.link(obj)
     obj.matrix_world = matrix
@@ -155,3 +157,59 @@ def panel(name, width, height, thickness=0.03, location=(0, 0, 0), direction=(0,
           roll_deg=0.0, material="solar_cell", parent=None):
     """Flat panel (solar array, radiator) centred on `location`, facing `direction`."""
     return box(name, (width, height, thickness), location, direction, roll_deg, material, parent)
+
+def strut(name, start, end, radius=0.012, segments=8, material="dark_metal", parent=None):
+    """A straight rod from `start` to `end` (struts, legs, rails)."""
+    a, b = Vector(start), Vector(end)
+    return cylinder(name, radius, (b - a).length, location=a, direction=b - a, segments=segments,
+                    material=material, parent=parent)
+
+def disc(name, radius, thickness, location=(0, 0, 0), direction=(0, 0, 1), roll_deg=0.0,
+         segments=96, bevel=0.001, hub=None, material="foil_gold", hole_material="black", parent=None):
+    """Thin plate (plaque, record cover): back face at `location`, front face `thickness` out
+    along `direction`, front rim chamfered by `bevel`. The front face is UV-mapped onto the
+    square [0, 1]^2 (circle inscribed, +v = the plate's local +y, turned by `roll_deg`), so a
+    square image of the face maps straight on; rim and back use the image's corner.
+    `hub`: {"outer": r, "inner": r, "height": h}, a raised ring at the centre with a hole
+    (`hole_material`) down to the face."""
+    bm = bmesh.new()
+    uv = bm.loops.layers.uv.new("UVMap")
+    corner = (0.01, 0.01)
+    def ring(r, z):
+        return [bm.verts.new((r * math.cos(a), r * math.sin(a), z))
+                for a in (2 * math.pi * k / segments for k in range(segments))]
+    back = ring(radius, 0.0)
+    rim = ring(radius, thickness - bevel)
+    front = ring(radius - bevel, thickness)
+    faces = [bm.faces.new(list(reversed(back)))]
+    for a, b in ((back, rim), (rim, front)):
+        for k in range(segments):
+            k2 = (k + 1) % segments
+            faces.append(bm.faces.new((a[k], a[k2], b[k2], b[k])))
+    def face_uv(f):
+        for loop in f.loops:
+            x, y = loop.vert.co.x, loop.vert.co.y
+            loop[uv].uv = (0.5 + x / (2 * radius), 0.5 + y / (2 * radius))
+    if hub:
+        # Front face as an annulus around the hub; the hub ring, its top, its hole wall and floor.
+        ro, ri, hh = hub["outer"], hub["inner"], hub["height"]
+        h_base = ring(ro, thickness)
+        for k in range(segments):
+            k2 = (k + 1) % segments
+            face_uv(bm.faces.new((front[k], front[k2], h_base[k2], h_base[k])))
+        h_top = ring(ro, thickness + hh)
+        h_in = ring(ri, thickness + hh)
+        h_floor = ring(ri, thickness)
+        for a, b in ((h_base, h_top), (h_top, h_in), (h_in, h_floor)):
+            for k in range(segments):
+                k2 = (k + 1) % segments
+                face_uv(bm.faces.new((a[k], a[k2], b[k2], b[k])))
+        floor = bm.faces.new(h_floor)
+        floor.material_index = 1
+    else:
+        face_uv(bm.faces.new(front))
+    for f in faces:
+        for loop in f.loops:
+            loop[uv].uv = corner
+    mats = [material, hole_material] if hub else material
+    return _object(name, bm, mats, frame(location, direction, roll_deg), parent)

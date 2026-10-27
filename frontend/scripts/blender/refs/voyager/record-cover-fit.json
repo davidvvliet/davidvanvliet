@@ -1,0 +1,58 @@
+{
+ "drawing": "record-cover.svg",
+ "photo": "The_Sounds_of_Earth_Record_Cover_-_GPN-2000-001978.jpg",
+ "photo_px": [
+  2215,
+  2215
+ ],
+ "rim": {
+  "cx": 1113.3603029280196,
+  "cy": 1113.1158417297913,
+  "r": 1071.5845414052585
+ },
+ "note": "per group: photo_px = svg_units * s + (tx, ty); score = mean line strength under the group's lines (higher is better)",
+ "groups": {
+  "Record-Plan-View": {
+   "s": 4.3498588508391,
+   "tx": -481.6174879192808,
+   "ty": -249.1878189242067,
+   "score": 1.008,
+   "score_whole_drawing_fit": 0.594
+  },
+  "Record-Elevation-View": {
+   "s": 4.406286799834756,
+   "tx": -489.9520343524328,
+   "ty": -263.0787296461267,
+   "score": 0.852,
+   "score_whole_drawing_fit": 0.81
+  },
+  "Video-Waveform-And-Scan-Triggering": {
+   "s": 4.506875752392232,
+   "tx": -537.5780139704441,
+   "ty": -287.68548578209936,
+   "score": 0.724,
+   "score_whole_drawing_fit": 0.468
+  },
+  "Video-Image-Frames": {
+   "s": 4.435727468875968,
+   "tx": -501.4616460934522,
+   "ty": -274.98522455062954,
+   "score": 0.821,
+   "score_whole_drawing_fit": 0.799
+  },
+  "Hydrogen-Atom-States": {
+   "s": 4.384206298053847,
+   "tx": -468.5203435243277,
+   "ty": -261.49119699219295,
+   "score": 0.884,
+   "score_whole_drawing_fit": 0.151
+  },
+  "Pulsars": {
+   "s": 4.423460523442131,
+   "tx": -476.4580067939962,
+   "ty": -282.92288782029823,
+   "score": 0.709,
+   "score_whole_drawing_fit": 0.133
+  }
+ }
+}
