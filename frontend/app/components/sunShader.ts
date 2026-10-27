@@ -157,7 +157,7 @@ void main() {
   g += 0.13 * detail(380.0) * granulation(n, 380.0);
   g += 0.045 * detail(60.0) * snoise(n * 60.0 + uTime * 0.2);   // mesogranular mottling
   g += 0.025 * detail(14.0) * snoise(n * 14.0 - uTime * 0.05);  // large-scale unevenness
-  float intensity = 0.93 + g * foreshorten;
+  float intensity = 1.0 + g * foreshorten;
 
   // Sunspots: dark umbra, filamentary penumbra, and faculae (bright patches
   // around active regions that show best near the limb).
@@ -215,8 +215,8 @@ export function createSunGlowTexture(discFraction: number): THREE.CanvasTexture 
     for (let x = 0; x < size; x++) {
       const r = Math.hypot(x + 0.5 - half, y + 0.5 - half) / half; // 0 centre, 1 sprite edge
       const s = Math.max(r - discFraction, 0) / (1 - discFraction); // 0 at limb, 1 at edge
-      const aureole = 0.2 * Math.exp(-s * 12); // starts below the limb's own brightness (~0.3)
-      const halo = 0.09 * Math.pow(discFraction / Math.max(r, discFraction), 2);
+      const aureole = 0.3 * Math.exp(-s * 10); // close to the limb's own brightness, so the edge reads as glowing
+      const halo = 0.14 * Math.pow(discFraction / Math.max(r, discFraction), 2);
       const fade = 1 - Math.min(1, Math.max(0, (r - 0.7) / 0.3));
       const a = Math.min(1, (aureole + halo) * fade * fade);
       const i = (y * size + x) * 4;
