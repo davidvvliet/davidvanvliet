@@ -5,8 +5,6 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Navbar from './Navbar';
 import Terminal from './Terminal';
-import MobileResume from './MobileResume';
-import BlogPost from './BlogPost';
 import styles from './MobilePage.module.css';
 import labelStyles from '../page.module.css'; // the desktop label overlay, reused
 import { usePageStore } from '../store/pageStore';
@@ -25,8 +23,8 @@ const dots = [
 ];
 type Dot = (typeof dots)[number];
 
-export default function MobilePage() {
-  const leftPanel = usePageStore((s) => s.leftPanel);
+// `panel`: a non-explore view (resume, a post) for the top cell; null shows the solar system.
+export default function MobilePage({ panel }: { panel: React.ReactNode }) {
   // Labels on touch: no hover, so a tapped dot, a tapped star, and the focused body.
   const [tappedDot, setTappedDot] = useState<Dot | null>(null);
   const [tappedStar, setTappedStar] = useState<{ name: string; lightYears: number; spectral?: string; fact?: string } | null>(null);
@@ -48,10 +46,8 @@ export default function MobilePage() {
 
         {/* Top 61.8%: controlled by terminal */}
         <div className={styles.globeCell}>
-          {leftPanel === "resume" ? (
-            <MobileResume />
-          ) : leftPanel === "blog" ? (
-            <BlogPost />
+          {panel ? (
+            panel
           ) : (
             <div className={labelStyles.globeWrapper}>
               <div className={labelStyles.globeLabel}>

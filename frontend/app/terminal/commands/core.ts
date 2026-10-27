@@ -9,7 +9,7 @@ const core: Command = {
   hidden: true,
   execute: () => {
     const store = usePageStore.getState();
-    store.setLeftPanel("");
+    store.openPath("/");
     store.setStarsVisible(true); // Sagittarius should frame it
     store.requestFocus("Galactic core");
     return ["This is the direction of the galactic core"];

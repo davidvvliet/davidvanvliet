@@ -9,7 +9,7 @@ const apollo: Command = {
   hidden: true,
   execute: () => {
     const store = usePageStore.getState();
-    store.setLeftPanel("");
+    store.openPath("/");
     store.setApolloVisible(true);
     store.requestFocus("Moon");
     return ["Flying to the Moon, just like those brave gentlemen."];

@@ -25,8 +25,7 @@ const writing: Command = {
     const post = getPost(slug);
     if (!post) return [`Unknown post: ${slug}. Type "${run("writing")}" to see available posts.`];
 
-    usePageStore.getState().setBlogPost(slug);
-    usePageStore.getState().setLeftPanel("blog");
+    usePageStore.getState().openPath(`/writing/${post.slug}`);
     return [`Opening "${post.title}"...`];
   },
   complete: (args) => (args.length <= 1 ? getAllPosts().map((p) => p.slug) : []),

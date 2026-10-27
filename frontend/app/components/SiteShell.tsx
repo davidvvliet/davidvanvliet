@@ -1,25 +1,43 @@
 "use client";
 
 import dynamic from 'next/dynamic';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import ChessBoard from './components/ChessBoard';
-import Navbar from './components/Navbar';
-import MobilePage from './components/MobilePage';
-import Terminal from './components/Terminal';
-import AsciiResume from './components/AsciiResume';
-import BlogPost from './components/BlogPost';
-import styles from './page.module.css';
-import { usePageStore } from './store/pageStore';
-import { BODY_FACTS } from './components/solarSystemData';
-import { MISSIONS } from './missions';
+import { usePathname, useRouter } from 'next/navigation';
+import ChessBoard from './ChessBoard';
+import Navbar from './Navbar';
+import MobilePage from './MobilePage';
+import Terminal from './Terminal';
+import ViewPanel from './ViewPanel';
+import { useIsMobile } from './useIsMobile';
+import styles from '../page.module.css';
+import { usePageStore } from '../store/pageStore';
+import { BODY_FACTS } from './solarSystemData';
+import { MISSIONS } from '../missions';
 
-const SolarSystem = dynamic(() => import('./components/SolarSystem').then(mod => mod.SolarSystem), {
+const SolarSystem = dynamic(() => import('./SolarSystem').then(mod => mod.SolarSystem), {
   ssr: false,
 });
 
-export default function GridPage() {
-  const [isMobile, setIsMobile] = useState(false);
+// The home grid. The URL decides the left panel: "/" is the solar system,
+// any other route (resume, a post) is that page, with a way back to explore.
+export default function SiteShell({ children }: { children: React.ReactNode }) {
+  const isMobile = useIsMobile();
+  const pathname = usePathname();
+  const router = useRouter();
+  const isExplore = pathname === '/';
+
+  // Terminal commands ask for a route through the store; the store also mirrors
+  // the current one so commands can tell where they are.
+  useEffect(() => { usePageStore.getState().setView(pathname); }, [pathname]);
+  const navRequest = usePageStore((s) => s.navRequest);
+  const handledNavSeq = useRef(0);
+  useEffect(() => {
+    if (!navRequest || navRequest.seq === handledNavSeq.current) return;
+    handledNavSeq.current = navRequest.seq;
+    if (navRequest.path !== pathname) router.push(navRequest.path);
+  }, [navRequest, pathname, router]);
+
   const [selectedDot, setSelectedDot] = useState<any>(null);
   const [hoveredDot, setHoveredDot] = useState<any>(null);
   const [hoveredBody, setHoveredBody] = useState<string | null>(null);
@@ -35,17 +53,6 @@ export default function GridPage() {
           ? { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }
           : { month: 'long', year: 'numeric', timeZone: 'UTC' })
     : null;
-  const leftPanel = usePageStore((s) => s.leftPanel);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
 
   const dots = [
     { id: 1, lat: 52.3676, lon: 4.9041, color: '#00ff00', size: 4, label: 'Amsterdam', subtitle: '2004-2022', description: 'Born here' },
@@ -54,7 +61,7 @@ export default function GridPage() {
     { id: 5, lat: 40.7128, lon: -74.0060, color: '#00ff00', size: 4, label: 'New York City', subtitle: '2026-present', description: 'Based here' },
   ];
 
-  if (isMobile) return <MobilePage />;
+  if (isMobile) return <MobilePage panel={isExplore ? null : <ViewPanel>{children}</ViewPanel>} />;
 
   return (
     <>
@@ -62,10 +69,8 @@ export default function GridPage() {
       <div className={styles.gridContainer}>
       {/* Two identical cells - each half width */}
       <div className={styles.cell2}>
-          {leftPanel === "resume" ? (
-            <AsciiResume />
-          ) : leftPanel === "blog" ? (
-            <BlogPost />
+          {!isExplore ? (
+            <ViewPanel>{children}</ViewPanel>
           ) : (
             <div className={styles.globeWrapper}>
               <div className={styles.globeLabel}>

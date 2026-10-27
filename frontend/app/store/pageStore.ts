@@ -2,10 +2,12 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 interface PageState {
-  leftPanel: string;
-  setLeftPanel: (view: string) => void;
-  blogPost: string;
-  setBlogPost: (slug: string) => void;
+  /** Current route, mirrored from the URL by the site shell ("/" is explore). */
+  view: string;
+  setView: (path: string) => void;
+  /** Route a terminal command asked for; the site shell navigates. `seq` increments so repeats fire. */
+  navRequest: { path: string; seq: number } | null;
+  openPath: (path: string) => void;
   /** Body the solar system should fly to. `seq` increments so repeat requests fire. */
   focusRequest: { name: string; seq: number } | null;
   requestFocus: (name: string) => void;
@@ -55,10 +57,10 @@ export const DEFAULT_SETTINGS = {
 export const usePageStore = create<PageState>()(
   persist(
     (set) => ({
-  leftPanel: "",
-  setLeftPanel: (view) => set({ leftPanel: view }),
-  blogPost: "",
-  setBlogPost: (slug) => set({ blogPost: slug }),
+  view: "/",
+  setView: (path) => set({ view: path }),
+  navRequest: null,
+  openPath: (path) => set((state) => ({ navRequest: { path, seq: (state.navRequest?.seq ?? 0) + 1 } })),
   focusRequest: null,
   requestFocus: (name) =>
     set((state) => ({ focusRequest: { name, seq: (state.focusRequest?.seq ?? 0) + 1 } })),
@@ -88,9 +90,8 @@ export const usePageStore = create<PageState>()(
     }),
     {
       name: "explore-settings",
-      // Only preferences persist. Panel, blog post, focus requests and the clock rate are per-visit.
+      // Only preferences persist. The view lives in the URL; focus requests and the clock rate are per-visit.
       partialize: (s) => ({
-        leftPanel: s.leftPanel,
         starsVisible: s.starsVisible,
         orbitsHighlighted: s.orbitsHighlighted,
         scaleMode: s.scaleMode,

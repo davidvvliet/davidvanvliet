@@ -1,11 +1,7 @@
-"use client";
-
-import { usePageStore } from "../store/pageStore";
 import { getPost } from "../writing";
 import styles from "./BlogPost.module.css";
 
-export default function BlogPost() {
-  const slug = usePageStore((s) => s.blogPost);
+export default function BlogPost({ slug }: { slug: string }) {
   const post = getPost(slug);
 
   if (!post) return <div className={styles.blog}>Post not found.</div>;

@@ -19,13 +19,13 @@ const focus: Command = {
     // Launched missions are focusable bodies too (their tip marker).
     const body = findName([...BODY_NAMES, ...MISSIONS.map((m) => m.name)], input);
     if (body) {
-      store.setLeftPanel("");
+      store.openPath("/");
       store.requestFocus(body);
       return [`Flying to ${body}...`];
     }
     const star = findName(STAR_NAMES, input);
     if (star) {
-      store.setLeftPanel("");
+      store.openPath("/");
       store.setStarsVisible(true); // can't aim at a hidden sky
       store.requestFocus(star);
       return [`Turning toward ${star}...`];

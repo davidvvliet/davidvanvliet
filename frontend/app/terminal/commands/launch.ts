@@ -53,7 +53,7 @@ const launch: Command = {
     }
     const mission = MISSIONS.find((m) => m.id === arg.replace(/\s+/g, "") || m.name.toLowerCase() === arg);
     if (!mission) return [`Unknown mission: ${args.join(" ")}. Type "${run("launch")}" to see the list.`];
-    store.setLeftPanel("");
+    store.openPath("/");
     if (store.scaleMode !== "true") store.setScaleMode("true"); // flybys only line up at true scale
     if (!store.orbitsHighlighted) store.setOrbitsHighlighted(true); // paths make the flybys readable
     // Remember the pre-mission rate once; launching another mission keeps the original.

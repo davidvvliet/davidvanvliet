@@ -6,7 +6,7 @@ const resume: Command = {
   name: "resume",
   description: "Open my resume",
   execute: () => {
-    usePageStore.getState().setLeftPanel("resume");
+    usePageStore.getState().openPath("/resume");
     return ["Loading resume..."];
   },
 };

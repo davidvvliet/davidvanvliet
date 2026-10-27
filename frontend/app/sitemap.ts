@@ -11,6 +11,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
+      url: "https://www.davidvvliet.com/resume",
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    },
+    {
       url: "https://www.davidvvliet.com/writing",
       lastModified: new Date(),
       changeFrequency: "weekly" as const,
