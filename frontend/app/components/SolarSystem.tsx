@@ -189,6 +189,7 @@ const ROOT_NAME_VISIBLE_FACTOR = 1.15;                 // for the Sun, relative 
 const REFOCUS_FACTOR = 20 / MIN_DISTANCE_RADII;        // ~5.8x close-up: beyond this, clicking the focused body zooms back in
 const FOCUS_TRANSITION_SECONDS = 0.9;  // base duration; fly-ins add time per decade of distance covered
 const FOCUS_SECONDS_PER_DECADE = 0.45; // Earth -> Moon ~1.6 s, Earth -> Pluto ~3.5 s
+const RESTORE_FLY_IN_FACTOR = 50;      // on reload, the saved view is flown into from this many times its distance
 const PICK_MIN_PX = 12;                // click tolerance floor, in pixels
 const PICK_RADIUS_MULTIPLE = 4;        // tolerance = drawn radius * this (capped: big bodies use their outline)
 const PICK_CAP_PX = 30;                // above this drawn radius, the outline itself is the hitbox
@@ -304,7 +305,9 @@ export function SolarSystem({
   const focusByNameRef = useRef<((name: string) => void) | null>(null);
   // Saved across a scene rebuild (scale switch): which body was focused and the
   // camera's offset from it in body radii, so the view is restored, not reset.
-  const savedViewRef = useRef<{ name: string; dir: THREE.Vector3; radii: number } | null>(null);
+  // `flyIn`: the scene was torn down mid restore fly-in (dev StrictMode remounts at once), so the next one restarts it.
+  // `intro`: that fly-in is the first-visit one into the default Earth view.
+  const savedViewRef = useRef<{ name: string; dir: THREE.Vector3; radii: number; flyIn?: boolean; intro?: boolean } | null>(null);
   // The same snapshot also persists to localStorage (VIEW_KEY), restored once per page load.
   const restoredStoredViewRef = useRef(false);
   const aimAtStarRef = useRef<((star: { sprite: THREE.Sprite; px: number; name: string; lightYears: number; spectral: string; fact?: string }) => void) | null>(null);
@@ -1705,16 +1708,25 @@ export function SolarSystem({
     aimAtStarRef.current = aimAtStar;
 
     // Restore the view saved by a previous scene (scale switch), else the one
-    // persisted from a previous visit (once per page load).
+    // persisted from a previous visit (once per page load), else fly in to the
+    // default Earth view.
     let saved = savedViewRef.current;
+    let fromStorage = saved?.flyIn ?? false;
+    let restoreTransition: object | null = null; // the fly-in started below, while it is still the live transition
+    let restoreTarget: { name: string; dir: THREE.Vector3; radii: number; intro?: boolean } | null = null;
     if (!saved && !restoredStoredViewRef.current) {
       restoredStoredViewRef.current = true;
       try {
         const stored = JSON.parse(localStorage.getItem(VIEW_KEY) ?? 'null');
         if (stored && typeof stored.name === 'string' && Array.isArray(stored.dir) && typeof stored.radii === 'number') {
           saved = { name: stored.name, dir: new THREE.Vector3().fromArray(stored.dir).normalize(), radii: stored.radii };
+          fromStorage = true;
         }
       } catch { /* no storage, or nothing usable */ }
+      if (!saved) {
+        saved = { name: earthBody.name, dir: new THREE.Vector3(0, 0, -1), radii: DEFAULT_CAMERA_DISTANCE / earthBody.radius, intro: true };
+        fromStorage = true;
+      }
     }
     if (saved) {
       savedViewRef.current = null;
@@ -1722,13 +1734,26 @@ export function SolarSystem({
       if (body) {
         focus = body;
         transition = null;
-        hasInteracted = true; // the user had already been exploring
+        hasInteracted = !saved.intro; // the user had already been exploring
         worldPos(body, focusPoint);
         const d = Math.max(saved.radii * body.radius, minDistanceFor(body));
         controls.target.copy(focusPoint);
-        camera.position.copy(focusPoint).addScaledVector(saved.dir, d);
+        if (fromStorage) {
+          // A new visit: start well out along the saved line of sight and fly in,
+          // rather than opening on the close-up. A scale switch restores in place.
+          const systemMax = Math.max(MAX_CAMERA_DISTANCE, fitDistance(outermostOrbit + sunBody.radius) * 1.5);
+          const far = Math.max(d, Math.min(d * RESTORE_FLY_IN_FACTOR, systemMax));
+          const startOffset = saved.dir.clone().multiplyScalar(far);
+          camera.position.copy(focusPoint).add(startOffset);
+          const decades = Math.log10(far / d);
+          transition = { from: body, t: 0, distTo: d, startOffset, seconds: FOCUS_TRANSITION_SECONDS + FOCUS_SECONDS_PER_DECADE * decades };
+          restoreTransition = transition;
+          restoreTarget = { name: body.name, dir: saved.dir.clone(), radii: saved.radii, intro: saved.intro };
+        } else {
+          camera.position.copy(focusPoint).addScaledVector(saved.dir, d);
+        }
         controls.update();
-        reportFocus(d);
+        reportFocus(camera.position.distanceTo(focusPoint));
       }
     }
     const pending = usePageStore.getState().focusRequest;
@@ -1791,11 +1816,13 @@ export function SolarSystem({
       textures.forEach((t) => t.dispose());
       orbitRings.forEach((ring) => { ring.geometry.dispose(); (ring.material as THREE.Material).dispose(); });
       renderer.dispose();
-      savedViewRef.current = {
-        name: focus.name,
-        dir: camera.position.clone().sub(controls.target).normalize(),
-        radii: camera.position.distanceTo(controls.target) / focus.radius,
-      };
+      savedViewRef.current = restoreTransition && transition === restoreTransition && restoreTarget
+        ? { ...restoreTarget, flyIn: true }
+        : {
+          name: focus.name,
+          dir: camera.position.clone().sub(controls.target).normalize(),
+          radii: camera.position.distanceTo(controls.target) / focus.radius,
+        };
       initializedRef.current = false;
     };
   }, [size, color, speed, scaleMode]); // scaleMode: the whole scene is rebuilt on switch
