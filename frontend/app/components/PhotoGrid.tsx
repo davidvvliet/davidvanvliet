@@ -9,25 +9,31 @@ import styles from "./PhotoGrid.module.css";
 
 const GAP_PX = 2;
 
-// Square thumbnails filling the cell: picks the column count that gives the
-// biggest tiles for the cell's current size. A click opens /photos/<n>.
+// Thumbnails filling the whole cell: picks the column count whose tiles come out
+// closest to square, then stretches the grid to the cell's edges (no side margins).
+// A click opens /photos/<n>.
 export default function PhotoGrid({ photos }: { photos: Photo[] }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [layout, setLayout] = useState({ cols: 5, size: 0 });
+  const [layout, setLayout] = useState({ cols: 0, rows: 0 });
   const pathname = usePathname();
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const fit = () => {
-      const { width, height } = el.getBoundingClientRect();
-      let best = { cols: 1, size: 0 };
+      const style = getComputedStyle(el);
+      const width = el.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+      const height = el.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom);
+      if (width <= 0 || height <= 0 || photos.length === 0) return;
+      let best = { cols: 1, rows: photos.length, skew: Infinity };
       for (let cols = 1; cols <= photos.length; cols++) {
         const rows = Math.ceil(photos.length / cols);
-        const size = Math.floor(Math.min((width - GAP_PX * (cols - 1)) / cols, (height - GAP_PX * (rows - 1)) / rows));
-        if (size > best.size) best = { cols, size };
+        const w = (width - GAP_PX * (cols - 1)) / cols;
+        const h = (height - GAP_PX * (rows - 1)) / rows;
+        const skew = Math.abs(Math.log(w / h)); // 0 = square
+        if (skew < best.skew) best = { cols, rows, skew };
       }
-      setLayout(best);
+      setLayout({ cols: best.cols, rows: best.rows });
     };
     fit();
     const ro = new ResizeObserver(fit);
@@ -37,10 +43,10 @@ export default function PhotoGrid({ photos }: { photos: Photo[] }) {
 
   return (
     <div ref={ref} className={styles.wrap}>
-      {layout.size > 0 && (
+      {layout.cols > 0 && (
         <div
           className={styles.grid}
-          style={{ gridTemplateColumns: `repeat(${layout.cols}, ${layout.size}px)`, gridAutoRows: `${layout.size}px`, gap: GAP_PX }}
+          style={{ gridTemplateColumns: `repeat(${layout.cols}, 1fr)`, gridTemplateRows: `repeat(${layout.rows}, 1fr)`, gap: GAP_PX }}
         >
           {photos.map((p) => (
             <Link
