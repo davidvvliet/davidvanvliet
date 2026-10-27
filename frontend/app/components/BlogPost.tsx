@@ -1,7 +1,7 @@
 "use client";
 
 import { usePageStore } from "../store/pageStore";
-import { getPost } from "../blog";
+import { getPost } from "../writing";
 import styles from "./BlogPost.module.css";
 
 export default function BlogPost() {

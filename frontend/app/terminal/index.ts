@@ -1,7 +1,7 @@
 import "./commands/help";
 import "./commands/clear";
 import "./commands/response";
-import "./commands/blog";
+import "./commands/writing";
 import "./commands/socials";
 import "./commands/resume";
 import "./commands/explore";
