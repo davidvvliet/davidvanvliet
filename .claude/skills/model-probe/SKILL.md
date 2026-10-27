@@ -64,6 +64,12 @@ from the repo.
 - Positions of painted details (plaques, markings) can be read from the reference model's
   texture: sample the texture colour on candidate faces.
 
+- Engraved or printed plates: a colour + normal map, not geometry (fine lines cost tens of
+  thousands of triangles and don't show). Get the layout from a photo of the real plate:
+  fit a clean drawing onto it with `tools/engraving.py` and check the overlay, since
+  explanatory drawings space their parts differently. Build with `parts.disc` +
+  `textures.engraved` (see the README's "Engraved plates").
+
 ## When the user corrects something
 Fix it at the level it belongs: a wrong number in the spec (with a better source), a
 part's shape in `lib/parts.py`, a look in `lib/materials.py`. If the lesson applies to

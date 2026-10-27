@@ -49,6 +49,12 @@ wrong before any document was opened (the documents later agreed, the claim was 
 5. **Photos** (NASA/JPL Photojournal, assembly and test photos) for finishes and colours,
    cabling and small parts. A part sized from a photo is scaled by a documented dimension in
    the same photo, and noted as such.
+   - Check what is actually visible before sizing it: a part can hide inside a cover
+     (Voyager's "12-inch record" is seen as its aluminium cover, which is 30.7 cm). Museum
+     catalogue pages (e.g. the Smithsonian's) give measured sizes of flight spares and duplicates.
+   - Images used as textures need their licence quoted from the file page (NASA work is
+     usually public domain; a redrawn copy says so separately). Keep only what the build needs
+     in `refs/` (drawing, fit, line image) and link large photos in the spec.
 6. **Write the spec** (see `specs/voyager.json` as the example):
    - `dimensions`: checked values. Each has `value`, `object`, `measure`, `source` (URL),
      `quote`, and optional `also` (agreeing sources) and `conflict` (disagreeing ones).

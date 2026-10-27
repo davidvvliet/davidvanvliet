@@ -5,10 +5,11 @@ renders a contact sheet and exports `.glb` files for the site. Runs on Blender's
 Python; the command line needs only the system `python3`.
 
 ## Layout
-- `lib/parts.py`: shared parts (dish, prism bus, box, truss/rod boom, RTG, panel, cylinder), in metres
-- `lib/materials.py`: shared materials (foil, paint, metal, solar cells), Principled BSDF only
+- `lib/parts.py`: shared parts (dish, prism bus, box, truss/rod boom, RTG, panel, cylinder, strut, disc with UVs and hub), in metres
+- `lib/materials.py`: shared materials (foil, paint, metal, solar cells) and `image()` (image colour + normal map), Principled BSDF only
+- `lib/textures.py`: textures made at build time from `refs/` data (`engraved()`: colour + normal map from a line image)
 - `lib/rig.py`: review rig and contact sheet (front, three-quarter / side, top; metric grid on the orthographic views)
-- `lib/checks.py`: dimension checks measured from the built geometry, triangle and file-size budgets
+- `lib/checks.py`: dimension checks measured from the built geometry, `attached`, `mounted`, `textures`, triangle and file-size budgets
 - `probes/<probe>.py`: one script per probe, `build(spec)` using `lib/`
 - `specs/<probe>.json`: dimensions with sources and tolerances, budgets, reference model
 - `refs/<probe>/`: reference images, shown on the dashboard
@@ -16,6 +17,8 @@ Python; the command line needs only the system `python3`.
 - `templates/`: what `new` copies
 - `addon/live_server.py`: runs inside Blender's GUI so builds land in the open session
 - `ref.py`: reference-model measuring (same rig, pieces with sizes and main-axis lengths)
+- `explode.py`: splits a reference model into our parts (offsets, unclaimed pieces)
+- `tools/engraving.py`: fits a line drawing of an engraved plate onto a photo of it (plain Python)
 - `build.py`: the build itself (spec → model → checks → render → export), headless or live
 - `run.py`: the command line
 - `blender.json`: pinned Blender version, path and live-server port
@@ -29,11 +32,15 @@ Python; the command line needs only the system `python3`.
 - `npm run model:approve <probe>`: copy the last passing build to `public/models/` and make its sheet the baseline
 - `npm run model:new <probe> "Title"`: start a probe from the templates
 - `npm run model:ref <probe> <model.glb>`: measure a reference model (sheet, and close-ups through the spec's views, in `refs/<probe>/`; largest pieces in `out/<probe>/ref/parts.json`)
+- `npm run model:explode <probe> <model.glb>`: after a build, split the reference model into our parts (`out/<probe>/ref/explode.json` and `explode.png`)
 - `npm run model:status`, `npm run model:watch` (contact sheets inline in iTerm2)
 - `python3 scripts/blender/run.py send <file.py>`: run any Python in the live session
 
 The dev-only dashboard at `localhost:3000/models` follows builds as they happen: progress,
-a 3D view of the export, the contact sheet, references, checks and history.
+a 3D view of the export, the contact sheet, references, checks and history. In the 3D view,
+Explode (top left) slides the parts apart; hovering shows a part's name, size and, after
+`model:explode`, its offset from the reference; clicking a part focuses the camera on it
+(click again, click empty space or press Escape to return).
 
 ## Engraved plates (textures)
 
