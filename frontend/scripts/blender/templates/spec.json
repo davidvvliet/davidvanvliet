@@ -1,9 +1,9 @@
 {
   "title": "__TITLE__",
   "sources": [
-    {"title": "", "url": ""}
+    {"id": "", "title": "", "url": "", "read": "", "licence": "", "saved": "", "credit": ""}
   ],
-  "reference_model": {"url": "", "note": "official NASA 3D model, if one exists"},
+  "reference_model": {"url": "", "source": "", "note": "official NASA 3D model, if one exists"},
   "dimensions": {
     "example_dish_diameter": {"value": 1.0, "object": "dish", "measure": "diameter", "source": ""}
   },

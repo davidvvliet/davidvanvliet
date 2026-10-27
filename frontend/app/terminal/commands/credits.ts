@@ -1,5 +1,7 @@
 import { Command } from "../types";
 import { register } from "../registry";
+// Written by `npm run model:approve`: the credit lines of each published model's sources.
+import modelCredits from "./model-credits.json";
 
 const credits: Command = {
   name: "credits",
@@ -17,6 +19,7 @@ const credits: Command = {
     "__SMALL__Hibberd, Hein and Eubanks (2020) and Hibberd, Hein, Eubanks and Kennedy (2022), Project Lyra mission designs: https://arxiv.org/abs/1902.04935 and https://arxiv.org/abs/2201.04240",
     "__SMALL__Solar System Scope, planet and ring textures: https://www.solarsystemscope.com/textures/",
     "__SMALL__Björn Jónsson, planetary maps: https://bjj.mmedia.is/data/planetary_maps.html",
+    ...[...new Set(Object.values(modelCredits as Record<string, string[]>).flat())].map((c) => `__SMALL__${c}`),
   ],
 };
 

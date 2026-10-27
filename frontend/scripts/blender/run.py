@@ -21,6 +21,7 @@ import glob, json, math, os, re, shutil, socket, subprocess, sys, time
 HERE = os.path.dirname(os.path.abspath(__file__))
 FRONTEND = os.path.dirname(os.path.dirname(HERE))
 PUBLIC_MODELS = os.path.join(FRONTEND, "public", "models")
+MODEL_CREDITS = os.path.join(FRONTEND, "app", "terminal", "commands", "model-credits.json")
 OUT = os.path.join(HERE, "out")
 STATUS = os.path.join(OUT, "status.json")
 CONFIG = json.load(open(os.path.join(HERE, "blender.json")))
@@ -161,6 +162,14 @@ def cmd_approve(args):
     if not spec.get("fixture"):  # fixtures only guard lib/; they never ship
         os.makedirs(PUBLIC_MODELS, exist_ok=True)
         shutil.copy(entry["glb"], os.path.join(PUBLIC_MODELS, f"{probe}.glb"))
+        # The site's credits list what shapes a published model (its sources' "credit" lines).
+        sys.path.insert(0, HERE)
+        from lib import sources
+        credits = json.load(open(MODEL_CREDITS)) if os.path.exists(MODEL_CREDITS) else {}
+        credits[probe] = sources.credits(spec)
+        with open(MODEL_CREDITS, "w") as f:
+            json.dump(dict(sorted(credits.items())), f, indent=2, ensure_ascii=False)
+            f.write("\n")
     shutil.copy(entry["sheet"], os.path.join(HERE, "baselines", f"{probe}.png"))
     entry["approved"] = time.time()
     entry["baseline"] = {"diff": 0.0, "changed": False}
@@ -168,7 +177,7 @@ def cmd_approve(args):
     json.dump(status, open(tmp, "w"), indent=1)
     os.replace(tmp, STATUS)
     print(f"Approved {probe}: " + ("baseline updated (fixture, not published)." if spec.get("fixture")
-          else f"public/models/{probe}.glb and baselines/{probe}.png updated."))
+          else f"public/models/{probe}.glb, baselines/{probe}.png and the site's model credits updated."))
 
 def cmd_new(args):
     if not args or not re.fullmatch(r"[a-z0-9_]+", args[0]):

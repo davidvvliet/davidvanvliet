@@ -18,8 +18,8 @@ import bpy
 
 def _lib():
     # Reload so the live session picks up edits to the library without a restart.
-    from lib import materials, parts, rig, checks, textures
-    for m in (materials, textures, parts, rig, checks):
+    from lib import materials, parts, rig, checks, textures, sources
+    for m in (sources, materials, textures, parts, rig, checks):
         importlib.reload(m)
     return parts, rig, checks
 
@@ -87,6 +87,11 @@ def build(probe, export=True):
 
         _step(status, probe, "checks")
         results = checks.run(spec, all_objs)
+        from lib import sources
+        src = sources.check(spec)
+        results.append({"name": "sources", "ok": not src, "measured": "ok" if not src else "off",
+                        "expected": "listed, cited", "unit": "",
+                        "detail": "; ".join(src) or "every source cited, every citation listed, saved files present"})
 
         _step(status, probe, "render")
         entry.update(rig.contact_sheet(objs, out_dir, spec.get("sheet_frame")))

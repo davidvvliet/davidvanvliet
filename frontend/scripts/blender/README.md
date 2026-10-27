@@ -9,7 +9,7 @@ Python; the command line needs only the system `python3`.
 - `lib/materials.py`: the shared material list (foil, paint, metal, solar cells), merged with a spec's `materials`, and `image()` (image colour + normal map), Principled BSDF only
 - `lib/textures.py`: textures made at build time from `refs/` data (`engraved()`: colour + normal map from a line image)
 - `lib/rig.py`: review rig and contact sheet (front, three-quarter / side, top; metric grid on the orthographic views)
-- `lib/checks.py`: dimension checks measured from the built geometry, `attached`, `mounted`, `ground`, `joints`, `materials`, `textures`, triangle and file-size budgets
+- `lib/checks.py`: dimension checks measured from the built geometry, `attached`, `mounted`, `ground`, `joints`, `materials`, `textures`, triangle and file-size budgets (plus `sources`, from `lib/sources.py`)
 - `probes/<probe>.py`: one script per probe, `build(spec)` using `lib/`
 - `specs/<probe>.json`: dimensions with sources and tolerances, budgets, reference model
 - `refs/<probe>/`: reference images, shown on the dashboard
@@ -19,6 +19,8 @@ Python; the command line needs only the system `python3`.
 - `ref.py`: reference-model measuring (same rig, pieces with sizes and main-axis lengths)
 - `explode.py`: splits a reference model into our parts (offsets, unclaimed pieces)
 - `tools/engraving.py`: fits a line drawing of an engraved plate onto a photo of it (plain Python)
+- `lib/sources.py`, `tools/sources.py`: a spec's sources (check, save texts; plain Python)
+- `refs/<probe>/sources/`: saved texts of the sources a spec uses
 - `build.py`: the build itself (spec → model → checks → render → export), headless or live
 - `run.py`: the command line
 - `blender.json`: pinned Blender version, path and live-server port
@@ -140,6 +142,40 @@ UVs inside the image, and the export carries every image.
    the dot already is far out.
    This step is the only one that changes the existing scene: it is its own change, made
    with the user's go-ahead.
+
+## Sources
+
+A spec lists every source it uses once, in `sources`, and cites them by id everywhere else:
+
+```json
+"sources": [
+  {"id": "nssdca", "title": "NSSDCA: Voyager 1", "url": "https://...", "read": "2026-10-27",
+   "licence": "public domain (NASA)", "saved": "refs/voyager/sources/nssdca.txt"},
+  {"id": "kohlhase1977", "title": "...", "url": "https://...", "licence": "© 1977 Kluwer: quoted, not kept",
+   "archive": "https://web.archive.org/web/..."},
+  {"id": "nasa_3d_voyager", "...": "...", "credit": "NASA 3D Resources, Voyager model (layout reference): ..."}
+],
+"dimensions": {"hga_diameter": {"value": 3.66, "source": "nssdca", "quote": "..."}},
+"facts": {"science_boom": {"value": "...", "source": "kohlhase1977, p.83"}}
+```
+
+- A citation is an id, or an id followed by where or how (`"kohlhase1977, p.83"`), a list of
+  those, or `"sources": [{"source": id, "quote": ...}]`. Second sources go in `also`/`conflict`
+  as `{"source": id, "quote": ...}`, not in free text, so they count as used.
+- `saved`: its text in `refs/<probe>/sources/`, only when the licence allows it (public domain,
+  CC BY). Copyrighted sources keep just the link and the quotes. `archive` (an existing Wayback
+  snapshot or a commit permalink) is optional. The licence is quoted from the source.
+- `credit`: a line for the site's credits, for sources whose content ships (the reference model,
+  photos colours were sampled from, drawings used as textures). `model:approve` writes the
+  published probe's credit lines to `app/terminal/commands/model-credits.json`, which the
+  `credits` command shows.
+
+Every build checks `sources`: every citation is a listed id, every listed source is cited, saved
+files exist, and the reference model's source has a credit. Fixtures may cite "design
+value". The same check runs without Blender, during research:
+
+    python3 -I tools/sources.py check <probe>
+    python3 -I tools/sources.py save <probe> <id> <downloaded file>   # PDF/HTML -> text
 
 ## Spec dimensions
 ```json

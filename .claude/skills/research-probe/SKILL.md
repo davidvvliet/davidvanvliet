@@ -77,15 +77,21 @@ wrong before any document was opened (the documents later agreed, the claim was 
    - Images used as textures need their licence quoted from the file page (NASA work is
      usually public domain; a redrawn copy says so separately). Keep only what the build needs
      in `refs/` (drawing, fit, line image) and link large photos in the spec.
-6. **Write the spec** (see `specs/voyager.json` as the example):
-   - `dimensions`: checked values. Each has `value`, `object`, `measure`, `source` (URL),
+6. **Keep the sources** (README "Sources"): list each source used once in the spec's `sources`
+   with its licence quoted from the source, and cite it by id. Save the text of public-domain
+   and CC BY sources with `tools/sources.py save`; copyrighted ones keep only the link and
+   quotes. Give a `credit` to every source whose content ships: the reference model,
+   photos colours were sampled from, drawings used as textures. Sources you read but didn't use
+   stay out. `tools/sources.py check <probe>` must pass before the spec goes to the user.
+7. **Write the spec** (see `specs/voyager.json` as the example):
+   - `dimensions`: checked values. Each has `value`, `object`, `measure`, `source` (an id),
      `quote`, and optional `also` (agreeing sources) and `conflict` (disagreeing ones).
    - `facts`: counts, angles and layout that aren't checked automatically, each with a source.
    - `from_reference_model`: what only the reference model gives, with how it was measured.
    - `materials`: sourced finishes (see step 5).
    - `open_questions`: conflicts and gaps, for the user to decide.
    - `reference_model`: its URL and how it compares to the documents.
-7. **Report**: a short table of verified values with sources, the conflicts and what they
+8. **Report**: a short table of verified values with sources, the conflicts and what they
    change, what is only from the model, what wasn't found. Ask the user to decide the
    conflicts before modelling.
 

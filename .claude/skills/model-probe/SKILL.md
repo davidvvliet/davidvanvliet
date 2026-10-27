@@ -10,8 +10,8 @@ script plus a sourced spec; nothing is modelled by hand in the GUI, so every mod
 from the repo.
 
 ## Rules
-- Never type a dimension from memory. Every number in a spec has a `source` (a URL, or a
-  document and page). A value estimated from a reference image says so in its source
+- Never type a dimension from memory. Every number in a spec has a `source`: an id from the
+  spec's `sources`, plus the page or how it was measured. A value estimated from a reference image says so in its source
   ("estimated from refs/<probe>/<file>, scaled by the 3.66 m dish").
 - Look for an official NASA 3D model first (NASA's 3D Resources) and record it in
   `reference_model`. Measure it with `npm run model:ref`; say so before deriving geometry from it.

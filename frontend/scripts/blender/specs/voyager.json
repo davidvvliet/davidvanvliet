@@ -3,44 +3,121 @@
   "note": "Voyager 1 and 2 share one design. Frame (PDS host catalog): HGA boresight -z (dish faces Earth), science boom +y, RTG boom generally -y; the magnetometer boom is on the side opposite the science boom. Values marked 'NASA model' are measured from NASA 3D Resources 'Voyager Probe (B)' where no document gives them.",
   "sources": [
     {
+      "id": "nssdca",
       "title": "NSSDCA: Voyager 1 (spacecraft and subsystems)",
-      "url": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1977-084A"
+      "url": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1977-084A",
+      "read": "2026-10-27",
+      "licence": "public domain (NASA)",
+      "saved": "refs/voyager/sources/nssdca.txt"
     },
     {
+      "id": "behannon1977",
       "title": "Behannon et al. 1977, Magnetic field experiment for Voyagers 1 and 2, Space Sci. Rev. 21",
-      "url": "https://pds-ppi.igpp.ucla.edu/data/voyager-mission/document-vg-mag/maginst.pdf"
+      "url": "https://pds-ppi.igpp.ucla.edu/data/voyager-mission/document-vg-mag/maginst.pdf",
+      "read": "2026-10-27",
+      "licence": "© 1977 Kluwer, all rights reserved: quoted, not kept"
     },
     {
+      "id": "scarf1977",
       "title": "Scarf & Gurnett 1977, A plasma wave investigation for the Voyager mission, Space Sci. Rev. 21",
-      "url": "https://pds-ppi.igpp.ucla.edu/data/voyager-mission/document-vg-pws/pwsinst.pdf"
+      "url": "https://pds-ppi.igpp.ucla.edu/data/voyager-mission/document-vg-pws/pwsinst.pdf",
+      "read": "2026-10-27",
+      "licence": "© 1977 Space Science Reviews (Reidel/Kluwer): quoted, not kept"
     },
     {
+      "id": "warwick1977",
       "title": "Warwick et al. 1977, Planetary radio astronomy experiment for Voyager, Space Sci. Rev. 21",
-      "url": "https://pds-ppi.igpp.ucla.edu/data/voyager-mission/document-vg-pra/prainst.pdf"
+      "url": "https://pds-ppi.igpp.ucla.edu/data/voyager-mission/document-vg-pra/prainst.pdf",
+      "read": "2026-10-27",
+      "licence": "© 1977 Space Science Reviews (Reidel/Kluwer): quoted, not kept"
     },
     {
+      "id": "kohlhase1977",
       "title": "Kohlhase & Penzo 1977, Voyager mission description, Space Sci. Rev. 21",
-      "url": "https://pds-ppi.igpp.ucla.edu/data/voyager-mission/document-voyager/mission-paper.pdf"
+      "url": "https://pds-ppi.igpp.ucla.edu/data/voyager-mission/document-voyager/mission-paper.pdf",
+      "read": "2026-10-27",
+      "licence": "© 1977 Kluwer, all rights reserved: quoted, not kept"
     },
     {
-      "title": "Cataldo & Bennett, U.S. space radioisotope power systems (NASA GRC), NTRS 20120000731",
-      "url": "https://ntrs.nasa.gov/api/citations/20120000731/downloads/20120000731.pdf"
+      "id": "cataldo",
+      "title": "Cataldo & Bennett, U.S. space radioisotope power systems and applications (NASA GRC), NTRS 20120000731",
+      "url": "https://ntrs.nasa.gov/api/citations/20120000731/downloads/20120000731.pdf",
+      "read": "2026-10-27",
+      "licence": "not stated (NASA author with a non-NASA co-author): quoted, not kept",
+      "archive": "http://web.archive.org/web/20250410153110/https://ntrs.nasa.gov/api/citations/20120000731/downloads/20120000731.pdf"
     },
     {
+      "id": "pds_insthost",
       "title": "PDS Voyager instrument host catalog (INSTHOST1.CAT)",
-      "url": "https://space.physics.uiowa.edu/plasma-wave/pds/VGPW_0101/CATALOG/INSTHOST1.CAT"
+      "url": "https://space.physics.uiowa.edu/plasma-wave/pds/VGPW_0101/CATALOG/INSTHOST1.CAT",
+      "read": "2026-10-27",
+      "licence": "public domain (NASA PDS)",
+      "saved": "refs/voyager/sources/pds_insthost.txt"
+    },
+    {
+      "id": "nasm_cover",
+      "title": "Smithsonian NASM: Record cover, Voyager, duplicate (A19772740000)",
+      "url": "https://airandspace.si.edu/collection-objects/record-cover-voyager-duplicate/nasm_A19772740000",
+      "read": "2026-10-27",
+      "licence": "Smithsonian terms of use: quoted, not kept",
+      "archive": "http://web.archive.org/web/20250814173341/https://www.airandspace.si.edu/collection-objects/record-cover-voyager-duplicate/nasm_A19772740000"
+    },
+    {
+      "id": "nasa_instructions",
+      "title": "NASA: Instructions for Aliens (image article)",
+      "url": "https://www.nasa.gov/image-article/instructions-for-aliens",
+      "read": "2026-10-27",
+      "licence": "public domain (NASA)",
+      "saved": "refs/voyager/sources/nasa_instructions.txt"
+    },
+    {
+      "id": "nasa_record_cover",
+      "title": "NASA Science: The Golden Record cover",
+      "url": "https://science.nasa.gov/mission/voyager/golden-record-cover",
+      "read": "2026-10-27",
+      "licence": "public domain (NASA)",
+      "saved": "refs/voyager/sources/nasa_record_cover.txt"
+    },
+    {
+      "id": "cover_photo",
+      "title": "NASA photo of the golden record cover (GPN-2000-001978), Wikimedia Commons",
+      "url": "https://commons.wikimedia.org/wiki/File:The_Sounds_of_Earth_Record_Cover_-_GPN-2000-001978.jpg",
+      "read": "2026-10-27",
+      "licence": "public domain (NASA), per the Commons file page",
+      "archive": "http://web.archive.org/web/20261012205600/https://commons.wikimedia.org/wiki/File:The_Sounds_of_Earth_Record_Cover_-_GPN-2000-001978.jpg",
+      "credit": "NASA, photo of the Voyager golden record cover (GPN-2000-001978), engraving layout"
+    },
+    {
+      "id": "cover_drawing",
+      "title": "Voyager Golden Record cover explanation (redrawn diagram), Wikimedia Commons",
+      "url": "https://commons.wikimedia.org/wiki/File:Voyager_Golden_Record_Cover_Explanation.svg",
+      "read": "2026-10-27",
+      "licence": "public domain (created by NASA), per the Commons file page",
+      "saved": "refs/voyager/record-cover.svg",
+      "archive": "http://web.archive.org/web/20261017043714/https://commons.wikimedia.org/wiki/File:Voyager_Golden_Record_Cover_Explanation.svg",
+      "credit": "NASA, Voyager golden record cover diagram (redrawn, Wikimedia Commons), engravings"
+    },
+    {
+      "id": "nasa_3d_voyager",
+      "title": "NASA 3D Resources: Voyager Probe (B)",
+      "url": "https://github.com/nasa/NASA-3D-Resources/tree/master/3D%20Models/Voyager%20Probe%20(B)",
+      "read": "2026-10-27",
+      "licence": "'These assets are free and without copyright.' (repo README)",
+      "archive": "https://github.com/nasa/NASA-3D-Resources/tree/43016a2b2bf292ff5581ee760fa81732f8124a54/3D%20Models/Voyager%20Probe%20(B)",
+      "credit": "NASA 3D Resources, Voyager model (layout reference): https://github.com/nasa/NASA-3D-Resources"
     }
   ],
   "reference_model": {
     "url": "https://github.com/nasa/NASA-3D-Resources/tree/master/3D%20Models/Voyager%20Probe%20(B)",
-    "note": "NASA 3D Resources 'Voyager Probe (B)', 1.72 MB, ~20k tris, metres. Matches documents within ~4% on dish, bus and magnetometer boom; its two whip antennas are 4.69 m, documents say 10 m, so it shortens them."
+    "note": "NASA 3D Resources 'Voyager Probe (B)', 1.72 MB, ~20k tris, metres. Matches documents within ~4% on dish, bus and magnetometer boom; its two whip antennas are 4.69 m, documents say 10 m, so it shortens them.",
+    "source": "nasa_3d_voyager"
   },
   "dimensions": {
     "hga_diameter": {
       "value": 3.66,
       "object": "hga",
       "measure": "diameter",
-      "source": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1977-084A",
+      "source": "nssdca",
       "quote": "A 3.66 m diameter parabolic high-gain antenna was mounted on top of the bus.",
       "also": "Kohlhase & Penzo p.83 and PDS catalog round it to 3.7 m; NASA model 3.81 m."
     },
@@ -48,7 +125,7 @@
       "value": 0.47,
       "object": "bus",
       "measure": "length",
-      "source": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1977-084A",
+      "source": "nssdca",
       "quote": "a decahedral bus, 47 cm in height and 1.78 m across from flat to flat",
       "conflict": "PDS catalog: 'about 2 meters in diameter and about 60 cm deep' (rounded; 2 m is likely across corners)."
     },
@@ -56,14 +133,14 @@
       "value": 1.872,
       "object": "bus",
       "measure": "diameter",
-      "source": "derived: 1.78 m flat-to-flat (NSSDCA) / cos(18 deg) for a decagon",
+      "source": "nssdca, derived: 1.78 m flat-to-flat / cos(18 deg) for a decagon",
       "also": "NASA model bus 1.84 m."
     },
     "mag_boom_length": {
       "value": 13.0,
       "object": "mag_boom",
       "measure": "length",
-      "source": "https://pds-ppi.igpp.ucla.edu/data/voyager-mission/document-vg-mag/maginst.pdf",
+      "source": "behannon1977",
       "quote": "The total interface-to-tip boom length is 13 meters. (section 5.2)",
       "also": "Astromast, 'highly rigid with respect to bending motions but soft to torsional'; NSSDCA: 'extending 13 m on the side opposite the science boom'; NASA model ~13.2 m."
     },
@@ -71,16 +148,26 @@
       "value": 10.0,
       "object": "whip_a",
       "measure": "length",
-      "source": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1977-084A",
+      "source": "nssdca",
       "quote": "Two 10 m whip antennas (used for the plasma wave and planetary radio astronomy investigations) also extended from the spacecraft, each perpendicular to the other.",
-      "also": "Scarf & Gurnett: '10-m elements as a balanced Vee' (OCR); NASA model 4.69 m (shortened)."
+      "also": [
+        {
+          "source": "scarf1977",
+          "quote": "10-m elements as a balanced Vee",
+          "note": "OCR text"
+        },
+        {
+          "source": "nasa_3d_voyager",
+          "note": "4.69 m in the NASA model (shortened)"
+        }
+      ]
     },
     "science_boom_length": {
       "value": 2.5,
       "object": "science_boom",
       "measure": "length",
       "tolerance": 0.1,
-      "source": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1977-084A",
+      "source": "nssdca",
       "quote": "a science boom extending out some 2.5 m from the spacecraft",
       "also": "'some 2.5 m' is approximate, hence 10%; NASA model scan side ~2.5 m."
     },
@@ -89,9 +176,13 @@
       "object": "rtg_1",
       "measure": "diameter",
       "tolerance": 0.05,
-      "source": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1977-084A",
+      "source": "nssdca",
       "quote": "Each RTG unit, contained in a beryllium outer case, was 40.6 cm in diameter, 50.8 cm in length, and weighed 39 kg.",
-      "conflict": "Cataldo & Bennett (NTRS 20120000731, Fig. 8): 'overall diameter was 39.73 cm'. NSSDCA chosen by the user.",
+      "conflict": {
+        "source": "cataldo, Fig. 8",
+        "quote": "overall diameter was 39.73 cm",
+        "note": "NSSDCA chosen by the user."
+      },
       "note": "taken as the body (case) diameter: the NASA model's fins span 0.63 m around a ~0.45 m body, so 40.6 cm is not the fin span"
     },
     "rtg_length": {
@@ -99,21 +190,25 @@
       "object": "rtg_1",
       "measure": "length",
       "tolerance": 0.05,
-      "source": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1977-084A",
+      "source": "nssdca",
       "quote": "Each RTG unit, contained in a beryllium outer case, was 40.6 cm in diameter, 50.8 cm in length, and weighed 39 kg.",
-      "conflict": "Cataldo & Bennett (NTRS 20120000731, Fig. 8): 'the length was 58.31 cm'. NSSDCA chosen by the user."
+      "conflict": {
+        "source": "cataldo, Fig. 8",
+        "quote": "the length was 58.31 cm",
+        "note": "NSSDCA chosen by the user."
+      }
     },
     "record_diameter": {
       "value": 0.307,
       "object": "golden_record",
       "measure": "diameter",
       "tolerance": 0.03,
-      "source": "https://airandspace.si.edu/collection-objects/record-cover-voyager-duplicate/nasm_A19772740000",
+      "source": "nasm_cover",
       "quote": "3-D: 30.7 × 1.3cm (1 ft. 1/16 in. × 1/2 in.)",
       "note": "what shows on the bus is the record's aluminium cover (NSSDCA: 'encased in a protective aluminum jacket'); this is the Smithsonian's duplicate cover, transferred from NASA",
       "also": [
         {
-          "source": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1977-084A",
+          "source": "nssdca",
           "quote": "Each Voyager has mounted to one of the sides of the bus a 12-inch gold-plated copper disk."
         }
       ]
@@ -123,7 +218,7 @@
       "object": "golden_record",
       "measure": "length",
       "tolerance": 0.1,
-      "source": "https://airandspace.si.edu/collection-objects/record-cover-voyager-duplicate/nasm_A19772740000",
+      "source": "nasm_cover",
       "quote": "3-D: 30.7 × 1.3cm (1 ft. 1/16 in. × 1/2 in.)",
       "note": "overall depth of the duplicate cover as catalogued; what the 1.3 cm includes is not stated (the page also lists 'Dimensions: 1/16 x 12in. (0.13 x 30.48cm)')"
     }
@@ -131,45 +226,63 @@
   "facts": {
     "rtg_count": {
       "value": 3,
-      "source": "PDS catalog: 'three Radioisotope Thermoelectric Generators (RTGs) mounted on a boom in the negative y-direction'; NSSDCA: 'mounted in tandem on a deployable boom'"
+      "sources": [
+        {
+          "source": "pds_insthost",
+          "quote": "three Radioisotope Thermoelectric Generators (RTGs) mounted on a boom in the negative y-direction"
+        },
+        {
+          "source": "nssdca",
+          "quote": "mounted in tandem on a deployable boom"
+        }
+      ]
     },
     "whip_angle_deg": {
       "value": 90,
-      "source": "NSSDCA: 'each perpendicular to the other'; Warwick: 'two orthogonal 10-meter ... antennas'"
+      "sources": [
+        {
+          "source": "nssdca",
+          "quote": "each perpendicular to the other"
+        },
+        {
+          "source": "warwick1977",
+          "quote": "two orthogonal 10-meter ... antennas"
+        }
+      ]
     },
     "mag_sensor_positions": {
       "value": "outer LFM at the tip; inner LFM at 0.57 of interface-to-tip (~7.4 m); two HFMs ~1 m apart on the boom support truss near the base",
-      "source": "Behannon et al. 1977 section 5.2"
+      "source": "behannon1977, section 5.2"
     },
     "science_boom": {
       "value": "scan platform at the end (ISS wide+narrow cameras, UVS, IRIS, PPS; 2 degrees of freedom); LECP, cosmic ray and plasma instruments inboard",
-      "source": "Kohlhase & Penzo p.83"
+      "source": "kohlhase1977, p.83"
     },
     "low_gain_antenna": {
       "value": "mounted on the HGA feed structure",
-      "source": "PDS catalog"
+      "source": "pds_insthost"
     },
     "record_cover": {
       "value": "aluminium cover over the gold-plated copper record, gold coloured, with engraved instructions; mounted in plain view on a bus side",
       "sources": [
         {
-          "source": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1977-084A",
+          "source": "nssdca",
           "quote": "Each disk is encased in a protective aluminum jacket along with a cartridge and a needle."
         },
         {
-          "source": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1977-084A",
+          "source": "nssdca",
           "quote": "Instructions explaining from where the spacecraft originated and how to play the disk are engraved onto the jacket."
         },
         {
-          "source": "https://airandspace.si.edu/collection-objects/record-cover-voyager-duplicate/nasm_A19772740000",
+          "source": "nasm_cover",
           "quote": "The disc was mounted in plain view on the exterior of both Voyager spacecraft,"
         },
         {
-          "source": "https://www.nasa.gov/image-article/instructions-for-aliens",
+          "source": "nasa_instructions",
           "quote": "The golden records placed aboard Voyager 1 and 2 each have a cover with special etchings"
         },
         {
-          "source": "https://commons.wikimedia.org/wiki/File:The_Sounds_of_Earth_Record_Cover_-_GPN-2000-001978.jpg",
+          "source": "cover_photo",
           "quote": "A gold aluminum cover that protects the Voyager 1 and 2 gold-plated 'Sounds of Earth' records from micrometeorite damage.",
           "note": "NASA GRIN caption as copied on Wikimedia Commons; the GRIN page itself was not reachable"
         }
@@ -179,11 +292,11 @@
       "value": "record and stylus (upper left), video signal and raster (upper right), pulsar map (lower left), hydrogen atom (lower right), elevation view with binary playing time (middle left)",
       "sources": [
         {
-          "source": "https://science.nasa.gov/mission/voyager/golden-record-cover",
+          "source": "nasa_record_cover",
           "quote": "In the upper left-hand corner is an easily recognized drawing of the phonograph record and the stylus carried with it."
         },
         {
-          "source": "https://science.nasa.gov/mission/voyager/golden-record-cover",
+          "source": "nasa_record_cover",
           "quote": "The drawing in the lower left-hand corner of the cover is the pulsar map previously sent as part of the plaques on Pioneers 10 and 11."
         }
       ]
@@ -333,11 +446,11 @@
       "note": "engraving layout: the public-domain redrawn cover diagram (Commons), each diagram group placed onto NASA's photo of the cover by tools/engraving.py fit (labels and arrows dropped); see the overlay check in the README",
       "sources": [
         {
-          "source": "https://commons.wikimedia.org/wiki/File:Voyager_Golden_Record_Cover_Explanation.svg",
+          "source": "cover_drawing",
           "quote": "is in the public domain in the United States because it was solely created by NASA."
         },
         {
-          "source": "https://commons.wikimedia.org/wiki/File:The_Sounds_of_Earth_Record_Cover_-_GPN-2000-001978.jpg",
+          "source": "cover_photo",
           "quote": "This file is in the public domain in the United States because it was solely created by NASA."
         }
       ]
