@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 // 1.3 cm thick, engravings as colour + normal maps), turning about its vertical axis like a spun coin.
 const URL = "/golden-record.glb";
 const TURN_SECONDS = 8;
-const MODEL_PAGE = "/models?probe=voyager"; // a click (not a drag) opens the whole spacecraft
+const MODEL_PAGE = "/models"; // a click (not a drag) opens the models grid
 const CLICK_PX = 5;
 const DRAG_RADIANS_PER_PX = 0.012;
 const MAX_PITCH = 1.2; // radians: tilting stops short of edge-on from above or below
@@ -97,7 +97,7 @@ export default function GoldenRecord() {
   return (
     <div onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={release}
       onLostPointerCapture={release}
-      onPointerEnter={() => (drag.current.hover = true)} onPointerLeave={() => (drag.current.hover = false)} role="link" aria-label="Voyager model"
+      onPointerEnter={() => (drag.current.hover = true)} onPointerLeave={() => (drag.current.hover = false)} role="link" aria-label="Models"
       style={{ width: "100%", height: "100%", touchAction: "none", cursor: grabbing ? "grabbing" : "pointer" }}>
     <Canvas camera={{ fov: 30, position: [0, 0, 0.66], near: 0.05, far: 5 }} dpr={[1, 2]}
       gl={{ alpha: true, antialias: true }} aria-label="Voyager golden record cover">
