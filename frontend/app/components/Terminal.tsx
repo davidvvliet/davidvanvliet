@@ -5,6 +5,10 @@ import styles from "./Terminal.module.css";
 import { getCommand, getAllCommands } from "../terminal";
 import { run, RUN_SPLIT } from "../terminal/run";
 import { usePageStore } from "../store/pageStore";
+import dynamic from "next/dynamic";
+
+// Model lines bring in three.js and the viewer only when one appears.
+const ModelLine = dynamic(() => import("./ModelLine"), { ssr: false });
 
 type Line = { text: string; type: "input" | "output"; restored?: boolean };
 
@@ -364,6 +368,10 @@ export default function Terminal() {
         line.type === "output" && line.text.startsWith("__VIDEO__") ? (
           <div key={i} className={styles.imageRow}>
             <VideoLine src={line.text.slice(9)} restored={line.restored} onSized={() => bottomRef.current?.scrollIntoView({ behavior: "smooth" })} />
+          </div>
+        ) : line.type === "output" && line.text.startsWith("__MODEL__") ? (
+          <div key={i} className={styles.imageRow}>
+            <ModelLine probe={line.text.slice(9)} restored={line.restored} onSized={() => bottomRef.current?.scrollIntoView({ behavior: "smooth" })} />
           </div>
         ) : line.type === "output" && line.text.startsWith("__IMG__") ? (
           <div key={i} className={styles.imageRow}>

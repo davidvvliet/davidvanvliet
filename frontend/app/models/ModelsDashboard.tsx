@@ -129,15 +129,18 @@ type Controls = { target: THREE.Vector3; update: () => void };
 // A clicked part (`focus`) gets the camera: it flies in keeping the current viewing
 // direction, orbits that part, follows it through explode/assemble, and flies back home
 // when the focus clears.
-function Model({ url, exploded, focus, setFocus, onLabel }: {
+function Model({ url, exploded, focus, setFocus, onLabel, onReady }: {
   url: string; exploded: boolean; focus: string | null; setFocus: (f: string | null) => void;
-  onLabel: (label: { name: string; size: THREE.Vector3 } | null) => void;
+  onLabel: (label: { name: string; size: THREE.Vector3 } | null) => void; onReady?: () => void;
 }) {
   const gltf = useGLTF(url);
   // A copy per mount (geometry is shared): explode, fades and Suspense hiding change the
   // objects, and useGLTF's cached scene is reused by the next mount and the /models grid.
   const scene = useMemo(() => gltf.scene.clone(true), [gltf.scene]);
   const { parts, units, offsets, boxes } = useParts(scene);
+  const readyRef = useRef(onReady);
+  readyRef.current = onReady;
+  useEffect(() => { readyRef.current?.(); }, [scene]);
   const [hover, setHover] = useState<string | null>(null);
   const t = useRef(0);
   const camera = useThree((s) => s.camera) as THREE.PerspectiveCamera;
@@ -311,7 +314,10 @@ class ViewerBoundary extends Component<{ children: ReactNode; resetKey: string }
   render() { return this.state.failed ? <div className={styles.empty}>Could not load the model.</div> : this.props.children; }
 }
 
-export function Viewer({ probe, url, breakdown, stale }: { probe: string; url: string; breakdown: Breakdown | null; stale: boolean }) {
+// `compact`: embedded in a scrolling page (the terminal): no wheel zoom, so the wheel scrolls the page.
+export function Viewer({ probe, url, breakdown, stale, compact, onReady }: {
+  probe: string; url: string; breakdown: Breakdown | null; stale: boolean; compact?: boolean; onReady?: () => void;
+}) {
   const [exploded, setExploded] = useState(false);
   const [focus, setFocus] = useState<string | null>(null);
   // Another model starts from its overview; a rebuild of the same one keeps the focus.
@@ -350,9 +356,9 @@ export function Viewer({ probe, url, breakdown, stale }: { probe: string; url: s
           <Lightformer form="rect" intensity={0.4} position={[5, -1, -3]} scale={[6, 4, 1]} rotation-y={-Math.PI / 1.5} />
         </Environment>
         <Suspense fallback={null}>
-          <Model key={url} url={url} exploded={exploded} focus={focus} setFocus={setFocus} onLabel={setLabel} />
+          <Model key={url} url={url} exploded={exploded} focus={focus} setFocus={setFocus} onLabel={setLabel} onReady={onReady} />
         </Suspense>
-        <OrbitControls makeDefault />
+        <OrbitControls makeDefault enableZoom={!compact} />
       </Canvas>
     </ViewerBoundary>
   );

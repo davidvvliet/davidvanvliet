@@ -203,3 +203,30 @@
   0%, 100% { background: #00ff00; color: #0a0a0a; }
   50% { background: transparent; color: #00ff00; }
 }
+
+/* A model line (ModelLine.tsx): the /models viewer in a box as wide as the videos. */
+.modelWrap {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  height: 300px;
+  background: #090909;
+}
+.modelThumb {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.modelOpen {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  z-index: 1;
+  color: #777;
+  text-decoration: none;
+  font-size: 0.75rem;
+}
+.modelOpen:hover { color: #ededed; }
