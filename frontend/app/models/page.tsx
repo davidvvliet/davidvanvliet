@@ -32,6 +32,11 @@ function citationCounts(spec: Spec): Map<string, number> {
   return counts;
 }
 
+// Who built each modelled vehicle (the grid's sections).
+const ORG: Record<string, string> = {
+  voyager: "nasa", perseverance: "nasa", x15: "nasa", starship: "spacex", superheavy: "spacex",
+};
+
 // Published models: public/models/<probe>.glb, written by `npm run model:approve` (fixtures never get there),
 // with their spec's title and sources.
 function published(): Published[] {
@@ -47,7 +52,7 @@ function published(): Published[] {
       const cited = citationCounts(s);
       // Licences are shown up to any ":" (the terms, not the harness's note on what it kept).
       return {
-        probe, title: s.title ?? probe, thumb: files.includes(`${probe}.webp`),
+        probe, title: s.title ?? probe, org: ORG[probe] ?? "other", thumb: files.includes(`${probe}.webp`),
         sources: (s.sources ?? []).map((x) => ({ title: x.title, url: x.url, licence: x.licence?.split(":")[0] ?? null, cited: cited.get(x.id) ?? 0 })),
       };
     });
