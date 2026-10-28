@@ -52,7 +52,7 @@ const launch: Command = {
     if (store.scaleMode !== "true") store.setScaleMode("true"); // flybys only line up at true scale
     if (!store.orbitsHighlighted) store.setOrbitsHighlighted(true); // paths make the flybys readable
     // Remember the pre-mission date and rate once; launching another mission keeps the originals.
-    if (store.beforeMission === null) store.setBeforeMission({ jd: store.simJD, rate: store.secondsPerDay });
+    if (store.beforeMission === null) store.setBeforeMission({ rate: store.secondsPerDay });
     store.requestTrack(mission.id);
     const note = mission.note ? [mission.note] : [];
     if (mission.secondsPerDay) {

@@ -20,12 +20,12 @@ interface PageState {
   /** Trace a mission's trajectory (id from MISSIONS), or null to clear. */
   trackRequest: { id: string | null; seq: number } | null;
   requestTrack: (id: string | null) => void;
-  /** The date and clock rate before the first `launch`: mission time only lasts the mission, so
-   *  endMission() puts them back (and any `date` or `time` change made during it is dropped).
-   *  Null when no mission is running. */
-  beforeMission: { jd: number; rate: number } | null;
-  setBeforeMission: (before: { jd: number; rate: number } | null) => void;
-  /** Clear the mission and return to the date and rate from before it. */
+  /** The clock rate before the first `launch`: mission time only lasts the mission, so
+   *  endMission() puts it back and returns the date to today (any `date` or `time` change made
+   *  during it is dropped). Null when no mission is running. */
+  beforeMission: { rate: number } | null;
+  setBeforeMission: (before: { rate: number } | null) => void;
+  /** Clear the mission and return to today, at the rate from before it. */
   endMission: () => void;
   /** Free-running mission videos still playing in the terminal; a finished mission ends only after them. */
   missionVideos: number;
@@ -97,7 +97,9 @@ export const usePageStore = create<PageState>()(
     s.requestTrack(null);
     if (s.beforeMission) {
       s.setSecondsPerDay(s.beforeMission.rate);
-      s.requestDate(s.beforeMission.jd);
+      // Today, not the sim date at launch: the default clock runs fast, so that one is
+      // often months ahead by the time a mission starts.
+      s.requestDate(Date.now() / 86400000 + 2440587.5);
       s.setBeforeMission(null);
     }
   },

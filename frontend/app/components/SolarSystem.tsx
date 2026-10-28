@@ -1490,7 +1490,7 @@ export function SolarSystem({
           const back = store.beforeMission;
           mission.endedAt = Infinity; // once
           store.pushTerminalLines([back
-            ? `__GRAY__Mission complete. Back to ${new Date((back.jd - 2440587.5) * 86400000).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}.`
+            ? `__GRAY__Mission complete. Back to ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}.`
             : '__GRAY__Mission complete.']);
           store.endMission();
         }
