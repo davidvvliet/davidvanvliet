@@ -382,4 +382,5 @@ def paint(spec, objs, harness, probe, unwrapped=False):
     n = len(info["markings"])
     return {"name": "livery", "ok": not bad, "measured": f"{n - len(marks)}/{n} on skin",
             "expected": "every marking painted, sharp", "unit": "",
-            "detail": "; ".join(bad) or f"{n} markings, {info['texel_mm']} mm texels"}
+            "detail": "; ".join(bad) or f"{n} markings, {info['texel_mm']} mm texels, textures "
+                      f"{os.path.getsize(base_p) // 1024} + {os.path.getsize(orm_p) // 1024} KB (colour + roughness/metal)"}

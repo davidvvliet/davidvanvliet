@@ -1,0 +1,99 @@
+{
+ "scale": 8,
+ "dark": 8,
+ "centre": [
+  7.5,
+  0,
+  0.3
+ ],
+ "landmarks": [
+  {
+   "object": "ball_nose",
+   "pick": "max_x",
+   "px": [
+    320,
+    2400
+   ]
+  },
+  {
+   "object": "fin_band",
+   "pick": "top_front",
+   "px": [
+    3308,
+    395
+   ]
+  },
+  {
+   "object": "fin_band",
+   "pick": "top_rear",
+   "px": [
+    3465,
+    482
+   ]
+  },
+  {
+   "object": "wing_left",
+   "pick": "tip",
+   "px": [
+    3655,
+    2155
+   ]
+  },
+  {
+   "object": "wing_right",
+   "pick": "tip",
+   "px": [
+    1655,
+    138
+   ]
+  },
+  {
+   "xyz": [
+    0.487,
+    -2.7555,
+    -0.6211
+   ],
+   "px": [
+    2255,
+    468
+   ]
+  },
+  {
+   "xyz": [
+    0.487,
+    2.7555,
+    -0.6211
+   ],
+   "px": [
+    3450,
+    1662
+   ]
+  }
+ ],
+ "exclude": [
+  [
+   1475,
+   62,
+   1825,
+   225
+  ],
+  [
+   3562,
+   2025,
+   3762,
+   2300
+  ]
+ ],
+ "leave_out": [
+  "canopy",
+  "window",
+  "lower_fin",
+  "speed_brake_lower"
+ ],
+ "show": [
+  "canopy",
+  "window_frame_left",
+  "window_frame_right"
+ ],
+ "iters": 600
+}

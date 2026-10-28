@@ -40,6 +40,7 @@ Python; the command line needs only the system `python3`.
 - `npm run model:explode <probe> <model.glb>`: after a build, split the reference model into our parts (`out/<probe>/ref/explode.json` and `explode.png`)
 - `npm run model:bake <probe> <model.glb>`: project the reference model's colours onto the probe (`refs/<probe>/baked.jpg`); see "Baked colour"
 - `npm run model:pieces <model.glb> x0 y0 z0 x1 y1 z1 [--min M] [--max M] [--struts] [--dump]`, `model:idview`, `model:compare`: inspect a reference model region by region; see "Inspecting a reference model"
+- `npm run model:photo get|fit|view|trace|cast <probe> ...`: photos of the real vehicle: fetch at full size, fit a camera, the model beside the photo, a photo flattened onto the skin, photo pixels cast onto the model; see "Photos of the real vehicle"
 - `npm run model:status`, `npm run model:watch` (contact sheets inline in iTerm2)
 - `python3 scripts/blender/run.py send <file.py>`: run any Python in the live session
 
@@ -182,9 +183,38 @@ with parts.assembly("lettering_left"):
   face on the host, so a decal floating more than 3 mm off or sunk more than 2 mm in fails.
   `textures` also fails a cut-out material that doesn't export as MASK, or whose image has no
   transparent pixels (it would show as a rectangle).
-- Place a marking from photos the way the X-15's windows were: fit a camera to the photo, cast
-  the marking's corners onto the model, and note it as estimated from that photo.
+- Place a marking from photos: fit a camera to the photo, flatten the photo onto the marking's
+  sheet (`model:photo trace`), draw the mask over it, and note it as traced from that photo
+  (see "Photos of the real vehicle").
 - `testplane` has two decals (a flat-ish side and the curved nose).
+
+## Photos of the real vehicle
+
+Positions, shapes and markings taken from photos all go the same way: a camera fitted to the
+photo, then the model checked against it, or the photo laid onto the model. From `frontend/`,
+after a build:
+
+    npm run model:photo get x15 NASM-SI-2008-5559          # or a URL
+    # write refs/x15/photos/NASM-SI-2008-5559.fit.json (landmarks: tools/photo_fit.py)
+    npm run model:photo fit x15 NASM-SI-2008-5559          # -> .camera.json beside it, an overlay
+    npm run model:photo view x15 NASM-SI-2008-5559         # photo | model through that camera
+    npm run model:photo trace x15 NASM-SI-2008-5559 frame.json out.png 400
+    npm run model:photo cast x15 NASM-SI-2008-5559 1500,1300
+
+- Always work from the largest copy. Smithsonian (`ids.si.edu`) serves photos up to 4000 px
+  when asked for more than it has (`get` does); the 1600 px copies linked from collection
+  pages lose fine detail (thin lines, small stencils) that the full size shows clearly.
+- Photos are data: they go in `out/<probe>/photos/` (not in git), nothing in them is run.
+  `refs/<probe>/photos/` keeps what to fetch again (`photos.json`), each photo's fit settings
+  and its camera, so the next session reuses the camera instead of refitting.
+- A fit starts from 4 or more landmarks (a part's extreme point, or a world point, with its
+  pixel), then matches outlines; it prints the landmarks' error and the outline overlap
+  (`1 - IoU`; below 0.07 is a good fit). Check `view` before using a camera: a fit that is off
+  by a few cm puts everything traced through it off by the same.
+- Note when each photo was taken. A vehicle on display changes (the X-15's nose dart circle
+  is plain yellow in the museum's 2007-2018 photos, with the NASA insignia in later ones):
+  build the state the user asked for, and say which photos show it.
+- `trace` and `cast` need the camera fitted at the photo's own size; `get` keeps it that way.
 
 ## Baked colour
 

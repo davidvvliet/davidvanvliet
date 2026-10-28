@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Command line for the probe-modelling harness (plain Python 3, no dependencies).
+# Command line for the probe-modelling harness (plain Python 3; `photo` also needs numpy and Pillow).
 #
 #   run.py blender                  open Blender with the live server
 #   run.py build <probe>            build in the live session if one is open, else headless
@@ -19,6 +19,17 @@
 #                                   render the pieces in a region one colour each, with a legend
 #   run.py compare <probe> <reference> <out.png> tx,ty,tz,dx,dy,dz ...
 #                                   close-ups of the reference (top) and our last build (bottom)
+#   run.py photo get <probe> <NASM id | url> ...
+#                                   photos of the real vehicle at full size into out/<probe>/photos
+#                                   (Smithsonian ids at the largest size served); listed in
+#                                   refs/<probe>/photos/photos.json so they can be fetched again
+#   run.py photo fit <probe> <photo>   fit a camera to a photo from refs/<probe>/photos/<photo>.fit.json
+#                                   (after a build): <photo>.camera.json there, and an overlay
+#   run.py photo view <probe> <photo>  the last build through the photo's camera, beside the photo
+#   run.py photo trace <probe> <photo> <frame.json> <out.png> [px_per_m]
+#                                   the photo flattened onto a sheet of skin (as a livery marking's
+#                                   frame), for drawing its mask
+#   run.py photo cast <probe> <photo> u,v ...  photo pixels -> points on the model
 #   run.py dev [probe] [--headless] rebuild on every save of a probe script, spec or lib/
 #   run.py send <file.py | ->       run Python in the live session
 #   run.py status                   print the last build of every probe, and whether its
@@ -349,6 +360,100 @@ def cmd_compare(args):
         die(f"{ours} not found: run.py build {args[0]} first")
     _tool("compare.py", [_model_arg(args[1]), ours, os.path.abspath(args[2]), *args[3:]], ok="COMPARE_OK")
 
+# --- photos of the real vehicle -----------------------------------------------------------
+
+def _photo_paths(probe, name=None):
+    dl = os.path.join(OUT, probe, "photos")        # downloads (data, never run)
+    keep = os.path.join(HERE, "refs", probe, "photos")  # fit settings and cameras (in git)
+    os.makedirs(dl, exist_ok=True)
+    os.makedirs(keep, exist_ok=True)
+    if name is None:
+        return dl, keep
+    jpg = os.path.join(dl, f"{name}.jpg")
+    return jpg, os.path.join(keep, f"{name}.fit.json"), os.path.join(keep, f"{name}.camera.json"), dl
+
+def _photo_blender(probe, mode, *rest):
+    blend = os.path.join(OUT, probe, f"{probe}.blend")
+    if not os.path.exists(blend):
+        die(f"{blend} not found: run.py build {probe} first")
+    check_version()
+    proc = subprocess.run([BLENDER, "--background", blend, "--python-exit-code", "1",
+                           "--python", os.path.join(HERE, "tools", "photo_blender.py"), "--", mode, *rest],
+                          capture_output=True, text=True)
+    lines = [l for l in proc.stdout.splitlines() if l.startswith(("CAST", "PHOTO_OK"))]
+    if proc.returncode or not any(l.startswith("PHOTO_OK") for l in lines):
+        die(proc.stdout[-4000:] + proc.stderr[-4000:])
+    return lines
+
+def cmd_photo(args):
+    usage = "usage: run.py photo get|fit|view|trace|cast <probe> ... (see run.py's header)"
+    if len(args) < 3:
+        die(usage)
+    sub, probe = args[0], args[1]
+    if sub == "get":
+        import urllib.request
+        dl, keep = _photo_paths(probe)
+        index_p = os.path.join(keep, "photos.json")
+        index = json.load(open(index_p)) if os.path.exists(index_p) else {}
+        for a in args[2:]:
+            if a.startswith("http"):
+                url, name = a, os.path.splitext(os.path.basename(a.split("?")[0]))[0]
+            else:  # a Smithsonian image id: ask for more than it has, it sends its largest
+                url, name = f"https://ids.si.edu/ids/deliveryService?id={a}&max=8000", a
+            path = os.path.join(dl, f"{name}.jpg")
+            urllib.request.urlretrieve(url, path)
+            with open(path, "rb") as fh:
+                if fh.read(3) != b"\xff\xd8\xff":
+                    os.remove(path)
+                    die(f"{a}: not a JPEG (wrong id or url?)")
+            index[name] = url
+            print(f"  {name}  {os.path.getsize(path) // 1024} KB  {path}")
+        json.dump(index, open(index_p, "w"), indent=1, sort_keys=True)
+        return
+    if len(args) < 3:
+        die(usage)
+    name = args[2]
+    jpg, fit_p, cam_p, dl = _photo_paths(probe, name)
+    if not os.path.exists(jpg):
+        die(f"{jpg} not found: run.py photo get {probe} <id or url>")
+    if sub == "fit":
+        if not os.path.exists(fit_p):
+            die(f"write {fit_p} first: landmarks (see tools/photo_fit.py)")
+        npz = os.path.join(dl, "model.npz")
+        _photo_blender(probe, "export", npz)
+        overlay = os.path.join(dl, f"{name}-overlay.png")
+        proc = subprocess.run([sys.executable, "-I", os.path.join(HERE, "tools", "photo_fit.py"), npz, jpg, fit_p, cam_p, overlay],
+                              capture_output=True, text=True)
+        print(proc.stdout.strip())
+        if proc.returncode:
+            die(proc.stderr[-4000:])
+        print(f"  overlay: {overlay}\n  now: run.py photo view {probe} {name}")
+    elif sub == "view":
+        if not os.path.exists(cam_p):
+            die(f"{cam_p} not found: run.py photo fit {probe} {name}")
+        render = os.path.join(dl, f"{name}-model.png")
+        _photo_blender(probe, "render", cam_p, render)
+        from PIL import Image
+        a, b = Image.open(jpg).convert("RGB"), Image.open(render).convert("RGB")
+        side = Image.new("RGB", (a.width * 2, a.height))
+        side.paste(a, (0, 0))
+        side.paste(b.resize(a.size), (a.width, 0))
+        side.thumbnail((3000, 3000))
+        out = os.path.join(dl, f"{name}-view.jpg")
+        side.save(out, quality=88)
+        print(f"  photo | model: {out}")
+    elif sub == "trace":
+        if len(args) < 5:
+            die("usage: run.py photo trace <probe> <photo> <frame.json> <out.png> [px_per_m]")
+        for l in _photo_blender(probe, "trace", jpg, cam_p, os.path.abspath(args[3]), os.path.abspath(args[4]),
+                                args[5] if len(args) > 5 else "400"):
+            print(" ", l)
+    elif sub == "cast":
+        for l in _photo_blender(probe, "cast", cam_p, *args[3:]):
+            print(" ", l)
+    else:
+        die(usage)
+
 def cmd_dev(args):
     names = [a for a in args if not a.startswith("--")]
     headless = "--headless" in args
@@ -435,7 +540,7 @@ def cmd_watch(args):
 
 COMMANDS = {"blender": cmd_blender, "build": cmd_build, "all": cmd_all, "approve": cmd_approve,
             "new": cmd_new, "ref": cmd_ref, "explode": cmd_explode, "bake": cmd_bake, "pieces": cmd_pieces, "idview": cmd_idview,
-            "compare": cmd_compare, "dev": cmd_dev, "send": cmd_send, "status": cmd_status, "watch": cmd_watch}
+            "compare": cmd_compare, "photo": cmd_photo, "dev": cmd_dev, "send": cmd_send, "status": cmd_status, "watch": cmd_watch}
 
 if __name__ == "__main__":
     if len(sys.argv) < 2 or sys.argv[1] not in COMMANDS:

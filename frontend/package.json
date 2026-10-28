@@ -18,6 +18,7 @@
     "model:pieces": "python3 scripts/blender/run.py pieces",
     "model:idview": "python3 scripts/blender/run.py idview",
     "model:compare": "python3 scripts/blender/run.py compare",
+    "model:photo": "python3 scripts/blender/run.py photo",
     "model:status": "python3 scripts/blender/run.py status",
     "model:watch": "python3 scripts/blender/run.py watch"
   },

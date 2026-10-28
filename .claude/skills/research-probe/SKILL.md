@@ -70,6 +70,10 @@ wrong before any document was opened (the documents later agreed, the claim was 
    the same photo, and noted as such.
    - Check what is actually visible before sizing it: a part can hide inside a cover
      (Voyager's "12-inch record" is seen as its aluminium cover, which is 30.7 cm).
+   - Fetch photos at full size (`npm run model:photo get`, see the README's "Photos of the
+     real vehicle"): Smithsonian serves up to 4000 px, collection pages link 1600 px.
+   - Note each photo's date. A vehicle on display gets repainted and changed; check that the
+     photos show the state being modelled (and ask which state when they disagree).
    - Finishes go in the spec's `materials`: a hex colour sampled from a photo (lit, not
      blown out, no strong colour cast; several spots averaged), metallic and roughness, and
      the photo and where it was sampled as the `source`. A reference model's material colours

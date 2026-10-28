@@ -73,6 +73,12 @@ More than one Claude session may be working in this harness.
    end, and look at every new part in a close-up before calling a pass done: passing checks
    only cover what is checked (Voyager's golden record sat on a corner, half buried, with
    every check green). Fix proportions, then details. Repeat 4-5.
+   For anything placed from photos (markings, small parts, shapes the documents don't give),
+   fit a camera once with `npm run model:photo fit`, check it with `model:photo view`, and
+   trace markings with `model:photo trace` (README "Photos of the real vehicle"). A new kind
+   of surface detail (a texture layer, a pattern over the whole skin) is tried on one small
+   area first and shown to the user before it is spread over the model; the livery check
+   prints what its textures add to the file.
 6. When checks pass and the sheet matches, show the user the sheet and ask for approval.
    On approval: `npm run model:approve <probe>`.
 
