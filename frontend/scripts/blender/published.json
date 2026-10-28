@@ -1,6 +1,6 @@
 {
  "perseverance": {
-  "approved": "2026-10-28 17:13",
+  "approved": "2026-10-28 17:29",
   "inputs": {
    "specs/perseverance.json": "5ce8fb0ef97a057e",
    "probes/perseverance.py": "69b064ed79be8a03",
@@ -10,7 +10,7 @@
    "lib/bake.py": "74d319683d9c87d6",
    "lib/checks.py": "ff15a079c5d56be3",
    "lib/engines.py": "725991c59fa91be9",
-   "lib/livery.py": "01e8ff81f415aa81",
+   "lib/livery.py": "fe683f8f6dfc9308",
    "lib/materials.py": "a56545e8f35429f2",
    "lib/parts.py": "0c7a2b5bf5d6443d",
    "lib/rig.py": "87431e5e6051f10e",
@@ -31,7 +31,7 @@
   }
  },
  "starship": {
-  "approved": "2026-10-28 17:13",
+  "approved": "2026-10-28 17:29",
   "inputs": {
    "specs/starship.json": "cf9c578653ae9892",
    "probes/starship.py": "0e784d2ebf4fe725",
@@ -41,7 +41,7 @@
    "lib/bake.py": "74d319683d9c87d6",
    "lib/checks.py": "ff15a079c5d56be3",
    "lib/engines.py": "725991c59fa91be9",
-   "lib/livery.py": "01e8ff81f415aa81",
+   "lib/livery.py": "fe683f8f6dfc9308",
    "lib/materials.py": "a56545e8f35429f2",
    "lib/parts.py": "0c7a2b5bf5d6443d",
    "lib/rig.py": "87431e5e6051f10e",
@@ -53,7 +53,7 @@
   }
  },
  "superheavy": {
-  "approved": "2026-10-28 17:13",
+  "approved": "2026-10-28 17:29",
   "inputs": {
    "specs/superheavy.json": "48d5d8b43c5078bb",
    "probes/superheavy.py": "992f7ae80cc2cdd8",
@@ -63,7 +63,7 @@
    "lib/bake.py": "74d319683d9c87d6",
    "lib/checks.py": "ff15a079c5d56be3",
    "lib/engines.py": "725991c59fa91be9",
-   "lib/livery.py": "01e8ff81f415aa81",
+   "lib/livery.py": "fe683f8f6dfc9308",
    "lib/materials.py": "a56545e8f35429f2",
    "lib/parts.py": "0c7a2b5bf5d6443d",
    "lib/rig.py": "87431e5e6051f10e",
@@ -73,7 +73,7 @@
   }
  },
  "voyager": {
-  "approved": "2026-10-28 17:13",
+  "approved": "2026-10-28 17:29",
   "inputs": {
    "specs/voyager.json": "5c5e659b36339595",
    "probes/voyager.py": "203d7bdecc38e083",
@@ -83,7 +83,7 @@
    "lib/bake.py": "74d319683d9c87d6",
    "lib/checks.py": "ff15a079c5d56be3",
    "lib/engines.py": "725991c59fa91be9",
-   "lib/livery.py": "01e8ff81f415aa81",
+   "lib/livery.py": "fe683f8f6dfc9308",
    "lib/materials.py": "a56545e8f35429f2",
    "lib/parts.py": "0c7a2b5bf5d6443d",
    "lib/rig.py": "87431e5e6051f10e",
@@ -99,7 +99,7 @@
   }
  },
  "x15": {
-  "approved": "2026-10-28 17:13",
+  "approved": "2026-10-28 17:29",
   "inputs": {
    "specs/x15.json": "44e5de9b47eac729",
    "probes/x15.py": "68f879e250926c0e",
@@ -109,7 +109,7 @@
    "lib/bake.py": "74d319683d9c87d6",
    "lib/checks.py": "ff15a079c5d56be3",
    "lib/engines.py": "725991c59fa91be9",
-   "lib/livery.py": "01e8ff81f415aa81",
+   "lib/livery.py": "fe683f8f6dfc9308",
    "lib/materials.py": "a56545e8f35429f2",
    "lib/parts.py": "0c7a2b5bf5d6443d",
    "lib/rig.py": "87431e5e6051f10e",
