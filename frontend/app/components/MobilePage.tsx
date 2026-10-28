@@ -28,7 +28,7 @@ export default function MobilePage({ panel }: { panel: React.ReactNode }) {
   // Labels on touch: no hover, so a tapped dot, a tapped star, and the focused body.
   const [tappedDot, setTappedDot] = useState<Dot | null>(null);
   const [tappedStar, setTappedStar] = useState<{ name: string; lightYears: number; spectral?: string; fact?: string } | null>(null);
-  const [focusedBody, setFocusedBody] = useState<string | null>('Earth');
+  const [focusedBody, setFocusedBody] = useState<string | null>('Sun');
   const missionId = usePageStore((s) => s.trackRequest?.id ?? null);
   const simJD = usePageStore((s) => s.simJD);
   const missionFormat = MISSIONS.find((m) => m.id === missionId)?.dateFormat ?? 'month';

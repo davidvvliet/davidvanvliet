@@ -47,7 +47,7 @@ export default function SiteShell({ children, photos }: { children: React.ReactN
   const [hoveredDot, setHoveredDot] = useState<any>(null);
   const [hoveredBody, setHoveredBody] = useState<string | null>(null);
   const [hoveredStar, setHoveredStar] = useState<{ name: string; lightYears: number; spectral?: string; fact?: string } | null>(null);
-  const [focusedBody, setFocusedBody] = useState<string | null>("Earth");
+  const [focusedBody, setFocusedBody] = useState<string | null>("Sun");
   // Mission date readout: shown while a mission is launched, as month and year.
   const missionId = usePageStore((s) => s.trackRequest?.id ?? null);
   const simJD = usePageStore((s) => s.simJD);

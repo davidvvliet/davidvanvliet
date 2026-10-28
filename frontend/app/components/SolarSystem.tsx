@@ -195,6 +195,7 @@ const RESTORE_FLY_IN_FACTOR = 50;      // on reload, the saved view is flown int
 // The reload fly-in starts on the far side of the body, looking toward the Sun,
 // nudged sideways and up so the Sun shows beside the body instead of behind it.
 const RESTORE_SUN_SIDE_DEG = 10;
+const DEFAULT_VIEW_ELEVATION_DEG = 25; // first visit: how far above the orbital plane the Sun is seen from
 const RESTORE_SUN_UP_DEG = 4;
 const PICK_MIN_PX = 12;                // click tolerance floor, in pixels
 const PICK_RADIUS_MULTIPLE = 4;        // tolerance = drawn radius * this (capped: big bodies use their outline)
@@ -312,7 +313,7 @@ export function SolarSystem({
   // Saved across a scene rebuild (scale switch): which body was focused and the
   // camera's offset from it in body radii, so the view is restored, not reset.
   // `flyIn`: the scene was torn down mid restore fly-in (dev StrictMode remounts at once), so the next one restarts it.
-  // `intro`: that fly-in is the first-visit one into the default Earth view.
+  // `intro`: that fly-in is the first-visit one into the default view (the Sun).
   const savedViewRef = useRef<{ name: string; dir: THREE.Vector3; radii: number; flyIn?: boolean; intro?: boolean } | null>(null);
   // The same snapshot also persists to localStorage (VIEW_KEY), restored once per page load.
   const restoredStoredViewRef = useRef(false);
@@ -1732,7 +1733,7 @@ export function SolarSystem({
 
     // Restore the view saved by a previous scene (scale switch), else the one
     // persisted from a previous visit (once per page load), else fly in to the
-    // default Earth view.
+    // default view of the Sun.
     let saved = savedViewRef.current;
     let fromStorage = saved?.flyIn ?? false;
     let restoreTransition: object | null = null; // the fly-in started below, while it is still the live transition
@@ -1747,7 +1748,11 @@ export function SolarSystem({
         }
       } catch { /* no storage, or nothing usable */ }
       if (!saved) {
-        saved = { name: earthBody.name, dir: new THREE.Vector3(0, 0, -1), radii: DEFAULT_CAMERA_DISTANCE / earthBody.radius, intro: true };
+        // First visit: the Sun from about Jupiter's orbital distance, looking down
+        // on the orbital plane at DEFAULT_VIEW_ELEVATION_DEG so the orbits read as rings.
+        const jupiterAU = PLANETS.find((p) => p.name === 'Jupiter')!.au;
+        const up = THREE.MathUtils.degToRad(DEFAULT_VIEW_ELEVATION_DEG);
+        saved = { name: sunBody.name, dir: new THREE.Vector3(0, Math.sin(up), -Math.cos(up)), radii: orbitRadiusForAU(jupiterAU) / sunBody.radius, intro: true };
         fromStorage = true;
       }
     }
