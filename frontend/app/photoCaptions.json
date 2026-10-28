@@ -5,7 +5,7 @@
   "p04b": { "title": "Guadalupe Peak, Guadalupe Mountains National Park", "caption": "Believe it or not, this is supposed to be a desert. I chose the one weekend where it turned into this.", "slug": "guadalupe-peak", "loc": [31.89, -104.86] },
   "p05t": { "title": "Witnessing the SpaceX IPO", "slug": "spacex-ipo" },
   "p07": { "title": "On top of the founder house in Berkeley", "slug": "berkeley", "loc": [37.87, -122.27] },
-  "p08": { "title": "Atlas", "slug": "atlas" },
+  "p08": { "title": "Atlas", "slug": "atlas", "loc": [40.76, -73.98] },
   "p08b": { "title": "Los Angeles", "caption": "Road surprise", "slug": "los-angeles", "loc": [34.05, -118.24] },
   "p10": { "title": "Tokyo, Japan", "caption": "Skytree", "slug": "tokyo", "loc": [35.71, 139.81] },
   "p12": { "title": "Sequoia National Park", "caption": "A warm, warm welcome to California. Driving down the 5,000 ft of elevation was a blast.", "slug": "sequoia", "loc": [36.56, -118.77] },
