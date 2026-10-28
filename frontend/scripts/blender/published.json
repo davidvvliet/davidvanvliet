@@ -65,7 +65,7 @@
  "starship": {
   "approved": "2026-10-28 19:39",
   "inputs": {
-   "specs/starship.json": "cf9c578653ae9892",
+   "specs/starship.json": "2bc9f53519892097",
    "probes/starship.py": "0e784d2ebf4fe725",
    "build.py": "6046dd94ba4984fb",
    "blender.json": "7bbc071b6e396ec4",
