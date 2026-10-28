@@ -86,15 +86,11 @@
     },
     "fuselage_width": {
       "value": 2.234,
-      "object": [
-        "fuselage",
-        "fairing_left",
-        "fairing_right"
-      ],
+      "object": "fuselage",
       "measure": "y",
       "source": "nasa_tnd3343, Table I, p.18-19",
       "quote": "Maximum width, ft . . . 7.33",
-      "also": "nasa_tmx430 Table: 7.33. The width across the side fairings, which are their own objects (fairing_left, fairing_right)."
+      "also": "nasa_tmx430 Table: 7.33. The side fairings are part of the fuselage object, so this is the width across them."
     },
     "fuselage_depth": {
       "value": 1.423,
@@ -419,7 +415,7 @@
         "top",
         "bottom"
       ],
-      "source": "nasa_tnd3343, Fig. 1 p.20: estimated from refs/x15/three-view-1966.png (TN D-3343 Fig. 1, rendered at 400 dpi), scaled by its 49.5 ft length (1695 px); top view outline (scaled up 2% so the widest station gives Table I's 7.33 ft), side view lozenge. The drawn fairings start in a rounded nose at x 12.9 and end at x 48.8.",
+      "source": "nasa_tnd3343, Fig. 1 p.20: estimated from refs/x15/three-view-1966.png (TN D-3343 Fig. 1, rendered at 400 dpi), scaled by its 49.5 ft length (1695 px); top view outline (scaled up 2% so the widest station gives Table I's 7.33 ft), side view lozenge. The drawn fairings start in a rounded nose at x 12.9 and end at x 48.8. The fillet (0.7 ft, the smooth-union blend between body and fairing) and the body's width inside the fairings (0.75 of the plan's inner line, reached by x 14) are estimated from the front view, whose sides are concave between the fairings and the canopy and under the belly. The fairing section is a superellipse of exponent 1.5 (diamond-like, its outer edge sharp at wing level), estimated from the same view.",
       "stations": [
         [
           12.9,
@@ -541,7 +537,10 @@
           0.8,
           -1.45
         ]
-      ]
+      ],
+      "fillet": 0.7,
+      "body_width_factor": 0.75,
+      "exponent": 1.5
     },
     "canopy": {
       "columns": [

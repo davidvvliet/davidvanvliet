@@ -17,21 +17,56 @@ def build(spec):
     def stations(rows):
         return [((length - x) * FT, w * FT, t * FT, b * FT) for x, w, t, b in rows]
 
-    rows = dr["fuselage"]["stations"]
+    # Body and side fairings are one skin: each cross-section is the smooth union of the body
+    # (an ellipse) and the fairing band (a superellipse across the full width), so the two
+    # blend with a fillet as in the drawing's front view. Fillet size estimated from that view.
+    body, fair = dr["fuselage"]["stations"], dr["side_fairings"]["stations"]
+    fillet = dr["side_fairings"]["fillet"]
+
+    def lerp(rows, x):
+        if x < rows[0][0] or x > rows[-1][0]:
+            return None
+        for r0, r1 in zip(rows, rows[1:]):
+            if r0[0] <= x <= r1[0]:
+                t = (x - r0[0]) / (r1[0] - r0[0]) if r1[0] > r0[0] else 0
+                return [u + (v - u) * t for u, v in zip(r0[1:], r1[1:])]
+
+    def field(y, z, w, top, bot, n):
+        h, zc = (top - bot) / 2, (top + bot) / 2
+        return ((abs(y / w) ** n + abs((z - zc) / h) ** n) ** (1 / n) - 1) * min(w, h)
+
+    def ring(x, n=64):
+        w, top, bot = lerp(body, x)
+        fr = lerp(fair, x)
+        zc = (top + bot) / 2
+        if fr:  # under the fairings the body is narrower than the plan outline (front view)
+            ramp = min(1.0, (x - fair[0][0]) / (fair[2][0] - fair[0][0]))
+            w *= 1 - (1 - dr["side_fairings"]["body_width_factor"]) * ramp
+        def f(y, z):
+            d = field(y, z, w, top, bot, 2)
+            if fr:
+                e = field(y, z, fr[0], fr[1], fr[2], dr["side_fairings"]["exponent"])
+                h = max(fillet - abs(d - e), 0.0) / fillet  # polynomial smooth min: blends only near the join
+                d = min(d, e) - h * h * fillet / 4
+            return d
+        pts = []
+        for k in range(n):
+            a = math.pi / 2 + 2 * math.pi * k / n
+            dy, dz = math.cos(a), math.sin(a)
+            lo, hi = 0.0, 8.0
+            for _ in range(40):  # bisect along the ray for the surface
+                m = (lo + hi) / 2
+                lo, hi = (m, hi) if f(m * dy, zc + m * dz) < 0 else (lo, m)
+            pts.append(P(x, lo * dy, zc + lo * dz))
+        return pts
+
     cut = spec["from_photos"]["bare_nose_end_x"]["value"]
-    i = next(k for k, r in enumerate(rows) if r[0] > cut)
-    a, b = rows[i - 1], rows[i]
-    t = (cut - a[0]) / (b[0] - a[0])
-    mid = [cut] + [a[j] + (b[j] - a[j]) * t for j in (1, 2, 3)]
+    xs = sorted({r[0] for r in body} | {r[0] for r in fair} | {cut})
+    nose_xs, aft_xs = [x for x in xs if x <= cut], [x for x in xs if x >= cut]
     with parts.assembly("fuselage", core=True):
-        parts.fuselage("fuselage", stations([mid] + rows[i:]), n=40, material="x15_black")
+        parts.loft("fuselage", [ring(x) for x in aft_xs], material="x15_black")
     with parts.assembly("nose_cone"):
-        parts.fuselage("nose_cone", stations(rows[:i] + [mid]), n=40, material="x15_bare")
-        for sign, side in parts.sides():
-            rows = [(x, w, t, b) for x, w, t, b in dr["side_fairings"]["stations"]]
-            parts.loft(f"fairing_{side}", [[((length - x) * FT, sign * y * FT, z * FT)
-                                            for y, z in parts.section(w, t, b, 32, 3.0)] for x, w, t, b in rows],
-                       material="x15_black")
+        parts.loft("nose_cone", [ring(x) for x in nose_xs], material="x15_bare")
 
     with parts.assembly("canopy"):
         rings = []
@@ -85,23 +120,27 @@ def build(spec):
                                        ("lower_fin", f["lower_vertical_tail"], dr["lower_vertical_tail"]["te_x"], bottom, -1)):
         cr, ct, sp = fact["root_chord"] / FT, fact["tip_chord"] / FT, fact["span"] / FT
         geom = (P(te - cr, 0, root_z), cr * FT, P(te - ct, 0, root_z + up * sp), ct * FT, wedge)
-        with parts.assembly(name):
-            parts.surface(name, *geom, kind="wedge", material="x15_black")
-        # Speed brakes: the aft part of the fixed fin, a left and a right half that open apart.
+        # The fin is built from pieces that meet edge to edge (no surface laid over another,
+        # which flickers in the viewer): the fixed part ahead of the speed brakes, the brakes
+        # (a left and a right half that open apart), the rest of the fin above them, and on
+        # the upper fin the yellow moving part.
         sb = f["speed_brakes"]
-        span_frac = sb["mean_span"] / fact["span"]
-        # A fixed fraction of the fin chord: Table I's 3.36 ft at the root, 9% less at the
-        # brake's top, where the fin chord is shorter (area 5.1 vs Table I's 5.37 ft2).
-        c = cr
+        brake_top = sb["mean_span"] / fact["span"]
+        # The brakes take a fixed fraction of the fin chord: Table I's 3.36 ft at the root, 9%
+        # less at their top, where the fin chord is shorter (area 5.1 vs Table I's 5.37 ft2).
+        brake_le = 1 - sb["chord"] / FT / cr
+        band = spec["from_photos"]["yellow_band"]["value"]["from_span_fraction"] if up > 0 else 1.0
+        with parts.assembly(name):
+            parts.surface(name, *geom, kind="wedge", span=(0, brake_top), chord=(0, brake_le),
+                          material="x15_black")
+            parts.surface(f"{name}_upper" if up > 0 else f"{name}_lower", *geom, kind="wedge",
+                          span=(brake_top, band), material="x15_black")
         for sign, side in parts.sides():
             sname = f"speed_brake_{name.split('_')[0]}_{side}"
             with parts.assembly(sname):
-                # side +1 is along (tip - root) x aft: +y (left) for the upper fin, -y for the lower.
-                parts.surface(sname, *geom, kind="wedge", span=(0, span_frac),
-                              chord=(1 - sb["chord"] / FT / c, 1), side=sign * up, offset=0.004,
-                              material="x15_black")
+                # side +1 is along (tip - root) x aft: -y (right) on the upper fin, +y on the lower.
+                parts.surface(sname, *geom, kind="wedge", span=(0, brake_top), chord=(brake_le, 1),
+                              side=-sign * up, material="x15_black")
         if up > 0:
             with parts.assembly("fin_band"):
-                parts.surface("fin_band", *geom, kind="wedge",
-                              span=(spec["from_photos"]["yellow_band"]["value"]["from_span_fraction"], 1),
-                              offset=0.003, material="x15_yellow")
+                parts.surface("fin_band", *geom, kind="wedge", span=(band, 1), material="x15_yellow")
