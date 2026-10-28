@@ -52,7 +52,8 @@ function published(): Published[] {
       const cited = citationCounts(s);
       // Licences are shown up to any ":" (the terms, not the harness's note on what it kept).
       return {
-        probe, title: s.title ?? probe, org: ORG[probe] ?? "other", thumb: files.includes(`${probe}.webp`),
+        probe, title: (s.title ?? probe).replace(/\s*\(.*\)\s*$/, ""), // the name only, not its note in brackets
+        org: ORG[probe] ?? "other", thumb: files.includes(`${probe}.webp`),
         sources: (s.sources ?? []).map((x) => ({ title: x.title, url: x.url, licence: x.licence?.split(":")[0] ?? null, cited: cited.get(x.id) ?? 0 })),
       };
     });
