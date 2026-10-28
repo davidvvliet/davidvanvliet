@@ -1,0 +1,525 @@
+{
+  "title": "Starship V3",
+  "note": "SpaceX Starship V3 (Block 3), full stack: Super Heavy booster with the Starship upper stage on top, as first flown on Flight 12 (booster B19, ship S39; SpaceX photo names). Dry, unfuelled (no frost). Frame: z up, the booster's lowest point at z = 0, the stack's axis on x = y = 0. +x is the ship's windward (heat-shield) side, which faces away from the launch tower; -x faces the tower. y completes a right-handed frame. No reference 3D model exists (see reference_model): the layout comes from the sources below and from SpaceX photos, scaled by the 9 m diameter.",
+  "sources": [
+    {
+      "id": "spacex_v3",
+      "title": "SpaceX, \"Introducing Starship V3\" (update, 2026-05-12)",
+      "url": "https://www.spacex.com/updates",
+      "read": "2026-10-28",
+      "licence": "SpaceX copyright; quoted only",
+      "saved": "",
+      "note": "Read through SpaceX's content API (https://content.spacex.com/api/spacex-website/updates, updateId starship-v3); the page itself renders client-side."
+    },
+    {
+      "id": "sciam_f12",
+      "title": "Scientific American, \"SpaceX launches Starship V3, the world's most powerful and tallest rocket ever\"",
+      "url": "https://www.scientificamerican.com/article/spacex-launches-starship-v3-the-worlds-most-powerful-and-tallest-rocket-ever/",
+      "read": "2026-10-28",
+      "licence": "copyright; quoted only",
+      "saved": ""
+    },
+    {
+      "id": "sfn_b21",
+      "title": "Spaceflight Now, \"SpaceX's Super Heavy booster arrives at pad ahead of first orbital Starship launch\" (2026-09-21)",
+      "url": "https://spaceflightnow.com/2026/09/21/spacexs-super-heavy-booster-arrives-at-pad-ahead-of-first-orbital-starship-launch/",
+      "read": "2026-10-28",
+      "licence": "copyright; quoted only",
+      "saved": ""
+    },
+    {
+      "id": "wiki_starship",
+      "title": "Wikipedia, SpaceX Starship (secondary: a lead, not a primary source)",
+      "url": "https://en.wikipedia.org/wiki/SpaceX_Starship",
+      "read": "2026-10-28",
+      "licence": "CC BY-SA 4.0",
+      "saved": ""
+    },
+    {
+      "id": "nsf_block3_mars",
+      "title": "NASASpaceflight, \"Future Starship Block 3 ... Mars\" (2025-05; read via the Wayback Machine)",
+      "url": "https://www.nasaspaceflight.com/2025/05/future-starship-block-3-mars/",
+      "read": "2026-10-28",
+      "licence": "copyright; quoted only",
+      "saved": ""
+    },
+    {
+      "id": "nsf_pad2",
+      "title": "NASASpaceflight, \"SpaceX prepare Pad 2 ... Block 3, Starbase\" (2025-09; read via the Wayback Machine)",
+      "url": "https://www.nasaspaceflight.com/2025/09/spacex-prepare-pad-2-block-3-starbase/",
+      "read": "2026-10-28",
+      "licence": "copyright; quoted only",
+      "saved": ""
+    },
+    {
+      "id": "nsf_block3_moon",
+      "title": "NASASpaceflight, \"Starship Block 3 ... path to the Moon\" (2025-11; read via the Wayback Machine)",
+      "url": "https://www.nasaspaceflight.com/2025/11/starship-block-3-path-moon/",
+      "read": "2026-10-28",
+      "licence": "copyright; quoted only",
+      "saved": ""
+    },
+    {
+      "id": "faa_plume",
+      "title": "FAA, Starship/Super Heavy draft EA, Appendix G: Exhaust plume calculations (2019)",
+      "url": "https://www.faa.gov/sites/faa.gov/files/space/stakeholder_engagement/spacex_starship/Appendix_G_Exhaust_Plume_Calculations.pdf",
+      "read": "2026-10-28",
+      "licence": "public domain (US government work)",
+      "saved": ""
+    },
+    {
+      "id": "faa_39a",
+      "title": "FAA, SpaceX Starship LC-39A EIS public meeting slides (2025)",
+      "url": "https://www.faa.gov/space/stakeholder_engagement/spacex_starship_ksc/SpaceX-39A-EIS_In-Person_Meeting_Slides_Final.pdf",
+      "read": "2026-10-28",
+      "licence": "public domain (US government work)",
+      "saved": ""
+    },
+    {
+      "id": "photo_pad_f13",
+      "title": "SpaceX, Flight 13 stack on Pad 2 at sunset (Flight_13_Website_Desktop_6.jpg, 2600 x 1200; near-side view from a distance)",
+      "url": "https://sxcontent9668.azureedge.us/cms-assets/assets/Flight_13_Website_Desktop_6_c571da0ca7.jpg",
+      "read": "2026-10-28",
+      "licence": "SpaceX copyright (licence not stated); used for measuring only, not in the repo",
+      "saved": ""
+    },
+    {
+      "id": "photo_pad_f13_close",
+      "title": "SpaceX, Flight 13 ship and booster top on Pad 2 (Flight_13_Website_Mobile_4.jpg, 840 x 1200; from below)",
+      "url": "https://sxcontent9668.azureedge.us/cms-assets/assets/Flight_13_Website_Mobile_4_319abe7e02.jpg",
+      "read": "2026-10-28",
+      "licence": "SpaceX copyright (licence not stated); used for measuring only",
+      "saved": ""
+    },
+    {
+      "id": "photo_wdr",
+      "title": "SpaceX, Flight 12 wet dress rehearsal, leeward side (20260511_Wet_Dress_Actual-2.jpg, 5272 x 3948)",
+      "url": "https://sxcontent9668.azureedge.us/cms-assets/assets/20260511_Wet_Dress_Actual_2_259bcb3ae9.jpg",
+      "read": "2026-10-28",
+      "licence": "SpaceX copyright (licence not stated); used for measuring only",
+      "saved": ""
+    },
+    {
+      "id": "photo_b19_lift",
+      "title": "SpaceX, B19 lifted onto Pad 2: hot-stage ring and grid fins (B19_Lift_Pad2_2603083611.jpg, 12125 x 6820)",
+      "url": "https://sxcontent9668.azureedge.us/cms-assets/assets/B19_Lift_Pad2_2603083611_083bb17256.jpg",
+      "read": "2026-10-28",
+      "licence": "SpaceX copyright (licence not stated); used for measuring only",
+      "saved": ""
+    },
+    {
+      "id": "photo_s39_fire",
+      "title": "SpaceX, S39 six-engine static fire, windward side (S39_6-Engine_Static_Fire_04142600114.jpg, 3607 x 2029)",
+      "url": "https://sxcontent9668.azureedge.us/cms-assets/assets/S39_6_Engine_Static_Fire_04142600114_d9f1acc588.jpg",
+      "read": "2026-10-28",
+      "licence": "SpaceX copyright (licence not stated); used for measuring only",
+      "saved": ""
+    },
+    {
+      "id": "photo_f12_ascent",
+      "title": "SpaceX, Flight 12 ascent (Flight_12_Website_Mobile_3.jpg)",
+      "url": "https://sxcontent9668.azureedge.us/cms-assets/assets/Flight_12_Website_Mobile_3_fba489c895.jpg",
+      "read": "2026-10-28",
+      "licence": "SpaceX copyright (licence not stated); used for looking only",
+      "saved": ""
+    }
+  ],
+  "reference_model": {
+    "url": "",
+    "note": "Searched gh api repos/nasa/NASA-3D-Resources on 2026-10-28: no SpaceX vehicle. No official 3D model. NASA's 3D Resources has no Starship; the models online are third-party marketplace models, not sources."
+  },
+  "dimensions": {
+    "stack_height": {
+      "value": 124.4,
+      "object": "*",
+      "measure": "z",
+      "tolerance": 0.01,
+      "source": "wiki_starship (infobox)",
+      "quote": "Block 1 : 121.3 m (398 ft) Block 2 : 123.1 m (404 ft) Block 3 : 124.4 m (408 ft)",
+      "also": [
+        {
+          "source": "sciam_f12",
+          "quote": "Fully stacked with its booster, the rocket is 408 feet (124 meters) tall."
+        }
+      ]
+    },
+    "booster_height": {
+      "value": 72.3,
+      "object": [
+        "booster_engine_00",
+        "hotstage_ring"
+      ],
+      "measure": "z",
+      "tolerance": 0.01,
+      "source": "wiki_starship",
+      "quote": "Super Heavy was initially 71 m (233 ft) tall (in its Block 1 and Block 2 design, now retired), while Block 3 Super Heavy is 72.3 meters tall.",
+      "also": [
+        {
+          "source": "sfn_b21",
+          "quote": "The stainless-steel booster stands 236 feet tall (72 meters) and boasts a diameter of 9 m (29.5 ft)."
+        }
+      ],
+      "note": "z extent from the lowest engine bell to the top of the hot-stage ring."
+    },
+    "ship_height": {
+      "value": 52.1,
+      "object": "ship_windward",
+      "measure": "z",
+      "tolerance": 0.02,
+      "source": "wiki_starship, derived: stack_height - booster_height = 124.4 - 72.3",
+      "quote": "No source states the V3 ship's height. wiki_starship gives the Block 2 ship as \"Block 2 : 52.1 m (171 ft)\", the same number; the derivation assumes the ship sits on top of the booster without overlap.",
+      "conflict": [
+        {
+          "source": "photo_pad_f13",
+          "value": 47.7,
+          "quote": "measured: nose tip to the top of the hot-stage ring 427 px against an 80.5 px body width (9 m). photo_pad_f13_close gives 49.4 m. Both are likely shortened by perspective (see open_questions)."
+        },
+        {
+          "source": "photo_f12_ascent (Flight_12_Website_Desktop_3.jpg)",
+          "value": 52.6,
+          "quote": "measured: nose tip (y 184) to the top of the hot-stage ring (y 496.5), 312.5 px, against the ship's width of 53.5 px (9 m), which stays the same along the ship, so perspective doesn't change the scale over it. Agrees with 52.1 m within 1%."
+        }
+      ]
+    },
+    "diameter_booster": {
+      "value": 9.0,
+      "object": "booster_tank",
+      "measure": "diameter",
+      "tolerance": 0.01,
+      "source": "sfn_b21",
+      "quote": "boasts a diameter of 9 m (29.5 ft)",
+      "also": [
+        {
+          "source": "faa_39a",
+          "quote": "Diameter (m) 9 9"
+        }
+      ]
+    },
+    "diameter_ship": {
+      "value": 9.0,
+      "object": "ship_windward",
+      "measure": "diameter",
+      "tolerance": 0.01,
+      "source": "faa_39a",
+      "quote": "Diameter (m) 9 9 (Starship, Super Heavy)",
+      "also": [
+        {
+          "source": "wiki_starship",
+          "quote": "Diameter 9 m (30 ft)"
+        }
+      ]
+    }
+  },
+  "facts": {
+    "booster_engines": {
+      "value": 33,
+      "source": "spacex_v3",
+      "quote": "The fuel transfer tube, which channels cryogenic fuel from the main tank to the 33 Raptor engines, has been completely redesigned"
+    },
+    "booster_inner_engines": {
+      "value": 13,
+      "source": "spacex_v3",
+      "quote": "shielding has been added to the surface area between engines and around the thrust vector control hardware on the inner 13 engines",
+      "also": "wiki_starship: \"This system uses electric actuators on the thirteen engines in the middle and center rings.\""
+    },
+    "booster_engine_rings": {
+      "value": {
+        "centre": 3,
+        "middle": 10,
+        "outer": 20
+      },
+      "source": "spacex_v3, inferred, not stated: 33 engines with 13 in the centre and middle rings; 3 in the centre (nsf_block3_mars), so 10 middle and 20 outer.",
+      "quote": ""
+    },
+    "booster_centre_engine_clocking_deg": {
+      "value": [
+        108,
+        108,
+        144
+      ],
+      "source": "nsf_block3_mars",
+      "quote": "Currently, the center engines are 120 degrees apart and symmetrical. Block 3 will be 108, 108, and 140 degrees apart, resulting in an unsymmetrical layout.",
+      "note": "As quoted the three gaps add to 356 degrees, not 360: 144 is what closes the circle. See open_questions."
+    },
+    "ship_engines": {
+      "value": {
+        "sea_level": 3,
+        "vacuum": 3
+      },
+      "source": "nsf_block3_mars",
+      "quote": "Block 3 Ship will not have nine engines right away, but will stick with six, meaning three Raptor Vacuum (RVACs) and three Raptor Sea Level or Center (RC) engines.",
+      "also": "SpaceX's photo of S39 is named \"S39_6-Engine_Static_Fire\"; wiki_starship: \"The three sea level engines are mounted on the thrust puck, which forms the bottom of the aft dome.\""
+    },
+    "raptor_sl_nozzle_exit_m": {
+      "value": 1.301,
+      "source": "faa_plume",
+      "quote": "Nozzle exit diameter (in) 51.226 ... Nozzle throat to exit length (in) 60.06",
+      "note": "Raptor 1-era (2019) sea-level nozzle; nothing found for Raptor 3. 51.226 in = 1.301 m; throat to exit 60.06 in = 1.526 m."
+    },
+    "no_engine_shrouds": {
+      "value": true,
+      "source": "spacex_v3",
+      "quote": "Large individual engine shrouds have been eliminated ... Sensors and controllers are now internally integrated and covered by engine thermal protection, eliminating the need for individual engine shrouds on both Starship and Super Heavy."
+    },
+    "grid_fins": {
+      "value": {
+        "count": 3,
+        "spacing_deg": [
+          90,
+          90,
+          180
+        ],
+        "layout": "T: one fin on each side (+y, -y) and one on the heat-shield side (+x); none on the tower side"
+      },
+      "source": [
+        "spacex_v3",
+        "nsf_block3_mars",
+        "wiki_starship"
+      ],
+      "quote": "spacex_v3: \"The number of grid fins has been reduced from four to three, with each fin now 50% larger and significantly stronger. These fins include a new catch point and have been re-clocked on the booster ... They have also been lowered\". nsf_block3_mars: \"they are spaced in a T shape, with a fin on the port and starboard sides, and then one on the non-tower side or the heat shield side of the ship.\" wiki_starship: \"three electrically actuated grid fins, in a 90/90/180 degree arrangement. Two of these fins have hardpoints\""
+    },
+    "hot_stage": {
+      "value": "integrated: a ring of steel struts (a crown of Vs) on top of the booster's methane tank, open between the struts",
+      "source": [
+        "spacex_v3",
+        "nsf_pad2",
+        "photo_b19_lift"
+      ],
+      "quote": "spacex_v3: \"An integrated hot stage replaces the previous single-use protective interstage. The forward dome of the booster fuel tank is now directly exposed to the Starship upper stage's Raptor engines\". nsf_pad2: \"topped by a nearly four-meter hot staging ring\". photo_b19_lift shows the strut crown above the exposed dome."
+    },
+    "ship_flaps": {
+      "value": "2 forward and 2 aft flaps. Forward flaps on the leeward side, about 140 degrees apart; aft flaps 180 degrees apart (on +y and -y).",
+      "source": "wiki_starship",
+      "quote": "Beginning with Block 2, the design of these forward flaps was significantly changed, moving leeward and becoming thinner and angled. This sets them at an approximately 140-degree angle, compared to the 180-degree angle of the aft flaps",
+      "also": "spacex_v3: \"The aft flap actuation system has also been upgraded from two actuators per flap to a single actuator with three motors.\""
+    },
+    "heat_shield": {
+      "value": "black hexagonal tiles on the windward side (+x); the leeward side is bare stainless steel",
+      "source": [
+        "wiki_starship",
+        "photo_s39_fire",
+        "photo_wdr"
+      ],
+      "quote": "wiki_starship: \"The windward side is protected by a heat shield composed of eighteen thousand hexagonal black tiles\". photo_s39_fire shows the windward side black from nose to skirt; photo_wdr shows the leeward side bare steel with the tile edge just in view."
+    },
+    "ring_height": {
+      "value": 1.83,
+      "unit": "m",
+      "source": "wiki_starship",
+      "quote": "These cylinders have a height of 1.83 m (6 ft), and a thickness of 3.97 mm (0.156 in).",
+      "note": "Weld lines every 1.83 m show on the steel in every photo: a texture detail, not geometry."
+    },
+    "docking_drogues": {
+      "value": 4,
+      "source": "spacex_v3",
+      "quote": "Four docking drogues have also been added on the leeward side of the vehicles to enable docking with other Starships",
+      "note": "Not visible at site scale; listed only."
+    },
+    "ship_catch_pins": {
+      "value": "on the nose cone",
+      "source": "nsf_block3_moon",
+      "quote": "SpaceX has refined the design of the ship catch pins and relocated them to the nosecone."
+    }
+  },
+  "from_photos": {
+    "scale": {
+      "value": {
+        "m_per_px_across": 0.1118,
+        "m_per_px_along": 0.122
+      },
+      "source": "photo_pad_f13: ship and booster both 80.5 px wide (9 m). Along the axis the photo reads short against the ascent photo (ship 47.7 m vs 52.6 m), so it seems squashed vertically: lengths there are scaled by the 52.1 m ship (0.122 m/px), widths by the diameter (0.1118 m/px). The hot-stage ring then measures 3.8 m, matching nsf_pad2's 'nearly four-meter' ring."
+    },
+    "nose_length": {
+      "value": 11.3,
+      "unit": "m",
+      "source": "photo_pad_f13: the nose reaches the full 9 m width about 93 px below the tip. Estimated."
+    },
+    "forward_flap": {
+      "value": {
+        "span": 2.4,
+        "root_chord": 6.5,
+        "tip_chord": 2.1,
+        "bottom_below_tip": 9.3
+      },
+      "unit": "m",
+      "source": "photo_pad_f13: the -y forward flap stands out 20 px from the body (2.2 m), seen about 20 degrees off its plane (flaps 140 degrees apart, viewed from the windward side), so about 2.4 m; root from y 125 to 178, outer edge y 160 to 177; bottom 76 px below the tip. Estimated. Shape: swept leading edge, straight outer edge (photo_wdr)."
+    },
+    "aft_flap": {
+      "value": {
+        "span": 2.0,
+        "root_chord": 14.5,
+        "tip_chord": 7.6
+      },
+      "unit": "m",
+      "source": "photo_pad_f13: the -y flap stands out 18 px (2.0 m), the +y one 16.5 px (1.85 m); root from y 410 to the ship's base at y 529, outer edge from y 465 down. Estimated. photo_wdr and photo_pad_f13 both show the aft flaps reaching slightly below the ship's base, alongside the hot-stage ring."
+    },
+    "hot_stage_ring_height": {
+      "value": 3.8,
+      "unit": "m",
+      "source": "photo_pad_f13: from the ship's base (y 529) to the bottom of the strut crown (about y 560), 31 px. Agrees with nsf_pad2's \"nearly four-meter hot staging ring\"."
+    },
+    "grid_fin": {
+      "value": {
+        "stands_out": 4.0,
+        "thickness": 1.2,
+        "top_below_booster_top": 6.2,
+        "width": 4.0
+      },
+      "unit": "m",
+      "source": "photo_pad_f13_close: the side fins stand out about 105 px from a 230 px (9 m) body and are about 30 px thick; photo_pad_f13: the fins' tops are about 51 px below the top of the hot-stage ring. Estimated: the close photo looks up from below, so expect a few percent of error. Shape: a grid of cells in a flat box, wider than it stands out, its outer edge serrated (photo_b19_lift). Width along the circumference: the heat-shield-side fin in photo_pad_f13_close is about 100 px wide on the 230 px body, 3.9 m. photo_b19_lift shows both side fins at the same height, about 5.8 m below the top (pad photo 6.2 m)."
+    },
+    "booster_engines_below_skirt": {
+      "value": 2.4,
+      "unit": "m",
+      "source": "photo_f12_ascent (Desktop_3): the bells reach about 11 px below the aft end of the booster, whose width there is about 42 px (9 m). Estimated."
+    },
+    "booster_nozzle_exit": {
+      "value": 1.2,
+      "unit": "m",
+      "source": "faa_plume, fitted, not measured: 20 outer bells of faa_plume's 1.30 m don't fit around a 9 m body (circumference at the bells' centres about 24.5 m, so at most 1.22 m each). Raptor 3's nozzle isn't published; 1.2 m for every booster engine, outer ring centres at r 3.9, middle (10) at r 2.4, centre (3) at r 0.85. Ring clocking estimated."
+    },
+    "booster_chines": {
+      "value": {
+        "count": 2,
+        "at": "+y and -y",
+        "top_above_aft_end": 28.0,
+        "stands_out": 0.9
+      },
+      "unit": "m",
+      "source": "photo_pad_f13: strakes on both sides of the lower booster from y 885 (left) and 945 (right) down past the mount top (y 1140), standing out about 8 px (0.9 m); photo_f12_ascent shows one from about 31 m above the aft end. Estimated: 28 m for both."
+    },
+    "booster_raceway": {
+      "value": {
+        "width": 0.5,
+        "stands_out": 0.3,
+        "angle_from_x_deg": -17
+      },
+      "unit": "m",
+      "source": "photo_pad_f13: a dark vertical line the full length of the booster, about 12 px (1.3 m) left of centre seen from +x, so about 17 degrees toward -y. Size estimated."
+    },
+    "hot_stage_struts": {
+      "value": {
+        "v_pairs": 18,
+        "strut_diameter": 0.3,
+        "dome_height": 2.2
+      },
+      "unit": "m",
+      "source": "photo_b19_lift (crop 700-1220 x 170-520 of the 1600 px view): 9 strut feet across the visible half, so about 18 around; the top ring sits on the strut tops; the methane dome rises about 2.2 m above the tank's top edge (100 px below the ring top on a 680 px / 9 m body). Estimated."
+    }
+  },
+  "materials": {
+    "stainless_steel": {
+      "hex": "#989c9e",
+      "metallic": 1.0,
+      "roughness": 0.3,
+      "source": "photo_wdr, the leeward side of the ship's nose in daylight (native px about 2640, 820; 20 x 20 px averaged). The steel mostly mirrors its surroundings, so the colour is only a base; other samples were blue from the sky."
+    },
+    "heat_shield_tiles": {
+      "hex": "#0f141c",
+      "metallic": 0.0,
+      "roughness": 0.8,
+      "source": "photo_s39_fire, the ship's windward side in daylight, four 24 x 24 px spots on the barrel averaged (from #080d14 to #1a1f2a)."
+    },
+    "grid_fin": {
+      "hex": "#0f141c",
+      "metallic": 0.3,
+      "roughness": 0.7,
+      "source": "photo_b19_lift and photo_pad_f13: the fins are near-black like the tiles; not sampled separately."
+    }
+  },
+  "open_questions": [
+    "Ship height: 52.1 m is derived (124.4 - 72.3). The ascent photo gives 52.6 m (in ship diameters), agreeing; the pad photo gives 47.7 m but reads squashed vertically. Decided: 52.1 m.",
+    "Does the 72.3 m booster height include the engine bells below the aft skirt? Not stated. Proposed: yes (overall height), so z = 0 is the bottom of the nozzles.",
+    "Engine sizes: Raptor 3 and Raptor Vacuum nozzle sizes aren't published. Only a 2019 sea-level Raptor nozzle (1.30 m exit) is sourced. Proposed: 1.30 m for every sea-level engine; the three vacuum bells would be estimated from a photo of the ship's aft end (none found yet). They're hidden inside the stack anyway.",
+    "Booster engine rings (3 / 10 / 20) are inferred, and the centre clocking as quoted (108, 108, 140) adds to 356 degrees. This only shows from below. Proposed: 3 / 10 / 20, centre gaps 108 / 108 / 144.",
+    "Grid fins: no size in metres anywhere; photos give about 4.0 x 4.0 x 1.2 m. The two side fins are level in photo_b19_lift; whether the heat-shield fin is higher isn't clear (two photos disagree, both with strong perspective). Built level.",
+    "Flap sizes and positions come from one photo each. Proposed: build from these estimates and compare the sheet with photo_pad_f13 and photo_f12_ascent.",
+    "Hot-stage struts: 18 V pairs estimated from the visible half of photo_b19_lift.",
+    "Photos: SpaceX's licence for these isn't stated (their Flickr photos have been CC BY-NC 2.0). They stay out of the repo; the spec links them.",
+    "Not modelled: frost (only when fuelled), chopsticks and tower, the docking drogues and Starlink antennas (too small at site scale)."
+  ],
+  "sheet_frame": {
+    "min": [
+      -9,
+      -9,
+      0
+    ],
+    "max": [
+      9,
+      9,
+      124.4
+    ]
+  },
+  "closeups": [
+    {
+      "name": "nose and forward flaps",
+      "target": [
+        0,
+        0,
+        113
+      ],
+      "look": [
+        0.6,
+        -1,
+        0.1
+      ],
+      "radius": 9
+    },
+    {
+      "name": "ship aft and aft flaps",
+      "target": [
+        0,
+        0,
+        76
+      ],
+      "look": [
+        0.3,
+        -1,
+        0
+      ],
+      "radius": 9
+    },
+    {
+      "name": "hot stage and grid fins",
+      "target": [
+        0,
+        0,
+        68
+      ],
+      "look": [
+        0.7,
+        -1,
+        0.3
+      ],
+      "radius": 8
+    },
+    {
+      "name": "booster base and engines",
+      "target": [
+        0,
+        0,
+        2
+      ],
+      "look": [
+        0.4,
+        -1,
+        -0.6
+      ],
+      "radius": 7
+    }
+  ],
+  "budget": {
+    "triangles": 50000,
+    "glb_bytes": 1500000
+  },
+  "decided": {
+    "date": "2026-10-28",
+    "by": "David",
+    "items": [
+      "Ship 52.1 m",
+      "Booster height includes the engine bells (z = 0 at the bell exits)",
+      "Engine bells and rings as proposed (see from_photos.booster_nozzle_exit)",
+      "Centre engines 108/108/144 degrees"
+    ]
+  }
+}
