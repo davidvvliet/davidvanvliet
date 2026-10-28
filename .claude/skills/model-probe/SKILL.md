@@ -44,8 +44,10 @@ More than one Claude session may be working in this harness.
   your builds: `git worktree add ../davidvanvliet-<probe> -b <probe> main`, then run the
   harness from its `frontend/`. Never push the branch (Vercel would deploy a preview): rebase
   on `origin/main` and `git push origin HEAD:main`. Builds there run headless (the live
-  Blender session only builds for the checkout it was started from), and the dashboard on
-  :3000 shows the main checkout's builds, so read the worktree's own `out/<probe>/` images.
+  Blender session only builds for the checkout it was started from). The dashboard on :3000
+  reads every worktree: for each probe it shows the worktree changing that probe's files
+  first, else the newest build, labelled with the worktree's name and switchable in the header.
+  Never move or restart :3000 for this.
 
 ## Loop
 1. `npm run model:new <probe> "Title"` (from `frontend/`), then research and fill in the spec

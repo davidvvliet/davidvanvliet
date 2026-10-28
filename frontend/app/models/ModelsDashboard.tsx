@@ -16,7 +16,8 @@ type Build = {
 type Probe = {
   name: string; title: string; fixture: boolean; note: string | null;
   sources: { title?: string; url?: string }[]; referenceModel: { url?: string; note?: string } | null;
-  refs: string[]; build: Build | null;
+  // Each git worktree that has this probe, newest build first (app/api/models/[...path]/route.ts).
+  worktrees: Source[];
   // Never approved: null. Else what changed since approve (scripts/blender/lib/published.py).
   published: { own: string[]; shared: string[] } | null;
 };
@@ -25,12 +26,14 @@ type Breakdown = {
   build_started: number | null;
   families: Record<string, { ref: { pieces: number; size: number[] } | null; centre_offset?: number[]; ours: { size: number[] } }>;
 };
-type Current = { probe: string; step: string; state: string; message: string | null; session: string; at: number };
+// `working`: that worktree has changes to the probe's own files (someone is working on it there).
+type Source = { worktree: string; label: string; branch: string | null; working: boolean; build: Build | null; refs: string[] };
+type Current = { probe: string; step: string; state: string; message: string | null; session: string; at: number; worktree: string; label: string };
 type Status = { updated: number | null; current: Current | null; probes: Probe[] };
 
 const STEPS = ["spec", "model", "checks", "render", "export", "done"];
 const SELECTED_KEY = "models-dashboard-probe";
-const file = (rel: string, v?: number) => `/api/models/file/${rel}${v ? `?v=${v}` : ""}`;
+const file = (worktree: string, rel: string, v?: number) => `/api/models/file/${worktree}/${rel}${v ? `?v=${v}` : ""}`;
 
 function ago(t: number, now: number) {
   const s = Math.max(0, Math.round(now / 1000 - t));
@@ -385,6 +388,8 @@ export default function ModelsDashboard() {
   const [status, setStatus] = useState<Status | null>(null);
   const [error, setError] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
+  // Which worktree's build to show, per probe, when the user picked one (else the newest).
+  const [picked, setPicked] = useState<Record<string, string>>({});
   const [view, setView] = useState<"build" | "reference" | "close-ups">("build");
   const [now, setNow] = useState(() => Date.now());
 
@@ -410,14 +415,18 @@ export default function ModelsDashboard() {
   // Follow a probe when a build of it starts, so the page shows whatever is happening
   // now; the build that was already finished when the page loaded doesn't count.
   const currentProbe = status?.current?.probe;
+  const currentTree = status?.current?.worktree;
   const currentAt = status?.current?.at;
   const seenAt = useRef<number | null | undefined>(undefined);
   useEffect(() => {
     if (currentAt === undefined) return;
     if (seenAt.current === undefined) { seenAt.current = currentAt; return; }
-    if (currentAt !== seenAt.current && currentProbe) setSelected(currentProbe);
+    if (currentAt !== seenAt.current && currentProbe) {
+      setSelected(currentProbe);
+      if (currentTree) setPicked((p) => ({ ...p, [currentProbe]: currentTree }));
+    }
     seenAt.current = currentAt;
-  }, [currentProbe, currentAt]);
+  }, [currentProbe, currentTree, currentAt]);
 
   const choose = (name: string) => {
     setSelected(name);
@@ -426,29 +435,31 @@ export default function ModelsDashboard() {
   };
 
   const probe = status?.probes.find((p) => p.name === selected) ?? status?.probes[0];
-  const cur = status?.current?.probe === probe?.name ? status?.current : null;
-  const b = probe?.build;
-  const hasRef = !!probe?.refs.includes("reference-sheet.png");
+  const src = probe?.worktrees.find((w) => w.worktree === picked[probe.name]) ?? probe?.worktrees[0];
+  const wt = src?.worktree ?? "";
+  const cur = status?.current?.probe === probe?.name && status?.current?.worktree === wt ? status?.current : null;
+  const b = src?.build;
+  const hasRef = !!src?.refs.includes("reference-sheet.png");
   // Until a probe has its own build, its reference sheet is all there is to show.
   const views = [b?.sheet && "build", hasRef && "reference", b?.closeups?.length && "close-ups"]
     .filter(Boolean) as ("build" | "reference" | "close-ups")[];
   const shown = views.includes(view) ? view : views[0];
   const sheetUrl = !probe ? null
-    : shown === "reference" ? file(`refs/${probe.name}/reference-sheet.png`)
-    : shown === "close-ups" ? file(`out/${probe.name}/closeups.png`, b?.started)
-    : b?.sheet ? file(`out/${probe.name}/sheet.png`, b.started) : null;
-  const glbUrl = probe && b?.glb ? file(`out/${probe.name}/${probe.name}.glb`, b.started) : null;
+    : shown === "reference" ? file(wt, `refs/${probe.name}/reference-sheet.png`)
+    : shown === "close-ups" ? file(wt, `out/${probe.name}/closeups.png`, b?.started)
+    : b?.sheet ? file(wt, `out/${probe.name}/sheet.png`, b.started) : null;
+  const glbUrl = probe && b?.glb ? file(wt, `out/${probe.name}/${probe.name}.glb`, b.started) : null;
 
   // The reference breakdown, if `run.py explode` has been run for this probe; re-read every
   // few seconds since it is written outside the build. Needs a measured reference model.
   const [breakdown, setBreakdown] = useState<Breakdown | null>(null);
   const probeName = probe?.name;
   useEffect(() => {
-    if (!probeName || !hasRef) return;
+    if (!probeName || !hasRef || !wt) return;
     let alive = true;
     const load = async () => {
       try {
-        const res = await fetch(file(`out/${probeName}/ref/explode.json`), { cache: "no-store" });
+        const res = await fetch(file(wt, `out/${probeName}/ref/explode.json`), { cache: "no-store" });
         const next = res.ok ? await res.json() : null;
         if (alive) setBreakdown(next);
       } catch { if (alive) setBreakdown(null); }
@@ -456,13 +467,13 @@ export default function ModelsDashboard() {
     load();
     const id = setInterval(load, 5000);
     return () => { alive = false; clearInterval(id); setBreakdown(null); };
-  }, [probeName, hasRef]);
+  }, [probeName, hasRef, wt]);
   const stale = !!breakdown && !!b && breakdown.build_started !== b.started;
   const state = !status ? (error ? "offline" : "") : cur?.state === "running" ? "building"
     : b?.error ? "error" : b ? (b.ok ? "pass" : "fail") : "not built";
   const dot = cur?.state === "running" ? styles.running : b?.ok ? styles.ok : b ? styles.bad : "";
 
-  const live = status?.current?.probe === probe?.name ? status?.current ?? null : null; // telemetry follows the tab
+  const live = cur ?? null; // telemetry follows the tab and the worktree shown
   const running = live?.state === "running";
   const anyRunning = status?.current?.state === "running";
   const passed = b?.checks?.filter((c) => c.ok).length ?? 0;
@@ -471,12 +482,16 @@ export default function ModelsDashboard() {
     <main className={styles.page}>
       <header className={styles.header}>
         <nav className={styles.tabs}>
-          {status?.probes.map((p) => (
-            <button key={p.name} onClick={() => choose(p.name)} className={p.name === probe?.name ? styles.active : ""}>
-              <span className={`${styles.dot} ${live?.probe === p.name && running ? styles.running : !p.build ? "" : p.build.ok ? styles.ok : styles.bad}`} />
-              {p.name}
-            </button>
-          ))}
+          {status?.probes.map((p) => {
+            const pb = p.worktrees[0]?.build;
+            const busy = anyRunning && status.current?.probe === p.name;
+            return (
+              <button key={p.name} onClick={() => choose(p.name)} className={p.name === probe?.name ? styles.active : ""}>
+                <span className={`${styles.dot} ${busy ? styles.running : !pb ? "" : pb.ok ? styles.ok : styles.bad}`} />
+                {p.name}
+              </button>
+            );
+          })}
         </nav>
         <div className={styles.telemetry}>
           {live && running ? (
@@ -492,9 +507,19 @@ export default function ModelsDashboard() {
               </span>
             </>
           ) : probe ? <span className={styles.dim}>not built yet{hasRef ? " · showing reference" : ""}</span> : null}
+          {probe && src && (probe.worktrees.length > 1 ? (
+            <span className={styles.trees} title="worktree this build is from">
+              {probe.worktrees.map((w) => (
+                <button key={w.worktree} onClick={() => setPicked((p) => ({ ...p, [probe.name]: w.worktree }))}
+                  className={w.worktree === wt ? styles.active : ""} title={w.branch ? `branch ${w.branch}` : undefined}>
+                  {w.label}{w.working ? " (changing)" : ""}{w.worktree === wt ? "" : w.build ? ` · ${ago(w.build.started, now)}` : " · not built"}
+                </button>
+              ))}
+            </span>
+          ) : <span className={styles.dim} title={src.branch ? `branch ${src.branch}` : undefined}>from {src.label}{src.working ? " (changing)" : ""}</span>)}
           {probe && !probe.fixture && <Published p={probe.published} />}
-          {anyRunning && status?.current?.probe !== probe?.name && (
-            <span className={styles.dim}>building {status?.current?.probe}</span>
+          {anyRunning && !running && (
+            <span className={styles.dim}>building {status?.current?.probe} in {status?.current?.label}</span>
           )}
           {error && <span className={styles.bad}>offline</span>}
         </div>

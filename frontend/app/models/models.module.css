@@ -56,6 +56,10 @@
 .toggle { position: absolute; top: 0.5rem; right: 0.5rem; display: flex; gap: 0.75rem; }
 .toggle button { background: none; border: none; padding: 0; color: #666; font: inherit; cursor: pointer; }
 .toggle .active { color: #ededed; }
+/* Header switch between worktrees that have built the shown probe. */
+.trees { display: inline-flex; gap: 0.6rem; flex-shrink: 0; white-space: nowrap; }
+.trees button { background: none; border: none; padding: 0; color: #666; font: inherit; cursor: pointer; }
+.trees .active { color: #ededed; }
 
 .explode {
   position: absolute; top: 0.5rem; left: 0.75rem; z-index: 1;

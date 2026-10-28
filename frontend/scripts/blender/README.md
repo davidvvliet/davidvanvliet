@@ -49,6 +49,15 @@ Explode (top left) slides the parts apart; hovering shows a part's name, size an
 (click again, click empty space or press Escape to return). Parts are grouped by assembly
 when the model has them (see "Assemblies, joints and poses"), else by name family.
 
+The dashboard reads every git worktree of the repo, not just the checkout it runs from, so
+sessions working in their own worktrees share one dashboard. Each probe lists the worktrees
+that have built it or are changing it (uncommitted changes to its spec, script or refs, or commits
+not on `origin/main`): those changing it first, then newest build first. The header names the
+worktree shown ("from x15") and, when there are several, switches between them; a build
+starting in any worktree takes the page there. File URLs carry the worktree:
+`/api/models/file/<worktree folder>/out/<probe>/sheet.png`. The "live version" check is always
+the server's own checkout, which is what the site ships.
+
 ## Assemblies, joints and poses
 
 Rovers, landers and capsules have moving parts, so their scripts declare structure as they build:
