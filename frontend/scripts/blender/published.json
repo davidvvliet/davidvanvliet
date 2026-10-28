@@ -53,10 +53,10 @@
   }
  },
  "superheavy": {
-  "approved": "2026-10-28 17:32",
+  "approved": "2026-10-28 17:47",
   "inputs": {
-   "specs/superheavy.json": "557144fb7a45c24a",
-   "probes/superheavy.py": "181e85182151f5d1",
+   "specs/superheavy.json": "8a531699b91d058f",
+   "probes/superheavy.py": "6e1528e78792115f",
    "build.py": "6046dd94ba4984fb",
    "blender.json": "7bbc071b6e396ec4",
    "lib/__init__.py": "e3b0c44298fc1c14",
