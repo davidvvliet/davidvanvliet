@@ -1,0 +1,1847 @@
+NASA TECHNICAL NOTE
+
+
+
+
+SUMMARY OF FULL-SCALE LIFT
+AND DRAG CHARACTERISTICS
+OF THE X-15 AIRPLANE
+by Edwin Jo Saltzmm and Darwin Jo Garringer
+Flight Research Center
+Edwards, Cal.3
+
+
+N A T I O N A L AERONAUTICS AND SPACE ADMINISTRATION   WASHINGTON, D. C.   MARCH 1966
+                                                                                         TECH LIBRARY KAFB, NM
+
+
+                                                                                         I I
+                                                                                           IIIl1I11I
+                                                                                                   IIl
+
+
+
+
+SUMMARY O F FULL-SCALE LIFT AND DRAG CHARACTERISTICS
+
+                           OF THE X-15 AIRPLANE
+
+         By Edwin J. Saltzman and Darwin J. G a r r i n g e r
+
+                            Flight R e s e a r c h C e n t e r
+                                E d w a r d s , Calif.
+
+
+
+
+       N A T I O N A L AERONAUTICS AND SPACE ADMINISTRATION
+     For s a l e by the Clearinghouse for Federal Scientific and Technical Information
+                           Springfield, Virginio 22151 - Price $0.70
+              SUMMARY OF FULL-SCALE LIFT AND D M G CHARACTERISTICS
+
+                               OF THE x-15 AIRFU-WE
+
+                By Edwin J. Saltzman and Darwin J. Garringer
+                              Flight Research Center
+
+
+                                      SUMMARY
+
+
+     Full-scale power-off flight lift and drag characteristics of the X-13 air-
+plane are summarized for Mach numbers from 0.63 to 6.0 and for free-stream
+Reynolds numbers from 0.2 x lo6 to 2.8 x 106 per foot. Comparisons are made
+between flight results and the wind-tunnel data that most nearly simulate the
+full-scale flight conditions.
+
+     Analysis of the results shows that 95 percent of the maximum supersonic
+lift-drag ratio can be obtained over an angle-of-attack range from about 7" to
+12". Thus, a near-optimum post-burnout gliding range can be approximated by
+flying within this angle-of-attack band throughout the supersonic speed range.
+
+     There is a strong tendency toward uniformity of pressures over adjacent
+base surfaces, even at low supersonic speeds, despite great differences in
+forebody geometry. This tendency prevails for gliding flight as well as when
+the propulsive jet exhausts from the base region.
+
+     The apparent effect of a sting support on the base pressure of an X-15
+wind-tunnel model was propagated onto the vertical-fin base at least one sting
+diameter above and about one-half sting diameter forward of the sting-model
+intercept at Mach numbers between 2.5 and 3.5. That is, the sting effect was
+propagated significantly beyond the fuselage base annulus. For the X-15, this
+effect amounts to from 8 to 15 percent of the base drag between these Mach
+numbers. For some future vehicles and missions, proper accounting of this
+interference effect may be necessary to adequately predict the full-scale
+transonic and supersonic performance.
+
+     Specially conducted wind-tunnel-model drag studies, when extrapolated to
+full-scale Reynolds numbers by the T' (reference temperature) method, accu-
+rately predicted the full-scale zero-lift drag minus base drag of the X-15 at
+Mach numbers of 2.5 and 3.0.
+
+     The trimmed drag-due-to-liftfactor is 43 percent higher than the inverse
+                          I
+of the lift-curve slope - at a Mach number of 5.       The major part of this
+                         cLa
+difference represents the relatively large component of trim drag that accom-
+panies the X - 1 5 configuration.
+                                     INTRODUCTION
+
+
+     The X-15 airplane is a unique research facility that provides full-scale
+aerodynamic data throughout a Mach number range extending from landing veloc-
+ities to six times the speed of sound. The full-scale drag characteristics of
+the X-15 have been measured throughout much of this speed range and are
+reported in references 1 to 3. Reference 3 includes drag results up to the
+highest velocities attained; however, these data are limited and provide only
+a cursory examination of the drag characteristics at high Mach numbers.
+
+      Additional and more detailed information on the high-speed drag of the
+X-15 is presented herein. The previously reported results are included in
+order to make a relatively complete set of power-off drag polars available in
+one report. Comparisons are made between full-scale flight data and wind-
+tunnel tests that most nearly simulate the full-scale flow conditions and
+geometry.
+
+     The data presented were obtained from flight tests conducted at the NASA
+Flight Research Center, Edwards, Calif., on two X-15 airplanes that are
+essentially aerodynamically Identical. Flight Mach numbers varied from about
+0.65 to 6.0, and free-stream Reynolds numbers ranged from 10 x lo6 to 140 x 106,
+based on fuselage length. The flights considered were made from late 1959 to
+mid-1963.
+
+
+                                          SYMBOLS
+
+
+A           aspect ratio
+
+Ab          base area, ft2
+
+A,          cross-sectional area, ft2
+
+“2          measured longitudinal acceleration (along aircraft reference axis),
+              g units
+
+an          normal acceleration (load factor), g units
+
+                                D
+CD          drag coefficient, -
+                               qs
+
+            base-drag coefficient,
+                                     Db
+                                     -
+c%                                   qs
+
+            speed-brake drag coefficient based upon frontal area (13.8 ft2 ) of
+(CD~~)’
+              deflected speed brake
+
+LcD         increment in drag coefficient (reference area S)
+
+
+2
+                                                                           - ....... ..
+
+
+
+
+      drag-due-to-liftfactor
+
+
+                          L
+CL    lift coefficient,   -
+                            qs
+
+      slope of the lift curve with respect to a , deg-l or rad-’
+
+
+      base-pressure coefficient, p b - p
+                                    q
+      chord length, ft
+
+      drag force along flight path, lb
+      gravitational acceleration, ft/sec 2
+
+      diameter or thickness of a base, ft
+
+      lift force normal to the flight path, lb
+
+      length, ft
+
+      free-stream Mach number
+
+      free-stream static pressure, lb/ft2
+
+      base static pressure, lb/ft2
+
+      free-stream dynamic pressure, 0.7M2p, lb/ft*
+
+R                                  -
+      free-stream Reynolds number, V I P
+                                       c1
+
+S     wing area, ftz
+
+Tad   adiabatic-wall temperature, OR
+
+‘PW   wall temperature, OR
+
+V     true airspeed, ft/sec
+
+w     airplane weight, lb
+
+a     angle of attack, deg
+
+n     error in corresponding parameter when used as a prefix for M,   W,
+        “2, a,     an,PY and v
+
+
+                                                                               3
+ 6           boundary-layer thickness,                  ft
+
+E             e r r o r i n angle of a t t a c k caused by upwash, deg
+
+P             absolute v i s c o s i t y , l b - s e c / f t 2
+
+ P            a i r density, s l u g s / f t 3
+
+Subscripts :
+
+b            base
+
+max          maximum
+
+min          minimum
+
+SB           speed brake
+
+0            zero l i f t
+
+
+
+
+        The X-15 i s a single-place, low-aspect-ratio monoplane ( f i g . 1) designed
+f o r aerodynamic and s t r u c t u r a l research a t v e l o c i t i e s up t o s i x times t h e speed
+of sound. Because t h e X-15 i s a rocket-powered a i r c r a f t , which must c a r r y both
+f u e l and oxygen i n i t s tanks, t h e p r o p e l l a n t volume i s correspondingly l i m i t e d .
+Therefore, t h e design performance (M x 6 ) i s achieved by launching t h e X-15
+from a modified B-52 a i r p l a n e a t an a l t i t u d e o f about 45,000 f e e t and a Mach
+number of 0.8.
+
+        For i t s e a r l i e s t f l i g h t s , t h e X-15 w a s powered by two four-chamber rocket
+engines (LR11)with a combined thrust of approximately 16,000 pounds f o r t h e
+major p a r t of t h e powered t r a j e c t o r y . This i n s t a l l a t i o n provided about 4 min-
+u t e s of powered f l i g h t and a maximum Mach number somewhat g r e a t e r than 3. I n
+1960, a l a r g e single-chamber rocket engine (LR99) w a s i n s t a l l e d t h a t provides
+approximately 58,000 pounds of t h r u s t f o r most of t h e powered t r a j e c t o r y . A t
+t h i s t h r u s t l e v e l , t h e f u e l i s exhausted i n about 85 seconds and a maximum
+Mach number of 6 can be achieved.
+
+          The configuration i n which t h e two I;Ru. powerplants were used i s r e f e r r e d
+t o h e r e i n as t h e i n t e r i m configuration, and t h e configuration with t h e l a r g e
+single-chamber IE99 engine i s designated t h e b a s i c configuration.           The i n s t a l -
+l a t i o n of t h e LR99 engine increased t h e fuselage base a r e a by about 10 percent.
+Closeup views of t h e a f t p o r t i o n s of each configuration a r e shown i n f i g -
+ures 2 ( a ) and 2 ( b ) .
+
+       Photographs of t h e a i r p l a n e i n t h e b a s i c and t h e i n t e r i m configurations
+a r e shown i n f i g u r e s 3(a) and 3(b), r e s p e c t i v e l y . As can be seen, a slender
+airspeed boom-vane system was used i n t h e i n t e r i m configuration t o obtain Mach
+number and flow d i r e c t i o n . A s p h e r i c a l flow-direction sensor was used f o r t h e
+
+4
+
+
+
+                                                                                                            I
+I
+
+
+
+    b a s i c configuration. This sensor, commonly termed t h e " b a l l nose," replaced
+    t h e boom and vane system a t t h e higher Mach numbers where aerodynamic heating
+    can a f f e c t t h e r e l i a b i l i t y of vane nulling. Closeups of t h e vane-boom and
+    ball-nose systems a r e shown i n f i g u r e s & ( a ) and 4 ( b ) , r e s p e c t i v e l y .
+
+              Detailed p h y s i c a l c h a r a c t e r i s t i c s of t h e X-15 a i r p l a n e i n t h e b a s i c con-
+    f i g u r a t i o n a r e presented i n t a b l e I, and t h e c r o s s - s e c t i o n a l a r e a d i s t r i b u t i o n
+    of each configuration i s shown i n f i g u r e 3 .
+
+
+                                                       INSTRUMENTATION
+
+
+                                                   Interim Configuration
+
+              For t h e f l i g h t s made with t h e i n t e r i m configuration, standard NASA
+    internal-recording instruments were used t o measure q u a n t i t i e s p e r t i n e n t t o t h e
+    d e f i n i t i o n of l i f t and drag (ref. 4 ) . Accelerometers were positioned as c l o s e
+    t o t h e a i r p l a n e c e n t e r of g r a v i t y as p r a c t i c a l , and c o r r e c t i o n s were made t o
+    compensate f o r any remaining displacement. Free-stream impact and s t a t i c pres-
+    sures were surveyed from nose-boom s t a t i o n s 7 1 inches and 63 inches, respec-
+    t i v e l y , ahead of t h e i n t e r s e c t i o n of t h e a i r p l a n e nose and t h e boom. Angle of
+    a t t a c k , which w a s measured by a f l o a t i n g vane about 43 inches forward of t h i s
+    i n t e r s e c t i o n , w a s c o r r e c t e d f o r t h e e f f e c t s of p i t c h i n g v e l o c i t y and i n e r t i a
+    bending of t h e boom. Corrections f o r boom bending caused by a i r l o a d s were
+    found t o be n e g l i g i b l e .
+
+         The base-pressure instrumentation c o n s i s t e d of a standard NASA 2 4 - c e l l
+    photorecording manometer. D e t a i l s on o r i f i c e l o c a t i o n s a r e given i n
+    reference 5 .
+
+
+                                                    Basic Configuration
+
+              The instrumentation f o r t h e b a s i c configuration remained e s s e n t i a l l y t h e
+    same as f o r t h e i n t e r i m configuration except t h a t angle of a t t a c k and angle of
+    s i d e s l i p were obtained f r o m t h e b a l l nose, and Mach number and ambient p r e s s u r e
+    were obtained by means of radiosonde balloons and radar t r a c k i n g of t h e a i r -
+    c r a f t . The method used t o o b t a i n Mach number and s t a t i c pressure i s discussed
+    i n d e t a i l i n reference 6.
+
+        Base p r e s s u r e w a s measured by a standard NASA = - c e l l photorecording
+    manometer. D e t a i l s on o r i f i c e l o c a t i o n s are included i n reference 5 .
+
+
+                                                              METHOD
+
+
+             The accelerometer method, which i s described i n reference 4, w a s used t o
+    determine l i f t and drag. For power-off conditions, t h e following r e l a t i o n -
+    s h i p s apply:
+
+                                                                                                                                   5
+
+
+
+I
+                                             ERROR AND RELIABILITY
+
+                                            Estimated E r r o r i n Drag
+
+         The following t a b l e shows t h e estimated maximum e r r o r s contributed by
+s e v e r a l sources t o t h e drag c o e f f i c i e n t f o r t h e boom-vane system a t a Mach
+number of 3 and t h e ball-nose system a t a Mach number of 5. The dynamic pres-
+s u r e f o r each exaurple i s 500 l b / f t 2 .
+
+
+                 Boom-vane system                                  Ball-nose system
+                        (M = 3)     .   .
+                                                                           (M = 5 )
+
+
+      I    Error source
+
+          AM = i-0.03
+                                                            Error source
+
+                                                          Ap = k1.5 l b / f t 2
+                                                                                      *CD
+                                                                                      -,
+                                                                                      CD
+                                                                                                percent
+
+
+          AW = k3OO l b                                   AV = k5O f t / s e c
+          Aa, = fO.OO5g                                   AW = +3OO l b
+          La = k0.5"                                      Aa, = +O.O@g
+          Aan = k00.03g                                   La = +l.oo
+                                                              = +o.o3g
+
+
+
+      The e r r o r s l i s t e d i n t h e t a b l e above tend t o be random, both i n magnitude
+and sign, up t o t h e values shown. Thus, it i s obvious t h a t t h e n e t e r r o r i s
+                                                                     not t h e absolute sum of t h e
+                                                                     numbers shown but i s t h e al-
+                                                                     gebraic sum of numbers which
+                                                                     range somewhat randomly with-
+                                                                     i n t h e limits given. On t h i s
+                                                                     basis, t h e t a b l e on t h e left
+                                                                     i s included t o show t h e e r r o r
+                                                                     t h a t i s believed t o apply f o r
+                                                                     f a i r e d values of drag c o e f f i -
+                                                                     c i e n t , f o r a dynamic p r e s s u r e
+                                                                     of 500 l b / f t 2 . This value of
+                                                                     dynamic pressure i s used be-
+                                                                     cause it represents a nominal
+value f o r t h e range i n which drag d a t a were obtained. A t higher dynamic pres-
+sures, t h e percentage e r r o r i n drag c o e f f i c i e n t s would be l e s s and, a t lower
+dynamic pressures, t h e percentage e r r o r would be l a r g e r . It should be noted
+
+6
+
+
+
+                                                                                           II   111111111111111 II I I   I
+t h a t drag parameters derived from d r a g d a t a f a i r e d with r e s p e c t t o Mach number
+have a smaller e r r o r than noted f o r t h e s p e c i f i c Mach numbers.
+
+
+                                  Angle-of-Attack Measuring Systems
+
+      The boom-vane and ball-nose angle-of-attack systems a r e each subject t o
+upwash. Inasmuch as t h e o r i f i c e s of t h e b a l l nose a r e much c l o s e r t o t h e X-l5
+forebody than t h e angle-of-attack vane, t h i s system should be a f f e c t e d more by
+upwash than t h e n u l l i n g vane of t h e boom-vane system. The l a r g e d i f f e r e n c e s
+i n subsonic l i f t - c u r v e slope obtained by t h e two systems s u b s t a n t i a t e t h i s
+assumption ( s e e DISCUSSION OF RESULTS).
+
+     Experience with a s i m i l a r boom-vane system on a YF-102 airplane ( r e f . 7)
+provided angle-of-attack values accurate t o about fO.25'.                                Figures 6(a) and 6 ( b )
+show t h a t t h e subsonic upwash of t h e X-15 and t h e YF-102 boom, fuselage, and
+wing c a l c u l a t e d by t h e methods of references 8 and 9 i s of approximately t h e
+same magnitude. These t h e o r e t i c a l values of upwash a r e compared i n order t o
+demonstrate t h a t t h e upwash experienced by t h e angle-of-attack vane on t h e X-15
+should be no g r e a t e r ( t h e o r e t i c a l l y , s l i g h t l y l e s s ) than on t h e YF-102, which,
+as previously indicated, w a s very s m a l l . Therefore, on t h e b a s i s of t h e favor-
+able f l i g h t experience reported i n reference 7, t h e t h e o r e t i c a l correspondence
+shown i n f i g u r e 6, and t h e wind-tunnel assessment of such boom-vane systems i n
+reference 10, t h e boom vane i s regarded as t h e most r e l i a b l e system f o r t h e
+X-15 a t subsonic and t r a n s o n i c speeds.
+     The estimated maximum e r r o r i n angle of a t t a c k assigned t h e X-15 boom-vane
+system (0.5") exceeds t h e e r r o r observed f o r t h e YF-102 experiment of r e f e r -
+ence 7 (O.25"), i n which t h e d a t a were obtained from s e l e c t e d maneuvers, and
+procedural e r r o r s and t a r e e f f e c t s were minimized. Unfortunately, such c a r e
+could not be exercised f o r many X-15 f l i g h t s , and a l a r g e r maximum e r r o r m u s t
+be assumed i n making an e r r o r a n a l y s i s f o r t h i s paper.
+
+          The estimated maximum e r r o r i n angle of a t t a c k assigned t h e ball-nose
+system (k1.0") i s a l s o much l a r g e r than t h e design s p e c i f i c a t i o n f o r n u l l i n g
+e r r o r 1 of t h e b a l l sensor (fO.l"), obtained from reference 11. The estimated
+maximum e r r o r i s assigned t o account f o r recorder-system e r r o r and procedural
+e r r o r s which, f o r t h e s e data, could not be defined with c e r t a i n t y .
+
+
+                                                TEST CONDITIONS
+
+
+           The drag d a t a presented i n t h i s paper r e p r e s e n t g l i d i n g f l i g h t ( i . e . , t h e
+rocket engine was not burning). Data were obtained during gradual push-down
+and pull-up maneuvers. The maximum range of angle of a t t a c k w a s from near 0"
+t o 25", and angle of s i d e s l i p was maintained a t n e g l i g i b l e values. The lower
+j e t t i s o n a b l e f i n w a s attached f o r all f l i g h t s , and t h e configuration was clean
+except where it i s i n d i c a t e d t h a t t h e speed brakes were deflected. Mach
+
+         ?"ling        e r r o r i s the l i m i t o f t h e sensor's a b i l i t y t o point at t h e l o c a l
+s t a g n a t i o n streamline and, hence, does not include recorder e r r o r .
+
+                                                                                                                   7
+number ranged from about 0.65 t o 6.0 and free-stream Reynolds number v a r i e d
+from 0 . 2 ’ ~        106 t o 2.8 x 106 p e r f o o t . Center-of-gravity p o s i t i o n v a r i e d be-
+tween 17 percent and 2 3 percent of t h e mean aerodynamic chord. For t h e i n t e r i m
+configuration, t h e c e n t e r of g r a v i t y was normally nearer t h e high end of t h i s
+range; f o r t h e b a s i c configuration it w a s u s u a l l y n e a r e r t h e low end. The d a t a
+i n t h i s paper were chosen f o r conditions of zero or very low values of p i t c h i n g
+a c c e l e r a t i o n . Experience has shown t h a t , when t h e s e conditions a r e maintained,
+t h e flight-measured drag r e p r e s e n t s trimmed conditions.
+
+
+                                         DISCUSSION OF RESULTS
+
+
+         The b a s i c f l i g h t d a t a of t h i s study a r e presented i n figures 7(a) t o 7(f),
+i n which l i f t c o e f f i c i e n t i s p l o t t e d as a f u n c t i o n of angle o f a t t a c k and drag
+c o e f f i c i e n t . The d a t a f o r a given Mach number were, i n many cases, obtained
+from more than one f l i g h t . The Mach number v a r i a t i o n within a p o l a r i s much
+smaller a t t h e lower Mach numbers than a t t h e higher values. Most of t h e sub-
+sequent summary f i g u r e s of f l i g h t d a t a a r e derived from these b a s i c d a t a .
+
+
+                                            Lift-Curve Slope
+
+       The slope of t h e l i f t curve           C b i s shown i n f i g u r e 8 as a function of
+Mach number f o r l i f t c o e f f i c i e n t s ranging f r o m t h e lowest values obtained t o
+near maximum l i f t - d r a g r a t i o . The slope from t h e b a s i c configuration i n which
+angle of a t t a c k w a s derived from t h e b a l l nose i s s i g n i f i c a n t l y lower than t h a t
+from t h e i n t e r i m boom-vane configuration a t t r a n s o n i c and subsonic speeds.
+These ball-nose d a t a are not included i n f i g u r e 7. Both configurations experi-
+ence upwash e f f e c t s ; however, f o r t h e reasons noted i n t h e ERROR AND RELI-
+ABILITY section, t h e slopes derived f r o m t h e boom-vane system a r e considered t o
+be t h e more r e l i a b l e values a t t h e subsonic and t r a n s o n i c speeds. A t t h e
+higher Mach numbers, t h e b a l l nose i s used t o o b t a i n angle of a t t a c k f o r t h e
+b a s i c configuration. 1
+
+      Values o f l i f t - c u r v e slope obtained from wind-tunnel models of t h e f i n a l
+x-15 configuration a r e a l s o shown i n f i g u r e 8. These data, obtained from r e f -
+erences 14, 15, and 16, have been adjusted to t r i m about t h e 20-percent mean-
+aerodynamic-chord l o c a t i o n as w e l l as l o c a t i o n s of ?&-percent mean aerodynamic
+chord from t h e 20-percent mean-aerodynamic-chord p o s i t i o n . The model d a t a
+shown i n f i g u r e 8 are, consequently, presented as an increment which r e p r e s e n t s
+t h e spread i n l i f t - c u r v e slope caused by a corresponding s h i f t of &percent
+mean aerodynamic chord i n t h e center-of-gravity p o s i t i o n from t h e median
+                            -
+
+         lThe r e s u l t s of reference 12 i n conjunction with unpublished wind-tunnel
+d a t a i n d i c a t e t h a t forebody upwash and l i p e f f e c t s on t h e ball-nose performance
+a r e n e g l i g i b l e above M = 1.8. Reference 13 provides a d d i t i o n a l information on
+t h e ball-nose and nose-boom sensors. The study compares t h e i n - f l i g h t perform-
+ance of t h e ball-nose sensor with X-15 wind-tunnel s t u d i e s , which include an
+e a r l y X-15 configuration a t subsonic Mach numbers.
+
+
+8
+p o s i t i o n . This s h i f t i s s l i g h t l y g r e a t e r than was a c t u a l l y experienced from
+f l i g h t - t o - f l i g h t with t h e f u l l - s c a l e a i r p l a n e .
+
+         The primary purpose of t h e wind-tunnel t e s t s was t o d e f i n e t h e s t a b i l i t y
+and c o n t r o l c h a r a c t e r i s t i c s of t h e airplane, a s opposed t o a d e t a i l e d l i f t and
+drag a n a l y s i s . Consequently, i n t e r p o l a t i o n over a considerable range of l i f t
+c o e f f i c i e n t was r e q u i r e d t o derive t h e slope values shown. The f l i g h t ( f a i r e d
+curve) and model r e s u l t s compare well a t supersonic speeds i n s p i t e of t h e
+interpolation.
+
+
+                                                              Drag
+
+          Figure 9 shows power-off drag c o e f f i c i e n t as a function of Mach number f o r
+l i f t c o e f f i c i e n t s from 0 t o 0.6.          These curves were derived by c r o s s - p l o t t i n g
+t h e drag p o l a r s of f i g u r e 7. The drag f o r zero l i f t i n c r e a s e s about twofold i n
+t r a v e r s i n g t h e t r a n s o n i c drag r i s e . A s i g n i f i c a n t p a r t of t h e z e r o - l i f t drag
+i s base drag at t h e lower supersonic Mach numbers, and t h e steady decrease i n
+z e r o - l i f t d r a g as Mach number i s increased i s caused p r i m a r i l y by t h e decay o f
+base drag. The r a p i d i n c r e a s e i n drag with l i f t i s evident from t h e d i s t r i b u -
+t i o n of t h e l i f t c o e f f i c i e n t s .
+
+         A more graphic example of t h e drag-due-to-lift i s shown i n f i g u r e 10 f o r
+t h e i n t e r i m configuration and t h e b a s i c configuration. The primary cause of
+t h e displacement of t h e s e curves i s believed t o be d i f f e r e n c e s i n center-of-
+g r a v i t y l o c a t i o n , which r e q u i r e a d i f f e r e n t h o r i z o n t a l - s t a b i l i z e r p o s i t i o n to
+maintain a given l i f t c o e f f i c i e n t . The model d a t a of reference 14 i n d i c a t e
+t h a t a &-percent s h i f t i n center-of-gravity p o s i t i o n would approximate t h i s
+displacement, which amounts t o about a 10-percent change i n drag-due-to-lift
+f a c t o r a t M = 3.0.           The l i f t range considered i n deriving t h e drag-due-to-lift
+f a c t o r extends from zero t o t h e region i n which (L/D)max                                     i s obtained. The
+corresponding drag-due-to-lift d a t a o f r e f e r e n c e 3 were based on r e l a t i v e l y
+l i m i t e d f l i g h t experience and f a i l e d t o discriminate between t h e two configu-
+r a t i o n s i n terms of drag-due-to-lift                  .
+        Included i n f i g u r e 10 a r e values f o r                  -
+                                                                        fill
+                                                                             and - which correspond t o
+                                                                                        cLa
+t h e o r e t i c a l limits of t h e drag-due-to-lift f a c t o r f o r f u l l y developed and zero
+leading-edge suction, r e s p e c t i v e l y , without regard f o r t r i m . A t subsonic
+speeds, t h e measured drag-due-to-lift f a c t o r i s c l o s e s t t o t h e zero s u c t i o n
+l e v e l , as would be expected f o r a configuration with a predominant body and
+s m a l l , t h i n wings. A t supersonic speeds, t h e measured drag-due-to-lift f a c t o r
+i s s i g n i f i c a n t l y higher than         - which i s o f t e n used as an approximation f o r
+                                                  cLay                      ACD
+untrimmed drag-due-to-lift.                      A t M = 5 , f o r example, - i s 43 percent
+                       1                                                    ACL~
+higher than  -. Most of t h i s d i f f e r e n c e i s a t t r i b u t a b l e t o high t r i m drag.
+                       I
+
+             cLa                                                                ACD
+This observation i s supported by wind-tunnel d a t a wherein -= -                       I- f o r zero
+                                                                                ACL2    C&
+
+
+                                                                                                                                  9
+ s t a b i l i z e r p o s i t i o n , but, f o r trim,   - w a s much t h e l a r g e r            (M = 3,
+ r e f . 14).                                             ACL~
+
+           Values of drag-due-to-lift f a c t o r obtained from wind-tunnel-model t e s t s
+ ( r e f s . 14, 15, and 16) a r e also included i n f i g u r e 10. These d a t a are derived
+ from t h e same t e s t s as t h e model l i f t - c u r v e - s l o p e d a t a of f i g u r e 8 and a r e
+ p l o t t e d i n a similar manner s o t h a t t h e e f f e c t of a &percent s h i f t i n center-
+ of-gravity p o s i t i o n may be seen. The r e s u l t i n g change i n t h e amount of
+ h o r i z o n t a l - s t a b i l i z e r d e f l e c t i o n required f o r t r i m has a l a r g e e f f e c t on drag-
+ d u e - t o - l i f t f a c t o r a t supersonic speeds as compared t o t h e influence observed
+ on t h e l i f t - c u r v e slopes of f i g u r e 8.
+
+         This s e n s i t i v i t y t o center-of-gravity l o c a t i o n , which i s evident f o r both
+ t h e f u l l - s c a l e and t h e model r e s u l t s , emphasizes t h a t much a t t e n t i o n should be
+ devoted t o t r i m c h a r a c t e r i s t i c s and c o n t r o l of center-of-gravity p o s i t i o n
+ during t h e e a r l y design and wind-tunnel-model t e s t i n g of short-coupled super-
+ sonic and hypersonic a i r c r a f t .
+
+          An attempt w a s made t o estimate t h e X-13 t r i m drag by a n a l y t i c a l methods
+i n reference 3. It was found t h a t both supersonic and hypersonic t h e o r y sig-
+n i f i c a n t l y underestimated t h e s t a b i l i z e r d e f l e c t i o n required f o r t r i m . This
+discrepancy w a s a r e s u l t o f t h e complex flow f i e l d i n which t h e h o r i z o n t a l
+s t a b i l i z e r i s immersed, even a t low d e f l e c t i o n angles, complicated f u r t h e r by
+t h e l a r g e gap which occurs along t h e inboard edge of t h e s t a b i l i z e r as deflec-
+t i o n angles become l a r g e .
+
+
+                                                  Lift-Drag Ratio
+     The r a t h e r s i g n i f i c a n t increase i n t h e drag-due-to-lift f a c t o r with Mach
+number would r e s u l t i n a s t e a d i l y d e t e r i o r a t i n g (L/D),, curve f o r an air-
+plane with more conventional afterbody geometry than t h e X-15. The high tran-
+ sonic base drag of t h e X-15, caused by t h e l a r g e b l u n t base, reduces with Mach
+number as t h e drag-due-to-lift i n c r e a s e s . The n e t r e s u l t i s an (L/D)m,
+curve t h a t i s depressed by base drag a t t h e lower supersonic Mach numbers and
+by high drag-due-to-lift a t t h e higher Mach numbers. The maximum l i f t - d r a g -
+r a t i o curve i s , thus, r e l a t i v e l y i n s e n s i t i v e t o Mach number throughout t h e
+supersonic speed range. This i n s e n s i t i v i t y i s shown i n f i g u r e 11, i n which t h e
+l e v e l of (L/D),,           throughout t h e higher speeds i s within 12 percent of t h e
+value a t M = 1.5. The decrement i n m a x i ” l i f t - d r a g r a t i o a s s o c i a t e d with
+t h e t r a n s o n i c drag r i s e i s about one-third of t h e subsonic value of (L/D)max.
+
+       Figure I 2 shows t h e l i f t c o e f f i c i e n t and angle of a t t a c k needed t o achieve
+( L/D 1”    as Mach number i s v a r i e d . The l i f t c o e f f i c i e n t required v a r i e s over
+a t h r e e f o l d range; however, t h e corresponding angle of a t t a c k i s r e l a t i v e l y
+i n v a r i a n t through t h e supersonic Mach number.
+
+           Figure l3( a ) shows t h e r e l a t i v e l y flat-topped v a r i a t i o n of l i f t - d r a g r a t i o
+with angle of a t t a c k f o r two s e l e c t e d Mach numbers.        The t i c k s on t h e curves
+i n d i c a t e t h e range of angle of a t t a c k within which 95 percent of t h e maximum
+l i f t - d r a g r a t i o can be obtained. The shaded a r e a i n f i g u r e l 3 ( b ) r e p r e s e n t s
+
+10
+
+
+
+                                                                                                                             I
+t h e range of angle of a t t a c k t h a t can be flown throughout t h e Mach number
+range, while s t i l l obtaining 95 percent of (L/D)ma.          Thus, f o r t h e X-15,                    a
+near-optimum post-burnout g l i d i n g range can be approximated by f l y i n g a t any
+angle of a t t a c k between about 7" and 12' throughout t h e e n t i r e supersonic speed
+range. This f e a t u r e i s c h a r a c t e r i s t i c , of course, of a i r c r a f t t h a t have a low
+value of maximum l i f t - d r a g r a t i o .
+
+
+                                                  Base D r a g
+
+         As mentioned e a r l i e r , t h e shape of t h e X-15 l i f t - d r a g - r a t i o curve i s de-
+pendent on t h e decay of base drag with Mach number. Base-drag c o e f f i c i e n t as a
+f u n c t i o n of Mach number i s shown i n f i g u r e 1 4 ( a ) . These d a t a a r e derived from
+t h e base-pressure d a t a presented i n reference 5 . The short-dashed l i n e s i n t h e
+transonic region do not r e p r e s e n t base-drag-coefficient l e v e l s but merely serve
+t o connect t h e subsonic d a t a with t h e supersonic d a t a f o r a given base compo-
+nent. The long-dashed curve shows t h e r a t i o of base drag t o z e r o - l i f t drag as
+a function of Mach number. The e f f e c t of base drag on t h e terminal-phase
+performancc o f a blunt-base r e e n t r y v e h i c l e or boost-glide a i r c r a f t may be
+l a r g e because, as shown i n t h e f i g u r e , base drag becomes a dominant f a c t o r a t
+subsonic and low supersonic speeds and i s s i g n i f i c a n t even a t M = 6.
+
+        Figure 1 4 ( b ) shows t h e base-drag increment p e r u n i t a r e a f o r t h e v e r t i c a l
+f i n s ( t h e base being preceded by s h o r t quasi-two-dimensional s u r f a c e s ) and f o r
+t h e s i d e f a i r i n g ( i n t h i s instance, preceded by much longer quasi-three-
+dimensional s u r f a c e s ) . The base-drag-coefficient increments per u n i t of a r e a
+a r e n e a r l y equal, even a t t h e lower speeds where flow phenomena normally d i s -
+criminate between two-dimensional and three-dimensional shapes. This condition
+i s not c o n s i s t e n t with body-of-revolution and wing or wedge turbulent-flow
+base-drag r e s u l t s obtained s e p a r a t e l y ( r e f s . 17 and 18). The s i d e f a i r i n g , of
+course, i s not a body of revolution.                 The shape o f t h i s base and t h e f a c t t h a t
+it i s preceded by a long flow l e n g t h            (i= 23)        accompanied by a r e l a t i v e l y
+t h i c k boundary l a y e r   (E =    0.3)     suggest t h a t i t s base-pressure (drag) charac-
+t e r i s t i c s would approach those of a body of revolution. Therefore, representa-
+t i v e values of two- and three-dimensional base-drag increments from r e f e r -
+ence 17 a r e included i n f i g u r e 1 4 ( b ) t o i l l u s t r a t e how far t h e s i d e - f a i r i n g
+values depart from body-of-revolution l e v e l s . The observation t h a t t h e drag
+increments p e r u n i t a r e a a r e s i m i l a r f o r t h e f i n and t h e s i d e - f a i r i n g bases i s
+c o n s i s t e n t with t h e r e s u l t s of reference 5 . I n t h a t study, t h e "dead air"
+region behind t h e l a r g e base components was found t o serve as an e f f e c t i v e
+channel f o r equalizing t h e p r e s s u r e over t h e bases during rocket-engine opera-
+t i o n as w e l l as during g l i d i n g f l i g h t . Apparently, f o r l a r g e adjacent base
+areas, t h e r e i s a s t r o n g tendency toward uniformity of pressure over t h e
+s e v e r a l bases, d e s p i t e g r e a t d i f f e r e n c e s of forebody geometry, even a t r e l a -
+t i v e l y l o w supersonic speeds.
+
+          The almost complete dependence of t h e shape of z e r o - l i f t drag upon t h e
+v a r i a t i o n of base drag i s shown i n f i g u r e 15. The increment of drag sepa-
+r a t i n g t h e two curves is, of course, composed p r i m a r i l y of wave and f r i c t i o n
+drag.
+                                                                                                                11
+I I111111111 I        II   1111 I   I
+
+
+
+
+                               Comparison of F l i g h t and Wind-Tunnel Minimum Drag                 ( C D ~- Ca)
+                      F r i c t i o n drag, per se, cannot be r e a d i l y defined f o r t h e X-13; however,
+                 an assessment of t h e e f f e c t of Reynolds number on f r i c t i o n drag i s reported
+                 i n reference 3. The results of t h e assessment a r e shown i n f i g u r e s 16(a)
+             and 16(b) as t h e v a r i a t i o n of z e r o - l i f t drag minus base drag with Reynolds
+             number. The experimental d a t a f o r low Reynolds numbers a r e represented by
+             1/15-scale wind-tunnel-model r e s u l t s ; t h e interim-configuration X-13 provided
+             t h e f u l l - s c a l e Reynolds number data. For t h e Mach numbers considered, t h e
+             T' method of r e f e r e n c e s 19 and 20 provided a s a t i s f a c t o r y e x t r a p o l a t i o n of
+             wind-tunnel drag t o t h e f u l l - s c a l e Reynolds numbers.
+
+                      For t h e s e extrapolations, using t h e T' method, t h e recovery tempera-
+             t u r e w a s assumed t o be t h a t f o r an adiabatic, smooth, f l a t p l a t e with a
+             t u r b u l e n t boundary l a y e r and a recovery f a c t o r of 0.88. The skin temperatures
+             on t h e X-15 a r e not i n equilibrium, however. Thus, a t t h e f u l l - s c a l e Reynolds
+             number and M = 3, a c a l c u l a t e d increment of skin-friction-drag c o e f f i c i e n t
+             w a s included corresponding t o t h e minimum temperature measured on t h e a f t
+             fuselage (Tad = 538" F and (Tw)min = 100" F ) . Therefore, t h e most exact
+             e x t r a p o l a t i o n from t h e model Reynolds numbers t o f u l l s c a l e would r e s u l t i n a
+             value between t h e c a l c u l a t e d l e v e l s f o r Tad and (Tw)min.         For these
+             extrapolations it w a s assumed t h a t wave drag d i d not vary with Reynolds
+             number, i n t h a t boundary-layer-displacement e f f e c t s a r e n e g l i g i b l e on t h e
+             X-15 configuration a t Mach numbers up t o 3.
+                       It should be emphasized t h a t t h e agreement shown i n f i g u r e 16 w a s
+             obtained through a n a l y s i s of t h e optimum f l i g h t maneuvers and by means of
+             s p e c i a l l y conducted wind-tunnel t e s t s i n which a x i a l f o r c e and dynamic pres-
+             s u r e were t h e primary measurements. The wind-tunnel measurements were made
+             on a p r e c i s e l y s c a l e d model t h a t included all of t h e protuberances on t h e
+             airplane, such as exhaust p o r t s , camera f a i r i n g s , and antennae. Transition
+             on t h e model w a s f i x e d near s t a t i o n s corresponding t o those t h a t experienced
+             t r a n s i t i o n i n f u l l - s c a l e f l i g h t , and t h e increment of drag a t t r i b u t a b l e t o
+             t h e t r i p p i n g device w a s subtracted.
+
+                      I n addition, it should be noted t h a t t h e X-15 a i r p l a n e and t h e model
+            were both very r i g i d , t h u s circumventing f l e x i b i l i t y problems and any sub-
+            sequent e f f e c t s on t r i m . Also, t h e X-13 has no leading-edge s l a t s , s p o i l e r s ,
+            or hinged rudders t h a t would add u n c e r t a i n t y because of p o s s i b l e leakage, t o
+            a comparison of model and f u l l - s c a l e r e s u l t s . Furthermore, t h e r e were no i n -
+            l e t airflows, propulsive j e t s , o r bypass airflows t o simulate on t h e model,
+            and t h e problem of measuring t h r u s t i n f l i g h t w a s avoided by considering only
+            g l i d i n g f l i g h t . Therefore, t h e comparison shown i n f i g u r e 16 represents an
+            experiment i n which many of t h e complicating f a c t o r s associated with f l e x i b l e ,
+            air-breathing a i r c r a f t were avoided. Even under such favorable conditions,
+            however, it was necessary t o s u b t r a c t t h e bas e drag from both t h e wind-tunnel-
+            model and f u l l - s c a l e results because t h e model t e s t s could not simulate t h e
+            base component of drag.
+         "he study of reference 3, i n which t h e base drag of t h e model w a s care-
+f u l l y measured and subtracted, provides a unique opportunity t o examine t h e
+e x t e n t of s t i n g e f f e c t s on base pressure. A t l e a s t two sources of e r r o r are
+commonly recognized i n t h e simulation of base d r a g from wind-tunnel t e s t s of
+sting-supported models, assuming t h a t t h e afterbody geometry i s c o r r e c t , t h e
+boundary-layer condition i s known ( i . e . , t u r b u l e n t or laminar), shock r e f l e c -
+t i o n f r o m t h e t u n n e l w a l l has been avoided, and exhaust e f f e c t s axe excluded.
+One source of e r r o r would be t h e s t i n g e f f e c t , and another would concern t h e
+boundary l a y e r . For bodies with r e l a t i v e l y high f i n e n e s s r a t i o s , t h e r a t i o
+of boundary-layer thickness t o base diameter can become d i s p r o p o r t i o n a t e l y
+l a r g e f o r models i n comparison t o t h a t f o r f u l l - s c a l e f l i g h t conditions. This
+viscous e f f e c t can r e s u l t i n t h e boundary-layer-induced base-pressure discrep-
+ancy j u s t mentioned. By comparing model and f u l l - s c a l e base-pressure r e s u l t s
+from t h e X-15 upper v e r t i c a l f i n , which i s a low-fineness-ratio shape, t h e
+boundary-layer e f f e c t i s g r e a t l y reduced and can be estimated. Thus, t h e
+remaining increment, which i s believed t o be p r i m a r i l y a s t i n g e f f e c t , can
+be defined.
+
+        Figure 17 shows t h e p r e s s u r e r a t i o             2      from t h e upper v e r t i c a l f i n of
+t h e f u l l - s c a l e X - l 5 and t h e l / l ? - s c a l e
+                                                                     l?
+                                                                  model p l o t t e d a g a i n s t   -  C
+                                                                                                      h R W        The
+slopes of t h e curves extending f r o m t h e . f l i g h t d a t a show t h e e f f e c t of
+boundary-layer thickness r e l a t i v e t o base thickness, previously discussed.
+                                       -
+These curves were i n t e r p o l a t e d from t h e blunt-trailing-edge-wing d a t a of
+reference 21.                          -
+                         The values of rb
+                                       P
+                                          f o r t h e model a r e much higher than t h e
+f l i g h t r e s u l t s adjusted t o similar values of
+                                                                            &-           The d i f f e r e n c e s a r e
+
+believed t o be p r i m a r i l y a t t r i b u t a b l e t o t h e s t i n g , which i n t e r s e c t s t h e
+model fuselage base about one-half s t i n g diameter a f t of t h e f i n base and
+over 1 s t i n g diameter below t h e c e n t e r of t h e f i n . The r e s u l t s show t h a t t h e
+d i f f e r e n c e between t h e model and t h e f l i g h t p r e s s u r e r a t i o s i n c r e a s e s with
+Mach number f o r t h e s e speeds, t h u s emphasizing t h a t t h i s probable s t i n g
+i n t e r f e r e n c e should not be considered as only a t r a n s o n i c problem.
+
+                  pb
+        When      -
+                  P
+                     i s converted t o an increment of base drag, or t o p r e s s u r e co-
+e f f i c i e n t , t h e i n t e r f e r e n c e e f f e c t does not appear t o be so l a r g e ; f o r
+example, t h e e f f e c t i s about 8 percent of t h e f u l l - s c a l e p r e s s u r e c o e f f i c i e n t s
+a t M = 2.5 and 15 percent a t M = 3.5.                              This i s t h e order of magnitude of
+discrepancies between model and f l i g h t - r e s u l t s f o r t h e o t h e r components of
+base pressure on t h e X-15, as reported i n reference 5 . The supersonic f l i g h t
+and wind-tunnel d a t a compiled i n reference 5, from references 3, 14, 22,and 23,
+and t r a n s o n i c and subsonic r e s u l t s from reference I5 a r e shown i n f i g u r e s 1 8 ( a )
+t o 18(c ) . The discussion concerning t h e v e r t i c a l - f i n base pressures ( f i g . l7),
+i n conjunction with t h e r e l a t i v e uniformity of p r e s s u r e l e v e l over t h e
+                                                                    ,
+s e v e r a l adjacent base s u r f a c e s (page 11) suggests t h a t t h e discrepancies
+shown i n f i g u r e 18, f o r t h e several sources of data, are a l s o p r i m a r i l y
+a t t r i b u t a b l e t o t h e s t i n g . It i s not intended t o imply t h a t t h i s discrepancy
+between t h e model and f u l l - s c a l e d a t a i s p a r t i c u l a r l y important t o t h e X - l 5
+ a i r p l a n e . It should be emphasized, however, t h a t t h e discrepancy (probable
+ s t i n g i n t e r f e r e n c e ) i s not l i m i t e d t o t h e annulus region of t h e fuselage and
+ t h a t , f o r some f u t u r e vehicles and missions, proper accounting of s t i n g i n t e r -
+ ference may be necessary.
+
+
+                                     Drag of t h e Speed Brakes
+
+       The f u l l - s c a l e f l i g h t and wind-tunnel values of drag increment f o r t h e
+X-15 speed brakes a r e shown i n f i g u r e l g ( a ) f o r t h e brakes f u l l y opened (35").
+Figure l 9 ( b ) shows t h e r a t i o of t h e f u l l - s c a l e speed-brake-drag increment t o
+t h e b a s i c ( c l e a n configuration) z e r o - l i f t drag of t h e X-13.     The drag c o n t r i -
+bution o f t h e speed brakes i s about 1.73 times t h e c l e a n z e r o - l i f t drag of t h e
+a i r p l a n e a t subsonic speeds and' about 1 t o 1 . 3 times t h e clean z e r o - l i f t drag
+through t h e supersonic range, although t h e brake f r o n t a l a r e a i s only about
+36 percent of t h e f r o n t a l a r e a of t h e b a s i c clean a i r p l a n e .
+          The dashed curve of f i g u r e 1 9 ( b ) shows t h e drag c o e f f i c i e n t of t h e speed
+brakes based upon t h e i r f r o n t a l area, which i s t h e conventional method of
+defining decelerator-drag c o e f f i c i e n t . Also shown (shaded a r e a ) i s t h e range
+of drag c o e f f i c i e n t s , obtained from t h e wind-tunnel t e s t s of r e f e r e n c e 24, f o r
+s e v e r a l t y p i c a l "towed" d e c e l e r a t o r s . The towed-decelerator values r e p r e s e n t
+shapes immersed i n a symmetrical wake; therefore, it i s uncertain t o what
+e x t e n t t h e s e values a r e applicable t o t h e X-15 wake. It i s of i n t e r e s t t o
+note, however, t h a t t h e X - l 5 speed brakes compare favorably with towed
+decelerators as drag-producing devices. This comparison does not, of course,
+take i n t o account t h e r e l a t i v e cost, i n weight, of obtaining t h e r e s p e c t i v e
+d e c e l e r a t i o n drag-coefficient l e v e l s .
+
+
+
+
+          Analysis of t h e power-off, full-scale-drag c h a r a c t e r i s t i c s of t h e X-15
+a i r p l a n e and comparison with wind-tunnel-model d a t a have shown t h a t :
+
+     1. The t r a n s o n i c drag-rise increment of t h e X - l 5 i s about equal t o t h e
+subsonic l e v e l of drag f o r zero l i f t .
+
+       2. Transonic drag r i s e reduces t h e maximum l i f t - d r a g r a t i o by one-third
+t h e subsonic value.
+
+     3. Ninety-five percent of t h e m a x i m u m supersonic l i f t - d r a g r a t i o can be
+obtained over an angle-of-attack range f r o m about 7" t o 12'. Thus, a near-
+optimum post-burnout g l i d i n g range can be approximated by f l y i n g within t h i s
+angle-of-attack band throughout t h e supersonic speed range.
+
+        4. There i s a strong tendency toward uniformity of pressures over
+adjacent base surfaces, even a t low supersonic speeds, d e s p i t e g r e a t d i f -
+ferences i n forebody geometry. This tendency p r e v a i l s f o r g l i d i n g f l i g h t as
+w e l l as when t h e propulsive j e t exhausts f r o m t h e base region.
+
+14
+     5. The apparent e f f e c t of a s t i n g support on t h e base pressure of an
+X-15 wind-tunnel model w a s propagated onto t h e v e r t i c a l - f i n base a t l e a s t
+1 s t i n g diameter above and about one-half s t i n g diameter forward of t h e s t i n g -
+model i n t e r c e p t a t Mach numbers between 2.5 and 3.5.            That i s , t h e s t i n g
+e f f e c t was propagated s i g n i f i c a n t l y beyond t h e fuselage base annulus. For t h e
+X-15, t h i s e f f e c t amounts t o from 8 t o 15 percent of t h e base drag between
+t h e s e Mach numbers. For some f u t u r e v e h i c l e s and missions, proper accounting
+of t h i s i n t e r f e r e n c e e f f e c t may be necessary t o adequately p r e d i c t t h e f u l l -
+s c a l e transonic and supersonic performance.
+
+        6. S p e c i a l l y conducted wind-tunnel-model drag s t u d i e s when extrapolated
+t o f u l l - s c a l e Reynolds numbers by t h e T'                 ( r e f e r e n c e temperature) method
+accurately p r e d i c t e d t h e f u l l - s c a l e z e r o - l i f t drag minus base drag of t h e
+X - l 5 a t Mach numbers of 2.5 and 3.0.
+       7. "he trimmed drag-due-to-lift                   f a c t o r i s 43 percent higher than t h e
+inverse o f t h e l i f t - c u r v e slope       - a t a Mach number of 5 .                    The major p a r t
+                                                   CLa
+o f t h i s d i f f e r e n c e r e p r e s e n t s t h e r e l a t i v e l y l a r g e component of t r i m drag t h a t
+accompanies t h e X-15 configuration.
+
+     8. Trimmed values of l i f t - c u r v e slope from f u l l - s c a l e f l i g h t and wind-
+tunnel models agree w e l l a t supersonic Mach numbers.
+
+
+F l i g h t Research Center,
+         National Aeronautics and Space Administration,
+               Edwards, C a l i f . , October 15, 1965.
+                                     REFERENCES
+
+
+ 1. Matranga, Gene J.: Analysis of X-15 Landing Approach and Flare Character-
+      istics Determined From the First 30 Flights. NASA TN D-1057, 1961.
+
+ 2. Saltzman, Edwin J.: Preliminary Full-Scale Power-Off Drag of the X-15 Air-
+      plane for Mach Numbers From 0.7 to 3.1. NASA TM X-430, 1960.
+
+ 3. Hopkins, Edward J.; Fetterman, David E., Jr.; and Saltzman, Edwin J.:
+      Comparison of Full-Scale Lift and Drag Characteristics of the X-15 Air-
+      plane With Wind-Tunnel Results and Theory. NASA TM X-713, 1962.
+
+ 4. Beeler, De E.; Bellman, Donald R.; and Saltzman, Edwin J.:  Flight Tech-
+      niques for Determining Airplane Drag at High Mach Numbers. NACA TN 3821,
+      1956
+ 5. Saltzman, Edwin J.: Base Pressure Coefficients Obtained From the X-15 Air-
+      plane for Mach Numbers Up to 6. NASA TN D-2420, 1964.
+
+ 6. Larson, Terry J.; and Webb, Lannie D.: Calibrations and Comparisons of
+      Pressure-Type Airspeed-Altitude Systems of the X-15 Airplane From Sub-
+      sonic to High Supersonic Speeds. NASA TN D-1724, 1963.
+
+ 7. Saltzman, Edwin J.; Bellman, Donald R.; and Musialowski, Norman T.:
+      Flight-Determined Transonic Lift and Drag Characteristics of the YF-102
+      Airplane With Two Wing Configurations. NACA RM ~56~08,  1956.
+ 8. Rogallo, Vernon L.: Effects of Wing Sweep on the Upwash at the Propeller
+      Planes of Multiengine Airplanes. NACA TN 2795, 1952.
+
+ 9. Yaggy, Paul F.: A Method for Predicting the Upwash Angles Induced at the
+      Propeller Plane for a Combination of Bodies With an Upswept Wing. NACA
+      TN 2528, 1951.
+10. Richardson, Norman R.; and Pearson, Albin 0.: Wind-Tunnel Calibrations of
+      a Combined Pitot-static Tube, Vane-Type Flow-Direction Transmitter, and
+      Stagnation-TemperatureElement at Mach Numbers From 0.60 to 2.87. NASA
+      TN D-122, 1959.
+
+11. Anon.: & - B a l l Airflow Direction and Air Data Sensors, General Descrip-
+      tions. NORT 63-365, Nortronics, Div. of Northrop Corp., Oct. 1963.
+
+12, Cay, John P.; and Keener, Earl R. : Flight Evaluation of the X-15 Ball-
+      Nose Flow-Direction Sensor as an Air-Data System. NASA TN D-2923, 1963.
+
+13. Wolowicz, Chester H.; and Gossett, Terrence D.: Operational and Perform-
+      ance Characteristics of the X-15 Spherical, Hyyersonic Flow-Direction
+      Sensor. NASA TN D-3070, 1963.
+
+
+
+
+16
+
+
+                  ---                   . - . -.-.. .....-..-....-.-.
+                                                                   I..,   I I
+                                                                                  I I   I,I 111
+                                                                                                  I
+14. Franklin, Arthur E.; and L u s t , Robert M.:              I n v e s t i g a t i o n of t h e Aerodynamic
+       C h a r a c t e r i s t i c s o f a 0.067-Scale Model of t h e X-13 Airplane (Configura-
+       t i o n 3) a t Mach Numbers of 2.29, 2.98, and 4.63.                     NASA TM x-38, 1959.
+
+15. Osborne, Robert S.:   S t a b i l i t y and Control C h a r a c t e r i s t i c s of a
+       0.o667-scde Model o f t h e F i n a l Version of t h e North American X-Yj
+       Research Airplane (Configuration 3) a t Transonic Speeds. NASA TM x-738,
+       1963   -
+16. Penland, J i m A.; and Fetterman, David E., Jr.: S t a t i c Longitudinal,
+       Directional, and L a t e r a l S t a b i l i t y and Control Data a t a Mach Number of
+       6.83 of t h e F i n a l Configuration of t h e X-15 Research Airplane. NASA
+       m x-236, 1960.
+17. Love, Eugene S. :         Base Pressure a t Supersonic Speeds on Two-Dimensional
+       A i r f o i l s and on Bodies of Revolution With and Without Fins Having
+       Turbulent Boundary Layers. NASA TN 3819, 1937. (Supersedes N A C i
+       RM ~ 3 3 ~ 0)2 .
+
+18. Hoerner, Sighard F.:   Fluid-Dynamic Drag.                  Publ. by t h e author       (148 Busteed
+       Drive, Vidland Park, N. J . ) , 1938.
+
+19. Somer, Simon C . ; and Short, Barbara J . : Free-Flight Measurements of
+       Turbulent-Boundary-Layer Skin F r i c t i o n i n t h e Presence of Severe Aero-
+       dynamic Heating a t Mach Numbers From 2.8 t o 7.0.          NACA TN 3391, 1953.
+
+20. Bertram, Mitchel H.: Calculations of Compressible Average Turbulent Skin
+      F r i c t i o n . NASA TR R-123, 1962.
+
+21. Chapman, Dean R.; Wimbrow, W i l l i a m R.; and Kester, Robert H. : Experimental
+      I n v e s t i g a t i o n of Base Pressure on Blunt-Trailing-Edge Wings a t Supersonic
+      V e l o c i t i e s . NACA Rep. 1109, 1952. (Supersedes NACA TN 2611.)
+
+22. Leupold, Mathias J.; and Freeman, Elizabeth M.:       A Second S e r i e s of Super-
+      sonic Force Tests on t h e Full-Span Model X - l 5 for North American
+      Aviation Incorporated. WTR 200, Mass. I n s t . of Tech. (Naval Supersonic
+      Laboratory), Sept 1938.  .
+23. Franklin, Arthur E.; and S i l v e r s , H. Norman: I n v e s t i g a t i o n of t h e Aero-
+      dynamic C h a r a c t e r i s t i c s of a 0.067-Scale Model of t h e X-13 Airplane
+      (Configuration 2) a t Mach Numbers of 2.29, 2.98, 3.96, and 4.63.
+      NASA MEMO 4-27-59L, 1939.
+
+24. McShera, John T., Jr.: Aerodynamic Drag and S t a b i l i t y C h a r a c t e r i s t i c s of
+     Towed I n f l a t a b l e Decelerators a t Supersonic Speeds. NASA TN D-1601,
+       1963.
+                                                                                        ..
+
+
+
+
+                                                                  TABLE I
+
+                              PHYSICAL CHARACTERISTICS OF TKE BASIC                            x-15 AIRPLANE
+
+     Wing -
+       Airfoil section        ....................                    NACA 66005 (modified)
+                                                                 , ft2 . . . . . .
+       T o t a l area ( i n c l u d e s 94.98 f t 2 covered b y f u s e l a g e )       2 00
+       Span, f t        ..............................                               22.36
+       Mean aerodynamic chord, f t        .....................                      10.27
+       Root chord, f t        ...........................                            14.91
+       T i p chord, f t     ............................                              2.98
+       Taper r a t i o
+           -              .............................                                0.20
+      Aspect r a t i o      . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2.50
+       Sweep a t 25-percent-chord l i n e , deg   . . . . . . . . . . . . . . . . . 25.64
+       Incidence, deg         ...........................                                  0
+      Dihedral, deg         ...... ......................                                  0
+      Aerodynamic t w i s t , deg     .......................                              0
+      Flap :
+          Type        . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . Plain
+          A r e a (each), f t 2          . . . . . . . . . . . . . . . . . . . . . . . . .                                       8.30
+          Span ( e a c h ) , f t       . . . . . . . . . . . . . . . . . . . . . . . . . .                                       4.50
+          Inboard chord, f t             .........................                                                               2.61
+          Outboard chord, f t              .................. ......                                                             1.08
+                                                                                                            Original          Present
+           Deflection, down (nominal d e s i g n ) , deg              ........               40                                    32
+           R a t i o f l a p chord t o wing chord             ............. . . . . .                                            0.22
+           R a t i o t o t a l f l a p area t o w i n g a r e a   . . . . . . . . . . . . . . . .                                0.08
+           R a t i o f l a p span t o wing semispan             . . . . . . . . . . .......                                      0.40
+           Trailing-edge angle, deg                     . . . . . . . . . . . . . . .. . . . . .                                   5.67
+           Sweepback a n g l e of hinge l i n e , deg             . . . . . . . . . .. . . . . .                                        0
+
+     Horizontal t a i l -
+      Airfoil section       ....................                                                       NACA 66005 (modified)
+                                                       ......
+      T o t a l a r e a ( i n c l u d e s 63.29 f t 2 covered b y f u s e l a g e ) , f t 2                                      115.34
+      Span, ft           ...............................                                                                           18.08
+      Mean aerodynamic chord, f t  .....................                                                                            7-05
+      Root chord, f t       ...........................                                                                            10.22
+      T i p chord, f t     ............................                                                                             2.11
+      Taper r a t i o     .............................                                                                             0.21
+      Aspectratio          ............................                                                                             2.83
+                                        .................
+      Sweep a t 25-percent-chord l i n e , deg                                                                                          45
+      Dihedral, deg        ............................                                                                               -15
+                                          ...............
+      R a t i o h o r i z o n t a l - t a i l a r e a t o wing a r e a                                                              0.58
+                                  ......................
+      Movable s u r f a c e a r e a , f t 2                                                                                        51.77
+      Deflection :
+         Longitudinal, up, deg   .......................                                                                                15
+         Longitudinal, down, deg  ......................                                                                                35
+                                             ............
+         Lateral d i f f e r e n t i a l ( p i l o t a u t h o r i t y ) , deg                                                        515
+                                               . . . . . . . . . .
+         L a t e r a l d i f f e r e n t i a l ( a u t o p i l o t a u t h o r i t y ) , deg                                          k30
+      Control system        ......                      I r r e v e r s i b l e h y d r a u l i c boost w i t h a r t i f i c i a l f e e l
+
+
+
+
+18
+                                                  TABLE! I.- Concluded
+
+                       PHYSICAL CHARACTERISTICS                  OF THE BASIC          x-15 AIRPLANE
+
+Upper v e r t i c a l t a i l -
+  Airfoil section      ......................                                                         10" s i n g l e wedge
+  Total area, f t 2    ...........................                                                                        40.91
+  Span,ft           ..............................                                                                         4.58
+  Mean aerodynamic chord, f t .....................                                                                        8.95
+  Rootchord, f t       ...........................                                                                        10.21
+  Tip chord, f t      ............................                                                                         7.56
+  Taper r a t i o    .............................                                                                         0.74
+  Aspectratio         ............................                                                                         0.51
+                                  .................
+  Sweep a t 25-percent-chord l i n e , deg                                                                                23.41
+                                    ................
+  R a t i o v e r t i c a l - t a i l a r e a t o wing a r e a                                                             0.20
+                             ......................
+  Movable s u r f a c e a r e a , f t 2                                                                                   26.45
+                       ...........................
+  D e f l e c t i o n , deg                                                                                               k7.50
+                               ....................
+  Sweepback of hinge l i n e , deg                                                                                              0
+  Control system       ......                     I r r e v e r s i b l e h y d r a u l i c boost with a r t i f i c i a l f e e l
+
+Lower v e r t i c a l t a i l -
+  Airfoil section      ......................                                                             10" s i n g l e wedge
+  Total area, f t 2    ...........................                                                                            34.41
+  Span,ft           ..............................                                                                             3 -83
+  Mean aerodynamic chord, f t .....................                                                                            9.17
+  Root chord, f t      ...........................                                                                            10.21
+  Tip chord, f t      ............................                                                                                  8
+  Taper r a t i o    .............................                                                                             0.78
+  Aspectratio         ............................                                                                             0.43
+                                         .................
+  Sweep a t 25-percent-chord l i n e , deg                                                                                    23.41
+                                          ................
+  R a t i o v e r t i c a l - t a i l a r e a t o wing a r e a                                                                 0.17
+                                   ......................
+  Movable s u r f a c e a r e a , f t 2                                                                                       19.95
+  D e f l e c t i o n , deg   ...........................                                                                     k7.50
+  Sweepback of hinge l i n e , deg    ....................                                                                          0
+  Control system              ......              I r r e v e r s i b l e h y d r a u l i c b o o s t with a r t i f i c i a l f e e l
+
+Fuselage -
+  Length, f t           .............................                                                                         49.5
+  Maximumwidth, f t         ..........................                                                                        7.33
+  Maximum depth, f t        ..........................                                                                        4.67
+  Maximum depth over canopy, f t  ....................                                                                        4.97
+                           ,   .......................
+  Side a r e a ( t o t a l ) f t 2 .                                                                                       215.66
+  Fineness r a t i o      ...........................                                                                       10.91
+
+Speed brake -
+  Area ( e a c h ) , f t 2     ..........................                                                                     5.37
+  Mean span ( e a c h ) , f t    ........................                                                                     1.60
+  Chord ( e a c h ) , f t      ..........................                                                                     3.36
+  D e f l e c t i o n , deg   ...........................                                                                       35
+                                           ...............
+  F r o n t a l a r e a a t maximum d e f l e c t i o n , f t 2                                                               13.8
+Base a r e a ( f u s e l a g e , s i d e f a i r i n g , v e r t i c a l f i n s , wings,
+                            ,
+  h o r i z o n t a l t a i l landing skids), f t 2                ................                                           34.1
+T o t a l f r o n t a l a r e a (maximum) i n c l u d i n g wing and h o r i z o n t a l
+   t a i l a t 0" d e f l e c t i o n angle, f t 2           ..................                                               38.8
+               I                           49.5
+
+
+
+
+                                                  A
+
+
+
+             <-                                                              I
+                                                                           18.1
+
+
+
+
+Figure 1.- Three-view drawing of t h e b a s i c X-15 a i r p l a n e . Shaded areas denote
+                    speed brakes. All dimensions i n f e e t .
+
+
+
+
+20
+                      ( a ) I n t e r i m configuration.                                   E-6646
+Figure 2.-   X-13 viewed from t h e l e f t r e a r .      Lower j e t t i s o n a b l e
+                               f i n removed.
+
+                                                                                              21
+     I I,   I   I   I, I   , 1 1 1 111   .,,       ,.. .........-... .
+                                               , ,.,. ,
+
+
+
+
+            ( b ) Basic configuration.                                   E-9908
+                Figure 2                       .- Concluded.
+22
+E
+
+
+
+
+    /-
+         (a) Interim configuration.    E-5251
+
+         Figure 3.-   X-15 airplane.
+                           --
+(b) Basic configuration.        E-7902
+Figure 3.- Concluded.
+                                               Angle-of-attack vane
+                                                                      7
+
+
+
+Static orifices                                      /I
+
+
+
+
+                               inches                                      L Angle-of-sideslip vane
+
+                                                    Stagnation-temperature probe
+
+
+
+
+                     ( a ) Interim configuration, vane-boom system.                             E -13702
+
+                  Figure 4.-    Impact-pressure and flow-angle sensors.
+( b ) Basic configuration, ball-nose system.   ES-1385
+           Figure 4 .- Concluded.
+          36        ~
+
+                                I    I         I               I    1     I            r        I        I      I     I     1     1            I
+
+
+          32 -
+
+
+
+          28 -
+                                                  Basic
+                                                           I
+                                        ---- Interim Afterbody fairing
+
+
+          24 -                                                                                                                   horizontal
+                                                                                                                                 stabilizers
+
+
+          20 -
+
+A,, ft2
+          16 -
+
+
+
+          12 -
+
+
+
+           8   -8
+                                                                                           Circular fuselage
+
+
+
+
+                        /
+
+
+
+           0                I       I         I            I        I     I        I            I       I       I     I     I     I        I
+          -40           40          80       120          160      200   240     280          320      360     400   440   480   520     560       600
+                                                                         Fuselage station, in.
+
+                                                     Figure 5.- X-15 area distribution.
+                .04 -                 I                 I                I               I
+
+                                                                                             x-15
+                                                                                 0           YF-102
+                      0
+
+
+
+
+           -
+           a
+            €
+                .02 -
+
+
+
+
+                 .01 -
+
+
+
+
+                                   I                I                I                I
+                  0               .2                .4               .6              .8                 1.0
+                                                                 M
+
+                                      ( a ) Boom and fuselage.
+                 .6           I   I             I   I            I   I       I       I              I
+
+
+                                                                                             x-15
+                 .5 -                                                                                   -
+                                                                                 0           YF-102
+                      3
+                 .4 -                                                                                   -
+
+         A , deg .3 -
+         Cl
+
+                 .2 -                                                                                   -
+
+
+                  .1 -
+
+                          I       I       -1.       1-      -1
+
+
+
+
+     Figure 6.- Calculated upwash f a c t o r s f o r t h e angle-of-attack
+                            vane l o c a t i o n .
+
+
+
+
+28
+                  0        0         0    .04    .00        .12   .16   .20   .24   .20   .32
+                                                       CD
+                       ( a ) Subsonic speed range, interim configuration.
+
+Figure 7.-   Typical l i f t curves and drag polars f o r t h e X-15 i n trimmed unpowered f l i g h t .
+W
+0
+
+
+
+
+    0   0     0        0         0        0           0   .04   .08     .12   .16   .20   .24
+                                          CD
+
+            ( b ) Transonic speed range, i n t e r i m configuration.
+
+                            Figure 7.-   Continued.
+                    CD
+
+
+(e) M N 1.9 to 3.1, interim configuration.
+          Figure 7.- Continued.
+W
+          .8
+Iu
+
+          .6
+
+
+
+          .4
+
+     CL
+          .2
+
+
+
+           0
+
+
+          -.2
+
+
+
+
+                0   0   0          0          0     .04   .08    .12   .16   .20   .24   .28   .32
+                                                     =D
+
+
+                            (d) M z 3.3 t o 4.1, basic configuration.
+                                       Figure 7.-   Continued.
+    0   0    0         0        0              4    8    12    16    20    24    28
+                                    Q,   de9
+
+
+
+
+    0   0    0         0        0          .04     .08   .12   .16   .20   .24   .28
+                                     CD
+
+            (e)   M sz 4.3 to 5.1, basic configuration.
+W
+w                      Figure 7.- Continued.
+w
+
+
+
+
+    0   0          0         0         0   .04   .08   .12   .16   .20
+                                  =D
+
+
+            (f) M x 5.3 to 6.0, basic configuration.
+                       Figure 7.- Concluded.
+.12
+                                        0 Boom-vane system
+                                                (interim)
+                                                               Flight
+                                        0 Ball nose (basic)
+
+                                        I Wind-tunnel models
+
+
+
+
+                           i                                            I
+
+
+
+
+ 0              1         2         3              4             5      6   7
+                                           M
+
+
+      Figure 8.- Lift-curve-slope variation with Mach number. Trimmed.
+W
+m
+
+
+
+                                                                                   I     I     I     I     I     I
+
+
+
+
+                      .401
+                      .36 -
+                                  ---
+                                            Interpolated data
+
+                                                                                                                      cL
+                                                                                                                      .6   1
+                      .28 -
+
+
+                      .24 -
+
+
+                      .20   -    CL                                                                                   .4
+                                                                                                                           -
+
+                       .16 -
+                             5   5
+
+
+                                 .3
+                      .08 - 5 2
+                           4.;
+                      .04 -
+                                                                                                                      0
+
+                        0         I     I        I      I        I     I     I     I     1     1     I     I     I
+                            .6   1.0   1.4      1.8    2.2      2.6   3.0   3.4   3.8   4.2   4.6   5.0   5.4   5.8        6.2
+                                                                            M
+
+    Figure 9.- Variation of drag c o e f f i c i e n t with Mach number f o r constant values of l i f t c o e f f i c i e n t .
+                                                        Trimmed f l i g h t .
+  1.6
+
+
+
+
+  1.2
+                                                                           /_--       Wind- tunnel
+                                                                       _/_e
+                                                                                        model
+                                                                //e-
+                                        BasicT,,,       / / /
+
+
+
+
+   .4
+
+
+
+                                    1               I
+   0           1         2          3               4                  5          6                  7
+                                         M
+
+Figure 10.- Variation o f trimmed drag-due-to-lift         f a c t o r with Mach number.
+w
+co
+
+
+
+
+                 Ij
+                 I        I
+
+                 -    I       1      1                              1
+             0            1              2     3        4          5             6
+                                               M
+
+     Figure 11.- Variation o f    (L/D),,    with Mach number.   Trimmed f l i g h t .   I
+     .6                                12
+
+
+                _----___-------__
+                              -- -----__
+
+     .4   ---                          a
+
+Cl
+
+
+     .2         ‘4                     4
+                                            a, deg
+
+
+
+
+                                       0
+            3
+
+
+
+
+            2
+                                                                                  +
+
+
+
+            1
+                                                                                   M
+                                                                             - 3.5
+                                                                             --- 5.7
+
+
+
+            0                                4           8                                                  D
+
+
+
+          ( a ) Example of t h e v a r i a t i o n o f l i f t - d r a g r a t i o w i t h angle of a t t a c k .
+                      Ticks i n d i c a t e a range f o r 93-percent                     (L/D),,.
+
+
+                                                 I   I       I   I   ‘   -    1      I      I       I
+
+
+
+
+                         .:.
+                         i:; ::
+                                :.:...
+                       I /               I       1   1       I   I   I        1      I     1-      1
+            51)                          1           2           3            4            5
+                                                                 M
+
+( b ) Range of angle of a t t a c k over which 95 percent of                      (L/D)”        i s obtainable.
+
+     Figure 13.- Relationship of maximum l i f t - d r a g r a t i o t o angle of a t t a c k .
+
+
+
+
+40
+          .O 8         I           I         I          i         i100
+
+                                                                                 80
+                                       I
+          .07
+                                       \                                         60   ‘Db
+                                                                                      -
+                                                                                      ‘Do ’
+                                                                                 40 percent
+          .06                                                                    20
+
+                                                                                 0
+
+          .05
+
+
+
+
+    ‘Db   .04
+
+
+
+
+          .03
+
+
+
+          .02
+
+
+
+
+          .01
+
+
+
+           0           1          2          3          4            5       6
+                                            M
+
+                           ( a ) Base-drag c o e f f i c i e n t .
+
+
+    Figure 14    .- V a r i a t i o n of f l i g h t base-drag c h a r a c t e r i s t i c s
+                                  with Mach number.
+
+
+
+
+                                                                                               41
+
+
+I
+.0020             I            I            I              I                  I
+
+                                                               Flight data
+
+                                                                 Ab, f t 2   2/h      6/h
+.0016                                           Side fairings       4.8      23           .30   -
+                                      ----- Vertical fins          14.8      5.5          .08
+
+
+
+
+.0012
+
+          Three dimensional
+
+
+            (ref. 17)3
+.0008
+
+
+
+
+.0004
+
+
+
+
+    0             1            2            3              4                      5             6
+                                            M
+
+( b ) Increment of base-drag c o e f f i c i e n t per u n i t a r e a f o r
+                     d i f f e r e n t forebodies.
+
+                         Figure 1 4   .- Concluded.
+
+
+                                                                                      c
+      CD   .aa -
+                   -   \
+
+
+
+
+                 --------- ..\.-
+                           \
+                               'a,
+                                     \
+                                         \                         '
+                                                                   \
+           .Q4
+                                             \
+
+                                                 ,'
+                                                      \
+                                                                            h-
+                                                                -\.-
+                                                                   ------
+                                                          '-.
+
+
+
+
+                                                                             --- ------_. ---
+                                                                        -__I___
+
+
+
+
+-t=
+w
+   ‘Do   - ‘Db
+                 .04   1    0
+                            0
+                                          n
+                                Full-scale flight
+                                                       m
+
+
+
+
+                                1/15 scale wind-tunnel model
+                                                                 0-                  -----__
+                                                                                           0--                                1
+                                                                                                                              -
+                 .03                       T’ method (refs. 19 and 20)
+                                                                             I       I       I       I       I    I   I   I
+                       1          2            4           6    8 10         20              40              60           100x106
+                                                                   R
+
+                                                       (a)      M = 3.0.
+
+
+
+
+                  .03   I
+                        1         2
+                                   I       I
+                                                4
+                                                   I   I    I I I I I
+                                                            6   8 10         20
+                                                                                 I       I
+                                                                                             40
+                                                                                                 I       I
+                                                                                                             60
+                                                                                                                 I I I I ,
+                                                                                                                          100X106
+                                                                    R
+
+                                                           (b) M = 2 . 5 .
+
+Figure 16.- Effect of Reynolds number on zero-lift drag coefficient minus base-drag
+                      coefficient. Turbulent flow; power off.
+             .6
+                       I          I           I        I         I
+                                                                        Scale
+                                                                 M    Full 1/15
+                                                                2.5   e     o
+                                                                3.0   I
+             .4 -                                               3.5   +     0 -
+
+                             0   0
+        -
+        'b
+         P                   1 7 0
+                       e
+                             0
+
+
+
+
+                                                                      Refez"cel
+             .2 -
+                       I
+
+
+
+
+                  I    I         I           I        I          I
+
+                                             C
+
+                                          ~I(R)''~
+
+Figure 17.- Base-pressure ratio for the upper vertical fin as determined in full-scale
+                 flight and on a wind-tunnel model for turbulent flow.
+                                                            .Orifices on full-
+                                                               scale airplane
+
+
+                                                                                                              I
+                                                            ~
+
+
+
+
+                                              I             I
+                                    7'
+                             \
+                                                                    tl
+
+           0' -                     !         L         1 -
+                1       2           3        4              5       6            7   0   1         2         3           4            5      6        7
+                                             M                                                                       M
+
+                    ( a ) Upper v e r t i c a l f i n .                                                ( b ) Fuselage.
+
+          -.5
+                                                                                                            Boundary         R per ft,    Scale
+                                                                                                              layer
+                                                                                         -
+          -.4
+                                                                                         -        Flight    Turbulent'       0.7 to 2.6   Full
+                                                                                             0   Ref. 23     N o trip           3.8       1/15
+                                                                                             0   Ref. 14     No trip         2.7 to 3.3 1/15
+          -.3                                                                                0   Ref. 2 2    N o trip
+    C                                                                                        A   Ref. 3           Trip   '   0.9 to 2.7   1/15
+     Pb                                                                                                                  j
+                                                                                             n   Ref. 15     N o trip        3.2 to 4.1   1/15    1
+                                                                                             'Caused by fabrication-type roughness
+                                                                                                and discontinuities.
+
+
+
+
+                                        I     I     I   -       -
+            O1           2          3         4                 5    6           7
+                                              M
+
+                             ( c ) Side f a i r i n g .
+
+Figure 18.- Comparison of base-pressure c o e f f i c i e n t s obtained from f u l l - s c a l e f l i g h t and. X-13 wind-
+                                    t u n n e l models. Power o f f .
+                                                 I                     I              I               I              I                 7
+
+                                                                                          -0- Full-scale flight
+                                                                                           0 Reference 14 \
+
+
+
+
+                                                                                                                     i
+                                    -
+                                           -0%                                             0 Reference 2 2
+                                                                                                                         Wind
+                                            h                                              D Reference 3                 tunnel
+                                              h
+                                                                                           h Reference 15
+                                                                                           b Reference 16            I
+
+                                    -
+
+
+                                    -
+
+
+
+                                             I
+                                             1                     2
+                                                                       1
+                                                                                  3
+                                                                                      I           I
+                                                                                                  4
+                                                                                                                 1
+                                                                                                                 5
+                                                                                                                          -   I
+                                                                                                                              6 7
+                                                                                             M
+
+                                        ( a ) F u l l - s c a l e and model comparison.
+
+                              2.0
+
+
+
+
+                              1.6 -
+
+
+
+                          ' 1.2 -
+                     (CDSBX
+                                                                   .:y
+                                                                   :.'.
+                                                     /J::;:;>,       .............. I       ,
+                                                                        ............... ....~ ~ . ~ ~ ~ : : : : : ~ : : ~ : : ~ ~ ~ ~ : : : : :
+                                                                     ....
+                                                                 )"/:::::::::.:
+                               .8 -                                                                                           __
+                                                                                                                 *:<.......'.'.:
+                                                                                                   ..........:...........
+                                                                                         ....::.:..:.:.:
+                                                                                  ..........  ............
+                                                                                             _.:.:
+                                                                                             . ...:.            :.:.:.:.::-=---  -
+                                                     (' SB
+                                             wind-tunnel
+                                           symmetrical body
+                              .4             1                     I              I               I              I                 1              I
+                                             1                    2              3               4              5                  6              7
+                                                                                            M
+
+                               ( b ) Speed-brake drag and z e r o - l i f t drag comparison.
+
+                        Figure 19.- V a r i a t i o n of speed-brake drag with Mach number.
+
+
+
+
+NASA-Langley, 1966   H-388                                                                                                                            47
+            “The aerotiairtical aiid space activities of the United States shall be
+         conducted so as to contribute . . . t o the expansioii of hzrmaii kitowl-
+         edge o f phenomena in the atmosphere and space. T h e Administration
+         shall provide for the widest practicable and appropriate di~semiiiatioi~
+         of information concerniirg its actiilities and the reszrlts thereof.”
+                                          AERONAUTICS
+                                  -NATIONAL        A N D SPACE ACT OF 1958
+
+
+
+
+NASA SCIENTIFIC A N D TECHNICAL PUBLICATIONS
+
+    TECHNICAL REPORTS: Scientific and technical information considered
+    important, complete, and a lasting contribution to existing knowledge.
+
+    TECHNICAL NOTES: Information less broad in scope but nevertheless
+    of importance as a contribution to existing knowledge.
+
+    TECHNICAL MEMORANDUMS: Information receiving limited distri-
+    bution because of preliminary data, security classification, or other reasons.
+
+    CONTRACTOR REPORTS: Technical information generated in con-
+    nection with a NASA contract or grant and released under NASA auspices.
+
+    TECHNICAL TRANSLATIONS: Information published in a foreign
+    language considered to merit NASA distribution in English.
+
+    TECHNICAL REPRINTS: Information derived from NASA activities
+    and initially published in the form of journal articles.
+
+    SPECIAL PUBLICATIONS: Information derived from or of value to
+    NASA activities but not necessarily reporting the results .of individual
+    NASA-programmed scientific efforts. Publications include conference
+    proceedings, monographs, data compilations, handbooks, sourcebooks,
+    and special bibliographies.
+
+
+
+
+       Details on the availability of these publications m a y be obtained from:
+
+
+          SCIENTIFIC AND TECHNICAL INFORMATION DIVISION
+
+NATIONAL AERONAUTICS AND SPACE ADMINISTRATION
+                             Washington, D.C.     20546
+

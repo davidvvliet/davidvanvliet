@@ -1,0 +1,727 @@
+{
+  "title": "X-15",
+  "note": "North American X-15, the basic airplane (not the X-15A-2). Frame: x forward (nose tip at the front), y left, z up; fuselage centreline on z = 0; gear up, lower (ventral) fin on, as in the three-view drawings. Feet from the sources are converted at 0.3048 m/ft. No reference 3D model exists (see reference_model): layout and shapes come from the dimensioned three-view drawings in refs/x15/ and Table I of NASA TN D-3343.",
+  "sources": [
+    {
+      "id": "nasa_tnd3343",
+      "title": "Saltzman & Garringer 1966, Summary of full-scale lift and drag characteristics of the X-15 airplane (NASA TN D-3343)",
+      "url": "https://ntrs.nasa.gov/citations/19660010056",
+      "read": "2026-10-27",
+      "licence": "public domain (US government work; NTRS: distribution PUBLIC, GOV_PUBLIC_USE_PERMITTED)",
+      "saved": "refs/x15/sources/nasa_tnd3343.txt",
+      "credit": "NASA TN D-3343 (Saltzman & Garringer, 1966), dimensions and three-view drawing of the X-15: https://ntrs.nasa.gov/citations/19660010056"
+    },
+    {
+      "id": "nasa_tmx430",
+      "title": "Saltzman 1960, Preliminary full-scale power-off drag of the X-15 airplane for Mach numbers from 0.7 to 3.1 (NASA TM X-430)",
+      "url": "https://ntrs.nasa.gov/citations/19980223586",
+      "read": "2026-10-27",
+      "licence": "public domain (US government work; NTRS: distribution PUBLIC, GOV_PUBLIC_USE_PERMITTED)",
+      "saved": "refs/x15/sources/nasa_tmx430.txt"
+    },
+    {
+      "id": "jenkins_sp2007",
+      "title": "Jenkins, X-15: Extending the Frontiers of Flight (NASA SP-2007-562)",
+      "url": "https://ntrs.nasa.gov/citations/20080008340",
+      "read": "2026-10-27",
+      "licence": "public domain (US government work; NTRS: distribution PUBLIC)"
+    },
+    {
+      "id": "nasm_x15",
+      "title": "Smithsonian National Air and Space Museum: North American X-15 (A19690360000)",
+      "url": "https://airandspace.si.edu/collection-objects/north-american-x-15/nasm_A19690360000",
+      "read": "2026-10-27",
+      "licence": "CC0 (record and images: \"Restrictions & Rights: CC0\")",
+      "saved": "refs/x15/sources/nasm_x15.txt",
+      "credit": "Smithsonian National Air and Space Museum, North American X-15 (A19690360000), CC0 photos for colours: https://airandspace.si.edu/collection-objects/north-american-x-15/nasm_A19690360000"
+    }
+  ],
+  "reference_model": {
+    "url": "",
+    "note": "None. NASA 3D Resources has no X-15 (whole repository tree searched, 2026-10-27; it has the X-57). The Smithsonian record's 57 media items are all images, and an Open Access search for 3D media returned nothing. Layout comes from the three-view drawings instead (refs/x15/three-view-1966.png, nasa_tnd3343 Fig. 1; three-view-1960.png, nasa_tmx430 Fig. 1)."
+  },
+  "dimensions": {
+    "overall_length": {
+      "value": 15.088,
+      "object": "*",
+      "measure": "x",
+      "source": "nasa_tnd3343, Table I, p.18-19 and Fig. 1, p.20",
+      "quote": "Fuselage - Length, ft . . . 49.5 (Fig. 1 labels the side view 49.5, nose tip to tail trailing edge)",
+      "conflict": [
+        {
+          "source": "nasa_tmx430, Table and Fig. 1, p.11",
+          "value": 15.469,
+          "quote": "Fuselage: Length, ft 50.75 (Fig. 1: the 1960 airplane with a pointed nose and nose boom; the 50.75 runs from where the boom meets the nose)"
+        },
+        {
+          "source": "jenkins_sp2007, Appendix C, p.660",
+          "value": 15.469,
+          "quote": "Fuselage Length (feet): 50.75 53.16 (X-15, X-15A-2); its sources include NASA TM X-430"
+        },
+        {
+          "source": "nasm_x15",
+          "value": 15.545,
+          "quote": "3-D: 1554.5 x 396.2cm, 5719.9kg, 6.706m (51 x 13 ft., 12610lb., 22 ft.)"
+        }
+      ]
+    },
+    "wing_span": {
+      "value": 6.815,
+      "object": [
+        "wing_left",
+        "wing_right"
+      ],
+      "measure": "y",
+      "source": "nasa_tnd3343, Table I, p.18-19",
+      "quote": "Span, ft . . . 22.36",
+      "also": "Fig. 1 labels 22.4; nasa_tmx430 Fig. 1 22.36; nasm_x15 6.706 m (22 ft.)"
+    },
+    "overall_height": {
+      "value": 3.993,
+      "object": "*",
+      "measure": "z",
+      "source": "nasa_tnd3343, Fig. 1, p.20",
+      "quote": "13.1 (side view, upper fin tip to lower fin tip; gear not drawn)",
+      "also": "nasm_x15 396.2 cm (13 ft.)"
+    },
+    "fuselage_width": {
+      "value": 2.234,
+      "object": [
+        "fuselage",
+        "fairing_left",
+        "fairing_right"
+      ],
+      "measure": "y",
+      "source": "nasa_tnd3343, Table I, p.18-19",
+      "quote": "Maximum width, ft . . . 7.33",
+      "also": "nasa_tmx430 Table: 7.33. The width across the side fairings, which are their own objects (fairing_left, fairing_right)."
+    },
+    "fuselage_depth": {
+      "value": 1.423,
+      "object": "fuselage",
+      "measure": "z",
+      "source": "nasa_tnd3343, Table I, p.18-19",
+      "quote": "Maximum depth, ft . . . 4.67"
+    },
+    "depth_over_canopy": {
+      "value": 1.515,
+      "object": [
+        "fuselage",
+        "canopy"
+      ],
+      "measure": "z",
+      "source": "nasa_tnd3343, Table I, p.18-19",
+      "quote": "Maximum depth over canopy, ft . . . 4.97"
+    },
+    "horizontal_tail_span": {
+      "value": 5.511,
+      "object": [
+        "htail_left",
+        "htail_right"
+      ],
+      "measure": "y",
+      "source": "nasa_tnd3343, Table I, p.18-19",
+      "quote": "Span, ft . . . 18.08 (horizontal tail)",
+      "also": "Fig. 1 labels 18.1; nasa_tmx430 Fig. 1 18.08"
+    },
+    "speed_brake_chord": {
+      "value": 1.024,
+      "object": "speed_brake_upper_left",
+      "measure": "x",
+      "source": "nasa_tnd3343, Table I, p.18-19",
+      "quote": "Speed brake - Chord (each), ft 3.36"
+    }
+  },
+  "facts": {
+    "wing": {
+      "value": {
+        "root_chord": 4.545,
+        "tip_chord": 0.908,
+        "sweep_quarter_chord_deg": 25.64,
+        "taper_ratio": 0.2,
+        "aspect_ratio": 2.5,
+        "total_area_m2": 18.58,
+        "area_inside_fuselage_m2": 8.82,
+        "airfoil": "NACA 66005 (modified)",
+        "incidence_deg": 0,
+        "dihedral_deg": 0,
+        "twist_deg": 0
+      },
+      "source": "nasa_tnd3343, Table I, p.18-19",
+      "quote": "Root chord, ft 14.91; Tip chord, ft 2.98; Taper ratio 0.20; Aspect ratio 2.50; Sweep at 25-percent-chord line, deg 25.64; Total area (includes 94.98 ft2 covered by fuselage), ft2 200; Airfoil section NACA 66005 (modified); Incidence, deg 0; Dihedral, deg 0; Aerodynamic twist, deg 0"
+    },
+    "flap": {
+      "value": {
+        "span_each": 1.372,
+        "inboard_chord": 0.796,
+        "outboard_chord": 0.329
+      },
+      "source": "nasa_tnd3343, Table I, p.18-19",
+      "quote": "Flap: Type Plain; Span (each), ft 4.50; Inboard chord, ft 2.61; Outboard chord, ft 1.08"
+    },
+    "horizontal_tail": {
+      "value": {
+        "root_chord": 3.115,
+        "tip_chord": 0.643,
+        "sweep_quarter_chord_deg": 45,
+        "dihedral_deg": -15,
+        "taper_ratio": 0.21,
+        "aspect_ratio": 2.83,
+        "airfoil": "NACA 66005 (modified)",
+        "all_moving": true
+      },
+      "source": "nasa_tnd3343, Table I, p.18-19",
+      "quote": "Root chord, ft 10.22; Tip chord, ft 2.11; Sweep at 25-percent-chord line, deg 45; Dihedral, deg -15; Taper ratio 0.21; Aspect ratio 2.83; Airfoil section NACA 66005 (modified); Movable surface area, ft2 51.77 (of 115.34 total)"
+    },
+    "upper_vertical_tail": {
+      "value": {
+        "span": 1.396,
+        "root_chord": 3.112,
+        "tip_chord": 2.304,
+        "sweep_quarter_chord_deg": 23.41,
+        "airfoil": "10 deg single wedge"
+      },
+      "source": "nasa_tnd3343, Table I, p.18-19",
+      "quote": "Upper vertical tail - Airfoil section 10° single wedge; Span, ft 4.58; Root chord, ft 10.21; Tip chord, ft 7.56; Sweep at 25-percent-chord line, deg 23.41"
+    },
+    "lower_vertical_tail": {
+      "value": {
+        "span": 1.167,
+        "root_chord": 3.112,
+        "tip_chord": 2.438,
+        "sweep_quarter_chord_deg": 23.41,
+        "airfoil": "10 deg single wedge"
+      },
+      "source": "nasa_tnd3343, Table I, p.18-19",
+      "quote": "Lower vertical tail - Airfoil section 10° single wedge; Span, ft 3.83; Root chord, ft 10.21; Tip chord, ft 8; Sweep at 25-percent-chord line, deg 23.41"
+    },
+    "lower_fin_jettisoned": {
+      "value": true,
+      "source": "nasm_x15",
+      "quote": "it was necessary for the designers to make the lower half of the ventral fin jettisonable prior to landing so that the conventional two-wheel, nose-landing gear and two tail-mounted landing skids could support the aircraft"
+    },
+    "speed_brakes": {
+      "value": {
+        "count": 4,
+        "chord": 1.024,
+        "mean_span": 0.488
+      },
+      "source": [
+        "nasa_tnd3343, Table I, p.18-19",
+        "nasa_tnd3343, Fig. 1, p.20"
+      ],
+      "quote": "Speed brake - Area (each), ft2 5.37; Mean span (each), ft 1.60; Chord (each), ft 3.36; Deflection, deg 35. Fig. 1: Shaded areas denote speed brakes (aft end of the fixed upper and lower fins, both sides)"
+    },
+    "ball_nose": {
+      "value": {
+        "length": 0.425,
+        "base_diameter": 0.349
+      },
+      "source": "jenkins_sp2007, ch. 'ball nose', p.184",
+      "quote": "Officially called the “high-temperature flow-direction sensor,” the device was 16.75 inches long with a base diameter of 13.75 inches."
+    },
+    "landing_gear": {
+      "value": "dual nose wheel forward, two steel skids aft",
+      "source": "jenkins_sp2007, ch. 5",
+      "quote": "The system consisted of a dual nose wheel and a pair of aft skids."
+    },
+    "structure": {
+      "value": "Inconel X skin",
+      "source": "nasm_x15",
+      "quote": "the aircraft was fabricated using a special high-strength nickel alloy named Inconel X."
+    },
+    "wingtip_pods": {
+      "value": {
+        "diameter": 0.2032,
+        "length": 1.4732
+      },
+      "source": "jenkins_sp2007, ch. 8 'Wing-Tip Pods', p.499-500",
+      "quote": "The pods were 8 inches in diameter and 58 inches long ... The first flight (1-50-79) with the pods was conducted on 15 October 1964 ... Initially, North American manufactured a single set of the pods for X-15-1.",
+      "note": "The museum airplane (X-15-1, 56-6670) carries them in photos NASM2018-10035 to -10037."
+    }
+  },
+  "materials": {
+    "x15_black": {
+      "hex": "#22211e",
+      "metallic": 0.3,
+      "roughness": 0.45,
+      "source": "nasm_x15, photo NASM2018-10041 (black skin aft of the yellow band), four spots away from the highlight averaged; metallic and roughness estimated from the sheen in the same photo",
+      "quote": "black titanium skin with wedge shaped horizontal stablizer"
+    },
+    "x15_yellow": {
+      "hex": "#b6830c",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "nasm_x15, photo NASM2018-10041, yellow band, three spots averaged",
+      "quote": "yellow stripe NASA inisignia on tail"
+    },
+    "x15_red": {
+      "hex": "#a63b3f",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "nasm_x15, photo NASM2018-10041, red panel border, three spots averaged"
+    },
+    "x15_bare": {
+      "hex": "#b9ae9c",
+      "metallic": 1.0,
+      "roughness": 0.3,
+      "source": "nasm_x15, photo NASM2018-10038 (ball nose and the bare cone behind it): the 85th-97th percentile of brightness inside the cone and inside the ball, below blow-out, averaged (the darker pixels are reflections of the room); roughness estimated from the sharp reflections in the same photo"
+    }
+  },
+  "open_questions": [
+    "Length: 49.5 ft (1966 basic airplane, blunt nose) vs 50.75 ft (1960 airplane, pointed nose, excluding the nose boom) vs the museum's 1554.5 cm (51 ft, ball nose). The spec uses 49.5 ft with the ball nose, matching the museum airframe's nose (photo NASM2018-10035). The museum figure is 0.46 m longer and its method isn't stated.",
+    "Which X-15 and markings: the museum's X-15 #1 (tail 56-6670, \"U.S. AIR FORCE\", NASA tail band) is the proposal.",
+    "Gear up (in flight, as the drawings) or down (skids and nose wheel) and the lower fin on or off. The spec assumes up and on.",
+    "Not in any source read: wing position along the fuselage, fuselage cross-sections, side-fairing length and width, nose and canopy shape, engine nozzle exit size, skid and nose-gear positions. They would be measured from the 1966 three-view (scaled by its 49.5 ft length) and labelled \"estimated from refs/x15/three-view-1966.png\". Next documents to try: NASA TN D-1057 (Matranga), which Jenkins cites.",
+    "Leading-edge sweep is derived from the quarter-chord sweep and the chords (geometry), not quoted.",
+    "Engine nozzle: not modelled. Jenkins (ch. 4) gives the XLR99 nozzle as a 20-degree cone with a 9.8:1 expansion ratio, but no exit diameter was found, and no museum photo shows the base."
+  ],
+  "budget": {
+    "triangles": 50000,
+    "glb_bytes": 1500000
+  },
+  "from_drawing": {
+    "unit": "ft",
+    "scale_note": "At the 49.5 ft scale the drawn fuselage matches Table I both ways (depth 4.67, width across the fairings 7.18 vs 7.33), but the wings, tails and fins are drawn about 10% short in span (wing 20.5 vs the labelled 22.4, horizontal tail 16.2 vs 18.1, fin tip to fin tip 11.8 vs 13.1). So spans and chords come from Table I; the drawing gives positions along the length and the fuselage shape. x is aft from the nose tip, z up from the fuselage's mid-depth at its deepest section, y left.",
+    "fuselage": {
+      "columns": [
+        "x",
+        "half_width",
+        "top",
+        "bottom"
+      ],
+      "source": "nasa_tnd3343, Fig. 1 p.20: estimated from refs/x15/three-view-1966.png (TN D-3343 Fig. 1, rendered at 400 dpi), scaled by its 49.5 ft length (1695 px); top view for half_width (the body edge inside the side fairings from x 14), side view for top and bottom. Top under the canopy is interpolated; aft of x 30 the drawn top line has faded and is held at the forward value, which also puts the fin roots 4.69 ft apart as Table I's 13.1 - 4.58 - 3.83 requires.",
+      "stations": [
+        [
+          1.4,
+          0.85,
+          0.9,
+          -0.13
+        ],
+        [
+          2,
+          0.99,
+          1.02,
+          -0.29
+        ],
+        [
+          3,
+          1.23,
+          1.23,
+          -0.53
+        ],
+        [
+          4,
+          1.41,
+          1.4,
+          -0.73
+        ],
+        [
+          5,
+          1.55,
+          1.58,
+          -0.93
+        ],
+        [
+          6,
+          1.69,
+          1.72,
+          -1.08
+        ],
+        [
+          8,
+          1.93,
+          1.92,
+          -1.4
+        ],
+        [
+          10,
+          2.08,
+          2.05,
+          -1.64
+        ],
+        [
+          12,
+          2.19,
+          2.2,
+          -1.78
+        ],
+        [
+          14,
+          2.19,
+          2.25,
+          -1.9
+        ],
+        [
+          16,
+          2.19,
+          2.27,
+          -1.99
+        ],
+        [
+          20,
+          2.19,
+          2.27,
+          -2.04
+        ],
+        [
+          24,
+          2.19,
+          2.27,
+          -2.13
+        ],
+        [
+          28,
+          2.19,
+          2.27,
+          -2.22
+        ],
+        [
+          32,
+          2.19,
+          2.27,
+          -2.28
+        ],
+        [
+          36,
+          2.19,
+          2.27,
+          -2.34
+        ],
+        [
+          40,
+          2.16,
+          2.27,
+          -2.4
+        ],
+        [
+          44,
+          2.16,
+          2.27,
+          -2.4
+        ],
+        [
+          46,
+          2.1,
+          2.2,
+          -2.38
+        ],
+        [
+          48,
+          1.99,
+          1.95,
+          -2.2
+        ],
+        [
+          49.5,
+          1.87,
+          1.6,
+          -1.93
+        ]
+      ]
+    },
+    "side_fairings": {
+      "columns": [
+        "x",
+        "half_width",
+        "top",
+        "bottom"
+      ],
+      "source": "nasa_tnd3343, Fig. 1 p.20: estimated from refs/x15/three-view-1966.png (TN D-3343 Fig. 1, rendered at 400 dpi), scaled by its 49.5 ft length (1695 px); top view outline (scaled up 2% so the widest station gives Table I's 7.33 ft), side view lozenge. The drawn fairings start in a rounded nose at x 12.9 and end at x 48.8.",
+      "stations": [
+        [
+          12.9,
+          2.1,
+          0.6,
+          -0.2
+        ],
+        [
+          13.5,
+          2.3,
+          1.0,
+          -0.5
+        ],
+        [
+          14,
+          2.5,
+          1.1,
+          -0.58
+        ],
+        [
+          16,
+          2.84,
+          1.14,
+          -0.64
+        ],
+        [
+          18,
+          3.07,
+          1.14,
+          -0.82
+        ],
+        [
+          20,
+          3.21,
+          1.14,
+          -0.95
+        ],
+        [
+          22,
+          3.4,
+          1.14,
+          -1.08
+        ],
+        [
+          24,
+          3.52,
+          1.14,
+          -1.14
+        ],
+        [
+          26,
+          3.57,
+          1.14,
+          -1.2
+        ],
+        [
+          28,
+          3.63,
+          1.14,
+          -1.26
+        ],
+        [
+          31,
+          3.665,
+          1.14,
+          -1.33
+        ],
+        [
+          34,
+          3.665,
+          1.14,
+          -1.38
+        ],
+        [
+          36,
+          3.63,
+          1.14,
+          -1.43
+        ],
+        [
+          38,
+          3.52,
+          1.1,
+          -1.45
+        ],
+        [
+          40,
+          3.45,
+          1.05,
+          -1.48
+        ],
+        [
+          42,
+          3.34,
+          1.0,
+          -1.5
+        ],
+        [
+          44,
+          3.27,
+          0.95,
+          -1.5
+        ],
+        [
+          46,
+          3.16,
+          0.9,
+          -1.5
+        ],
+        [
+          48,
+          3.04,
+          0.85,
+          -1.5
+        ],
+        [
+          48.8,
+          2.95,
+          0.8,
+          -1.45
+        ]
+      ]
+    },
+    "canopy": {
+      "columns": [
+        "x",
+        "half_width",
+        "top",
+        "bottom"
+      ],
+      "source": "nasa_tnd3343, Fig. 1 p.20: estimated from refs/x15/three-view-1966.png (TN D-3343 Fig. 1, rendered at 400 dpi), scaled by its 49.5 ft length (1695 px); side view for the profile (the drawn top, 2.77, lowered to 2.57 so the depth over the canopy is Table I's 4.97 with the 2.40 bottom), top view for the width (1.46 at the frame). Ends are points.",
+      "stations": [
+        [
+          6.7,
+          0,
+          1.8,
+          1.8
+        ],
+        [
+          8,
+          1.2,
+          2.3,
+          1.3
+        ],
+        [
+          9.5,
+          1.4,
+          2.57,
+          1.4
+        ],
+        [
+          11.5,
+          1.45,
+          2.52,
+          1.5
+        ],
+        [
+          13,
+          1.0,
+          2.42,
+          1.7
+        ],
+        [
+          15,
+          0.5,
+          2.33,
+          1.95
+        ],
+        [
+          16.5,
+          0,
+          2.22,
+          2.22
+        ]
+      ]
+    },
+    "wing": {
+      "tip_le_x": 32.0,
+      "z": 0.0,
+      "source": "nasa_tnd3343, Fig. 1 p.20: estimated from refs/x15/three-view-1966.png (TN D-3343 Fig. 1, rendered at 400 dpi), scaled by its 49.5 ft length (1695 px); tip leading edge (both tips 31.9-32.1; tip chord 3.15 drawn vs 2.98), wing mid-plane from the edge-on lens in the side view. With Table I's chords, span and 25.64 deg sweep this puts the root leading edge at x 23.66; the drawn leading edge at x 28 lies 0.3 ft from that line."
+    },
+    "horizontal_tail": {
+      "tip_le_x": 46.85,
+      "root_z_at_fairing": -0.58,
+      "fairing_y": 3.6,
+      "source": "nasa_tnd3343, Fig. 1 p.20: estimated from refs/x15/three-view-1966.png (TN D-3343 Fig. 1, rendered at 400 dpi), scaled by its 49.5 ft length (1695 px); tip leading edge (tip chord 2.0 drawn vs 2.11), and the side view's upper edge where the tail leaves the side fairing (z -0.58, half-width 3.6)."
+    },
+    "upper_vertical_tail": {
+      "te_x": 48.45,
+      "source": "nasa_tnd3343, Fig. 1 p.20: estimated from refs/x15/three-view-1966.png (TN D-3343 Fig. 1, rendered at 400 dpi), scaled by its 49.5 ft length (1695 px); side view, the trailing edge is vertical at x 48.45 (drawn tip chord 7.62 vs Table I 7.56)."
+    },
+    "lower_vertical_tail": {
+      "te_x": 48.3,
+      "source": "nasa_tnd3343, Fig. 1 p.20: estimated from refs/x15/three-view-1966.png (TN D-3343 Fig. 1, rendered at 400 dpi), scaled by its 49.5 ft length (1695 px); side view, vertical trailing edge at x 48.3."
+    },
+    "ball_nose": {
+      "axis_z": 0.39,
+      "source": "nasa_tnd3343, Fig. 1 p.20: estimated from refs/x15/three-view-1966.png (TN D-3343 Fig. 1, rendered at 400 dpi), scaled by its 49.5 ft length (1695 px); side view, nose tip at z 0.44 and the section centre at x 1.4 at 0.39. Shape (round front, cone back to the base) estimated from the same drawing; length and base diameter are Jenkins's."
+    }
+  },
+  "closeups": [
+    {
+      "name": "nose",
+      "target": [
+        14.2,
+        0,
+        0.2
+      ],
+      "look": [
+        -0.7,
+        -0.8,
+        -0.3
+      ],
+      "radius": 1.2,
+      "note": "ball nose and forward fuselage"
+    },
+    {
+      "name": "canopy",
+      "target": [
+        11.6,
+        0,
+        0.6
+      ],
+      "look": [
+        -0.6,
+        -0.8,
+        -0.5
+      ],
+      "radius": 1.6,
+      "note": "canopy and where the side fairings start"
+    },
+    {
+      "name": "wing_root",
+      "target": [
+        6.5,
+        1.0,
+        0
+      ],
+      "look": [
+        0.3,
+        -0.6,
+        -0.8
+      ],
+      "radius": 2.2,
+      "note": "wing root on the side fairing, from above"
+    },
+    {
+      "name": "tail",
+      "target": [
+        1.2,
+        0,
+        0
+      ],
+      "look": [
+        0.8,
+        -0.9,
+        -0.25
+      ],
+      "radius": 2.6,
+      "note": "fins, horizontal tail and fairing ends"
+    },
+    {
+      "name": "base",
+      "target": [
+        0,
+        0,
+        0
+      ],
+      "look": [
+        1,
+        -0.4,
+        -0.15
+      ],
+      "radius": 1.6,
+      "note": "fuselage base and fin trailing edges"
+    }
+  ],
+  "from_photos": {
+    "bare_nose_end_x": {
+      "value": 3.5,
+      "unit": "ft",
+      "source": "nasm_x15, photo NASM2018-10038: estimated, scaled by the ball nose's 13.75 in base (jenkins_sp2007); the bare cone runs about 25 in behind the ball to the frame ahead of the two-hole panel. The view is slightly oblique, so this is a lower bound."
+    },
+    "yellow_band": {
+      "value": {
+        "from_span_fraction": 0.38
+      },
+      "source": "nasm_x15, photos NASM2018-10035 and -10037: the upper fin is yellow (with NASA in black) above a straight line parallel to the fuselage, which is the split between the fixed fin and the moving upper part; nasa_tnd3343 Fig. 1 p.20 draws that split 38% of the way up the fin (z 3.27 ft over a root at 1.58 and tip at 6.05)."
+    },
+    "wingtip_pod_position": {
+      "value": {
+        "centre_chord_fraction": 0.5
+      },
+      "source": "nasm_x15, photos NASM2018-10035 and -10037: each pod sits on the wing tip, axis along the airflow in the wing plane, and runs past both ends of the tip chord; centred on the tip chord's midpoint (estimated)."
+    }
+  }
+}

@@ -1,0 +1,1178 @@
+                                                                                  NASA              TM        X-430
+
+
+O
+co                                                                           ,/   /
+
+
+ !
+X                                                                                           .....      iii_
+
+
+
+
+ •   I
+
+
+
+
+           TECHNICAL MEMORANDUM
+                                          X-430
+
+
+
+
+               PRELIMINARY     FULL-SCALE         POWER-OFF              DRAG                 OF
+
+         THE   X-15 AIRPLANE     FOR   MACH     NUMBERS          FROM                 0.7 TO           3.1
+
+
+                               By Edwin    J. Saltzman
+
+                               Flight Research Center
+                                  Edwards,   Calif.
+
+
+
+
+          NATIONAL     AERONAUTICS        AND    SPACE         ADMINISTRATION
+
+                                                          December       1960
+          WASHINGTON
+                                                Declassified         April            12,       1961
+i
+                      NATI ONAL   AERONAUTI     CS AND     SPACE     ADMINISTRATI          ON
+
+
+
+                                  TE CHNI CAL MEMORANDUM            X- 430
+
+
+
+                        PRELIMINARY      FULL-SCALE        POWER-OFF         DRAG    OF
+
+
+                THE    X-15   AIRPLANE    FOR   MACH      NUMBERS     FROM     0.7    TO 3.1"
+
+
+                                      By Edwin       J.   Saltzman
+
+
+
+                                                 SUMMARY
+
+
+
+      Drag     characteristics        have    been    obtained       for     the    X-15    airplane
+during  unpowered  flight.   These data represent      a Mach number range
+from about   0.7 to 3.1 and a Reynolds    number   range from 13.9 × i0 ° to
+28 × 106 , based  on the mean aerodynamic     chord.
+
+
+       The full-scale     data are compared    with estimates     compiled    from
+several    wind-tunnel    facilities.    The agreement    between    wind-tumnel    and
+full-scale     supersonic   drag, uncorrected     for Reynolds    number   effects,   is
+reasonably     close except    at low supersonic    Mach numbers     where   the flight
+values    are significantly     higher.
+
+
+
+                                             INTRODUCTI     ON
+
+
+
+       Three X-15 airplanes        have been constructed        for use in hypersonic
+flight    research.      To date,   two of these airplanes         have been flown,
+powered    by interim     rocket   engines.     The flights     have consisted,    primaril_
+of maneuvers      to investigate      low-speed    handling   qualities,     check out the
+systems,     demonstrate     structural    integrity,     and provide    pilot familiari-
+zation.     Although     only about one-half       of the X-15 design       speed and alti-
+tude potential      has been realized,       the performance       attained   is in excess
+of the capabilities        of any other current        airplane.
+
+
+      Little     full-scale   drag data are available  on any airplane   at                            speeds
+above    M _    1.5.   Therefore,  since the X-15 data extend  to   M 2 3,                             the
+results   of    these early flights    are considered to be of interest.
+
+
+
+
+      *Title,     Unclassified.
+2
+
+        This paper concerns the drag characteristics of the two airplanes
+flown thus far, which are considered ideJltical, over the Mach number
+range from about 0.7 to 3.1. The flight data are compareddirectly with
+estimated values which have been compiled by the airplane manufacturer,
+North American Aviation, Inc., from wind-tunnel tests madeat several
+facilities.     Differences in wind-tunnel _nd full-scale Reynolds numbers
+are not considered in the comparisons because of a lack of sufficiently
+accurate full-scale base-pressure data.
+
+     It is planned to obtain more accurate and sufficient base-pressure
+data during future flights to adequatelF account for base drag. A
+meaningful study of Reynolds number effects, wind-tunnel to full-scale,
+will then be attempted.
+
+                                             SYMBOLS
+
+
+aZ            longitudinal         acceleration_          g units
+
+
+a n           normal     acceleration,         g un;_.ts
+
+
+CD            drag     coefficient,          D/qS
+
+
+AC D          increment         in drag     coefficient
+
+
+CL            lift     coefficient,          L/qS
+
+den
+              drag-due-to-lift             factor
+d CL 2
+
+
+D             drag     force     along    flight      lath,    ib
+
+
+g             gravitational         acceleration,          ft/sec 2
+
+L             lift     force     normal     to flight      path,      lb
+
+
+              length,     ft
+
+M             Mach     number
+
+
+PO            free-stream         static     pressure,        ib/sq     ft
+
+
+q             dynamic     pressure,         0.7M2_0
+
+R             free-stream         Reynolds     number,         pV___l
+ S                      wing area, sq ft
+ V                      true airspeed, ft/sec
+W                       airplane weight, ib
+(%                      angle of attack,            deg
+ 8h                     meanhorizontal-control-surface                     deflection,
+                          8hleft      +   8hright    , deg
+                                      2
+
+
+8j                      speed-brake        deflection,         deg
+
+
+                        absolute      viscosity,       lb-sec/sq      ft
+
+P                       air   density,      slugs/cu      ft
+
+Subs cript :
+
+max                     maximum
+
+
+
+                                                 AIRPLANE
+
+
+
+       The X-15 is a single-place,       low-aspect-ratlo      monoplane   (figs.  1
+and 2) designed      for aerodynamic    research    at maximum    speeds  on the order
+of 6,600     feet per second.     The X-15 is carried      to an altitude    of about
+45,000    feet by a B-52 carrier     airplane    and launched     at a Mach number
+near 0.8.
+
+
+         When design   speed is achieved,   the X-15 will be propelled   by a
+single      rocket engine   providing on the order of 55,000  pounds   of thrust
+under   flight      conditions.           For the flights  made to date, however,   the
+airplane    has     been powered          by a cluster  of eight XLRll  rocket chambers
+with     a   combined     thrust   of     approximately          16,000    pounds     under   flight   con-
+ditions.    This provides             slightly       more than 4 minutes             of powered   flight,
+after which   the airplane             glides       to a landing on the             dry lakebed   at
+Edwards  Air Force   Base,            Calif.
+
+
+      From the standpoint    of drag,  the most unusual     aspect  of the X-15
+is the large,   blunt base,    an area of about 31 square      feet when the
+jettisonable  lower ventral     fin is attached.    Another    item of interest
+is the speed-brake    configuration   and location    (fig. 1).    The brakes
+have a total  frontal   area of 13.8 square     feet when they are fully
+deflected.
+4
+
+
+
+      Other detailed              physical     characteristics          of the           airplane     are
+presented  in table              I.
+
+
+
+                                              INSTRUMENTATI        ON
+
+
+
+         The X-15 airplane   carried                standard     NASA internal-recording                    instru-
+ments     for measuring  quantities                 pertinent     i o evaluating  lift and                  drag.
+
+      Free-stream    total and static                    pressures    were sensed from nose-boom
+stations   71 inches   and 63 inches,                    respect_vely,    ahead of the intersec-
+tion of the airplane      nose and the                   boom.    Angle of attack   was measured
+by a vane located     about 43 inches                    forward   of this intersection.     Angle
+of attack   has been             corrected     for the effects   of pitching   velocity                          and
+inertia   bending of             the nose     boom.   The ac_elerometers   were located                           as
+close to the            center of gravity           as practic_l,       and       corrections         were    made
+to compensate            for any remaining           displacem,_nt.
+
+
+
+                                                    ACCURACY
+
+
+
+      The following  table lists the maxim_a    estimated  errors   that                                     each
+of five major   error sources  could contribate    to drag coefficient                                       at a
+Mach number   of 2 and a dynamic   pressure of 450 pounds   per square                                       foot.
+
+
+                                                                   l
+                                             Maximum               L    Resultant           error     in     CD
+        Source     of    error
+                                     error     in    source
+                                                                   I     (_   =    0 °               C_=    5°
+
+
+           az,     g                         0.0005                      o.ooo9                      0.ooo9
+           an,     g                             .03                           0                      .ooo5
+           C_, deg                                .5                                0                 .o017
+           q,    psf                                i0                        .0017                   .0022
+           W,    ib                              5OO                          .oo23                   .oo19
+
+
+
+         Because        these    errors   tend      to be     ran_om,   their       effect      on     CD        is
+not represented      by their sum.     The preceding    table is included     only to
+provide    an insight   into the relative     significance     of the various    error
+sources.     Based upon examination       of the subject    data and experience
+with   similar   instrumentation    systems,    it is estimated    that the faired
+values   of drag coefficient     shown in the _ummary       data  (fig. 5) are
+accurate    to ±4 percent    for lift coefficients      of 0.2 or less.
+                                      TESTCONDITIONS
+
+
+     The drag data reported herein represent gliding flight,    inasmuch
+as the rocket-engine-nozzle coefficients had not been obtained through
+thorough thrust-stand calibrations.    The lower ventral was attached
+throughout these tests, and the airplane was in the clean configuration
+except where, as noted, the speed brakes were deflected.
+
+      As inferred in the INTRODUCTION, to date, the flight maneuvers and
+instrumentation have not been ideally suited to the determination of
+drag. A few push-down or pull-up maneuverswere obtained, however,
+which provide a preliminary view of the X-15 drag characteristics.      The
+tests ranged in Machnumber from about 0.7 to about 3.1, providing a
+free-stream   Reynolds
+This corresponds  to anumber range
+                       Reynolds    fromrange
+                                number  1.35 X
+                                             of 106 to 2.7
+                                                 about  13.9 xx1066Perlo
+                                                                   to foot.
+28 X 106, based on the meanaerodynamic chord. Data recorded from two
+brief intervals with speed brakes deflected are included.
+      Center-of-gravity position varied between 20 and 24 percent of the
+meanaerodynamic chord for these tests.      As can be seen in the basic
+data, meanhorizontal-control-surface     deflection is indicated for all
+maneuverswhere available so that a more detailed comparison with wind-
+tunnel data may be madeif desired. All flight data in the summary
+figures represent the horizontal-control-surface     deflections shownfor
+the respective Machnumbers and lift     coefficients in figure 3. Examina-
+tion of the flight data has shown that negligible or zero pitching
+acceleration was experienced for most of the data points used in pre-
+paring figures 4 to 7.
+
+                                        PRO_DURES
+
+
+    The accelerometer method was used to determine lift                          and drag.   For
+power-off conditions the following equations apply:
+
+
+                                          cos      _    -[ ___L_ sin      (_
+                                                            \ qS/
+
+
+
+                                          cos      a    +           sin
+                                \qs,/
+
+Details   regarding   this   method     may   be       found   in   reference   i.
+                                                DISCUSSION
+                                                         OF RE3ULTS
+
+
+                                                         Basic Data
+
+          The basic           data     are shown        in     figures           _(a)      to 3(J)     in which      drag
+coefficient,              horizontal-control-surface                           deflection,         and    angle     of attack
+are    related          to lift        coefficient           for    each         test      Mach number.         Free-stream
+Reynolds         numbers        for    the     tests     are       indicated           for    each   set     of   basic    data•   H
+                                                                                                                                   1
+      All data represent       the clean configuration     with power off and the                                                  9
+lower   ventral    on, except   for some brief    data obtained   at subsonic    speeds                                            1
+where   the speed brakes      were deflected    (figs. 3(a) and 3(b)).      These data
+indicate    a drag-coefficlent     increase   of 0.060 and 0.114 for speed-brake
+deflections     of 23 ° and 35 ° , respectively.      For the 35°-deflection     the
+drag increases      about 115 percent,     for a frontal-area    increase   of about
+35 percent,     at    CL _ 0.35.   The following     table compares   these data
+with the estimates       of reference   2.
+
+
+                                                                                             _CDestimated
+   M              CL         5J,       _CDflight               ACDestim_                                          , percent
+                             deg
+                                                                                              ACDflight
+
+
+  o.72           o.23         23             o.o6o                   o.o52                                 86.6
+                  to
+                  .33
+    •87           .33         35              .114                       •i00                              87.7
+                  to
+                  .40
+
+
+
+                                                       Summary           Fig_:'es
+
+       Figures  4(a) and 4(b) show a compari_on       of three typical     drag
+polars    with the estimated   polars  of reference    2.  Although     the agree-
+ment is reasonably      good for the lowest   an l highest   Mach numbers,     the
+flight-measured     drag is significantly    higtler for a Mach number      of 1.1.
+An explanation    for this disagreement     is n_t offered;     however,   it has
+been determined     that trim differences    can account    for only a very small
+part of this drag increment.
+
+
+       A summary  of full-scale    drag-coefficient     variation   with Mach
+number   is shown in figure     5.  Estimated    values  of drag coefficient
+obtained   from reference    2 are included    fcr comparison.      As can be seen,
+the full-scale    values   of drag coefficient      are significantly   higher for
+supersonic    Mach numbers   below about 1.5, CL = 0.i.
+      The drag-due-to-lift  characteristics  of the X-15 airplane are
+presented in figure 6. As can be seen, the drag due to lift      is higher
+than estimated at the higher supersonic Mach numbers and lower than
+estimated in the subsonic region. One-third to one-half of the disa-
+greement in drag due to lift,   supersonically, is a result of horizontal-
+control-surface deflections which were higher than those assumedin
+reference 2.
+
+        The resultant lift-drag    ratios obtained for power-off flight are
+shownin figure 7. The lift-coefficient         range experienced in flight
+was not sufficient to acquire maximumlift-drag        ratios throughout the
+Mach number range. It is apparent, however, that the subsonic maximum
+lift-drag    ratio is greater than estimated, because the lower full-scale
+drag due to lift     is the dominant drag factor at the lift    coefficient
+where maximumlift-drag        ratio occurs. The supersonic ratios measured
+are less than estimated, as a result of higher than estimated drag at
+low lift up to M _ 1.5 and higher than estimated drag due to lift
+at higher Mach numbers.
+
+                              CONCLUDING
+                                      REMARKS
+
+
+      The most significant result of this preliminary survey of the
+drag of the X-15 research airplane is that the agreement of the wind-
+tunnel and full-scale    supersonic drag, unadjusted for Reynolds number
+effects, is reasonably close except at Mach numbers between i.i
+and 1.5 where flight measured values are significantly    higher.
+
+
+Flight    Research Center,
+         National Aeronautics and SpaceAdministration,
+              Edwards, Calif., Novemberi, 1960.
+     8
+
+
+                                         REFERENCES
+
+
+
+io       Beeler,  De E., Bellman,    Donald    R., and Saltzman,  Edwin J.:  Flight
+           Techniques   for Determining     Airplane  Drag at High Mach Numbers.
+           NACA TN 3821, 1956.
+
+
+     1   Anon.:   Revised   Basic Aerodynamic    Characteristics        of the X-15
+           Research   Airplane.    Rep. NA-59-1203    (Contract    AF    33(600)-31693),
+           North American    Aviation,  Inc., Aug. 7, 1959.
+             TABLEI.-      PHYSICALCHARACTERISTICS
+                                               OFTHEAIRPLANE
+
+Wing:
+ Airfoil    section ................                               NACA66005 (Modified)
+  Total area (includes 94.98 sq ft covered by
+    fuselage), sq ft            .....................                                    200
+  Span, ft    ..........................                                               22.36
+ Meanaerodynamic chord, ft                     .................                       10.27
+ Root chord, ft          .......................                                       14.91
+ Tip chord, ft ........................                                                 2.95
+  Taper ratio .........................                                                 0.20
+ Aspect ratio        ........................                                           2.50
+  Sweepat 25-percent-chord line, deg .............                                     25.64
+ Incidence, deg .......................                                                    0
+ Dihedral, deg ........................                                                    0
+ Aerodynamic twist, deg ...................                                                0
+ Flap -
+    Type ...........................                                                   Plain
+    Area (each), sq ft              ....................                                $.30
+    Span (each), ft ......................                                              4.50
+    Inboard chord, ft .....................                                             2.61
+    Outboard chord, ft              ....................                                1.08
+    Deflection, down, deg ...................                                              40
+    Ratio flap chord to wing chord ..............                                       0.22
+    Ratio total flap area to wing area ............                                     0.08
+    Ratio flap span to wing semispan .............                                      0.40
+    Trailing-edge angle, deg .................                                          5.67
+    Sweepbackangle of hinge line, deg ............                                          0
+Horizontal tail:
+  Airfoil   section ................                                    NACA66005 (Modified)
+  Total area (includes 63.29 sq ft covered by
+     fuselage), sq ft           .....................                                   115.34
+  Span, ft    ..........................                                                 18.08
+  Meanaerodynamic chord, ft                    .................                          7.05
+  Root chord, ft         .......................                                         10.22
+  Tip chord, ft .......................                                                   2.11
+  Taper ratio .........................                                                   0.21
+  Aspect ratio       ........................                                             2.83
+  Sweepat 25-percent-chord line, deg .............                                           45
+  Dihedral, deg .........................                                                    15
+  Ratio horizontal-tail            area to wing area ...........                          0.58
+  Movable surface area, sq ft ................                                           51.77
+  Deflection -
+     Longitudinal, up, deg ...................                                               15
+     Longitudinal, down, deg ..................                                              35
+     Lateral differential             (pilot authority),         deg ........              ±15
+     Lateral differential             (autopilot authority),          deg ......           ±3o
+  Control system . . Irreversible                      hydraulic  boost with artificial   feel
+ i0
+         TABLEI.-    PHYSICALCHARACTERISTICS
+                                         0__ THEAIRPLANE- Concluded
+
+Upper vertical tail:
+  Airfoil  section ..................                                       i0 ° single wedge
+   Total area, sq ft ......................                                             40.91
+   Span, ft    ..........................                                                   4.58
+   Mean aerodynamic    chord,   ft   ..................                                    8.95
+                                                                                          10.21
+      Root chord,  ft    .......................
+      Tip chord,  ft ........................                                               7.56
+      Taper ratio   .........................                                               0"74
+   Aspect    ratio    ........................                                              O.5l
+   Sweep at 25-percent-chord         line, deg .............                              23 .41
+   Ratio    vertical-tail    area to wing area      ............                           0.20
+   Movable    surface   area, sq ft ................                                      26.45
+   Deflection,     deg .......................                                            ±7.50
+   Sweepback     of hinge   line, deg     ................                                      0
+    Control   system       • Irreversible    hydrallic    boost with         artificial    feel
+
+ Lower   vertical   tail:
+    Airfoil   section   ..................                                  i0 ° single   wedge
+      Total   area, sq ft      .....................                                      3 4.41
+      Span,   ft   ..........................                                               3"83
+      Mean aerodynamic        chord,  ft    ...............                                 9.17
+                                                                                           10.21
+      Root chord,      ft   .......................
+      Tip chord,     ft ........................                                                 8
+      Taper ratio      .........................                                            0.78
+      Aspect    ratio     ......         ..................                                 0.43
+      Sweep at 25-percent-chord          line, deg .............                           23 .41
+      Ratio    vertlcal-tail      area to wing area      ............                       0.17
+      Movable    surface    area, sq ft ................                                   19.95
+      Deflection,      deg .......................                                         ±7.50
+      Sweepback     of hinge     llne, deg     ................                                  0
+       Control    system     • . Irreversible     hydrs_lic    boost with    artificial     feel
+
+ Fuselage    :
+    Length,    ft   .........................                                              50.75
+    Maximum    width,  ft ......................                                             7.33
+    Maximum    depth,  ft ......................                                             4.67
+    Maximum    depth over canopy,     ft ...............                                     4._--
+    Side area _total),       sq ft   ..................                                   215. Gb
+    Fineness    ratio    .......................                                           10.91
+
+  Speed brake:
+    Area   (each),  sq ft    ....................                                           5.37
+    Mean   span (each),   ft    ....................                                        1.60
+     Chord _each),   ft   ......................                                            3.36
+    Deflection,    deg .......................                                                 35
+    Frontal    area at maximum    deflection,    scft        ..........                     13.8
+
+  Base    area   (fuselage,    side   fairings,   vertical   fins),   sq    ft   . . .     31.18
+
+  Total frontal      area (maximum)   including   zing and
+    horizontal      tail at 0 ° deflection,    sq _t ...........                            38.8
+                                                                                ll
+
+
+
+
+                                                                           J
+                                         5o.75                             r
+
+
+
+
+                          C
+
+
+
+
+                                          op_.
+
+
+
+                          i_"             -      36     _j
+
+
+
+
+Figure   i.- Three-view       drawing of the X-15 airplane.    All dimensions   in
+                 feet.        Speed brakes shown crosshatched.
+12
+
+
+
+
+     O
+     Lf_
+     C_J
+     Lr_
+      !
+     r_
+
+
+
+
+     a_
+
+     L_
+
+      |
+
+
+
+
+     cH
+      0
+
+
+
+
+      O
+     4_
+
+
+
+
+      !
+
+
+     c_J
+
+     Q_
+
+
+     _or4
+     r_
+                                                                          15
+
+
+
+
+                                                              C)
+
+
+                                                          4o
+
+                                                          q_
+                                                          0
+
+
+                                                              _D
+                               OJ
+
+
+
+
+                               0
+                                                          o
+                                                         °r'l
+                                                         -Io
+                                              i
+
+                                         o               r--t
+                                                          i1)
+                               I         X
+                                         o               ,--t
+                                                          o
+                                        cO
+                                         c_
+                                         o
+                                                          I        °r'l
+                                    %
+                                        H
+                                         X
+                                                         N O
+
+                                        cO
+                                        r-I
+                                                                oH
+                                                          •, ,--t
+
+                                                         I1)-O
+                                                     _'_
+
+
+                                                     o
+
+
+
+
+                                    v
+
+                                                    o
+
+                                                   o
+                                                  "rl
+                                                  4O
+                           o
+     0   0
+
+                                                    I
+
+L_                                                tc_
+                     C_J   0
+
+
+               ._I
+                                                  -r't
+             (D
+14
+
+
+
+
+     Q
+                                    15
+
+
+
+
+    kO
+
+
+
+
+    ed
+
+
+
+
+    0
+                 k.o
+                  o
+
+                  x
+                              ©
+
+        I        _            -H
+                  H           -P
+                  _I          o
+
+                               I
+
+
+
+                  H"
+                    •         I1)
+                  ,-t
+
+    0                         "_
+
+
+                 %"
+
+
+
+
+             0
+            (D
+
+
+    0
+
+
+
+    0
+0
+
+
+
+
+                        ,V"
+16
+
+
+
+
+                         0
+
+
+
+
+                              '4D
+                                0
+                                ,-4
+
+          0                     x
+                               co
+           I
+                                  oJ
+                                  oJ
+
+                                   o
+
+
+
+                                  r-I   ._
+                                        4-J
+     Q_                           x     _
+                                        o
+
+
+                                Lr_      i
+                               r-4        °
+
+                                  Z_
+
+          oo
+           I
+                                  ur_   ,r_
+                                        p_
+                                  r_
+
+           I
+
+
+                                  rd
+                              V
+
+
+
+
+                         oo
+                         o.
+
+
+
+                     I
+
+
+
+
+                _J
+               L)
+                                                     :]-7
+
+
+
+
+                                       ii
+                                   ,,q:)
+                                      o
+                                      ,-H
+                                     x      4
+
+                                            oH
+                                     ,-I    -o
+                                      _      o
+                                            r_
+                             0,1
+                                                 I
+
+
+
+
+                             0
+                                            ,H
+
+
+
+
+                                      GO
+
+
+
+
+I
+
+
+
+
+                             Q
+
+
+
+
+    u_              Od   0
+
+
+
+             ...1
+         0
+18
+
+
+
+
+               0
+
+
+
+
+     I                         J
+
+                         _0
+                           0
+
+                           ×
+     o
+     !
+
+
+
+                                   o
+                                   c)
+               oJ
+                                    !
+     I
+
+
+                            •      ©
+                           O4
+
+
+     I
+
+
+                          V
+
+     cO
+      I
+
+
+
+               oJ
+     I
+
+                     o
+                    c)
+
+
+
+
+           d
+          o
+                                           15
+
+
+
+     0
+
+
+
+
+                    0
+
+
+
+
+                            i-I
+                             x
+     0
+                            o_    ._
+         I                  r-i   .._
+
+                                   o
+                                  rj
+
+                                       !
+
+
+
+
+no
+
+
+_o
+
+
+                        v
+
+
+
+
+                    N
+     !
+
+
+
+
+              ._1
+             L3
+      2O
+
+
+
+
+      .2
+
+
+
+
+CL    .I
+
+
+
+       C
+                                                                                                      (h)    M_     2.9,              R _ 18._ x lO6.
+
+
+
+
+CL
+
+
+
+
+                                                                                                  (I)        M _ 3.0,
+      2    m-rrr, T, .....................................................
+
+
+           :::fiiiiiiii!!!!!!!4111111111!!!iHiiiilliiiiiiii_Hiiiiiiiiiilliiiiiiiiiii!i
+           iiiiiiiiiiiiiiii   iiHiiilliiiiiiiiiiWi_iiliH!!!!iiii
+
+
+
+       I
+              ii i iiiiiii!!!iiii                                                    !!!!!!!iiiiiiiiiiiiii!!iiii!liiiiiii ii
+ CL
+           ,,I,,,]II:::llllllI_::::Illllll:II_II_,';_|I[_'I{_H4+I+H-IttH                                               IIl:l:l
+
+                                                             _::::_::l:l:ll_H_i_:111Hllll:l:1::_lll               .............
+
+
+           _[ilHiiii_ilH!iiiiiiiiiiiiiiii;i!i!!!!!!!!!!iiiiiiiiii_i_g iiiiill
+           :211!W!!![!!!!!_!!![!!![[!!![[!!!!!!!!!![!!HW[[!::::rw::ur'_L_W!![
+       0                                       .04                              .08                         -4                   -8        -I 2         0     2       4
+
+                                                                   CD                                                            8h, Ceg                    o_, deg
+
+
+                                                                                          (J) M = _.i,                           R _ 17.0 X 10 6 .
+
+                                                                                                       Figure        5.- Concluded.
+                                                                                21
+
+
+
+
+                                             0
+                                             od                     I
+
+
+
+\\                                                                 o
+
+     \
+         \                                                         o
+             \                               LO
+                 \                                                        4-_
+
+
+                                                        d          _
+                                                         Od   •   _0
+                                             Od
+                                                         0                ,_
+
+                                                                   113
+                                                   £3
+                                                  CD
+                                             O0
+                     b.O                     o.                   __
+                                                                  .r--I
+
+
+
+
+                                                                  "d
+                                             ©
+
+                           I
+                           I
+
+                                             0
+                                                                          I1)
+
+
+
+
+                                             _0
+                                         T
+
+
+
+                                                                  or-I g--t
+
+
+                                             Od
+                                                                   _4-_
+
+
+
+
+                                             GO                           0
+                                             0     £3
+                                                              •    0      "0
+                                                  C)    0                 0
+                     o
+                                                         _         O_
+
+
+
+                                             0          _'-               I1)
+
+
+
+
+                                             0                     I1)
+
+                                                                   g
+                                                                  .i--I
+                                   _.J
+                               0
+22
+
+
+
+
+            18
+                                                                                                                                        Flight
+                                                      _                      I           ,I
+                                                                                                                                        Ref. 2
+
+             14
+
+
+                                                                                                                        .3
+                              .4
+ CO         .10
+                              .3
+                                                                                                                             .2
+                              .2
+                    °1--
+                    .....     ",l
+            .O6                                                                                                                              .l
+
+
+
+
+            .02
+                  .6                1.0            1.4                 1.8                    2.2                  2.6            3.0             3.4
+                                                                                     M
+
+
+ Figure  5.- Variation                      of    drag coefficient    with Mach                                    number for several
+     lift coefficients.                          Control-surface   deflections                                     at trim for data of
+       reference            2 and         near    trim    for     flight                 data.
+
+             8
+                                                      FIight
+
+                                                      Ref. 2
+             .6                                                                                               I
+
+                                                                                               J                    I
+                                                                                                                         I
+                                                                                                              f
+dCo                                                                                                 i
+                                                                                                          I
+
+
+       2                                                           J
+                                                                                     f
+dC L                                                                    f
+                                                                                 I
+
+
+             .4                                               f
+                                                          J
+                                                      J
+
+
+
+
+             .2
+               •6                  I. 0            I .4            I. 8                       2.2                 2.6             3.0            3.4
+                                                                                     M
+
+      Figure   6.- Variation    of drag-due-to-lift                                         factor            with Mach number.
+          Control-surface    deflections    at trim                                      ior data             of reference  2 and
+           near     trim     for      flight        data.         CL    = O.l_                 to       0.35.
+                                                                                                                            23
+
+
+
+
+          5
+                                                                             Flight,     L/D   at    constant   CL
+                CL
+                                                                  0          Flight,    (L/D) max
+                    .4
+          4
+
+                                                                             Reference      2, (L/D)ma x
+LID
+                    .3
+
+          3
+                                      CL_      _
+
+
+
+                                      .4_                 O                   A         O           r
+                                                              f
+                                                     I
+                                      .3_
+          2
+           .6                       1.0            I .4               I. 8        2.2               2.6         :5.0        :5.4
+                                                                              M
+
+
+      Figure   7.-              Variation   of lift-drag ratio                    with Mach number.             Control-
+          surface               deflections   at trim for data                    of reference  2 and           near trim
+              for        flight        data.
+
+
+
+
+  NASA-   Langley    Field,   V,.     _-191
+

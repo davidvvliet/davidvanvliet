@@ -566,32 +566,45 @@ def fuselage(name, stations, n=32, material="white_paint", parent=None):
             rings.append([(x, y, z) for y, z in section(w, top, bottom, n, st[4] if len(st) > 4 else 2.0)])
     return loft(name, rings, material, parent=parent)
 
-def _airfoil(kind, thickness, n):
-    """Upper surface half-thickness (fraction of chord) at chord stations 0..1: "lens" is a
-    symmetric biconvex section (sharp edges), "wedge" a single wedge with a blunt base."""
-    xs = [0.5 - 0.5 * math.cos(math.pi * i / (n - 1)) for i in range(n)] if kind == "lens" \
-        else [i / (n - 1) for i in range(n)]
+def _half_thickness(kind, thickness, x):
+    """Half-thickness (fraction of chord) at chord fraction x: "lens" is a symmetric
+    biconvex section (sharp edges), "wedge" a single wedge with a blunt base."""
     if kind == "lens":
-        return [(x, 2 * thickness * x * (1 - x)) for x in xs]
+        return 2 * thickness * x * (1 - x)
     if kind == "wedge":
-        return [(x, thickness / 2 * x) for x in xs]
+        return thickness / 2 * x
     raise ValueError(kind)
 
 def surface(name, root_le, root_chord, tip_le, tip_chord, thickness, kind="lens",
-            chord_dir=(-1, 0, 0), chords=9, material="white_paint", parent=None):
+            chord_dir=(-1, 0, 0), chords=9, material="white_paint", parent=None,
+            span=(0.0, 1.0), chord=(0.0, 1.0), side=0, offset=0.0):
     """A wing, tail or fin: a trapezoid from the root chord (leading edge at `root_le`) to the
     tip chord (leading edge at `tip_le`), each chord running along `chord_dir` (aft). The
-    section is `kind` ("lens" or "wedge", see _airfoil), `thickness` a fraction of the chord
-    (a wedge's is its base). Thickness is across the plane of the span and chord."""
+    section is `kind` ("lens" or "wedge"), `thickness` a fraction of the chord (a wedge's is
+    its base). Thickness is across the plane of the span and chord.
+    A piece of it (a control surface, speed brake or painted band): `span` and `chord` are the
+    fractions it covers, `side` +1 or -1 builds only the half on that side of the mid-plane
+    (+1 is along (tip - root) x chord_dir), and `offset` (m) stands it out from the surface."""
     cd = Vector(chord_dir).normalized()
     r0, t0 = Vector(root_le), Vector(tip_le)
     normal = (t0 - r0).cross(cd).normalized()
-    foil = _airfoil(kind, thickness, chords)
-    def ring(le, c):
-        up = [le + cd * (x * c) + normal * (h * c) for x, h in foil]
-        lo = [le + cd * (x * c) - normal * (h * c) for x, h in reversed(foil)]
-        lo = lo[1:-1] if kind == "lens" else lo[:-1]  # drop points both surfaces share
-        return [tuple(p) for p in up + lo]
+    c0, c1 = chord
+    xs = [c0 + (c1 - c0) * (0.5 - 0.5 * math.cos(math.pi * i / (chords - 1))) if kind == "lens"
+          else c0 + (c1 - c0) * i / (chords - 1) for i in range(chords)]
+    def ring(s):
+        le, c = r0 + (t0 - r0) * s, root_chord + (tip_chord - root_chord) * s
+        pt = lambda x, h: tuple(le + cd * (x * c) + normal * h)
+        hs = [_half_thickness(kind, thickness, x) * c + offset for x in xs]
+        up = [pt(x, h) for x, h in zip(xs, hs)]
+        if side:
+            up = [pt(x, side * h) for x, h in zip(xs, hs)]
+            return up + [pt(xs[-1], 0.0), pt(xs[0], 0.0)]
+        lo = [pt(x, -h) for x, h in zip(reversed(xs), reversed(hs))]
+        if hs[-1] <= 1e-12:  # sharp trailing edge: both surfaces share it
+            lo = lo[1:]
+        if hs[0] <= 1e-12:   # sharp leading edge
+            lo = lo[:-1]
+        return up + lo
     bm = bmesh.new()
-    _loft(bm, [ring(r0, root_chord), ring(t0, tip_chord)])
+    _loft(bm, [ring(span[0]), ring(span[1])])
     return _object(name, bm, material, Matrix(), parent, smooth=False)
