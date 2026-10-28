@@ -1,6 +1,8 @@
 {
-  "p01": { "caption": "Durgerdam, The Netherlands Circa 2008", "slug": "durgerdam" },
-  "p03": { "caption": "Emory Peak, Big Bend National Park", "slug": "emory-peak" },
-  "p05t": { "caption": "Witnessing the SpaceX IPO", "slug": "spacex-ipo" },
-  "p08": { "caption": "Atlas", "slug": "atlas" }
+  "p01": { "title": "Durgerdam, The Netherlands Circa 2008", "slug": "durgerdam" },
+  "p01b": { "title": "Petrified Forest", "caption": "Didn't want to pay for a motel on my drive from Texas to California, so I chose this gorgeous spot", "slug": "petrified-forest" },
+  "p03": { "title": "Emory Peak, Big Bend National Park", "slug": "emory-peak" },
+  "p04b": { "title": "Guadalupe Peak, Guadalupe Mountains National Park", "caption": "Believe it or not this is supposed to be a desert. I chose the one weekend where it turned into this.", "slug": "guadalupe-peak" },
+  "p05t": { "title": "Witnessing the SpaceX IPO", "slug": "spacex-ipo" },
+  "p08": { "title": "Atlas", "slug": "atlas" }
 }

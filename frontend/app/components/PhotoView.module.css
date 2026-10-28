@@ -26,13 +26,25 @@
   display: block;
 }
 
-.caption {
+.text {
   flex-shrink: 0;
-  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
   text-align: center;
   font-family: var(--font-roboto-mono);
+}
+
+.title {
+  margin: 0;
   font-size: 0.8rem;
   color: #00ff00;
+}
+
+.caption {
+  margin: 0;
+  font-size: 0.75rem;
+  color: rgba(0, 255, 0, 0.6);
 }
 
 .nav {

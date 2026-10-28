@@ -3,6 +3,7 @@
 export interface Photo {
   n: number;
   slug: string;
+  title?: string;
   caption?: string;
   image?: string;
   video?: string;

@@ -7,7 +7,7 @@ type Props = { params: Promise<{ slug: string }> };
 
 export const dynamicParams = false;
 
-// Each photo lives at its slug. A captioned photo's old number URL (/photos/3)
+// Each photo lives at its slug. A titled photo's old number URL (/photos/3)
 // is built too and redirects to the slug, so earlier links keep working.
 export async function generateStaticParams() {
   return getPhotos().flatMap((p) => (p.slug === String(p.n) ? [p.slug] : [p.slug, String(p.n)]).map((slug) => ({ slug })));
@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const photo = getPhotos().find((p) => p.slug === slug);
   if (!photo) return {};
-  return { title: photo.caption ?? `Photo ${photo.n}`, alternates: { canonical: `/photos/${photo.slug}` } };
+  return { title: photo.title ?? `Photo ${photo.n}`, alternates: { canonical: `/photos/${photo.slug}` } };
 }
 
 export default async function PhotoPage({ params }: Props) {

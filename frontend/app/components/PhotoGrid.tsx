@@ -53,7 +53,7 @@ export default function PhotoGrid({ photos }: { photos: Photo[] }) {
               key={p.n}
               href={`/photos/${p.slug}`}
               className={`${styles.tile} ${pathname === `/photos/${p.slug}` ? styles.active : ""}`}
-              aria-label={p.caption ?? `Photo ${p.n}`}
+              aria-label={p.title ?? `Photo ${p.n}`}
             >
               {p.video ? (
                 // A clip plays in its tile like a GIF: muted, looping, inline.
