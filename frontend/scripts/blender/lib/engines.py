@@ -27,7 +27,8 @@
 #   parts:     [{"kind": "pump" | "pipe" | "box" | "actuator" | "lathe", "name": ..., ...}, ...]
 #              in the engine's frame: pump {diameter, length, at, axis}, pipe {diameter, points},
 #              box {size, at}, actuator {diameter, from, to}, lathe {profile [[r, z], ...], at,
-#              axis}; each with its own source
+#              axis, smooth (false for flat-ended discs)}; each may set its material; each
+#              with its own source
 #   materials: {"nozzle", "chamber", "powerhead", "parts"}: material names (spec or shared)
 # Jet ("kind": "jet"), the intake at the top (z = length), exhaust at z = 0:
 #   nacelle:   length, max_diameter, inlet_diameter, exit_diameter, wall; optional profile
@@ -223,7 +224,7 @@ def _rocket(name, e, lod):
             elif k == "lathe":
                 objs.append(parts.lathe(pn, [tuple(q) for q in p["profile"]], location=p["at"],
                                         direction=p.get("axis", (0, 0, 1)), segments=24,
-                                        material=p.get("material", pm)))
+                                        smooth=p.get("smooth", True), material=p.get("material", pm)))
             else:
                 raise ValueError(f"{pn}: unknown engine part kind {k!r}")
     return objs

@@ -331,8 +331,8 @@
     },
     "powerhead": {
       "diameter": {
-        "value": 1.0,
-        "source": "factsheet_1968 drawing, estimated: the oxidizer dome is about as wide as the chamber"
+        "value": 1.1,
+        "source": "photo_6413912 (scaled by the 4 ft turbopump, about 370 px across: 0.0033 m/px): the oxidizer dome's bolted ring about 330 px across. Estimated."
       },
       "height": {
         "value": 0.55,
@@ -342,7 +342,7 @@
     "gimbal": {
       "diameter": {
         "value": 0.5,
-        "source": "r3896_1, Figure 2-22, estimated from the gimbal block drawn above the gimbal centre"
+        "source": "photo_6413912 (scaled by the 4 ft turbopump, about 370 px across: 0.0033 m/px): the cross-shaped gimbal block about 150 px across. Estimated."
       },
       "height": {
         "value": 0.3161,
@@ -373,23 +373,68 @@
     },
     "parts": [
       {
-        "kind": "pump",
+        "kind": "lathe",
         "name": "turbopump",
-        "diameter": {
-          "value": 1.2192,
-          "source": "f1_familiarization, turbopump particulars: \"Length 5 feet\", \"Diameter 4 feet\""
-        },
-        "length": {
-          "value": 1.524,
-          "source": "f1_familiarization (see diameter)"
+        "profile": {
+          "value": [
+            [
+              0,
+              0
+            ],
+            [
+              0.45,
+              0
+            ],
+            [
+              0.5,
+              0.08
+            ],
+            [
+              0.5,
+              0.42
+            ],
+            [
+              0.58,
+              0.5
+            ],
+            [
+              0.61,
+              0.6
+            ],
+            [
+              0.61,
+              0.95
+            ],
+            [
+              0.55,
+              1.02
+            ],
+            [
+              0.61,
+              1.08
+            ],
+            [
+              0.61,
+              1.42
+            ],
+            [
+              0.5,
+              1.524
+            ],
+            [
+              0,
+              1.524
+            ]
+          ],
+          "source": "f1_familiarization: \"Length 5 feet\", \"Diameter 4 feet\"; the stack (turbine at the bottom, then the fuel pump, the oxidizer pump on top) from biggs_f1 and the R-3896-1A turbopump cutaway; section heights estimated."
         },
         "at": {
           "value": [
-            1.3,
+            1.27,
             0,
             3.9497
           ],
-          "source": "r3896_1, Figure 2-22 view B-B: the envelope reaches 75.75 in from the gimbal centre on the turbopump side, so with the 4 ft pump its axis is about 51 in (1.30 m) out; top at the gimbal centre's height (photo_6862832). Estimated."
+          "source": "r3896_1, Figure 2-22 view B-B: the interface panel's centreline about 48 in from the gimbal centre, the envelope 75.75 in on that side; Figure 1-3 puts the turbopump at 12 o'clock. Estimated."
         },
         "axis": [
           0,
@@ -397,6 +442,584 @@
           1
         ],
         "material": "cres"
+      },
+      {
+        "kind": "box",
+        "name": "interface_panel",
+        "size": {
+          "value": [
+            0.8001,
+            1.3144,
+            0.06
+          ],
+          "source": "r3896_1, Figure 2-22 view B-B: a stadium 51.75 in between the centres of its 15.75 in radius ends; Figure 1-3 shows it over the turbopump with the oxidizer inlet between the two fuel inlets"
+        },
+        "at": {
+          "value": [
+            1.27,
+            0,
+            5.5037
+          ],
+          "source": "r3896_1, Figure 2-22: on top of the turbopump. Estimated."
+        },
+        "material": "cres"
+      },
+      {
+        "kind": "lathe",
+        "name": "interface_panel_end_1",
+        "profile": {
+          "value": [
+            [
+              0,
+              0
+            ],
+            [
+              0.4,
+              0
+            ],
+            [
+              0.4,
+              0.06
+            ],
+            [
+              0,
+              0.06
+            ]
+          ],
+          "source": "r3896_1, Figure 2-22 view B-B: \"15.75 RADIUS (TYP 2 PLACES)\""
+        },
+        "at": {
+          "value": [
+            1.27,
+            0.6572,
+            5.4737
+          ],
+          "source": "r3896_1, Figure 2-22 view B-B: 25.87 in each side of the centre"
+        },
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "material": "cres",
+        "smooth": false
+      },
+      {
+        "kind": "pipe",
+        "name": "fuel_inlet_1",
+        "diameter": {
+          "value": 0.3,
+          "source": "photo_6413912: the fuel inlet elbows about 90 px across. Estimated."
+        },
+        "points": {
+          "value": [
+            [
+              1.27,
+              0.45,
+              4.75
+            ],
+            [
+              1.27,
+              0.68,
+              4.75
+            ],
+            [
+              1.27,
+              0.66,
+              5.454
+            ]
+          ],
+          "source": "r3896_1, Figure 1-3: the fuel inlets No. 1 and 2 come up through the interface panel's ends from the fuel pump's two radial inlets (factsheet_1968, p.3-3). Estimated."
+        },
+        "bend_radius": 0.15,
+        "material": "cres"
+      },
+      {
+        "kind": "lathe",
+        "name": "interface_panel_end_2",
+        "profile": {
+          "value": [
+            [
+              0,
+              0
+            ],
+            [
+              0.4,
+              0
+            ],
+            [
+              0.4,
+              0.06
+            ],
+            [
+              0,
+              0.06
+            ]
+          ],
+          "source": "r3896_1, Figure 2-22 view B-B: \"15.75 RADIUS (TYP 2 PLACES)\""
+        },
+        "at": {
+          "value": [
+            1.27,
+            -0.6572,
+            5.4737
+          ],
+          "source": "r3896_1, Figure 2-22 view B-B: 25.87 in each side of the centre"
+        },
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "material": "cres",
+        "smooth": false
+      },
+      {
+        "kind": "pipe",
+        "name": "fuel_inlet_2",
+        "diameter": {
+          "value": 0.3,
+          "source": "photo_6413912: the fuel inlet elbows about 90 px across. Estimated."
+        },
+        "points": {
+          "value": [
+            [
+              1.27,
+              -0.45,
+              4.75
+            ],
+            [
+              1.27,
+              -0.68,
+              4.75
+            ],
+            [
+              1.27,
+              -0.66,
+              5.454
+            ]
+          ],
+          "source": "r3896_1, Figure 1-3: the fuel inlets No. 1 and 2 come up through the interface panel's ends from the fuel pump's two radial inlets (factsheet_1968, p.3-3). Estimated."
+        },
+        "bend_radius": 0.15,
+        "material": "cres"
+      },
+      {
+        "kind": "lathe",
+        "name": "oxidizer_inlet",
+        "profile": {
+          "value": [
+            [
+              0,
+              0
+            ],
+            [
+              0.36,
+              0
+            ],
+            [
+              0.36,
+              0.08
+            ],
+            [
+              0,
+              0.08
+            ]
+          ],
+          "source": "r3896_1, Figure 1-3: the turbopump oxidizer inlet flange in the panel's middle, about a third of its length across. Estimated."
+        },
+        "at": {
+          "value": [
+            1.27,
+            0,
+            5.5137
+          ],
+          "source": "r3896_1, Figure 1-3"
+        },
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "material": "cres",
+        "smooth": false
+      },
+      {
+        "kind": "lathe",
+        "name": "oxidizer_valve_1",
+        "profile": {
+          "value": [
+            [
+              0,
+              0
+            ],
+            [
+              0.2184,
+              0
+            ],
+            [
+              0.2184,
+              0.762
+            ],
+            [
+              0,
+              0.762
+            ]
+          ],
+          "source": "r3896_1, Figure 1-22 (PDF p.51): oxidizer valve \"Length 30.0 in.\", \"Width 17.25 in.\""
+        },
+        "at": {
+          "value": [
+            0,
+            0.77,
+            4.636
+          ],
+          "source": "r3896_1, p.1-12: the two main oxidizer valves on the oxidizer dome, 180 degrees apart; photo_6413912 shows them standing along the engine's axis beside the dome. Estimated."
+        },
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "material": "cres",
+        "smooth": false
+      },
+      {
+        "kind": "lathe",
+        "name": "fuel_valve_1",
+        "profile": {
+          "value": [
+            [
+              0,
+              0
+            ],
+            [
+              0.1397,
+              0
+            ],
+            [
+              0.1397,
+              0.4064
+            ],
+            [
+              0,
+              0.4064
+            ]
+          ],
+          "source": "r3896_1, Figure 1-22 (PDF p.51): fuel valve \"Length 16.0 in.\", \"Width 11.0 in.\""
+        },
+        "at": {
+          "value": [
+            -0.3,
+            0.74,
+            4.42
+          ],
+          "source": "r3896_1, p.1-10: two flanges on the fuel inlet manifold, 180 degrees apart, for the main fuel valves; factsheet_1968 drawing: below and beside the oxidizer valve. Estimated."
+        },
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "material": "cres",
+        "smooth": false
+      },
+      {
+        "kind": "pipe",
+        "name": "lox_duct_1",
+        "diameter": {
+          "value": 0.33,
+          "source": "photo_6413912 (scaled by the 4 ft turbopump, about 370 px across: 0.0033 m/px): the oxidizer high-pressure ducts about 100 px across. Estimated."
+        },
+        "points": {
+          "value": [
+            [
+              1.27,
+              0.4,
+              5.2
+            ],
+            [
+              1.0,
+              0.98,
+              5.2
+            ],
+            [
+              0.35,
+              0.98,
+              5.2
+            ],
+            [
+              0.05,
+              0.8,
+              5.2
+            ]
+          ],
+          "source": "photo_6413912 and factsheet_1968 drawing: from the oxidizer pump's tangential outlets (factsheet_1968, p.3-3) round to the oxidizer valves. Estimated."
+        },
+        "bend_radius": 0.3,
+        "material": "cres"
+      },
+      {
+        "kind": "pipe",
+        "name": "fuel_duct_1",
+        "diameter": {
+          "value": 0.27,
+          "source": "photo_6413912 (scaled by the 4 ft turbopump, about 370 px across: 0.0033 m/px): the fuel high-pressure ducts about 80 px across. Estimated."
+        },
+        "points": {
+          "value": [
+            [
+              1.27,
+              0.4,
+              4.62
+            ],
+            [
+              1.0,
+              1.05,
+              4.62
+            ],
+            [
+              0.0,
+              1.05,
+              4.62
+            ],
+            [
+              -0.28,
+              0.78,
+              4.62
+            ]
+          ],
+          "source": "photo_6413912 and factsheet_1968 drawing: from the fuel pump's outlets round to the fuel valves. Estimated."
+        },
+        "bend_radius": 0.3,
+        "material": "cres"
+      },
+      {
+        "kind": "lathe",
+        "name": "oxidizer_valve_2",
+        "profile": {
+          "value": [
+            [
+              0,
+              0
+            ],
+            [
+              0.2184,
+              0
+            ],
+            [
+              0.2184,
+              0.762
+            ],
+            [
+              0,
+              0.762
+            ]
+          ],
+          "source": "r3896_1, Figure 1-22 (PDF p.51): oxidizer valve \"Length 30.0 in.\", \"Width 17.25 in.\""
+        },
+        "at": {
+          "value": [
+            0,
+            -0.77,
+            4.636
+          ],
+          "source": "r3896_1, p.1-12: the two main oxidizer valves on the oxidizer dome, 180 degrees apart; photo_6413912 shows them standing along the engine's axis beside the dome. Estimated."
+        },
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "material": "cres",
+        "smooth": false
+      },
+      {
+        "kind": "lathe",
+        "name": "fuel_valve_2",
+        "profile": {
+          "value": [
+            [
+              0,
+              0
+            ],
+            [
+              0.1397,
+              0
+            ],
+            [
+              0.1397,
+              0.4064
+            ],
+            [
+              0,
+              0.4064
+            ]
+          ],
+          "source": "r3896_1, Figure 1-22 (PDF p.51): fuel valve \"Length 16.0 in.\", \"Width 11.0 in.\""
+        },
+        "at": {
+          "value": [
+            -0.3,
+            -0.74,
+            4.42
+          ],
+          "source": "r3896_1, p.1-10: two flanges on the fuel inlet manifold, 180 degrees apart, for the main fuel valves; factsheet_1968 drawing: below and beside the oxidizer valve. Estimated."
+        },
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "material": "cres",
+        "smooth": false
+      },
+      {
+        "kind": "pipe",
+        "name": "lox_duct_2",
+        "diameter": {
+          "value": 0.33,
+          "source": "photo_6413912 (scaled by the 4 ft turbopump, about 370 px across: 0.0033 m/px): the oxidizer high-pressure ducts about 100 px across. Estimated."
+        },
+        "points": {
+          "value": [
+            [
+              1.27,
+              -0.4,
+              5.2
+            ],
+            [
+              1.0,
+              -0.98,
+              5.2
+            ],
+            [
+              0.35,
+              -0.98,
+              5.2
+            ],
+            [
+              0.05,
+              -0.8,
+              5.2
+            ]
+          ],
+          "source": "photo_6413912 and factsheet_1968 drawing: from the oxidizer pump's tangential outlets (factsheet_1968, p.3-3) round to the oxidizer valves. Estimated."
+        },
+        "bend_radius": 0.3,
+        "material": "cres"
+      },
+      {
+        "kind": "pipe",
+        "name": "fuel_duct_2",
+        "diameter": {
+          "value": 0.27,
+          "source": "photo_6413912 (scaled by the 4 ft turbopump, about 370 px across: 0.0033 m/px): the fuel high-pressure ducts about 80 px across. Estimated."
+        },
+        "points": {
+          "value": [
+            [
+              1.27,
+              -0.4,
+              4.62
+            ],
+            [
+              1.0,
+              -1.05,
+              4.62
+            ],
+            [
+              0.0,
+              -1.05,
+              4.62
+            ],
+            [
+              -0.28,
+              -0.78,
+              4.62
+            ]
+          ],
+          "source": "photo_6413912 and factsheet_1968 drawing: from the fuel pump's outlets round to the fuel valves. Estimated."
+        },
+        "bend_radius": 0.3,
+        "material": "cres"
+      },
+      {
+        "kind": "lathe",
+        "name": "fuel_inlet_manifold",
+        "profile": {
+          "value": [
+            [
+              0.45,
+              4.38
+            ],
+            [
+              0.72,
+              4.38
+            ],
+            [
+              0.72,
+              4.5
+            ],
+            [
+              0.45,
+              4.5
+            ]
+          ],
+          "source": "r3896_1, p.1-10: \"The fuel inlet manifold, welded to the upper end of the chamber body\"; size from photo_6413912. Estimated."
+        },
+        "at": [
+          0,
+          0,
+          0
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "material": "cres",
+        "smooth": false
+      },
+      {
+        "kind": "lathe",
+        "name": "dome_flange",
+        "profile": {
+          "value": [
+            [
+              0.5,
+              0
+            ],
+            [
+              0.6,
+              0
+            ],
+            [
+              0.6,
+              0.08
+            ],
+            [
+              0.5,
+              0.08
+            ]
+          ],
+          "source": "photo_6413912 (scaled by the 4 ft turbopump, about 370 px across: 0.0033 m/px): the dome's bolted ring about 330 px (1.1 m) across, 1.2 m with the bolts. Estimated."
+        },
+        "at": {
+          "value": [
+            0,
+            0,
+            4.8162
+          ],
+          "source": "r3896_1, the injector end (see chamber)"
+        },
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "material": "cres",
+        "smooth": false
       },
       {
         "kind": "lathe",
@@ -434,12 +1057,12 @@
           "value": [
             1.56,
             0,
-            2.4765
+            2.4764999999999997
           ],
           "source": "factsheet_1968 drawing: hangs from the turbine and drops into the manifold's inlet; leaned out so it clears the bell (photo_6862832 puts its axis about 1.5 m out). Estimated."
         },
         "axis": [
-          -0.26,
+          -0.29,
           0,
           1.4732
         ],
@@ -474,126 +1097,6 @@
         },
         "bend_radius": 0.4,
         "material": "bright_steel"
-      },
-      {
-        "kind": "pipe",
-        "name": "lox_duct_1",
-        "diameter": {
-          "value": 0.2032,
-          "source": "r3896_1, Figure 1-22: oxidizer valve \"Inlet diameter 8.0 inches\""
-        },
-        "points": {
-          "value": [
-            [
-              1.27,
-              0.3,
-              5.2705
-            ],
-            [
-              0.3,
-              0.75,
-              5.2705
-            ],
-            [
-              0,
-              0.45,
-              5.1181
-            ]
-          ],
-          "source": "factsheet_1968 drawing: high-pressure oxidizer ducts from the pump's top to the two main oxidizer valves on the dome, 180 degrees apart. Estimated."
-        },
-        "bend_radius": 0.25,
-        "material": "duct_white"
-      },
-      {
-        "kind": "pipe",
-        "name": "lox_duct_2",
-        "diameter": {
-          "value": 0.2032,
-          "source": "r3896_1, Figure 1-22 (see lox_duct_1)"
-        },
-        "points": {
-          "value": [
-            [
-              1.27,
-              -0.3,
-              5.2705
-            ],
-            [
-              0.3,
-              -0.75,
-              5.2705
-            ],
-            [
-              0,
-              -0.45,
-              5.1181
-            ]
-          ],
-          "source": "factsheet_1968 drawing (see lox_duct_1). Estimated."
-        },
-        "bend_radius": 0.25,
-        "material": "duct_white"
-      },
-      {
-        "kind": "pipe",
-        "name": "fuel_duct_1",
-        "diameter": {
-          "value": 0.1524,
-          "source": "r3896_1, Figure 1-22: fuel valve \"Inlet diameter 6.0 inches\""
-        },
-        "points": {
-          "value": [
-            [
-              0.72,
-              0.2,
-              4.7117
-            ],
-            [
-              0,
-              0.9,
-              4.7117
-            ],
-            [
-              -0.35,
-              0.36,
-              4.5085
-            ]
-          ],
-          "source": "factsheet_1968 drawing: high-pressure fuel ducts from the fuel pump to the two main fuel valves on the fuel inlet manifold, 180 degrees apart (r3896_1 p.1-10). Estimated."
-        },
-        "bend_radius": 0.25,
-        "material": "duct_white"
-      },
-      {
-        "kind": "pipe",
-        "name": "fuel_duct_2",
-        "diameter": {
-          "value": 0.1524,
-          "source": "r3896_1, Figure 1-22 (see fuel_duct_1)"
-        },
-        "points": {
-          "value": [
-            [
-              0.72,
-              -0.2,
-              4.7117
-            ],
-            [
-              0,
-              -0.9,
-              4.7117
-            ],
-            [
-              -0.35,
-              -0.36,
-              4.5085
-            ]
-          ],
-          "source": "factsheet_1968 drawing (see fuel_duct_1). Estimated."
-        },
-        "bend_radius": 0.25,
-        "material": "duct_white"
       },
       {
         "kind": "box",
@@ -709,21 +1212,35 @@
       "target": [
         0.6,
         0,
-        4.6
+        4.9
+      ],
+      "look": [
+        0.5,
+        -1,
+        0.7
+      ],
+      "radius": 2.0
+    },
+    {
+      "name": "powerhead from the turbopump side",
+      "target": [
+        0.8,
+        0,
+        4.7
       ],
       "look": [
         1,
-        -1,
+        0.3,
         0.3
       ],
-      "radius": 2.2
+      "radius": 2.0
     },
     {
       "name": "manifold and extension joint",
       "target": [
-        1.4,
+        1.5,
         0,
-        1.8
+        2.0
       ],
       "look": [
         1,
