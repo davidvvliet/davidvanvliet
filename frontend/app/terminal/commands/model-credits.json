@@ -7,9 +7,16 @@
   "starship": [
     "SpaceX, \"Introducing Starship V3\" (engines, grid fins, hot stage)",
     "SpaceX, photo of the Flight 13 Starship stack on Pad 2 (proportions, flaps, hot-stage ring)",
-    "SpaceX, close photo of the Flight 13 ship on Pad 2 (grid fins)",
-    "SpaceX, photo of Booster 19 at Pad 2 (grid fins, hot stage)",
     "Material colours sampled from SpaceX photos of Ship 39 and the Flight 12 wet dress rehearsal",
+    "SpaceX, photo of the Flight 12 ascent (ship height, engines)",
+    "SpaceX, render of the Block 3 ship's aft end (engine layout, flap hinges)"
+  ],
+  "superheavy": [
+    "SpaceX, \"Introducing Starship V3\" (engines, grid fins, hot stage)",
+    "SpaceX, photo of the Flight 13 Starship stack on Pad 2 (proportions, flaps, hot-stage ring)",
+    "SpaceX, close photo of the Flight 13 ship on Pad 2 (grid fins)",
+    "Material colours sampled from a SpaceX photo of the Flight 12 wet dress rehearsal",
+    "SpaceX, photo of Booster 19 at Pad 2 (grid fins, hot stage)",
     "SpaceX, photo of the Flight 12 ascent (ship height, engines)"
   ],
   "voyager": [
