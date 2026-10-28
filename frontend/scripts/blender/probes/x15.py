@@ -35,12 +35,21 @@ def build(spec):
         h, zc = (top - bot) / 2, (top + bot) / 2
         return ((abs(y / w) ** n + abs((z - zc) / h) ** n) ** (1 / n) - 1) * min(w, h)
 
+    rn = spec["from_photos"]["round_nose"]["value"]
+    ball_r = f["ball_nose"]["base_diameter"] / FT / 2
+
     def ring(x, n=64):
         w, top, bot = lerp(body, x)
+        if x < rn["blend_to_x"]:  # round nose cone, from the ball's base
+            zc, r = (top + bot) / 2, (w + (top - bot) / 2) / 2
+            if x <= body[0][0]:
+                r = ball_r
+            t = max(0.0, (x - rn["until_x"]) / (rn["blend_to_x"] - rn["until_x"]))
+            w, top, bot = r + (w - r) * t, zc + r + (top - zc - r) * t, zc - r + (bot - zc + r) * t
         fr = lerp(fair, x)
         zc = (top + bot) / 2
         if fr:  # under the fairings the body is narrower than the plan outline (front view)
-            ramp = min(1.0, (x - fair[0][0]) / (fair[2][0] - fair[0][0]))
+            ramp = min(1.0, (x - fair[0][0]) / (dr["side_fairings"]["body_narrowing_to_x"] - fair[0][0]))
             w *= 1 - (1 - dr["side_fairings"]["body_width_factor"]) * ramp
         def f(y, z):
             d = field(y, z, w, top, bot, 2)
@@ -61,7 +70,7 @@ def build(spec):
         return pts
 
     cut = spec["from_photos"]["bare_nose_end_x"]["value"]
-    xs = sorted({r[0] for r in body} | {r[0] for r in fair} | {cut})
+    xs = sorted({r[0] for r in body} | {r[0] for r in fair} | {cut, 4.25, 7.0, rn["blend_to_x"], 15.0, 17.0, fair[-1][0] + 0.01})
     nose_xs, aft_xs = [x for x in xs if x <= cut], [x for x in xs if x >= cut]
     with parts.assembly("fuselage", core=True):
         parts.loft("fuselage", [ring(x) for x in aft_xs], material="x15_black")
@@ -74,7 +83,7 @@ def build(spec):
             if w <= 0:
                 rings.append([P(x, 0, t)])
             else:
-                rings.append([P(x, y, z) for y, z in parts.section(w, t, b, 32, 2.5)])
+                rings.append([P(x, y, z) for y, z in parts.section(w, t, b, 32, dr["canopy"]["exponent"])])
         parts.loft("canopy", rings, material="x15_black")
 
     with parts.assembly("ball_nose"):

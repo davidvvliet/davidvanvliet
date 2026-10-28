@@ -415,23 +415,23 @@
         "top",
         "bottom"
       ],
-      "source": "nasa_tnd3343, Fig. 1 p.20: estimated from refs/x15/three-view-1966.png (TN D-3343 Fig. 1, rendered at 400 dpi), scaled by its 49.5 ft length (1695 px); top view outline (scaled up 2% so the widest station gives Table I's 7.33 ft), side view lozenge. The drawn fairings start in a rounded nose at x 12.9 and end at x 48.8. The fillet (0.7 ft, the smooth-union blend between body and fairing) and the body's width inside the fairings (0.75 of the plan's inner line, reached by x 14) are estimated from the front view, whose sides are concave between the fairings and the canopy and under the belly. The fairing section is a superellipse of exponent 1.5 (diamond-like, its outer edge sharp at wing level), estimated from the same view.",
+      "source": "nasa_tnd3343, Fig. 1 p.20: estimated from refs/x15/three-view-1966.png (TN D-3343 Fig. 1, rendered at 400 dpi), scaled by its 49.5 ft length (1695 px); top view outline (scaled up 2% so the widest station gives Table I's 7.33 ft), side view lozenge. The drawn fairings start in a rounded nose at x 12.9 and end at x 48.8. The fillet (0.7 ft, the smooth-union blend between body and fairing) and the body's width inside the fairings (0.75 of the plan's inner line, narrowing from where the fairings start to x 20) are estimated from the front view, whose sides are concave between the fairings and the canopy and under the belly. The fairing section is a superellipse of exponent 1.5 (diamond-like, its outer edge sharp at wing level), estimated from the same view. The first three half-widths are reduced by up to 0.1 ft so the fairings grow out of the body without a nub; they end in a step at x 48.8, as drawn.",
       "stations": [
         [
           12.9,
-          2.1,
+          2.0,
           0.6,
           -0.2
         ],
         [
           13.5,
-          2.3,
+          2.2,
           1.0,
           -0.5
         ],
         [
           14,
-          2.5,
+          2.42,
           1.1,
           -0.58
         ],
@@ -540,7 +540,8 @@
       ],
       "fillet": 0.7,
       "body_width_factor": 0.75,
-      "exponent": 1.5
+      "exponent": 1.5,
+      "body_narrowing_to_x": 20.0
     },
     "canopy": {
       "columns": [
@@ -549,7 +550,7 @@
         "top",
         "bottom"
       ],
-      "source": "nasa_tnd3343, Fig. 1 p.20: estimated from refs/x15/three-view-1966.png (TN D-3343 Fig. 1, rendered at 400 dpi), scaled by its 49.5 ft length (1695 px); side view for the profile (the drawn top, 2.77, lowered to 2.57 so the depth over the canopy is Table I's 4.97 with the 2.40 bottom), top view for the width (1.46 at the frame). Ends are points.",
+      "source": "nasa_tnd3343, Fig. 1 p.20: estimated from refs/x15/three-view-1966.png (TN D-3343 Fig. 1, rendered at 400 dpi), scaled by its 49.5 ft length (1695 px). Side view for the profile: windscreen from x 6.7 (z 1.8) to the flat top at x 9.5-11.5, then the aft fairing down to the fuselage top by x 16; the drawn top (2.77) is lowered by up to 0.2 ft so the depth over the canopy is Table I's 4.97 with the 2.40 bottom, tapering to no change where the fairing meets the fuselage. Front view for the width (half-width 1.2 at the windows, flat sides, so a superellipse of exponent 3); top view for the aft fairing's taper (half-width 0.95 at x 13 to a point at about x 16-17). The bottom points sit inside the fuselage, along the drawn canopy sill (z 1.2).",
       "stations": [
         [
           6.7,
@@ -558,42 +559,91 @@
           1.8
         ],
         [
-          8,
-          1.2,
-          2.3,
+          7.0,
+          0.8,
+          1.9,
           1.3
         ],
         [
+          7.5,
+          1.0,
+          2.06,
+          1.2
+        ],
+        [
+          8.0,
+          1.1,
+          2.25,
+          1.2
+        ],
+        [
+          8.5,
+          1.15,
+          2.45,
+          1.2
+        ],
+        [
+          9.0,
+          1.18,
+          2.52,
+          1.2
+        ],
+        [
           9.5,
-          1.4,
+          1.2,
           2.57,
-          1.4
+          1.2
         ],
         [
           11.5,
-          1.45,
-          2.52,
+          1.2,
+          2.57,
+          1.25
+        ],
+        [
+          12.0,
+          1.15,
+          2.55,
+          1.35
+        ],
+        [
+          12.5,
+          1.05,
+          2.5,
           1.5
         ],
         [
-          13,
-          1.0,
-          2.42,
-          1.7
+          13.0,
+          0.95,
+          2.48,
+          1.65
         ],
         [
-          15,
-          0.5,
-          2.33,
+          14.0,
+          0.78,
+          2.42,
+          1.85
+        ],
+        [
+          15.0,
+          0.55,
+          2.36,
           1.95
         ],
         [
-          16.5,
+          15.5,
+          0.4,
+          2.34,
+          2.0
+        ],
+        [
+          16.3,
           0,
-          2.22,
-          2.22
+          2.28,
+          2.28
         ]
-      ]
+      ],
+      "exponent": 3.0
     },
     "wing": {
       "tip_le_x": 32.0,
@@ -707,6 +757,14 @@
         "from_span_fraction": 0.38
       },
       "source": "nasm_x15, photos NASM2018-10035 and -10037: the upper fin is yellow (with NASA in black) above a straight line parallel to the fuselage, which is the split between the fixed fin and the moving upper part; nasa_tnd3343 Fig. 1 p.20 draws that split 38% of the way up the fin (z 3.27 ft over a root at 1.58 and tip at 6.05)."
+    },
+    "round_nose": {
+      "value": {
+        "until_x": 3.5,
+        "blend_to_x": 10.0
+      },
+      "unit": "ft",
+      "source": "nasm_x15, photo NASM2018-10038: the cone behind the ball nose is round in section; its radius is taken as the mean of the drawn half-width and half-depth, starting at the ball's 13.75 in base (jenkins_sp2007) and blending into the drawn sections between x 3.5 and 10 ft (estimated)."
     }
   }
 }
