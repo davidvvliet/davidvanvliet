@@ -9,7 +9,8 @@
       "read": "2026-10-28",
       "licence": "SpaceX copyright; quoted only",
       "saved": "",
-      "note": "Read through SpaceX's content API (https://content.spacex.com/api/spacex-website/updates, updateId starship-v3); the page itself renders client-side."
+      "note": "Read through SpaceX's content API (https://content.spacex.com/api/spacex-website/updates, updateId starship-v3); the page itself renders client-side.",
+      "credit": "SpaceX, \"Introducing Starship V3\" (engines, grid fins, hot stage)"
     },
     {
       "id": "sciam_f12",
@@ -81,7 +82,8 @@
       "url": "https://sxcontent9668.azureedge.us/cms-assets/assets/Flight_13_Website_Desktop_6_c571da0ca7.jpg",
       "read": "2026-10-28",
       "licence": "SpaceX copyright (licence not stated); used for measuring only, not in the repo",
-      "saved": ""
+      "saved": "",
+      "credit": "SpaceX, photo of the Flight 13 Starship stack on Pad 2 (proportions, flaps, hot-stage ring)"
     },
     {
       "id": "photo_pad_f13_close",
@@ -89,7 +91,8 @@
       "url": "https://sxcontent9668.azureedge.us/cms-assets/assets/Flight_13_Website_Mobile_4_319abe7e02.jpg",
       "read": "2026-10-28",
       "licence": "SpaceX copyright (licence not stated); used for measuring only",
-      "saved": ""
+      "saved": "",
+      "credit": "SpaceX, close photo of the Flight 13 ship on Pad 2 (grid fins)"
     },
     {
       "id": "photo_wdr",
@@ -105,7 +108,8 @@
       "url": "https://sxcontent9668.azureedge.us/cms-assets/assets/B19_Lift_Pad2_2603083611_083bb17256.jpg",
       "read": "2026-10-28",
       "licence": "SpaceX copyright (licence not stated); used for measuring only",
-      "saved": ""
+      "saved": "",
+      "credit": "SpaceX, photo of Booster 19 at Pad 2 (grid fins, hot stage)"
     },
     {
       "id": "photo_s39_fire",
@@ -113,7 +117,8 @@
       "url": "https://sxcontent9668.azureedge.us/cms-assets/assets/S39_6_Engine_Static_Fire_04142600114_d9f1acc588.jpg",
       "read": "2026-10-28",
       "licence": "SpaceX copyright (licence not stated); used for measuring only",
-      "saved": ""
+      "saved": "",
+      "credit": "Material colours sampled from SpaceX photos of Ship 39 and the Flight 12 wet dress rehearsal"
     },
     {
       "id": "photo_f12_ascent",
@@ -121,7 +126,8 @@
       "url": "https://sxcontent9668.azureedge.us/cms-assets/assets/Flight_12_Website_Mobile_3_fba489c895.jpg",
       "read": "2026-10-28",
       "licence": "SpaceX copyright (licence not stated); used for looking only",
-      "saved": ""
+      "saved": "",
+      "credit": "SpaceX, photo of the Flight 12 ascent (ship height, engines)"
     }
   ],
   "reference_model": {
