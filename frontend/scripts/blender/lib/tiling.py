@@ -30,26 +30,36 @@ def image(probe, name, rgb, colorspace):
     img["tiling"] = True
     return img
 
-def hex_tiles(probe, t, tile_hex, repeat_w, px_per_m=480):
+def hex_tiles(probe, t, tile_hex, repeat_w, cols=4, rows=4, px_per_m=480):
     """Colour and normal map of hexagonal tiles in staggered horizontal rows (vertices up),
-    `repeat_w` wide (4 tiles) and two row pairs tall, so it repeats seamlessly. `t`: gap,
-    gap_brightness, shade_spread, bevel, gap_depth, tilt. Returns (base, normal, height)."""
-    d = repeat_w / 4                                   # across flats = centre spacing in a row
-    H = 2 * d * math.sqrt(3)
+    `repeat_w` wide (`cols` tiles) and `rows` rows tall (even), so it repeats seamlessly; every
+    tile in the repeat gets its own shade and tilt. `t`: gap, gap_brightness, shade_spread,
+    bevel, gap_depth, tilt. Tile centres sit at (m d + (k % 2) d / 2, k d sqrt(3) / 2) in
+    texture metres (d = across flats). Returns (base, normal, height)."""
+    d = repeat_w / cols                                # across flats = centre spacing in a row
+    H = rows * d * math.sqrt(3) / 2
     w, h = int(round(repeat_w * px_per_m)), int(round(H * px_per_m))
     x = (np.arange(w) + 0.5) / w * repeat_w
     y = (np.arange(h) + 0.5) / h * H
-    X, Y = np.meshgrid(x, y)
-    cs, ids = [], []
-    for k in range(-2, 7):
-        for m in range(-2, 7):
-            cs.append((m * d + (k % 2) * d / 2, k * d * math.sqrt(3) / 2))
-            ids.append((m % 4) * 4 + (k % 4))
-    cs, ids = np.array(cs), np.array(ids)
-    D2 = (X[..., None] - cs[:, 0]) ** 2 + (Y[..., None] - cs[:, 1]) ** 2
+    X, Y = np.meshgrid(x.astype(np.float32), y.astype(np.float32))
+    # The two nearest tile centres per pixel, from the few candidates around it: rows just
+    # below and above, and in each row the nearest centre and its neighbours.
+    row = d * math.sqrt(3) / 2
+    k0 = np.floor(Y / row).astype(np.int32)
+    D2s, idss = [], []
+    for dk in (-1, 0, 1, 2):
+        k = k0 + dk
+        off = (k % 2) * d / 2
+        mc = np.rint((X - off) / d).astype(np.int32)
+        for dm in (-1, 0, 1):
+            m = mc + dm
+            D2s.append((X - (m * d + off)) ** 2 + (Y - k * row) ** 2)
+            idss.append((m % cols) * rows + (k % rows))
+    D2, ids_px = np.stack(D2s, 2), np.stack(idss, 2)
     order = np.argsort(D2, axis=2)[..., :2]
     d1 = np.take_along_axis(D2, order[..., :1], 2)[..., 0]
     d2 = np.take_along_axis(D2, order[..., 1:2], 2)[..., 0]
+    cell = np.take_along_axis(ids_px, order[..., :1], 2)[..., 0]
     edge = (d2 - d1) / (2 * d)                         # distance to the cell's edge (m)
     inside = np.clip((edge - t["gap"] / 2) / 0.004, 0, 1)
     # Bevel: each tile's edge rounds down into the gap over `bevel`, so light draws a thin
@@ -57,15 +67,15 @@ def hex_tiles(probe, t, tile_hex, repeat_w, px_per_m=480):
     bev = np.clip((edge - t["gap"] / 2) / t["bevel"], 0, 1)
     bev = bev * bev * (3 - 2 * bev)
     rng = np.random.default_rng(39)
-    shade = 1 + t["shade_spread"] * rng.uniform(-1, 1, 16)
-    tilt = rng.uniform(-1, 1, (16, 2)) * t["tilt"]     # each tile sits slightly off flush
-    tile = srgb(tile_hex)[None, None] * shade[ids[order[..., 0]]][..., None]
+    shade = 1 + t["shade_spread"] * rng.uniform(-1, 1, cols * rows)
+    tilt = rng.uniform(-1, 1, (cols * rows, 2)) * t["tilt"]     # each tile sits slightly off flush
+    tile = srgb(tile_hex)[None, None] * shade[cell][..., None]
     gap = srgb(tile_hex) * t["gap_brightness"]
     rgb = tile * inside[..., None] + gap[None, None] * (1 - inside[..., None])
     hgt = -(1 - bev) * t["gap_depth"]                 # gaps sit below the tile faces
     step = repeat_w / w
     dy, dx = np.gradient(hgt, step)
-    tl = tilt[ids[order[..., 0]]] * bev[..., None]
+    tl = tilt[cell] * bev[..., None]
     n = np.stack([-dx + tl[..., 0], -dy + tl[..., 1], np.ones_like(hgt)], 2)
     n /= np.linalg.norm(n, axis=2, keepdims=True)
     return (image(probe, "heat_shield_tiles_base", np.clip(rgb, 0, 1).astype(np.float32), "sRGB"),

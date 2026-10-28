@@ -94,6 +94,31 @@
       "licence": "SpaceX copyright (licence not stated); used for looking only",
       "saved": "",
       "credit": "SpaceX, photo of the Flight 12 ascent (ship height, engines)"
+    },
+    {
+      "id": "faa_plume",
+      "title": "FAA, Starship/Super Heavy draft EA, Appendix G: Exhaust plume calculations (2019)",
+      "url": "https://www.faa.gov/sites/faa.gov/files/space/stakeholder_engagement/spacex_starship/Appendix_G_Exhaust_Plume_Calculations.pdf",
+      "read": "2026-10-28",
+      "licence": "public domain (US government work)",
+      "saved": ""
+    },
+    {
+      "id": "render_aft_b3",
+      "title": "SpaceX render of the aft end of a Block 3 ship with nine engines (\"Aft of Block 3 Ship with Nine Engines\", 2551 x 1364), published in nsf_block3_mars; read via the Wayback Machine",
+      "url": "https://web.archive.org/web/20260202234154im_/https://www.nasaspaceflight.com/wp-content/uploads/2025/05/Aft-of-Block-3-Ship-with-Nine-Engines.jpg",
+      "read": "2026-10-28",
+      "licence": "SpaceX copyright (credited \"SpaceX\" by NSF); used for measuring only, not in the repo",
+      "saved": "",
+      "credit": "SpaceX, render of the Block 3 ship's aft end (engine layout, flap hinges)"
+    },
+    {
+      "id": "photo_s36",
+      "title": "SpaceX, Ship 36 on the Massey's test stand (Ship_36_a2506190485.jpg, 3775 x 2123; a Version 2 ship)",
+      "url": "https://sxcontent9668.azureedge.us/cms-assets/assets/Ship_36_a2506190485_d5e0f8b811.jpg",
+      "read": "2026-10-28",
+      "licence": "SpaceX copyright (licence not stated); used for looking only",
+      "saved": ""
     }
   ],
   "reference_model": {
@@ -171,7 +196,8 @@
       },
       "source": "nsf_block3_mars",
       "quote": "Block 3 Ship will not have nine engines right away, but will stick with six, meaning three Raptor Vacuum (RVACs) and three Raptor Sea Level or Center (RC) engines.",
-      "also": "SpaceX's photo of S39 is named \"S39_6-Engine_Static_Fire\"; wiki_starship: \"The three sea level engines are mounted on the thrust puck, which forms the bottom of the aft dome.\""
+      "also": "SpaceX's photo of S39 is named \"S39_6-Engine_Static_Fire\"; wiki_starship: \"The three sea level engines are mounted on the thrust puck, which forms the bottom of the aft dome.\"",
+      "note": "wiki_starship_ship (secondary) says the six engines \"are housed within a dedicated shielding compartment\": inside the skirt, as render_aft_b3 shows."
     },
     "no_engine_shrouds": {
       "value": true,
@@ -210,6 +236,12 @@
       "value": "on the nose cone",
       "source": "nsf_block3_moon",
       "quote": "SpaceX has refined the design of the ship catch pins and relocated them to the nosecone."
+    },
+    "raptor_sl_nozzle_exit_m": {
+      "value": 1.301,
+      "source": "faa_plume",
+      "quote": "Nozzle exit diameter (in) 51.226 ... Nozzle throat to exit length (in) 60.06",
+      "note": "Raptor 1-era (2019) sea-level nozzle; nothing found for Raptor 3. 51.226 in = 1.301 m; throat to exit 60.06 in = 1.526 m."
     }
   },
   "from_photos": {
@@ -253,10 +285,11 @@
       "value": {
         "height": 2.0,
         "stands_out": 1.0,
-        "width": 1.2
+        "width": 1.2,
+        "outer_height": 1.0
       },
       "unit": "m",
-      "source": "photo_wdr (aft flap crop): a dark angular block on the body at the top of the flap's root, about 50 px tall (2.1 m at 0.0428 m/px) and about 25 px (1 m) out. Estimated."
+      "source": "photo_wdr (aft flap crop): a dark angular block on the body at the top of the flap's root, about 50 px tall (2.1 m at 0.0428 m/px) and about 25 px (1 m) out. Estimated. Shape: a steel wedge whose top slopes down outward, the outer edge about half the height at the body (photo_wdr, aft flap crop). Material: bare steel in the same crop."
     },
     "tile_layout": {
       "value": {
@@ -276,10 +309,14 @@
         "shade_spread": 0.08,
         "bevel": 0.012,
         "gap_depth": 0.008,
-        "tilt": 0.07
+        "tilt": 0.07,
+        "repeat_tiles": [
+          12,
+          12
+        ]
       },
       "unit": "m",
-      "source": "photo_wdr: a tiled patch on the leeward side (x 2578-2662, y 1402-1466): the pattern repeats every 7 px across (tile centres in a row) and about 12 px up (two staggered rows), i.e. hexagons with a vertex up, 7 px x 0.0366 m/px = 0.26 m across the flats; fitted to 0.2618 m so 108 tiles go round. The gaps are 1.87 times as bright as the tiles there (sRGB means of the brightest 15% and darkest 30% of pixels). Gap width (12 mm), tile-to-tile shade spread are estimated: they're under a pixel in every photo. Edge bevel (12 mm), gap depth (8 mm) and each tile's random tilt (up to 0.07, about 4 degrees, in the normal map) are estimated, chosen so the tiles catch light one by one as they do in photo_s39_fire and photo_wdr."
+      "source": "photo_wdr: a tiled patch on the leeward side (x 2578-2662, y 1402-1466): the pattern repeats every 7 px across (tile centres in a row) and about 12 px up (two staggered rows), i.e. hexagons with a vertex up, 7 px x 0.0366 m/px = 0.26 m across the flats; fitted to 0.2618 m so 108 tiles go round. The gaps are 1.87 times as bright as the tiles there (sRGB means of the brightest 15% and darkest 30% of pixels). Gap width (12 mm), tile-to-tile shade spread are estimated: they're under a pixel in every photo. Edge bevel (12 mm), gap depth (8 mm) and each tile's random tilt (up to 0.07, about 4 degrees, in the normal map) are estimated, chosen so the tiles catch light one by one as they do in photo_s39_fire and photo_wdr. The texture repeats every 12 x 12 tiles (9 repeats round), each tile with its own shade and tilt, so the shading doesn't visibly repeat. No white replacement tiles: photo_s39_fire shows only specks smaller than a tile (chips or frost), 0.01% of the barrel's pixels brighter than sRGB 120."
     },
     "weld_lines": {
       "value": {
@@ -288,6 +325,63 @@
       },
       "unit": "m",
       "source": "photo_wdr: the weld lines between the 1.83 m steel rings show in every photo but are under a pixel wide; line width (20 mm) and how dark (0.8 as bright as the steel) estimated."
+    },
+    "engines": {
+      "value": {
+        "sl_ring_radius": 0.9,
+        "sl_angles_deg": [
+          0,
+          120,
+          240
+        ],
+        "sl_exit_above_base": 0.8,
+        "rvac_exit": 2.45,
+        "rvac_ring_radius": 3.2,
+        "rvac_angles_deg": [
+          60,
+          180,
+          300
+        ],
+        "rvac_exit_above_base": 0.2,
+        "bay_depth": 4.0,
+        "skirt_wall": 0.06
+      },
+      "unit": "m, degrees from +x",
+      "source": "render_aft_b3, seen from below: the skirt's open end is 580 px across at the 1400 px view (9 m, 0.0155 m/px). Sea-level bells 83 px (1.29 m, agreeing with faa_plume's 1.30 m), their centres about 0.9 m from the axis in a triangle; vacuum bells 155-162 px (2.45 m), centres 3.2-3.3 m out (3.2 so they clear the skirt wall); all recessed inside the skirt, the vacuum bells' exits nearly at its edge, the sea-level ones higher. The render has six vacuum bells (a later nine-engine ship); V3 has three (facts.ship_engines), in every other slot. Which three, and how the layout is clocked against the flaps, isn't shown: built with a sea-level engine toward +x and the vacuum bells between them. Exit heights, bay depth and wall thickness estimated."
+    },
+    "flap_hinges": {
+      "value": {
+        "aft_standoff": 0.45,
+        "forward_standoff": 0.2,
+        "rod_radius": 0.065,
+        "bracket": 0.25,
+        "aft_brackets": [
+          0.1,
+          0.5,
+          0.9
+        ],
+        "forward_brackets": [
+          0.2,
+          0.8
+        ]
+      },
+      "unit": "m, brackets as fractions along the root",
+      "source": "render_aft_b3 (full size, 0.0085 m/px; the aft flaps are edge-on there): each aft flap's root edge stands about 60 px (0.5 m) off the body, joined by brackets about 30 px (0.25 m) thick, with a thin rod (about 15 px, 0.13 m across) between flap and body. photo_wdr shows a bracket at the forward flaps' roots too, closer to the nose. Bracket count and spacing estimated (the render shows only the lower end of the aft flap)."
+    },
+    "catch_pins": {
+      "value": {
+        "count": 2,
+        "from_tower_deg": 50,
+        "below_tip": 14.8,
+        "diameter": 0.9,
+        "stands_out": 1.0
+      },
+      "unit": "m, degrees either side of the tower side (-x)",
+      "source": "photo_wdr (nose crop x 2510-2810, y 640-990): two stubby steel cylinders with dark end faces stick out where the nose meets the barrel, centre at y 902 (tip y 557, 0.0428 m/px along: 14.8 m below the tip), about 22 px (0.9 m) across. Taken as the catch pins nsf_block3_moon puts on the nose cone (inferred: not labelled). One points almost at the camera (45-55 degrees off the leeward side, see tile_layout) and the other is on the far limb, so they sit about 50 degrees either side of the tower side. Length estimated."
+    },
+    "tile_edge": {
+      "value": "jagged: the tiles stop on whole hexagons, so the edge follows the tiles' sides and steps half a tile every row",
+      "source": "photo_s36 (a V2 ship, the clearest view of the edge): the boundary between the tiles and the bare steel steps along the hexagons on the nose and the barrel. Built on the barrel's two edges (+-90 degrees); the flap-wrap and nose-cap edges stay straight."
     }
   },
   "materials": {
@@ -308,8 +402,9 @@
     "Ship height: 52.1 m is derived (124.4 - 72.3). The ascent photo gives 52.6 m (in ship diameters), agreeing; the pad photo gives 47.7 m but reads squashed vertically. Decided: 52.1 m.",
     "Flap sizes and positions come from one photo each. Proposed: build from these estimates and compare the sheet with photo_pad_f13 and photo_f12_ascent.",
     "Photos: SpaceX's licence for these isn't stated (their Flickr photos have been CC BY-NC 2.0). They stay out of the repo; the spec links them.",
-    "Engines: the ship's 3 sea-level and 3 vacuum Raptors aren't modelled yet (they were hidden inside the stack). No Raptor Vacuum or Raptor 3 nozzle size is sourced; seen from below, the base is a flat closed disc.",
-    "Not modelled: frost (only when fuelled), the docking drogues and Starlink antennas (too small at site scale)."
+    "Not modelled: frost (only when fuelled), the docking drogues and Starlink antennas (too small at site scale).",
+    "Engines: vacuum bells sized from SpaceX's render of a nine-engine Block 3 ship; which three slots V3 fills and how the layout is clocked against the flaps isn't known.",
+    "Catch pins: the two cylinders on the forward section are taken to be the catch pins; nothing labels them."
   ],
   "sheet_frame": {
     "min": [
@@ -351,6 +446,34 @@
         0
       ],
       "radius": 9
+    },
+    {
+      "name": "engines from below",
+      "target": [
+        0,
+        0,
+        1.5
+      ],
+      "look": [
+        0.3,
+        -0.4,
+        -1
+      ],
+      "radius": 7
+    },
+    {
+      "name": "catch pins",
+      "target": [
+        -4.5,
+        0,
+        37.3
+      ],
+      "look": [
+        -1,
+        -0.3,
+        0.1
+      ],
+      "radius": 6
     }
   ],
   "budget": {
