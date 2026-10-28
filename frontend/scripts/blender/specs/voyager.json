@@ -386,10 +386,6 @@
       "value": 0.5,
       "note": "boom core at y 1.4, NASA model"
     },
-    "under_bus_depth": {
-      "value": 0.55,
-      "note": "estimated from the reference close-up (a strut frame under the bus); a region reaching z -1.17 also holds other parts"
-    },
     "bus_z": {
       "value": [
         -0.24,
@@ -654,6 +650,365 @@
         }
       },
       "note": "the NASA model's loose pieces in y > 3.2 (77 pieces: open box faces, rings and discs), grouped into the volumes they bound and read off their bounds: six blanket-wrapped boxes, a vertical post with a tip and a short tube along the boom, two sideways barrels (0.244 and 0.19-0.197 m across) and a dish-shaped telescope 0.485 m across facing +x with a 0.18 m secondary on a stalk. Two gaps under 1 cm closed so the pieces touch (lower box top raised to the body box, telescope back moved to the lower box's side). Which instrument each piece is (ISS cameras, IRIS, UVS, PPS per kohlhase1977's list) is not stated in any opened source, so the names describe shapes. The two barrels are open sunshades with a lens at the back (NASA's are open tubes); the telescope is a bowl 0.485 m across and 0.155 m deep (its ring spans x 0.145-0.30) opening toward +x, its secondary on a 0.055 m stalk."
+    },
+    "bus_details": {
+      "value": {
+        "top_blanket": [
+          [
+            0.866,
+            0.245
+          ],
+          [
+            0.866,
+            0.267
+          ],
+          [
+            0.775,
+            0.287
+          ],
+          [
+            0.675,
+            0.31
+          ],
+          [
+            0.575,
+            0.335
+          ],
+          [
+            0.475,
+            0.367
+          ],
+          [
+            0.375,
+            0.4
+          ],
+          [
+            0.325,
+            0.448
+          ],
+          [
+            0.275,
+            0.49
+          ],
+          [
+            0.225,
+            0.53
+          ],
+          [
+            0.175,
+            0.556
+          ],
+          [
+            0.125,
+            0.565
+          ],
+          [
+            0.075,
+            0.576
+          ],
+          [
+            0.0,
+            0.586
+          ]
+        ],
+        "bottom_plate": {
+          "radius": 0.975,
+          "z": [
+            -0.238,
+            -0.225
+          ]
+        },
+        "under_legs": [
+          [
+            [
+              0.467,
+              0.563,
+              -0.203
+            ],
+            [
+              0.531,
+              0.076,
+              -1.041
+            ]
+          ],
+          [
+            [
+              0.467,
+              -0.563,
+              -0.203
+            ],
+            [
+              0.531,
+              -0.077,
+              -1.041
+            ]
+          ],
+          [
+            [
+              -0.446,
+              0.563,
+              -0.203
+            ],
+            [
+              -0.51,
+              0.076,
+              -1.041
+            ]
+          ],
+          [
+            [
+              -0.446,
+              -0.563,
+              -0.203
+            ],
+            [
+              -0.51,
+              -0.077,
+              -1.041
+            ]
+          ],
+          [
+            [
+              0.459,
+              0.55,
+              -0.231
+            ],
+            [
+              0.087,
+              0.52,
+              -1.041
+            ]
+          ],
+          [
+            [
+              -0.438,
+              0.55,
+              -0.231
+            ],
+            [
+              -0.066,
+              0.52,
+              -1.041
+            ]
+          ],
+          [
+            [
+              0.459,
+              -0.55,
+              -0.231
+            ],
+            [
+              0.087,
+              -0.52,
+              -1.041
+            ]
+          ],
+          [
+            [
+              -0.438,
+              -0.55,
+              -0.231
+            ],
+            [
+              -0.066,
+              -0.52,
+              -1.041
+            ]
+          ]
+        ],
+        "under_leg_radius": 0.0125,
+        "under_panel": {
+          "edge_top": [
+            [
+              -0.364,
+              0.561,
+              -0.345
+            ],
+            [
+              0.367,
+              0.561,
+              -0.345
+            ]
+          ],
+          "edge_bottom": [
+            [
+              -0.364,
+              0.971,
+              -0.962
+            ],
+            [
+              0.367,
+              0.971,
+              -0.962
+            ]
+          ],
+          "thickness": 0.015
+        },
+        "under_panel_struts": [
+          [
+            [
+              0.062,
+              0.589,
+              -1.109
+            ],
+            [
+              0.373,
+              0.904,
+              -0.87
+            ]
+          ],
+          [
+            [
+              -0.041,
+              0.589,
+              -1.109
+            ],
+            [
+              -0.351,
+              0.904,
+              -0.87
+            ]
+          ]
+        ],
+        "under_panel_strut_radius": 0.01,
+        "record_boxes": [
+          {
+            "centre": [
+              0.955,
+              -0.047,
+              -0.2925
+            ],
+            "size": [
+              0.091,
+              0.201,
+              0.109
+            ]
+          },
+          {
+            "centre": [
+              -0.955,
+              0.048,
+              -0.2925
+            ],
+            "size": [
+              0.091,
+              0.201,
+              0.109
+            ]
+          }
+        ],
+        "top_boxes_axis": [
+          0.5822,
+          0.8131,
+          0.0
+        ],
+        "top_boxes": [
+          {
+            "grille": {
+              "centre": [
+                -0.8788,
+                -0.584,
+                0.3505
+              ],
+              "size": [
+                0.149,
+                0.121,
+                0.2126
+              ]
+            },
+            "body": {
+              "centre": [
+                -0.7617,
+                -0.417,
+                0.3505
+              ],
+              "size": [
+                0.275,
+                0.095,
+                0.1837
+              ]
+            }
+          },
+          {
+            "grille": {
+              "centre": [
+                -0.7299,
+                -0.7583,
+                0.3505
+              ],
+              "size": [
+                0.149,
+                0.122,
+                0.2126
+              ]
+            },
+            "body": {
+              "centre": [
+                -0.6128,
+                -0.5913,
+                0.3505
+              ],
+              "size": [
+                0.275,
+                0.094,
+                0.1837
+              ]
+            }
+          }
+        ],
+        "ring_struts": [
+          [
+            [
+              0.44,
+              0.584,
+              0.239
+            ],
+            [
+              0.761,
+              0.387,
+              0.617
+            ]
+          ],
+          [
+            [
+              0.68,
+              0.248,
+              0.233
+            ],
+            [
+              0.759,
+              0.392,
+              0.62
+            ]
+          ],
+          [
+            [
+              -0.458,
+              0.583,
+              0.239
+            ],
+            [
+              -0.779,
+              0.387,
+              0.618
+            ]
+          ],
+          [
+            [
+              -0.698,
+              0.248,
+              0.233
+            ],
+            [
+              -0.777,
+              0.392,
+              0.62
+            ]
+          ]
+        ],
+        "ring_strut_radius": 0.014
+      },
+      "note": "NASA model (nasa_3d_voyager), measured from its loose pieces (each strut is several flat faces, merged; endpoints are the ends along the principal axis). top_blanket: the domed thermal blanket on the bus top, [r, z] from the outer envelope of its 672-vertex piece in 5 cm radius bands (mid z of each band; the blanket is draped, so z varies by up to 4 cm at one radius); it replaces a 0.35 m post that stood in for it. bottom_plate: the decagonal plate under the bus, corners 0.97-0.98 m out at z -0.238, same turn as the bus; its top is set on our bus bottom. under_legs: eight legs from four bus corners to eight feet at z -1.041 (the reference has no adapter ring; it replaces four estimated struts and a ring). Leg radius from the spread of each leg's faces (about 25 mm across). under_panel: a flat panel under the bus on the +y side, frame edges as given, two faces 15 mm apart; carried by two struts from near the +y feet. record_boxes: a small box under the golden record and one opposite it, bounds of their faces. top_boxes: two units on the bus top at -x/-y, each a grille housing overhanging the bus edge and a body box behind it, measured in axes along top_boxes_axis (the body's top slopes from z 0.384 to 0.442 in the reference; built flat). ring_struts: two V pairs from the bus top to the upper ring's base on the +-x sides. Struts from the bus to the science and magnetometer boom roots are left for the boom pass."
     }
   },
   "open_questions": [
@@ -662,7 +1017,8 @@
     "RTG boom geometry, HGA depth, magnetometer boom angle and support truss: only from the NASA model.",
     "MHW-RTG fin span: only from the NASA model (0.63 m).",
     "Golden record cover: what the Smithsonian's 1.3 cm depth includes, engraving depth and method, hub height, and the exact turn on the bus are not documented; the gold finish method is not given by NASA.",
-    "Scan platform: which piece is which instrument (ISS narrow/wide cameras, IRIS, UVS, PPS); layout and sizes now from the NASA model."
+    "Scan platform: which piece is which instrument (ISS narrow/wide cameras, IRIS, UVS, PPS); layout and sizes now from the NASA model.",
+    "Bus details: what the panel under the bus (+y side), the boxes under the golden record and the two grille units on the bus top are; geometry from the NASA model, identities not found."
   ],
   "budget": {
     "triangles": 50000,

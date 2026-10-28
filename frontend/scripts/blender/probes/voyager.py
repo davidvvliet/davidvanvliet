@@ -29,11 +29,27 @@ def build(spec):
     parts.prism("bus", sides=10, radius=bus_r, height=bus_h, location=(0, 0, bottom),
                 roll_deg=ref["bus_flat_azimuth_deg"], material="black")
 
-    # Upper ring between bus and dish (reference model), on a central post from the bus top
-    # (post radius estimated from the reference close-up).
+    # Bus details from the reference model (spec bus_details): the domed blanket on the bus top,
+    # the plate under it, two grille units on the top, boxes under the record and opposite it.
+    bd = ref["bus_details"]
+    parts.lathe("bus_blanket", [tuple(p) for p in bd["top_blanket"]], segments=40, material="black")
+    bp = bd["bottom_plate"]
+    parts.prism("bus_bottom_plate", sides=10, radius=bp["radius"], height=bp["z"][1] - bp["z"][0],
+                location=(0, 0, bp["z"][0]), roll_deg=ref["bus_flat_azimuth_deg"], material="black")
+    ax = bd["top_boxes_axis"]
+    yaw = math.degrees(math.atan2(ax[1], ax[0]))
+    for i, unit in enumerate(bd["top_boxes"]):
+        for part in ("grille", "body"):
+            b = unit[part]
+            parts.box(f"top_{part}_{i + 1}", tuple(b["size"]), location=tuple(b["centre"]), roll_deg=yaw,
+                      material="black")
+    for i, b in enumerate(bd["record_boxes"]):
+        parts.box(f"record_box_{i + 1}", tuple(b["size"]), location=tuple(b["centre"]), material="black")
+
+    # Upper ring between bus and dish (reference model), on two pairs of struts from the bus top.
     ring = ref["upper_ring"]
-    parts.cylinder("hga_mount", radius=0.35, length=ring["z"][0] - top, location=(0, 0, top), segments=20,
-                   material="dark_metal")
+    for i, (a0, a1) in enumerate(bd["ring_struts"]):
+        parts.strut(f"ring_strut_{i + 1}", a0, a1, radius=bd["ring_strut_radius"])
     parts.prism("upper_ring", sides=20, radius=ring["radius"], height=ring["z"][1] - ring["z"][0],
                 location=(0, 0, ring["z"][0]), material="black", cap_top=False)
 
@@ -59,15 +75,22 @@ def build(spec):
     parts.cylinder("feed_horn", radius=fh["diameter"] / 2, length=fh["top_z"] - vertex,
                    location=(0, 0, vertex), segments=16, material="foil_silver")
 
-    # Strut frame under the bus down to an adapter ring (depth estimated, spec under_bus_depth).
-    low = bottom - ref["under_bus_depth"]
-    parts.cylinder("adapter_ring", radius=0.25, length=0.06, location=(0, 0, low), segments=20,
-                   material="dark_metal")
-    for i in range(4):
-        a = math.radians(45 + 90 * i)
-        c, sn = math.cos(a), math.sin(a)
-        parts.strut(f"under_strut_{i + 1}", (0.7 * c, 0.7 * sn, bottom), (0.24 * c, 0.24 * sn, low + 0.06),
-                    radius=0.025)
+    # Under the bus (spec bus_details): eight legs from four corners to eight feet, and a flat
+    # panel on the +y side carried by two struts.
+    for i, (a0, a1) in enumerate(bd["under_legs"]):
+        parts.strut(f"under_leg_{i + 1}", a0, a1, radius=bd["under_leg_radius"])
+    up_ = bd["under_panel"]
+    t0, t1 = Vector(up_["edge_top"][0]), Vector(up_["edge_top"][1])
+    b0 = Vector(up_["edge_bottom"][0])
+    across, down = t1 - t0, b0 - t0
+    normal = down.cross(across).normalized()
+    if normal.z < 0:
+        normal = -normal
+    centre = (t0 + t1) / 2 + down / 2 - normal * up_["thickness"] / 2
+    parts.plate("under_panel", across.length, down.length, up_["thickness"], location=tuple(centre),
+                direction=tuple(normal), up=tuple(-down), material="black")
+    for i, (a0, a1) in enumerate(bd["under_panel_struts"]):
+        parts.strut(f"under_panel_strut_{i + 1}", a0, a1, radius=bd["under_panel_strut_radius"])
 
     # Golden record: its aluminium cover (what shows on the bus; facts.record_cover), flat on
     # the bus face where the reference model's texture shows it. Size from the Smithsonian's
