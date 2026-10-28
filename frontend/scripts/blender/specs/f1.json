@@ -1,0 +1,749 @@
+{
+  "title": "Rocketdyne F-1",
+  "note": "The Saturn V first-stage engine, flight configuration with the nozzle extension. Frame: thrust axis z up, the extension's exit at z = 0.",
+  "sources": [
+    {
+      "id": "factsheet_1968",
+      "title": "MSFC, Saturn V News Reference: F-1 Engine Fact Sheet (changed December 1968), 11 pages, image-only scan, read by OCR and page images",
+      "url": "https://web.archive.org/web/http://history.msfc.nasa.gov/saturn_apollo/documents/F-1_Engine.pdf",
+      "read": "2026-10-28",
+      "licence": "NASA, public domain",
+      "saved": "",
+      "credit": "NASA/MSFC, Saturn V News Reference F-1 fact sheet (drawing and data)"
+    },
+    {
+      "id": "r3896_1",
+      "title": "Rocketdyne R-3896-1, Technical Manual: Engine Data, F-1 Rocket Engine (31 March 1967, changes to 12 May 1972), 262 pages; Figure 2-22 Engine Envelope Dimensions on PDF p.148 (manual p.2-23)",
+      "url": "https://archive.org/details/r-3896-1-technical-manual-engine-data-f-1-rocket-engine-31-mar-1967",
+      "read": "2026-10-28",
+      "licence": "US government contract document (Rocketdyne for NASA), released; only numbers and layout used",
+      "saved": "",
+      "credit": "Rocketdyne, F-1 Engine Data manual R-3896-1 (dimensions)"
+    },
+    {
+      "id": "f1_familiarization",
+      "title": "Rocketdyne, F-1 Engine Familiarization Training Manual (93 pages)",
+      "url": "https://archive.org/details/rocketdyne-f1-engine-familiarization-manual",
+      "read": "2026-10-28",
+      "licence": "US government contract document (Rocketdyne for NASA), released; only numbers used",
+      "saved": "",
+      "credit": ""
+    },
+    {
+      "id": "biggs_f1",
+      "title": "R. Biggs, Rocketdyne - F-1 Saturn V First Stage Engine (NTRS 20100027316)",
+      "url": "https://ntrs.nasa.gov/citations/20100027316",
+      "read": "2026-10-28",
+      "licence": "NASA, public domain",
+      "saved": "",
+      "credit": ""
+    },
+    {
+      "id": "waking_giant",
+      "title": "Waking a Giant: Bringing the Saturn F-1 Engine Back to Life (NTRS 20140011656, slides)",
+      "url": "https://ntrs.nasa.gov/citations/20140011656",
+      "read": "2026-10-28",
+      "licence": "NASA, public domain",
+      "saved": "",
+      "credit": ""
+    },
+    {
+      "id": "f1_failure_review",
+      "title": "Independent Review of the Failure Modes of F-1 Engine (NTRS 20030093580)",
+      "url": "https://ntrs.nasa.gov/citations/20030093580",
+      "read": "2026-10-28",
+      "licence": "NASA, public domain",
+      "saved": "",
+      "credit": ""
+    },
+    {
+      "id": "nasm_turbopump",
+      "title": "Smithsonian NASM, Turbopump, Rocket Engine, Liquid Fuel, F-1, Recovered (A20160021000)",
+      "url": "https://airandspace.si.edu/collection-objects/turbopump-rocket-engine-liquid-fuel-f-1-recovered/nasm_A20160021000",
+      "read": "2026-10-28",
+      "licence": "Smithsonian catalogue data; only numbers used",
+      "saved": "",
+      "credit": ""
+    },
+    {
+      "id": "photo_6862832",
+      "title": "NASA/MSFC photo 6862832, a complete F-1 engine on its side in a shop, without the nozzle extension (3000 x 2300)",
+      "url": "https://images-assets.nasa.gov/image/6862832/6862832~orig.jpg",
+      "read": "2026-10-28",
+      "licence": "NASA image library (images.nasa.gov), public domain",
+      "saved": "",
+      "credit": "NASA/MSFC, photo of an F-1 engine assembly"
+    },
+    {
+      "id": "photo_0201422",
+      "title": "NASA/MSFC photo 0201422, Wernher von Braun beside the five F-1 engines of a Saturn V (2431 x 3000)",
+      "url": "https://images-assets.nasa.gov/image/0201422/0201422~orig.jpg",
+      "read": "2026-10-28",
+      "licence": "NASA image library (images.nasa.gov), public domain",
+      "saved": "",
+      "credit": "NASA/MSFC, photo of the Saturn V's F-1 engines"
+    },
+    {
+      "id": "photo_6413912",
+      "title": "NASA/MSFC photo 6413912, close view of an F-1 powerhead on a transporter (3000 x 2308)",
+      "url": "https://images-assets.nasa.gov/image/6413912/6413912~orig.jpg",
+      "read": "2026-10-28",
+      "licence": "NASA image library (images.nasa.gov), public domain",
+      "saved": "",
+      "credit": "NASA/MSFC, photo of an F-1 powerhead"
+    }
+  ],
+  "facts": {
+    "length_m": {
+      "value": 5.791,
+      "source": [
+        "factsheet_1968, PDF p.1",
+        "waking_giant: \"18.4 ft tall\" (conflict)",
+        "biggs_f1, PDF p.3: \"eighteen feet tall, twelve feet wide\" (conflict)"
+      ],
+      "quote": "LENGTH 19 ft.",
+      "note": "19 ft = 5.791 m",
+      "conflict": "waking_giant: \"18.4 ft tall\" (5.61 m); biggs_f1: \"The engine was eighteen feet tall, twelve feet wide.\""
+    },
+    "width_m": {
+      "value": 3.759,
+      "source": "factsheet_1968, PDF p.1",
+      "quote": "WIDTH 12 ft. 4 in.",
+      "note": "148 in = 3.759 m",
+      "conflict": "waking_giant: \"12 ft wide\""
+    },
+    "exit_diameter_m": {
+      "value": 3.531,
+      "source": "factsheet_1968, PDF p.1",
+      "quote": "MAXIMUM NOZZLE EXIT DIAMETER 11 ft. 7 in.",
+      "note": "139 in = 3.531 m; taken as the extension's exit (the maximum)",
+      "conflict": "photo_6862832 caption: \"12.5 feet at the nozzle exit\""
+    },
+    "area_ratio": {
+      "value": {
+        "with_extension": 16,
+        "without": 10
+      },
+      "source": "factsheet_1968, PDF p.1",
+      "quote": "EXPANSION AREA RATIO 16:1 with nozzle extension 10:1 without nozzle extension"
+    },
+    "throat_diameter_m": {
+      "value": 0.883,
+      "source": "factsheet_1968, derived: the 3.531 m exit at 16:1 gives a 0.883 m throat (3.531 / 4); the 10:1 exit is then 2.792 m",
+      "quote": ""
+    },
+    "extension": {
+      "value": "bolted to the thrust chamber's exit ring; double wall, film-cooled by turbine exhaust",
+      "source": [
+        "factsheet_1968, p.3-2",
+        "f1_failure_review: \"a detachable, conical nozzle extension\""
+      ],
+      "quote": "increases the expansion ratio of the thrust chamber from 10:1 to 16:1. It is a detachable unit that is bolted to the exit ring of the thrust chamber."
+    },
+    "turbine_exhaust_manifold": {
+      "value": "a torus round the aft end of the thrust chamber",
+      "source": "factsheet_1968, p.3-2",
+      "quote": "forms a torus around the aft end of the thrust chamber body"
+    },
+    "tubes": {
+      "value": 178,
+      "source": "factsheet_1968, p.3-2",
+      "quote": "89 alternate CRES down tubes ... the remaining 89 return tubes"
+    },
+    "turbopump": {
+      "value": "one, shaft parallel to the chamber axis: LOX pump on top, fuel pump, turbine",
+      "source": "biggs_f1, PDF p.4",
+      "quote": "a shaft that was parallel to the axis of the thrust chamber. It had a liquid oxygen (LOX) pump on top of the shaft, then a fuel pump, then a turbine."
+    },
+    "turbopump_size_m": {
+      "value": [
+        1.372,
+        1.143,
+        1.422
+      ],
+      "source": "nasm_turbopump",
+      "quote": "3-D: 137.2 x 114.3 x 142.2cm"
+    },
+    "gimbal_deg": {
+      "value": 6,
+      "source": "factsheet_1968, p.3-1",
+      "quote": "maximum pivotal movement of 6 degrees in each direction of both the X and Z axes"
+    },
+    "insulation": {
+      "value": "foil-batt on complex surfaces, asbestos blankets on large simple ones",
+      "source": "factsheet_1968, p.3-3",
+      "quote": "foil-batt on complex surfaces and asbestos blankets on large, simple surfaces"
+    }
+  },
+  "open_questions": [
+    "Length: built to the R-3896-1 envelope drawing (224.5 in, 5.70 m). The fact sheet says 19 ft (5.79 m), R-3896-1's text 19.2 ft, NASA's 2013 slides 18.4 ft.",
+    "Bell contour: no contour published. Built as a 30 to 15 degree bell from the throat (62.5 in below the gimbal) to the 10:1 plane; the manual puts the 3:1 plane \"approximately 30 inches below the throat\", where this bell is 1.68 m across against 1.53 m for 3:1. A bell that matches both would need a longer nozzle than the envelope allows.",
+    "Chamber and oxidizer dome diameters, and the gimbal block, are estimated: R-3896-1 gives no figures. The injector drawings in the R-3896-1A supplement may.",
+    "Pipe routing and the turbopump's position are estimated from the drawings and photos.",
+    "Finish: bare metal, as in the shop and museum photos; flight engines were wrapped in insulation (fact sheet).",
+    "Photo caption 6862832 says 12.5 ft at the exit: that matches R-3896-1's 147 in envelope over the rings (12.25 ft), not the 139 in lip.",
+    "No reference model: NASA 3D Resources has only a low-detail Saturn V with plain bells, and the Sketchfab F-1 (Defonten) can't be downloaded and has an editorial licence."
+  ],
+  "dimensions": {
+    "throat": {
+      "value": 0.883,
+      "object": "f1_nozzle",
+      "measure": "throat_diameter",
+      "source": "factsheet_1968, derived (facts.throat_diameter_m)"
+    },
+    "area_ratio_chamber": {
+      "value": 10,
+      "unit": "x",
+      "object": "f1_nozzle",
+      "measure": "area_ratio",
+      "source": "factsheet_1968, PDF p.1: \"10:1 without nozzle extension\""
+    },
+    "extension_exit": {
+      "value": 3.5906000000000002,
+      "object": "f1_extension",
+      "measure": "diameter",
+      "source": "factsheet_1968, PDF p.1: 11 ft 7 in at the lip, plus the 0.03 m wall either side"
+    },
+    "height": {
+      "value": 5.7023,
+      "object": [
+        "f1_extension",
+        "f1_nozzle",
+        "f1_chamber",
+        "f1_powerhead",
+        "f1_gimbal"
+      ],
+      "measure": "z",
+      "source": "r3896_1, Figure 2-22: 215.50 + 9.00 in",
+      "also": "factsheet_1968: \"LENGTH 19 ft.\" (5.79 m); r3896_1 p.1-5: \"approximately 12.5 feet in diameter and 19.2 feet long\""
+    }
+  },
+  "materials": {
+    "inconel_tubes": {
+      "hex": "#78736f",
+      "metallic": 0.9,
+      "roughness": 0.45,
+      "source": "photo_6862832, the tube wall averaged over (1100-1200, 1000-1100) and (1300-1400, 1200-1300): #878581 and #69625f"
+    },
+    "cres": {
+      "hex": "#7c7f92",
+      "metallic": 0.9,
+      "roughness": 0.35,
+      "source": "photo_6862832, the turbine exhaust manifold at (350-450, 1100-1250) and (300-400, 800-900): #8d90ac and #676a78 (bluish shop light)"
+    },
+    "bright_steel": {
+      "hex": "#c8d2dd",
+      "metallic": 1.0,
+      "roughness": 0.25,
+      "source": "photo_6862832, the heat exchanger at (1450-1600, 350-500)"
+    },
+    "duct_white": {
+      "hex": "#b6b9b3",
+      "metallic": 0.0,
+      "roughness": 0.7,
+      "source": "photo_6862832, the wrapped high-pressure duct at (1900-1980, 700-900)"
+    }
+  },
+  "budget": {
+    "triangles": 50000,
+    "glb_bytes": 1500000
+  },
+  "engine": {
+    "kind": "rocket",
+    "nozzle": {
+      "exit_diameter": {
+        "value": 2.792,
+        "source": "factsheet_1968, derived: the 0.883 m throat at the 10:1 area ratio (0.883 x sqrt 10)"
+      },
+      "throat_diameter": {
+        "value": 0.883,
+        "source": "factsheet_1968, derived: facts.throat_diameter_m"
+      },
+      "length": {
+        "value": 2.2225,
+        "source": "r3896_1, Figure 2-22: gimbal centre to the manifold plane 150.00 in, gimbal centre to the start of the bell 62.50 in, so 87.5 in from the throat (taken at the bell's start) to the 10:1 plane; photo_6862832 agrees within a few percent (10:1 plane to the 3:1 bifurcation band about 1.46 m, plus the manual's 30 in)."
+      },
+      "contour": "parabola",
+      "initial_angle_deg": {
+        "value": 30,
+        "source": "photo_6862832, estimated: the wall steepens towards the throat (side silhouette slopes about 15 degrees near the exit, 25 near the bifurcation band)"
+      },
+      "exit_angle_deg": {
+        "value": 15,
+        "source": "photo_6862832, estimated (see initial_angle_deg)"
+      },
+      "wall": {
+        "value": 0.0278,
+        "source": "r3896_1, p.1-8: \"One hundred seventy-eight primary tubes, hydraulically formed from 1-3/32 inch outside diameter Inconel-X tubing\""
+      },
+      "hoops": {
+        "value": {
+          "count": 10,
+          "height": 0.04,
+          "stands_out": 0.03,
+          "from": 0.0,
+          "to": 0.62
+        },
+        "source": "photo_6862832: about ten reinforcing bands round the tubes between the exit and the bifurcation band. Estimated."
+      }
+    },
+    "extension": {
+      "exit_diameter": {
+        "value": 3.5306,
+        "source": "factsheet_1968, PDF p.1: \"MAXIMUM NOZZLE EXIT DIAMETER 11 ft. 7 in.\" (the lip; r3896_1 Figure 2-22's 147.00 in envelope includes the stiffening rings)"
+      },
+      "length": {
+        "value": 1.6637,
+        "source": "r3896_1, Figure 2-22: gimbal centre to exit 215.50 in, to the manifold plane 150.00 in: 65.5 in"
+      },
+      "wall": {
+        "value": 0.03,
+        "source": "factsheet_1968, p.3-2: double wall (\"a continuous outer wall and a shingled inner wall\"); thickness a design value"
+      },
+      "hoops": {
+        "value": {
+          "count": 9,
+          "height": 0.06,
+          "stands_out": 0.1016,
+          "from": 0.02,
+          "to": 0.92
+        },
+        "source": [
+          "r3896_1, Figure 2-22: 147.00 in across the rings at the exit against the 139 in lip, so they stand out 4 in; Estimated.",
+          "photo_0201422 and factsheet_1968 drawing: about nine rings on the extension. Estimated."
+        ]
+      }
+    },
+    "chamber": {
+      "diameter": {
+        "value": 1.0,
+        "source": "photo_6413912, estimated: the chamber above the throat is hidden by the powerhead; about 1.1 times the throat's 0.88 m plus the tube wall. Open question."
+      },
+      "convergent_length": {
+        "value": 0.35,
+        "source": "r3896_1, Figure 2-22, design value within it: the throat 62.5 in below the gimbal centre leaves 1.59 m for the convergent section, the chamber, the oxidizer dome and the gimbal"
+      },
+      "length": {
+        "value": 0.6,
+        "source": "r3896_1, design value within the 1.59 m (see convergent_length)"
+      }
+    },
+    "powerhead": {
+      "diameter": {
+        "value": 1.0,
+        "source": "factsheet_1968 drawing, estimated: the oxidizer dome is about as wide as the chamber"
+      },
+      "height": {
+        "value": 0.55,
+        "source": "r3896_1, design value within the 1.59 m (see chamber.convergent_length)"
+      }
+    },
+    "gimbal": {
+      "diameter": {
+        "value": 0.5,
+        "source": "r3896_1, Figure 2-22, estimated from the gimbal block drawn above the gimbal centre"
+      },
+      "height": {
+        "value": 0.3161,
+        "source": "r3896_1, Figure 2-22: the top 9.00 in above the gimbal centre (224.5 in overall), less the parts below"
+      }
+    },
+    "manifold": {
+      "diameter": {
+        "value": 3.175,
+        "source": "r3896_1, Figure 2-22: \"125.00 DIAMETER\" between the torus's centres"
+      },
+      "tube_diameter": {
+        "value": 0.6858,
+        "source": "r3896_1, Figure 2-22: \"13.50 RADIUS\" at the inlet side"
+      },
+      "end_diameter": {
+        "value": 0.3556,
+        "source": "r3896_1, Figure 2-22: \"7.00 RADIUS\" on the far side; p.1-9: \"a CRES torus of decreasing (from inlet to exit) cross-sectional area\""
+      },
+      "z": {
+        "value": 1.7907,
+        "source": "r3896_1, Figure 2-22: the torus centres about 145 in below the gimbal centre (the 150.00 in line runs to its rear face). Estimated."
+      },
+      "inlet_deg": {
+        "value": 0,
+        "source": "r3896_1, design value: the inlet faces the turbopump (+x), as in Figure 2-22"
+      }
+    },
+    "parts": [
+      {
+        "kind": "pump",
+        "name": "turbopump",
+        "diameter": {
+          "value": 1.2192,
+          "source": "f1_familiarization, turbopump particulars: \"Length 5 feet\", \"Diameter 4 feet\""
+        },
+        "length": {
+          "value": 1.524,
+          "source": "f1_familiarization (see diameter)"
+        },
+        "at": {
+          "value": [
+            1.27,
+            0,
+            3.9497
+          ],
+          "source": "r3896_1, Figure 2-22 section A-A: the envelope reaches 50.00 in out on the turbopump side; top at the gimbal centre's height (photo_6862832). Estimated."
+        },
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "material": "cres"
+      },
+      {
+        "kind": "lathe",
+        "name": "heat_exchanger",
+        "profile": {
+          "value": [
+            [
+              0,
+              0
+            ],
+            [
+              0.3048,
+              0
+            ],
+            [
+              0.5461,
+              1.016
+            ],
+            [
+              0.5461,
+              1.3208
+            ],
+            [
+              0.508,
+              1.4732
+            ],
+            [
+              0,
+              1.4732
+            ]
+          ],
+          "source": "r3896_1, p.1-25: \"a basic envelope 43 inches in diameter and 58 inches in length, with the diameter varying from 40 inches at the turbine outlet to 24 inches at the turbine exhaust manifold\""
+        },
+        "at": {
+          "value": [
+            1.27,
+            0,
+            2.4765
+          ],
+          "source": "factsheet_1968 drawing: directly under the turbine"
+        },
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "material": "bright_steel"
+      },
+      {
+        "kind": "pipe",
+        "name": "exhaust_duct",
+        "diameter": {
+          "value": 0.6096,
+          "source": "r3896_1, p.1-25: 24 in at the turbine exhaust manifold"
+        },
+        "points": {
+          "value": [
+            [
+              1.27,
+              0,
+              2.5265
+            ],
+            [
+              1.4224,
+              0,
+              2.1717
+            ],
+            [
+              1.5875,
+              0,
+              1.9907
+            ]
+          ],
+          "source": "photo_6862832: the duct curves out from under the heat exchanger into the top of the torus. Estimated."
+        },
+        "bend_radius": 0.4,
+        "material": "bright_steel"
+      },
+      {
+        "kind": "pipe",
+        "name": "lox_duct_1",
+        "diameter": {
+          "value": 0.2032,
+          "source": "r3896_1, Figure 1-22: oxidizer valve \"Inlet diameter 8.0 inches\""
+        },
+        "points": {
+          "value": [
+            [
+              1.27,
+              0.3,
+              5.2705
+            ],
+            [
+              0.3,
+              0.75,
+              5.2705
+            ],
+            [
+              0,
+              0.45,
+              5.1181
+            ]
+          ],
+          "source": "factsheet_1968 drawing: high-pressure oxidizer ducts from the pump's top to the two main oxidizer valves on the dome, 180 degrees apart. Estimated."
+        },
+        "bend_radius": 0.25,
+        "material": "duct_white"
+      },
+      {
+        "kind": "pipe",
+        "name": "lox_duct_2",
+        "diameter": {
+          "value": 0.2032,
+          "source": "r3896_1, Figure 1-22 (see lox_duct_1)"
+        },
+        "points": {
+          "value": [
+            [
+              1.27,
+              -0.3,
+              5.2705
+            ],
+            [
+              0.3,
+              -0.75,
+              5.2705
+            ],
+            [
+              0,
+              -0.45,
+              5.1181
+            ]
+          ],
+          "source": "factsheet_1968 drawing (see lox_duct_1). Estimated."
+        },
+        "bend_radius": 0.25,
+        "material": "duct_white"
+      },
+      {
+        "kind": "pipe",
+        "name": "fuel_duct_1",
+        "diameter": {
+          "value": 0.1524,
+          "source": "r3896_1, Figure 1-22: fuel valve \"Inlet diameter 6.0 inches\""
+        },
+        "points": {
+          "value": [
+            [
+              0.72,
+              0.2,
+              4.7117
+            ],
+            [
+              0,
+              0.9,
+              4.7117
+            ],
+            [
+              -0.6,
+              0.6,
+              4.5085
+            ]
+          ],
+          "source": "factsheet_1968 drawing: high-pressure fuel ducts from the fuel pump to the two main fuel valves on the fuel inlet manifold, 180 degrees apart (r3896_1 p.1-10). Estimated."
+        },
+        "bend_radius": 0.25,
+        "material": "duct_white"
+      },
+      {
+        "kind": "pipe",
+        "name": "fuel_duct_2",
+        "diameter": {
+          "value": 0.1524,
+          "source": "r3896_1, Figure 1-22 (see fuel_duct_1)"
+        },
+        "points": {
+          "value": [
+            [
+              0.72,
+              -0.2,
+              4.7117
+            ],
+            [
+              0,
+              -0.9,
+              4.7117
+            ],
+            [
+              -0.6,
+              -0.6,
+              4.5085
+            ]
+          ],
+          "source": "factsheet_1968 drawing (see fuel_duct_1). Estimated."
+        },
+        "bend_radius": 0.25,
+        "material": "duct_white"
+      },
+      {
+        "kind": "box",
+        "name": "gas_generator",
+        "size": {
+          "value": [
+            0.4572,
+            0.6096,
+            0.7112
+          ],
+          "source": "r3896_1, p.1-23: \"within a basic envelope 18 by 24 by 28 inches\""
+        },
+        "at": {
+          "value": [
+            0.52,
+            0.35,
+            3.5687
+          ],
+          "source": "factsheet_1968 drawing: beside the turbopump, towards the chamber. Estimated."
+        },
+        "material": "cres"
+      },
+      {
+        "kind": "actuator",
+        "name": "gimbal_outrigger_1",
+        "diameter": 0.12,
+        "from": {
+          "value": [
+            0,
+            0.42,
+            4.2037
+          ],
+          "source": "r3896_1, p.1-8: \"two outrigger arms to which the gimbal actuators attach\"; position from r3896_1 Figure 1-8. Estimated."
+        },
+        "to": [
+          0,
+          1.25,
+          4.0513
+        ],
+        "material": "cres"
+      },
+      {
+        "kind": "actuator",
+        "name": "gimbal_outrigger_2",
+        "diameter": 0.12,
+        "from": {
+          "value": [
+            0,
+            -0.42,
+            4.2037
+          ],
+          "source": "r3896_1, p.1-8 (see gimbal_outrigger_1). Estimated."
+        },
+        "to": [
+          0,
+          -1.25,
+          4.0513
+        ],
+        "material": "cres"
+      },
+      {
+        "kind": "actuator",
+        "name": "turbopump_arm_1",
+        "diameter": 0.1,
+        "from": {
+          "value": [
+            0.32,
+            0.2,
+            4.0005
+          ],
+          "source": "r3896_1, p.1-8: \"two outrigger arms to support the turbopump\". Estimated."
+        },
+        "to": [
+          0.77,
+          0.35,
+          4.2037
+        ],
+        "material": "cres"
+      },
+      {
+        "kind": "actuator",
+        "name": "turbopump_arm_2",
+        "diameter": 0.1,
+        "from": {
+          "value": [
+            0.32,
+            -0.2,
+            4.0005
+          ],
+          "source": "r3896_1, p.1-8 (see turbopump_arm_1). Estimated."
+        },
+        "to": [
+          0.77,
+          -0.35,
+          4.2037
+        ],
+        "material": "cres"
+      }
+    ],
+    "materials": {
+      "nozzle": "inconel_tubes",
+      "chamber": "inconel_tubes",
+      "hoops": "inconel_tubes",
+      "extension": "cres",
+      "manifold": "cres",
+      "powerhead": "cres",
+      "parts": "cres"
+    }
+  },
+  "closeups": [
+    {
+      "name": "powerhead",
+      "target": [
+        0.6,
+        0,
+        4.6
+      ],
+      "look": [
+        1,
+        -1,
+        0.3
+      ],
+      "radius": 2.2
+    },
+    {
+      "name": "manifold and extension joint",
+      "target": [
+        1.4,
+        0,
+        1.8
+      ],
+      "look": [
+        1,
+        -0.6,
+        0.1
+      ],
+      "radius": 1.6
+    },
+    {
+      "name": "exit",
+      "target": [
+        0,
+        0,
+        0.2
+      ],
+      "look": [
+        0.3,
+        -1,
+        -0.6
+      ],
+      "radius": 2.5
+    }
+  ]
+}

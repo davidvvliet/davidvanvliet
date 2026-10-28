@@ -16,9 +16,16 @@
 #   chamber:   diameter, length (cylinder), convergent_length (throat to the cylinder)
 #   powerhead: diameter, height (injector dome and the block above it)
 #   gimbal:    diameter, height (the mount on top), optional
-#   parts:     [{"kind": "pump" | "pipe" | "box" | "actuator", "name": ..., ...}, ...] in the
-#              engine's frame: pump {diameter, length, at, axis}, pipe {diameter, points},
-#              box {size, at}, actuator {diameter, from, to}; each with its own source
+#   nozzle.hoops, extension.hoops: optional stiffening rings {count, height, stands_out, from,
+#              to} (from and to: fractions of that part's length from its exit), full lod only
+#   extension: optional nozzle extension below the nozzle {exit_diameter, length, wall}: a cone
+#              from the nozzle's exit down to its own; the engine's z = 0 is then its exit
+#   manifold:  optional torus round the nozzle {diameter (centreline), tube_diameter (at the
+#              inlet), end_diameter (at the far end, for a tapering one), z, inlet_deg}
+#   parts:     [{"kind": "pump" | "pipe" | "box" | "actuator" | "lathe", "name": ..., ...}, ...]
+#              in the engine's frame: pump {diameter, length, at, axis}, pipe {diameter, points},
+#              box {size, at}, actuator {diameter, from, to}, lathe {profile [[r, z], ...], at,
+#              axis}; each with its own source
 #   materials: {"nozzle", "chamber", "powerhead", "parts"}: material names (spec or shared)
 # Jet ("kind": "jet"), the intake at the top (z = length), exhaust at z = 0:
 #   nacelle:   length, max_diameter, inlet_diameter, exit_diameter, wall; optional profile
@@ -84,6 +91,55 @@ def nozzle_profile(nz, steps=24):
         out.append((r, L - x))
     return out
 
+def _hoops(name, h, outer, length, material, seg):
+    """Stiffening rings on a shell whose outer wall is `outer` [(r, z)] (z from its exit)."""
+    objs = []
+    n = h["count"]
+    for i in range(n):
+        f = h["from"] + (h["to"] - h["from"]) * (i / (n - 1) if n > 1 else 0.5)
+        z = f * length
+        r = _interp(outer, z)
+        objs.append(parts.lathe(f"{name}_{i:02d}", [(r - 0.005, z - h["height"] / 2),
+                                                    (r + h["stands_out"], z - h["height"] / 2),
+                                                    (r + h["stands_out"], z + h["height"] / 2),
+                                                    (r - 0.005, z + h["height"] / 2)],
+                                closed=True, segments=seg, smooth=False, material=material))
+    return objs
+
+def _interp(prof, z):
+    """Radius of a profile [(r, z)] at height z (profile in either z order)."""
+    pts = sorted(prof, key=lambda p: p[1])
+    for (r0, z0), (r1, z1) in zip(pts, pts[1:]):
+        if z0 <= z <= z1:
+            return r0 + (r1 - r0) * (z - z0) / ((z1 - z0) or 1)
+    return pts[0][0] if z < pts[0][1] else pts[-1][0]
+
+def _torus(name, m, seg, material):
+    """A torus whose tube narrows from tube_diameter at the inlet to end_diameter all the way
+    round (a turbine exhaust manifold), both ends capped."""
+    R, z = m["diameter"] / 2, m["z"]
+    r0 = m["tube_diameter"] / 2
+    r1 = m.get("end_diameter", m["tube_diameter"]) / 2
+    a0 = math.radians(m.get("inlet_deg", 0.0))
+    ring_n = max(8, seg // 3)
+    bm = bmesh.new()
+    rings = []
+    for i in range(seg + 1):
+        t = i / seg
+        phi = a0 + 2 * math.pi * t * 0.995
+        rr = r0 + (r1 - r0) * t
+        radial = Vector((math.cos(phi), math.sin(phi), 0))
+        c = radial * R + Vector((0, 0, z))
+        rings.append([bm.verts.new(c + radial * rr * math.cos(th) + Vector((0, 0, rr * math.sin(th))))
+                      for th in (2 * math.pi * k / ring_n for k in range(ring_n))])
+    for a, b in zip(rings, rings[1:]):
+        for k in range(ring_n):
+            bm.faces.new((a[k], a[(k + 1) % ring_n], b[(k + 1) % ring_n], b[k]))
+    bm.faces.new(list(reversed(rings[0])))
+    bm.faces.new(rings[-1])
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    return parts._object(name, bm, material, Matrix(), smooth=True)
+
 def _rocket(name, e, lod):
     nz, ch, ph = e["nozzle"], e["chamber"], e["powerhead"]
     mats = e.get("materials", {})
@@ -118,6 +174,26 @@ def _rocket(name, e, lod):
         objs.append(parts.cylinder(f"{name}_gimbal", g["diameter"] / 2, g["height"] + 0.01,
                                    location=(0, 0, top + hp - 0.01), segments=seg // 2,
                                    material=mats.get("parts", "dark_metal")))
+    if lod == "full" and "hoops" in nz:
+        objs += _hoops(f"{name}_nozzle_hoop", nz["hoops"], outer, L,
+                       mats.get("hoops", mats.get("nozzle", "dark_metal")), seg)
+    # Nozzle extension: everything so far stands on it, so z = 0 becomes its exit.
+    ext = e.get("extension")
+    if ext:
+        ze = ext["length"]
+        for o in objs:
+            o.matrix_world = Matrix.Translation((0, 0, ze)) @ o.matrix_world
+        r_top, r_lip, w = inner[0][0], ext["exit_diameter"] / 2, ext.get("wall", wall)
+        e_in = [(r_lip + (r_top - r_lip) * i / steps, ze * i / steps) for i in range(steps + 1)]
+        e_out = [(r + w, z) for r, z in e_in]
+        em = mats.get("extension", mats.get("nozzle", "dark_metal"))
+        objs.append(parts.lathe(f"{name}_extension", e_out + list(reversed(e_in)), closed=True,
+                                segments=seg, material=em))
+        if lod == "full" and "hoops" in ext:
+            objs += _hoops(f"{name}_extension_hoop", ext["hoops"], e_out, ze, em, seg)
+    if "manifold" in e:
+        objs.append(_torus(f"{name}_manifold", e["manifold"], seg,
+                           mats.get("manifold", mats.get("nozzle", "dark_metal"))))
     if lod == "full":
         pm = mats.get("parts", "dark_metal")
         for p in e.get("parts", []):
@@ -128,15 +204,19 @@ def _rocket(name, e, lod):
                 objs.append(parts.lathe(pn, [(0, 0), (r * 0.7, 0), (r, cap), (r, l - cap),
                                              (r * 0.7, l), (0, l)],
                                         location=p["at"], direction=p.get("axis", (0, 0, 1)),
-                                        segments=24, material=pm))
+                                        segments=24, material=p.get("material", pm)))
             elif k == "pipe":
                 objs.append(parts.tube(pn, p["points"], p["diameter"] / 2, segments=12,
-                                       bend_radius=p.get("bend_radius", p["diameter"]), material=pm))
+                                       bend_radius=p.get("bend_radius", p["diameter"]), material=p.get("material", pm)))
             elif k == "box":
-                objs.append(parts.box(pn, p["size"], location=p["at"], material=pm))
+                objs.append(parts.box(pn, p["size"], location=p["at"], material=p.get("material", pm)))
             elif k == "actuator":
                 objs.append(parts.strut(pn, p["from"], p["to"], radius=p["diameter"] / 2,
-                                        segments=10, material=pm))
+                                        segments=10, material=p.get("material", pm)))
+            elif k == "lathe":
+                objs.append(parts.lathe(pn, [tuple(q) for q in p["profile"]], location=p["at"],
+                                        direction=p.get("axis", (0, 0, 1)), segments=24,
+                                        material=p.get("material", pm)))
             else:
                 raise ValueError(f"{pn}: unknown engine part kind {k!r}")
     return objs

@@ -365,6 +365,9 @@ Engines are models of their own and parts other models use (`lib/engines.py`; th
   `diameter`, `throat_diameter`, `area_ratio`, `length`), `materials` and `budget`. Its probe
   is two lines: `engines.build(spec["engine"], "<engine>", lod="full")`.
 - Frame: the thrust axis is local z, the nozzle exit (a jet's exhaust plane) at z = 0.
+- Optional rocket parts: a nozzle `extension` (z = 0 moves to its exit), stiffening `hoops` on
+  the nozzle and extension, a turbine exhaust `manifold` torus that can taper, and `lathe` parts
+  (the F-1 uses all of them).
 - Nozzle contours: `parabola` (initial and exit wall angles, the usual approximation of a bell),
   `cone`, or `traced` (the wall's profile measured from a side photo, scaled by the exit).
 - A vehicle lists the engines it uses in its spec (`"engines": ["raptor3"]`) and calls
