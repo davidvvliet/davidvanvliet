@@ -3,6 +3,7 @@
 # 1966 three-view for positions and shapes ("from_drawing", in feet, x aft from the nose tip).
 # World frame: x forward with the fuselage base at x = 0, y left, z up.
 import math
+import bpy
 from lib import parts
 
 FT = 0.3048
@@ -71,7 +72,56 @@ def build(spec):
 
     xs = sorted({r[0] for r in body} | {r[0] for r in fair} | {2.5, 3.5, 4.25, 7.0, rn["blend_to_x"], 15.0, 17.0, fair[-1][0] + 0.01})
     with parts.assembly("fuselage", core=True):
-        parts.loft("fuselage", [ring(x) for x in xs], material="x15_black")
+        body_obj = parts.loft("fuselage", [ring(x) for x in xs], material="x15_black")
+        # The engine's nozzle in the base (photo NASM-SI-2008-5570, straight from behind, camera
+        # fitted): a bare plate, a red rim and the liner running forward into the fuselage.
+        # The fairings end in a flat step (drawing, x 48.8 ft; photo NASM-SI-2008-5570 shows
+        # flat ribbed end faces): those faces are shaded flat, not rounded into the body.
+        x_end = P(fair[-1][0], 0, 0)[0]
+        for face in body_obj.data.polygons:
+            vx = [body_obj.data.vertices[i].co.x for i in face.vertices]
+            if max(vx) <= x_end + 1e-4 and min(vx) >= x_end - 0.01:
+                face.use_smooth = False
+        nz = spec["from_photos"]["nozzle"]["value"]
+        parts.cap_hole(body_obj, P(xs[-1], 0, 0), (-1, 0, 0), nz["plate_outer_r"])
+    # Ribs across the fairings' flat end faces (photo NASM-SI-2008-5570): bars standing out of
+    # the face, each cut to the face's width at its height (between the body and the fairing).
+    rb = spec["from_photos"]["fairing_end_ribs"]["value"]
+    outer, inner = ring(fair[-1][0]), ring(fair[-1][0] + 0.01)
+
+    def reach(pts, z):
+        """Furthest y (left side) where the section outline crosses height z, or None."""
+        ys = []
+        for (_, y0, z0), (_, y1, z1) in zip(pts, pts[1:] + pts[:1]):
+            if (z0 - z) * (z1 - z) <= 0 and z0 != z1:
+                ys.append(y0 + (y1 - y0) * (z - z0) / (z1 - z0))
+        return max(ys) if ys else None
+
+    zs = [p[2] for p in outer]
+    ribs = []
+    z = min(zs) + rb["spacing"] / 2
+    while z < max(zs):
+        yo, yi = reach(outer, z), reach(inner, z)
+        yi = yi if yi is not None else 0.0
+        if yo is not None and yo - yi > 0.03:
+            for sgn in (1, -1):
+                ribs.append(((rb["proud"], yo - yi - 0.01, rb["height"]),
+                             (x_end - rb["proud"] / 2, sgn * (yo + yi) / 2, z)))
+        z += rb["spacing"]
+    with parts.assembly("fairing_ribs"):
+        parts.boxes("fairing_ribs", ribs, material="x15_rib")
+    with parts.assembly("nozzle"):
+        x0, t = xs[-1], 0.02
+        parts.lathe("nozzle_plate", [(nz["plate_outer_r"], 0), (nz["plate_outer_r"], t), (nz["rim_r"], t), (nz["rim_r"], 0)],
+                    location=P(x0, 0, 0), direction=(1, 0, 0), segments=64, closed=True, material="x15_nozzle_plate", smooth=False)
+        parts.lathe("nozzle_rim", [(nz["rim_r"], -0.01), (nz["rim_r"], 0.03), (nz["rim_r"] - 0.017, 0.03), (nz["rim_r"] - 0.017, -0.01)],
+                    location=P(x0, 0, 0), direction=(1, 0, 0), segments=64, closed=True, material="x15_nozzle_rim", smooth=False)
+        L, rt = nz["depth"], nz["throat_r"]
+        rl = nz["rim_r"] - 0.017
+        parts.lathe("nozzle_liner", [(rl, 0.03), (rt, L), (rt + t, L), (rl + t, 0.03)],
+                    location=P(x0, 0, 0), direction=(1, 0, 0), segments=64, closed=True, material="x15_nozzle_liner")
+        parts.lathe("nozzle_throat", [(0, L - 0.01), (rt + t, L - 0.01), (rt + t, L + 0.01), (0, L + 0.01)],
+                    location=P(x0, 0, 0), direction=(1, 0, 0), segments=32, material="x15_black")
 
     # Canopy (photos NASM-SI-2007-12573, -12578, NASM-SI-2008-5563, -5565): a round tube (upright
     # sides under the front view's arch) whose front is a sharp V: two flat faces cut back from the
@@ -282,10 +332,42 @@ def build(spec):
     span = spec["dimensions"]["wing_span"]["value"] / FT / 2
     rle, cr, tle, ct = planform(f["wing"], span, dr["wing"]["tip_le_x"])
     wz = dr["wing"]["z"]
+    # Each wing's plain flap (Table I: span, inboard and outboard chord) runs out from the side
+    # of the fuselage along the trailing edge (1966 three-view top view). The wing is built
+    # round it in pieces that meet edge to edge and are joined into one object; the flap is its
+    # own object, a hinge gap ahead of it and beside its outer end.
+    import bmesh
+    from mathutils import Vector
+    from mathutils.bvhtree import BVHTree
+    fl, gap = f["flap"], 0.01 / FT
+    le = lambda s: rle + (tle - rle) * s
+    chord = lambda s: cr + (ct - cr) * s
+    te = lambda s: le(s) + chord(s)
+    bvh = BVHTree.FromObject(body_obj, bpy.context.evaluated_depsgraph_get())
     for sign, side in parts.sides():
+        # The flap's inner end: where the trailing edge meets the fuselage's side.
+        x_in = P(te(0.3) - 0.2, 0, wz)
+        hit = bvh.ray_cast(Vector((x_in[0], sign * 3.0, x_in[2])), Vector((0, -sign, 0)), 6.0)[0]
+        s_in = abs(hit.y) / FT / span
+        s_out = s_in + fl["span_each"] / FT / span
+        hinge_in, hinge_out = te(s_in) - fl["inboard_chord"] / FT, te(s_out) - fl["outboard_chord"] / FT
+        hinge = lambda s: hinge_in + (hinge_out - hinge_in) * (s - s_in) / (s_out - s_in)
+        frac = lambda s, dx=0.0: (hinge(s) + dx - le(s)) / chord(s)
+        geom = (P(rle, 0, wz), cr * FT, P(tle, sign * span, wz), ct * FT, 0.05)
         with parts.assembly(f"wing_{side}"):
-            parts.surface(f"wing_{side}", P(rle, 0, wz), cr * FT, P(tle, sign * span, wz), ct * FT,
-                          0.05, material="x15_black")
+            pieces = [parts.surface(f"wing_{side}", *geom, span=(0, s_in), material="x15_black"),
+                      parts.surface("_wing_fixed", *geom, span=(s_in, s_out),
+                                    chord=((0, frac(s_in)), (0, frac(s_out))), material="x15_black"),
+                      parts.surface("_wing_outer", *geom, span=(s_out, 1), material="x15_black")]
+            bm = bmesh.new()
+            for o in pieces:
+                bm.from_mesh(o.data)
+            bm.to_mesh(pieces[0].data); bm.free()
+            for o in pieces[1:]:
+                bpy.data.objects.remove(o)
+            s_end = s_out - gap / span
+            parts.surface(f"flap_{side}", *geom, span=(s_in, s_end),
+                          chord=((frac(s_in, gap), 1), (frac(s_end, gap), 1)), material="x15_black")
 
     ht = f["horizontal_tail"]
     hspan = spec["dimensions"]["horizontal_tail_span"]["value"] / FT / 2
@@ -307,28 +389,78 @@ def build(spec):
     for name, fact, te, root_z, up in (("upper_fin", f["upper_vertical_tail"], dr["upper_vertical_tail"]["te_x"], top, 1),
                                        ("lower_fin", f["lower_vertical_tail"], dr["lower_vertical_tail"]["te_x"], bottom, -1)):
         cr, ct, sp = fact["root_chord"] / FT, fact["tip_chord"] / FT, fact["span"] / FT
-        geom = (P(te - cr, 0, root_z), cr * FT, P(te - ct, 0, root_z + up * sp), ct * FT, wedge)
+        # Table I's root chord and span are the fin's exposed part, from the fuselage's top (or
+        # bottom). The fin's flat sides carry on down into the round fuselage (photos
+        # NASM-SI-2007-12585, -12586) to just inside its skin (not further: the nozzle runs
+        # forward inside), so its planform is extended inward that far; every piece's span
+        # fraction below is mapped onto that, keeping its exposed size.
+        from mathutils import Vector
+        from mathutils.bvhtree import BVHTree
+        bvh = BVHTree.FromObject(body_obj, bpy.context.evaluated_depsgraph_get())
+
+        def skin(x0, x1):
+            """Lowest skin (distance from the axis, m) beside the fin between world x0 and x1."""
+            hits = []
+            for k in range(9):
+                x = x0 + (x1 - x0) * k / 8
+                for yy in (0.3, -0.3):
+                    hit = bvh.ray_cast(Vector((x, yy, up * 3.0)), Vector((0, 0, -up)), 6.0)[0]
+                    if hit is not None:
+                        hits.append(up * hit.z)
+            return min(hits)
+
+        inner = (skin(P(te, 0, 0)[0], P(te - cr, 0, 0)[0]) - 0.05) / FT
+        d0 = up * root_z - inner
+        sp_in, cr_in = sp + d0, cr + (cr - ct) * d0 / sp
+        geom = (P(te - cr_in, 0, up * inner), cr_in * FT, P(te - ct, 0, root_z + up * sp), ct * FT, wedge)
+        frac = lambda fr: (d0 + fr * sp) / sp_in
         # The fin is built from pieces that meet edge to edge (no surface laid over another,
         # which flickers in the viewer): the fixed part ahead of the speed brakes, the brakes
         # (a left and a right half that open apart), the rest of the fin above them, and on
         # the upper fin the yellow moving part.
         sb = f["speed_brakes"]
-        brake_top = sb["mean_span"] / fact["span"]
-        # The brakes take a fixed fraction of the fin chord: Table I's 3.36 ft at the root, 9%
-        # less at their top, where the fin chord is shorter (area 5.1 vs Table I's 5.37 ft2).
+        brake_top = frac(sb["mean_span"] / fact["span"])
+        # The brakes reach down to the skin beside the fin (lower there than on the top line,
+        # the body being round); Table I's brake chord is taken there (their longest chord).
         brake_le = 1 - sb["chord"] / FT / cr
-        band = spec["from_photos"]["yellow_band"]["value"]["from_span_fraction"] if up > 0 else 1.0
+        root_f = ((skin(P(te, 0, 0)[0], P(te - cr * (1 - brake_le), 0, 0)[0]) - 0.02) / FT - inner) / sp_in
+        brake_le = 1 - sb["chord"] / FT / (cr_in + (ct - cr_in) * root_f)
+        band = frac(spec["from_photos"]["yellow_band"]["value"]["from_span_fraction"]) if up > 0 else 1.0
         with parts.assembly(name):
             parts.surface(name, *geom, kind="wedge", span=(0, brake_top), chord=(0, brake_le),
                           material="x15_black")
             parts.surface(f"{name}_upper" if up > 0 else f"{name}_lower", *geom, kind="wedge",
                           span=(brake_top, band), material="x15_black")
+            # Behind the hinge line, below the brakes: solid fin inside the fuselage.
+            parts.surface(f"{name}_root", *geom, kind="wedge", span=(0, root_f), chord=(brake_le, 1),
+                          material="x15_black")
         for sign, side in parts.sides():
             sname = f"speed_brake_{name.split('_')[0]}_{side}"
             with parts.assembly(sname):
                 # side +1 is along (tip - root) x aft: -y (right) on the upper fin, +y on the lower.
-                parts.surface(sname, *geom, kind="wedge", span=(0, brake_top), chord=(brake_le, 1),
-                              side=-sign * up, material="x15_black")
+                brake = parts.surface(sname, *geom, kind="wedge", span=(root_f, brake_top), chord=(brake_le, 1),
+                                      side=-sign * up, material="x15_black")
+                # Each brake is a plate: behind it the fin is an open slot back to the fixed
+                # part (photos NASM-SI-2007-12585, -12586 and NASM-SI-2008-5570).
+                parts.shell(brake, lambda face, vs: all(abs(v.y) > 1e-4 for v in vs),
+                            spec["from_photos"]["speed_brake_plate"]["value"]["thickness_m"])
         if up > 0:
             with parts.assembly("fin_band"):
-                parts.surface("fin_band", *geom, kind="wedge", span=(band, 1), material="x15_yellow")
+                box_part = parts.surface("fin_band", *geom, kind="wedge", span=(band, 1), material="x15_black")
+            # The moving part's blunt back face is ribbed like the fairing ends (photo
+            # NASM-SI-2007-12585: ribs every 21.5 px over the face's 623 px = 0.87 m, so 3 cm).
+            rb = spec["from_photos"]["fairing_end_ribs"]["value"]
+            te = [box_part.matrix_world @ v.co for v in box_part.data.vertices]
+            x_te = min(v.x for v in te)
+            edge = [v for v in te if v.x < x_te + 1e-4]
+            z0, z1 = min(v.z for v in edge), max(v.z for v in edge)
+            half = lambda zz: max(abs(v.y) for v in edge if abs(v.z - zz) < 1e-3)
+            h0, h1 = half(z0), half(z1)
+            ribs = []
+            zz = z0 + rb["spacing"] / 2
+            while zz < z1 - rb["height"] / 2:
+                hw = h0 + (h1 - h0) * (zz - z0) / (z1 - z0)
+                ribs.append(((rb["proud"], 2 * hw - 0.01, rb["height"]), (x_te - rb["proud"] / 2, 0, zz)))
+                zz += rb["spacing"]
+            with parts.assembly("fin_ribs"):
+                parts.boxes("fin_ribs", ribs, material="x15_rib")

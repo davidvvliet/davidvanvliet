@@ -104,6 +104,13 @@ def prism(name, sides, radius, height, location=(0, 0, 0), direction=(0, 0, 1), 
         bmesh.ops.delete(bm, geom=[top], context="FACES_ONLY")
     return _object(name, bm, material, frame(location, direction, roll_deg), parent)
 
+def boxes(name, items, material="foil_gold", parent=None):
+    """Many axis-aligned boxes as one object (ribs, slats): `items` is [(size, centre), ...]."""
+    bm = bmesh.new()
+    for size, centre in items:
+        _box(bm, size, Matrix.Translation(Vector(centre)))
+    return _object(name, bm, material, Matrix(), parent)
+
 def box(name, size, location=(0, 0, 0), direction=(0, 0, 1), roll_deg=0.0,
         material="foil_gold", parent=None):
     """Box of `size` (x, y, z) centred on `location`."""
@@ -633,14 +640,17 @@ def surface(name, root_le, root_chord, tip_le, tip_chord, thickness, kind="lens"
     its base). Thickness is across the plane of the span and chord.
     A piece of it (a control surface, speed brake or painted band): `span` and `chord` are the
     fractions it covers, `side` +1 or -1 builds only the half on that side of the mid-plane
-    (+1 is along (tip - root) x chord_dir), and `offset` (m) stands it out from the surface."""
+    (+1 is along (tip - root) x chord_dir), and `offset` (m) stands it out from the surface.
+    `chord` can also be a pair of pairs, the fractions at the piece's inner and outer end (a
+    flap whose hinge line is swept differently from the edges)."""
     cd = Vector(chord_dir).normalized()
     r0, t0 = Vector(root_le), Vector(tip_le)
     normal = (t0 - r0).cross(cd).normalized()
-    c0, c1 = chord
-    xs = [c0 + (c1 - c0) * (0.5 - 0.5 * math.cos(math.pi * i / (chords - 1))) if kind == "lens"
-          else c0 + (c1 - c0) * i / (chords - 1) for i in range(chords)]
+    ends = chord if isinstance(chord[0], (tuple, list)) else (chord, chord)
     def ring(s):
+        c0, c1 = ends[0] if s == span[0] else ends[1]
+        xs = [c0 + (c1 - c0) * (0.5 - 0.5 * math.cos(math.pi * i / (chords - 1))) if kind == "lens"
+              else c0 + (c1 - c0) * i / (chords - 1) for i in range(chords)]
         le, c = r0 + (t0 - r0) * s, root_chord + (tip_chord - root_chord) * s
         pt = lambda x, h: tuple(le + cd * (x * c) + normal * h)
         hs = [_half_thickness(kind, thickness, x) * c + offset for x in xs]
@@ -737,6 +747,55 @@ def grid_fin(name, span, width, thickness, pitch, location=(0, 0, 0), direction=
     frame_edge((0, -w2, 0), (0, w2, 0), [])
     return _object(name, bm, material, m, parent)
 
+def cap_hole(obj, center, normal, radius):
+    """Open a round hole of `radius` (m) in `obj`'s flat cap through `center` facing `normal`
+    (a nozzle's opening in a base): the cap becomes a ring from its own outline in to the
+    hole, one quad per outline edge. The outline must lie outside the hole all round."""
+    c, n = Vector(center), Vector(normal).normalized()
+    bm = bmesh.new()
+    bm.from_mesh(obj.data)
+    mw, mi = obj.matrix_world, obj.matrix_world.inverted()
+    cap = [f for f in bm.faces if all(abs((mw @ v.co - c).dot(n)) < 1e-5 for v in f.verts)]
+    if not cap:
+        raise ValueError(f"cap_hole {obj.name}: no flat cap at {tuple(c)}")
+    edges = {e for f in cap for e in f.edges if not all(g in cap for g in e.link_faces)}
+    bmesh.ops.delete(bm, geom=cap, context="FACES_ONLY")
+    inner = {}
+    for v in {v for e in edges for v in e.verts}:
+        d = mw @ v.co - c
+        d -= n * d.dot(n)
+        if d.length <= radius:
+            raise ValueError(f"cap_hole {obj.name}: outline inside the hole at {tuple(round(x, 3) for x in mw @ v.co)}")
+        inner[v] = bm.verts.new(mi @ (c + d.normalized() * radius))
+    for e in edges:
+        a, b = e.verts
+        f = bm.faces.new((a, b, inner[b], inner[a]))
+        if (mw.to_3x3() @ f.normal).dot(n) < 0:
+            f.normal_flip()
+    bm.to_mesh(obj.data)
+    bm.free()
+    obj.data.update()
+    return obj
+
+def shell(obj, keep, thickness):
+    """Keep only `obj`'s faces for which `keep(face, world_vertices)` is true and give them
+    `thickness` (m) inward, against their normals: a part becomes its skin, open where the
+    rest was (a speed brake's plate, with the slot behind it). Returns `obj`."""
+    bm = bmesh.new()
+    bm.from_mesh(obj.data)
+    mw = obj.matrix_world
+    bmesh.ops.delete(bm, geom=[f for f in bm.faces if not keep(f, [mw @ v.co for v in f.verts])],
+                     context="FACES_ONLY")
+    bmesh.ops.delete(bm, geom=[v for v in bm.verts if not v.link_faces], context="VERTS")
+    if not bm.faces:
+        raise ValueError(f"shell {obj.name}: no faces kept")
+    bmesh.ops.solidify(bm, geom=list(bm.faces), thickness=-thickness)
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    bm.to_mesh(obj.data)
+    bm.free()
+    obj.data.update()
+    return obj
+
 # --- Painted markings -----------------------------------------------------------------
 
 def _host_tree(host):
@@ -752,7 +811,7 @@ def _host_tree(host):
     return tree
 
 def decal(name, host, center, direction, up, width, height, material, lift=0.002, step=0.02,
-          parent=None):
+          parent=None, clip=False):
     """A painted marking (lettering, an insignia) on a curved skin: a sheet laid on `host`,
     `lift` m off it, so it follows the curve and never flickers against it. `center` is a
     point at the marking's middle (on or near the skin), `direction` the way it is looked at
@@ -760,7 +819,9 @@ def decal(name, host, center, direction, up, width, height, material, lift=0.002
     sheet wraps by arc length, so lettering keeps its size where the skin curves away. Its
     UVs cover the image's [0, 1]^2; give it a cut-out material (`materials.image(...,
     cutout=True)` with a `textures.marking` image). Every vertex is in the vertex group "back",
-    which the `mounted` check reads as the face on the host. Raises if any of it misses."""
+    which the `mounted` check reads as the face on the host. Raises if any of it misses, unless
+    `clip`: then the part hanging past the skin's edge (a leading edge) is left out; its image
+    there should be clear."""
     d = Vector(direction).normalized()
     v0 = Vector(up) - d * Vector(up).dot(d)
     if v0.length < 1e-6:
@@ -774,6 +835,8 @@ def decal(name, host, center, direction, up, width, height, material, lift=0.002
     def cast(p):
         hit, normal, _, _ = tree.ray_cast(p - d * reach, d, 2 * reach)
         if hit is None:
+            if clip:
+                return None, None
             raise ValueError(f"decal {name}: misses {host.name} near {tuple(round(x, 3) for x in p)}")
         return hit, (normal if normal.dot(d) < 0 else -normal)
 
@@ -783,7 +846,7 @@ def decal(name, host, center, direction, up, width, height, material, lift=0.002
         sampling t over +-length/2 always reaches the ends."""
         k = 64
         ts = [length * (i / k - 0.5) for i in range(k + 1)]
-        pts = [cast(line(t))[0] for t in ts]
+        pts = [cast(line(t))[0] or line(t) for t in ts]
         arc = [0.0]
         for a, b in zip(pts, pts[1:]):
             arc.append(arc[-1] + (b - a).length)
@@ -807,13 +870,19 @@ def decal(name, host, center, direction, up, width, height, material, lift=0.002
         col = []
         for t in vs:
             hit, normal = cast(c0 + u0 * s + v0 * t)
-            col.append(bm.verts.new(hit + normal * lift))
+            col.append(bm.verts.new(hit + normal * lift) if hit is not None else None)
         grid.append(col)
     for i in range(nu):
         for j in range(nv):
+            if None in (grid[i][j], grid[i + 1][j], grid[i + 1][j + 1], grid[i][j + 1]):
+                continue
             f = bm.faces.new((grid[i][j], grid[i + 1][j], grid[i + 1][j + 1], grid[i][j + 1]))
             for loop, (a, b) in zip(f.loops, ((i, j), (i + 1, j), (i + 1, j + 1), (i, j + 1))):
                 loop[uv].uv = (a / nu, b / nv)
+    for v in [v for v in bm.verts if not v.link_faces]:
+        bm.verts.remove(v)
+    if not bm.faces:
+        raise ValueError(f"decal {name}: nothing of it lands on {host.name}")
     obj = _object(name, bm, material, Matrix(), parent, smooth=True)
     obj.vertex_groups.new(name="back").add(list(range(len(obj.data.vertices))), 1.0, "REPLACE")
     return obj

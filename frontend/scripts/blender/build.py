@@ -18,8 +18,8 @@ import bpy
 
 def _lib():
     # Reload so the live session picks up edits to the library without a restart.
-    from lib import materials, parts, rig, checks, textures, sources, bake, published
-    for m in (sources, materials, textures, parts, rig, checks, bake, published):
+    from lib import materials, parts, rig, checks, textures, sources, bake, published, livery
+    for m in (sources, materials, textures, parts, rig, checks, bake, published, livery):
         importlib.reload(m)
     return parts, rig, checks
 
@@ -96,12 +96,18 @@ def build(probe, export=True):
             baked = bake.stale(objs, info) if os.path.exists(jpg) else "no baked.jpg: run `run.py bake`"
             if os.path.exists(jpg):
                 bake.apply(objs, jpg, bake.normal_path(HERE, probe))
+        painted = None
+        if spec.get("livery"):  # markings baked into the skin texture (lib/livery.py)
+            from lib import livery
+            painted = livery.paint(spec, objs, HERE, probe, unwrapped=bool(spec.get("bake")))
 
         _step(status, probe, "checks")
         results = checks.run(spec, all_objs)
         if spec.get("bake"):
             results.append({"name": "bake", "ok": baked is None, "measured": "fresh" if baked is None else "stale",
                             "expected": "baked for this geometry", "unit": "", "detail": baked or "atlas matches the parts"})
+        if painted is not None:
+            results.append(painted)
         from lib import sources
         src = sources.check(spec)
         results.append({"name": "sources", "ok": not src, "measured": "ok" if not src else "off",

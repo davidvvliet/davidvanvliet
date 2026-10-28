@@ -12,6 +12,8 @@ from mathutils.bvhtree import BVHTree
 UV = "bake"
 HIDDEN_SCALE = 0.05    # texel density of hidden faces relative to visible ones
 HIDDEN_GAP = 0.01      # m: a face whose sample rays all hit something this close is hidden
+HIDDEN_FOLD = 0.003    # m: back faces this close are the face's own fold (a bent quad), not a part
+                       # around it. unwrap(fold=HIDDEN_FOLD) uses it (the livery); 0 keeps older bakes' layouts
 STATS = {}             # last unwrap: faces, hidden
 
 def _textured(o):
@@ -56,13 +58,13 @@ def _hash(objs, h):
         o.data.loops.foreach_get("vertex_index", lt)
         h.update(lt.tobytes())
 
-def unwrap(objs, margin=0.001):
+def unwrap(objs, margin=0.001, fold=0.0):
     """Lay every target's faces out in one atlas (world scale, so texel size is even) and
     store it as each part's active UV map (laid out at rest). Faces nobody can see (covered
     by another part, or inside one) get a token corner. Returns the targets."""
     with at_rest():
         occluders = _occluders([o for o in objs if o.type == "MESH"])
-        return _unwrap(targets(objs), margin, occluders)
+        return _unwrap(targets(objs), margin, occluders, fold)
 
 def _occluders(meshes):
     verts, polys = [], []
@@ -73,9 +75,10 @@ def _occluders(meshes):
         polys.extend([base + i for i in p.vertices] for p in o.data.polygons)
     return BVHTree.FromPolygons(verts, polys)
 
-def _hidden(me, tree):
+def _hidden(me, tree, fold=0.0):
     """Per face of the world-space mesh `me`: True when every sample point's outward ray
-    hits a front face within HIDDEN_GAP or the inside of a part (a back face)."""
+    hits a front face within HIDDEN_GAP or the inside of a part (a back face, past the
+    face's own fold)."""
     hidden = np.zeros(len(me.polygons), dtype=bool)
     co = [v.co for v in me.vertices]
     for p in me.polygons:
@@ -84,7 +87,13 @@ def _hidden(me, tree):
         pts = [c] + [c.lerp(co[i], 0.7) for i in p.vertices]
         covered = True
         for q in pts:
-            loc, nrm, _, dist = tree.ray_cast(q + n * 1e-4, n, 0.5)
+            start = q + n * 1e-4
+            loc, nrm, _, dist = tree.ray_cast(start, n, 0.5)
+            while loc is not None and nrm.dot(n) >= 0 and (loc - q).length < fold:
+                start = loc + n * 1e-4
+                loc, nrm, _, dist = tree.ray_cast(start, n, 0.5)
+            if loc is not None:
+                dist = (loc - q).length
             if loc is None or (nrm.dot(n) < 0 and dist > HIDDEN_GAP):
                 covered = False
                 break
@@ -101,7 +110,7 @@ def _density(me, faces, uv):
         a2 += abs(sum(u[i][0] * u[(i + 1) % len(u)][1] - u[(i + 1) % len(u)][0] * u[i][1] for i in range(len(u)))) / 2
     return (a2 / a3) ** 0.5 if a3 > 0 and a2 > 0 else 1.0
 
-def _unwrap(objs, margin, occluders):
+def _unwrap(objs, margin, occluders, fold=0.0):
     bpy.context.view_layer.update()
     # Work on a joined world-space copy; each face remembers its part and index.
     copies = []
@@ -125,7 +134,7 @@ def _unwrap(objs, margin, occluders):
     while me.uv_layers:
         me.uv_layers.remove(me.uv_layers[0])
     me.uv_layers.new(name=UV)
-    hidden = _hidden(me, occluders)
+    hidden = _hidden(me, occluders, fold)
     # Visible and hidden faces are projected separately, so no island mixes them; hidden
     # islands are then shrunk before packing (packing keeps relative sizes).
     for group in (~hidden, hidden):
@@ -253,3 +262,111 @@ def stale(objs, json_path):
     if info.get("layout") != lay:
         return f"atlas layout differs from the bake's ({info.get('layout')} -> {lay})"
     return None
+
+# --- Baking helpers (used by run.py bake and the livery step) ----------------------
+
+def world_copy(objs, name):
+    """One object joining world-space copies of `objs` (materials and UVs kept)."""
+    copies = []
+    for o in objs:
+        me = o.data.copy()
+        me.transform(o.matrix_world)
+        c = bpy.data.objects.new(name, me)
+        bpy.context.scene.collection.objects.link(c)
+        copies.append(c)
+    for o in bpy.context.view_layer.objects:
+        o.select_set(False)
+    for c in copies:
+        c.select_set(True)
+    bpy.context.view_layer.objects.active = copies[0]
+    if len(copies) > 1:
+        bpy.ops.object.join()
+    j = bpy.context.view_layer.objects.active
+    j.name = name
+    return j
+
+def albedo(mats, on):
+    """Switch materials to show their plain base colour (an emission of it) or back. A
+    diffuse bake reads base colour x (1 - metallic) x (1 - transmission), so metal and glass
+    would bake black; emission bakes the base colour itself, texture and all."""
+    for m in mats:
+        if not m or not m.node_tree:
+            continue
+        nt = m.node_tree
+        out = next((n for n in nt.nodes if n.type == "OUTPUT_MATERIAL" and n.is_active_output), None)
+        bsdf = next((n for n in nt.nodes if n.type == "BSDF_PRINCIPLED"), None)
+        if out is None or bsdf is None:
+            continue
+        if on:
+            em = nt.nodes.get("_albedo") or nt.nodes.new("ShaderNodeEmission")
+            em.name = "_albedo"
+            src = bsdf.inputs["Base Color"]
+            if src.is_linked:
+                nt.links.new(src.links[0].from_socket, em.inputs["Color"])
+            else:
+                em.inputs["Color"].default_value = src.default_value
+            nt.links.new(em.outputs["Emission"], out.inputs["Surface"])
+        else:
+            nt.links.new(bsdf.outputs["BSDF"], out.inputs["Surface"])
+
+def bake_into(target, img, selected=(), extrusion=0.0, max_ray=0.0, kind="DIFFUSE"):
+    """Bake the albedo seen by `target` (from `selected` when given) into `img`."""
+    for m in target.data.materials:
+        nt = m.node_tree
+        node = next((n for n in nt.nodes if n.name == "_bake"), None) or nt.nodes.new("ShaderNodeTexImage")
+        node.name = "_bake"
+        node.image = img
+        nt.nodes.active = node
+    for o in bpy.context.view_layer.objects:
+        o.select_set(False)
+    for o in selected:
+        o.select_set(True)
+    target.select_set(True)
+    bpy.context.view_layer.objects.active = target
+    s = bpy.context.scene.render.bake
+    s.use_selected_to_active = bool(selected)
+    s.cage_extrusion = extrusion
+    s.max_ray_distance = max_ray
+    s.margin = 4
+    s.use_clear = True
+    if kind == "NORMAL":
+        bpy.ops.object.bake(type="NORMAL", normal_space="TANGENT", uv_layer=UV)
+    else:
+        bpy.ops.object.bake(type="EMIT", uv_layer=UV)
+
+def face_ids(obj, size):
+    """Atlas image of which face covers each pixel (-1 for none), rasterised from the UVs."""
+    me = obj.data
+    me.calc_loop_triangles()
+    uv = np.empty(len(me.loops) * 2)
+    me.uv_layers[UV].data.foreach_get("uv", uv)
+    uv = uv.reshape(-1, 2) * size - 0.5
+    ids = np.full((size, size), -1, dtype=np.int64)
+    for t in me.loop_triangles:
+        a, b, c = uv[t.loops[0]], uv[t.loops[1]], uv[t.loops[2]]
+        x0, y0 = np.floor(np.minimum(np.minimum(a, b), c)).astype(int)
+        x1, y1 = np.ceil(np.maximum(np.maximum(a, b), c)).astype(int)
+        x0, y0, x1, y1 = max(x0, 0), max(y0, 0), min(x1, size - 1), min(y1, size - 1)
+        if x1 < x0 or y1 < y0:
+            continue
+        X, Y = np.meshgrid(np.arange(x0, x1 + 1), np.arange(y0, y1 + 1))
+        d = (b[1] - c[1]) * (a[0] - c[0]) + (c[0] - b[0]) * (a[1] - c[1])
+        if abs(d) < 1e-12:
+            continue
+        l1 = ((b[1] - c[1]) * (X - c[0]) + (c[0] - b[0]) * (Y - c[1])) / d
+        l2 = ((c[1] - a[1]) * (X - c[0]) + (a[0] - c[0]) * (Y - c[1])) / d
+        m = (l1 >= -1e-6) & (l2 >= -1e-6) & (1 - l1 - l2 >= -1e-6)
+        ids[Y[m], X[m]] = t.polygon_index
+    return ids
+
+def pixels(img):
+    a = np.empty(img.size[0] * img.size[1] * 4, dtype=np.float32)
+    img.pixels.foreach_get(a)
+    return a.reshape(img.size[1], img.size[0], 4)
+
+def jpeg(sc, quality):
+    """save_render writes in the scene's output format, not the image's: set it to JPEG."""
+    s = sc.render.image_settings
+    s.file_format = "JPEG"
+    s.color_mode = "RGB"
+    s.quality = quality

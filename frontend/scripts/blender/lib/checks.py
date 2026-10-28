@@ -345,9 +345,14 @@ def materials(spec, objs, glb, problems=()):
             problems.append(f"{mat.name}: not in the export")
             continue
         pbr = g.get("pbrMetallicRoughness", {})
-        want = {"metallic": bsdf.inputs["Metallic"].default_value,
-                "roughness": bsdf.inputs["Roughness"].default_value}
-        got = {"metallic": pbr.get("metallicFactor", 1.0), "roughness": pbr.get("roughnessFactor", 1.0)}
+        want, got = {}, {}
+        for k, sock in (("metallic", "Metallic"), ("roughness", "Roughness")):
+            if bsdf.inputs[sock].is_linked:  # from a map (a livery): the export must carry it
+                if "metallicRoughnessTexture" not in pbr:
+                    problems.append(f"{mat.name}: {k} from a map in Blender, a plain value exported")
+                continue
+            want[k] = bsdf.inputs[sock].default_value
+            got[k] = pbr.get(f"{k}Factor", 1.0)
         if not bsdf.inputs["Base Color"].is_linked:  # image colours are checked by `textures`
             want["colour"] = tuple(bsdf.inputs["Base Color"].default_value)[:3]
             got["colour"] = tuple(pbr.get("baseColorFactor", (1, 1, 1, 1)))[:3]

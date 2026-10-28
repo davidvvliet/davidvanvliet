@@ -269,6 +269,36 @@
       "metallic": 1.0,
       "roughness": 0.5,
       "source": "nasm_x15, photo NASM-SI-2008-5567 (the aircraft from below): the horizontal tails' undersides are bare metal, their tops black like the wings (photo NASM-SI-2007-12575, from above in the hall's even light). Colour: the middle half of the brightness range at four spots on the two tails, averaged; roughness estimated from the dull, blurred reflections in the same photo"
+    },
+    "x15_white": {
+      "hex": "#e0dedb",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "nasm_x15, photo NASM-SI-2007-12575 (the aircraft from above, the hall's even light): the U.S. AIR FORCE letters on the left side, flattened onto the skin with the photo's fitted camera; the middle half of the brightness range inside the letters, averaged"
+    },
+    "x15_nozzle_plate": {
+      "hex": "#908b84",
+      "metallic": 1.0,
+      "roughness": 0.45,
+      "source": "nasm_x15, photo NASM-SI-2008-5570, median of the pixels in a ring around the nozzle axis (fitted camera): 0.36 to 0.46 m out (bare plate); roughness estimated from its dull sheen"
+    },
+    "x15_nozzle_rim": {
+      "hex": "#ba715e",
+      "metallic": 0.0,
+      "roughness": 0.6,
+      "source": "nasm_x15, photo NASM-SI-2008-5570, median of the pixels in a ring around the nozzle axis (fitted camera): red pixels 0.29 to 0.36 m out (the rim)"
+    },
+    "x15_nozzle_liner": {
+      "hex": "#909088",
+      "metallic": 1.0,
+      "roughness": 0.6,
+      "source": "nasm_x15, photo NASM-SI-2008-5570, median of the pixels in a ring around the nozzle axis (fitted camera): 0.12 to 0.27 m out (the liner seen inside the rim); roughness estimated from the ribbed, matte look"
+    },
+    "x15_rib": {
+      "hex": "#303539",
+      "metallic": 1.0,
+      "roughness": 0.4,
+      "source": "nasm_x15, photo NASM-SI-2008-5570 flattened onto the fairing end plane: median of the end face's pixels outside the bright rib edges (the ribbed metal itself; the edges' brightness, #82868a, is its sheen, left to the lighting); roughness estimated from that sheen"
     }
   },
   "open_questions": [
@@ -823,6 +853,51 @@
       ],
       "radius": 1.6,
       "note": "fuselage base and fin trailing edges"
+    },
+    {
+      "name": "tail_right",
+      "target": [
+        1.5,
+        0,
+        1.2
+      ],
+      "look": [
+        0.8,
+        0.9,
+        -0.25
+      ],
+      "radius": 2.2,
+      "note": "fin, right side: stripe, NASA, 66670"
+    },
+    {
+      "name": "nose_right",
+      "target": [
+        13.3,
+        0,
+        0.2
+      ],
+      "look": [
+        -0.3,
+        0.95,
+        -0.1
+      ],
+      "radius": 1.3,
+      "note": "nose dart, right side"
+    },
+    {
+      "name": "wings_under",
+      "target": [
+        5,
+        0,
+        0
+      ],
+      "look": [
+        0,
+        0,
+        1
+      ],
+      "radius": 4.0,
+      "note": "wing undersides: USAF and star-and-bar"
     }
   ],
   "from_photos": {
@@ -830,7 +905,7 @@
       "value": {
         "from_span_fraction": 0.38
       },
-      "source": "nasm_x15, photos NASM2018-10035 and -10037: the upper fin is yellow (with NASA in black) above a straight line parallel to the fuselage, which is the split between the fixed fin and the moving upper part; nasa_tnd3343 Fig. 1 p.20 draws that split 38% of the way up the fin (z 3.27 ft over a root at 1.58 and tip at 6.05)."
+      "source": "nasm_x15, photos NASM2018-10035 and -10037: a straight line parallel to the fuselage splits the fixed fin from the moving upper part; nasa_tnd3343 Fig. 1 p.20 draws that split 38% of the way up the fin (z 3.27 ft over a root at 1.58 and tip at 6.05). Photo NASM-SI-2007-12585: the moving part is black with a yellow stripe across it (NASA in black, thin black lines along its edges); the stripe is painted (livery fin_stripe)."
     },
     "round_nose": {
       "value": {
@@ -918,6 +993,292 @@
       },
       "unit": "ft",
       "source": "nasm_x15, photo NASM-SI-2008-5558 (the left window from ahead and above): the glass outline's corners, read at 5x zoom (pixels (551,352), (657,354), (683,409), (548,415), (537,389) and (615,412) on the bottom edge), each cast onto the model hood (from_photos.canopy_top) through the camera fitted to the aircraft's outline (see canopy_top), and kept as (x, z): front bottom (8.20, 2.13), front (8.30, 2.34), top front (8.91, 2.63), top rear (11.12, 2.57), bottom rear (10.58, 2.10), bottom (9.29, 2.12). The glass mostly lies on the flat front face. This replaces from_drawing.canopy_windows, whose window is 0.3 ft lower and smaller; the corners shift with the hood shape they are cast onto (estimated ±0.05 ft)."
+    },
+    "speed_brake_plate": {
+      "value": {
+        "thickness_m": 0.03
+      },
+      "source": "nasm_x15, photo NASM-SI-2008-5570 (straight from behind, camera fitted, 5.5 px landmark rms): the upper fin's speed brakes are two plates with an open slot between them back to the fixed fin (actuator inside); each plate's rear edge is about 14 px against the fin box's 245 px (0.49 m) just above, so about 3 cm. Photos NASM-SI-2007-12585 and -12586 show the same slot from the side."
+    },
+    "nozzle": {
+      "value": {
+        "plate_outer_r": 0.48,
+        "rim_r": 0.322,
+        "depth": 1.0,
+        "throat_r": 0.065
+      },
+      "source": "nasm_x15, photo NASM-SI-2008-5570 (straight from behind, camera fitted, 5.5 px landmark rms; 534 px per m at the base): along the row through the axis the bare plate starts 0.48 m out, the red rim sits at 0.322 m on both sides. Depth 1.0 m is an estimate (not measured); the throat radius follows from it: the dark hole deep inside is 27 px across its radius, which at 1.0 m behind the base, seen from the fitted camera 3.64 m aft, is 0.065 m."
+    },
+    "fairing_end_ribs": {
+      "value": {
+        "spacing": 0.03,
+        "height": 0.01,
+        "proud": 0.008
+      },
+      "source": "nasm_x15, photo NASM-SI-2008-5570 flattened onto the fairing end plane (x 0.213 m) at 300 px/m through its fitted camera: the ribs repeat every 9 px (autocorrelation of brightness down the right-hand face), so 3 cm; each bright rib is about a third of that. How far they stand out (8 mm) is estimated."
     }
+  },
+  "livery": {
+    "size": 2048,
+    "source": "nasm_x15. Each marking is a sheet on the skin (world m: its middle, the way it is looked at, its top; width x height along the skin), placed by casting its corners in a museum photo onto the model through that photo's fitted camera; masks are the photo flattened onto the sheet, paint thresholded against the local background. Fitted cameras: refs/x15/cameras/.",
+    "markings": [
+      {
+        "name": "us_air_force",
+        "host": "fuselage",
+        "mirror": true,
+        "center": [
+          7.06,
+          0.715,
+          0.205
+        ],
+        "direction": [
+          0,
+          -0.45,
+          -0.89
+        ],
+        "up": [
+          0,
+          -0.9,
+          0.4
+        ],
+        "width": 3.4,
+        "height": 0.5,
+        "layers": [
+          [
+            "refs/x15/livery/us-air-force-white.png",
+            "x15_white"
+          ],
+          [
+            "refs/x15/livery/us-air-force-red.png",
+            "x15_red"
+          ]
+        ],
+        "source": "nasm_x15. Position: the letters' corners in photo NASM-SI-2008-5559, pixels (1003,652), (998,592), (1128,498), (1140,548), cast onto the top face of the left side fairing (x 5.50 to 8.52 m). Masks: photo NASM-SI-2007-12575 (landmark fit, 11.7 px rms), seam above the letters cut away. Right side: the mirror image (photo NASM-SI-2008-5559 shows it there)."
+      },
+      {
+        "name": "fin_stripe",
+        "host": "fin_band",
+        "mirror": true,
+        "clip": true,
+        "center": [
+          1.635,
+          0.115,
+          1.64
+        ],
+        "direction": [
+          -0.087,
+          -0.996,
+          0
+        ],
+        "up": [
+          0,
+          0,
+          1
+        ],
+        "width": 2.63,
+        "height": 0.48,
+        "layers": [
+          [
+            "refs/x15/livery/fin-stripe-yellow.png",
+            "x15_yellow"
+          ]
+        ],
+        "source": "nasm_x15. Photo NASM-SI-2007-12585 (fin, left side), camera fitted to six fin-box corners (7.6 px rms), flattened onto the fin's side at 600 px/m; yellow traced by colour saturation, so the letters and edge lines stay black skin. Ahead of the N the stripe's cross-section is carried to the leading edge. Right side: the mirror image. Right side: the stripe mirrored, NASA still reading forwards at its mirrored place (as the left side's, photo NASM-SI-2008-5559 shows NASA there).",
+        "right_layers": [
+          [
+            "refs/x15/livery/fin-stripe-yellow-right.png",
+            "x15_yellow"
+          ]
+        ]
+      },
+      {
+        "name": "fin_number",
+        "host": "upper_fin",
+        "mirror": true,
+        "center": [
+          2.24,
+          0.07,
+          0.935
+        ],
+        "direction": [
+          -0.087,
+          -0.996,
+          0
+        ],
+        "up": [
+          0,
+          0,
+          1
+        ],
+        "width": 1.75,
+        "height": 0.48,
+        "layers": [
+          [
+            "refs/x15/livery/fin-number-white.png",
+            "x15_white"
+          ]
+        ],
+        "source": "nasm_x15. 66670 from photo NASM-SI-2007-12585, same fitted camera, flattened onto the fixed fin below the moving part. Right side: the mirror image. Right side: the digits at their mirrored place, behind the leading edge as on the left.",
+        "right_layers": [
+          [
+            "refs/x15/livery/fin-number-white-right.png",
+            "x15_white"
+          ]
+        ]
+      },
+      {
+        "name": "usaf_lower_left",
+        "host": "wing_left",
+        "clip": true,
+        "center": [
+          4.95,
+          2.175,
+          -0.05
+        ],
+        "direction": [
+          0,
+          0,
+          1
+        ],
+        "up": [
+          1,
+          0,
+          0
+        ],
+        "width": 2.55,
+        "height": 1.0,
+        "layers": [
+          [
+            "refs/x15/livery/wing-usaf-white.png",
+            "x15_white"
+          ]
+        ],
+        "source": "nasm_x15. Photo NASM-SI-2008-5567 (underside from behind), camera fitted to eight corners (horizontal tail tips, wing tips at the trailing edge, fin top; 7.9 px rms), flattened onto the wing's underside at 400 px/m; paint thresholded, chips closed. Laid square to the fuselage (David, 2026-10-28): USAF turned back 12 deg (its stems lean 12.3 and 11.6 deg, its row 12.4 deg), the insignia 8.9 deg (its bars' measured angle). The photo's edge cuts the tops of the U and S: the U's strokes are carried up to the A's and F's full height, the S's top is its bottom turned (a block S is point-symmetric)."
+      },
+      {
+        "name": "star_lower_right",
+        "host": "wing_right",
+        "clip": true,
+        "center": [
+          5.075,
+          -2.325,
+          -0.05
+        ],
+        "direction": [
+          0,
+          0,
+          1
+        ],
+        "up": [
+          1,
+          0,
+          0
+        ],
+        "width": 2.25,
+        "height": 1.05,
+        "layers": [
+          [
+            "refs/x15/livery/wing-star-white.png",
+            "x15_white"
+          ],
+          [
+            "refs/x15/livery/wing-star-red.png",
+            "x15_red"
+          ]
+        ],
+        "source": "nasm_x15. Photo NASM-SI-2008-5567 (underside from behind), camera fitted to eight corners (horizontal tail tips, wing tips at the trailing edge, fin top; 7.9 px rms), flattened onto the wing's underside at 400 px/m; paint thresholded, chips closed. Laid square to the fuselage (David, 2026-10-28): USAF turned back 12 deg (its stems lean 12.3 and 11.6 deg, its row 12.4 deg), the insignia 8.9 deg (its bars' measured angle). The photo's edge cuts the tops of the U and S: the U's strokes are carried up to the A's and F's full height, the S's top is its bottom turned (a block S is point-symmetric)."
+      },
+      {
+        "name": "usaf_upper_right",
+        "host": "wing_right",
+        "clip": true,
+        "center": [
+          4.95,
+          -2.175,
+          0.05
+        ],
+        "direction": [
+          0,
+          0,
+          -1
+        ],
+        "up": [
+          1,
+          0,
+          0
+        ],
+        "width": 2.55,
+        "height": 1.0,
+        "layers": [
+          [
+            "refs/x15/livery/wing-usaf-white.png",
+            "x15_white"
+          ]
+        ],
+        "source": "nasm_x15. Same mask as usaf_lower_left, at its mirror place on top of the right wing: photo NASM-SI-2007-12575 (overhead, fitted camera) shows USAF there, inboard end at y -1.35 m as in the underside photo (+1.35 m)."
+      },
+      {
+        "name": "star_upper_left",
+        "host": "wing_left",
+        "clip": true,
+        "center": [
+          5.075,
+          2.325,
+          0.05
+        ],
+        "direction": [
+          0,
+          0,
+          -1
+        ],
+        "up": [
+          1,
+          0,
+          0
+        ],
+        "width": 2.25,
+        "height": 1.05,
+        "layers": [
+          [
+            "refs/x15/livery/wing-star-white.png",
+            "x15_white"
+          ],
+          [
+            "refs/x15/livery/wing-star-red.png",
+            "x15_red"
+          ]
+        ],
+        "source": "nasm_x15. Same mask as star_lower_right, at its mirror place on top of the left wing (photos NASM-SI-2008-5559 and -5560 show the star there)."
+      },
+      {
+        "name": "nose_dart",
+        "host": "fuselage",
+        "mirror": "shape",
+        "center": [
+          13.45,
+          0.47,
+          0.17
+        ],
+        "direction": [
+          -0.15,
+          -0.98,
+          -0.15
+        ],
+        "up": [
+          0,
+          0,
+          1
+        ],
+        "width": 1.5,
+        "height": 0.55,
+        "layers": [
+          [
+            "refs/x15/livery/nose-dart-yellow.png",
+            "x15_yellow"
+          ]
+        ],
+        "source": "nasm_x15. Drawn from points read off two photos flattened onto the left side of the nose: front tip from NASM-SI-2008-5559 (fitted camera), aft tips, notch and circle from NASM-SI-2007-12578 (camera fitted to seven points cast from 5559: RESCUE box corners and dart tips, 24 px rms). The two agree on its place within a few cm. Right side: the mirror image (photo NASM-SI-2008-5559 shows it there)."
+      }
+    ]
   }
 }
