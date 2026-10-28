@@ -229,15 +229,6 @@
       "value": "Inconel X skin",
       "source": "nasm_x15",
       "quote": "the aircraft was fabricated using a special high-strength nickel alloy named Inconel X."
-    },
-    "wingtip_pods": {
-      "value": {
-        "diameter": 0.2032,
-        "length": 1.4732
-      },
-      "source": "jenkins_sp2007, ch. 8 'Wing-Tip Pods', p.499-500",
-      "quote": "The pods were 8 inches in diameter and 58 inches long ... The first flight (1-50-79) with the pods was conducted on 15 October 1964 ... Initially, North American manufactured a single set of the pods for X-15-1.",
-      "note": "The museum airplane (X-15-1, 56-6670) carries them in photos NASM2018-10035 to -10037."
     }
   },
   "materials": {
@@ -274,7 +265,8 @@
     "Gear up (in flight, as the drawings) or down (skids and nose wheel) and the lower fin on or off. The spec assumes up and on.",
     "Not in any source read: wing position along the fuselage, fuselage cross-sections, side-fairing length and width, nose and canopy shape, engine nozzle exit size, skid and nose-gear positions. They would be measured from the 1966 three-view (scaled by its 49.5 ft length) and labelled \"estimated from refs/x15/three-view-1966.png\". Next documents to try: NASA TN D-1057 (Matranga), which Jenkins cites.",
     "Leading-edge sweep is derived from the quarter-chord sweep and the chords (geometry), not quoted.",
-    "Engine nozzle: not modelled. Jenkins (ch. 4) gives the XLR99 nozzle as a 20-degree cone with a 9.8:1 expansion ratio, but no exit diameter was found, and no museum photo shows the base."
+    "Engine nozzle: not modelled. Jenkins (ch. 4) gives the XLR99 nozzle as a 20-degree cone with a 9.8:1 expansion ratio, but no exit diameter was found, and no museum photo shows the base.",
+    "Wingtip pods: left off (David's call). They are not in the 1966 three-view; Jenkins (ch. 8) gives them as 8 in by 58 in, fitted to X-15-1 from October 1964."
   ],
   "budget": {
     "triangles": 50000,
@@ -716,12 +708,6 @@
         "from_span_fraction": 0.38
       },
       "source": "nasm_x15, photos NASM2018-10035 and -10037: the upper fin is yellow (with NASA in black) above a straight line parallel to the fuselage, which is the split between the fixed fin and the moving upper part; nasa_tnd3343 Fig. 1 p.20 draws that split 38% of the way up the fin (z 3.27 ft over a root at 1.58 and tip at 6.05)."
-    },
-    "wingtip_pod_position": {
-      "value": {
-        "centre_chord_fraction": 0.5
-      },
-      "source": "nasm_x15, photos NASM2018-10035 and -10037: each pod sits on the wing tip, axis along the airflow in the wing plane, and runs past both ends of the tip chord; centred on the tip chord's midpoint (estimated)."
     }
   }
 }

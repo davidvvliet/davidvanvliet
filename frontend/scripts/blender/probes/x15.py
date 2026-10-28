@@ -66,16 +66,6 @@ def build(spec):
         with parts.assembly(f"wing_{side}"):
             parts.surface(f"wing_{side}", P(rle, 0, wz), cr * FT, P(tle, sign * span, wz), ct * FT,
                           0.05, material="x15_black")
-        pod = f["wingtip_pods"]
-        pr, pl = pod["diameter"] / 2, pod["length"]
-        mid_x = tle + ct * spec["from_photos"]["wingtip_pod_position"]["value"]["centre_chord_fraction"]
-        nose = P(mid_x, sign * span, wz)
-        nose = (nose[0] + pl / 2, nose[1], nose[2])
-        # Shape (round nose, short taper aft) estimated from photos NASM2018-10035 and -10037.
-        prof = [(0, 0)] + [(pr * math.sin(a), 1.5 * pr * (1 - math.cos(a)))
-                           for a in (math.pi / 2 * k / 6 for k in range(1, 7))] + [(pr, pl - 2 * pr), (pr * 0.4, pl), (0, pl)]
-        with parts.assembly(f"pod_{side}"):
-            parts.lathe(f"pod_{side}", prof, location=nose, direction=(-1, 0, 0), segments=24, material="x15_black")
 
     ht = f["horizontal_tail"]
     hspan = spec["dimensions"]["horizontal_tail_span"]["value"] / FT / 2
