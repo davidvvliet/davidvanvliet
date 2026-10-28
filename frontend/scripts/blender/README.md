@@ -5,7 +5,11 @@ renders a contact sheet and exports `.glb` files for the site. Runs on Blender's
 Python; the command line needs only the system `python3`.
 
 ## Layout
-- `lib/parts.py`: shared parts (dish, prism bus, box, truss/rod boom, RTG, panel, cylinder, strut, disc with UVs and hub, lathe, wheel, bent tube, decal), assemblies, joints and poses, in metres
+- `lib/parts.py`: shared parts, in metres, used as `parts.<name>`; it gathers four files, and a new part goes in the one it belongs to:
+  - `lib/parts_core.py`: the collection, assemblies, `_object` (bmesh to object), joints and poses
+  - `lib/parts_shapes.py`: dish, prism bus, box, truss/rod boom, RTG, panel, cylinder, strut, disc with UVs and hub, plate, lathe, wheel, bent tube, joint chain
+  - `lib/parts_aero.py`: fuselage sections and lofts, wings, tails and fins (`surface`, with pieces for control surfaces), grid fins
+  - `lib/parts_skin.py`: operations on a skin: `cap_hole`, `shell`, `decal`
 - `lib/materials.py`: the shared material list (foil, paint, metal, solar cells), merged with a spec's `materials`, and `image()` (image colour + normal map, optionally cut out by the image's alpha), Principled BSDF only
 - `lib/textures.py`: textures made at build time from `refs/` data (`engraved()`: colour + normal map from a line image; `marking()`: colour + cut-out for a decal from traced masks)
 - `lib/engines.py`: rocket and jet engines from an engine spec (nozzle contour, chamber, powerhead, pumps, pipes; nacelle, fan, core), full or simple, and `place` for putting them on a vehicle

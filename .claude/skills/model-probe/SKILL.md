@@ -16,7 +16,7 @@ from the repo.
 - Look for an official NASA 3D model first (NASA's 3D Resources) and record it in
   `reference_model`. Measure it with `npm run model:ref`; say so before deriving geometry from it.
 - Model in metres at real size. Stay within the budgets (default 50k triangles, 1.5 MB).
-- Build from `lib/parts.py`. When a probe needs a part twice or another probe will want
+- Build from `lib/parts.py` (its parts live in `lib/parts_*.py` by kind). When a probe needs a part twice or another probe will want
   it, add it to `lib/` instead of writing it in the probe script.
 - A change to `lib/` affects every probe: run `npm run model:all` and look at any sheet
   flagged as changed before calling the change done.
