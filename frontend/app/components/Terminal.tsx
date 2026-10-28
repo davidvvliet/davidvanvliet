@@ -293,7 +293,8 @@ export default function Terminal() {
   };
 
   // Run a command line, exactly as pressing Enter does: echo, history, output.
-  const runCommand = (line: string) => {
+  // `preset` replaces running it, for a command whose effect already happened.
+  const runCommand = (line: string, preset?: string[]) => {
     const trimmed = line.trim();
     if (!trimmed) {
       setLines((prev) => [...prev, { text: ">", type: "input" }]);
@@ -311,7 +312,9 @@ export default function Terminal() {
     const [name, ...args] = trimmed.split(" ");
     const command = getCommand(name.toLowerCase());
 
-    const output = command
+    const output = preset
+      ? preset
+      : command
       ? command.execute(args)
       : [`Unknown command: ${name}. Type "${run("help")}" for available commands.`];
 
@@ -334,8 +337,12 @@ export default function Terminal() {
   const typingRef = useRef(false);
   const typeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => () => { if (typeTimerRef.current) clearTimeout(typeTimerRef.current); }, []);
-  const typeAndRun = (command: string) => {
-    if (typingRef.current || transcriptPlaying) return;
+  const typeAndRun = (command: string, preset?: string[]) => {
+    if (typingRef.current || transcriptPlaying) {
+      // Busy: a scene request still shows up, just without the typing.
+      if (preset) setLines((prev) => [...prev, { text: `> ${command}`, type: "input" }, ...preset.map((text) => ({ text, type: "output" as const }))]);
+      return;
+    }
     typingRef.current = true;
     if (window.matchMedia("(pointer: fine)").matches) inputRef.current?.focus();
     const step = Math.min(TYPE_MAX_STEP_MS, Math.max(TYPE_MIN_STEP_MS, TYPE_TOTAL_MS / command.length));
@@ -349,7 +356,7 @@ export default function Terminal() {
       } else {
         typeTimerRef.current = setTimeout(() => {
           typingRef.current = false;
-          runCommand(command);
+          runCommand(command, preset);
         }, step * 2);
       }
     };
@@ -357,7 +364,18 @@ export default function Terminal() {
     setCursorPos(0);
     typeTimerRef.current = setTimeout(tick, step);
   };
-  const r = (text: string) => rich(text, typeAndRun);
+  const r = (text: string) => rich(text, (command) => typeAndRun(command));
+
+  // A command typed in from the scene (e.g. clicking Venus): typed and entered
+  // like a clicked command, with the scene's output.
+  const terminalType = usePageStore((s) => s.terminalType);
+  const handledTypeSeqRef = useRef(0);
+  useEffect(() => {
+    if (!terminalType || terminalType.seq === handledTypeSeqRef.current) return;
+    handledTypeSeqRef.current = terminalType.seq;
+    typeAndRun(terminalType.command, terminalType.lines);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [terminalType]);
 
   const beforeCaret = input.slice(0, cursorPos);
   const afterCaret = input.slice(cursorPos);

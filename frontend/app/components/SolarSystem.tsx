@@ -1031,10 +1031,11 @@ export function SolarSystem({
       const photo = SURFACE_PHOTOS[next.name];
       if (photo && next !== focus && !shownInTerminal.has(next.name)) {
         shownInTerminal.add(next.name);
-        // A typed `focus` already echoed its command; a click didn't, so give the
-        // photo the same context the terminal would have printed.
-        const context = opts.fromClick ? [`__IN__${next.name.toLowerCase()}`, `Flying to ${next.name}...`] : [];
-        usePageStore.getState().pushTerminalLines([...context, `__IMG__${photo[0]}`, `__DIM__${photo[1]}`]);
+        // A typed `focus` already echoed its command, so just add the photo. A click
+        // types the command into the terminal and enters it, like a clicked command.
+        const lines = [`__IMG__${photo[0]}`, `__DIM__${photo[1]}`];
+        if (opts.fromClick) usePageStore.getState().typeTerminalCommand(next.name.toLowerCase(), [`Flying to ${next.name}...`, ...lines]);
+        else usePageStore.getState().pushTerminalLines(lines);
       }
       clearPinnedStar();
       // Clicking the already-focused body only does something when the camera

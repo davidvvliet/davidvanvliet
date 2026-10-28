@@ -44,6 +44,10 @@ interface PageState {
   /** Lines pushed to the terminal from elsewhere (e.g. the scene). `seq` increments per push. */
   terminalPush: { lines: string[]; seq: number } | null;
   pushTerminalLines: (lines: string[]) => void;
+  /** A command the terminal types out and enters, as if clicked, showing `lines` as its output
+   *  instead of running it (the scene already acted on it). `seq` increments per request. */
+  terminalType: { command: string; lines: string[]; seq: number } | null;
+  typeTerminalCommand: (command: string, lines: string[]) => void;
   /** True while a mission transcript is playing in real time: the terminal hides its prompt. */
   transcriptPlaying: boolean;
   setTranscriptPlaying: (on: boolean) => void;
@@ -92,6 +96,9 @@ export const usePageStore = create<PageState>()(
   terminalPush: null,
   pushTerminalLines: (lines) =>
     set((state) => ({ terminalPush: { lines, seq: (state.terminalPush?.seq ?? 0) + 1 } })),
+  terminalType: null,
+  typeTerminalCommand: (command, lines) =>
+    set((state) => ({ terminalType: { command, lines, seq: (state.terminalType?.seq ?? 0) + 1 } })),
     }),
     {
       name: "explore-settings",
