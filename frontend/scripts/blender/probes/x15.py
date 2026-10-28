@@ -294,8 +294,11 @@ def build(spec):
     z0 = dr["horizontal_tail"]["root_z_at_fairing"] - dr["horizontal_tail"]["fairing_y"] * dih
     for sign, side in parts.sides():
         with parts.assembly(f"htail_{side}"):
-            parts.surface(f"htail_{side}", P(rle, 0, z0), cr * FT, P(tle, sign * hspan, z0 + hspan * dih),
-                          ct * FT, 0.05, material="x15_black")
+            tail = parts.surface(f"htail_{side}", P(rle, 0, z0), cr * FT, P(tle, sign * hspan, z0 + hspan * dih),
+                                 ct * FT, 0.05, material=["x15_black", "x15_tail_bare"])
+            # Bare metal underneath, black on top (spec materials x15_tail_bare).
+            for face in tail.data.polygons:
+                face.material_index = 1 if face.normal.z < 0 else 0
 
     # Fins: 10 deg single wedge, so the base is 2 tan 5 deg of the chord thick.
     wedge = 2 * math.tan(math.radians(5))

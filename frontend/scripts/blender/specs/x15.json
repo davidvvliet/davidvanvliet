@@ -234,9 +234,9 @@
   "materials": {
     "x15_black": {
       "hex": "#22211e",
-      "metallic": 0.3,
+      "metallic": 0.0,
       "roughness": 0.45,
-      "source": "nasm_x15, photo NASM2018-10041 (black skin aft of the yellow band), four spots away from the highlight averaged; metallic and roughness estimated from the sheen in the same photo",
+      "source": "nasm_x15, photo NASM2018-10041 (black skin aft of the yellow band), four spots away from the highlight averaged; roughness estimated from the sheen in the same photo. Metallic 0 (paint): the highlights on the skin are neutral white, not tinted, at eight spots in photos SI-2008-5558, SI-2008-5559 and SI-2007-12583 (97th-99.5th percentile brightness, channels within 3% of each other)",
       "quote": "black titanium skin with wedge shaped horizontal stablizer"
     },
     "x15_yellow": {
@@ -263,6 +263,12 @@
       "metallic": 0.0,
       "roughness": 0.05,
       "source": "nasm_x15, photo NASM2018-10039 (canopy window from the side): six spots on the glass away from the lamp's reflection, averaged; roughness estimated from the sharp reflections"
+    },
+    "x15_tail_bare": {
+      "hex": "#7b7773",
+      "metallic": 1.0,
+      "roughness": 0.5,
+      "source": "nasm_x15, photo NASM-SI-2008-5567 (the aircraft from below): the horizontal tails' undersides are bare metal, their tops black like the wings (photo NASM-SI-2007-12575, from above in the hall's even light). Colour: the middle half of the brightness range at four spots on the two tails, averaged; roughness estimated from the dull, blurred reflections in the same photo"
     }
   },
   "open_questions": [
@@ -837,9 +843,9 @@
     "ball_nose_shape": {
       "value": {
         "lip_radius_factor": 1.08,
-        "lip_from_tip_sphere_diameters": 0.75
+        "lip_from_tip_sphere_diameters": 0.5
       },
-      "source": "nasm_x15, photo NASM2018-10038: the sphere sits in a lip slightly wider than itself (about 8%, estimated), which starts about three quarters of a sphere diameter behind the tip; from there a straight cone runs to the 13.75 in base. In the photo the sphere is about half the base's width (6.5/13.75 = 0.47) and the cone ends at the riveted frame ahead of the two-hole panel, so the bare metal is the sensor only."
+      "source": "nasm_x15, photo NASM2018-10038: the sphere sits in a lip slightly wider than itself (about 8%, estimated), which starts half a sphere diameter behind the tip, so a hemisphere stands out of it (David's call, 2026-10-28: the sphere protruded too far at three quarters of a diameter); from there a straight cone runs to the 13.75 in base. In the photo the sphere is about half the base's width (6.5/13.75 = 0.47) and the cone ends at the riveted frame ahead of the two-hole panel, so the bare metal is the sensor only."
     },
     "window_frame": {
       "value": {
