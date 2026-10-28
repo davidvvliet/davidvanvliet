@@ -394,7 +394,8 @@ def build(spec):
         for i, p in enumerate(P["ports"]["list"]):
             z = top - p["below_tip"]
             a = math.radians(p["deg"])
-            parts.decal(f"ship_port_{i:02d}", body, center=(R * math.cos(a), R * math.sin(a), z),
+            rz = r_at(z)
+            parts.decal(f"ship_port_{i:02d}", body, center=(rz * math.cos(a), rz * math.sin(a), z),
                         direction=(-math.cos(a), -math.sin(a), 0), up=(0, 0, 1),
                         width=p["size"], height=p["size"], material=mats[p.get("shape", "round")],
                         lift=p.get("lift", 0.002))
