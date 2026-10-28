@@ -3,7 +3,8 @@
 import { Component, ReactNode, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, ThreeEvent, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
-import { Environment, Lightformer, OrbitControls, useGLTF } from "@react-three/drei";
+import { OrbitControls, useGLTF } from "@react-three/drei";
+import StudioLights from "./StudioLights";
 import styles from "./models.module.css";
 
 type Check = { name: string; ok: boolean; measured: number | null; expected: number; unit: string; detail?: string; source?: string | null };
@@ -350,15 +351,7 @@ export function Viewer({ probe, url, breakdown, stale, compact, onReady }: {
           if (d && Math.hypot(e.clientX - d.x, e.clientY - d.y) <= 4) setFocus(null);
         }}>
         <color attach="background" args={["#090909"]} />
-        <ambientLight intensity={0.25} />
-        <directionalLight position={[5, 7, 6]} intensity={3} />
-        <directionalLight position={[-6, -1, -3]} intensity={0.6} />
-        {/* Local studio reflections so foil and metal read as metal (no HDR download). */}
-        <Environment resolution={64}>
-          <Lightformer form="rect" intensity={2} position={[0, 5, 0]} scale={[10, 10, 1]} rotation-x={Math.PI / 2} />
-          <Lightformer form="rect" intensity={0.8} position={[-5, 1, 3]} scale={[6, 4, 1]} rotation-y={Math.PI / 3} />
-          <Lightformer form="rect" intensity={0.4} position={[5, -1, -3]} scale={[6, 4, 1]} rotation-y={-Math.PI / 1.5} />
-        </Environment>
+        <StudioLights />
         <Suspense fallback={null}>
           <Model key={url} url={url} exploded={exploded} focus={focus} setFocus={setFocus} onLabel={setLabel} onReady={onReady} />
         </Suspense>

@@ -4,7 +4,8 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Environment, Lightformer, PerspectiveCamera, View, useGLTF } from "@react-three/drei";
+import { PerspectiveCamera, View, useGLTF } from "@react-three/drei";
+import StudioLights from "./StudioLights";
 import * as THREE from "three";
 import ModelsDashboard, { Viewer } from "./ModelsDashboard";
 import styles from "./models.module.css";
@@ -140,14 +141,7 @@ function Card({ model, spin, root }: { model: Published; spin: boolean; root: Re
       )}
       <View className={styles.cardView}>
         <PerspectiveCamera makeDefault fov={FOV} />
-        <ambientLight intensity={0.25} />
-        <directionalLight position={[5, 7, 6]} intensity={3} />
-        <directionalLight position={[-6, -1, -3]} intensity={0.6} />
-        <Environment resolution={64}>
-          <Lightformer form="rect" intensity={2} position={[0, 5, 0]} scale={[10, 10, 1]} rotation-x={Math.PI / 2} />
-          <Lightformer form="rect" intensity={0.8} position={[-5, 1, 3]} scale={[6, 4, 1]} rotation-y={Math.PI / 3} />
-          <Lightformer form="rect" intensity={0.4} position={[5, -1, -3]} scale={[6, 4, 1]} rotation-y={-Math.PI / 1.5} />
-        </Environment>
+        <StudioLights />
         {seen && (
           <Suspense fallback={null}>
             <Spinning url={`/models/${model.probe}.glb`} spin={spin} hover={hover} onReady={() => setReady(true)} />
