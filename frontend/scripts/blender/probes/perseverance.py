@@ -85,6 +85,10 @@ def build(spec):
     wheel_d = d["wheel_diameter"]
     cleat = 0.008                       # est.: model's grouser tips r 0.263, tyre r ~0.255
     wheel_w = ref["wheel_width"]["value"]
+    # Curved titanium flexure spokes (facts.wheel_build), path from the NASA model; the path is
+    # for a left wheel and mirrors on the right (sign flips the angle about the axle).
+    ws = ref["wheel_spokes"]["value"]
+    hub = ref["wheel_hub"]["value"]   # lathed hub with the flange the spokes stand on, and its axle stub
     diff = ref["differential_bar"]["value"]
     with parts.assembly("differential"):
         parts.box("differential_bar", (diff["width"], 0.159, 0.046), location=tuple(diff["centre"]), material=BLACK)
@@ -129,9 +133,12 @@ def build(spec):
                     carrier = steer
                 parts.wheel(f"wheel_{side}_{pos}", wheel_d - 2 * cleat, wheel_w, location=(x(wx), y, axle_z),
                             axle=(sign, 0, 0), rim=0.02, cleats=48, cleat_height=cleat, cleat_width=0.006,
-                            spokes=6, spoke_width=0.03, hub_diameter=0.12, material=BLACK, parent=carrier)
-                parts.cylinder(f"hub_{side}_{pos}", 0.06, wheel_w * 0.7, location=(x(wx) - sign * wheel_w * 0.35, y, axle_z),
-                               direction=(sign, 0, 0), material=TI, parent=carrier)
+                            spokes=ws["count"], hub_profile=[tuple(p) for p in hub["profile"]],
+                            spoke_path=[(r, z, sign * (g + ws["phase_deg"]), wd, th) for r, z, g, wd, th in ws["path"]],
+                            spoke_material=TI, material=BLACK, parent=carrier)
+                ha = hub["axle"]
+                parts.cylinder(f"hub_{side}_{pos}", ha["radius"], ha["axial"][1] - ha["axial"][0],
+                               location=(x(wx + ha["axial"][0]), y, axle_z), direction=(sign, 0, 0), material=TI, parent=carrier)
 
     # --- Power: MMRTG between its heat-exchanger panels, tilted 30° up at the back -----------
     with parts.assembly("rtg"):

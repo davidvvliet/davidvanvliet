@@ -1127,6 +1127,236 @@
       ],
       "note": "NASA model's antenna_hg object split into loose pieces: the plate (0.27 x 0.29 m at z 1.37-1.41, centre 0.391, 0.271) is carried by a gimbal arm (tilted piece, built axis-aligned) on a base cylinder and disc at (0.475, 0.46) on the deck. The post between disc and arm is not a separate piece in the model: est. to join them.",
       "source": "nasa_3d_perseverance"
+    },
+    "wheel_spokes": {
+      "value": {
+        "count": 6,
+        "phase_deg": 15,
+        "path": [
+          [
+            0.08,
+            0.067,
+            0,
+            0.054,
+            0.022
+          ],
+          [
+            0.079,
+            0.078,
+            0,
+            0.049,
+            0.024
+          ],
+          [
+            0.079,
+            0.091,
+            0,
+            0.035,
+            0.029
+          ],
+          [
+            0.08,
+            0.105,
+            0,
+            0.024,
+            0.029
+          ],
+          [
+            0.086,
+            0.119,
+            0,
+            0.02,
+            0.027
+          ],
+          [
+            0.094,
+            0.133,
+            0,
+            0.0185,
+            0.023
+          ],
+          [
+            0.106,
+            0.144,
+            0,
+            0.018,
+            0.018
+          ],
+          [
+            0.121,
+            0.151,
+            0,
+            0.0175,
+            0.017
+          ],
+          [
+            0.137,
+            0.155,
+            0,
+            0.017,
+            0.013
+          ],
+          [
+            0.153,
+            0.155,
+            0,
+            0.0165,
+            0.012
+          ],
+          [
+            0.169,
+            0.151,
+            0,
+            0.0155,
+            0.013
+          ],
+          [
+            0.184,
+            0.143,
+            0,
+            0.0145,
+            0.013
+          ],
+          [
+            0.195,
+            0.131,
+            0,
+            0.014,
+            0.014
+          ],
+          [
+            0.204,
+            0.119,
+            0,
+            0.0135,
+            0.014
+          ],
+          [
+            0.207,
+            0.103,
+            0,
+            0.013,
+            0.014
+          ],
+          [
+            0.21,
+            0.08,
+            0,
+            0.013,
+            0.013
+          ],
+          [
+            0.21,
+            0.04,
+            0,
+            0.013,
+            0.013
+          ],
+          [
+            0.21,
+            0.012,
+            0,
+            0.013,
+            0.013
+          ],
+          [
+            0.211,
+            0.0005,
+            -4,
+            0.013,
+            0.013
+          ],
+          [
+            0.213,
+            0.0005,
+            -12.5,
+            0.013,
+            0.014
+          ],
+          [
+            0.219,
+            0.0005,
+            -22.5,
+            0.013,
+            0.014
+          ],
+          [
+            0.2225,
+            0.0005,
+            -32.5,
+            0.013,
+            0.011
+          ],
+          [
+            0.225,
+            0.0005,
+            -42.5,
+            0.017,
+            0.014
+          ],
+          [
+            0.2275,
+            0.0005,
+            -52.5,
+            0.021,
+            0.017
+          ],
+          [
+            0.23,
+            0.0005,
+            -62.5,
+            0.021,
+            0.012
+          ]
+        ]
+      },
+      "note": "NASA model, left front wheel (centre x 1.062, y -1.095, z 0.263, axle along x): six loose spoke pieces of 330 vertices (run.py pieces --dump), all the same shape. path: [radius, axial offset outward from the wheel's middle plane, angle about the axle from the spoke's line (deg), width, thickness] in metres. Each spoke is a flat strip with a rectangular section. Arch (hub to r 0.21): the spoke keeps one angle; centreline and thickness from the middle and spread of its vertices in 10-degree sectors about (r 0.145, axial 0.06); width is the tangential spread of each piece's vertices per sector (the same on all six to 1 mm). It stands on the hub flange at axial 0.067 as a foot 54 mm wide, narrows to 18 mm by r 0.11 and to 13 mm at the rim end, 12-14 mm thick over the arch (22-29 mm at the foot). It bows out to axial 0.155 at r 0.14-0.15, comes back to r 0.21 at axial 0.093, drops straight down at r 0.204-0.217 to the middle plane, then runs as a band along the inside of the rim (vertices binned every 5 degrees: radial centre 0.210 at 0 deg rising to 0.230 at -62.5 deg, axial -0.006..+0.007 widening to -0.010..+0.011 past -45 deg) to about -64 deg, more negative about world +x on both sides (the right wheel's spoke is the mirror image in x). phase_deg: the left wheel's spokes sit 15 degrees round from the wheel's local x (NASA spoke at -135 deg about +x)."
+    },
+    "wheel_hub": {
+      "value": {
+        "profile": [
+          [
+            0,
+            -0.063
+          ],
+          [
+            0.056,
+            -0.063
+          ],
+          [
+            0.069,
+            -0.024
+          ],
+          [
+            0.069,
+            0.054
+          ],
+          [
+            0.089,
+            0.054
+          ],
+          [
+            0.089,
+            0.067
+          ],
+          [
+            0.046,
+            0.083
+          ],
+          [
+            0,
+            0.083
+          ]
+        ],
+        "axle": {
+          "radius": 0.055,
+          "axial": [
+            -0.143,
+            -0.063
+          ]
+        }
+      },
+      "note": "NASA model, left front wheel as wheel_spokes: hub pieces read as [radius, axial] (axial outward from the wheel's middle plane). A cone from r 0.056 at -0.063 to r 0.069 at -0.024, a drum r 0.069-0.070 to 0.054, a flange out to r 0.089 from 0.054 to 0.067 (the spoke feet stand on it) and a conical cap to r 0.046 at 0.083 (closed here at the axis; NASA leaves it open). Axle stub inboard: r 0.053-0.056, axial -0.143 to -0.063."
     }
   },
   "open_questions": [
@@ -1495,7 +1725,7 @@
     "ignore": [
       "Icosphere"
     ],
-    "normal_size": 4096,
+    "normal_size": 2048,
     "jpeg_quality": 92,
     "passes": [
       {

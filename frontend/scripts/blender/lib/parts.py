@@ -447,9 +447,16 @@ def lathe(name, profile, location=(0, 0, 0), direction=(0, 0, 1), segments=48, c
 
 def wheel(name, diameter, width, location=(0, 0, 0), axle=(1, 0, 0), rim=None, cleats=0,
           cleat_height=0.0, cleat_width=0.01, spokes=0, spoke_width=None, hub_diameter=None,
-          segments=64, material="dark_metal", parent=None):
+          spoke_path=None, hub_profile=None, spoke_material=None, segments=64, material="dark_metal",
+          parent=None):
     """Wheel centred on `location`, turning about `axle`: a tyre ring `rim` thick (default 4%
-    of the diameter), straight cleats across the tread, spokes from the hub to the rim."""
+    of the diameter), straight cleats across the tread, spokes from the hub to the rim.
+    Spokes are straight bars in the wheel's middle plane, or, with `spoke_path`, flat strips
+    along a smooth curve through [(radius, axial, angle_deg, width, thickness), ...] (axial
+    along `axle`, angle about it from the spoke's own direction; width across the strip,
+    tangential where the path leaves the hub): curved flexure spokes. `hub_profile`
+    [(r, axial), ...] replaces the plain hub cylinder with a lathed hub. `spoke_material`
+    colours the spokes (and the lathed hub) apart from the tyre."""
     R, w = diameter / 2, width
     t = rim if rim is not None else diameter * 0.04
     bm = bmesh.new()
@@ -460,13 +467,28 @@ def wheel(name, diameter, width, location=(0, 0, 0), axle=(1, 0, 0), rim=None, c
         m = Matrix.Rotation(a, 4, "Z") @ Matrix.Translation((R + cleat_height / 2, 0, 0))
         _box(bm, (cleat_height, cleat_width, w), m)
     hub_r = (hub_diameter or diameter * 0.2) / 2
+    tyre = set(bm.faces)
+    if hub_profile:
+        _lathe(bm, hub_profile, 32)
     if spokes:
-        _cyl(bm, hub_r, w * 0.8, 24, Matrix.Translation((0, 0, -w * 0.4)))
+        if not hub_profile:
+            _cyl(bm, hub_r, w * 0.8, 24, Matrix.Translation((0, 0, -w * 0.4)))
         sw = spoke_width or diameter * 0.03
         for i in range(spokes):
             a = 2 * math.pi * i / spokes
+            if spoke_path:
+                path = _spline(spoke_path, 1)
+                pts = [Vector((r * math.cos(a + math.radians(g)), r * math.sin(a + math.radians(g)), z))
+                       for r, z, g, *_ in path]
+                _tube(bm, pts, 0, 4, section=[(p[3] / 2, p[4] / 2) for p in path],
+                      normal=Vector((math.cos(a), math.sin(a), 0)))
+                continue
             m = Matrix.Rotation(a, 4, "Z") @ Matrix.Translation(((hub_r + R - t) / 2, 0, 0))
             _box(bm, (R - t - hub_r + 0.002, sw, sw * 0.5), m)
+    if spoke_material:
+        for f in bm.faces:
+            f.material_index = 0 if f in tyre else 1
+        material = [material, spoke_material]
     return _object(name, bm, material, frame(location, axle), parent)
 
 def _round_corners(points, radius, steps=6):
@@ -489,17 +511,45 @@ def tube(name, points, radius, segments=12, bend_radius=0.0, material="dark_meta
     `bend_radius`, ends capped."""
     pts = _round_corners([Vector(p) for p in points], bend_radius)
     bm = bmesh.new()
+    _tube(bm, pts, radius, segments)
+    return _object(name, bm, material, Matrix(), parent, smooth=True)
+
+def _spline(points, steps):
+    """Catmull-Rom curve through `points` (tuples of floats, any length): `steps` points per
+    span, passing through every given point."""
+    P = [tuple(map(float, p)) for p in points]
+    P = [P[0]] + P + [P[-1]]
+    out = []
+    for i in range(1, len(P) - 2):
+        p0, p1, p2, p3 = P[i - 1], P[i], P[i + 1], P[i + 2]
+        for s in range(steps):
+            u = s / steps
+            out.append(tuple(0.5 * (2 * b + (-a + c) * u + (2 * a - 5 * b + 4 * c - d) * u * u
+                                    + (-a + 3 * b - 3 * c + d) * u ** 3) for a, b, c, d in zip(p0, p1, p2, p3)))
+    out.append(P[-2])
+    return out
+
+def _tube(bm, pts, radius, segments, section=None, normal=None):
+    """Sweep a ring of `radius` along the Vector path `pts` into `bm`, ends capped. With
+    `section` [(half_width, half_thickness), ...] per point, a rectangle instead: thickness
+    along `normal` (at the first point, carried along the path), width across it."""
     # Parallel-transport a ring frame along the path, mitred at each point.
     tangents = []
     for i in range(len(pts)):
         a = pts[max(i - 1, 0)]; b = pts[min(i + 1, len(pts) - 1)]
         tangents.append((b - a).normalized())
-    n = tangents[0].orthogonal().normalized()
+    n = (normal if normal is not None else tangents[0].orthogonal()).normalized()
+    if section:
+        segments = 4
     rings = []
     for i, (p, t) in enumerate(zip(pts, tangents)):
-        if i:
-            n = (n - t * n.dot(t)).normalized()
+        n = (n - t * n.dot(t)).normalized()
         b = t.cross(n)
+        if section:
+            hw, ht = section[i]
+            rings.append([bm.verts.new(p + n * (ht * sn) + b * (hw * sb))
+                          for sn, sb in ((1, 1), (-1, 1), (-1, -1), (1, -1))])
+            continue
         rings.append([bm.verts.new(p + (n * math.cos(a) + b * math.sin(a)) * radius)
                       for a in (2 * math.pi * k / segments for k in range(segments))])
     for a, c in zip(rings, rings[1:]):
@@ -508,7 +558,6 @@ def tube(name, points, radius, segments=12, bend_radius=0.0, material="dark_meta
             bm.faces.new((a[k], a[k2], c[k2], c[k]))
     bm.faces.new(list(reversed(rings[0])))
     bm.faces.new(rings[-1])
-    return _object(name, bm, material, Matrix(), parent, smooth=True)
 
 # --- Aircraft shapes ------------------------------------------------------------------
 
