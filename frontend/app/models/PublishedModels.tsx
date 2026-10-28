@@ -43,7 +43,7 @@ export default function PublishedModels({ models, dashboard }: { models: Publish
     return (
       <div className={styles.page}>
         <Header back>
-          <Link href="/" className={styles.dim}>← explore</Link>
+          <Link href="/models" className={styles.dim}>← models</Link>
           <span>{models.find((m) => m.probe === probe)!.title}</span>
         </Header>
         <div className={styles.detail}>
