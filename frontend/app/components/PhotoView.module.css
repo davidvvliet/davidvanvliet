@@ -26,6 +26,15 @@
   display: block;
 }
 
+.caption {
+  flex-shrink: 0;
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-roboto-mono);
+  font-size: 0.8rem;
+  color: #00ff00;
+}
+
 .nav {
   flex-shrink: 0;
   display: flex;

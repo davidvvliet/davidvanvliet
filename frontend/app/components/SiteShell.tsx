@@ -34,7 +34,7 @@ export default function SiteShell({ children, photos }: { children: React.ReactN
   // Terminal commands ask for a route through the store; the store also mirrors
   // the current one so commands can tell where they are.
   useEffect(() => { usePageStore.getState().setView(pathname); }, [pathname]);
-  useEffect(() => { usePageStore.getState().setPhotoCount(photos.length); }, [photos.length]);
+  useEffect(() => { usePageStore.getState().setPhotoSlugs(photos.map((p) => p.slug)); }, [photos]);
   const navRequest = usePageStore((s) => s.navRequest);
   const handledNavSeq = useRef(0);
   useEffect(() => {

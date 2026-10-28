@@ -11,7 +11,7 @@ const GAP_PX = 2;
 
 // Thumbnails filling the whole cell: picks the column count whose tiles come out
 // closest to square, then stretches the grid to the cell's edges (no side margins).
-// A click opens /photos/<n>.
+// A click opens /photos/<slug>.
 export default function PhotoGrid({ photos }: { photos: Photo[] }) {
   const ref = useRef<HTMLDivElement>(null);
   const [layout, setLayout] = useState({ cols: 0, rows: 0 });
@@ -51,9 +51,9 @@ export default function PhotoGrid({ photos }: { photos: Photo[] }) {
           {photos.map((p) => (
             <Link
               key={p.n}
-              href={`/photos/${p.n}`}
-              className={`${styles.tile} ${pathname === `/photos/${p.n}` ? styles.active : ""}`}
-              aria-label={`Photo ${p.n}`}
+              href={`/photos/${p.slug}`}
+              className={`${styles.tile} ${pathname === `/photos/${p.slug}` ? styles.active : ""}`}
+              aria-label={p.caption ?? `Photo ${p.n}`}
             >
               {p.video ? (
                 // A clip plays in its tile like a GIF: muted, looping, inline.

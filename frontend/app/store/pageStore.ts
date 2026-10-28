@@ -8,9 +8,9 @@ interface PageState {
   /** Route a terminal command asked for; the site shell navigates. `seq` increments so repeats fire. */
   navRequest: { path: string; seq: number } | null;
   openPath: (path: string) => void;
-  /** How many photos public/photos holds (set by the site shell; for the `photos` command). */
-  photoCount: number;
-  setPhotoCount: (count: number) => void;
+  /** Each photo's URL slug, in order (set by the site shell; for the `photos` command). */
+  photoSlugs: string[];
+  setPhotoSlugs: (slugs: string[]) => void;
   /** Body the solar system should fly to. `seq` increments so repeat requests fire. */
   focusRequest: { name: string; seq: number } | null;
   requestFocus: (name: string) => void;
@@ -63,8 +63,8 @@ export const usePageStore = create<PageState>()(
   view: "/",
   setView: (path) => set({ view: path }),
   navRequest: null,
-  photoCount: 0,
-  setPhotoCount: (count) => set({ photoCount: count }),
+  photoSlugs: [],
+  setPhotoSlugs: (slugs) => set({ photoSlugs: slugs }),
   openPath: (path) => set((state) => ({ navRequest: { path, seq: (state.navRequest?.seq ?? 0) + 1 } })),
   focusRequest: null,
   requestFocus: (name) =>
