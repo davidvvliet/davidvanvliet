@@ -1,218 +1,34 @@
-# Starship V3, full stack. Built from lib/parts in metres; every number comes from
+# Starship V3, the ship (upper stage). Built from lib/parts in metres; every number comes from
 # specs/starship.json ("dimensions", "facts", "from_photos", each with its source).
-# Frame: z up, engine bell exits at z = 0, axis on x = y = 0; +x is the ship's windward
-# (heat-shield) side, away from the tower.
-import math, os
-import bpy
-import numpy as np
-from lib import materials, parts
-
-HARNESS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = os.path.join(HARNESS, "out", "starship", "textures")
-
-def _at(angle_deg, r, z):
-    a = math.radians(angle_deg)
-    return (r * math.cos(a), r * math.sin(a), z)
-
-def _srgb(hexstr):
-    h = hexstr.lstrip("#")
-    return np.array([int(h[i:i + 2], 16) / 255 for i in (0, 2, 4)], np.float32)
-
-def _image(name, rgb, colorspace):
-    """Save rgb (rows bottom-up, values as stored) as a JPEG the export keeps as JPEG, marked
-    as a repeating pattern for checks.textures."""
-    os.makedirs(OUT, exist_ok=True)
-    h, w, _ = rgb.shape
-    img = bpy.data.images.get(name)
-    if img is not None:
-        bpy.data.images.remove(img)
-    img = bpy.data.images.new(name, w, h)
-    img.colorspace_settings.name = colorspace
-    img.pixels.foreach_set(np.concatenate([rgb, np.ones((h, w, 1), np.float32)], 2).ravel())
-    img.filepath_raw = os.path.join(OUT, f"{name}.jpg")
-    img.file_format = "JPEG"
-    bpy.context.scene.render.image_settings.quality = 90
-    img.save()
-    img["tiling"] = True
-    return img
-
-def _hex_tiles(t, tile_hex, repeat_w, px_per_m=480):
-    """Colour and normal map of hexagonal tiles in staggered horizontal rows (vertices up),
-    `repeat_w` wide (4 tiles) and two row pairs tall, so it repeats seamlessly."""
-    d = repeat_w / 4                                   # across flats = centre spacing in a row
-    H = 2 * d * math.sqrt(3)
-    w, h = int(round(repeat_w * px_per_m)), int(round(H * px_per_m))
-    x = (np.arange(w) + 0.5) / w * repeat_w
-    y = (np.arange(h) + 0.5) / h * H
-    X, Y = np.meshgrid(x, y)
-    cs, ids = [], []
-    for k in range(-2, 7):
-        for m in range(-2, 7):
-            cs.append((m * d + (k % 2) * d / 2, k * d * math.sqrt(3) / 2))
-            ids.append((m % 4) * 4 + (k % 4))
-    cs, ids = np.array(cs), np.array(ids)
-    D2 = (X[..., None] - cs[:, 0]) ** 2 + (Y[..., None] - cs[:, 1]) ** 2
-    order = np.argsort(D2, axis=2)[..., :2]
-    d1 = np.take_along_axis(D2, order[..., :1], 2)[..., 0]
-    d2 = np.take_along_axis(D2, order[..., 1:2], 2)[..., 0]
-    edge = (d2 - d1) / (2 * d)                         # distance to the cell's edge (m)
-    inside = np.clip((edge - t["gap"] / 2) / 0.004, 0, 1)
-    # Bevel: each tile's edge rounds down into the gap over `bevel`, so light draws a thin
-    # highlight and shadow round every tile.
-    bev = np.clip((edge - t["gap"] / 2) / t["bevel"], 0, 1)
-    bev = bev * bev * (3 - 2 * bev)
-    rng = np.random.default_rng(39)
-    shade = 1 + t["shade_spread"] * rng.uniform(-1, 1, 16)
-    tilt = rng.uniform(-1, 1, (16, 2)) * t["tilt"]     # each tile sits slightly off flush
-    tile = _srgb(tile_hex)[None, None] * shade[ids[order[..., 0]]][..., None]
-    gap = _srgb(tile_hex) * t["gap_brightness"]
-    rgb = tile * inside[..., None] + gap[None, None] * (1 - inside[..., None])
-    hgt = -(1 - bev) * t["gap_depth"]                 # gaps sit below the tile faces
-    step = repeat_w / w
-    dy, dx = np.gradient(hgt, step)
-    tl = tilt[ids[order[..., 0]]] * bev[..., None]
-    n = np.stack([-dx + tl[..., 0], -dy + tl[..., 1], np.ones_like(hgt)], 2)
-    n /= np.linalg.norm(n, axis=2, keepdims=True)
-    return (_image("heat_shield_tiles_base", np.clip(rgb, 0, 1).astype(np.float32), "sRGB"),
-            _image("heat_shield_tiles_normal", (n * 0.5 + 0.5).astype(np.float32), "Non-Color"),
-            H)
-
-def _weld_lines(steel_hex, ring_h, line, darken, px_per_m=280):
-    """Steel with a darker weld line every `ring_h` metres (u doesn't matter: 8 px wide)."""
-    h = int(round(ring_h * px_per_m))
-    v = (np.arange(h) + 0.5) / h * ring_h
-    dist = np.minimum(v, ring_h - v)
-    k = np.clip(dist / (line / 2), 0, 1)
-    shade = darken + (1 - darken) * k
-    rgb = _srgb(steel_hex)[None, None] * shade[:, None, None] * np.ones((1, 8, 1))
-    return _image("stainless_steel_welds", rgb.astype(np.float32), "sRGB")
-
-def _cyl_uv(obj, repeat_w, repeat_h, R):
-    """UVs that wrap round the z axis: u = angle x R / repeat_w (the same at every height, so
-    a whole number of repeats goes round and there is no seam), v = z / repeat_h."""
-    me, mw = obj.data, obj.matrix_world
-    uv = me.uv_layers.new(name="UVMap")
-    for poly in me.polygons:
-        c = mw @ poly.center
-        ac = math.atan2(c.y, c.x)
-        for li in poly.loop_indices:
-            p = mw @ me.vertices[me.loops[li].vertex_index].co
-            a = math.atan2(p.y, p.x) if math.hypot(p.x, p.y) > 1e-6 else ac
-            a = ac + ((a - ac + math.pi) % (2 * math.pi) - math.pi)
-            uv.data[li].uv = (a * R / repeat_w, p.z / repeat_h)
-
-def _plane_uv(obj, across, repeat_w, repeat_h):
-    """UVs for a flat part: u along the world direction `across`, v = z."""
-    me, mw = obj.data, obj.matrix_world
-    uv = me.uv_layers.new(name="UVMap")
-    for li, loop in enumerate(me.loops):
-        p = mw @ me.vertices[loop.vertex_index].co
-        uv.data[li].uv = ((p.x * across[0] + p.y * across[1]) / repeat_w, p.z / repeat_h)
+# Frame: z up, the ship's base (aft skirt) at z = 0, axis on x = y = 0; +x is the windward
+# (heat-shield) side, away from the tower. The booster is its own model (superheavy).
+import math
+from lib import materials, parts, tiling
 
 def build(spec):
     D = {k: v["value"] for k, v in spec["dimensions"].items()}
     F = {k: v["value"] for k, v in spec["facts"].items()}
     P = {k: v["value"] for k, v in spec["from_photos"].items()}
-    R = D["diameter_booster"] / 2
-    top = D["stack_height"]
-    hb = D["booster_height"]
-    hs = D["ship_height"]
+    R = D["diameter"] / 2
+    top = D["height"]
     steel, tiles = "stainless_steel", "heat_shield_tiles"
     # Surface detail: hexagonal tiles and weld lines as repeating textures
-    # (from_photos.hex_tiles, facts.ring_height). A whole number of tile repeats goes round.
+    # (from_photos.hex_tiles, from_photos.weld_lines, facts.ring_height). A whole number of
+    # tile repeats goes round.
     ht = P["hex_tiles"]
     reps = round(2 * math.pi * R / (4 * ht["across_flats"]))
     tile_w = 2 * math.pi * R / reps
     sm = spec["materials"]
-    tbase, tnorm, tile_h = _hex_tiles(ht, sm[tiles]["hex"], tile_w)
+    tbase, tnorm, tile_h = tiling.hex_tiles("starship", ht, sm[tiles]["hex"], tile_w)
     tiles_tex = materials.image("heat_shield_tiles_textured", tbase, tnorm,
                                 metallic=sm[tiles]["metallic"], roughness=sm[tiles]["roughness"])
-    welds = _weld_lines(sm[steel]["hex"], F["ring_height"], ht["weld_line"], ht["weld_darken"])
+    wl = P["weld_lines"]
+    welds = tiling.weld_lines("starship", sm[steel]["hex"], F["ring_height"], wl["line"], wl["darken"])
     steel_tex = materials.image("stainless_steel_textured", welds, metallic=sm[steel]["metallic"],
                                 roughness=sm[steel]["roughness"])
 
-    # --- Super Heavy -------------------------------------------------------------------
-    with parts.assembly("booster", core=True):
-        aft = P["booster_engines_below_skirt"]
-        ring_h = P["hot_stage_ring_height"]
-        tank_top = hb - ring_h
-        tank = parts.cylinder("booster_tank", R, tank_top - aft, location=(0, 0, aft), segments=64,
-                              material=steel_tex)
-        _cyl_uv(tank, 1.0, F["ring_height"], R)
-
-        # 33 bells: 3 centre, 10 middle, 20 outer (facts.booster_engine_rings). Bell profile:
-        # exit at z = 0, throat 1.53 m up (faa_plume's throat-to-exit length), powerhead into
-        # the aft plate.
-        ex = P["booster_nozzle_exit"] / 2
-        bell = [(0, 0.15), (ex, 0), (ex * 0.85, 0.5), (ex * 0.6, 1.1), (0.25, 1.53),
-                (0.4, 1.8), (0.4, aft + 0.2), (0, aft + 0.2)]
-        c = F["booster_centre_engine_clocking_deg"]
-        centre = [90, 90 + c[0], 90 + c[0] + c[1]]
-        rings = [(0.85, centre), (2.4, [18 + 36 * k for k in range(10)]),
-                 (3.9, [9 + 18 * k for k in range(20)])]
-        k = 0
-        for r, angles in rings:
-            for a in angles:
-                parts.lathe(f"booster_engine_{k:02d}", bell, location=_at(a, r, 0), segments=16,
-                            material="dark_metal")
-                k += 1
-
-        # Chines: strakes on +y and -y over the lower booster, tapering in at the top.
-        ch = P["booster_chines"]
-        for sign, tag in parts.sides():
-            y0, y1 = sign * (R - 0.05), sign * (R + ch["stands_out"])
-            z_top = aft + ch["top_above_aft_end"]
-            parts.surface(f"booster_chine_{tag}", root_le=(0, y0, z_top), root_chord=z_top - aft,
-                          tip_le=(0, y1, z_top - 3.0), tip_chord=z_top - 3.0 - aft,
-                          thickness=0.03, chord_dir=(0, 0, -1), material=steel)
-
-        rw = P["booster_raceway"]
-        parts.box("booster_raceway", (rw["stands_out"] + 0.1, rw["width"], tank_top - aft - 0.4),
-                  location=_at(rw["angle_from_x_deg"], R + rw["stands_out"] / 2 - 0.05,
-                               (aft + tank_top) / 2),
-                  roll_deg=rw["angle_from_x_deg"], material=steel)
-
-        # Integrated hot stage: the methane tank's exposed dome inside a crown of V struts
-        # that carries a ring the ship stands on.
-        hsr = P["hot_stage_struts"]
-        dh = hsr["dome_height"]
-        dome = [(R, 0)] + [(R * math.cos(t), dh * math.sin(t))
-                           for t in [math.radians(x) for x in range(15, 90, 15)]] + [(0, dh)]
-        parts.lathe("booster_dome", dome, location=(0, 0, tank_top - 0.01), segments=48,
-                    material=steel)
-        ring_t = 0.3
-        parts.lathe("hotstage_ring", [(R - 0.25, hb - ring_t), (R, hb - ring_t), (R, hb),
-                                      (R - 0.25, hb)], closed=True, segments=64, smooth=False,
-                    material=steel)
-        n = hsr["v_pairs"]
-        sr = hsr["strut_diameter"] / 2
-        for i in range(n):
-            foot = _at(360 * i / n, R - sr, tank_top - 0.3)
-            for j, da in enumerate((-180 / n, 180 / n)):
-                head = _at(360 * i / n + da, R - sr, hb - ring_t / 2)
-                parts.strut(f"hotstage_strut_{i:02d}_{j}", foot, head, radius=sr, segments=8,
-                            material=steel)
-
-        # A ribbed band of fittings round the booster (from_photos.booster_band).
-        bd = P["booster_band"]
-        b1 = hb - bd["top_below_booster_top"]
-        b0 = b1 - bd["height"]
-        parts.lathe("booster_band", [(R - 0.05, b0), (R + bd["stands_out"], b0),
-                                     (R + bd["stands_out"], b1), (R - 0.05, b1)], closed=True,
-                    segments=64, smooth=False, material="dark_metal")
-
-        # Grid fins: three, in a T (90/90/180): +y, -y and the heat-shield side (+x).
-        gf = P["grid_fin"]
-        zc = hb - gf["top_below_booster_top"] - gf["thickness"] / 2
-        for a, tag in ((90, "left"), (-90, "right"), (0, "windward")):
-            parts.grid_fin(f"grid_fin_{tag}", gf["stands_out"] + 0.1, gf["width"], gf["thickness"],
-                           gf["pitch"], location=_at(a, R - 0.1, zc), direction=_at(a, 1, 0),
-                           wall=gf["wall"], notch=gf["notch"], notch_top=0.0,
-                           material="grid_fin")
-
-    # --- Starship ----------------------------------------------------------------------
-    with parts.assembly("ship"):
-        z0 = top - hs                       # ship base, on the hot-stage ring
+    with parts.assembly("ship", core=True):
+        z0 = 0.0                            # ship base
         L = P["nose_length"]
         z_nose = top - L
         rn = P["nose_tip_radius"]
@@ -261,7 +77,7 @@ def build(spec):
         # One UV map serves both: tile repeats for the tiles, weld lines (1.83 m) for the
         # steel. The weld image is one ring tall, the tile image two row pairs, so v is scaled
         # per material below.
-        _cyl_uv(body, tile_w, tile_h, R)
+        tiling.cyl_uv(body, tile_w, tile_h, R)
         uv = body.data.uv_layers.active.data
         for poly in body.data.polygons:
             if poly.material_index == 1:
@@ -285,7 +101,7 @@ def build(spec):
             flap = parts.surface(f"ship_forward_flap_{tag}", root_le=top_pt, root_chord=chord,
                                  tip_le=tip_le, tip_chord=ff["tip_chord"], thickness=0.05,
                                  chord_dir=cd, material=tiles_tex)
-            _plane_uv(flap, (ux, uy), tile_w, tile_h)
+            tiling.plane_uv(flap, (ux, uy), tile_w, tile_h)
 
         # Aft flaps: +y and -y, root down to the ship's base.
         af = P["aft_flap"]
@@ -296,7 +112,7 @@ def build(spec):
                                  tip_le=(0, sign * (R + af["span"]), z0 + af["tip_chord"]),
                                  tip_chord=af["tip_chord"], thickness=0.04, chord_dir=(0, 0, -1),
                                  material=tiles_tex)
-            _plane_uv(flap, (0, sign), tile_w, tile_h)
+            tiling.plane_uv(flap, (0, sign), tile_w, tile_h)
             # Actuator housing on the body at the top of the flap's root.
             hz = P["aft_flap_housing"]
             parts.box(f"ship_aft_flap_housing_{tag}", (hz["width"], hz["stands_out"] + 0.1, hz["height"]),
