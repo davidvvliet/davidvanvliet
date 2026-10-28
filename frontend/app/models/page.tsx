@@ -5,7 +5,7 @@ import { Metadata } from "next";
 import PublishedModels, { Published } from "./PublishedModels";
 
 export const metadata: Metadata = {
-  title: "Probe models",
+  title: "Models",
   robots: { index: false, follow: false },
 };
 
