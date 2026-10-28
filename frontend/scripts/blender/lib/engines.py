@@ -18,17 +18,20 @@
 #   gimbal:    diameter, height (the mount on top), optional
 #   nozzle.tubes: optional tube-wall texture {count, split_below_throat, per_tile}, full lod only
 #   nozzle.hoops, extension.hoops: optional stiffening rings {count, height, stands_out, from,
-#              to} (from and to: fractions of that part's length from its exit), full lod only
+#              to, studs} (from and to: fractions of that part's length from its exit; studs
+#              {count, size [out, along, up], every}: boxes on every n-th ring), full lod only
 #   extension: optional nozzle extension below the nozzle {exit_diameter, length, wall}: a cone
 #              from the nozzle's exit down to its own; the engine's z = 0 is then its exit
 #   manifold:  optional torus round the nozzle {diameter (centreline) or inner_diameter (the
 #              circle its inside edge hugs), tube_diameter (at the
 #              inlet), end_diameter (at the far end, for a tapering one), inlet_deg, and z (its
-#              centre plane) or sits_on (the plane its underside rests on, so a tapering one tilts)}
+#              centre plane) or sits_on (the plane its underside rests on, so a tapering one tilts),
+#              joints {count, width, stands_out}: raised expansion joints round the tube}
 #   parts:     [{"kind": "pump" | "pipe" | "box" | "actuator" | "lathe", "name": ..., ...}, ...]
 #              in the engine's frame: pump {diameter, length, at, axis}, pipe {diameter, points},
 #              box {size, at}, actuator {diameter, from, to}, lathe {profile [[r, z], ...], at,
-#              axis, smooth (false for flat-ended discs)}; each may set its material; each
+#              axis, smooth (false for flat-ended discs)}; pipes may have flanges [fractions
+#              of their length]; each may set its material; each
 #              with its own source
 #   materials: {"nozzle", "chamber", "powerhead", "parts"}: material names (spec or shared)
 # Jet ("kind": "jet"), the intake at the top (z = length), exhaust at z = 0:
@@ -96,7 +99,8 @@ def nozzle_profile(nz, steps=24):
     return out
 
 def _hoops(name, h, outer, length, material, seg):
-    """Stiffening rings on a shell whose outer wall is `outer` [(r, z)] (z from its exit)."""
+    """Stiffening rings on a shell whose outer wall is `outer` [(r, z)] (z from its exit), at half
+    the shell's segments: a ring's chord sags less than it stands out."""
     objs = []
     n = h["count"]
     for i in range(n):
@@ -107,7 +111,21 @@ def _hoops(name, h, outer, length, material, seg):
                                                     (r + h["stands_out"], z - h["height"] / 2),
                                                     (r + h["stands_out"], z + h["height"] / 2),
                                                     (r - 0.005, z + h["height"] / 2)],
-                                closed=True, segments=seg, smooth=False, material=material))
+                                closed=True, segments=max(16, seg // 2), smooth=False,
+                                material=material))
+        st = h.get("studs")
+        if st and (i % st.get("every", 1) == 0):
+            # Studs or brackets standing on the ring, `count` round it, staggered on alternate rings.
+            bm = bmesh.new()
+            sx, sy, sz = st["size"]
+            off = math.pi / st["count"] * (i // st.get("every", 1) % 2)
+            for k in range(st["count"]):
+                a = 2 * math.pi * k / st["count"] + off
+                m = Matrix.Translation(((r + h["stands_out"] + sx / 2 - 0.005) * math.cos(a),
+                                        (r + h["stands_out"] + sx / 2 - 0.005) * math.sin(a), z))
+                parts._box(bm, (sx, sy, sz), m @ Matrix.Rotation(a, 4, "Z"))
+            objs.append(parts._object(f"{name}_{i:02d}_studs", bm, st.get("material", material),
+                                      Matrix()))
     return objs
 
 def _interp(prof, z):
@@ -147,7 +165,24 @@ def _torus(name, m, seg, material):
     bm.faces.new(list(reversed(rings[0])))
     bm.faces.new(rings[-1])
     bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
-    return parts._object(name, bm, material, Matrix(), smooth=True)
+    objs = [parts._object(name, bm, material, Matrix(), smooth=True)]
+    j = m.get("joints")
+    if j:
+        # Expansion joints: raised rings round the tube, evenly spaced from the inlet.
+        bm = bmesh.new()
+        for k in range(j["count"]):
+            t = (k + 0.5) / j["count"]
+            phi = a0 + 2 * math.pi * t * 0.995
+            rr = r0 + (r1 - r0) * t
+            R = R0 if R0 is not None else m["inner_diameter"] / 2 + rr
+            z = m["sits_on"] + rr if "sits_on" in m else m["z"]
+            c = Vector((math.cos(phi) * R, math.sin(phi) * R, z))
+            tan = Vector((-math.sin(phi), math.cos(phi), 0))
+            w, o = j["width"], j["stands_out"]
+            parts._lathe(bm, [(rr - 0.01, -w / 2), (rr + o, -w / 2), (rr + o, w / 2), (rr - 0.01, w / 2),
+                              (rr - 0.01, -w / 2)], ring_n, parts.frame(tuple(c), tuple(tan)))
+        objs.append(parts._object(f"{name}_joints", bm, material, Matrix()))
+    return objs
 
 def _tube_wall(obj, name, t, L, mat_name):
     """Give the nozzle the tube-wall texture: t {count (tubes round the top), split_below_throat
@@ -178,6 +213,25 @@ def _tube_wall(obj, name, t, L, mat_name):
             else:
                 vv = 0.5 * p.z / zs if p.z < zs else 0.5 + 0.5 * (p.z - zs) / (L - zs)
             uv.data[li].uv = (a / (2 * math.pi) * reps, vv)
+
+def _flanges(name, p, material):
+    """Rings round a pipe at fractions of its length along its straight runs (bends ignored)."""
+    pts = [Vector(q) for q in p["points"]]
+    lens = [(b - a).length for a, b in zip(pts, pts[1:])]
+    total = sum(lens)
+    r = p["diameter"] / 2
+    bm = bmesh.new()
+    for f in p["flanges"]:
+        d = f * total
+        for a, b, l in zip(pts, pts[1:], lens):
+            if d <= l:
+                c = a + (b - a) * (d / l)
+                parts._lathe(bm, [(r - 0.01, -0.03), (r + 0.035, -0.03), (r + 0.035, 0.03),
+                                  (r - 0.01, 0.03), (r - 0.01, -0.03)], 16,
+                             parts.frame(tuple(c), tuple(b - a)))
+                break
+            d -= l
+    return parts._object(name, bm, material, Matrix())
 
 def _rocket(name, e, lod):
     nz, ch, ph = e["nozzle"], e["chamber"], e["powerhead"]
@@ -233,7 +287,7 @@ def _rocket(name, e, lod):
         if lod == "full" and "hoops" in ext:
             objs += _hoops(f"{name}_extension_hoop", ext["hoops"], e_out, ze, em, seg)
     if "manifold" in e:
-        objs.append(_torus(f"{name}_manifold", e["manifold"], seg,
+        objs += (_torus(f"{name}_manifold", e["manifold"], seg,
                            mats.get("manifold", mats.get("nozzle", "dark_metal"))))
     if lod == "full":
         pm = mats.get("parts", "dark_metal")
@@ -249,6 +303,8 @@ def _rocket(name, e, lod):
             elif k == "pipe":
                 objs.append(parts.tube(pn, p["points"], p["diameter"] / 2, segments=12,
                                        bend_radius=p.get("bend_radius", p["diameter"]), material=p.get("material", pm)))
+                if p.get("flanges"):
+                    objs.append(_flanges(f"{pn}_flanges", p, p.get("flange_material", p.get("material", pm))))
             elif k == "box":
                 objs.append(parts.box(pn, p["size"], location=p["at"], material=p.get("material", pm)))
             elif k == "actuator":
