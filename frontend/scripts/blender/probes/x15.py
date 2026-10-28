@@ -103,6 +103,10 @@ def build(spec):
         for k in range(1, 9):
             t = math.pi / 2 * k / 8
             pts.append((y0 * math.cos(t) ** (2 / e), z0 + (top - z0) * math.sin(t) ** (2 / e)))
+        for _ in range(3):  # round the corners (Chaikin), keeping both ends
+            pts = [pts[0]] + [q for a, b in zip(pts, pts[1:]) for q in
+                              ((0.75 * a[0] + 0.25 * b[0], 0.75 * a[1] + 0.25 * b[1]),
+                               (0.25 * a[0] + 0.75 * b[0], 0.25 * a[1] + 0.75 * b[1]))] + [pts[-1]]
         return pts
 
     def resample(pts, n=24):
