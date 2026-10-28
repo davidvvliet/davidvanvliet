@@ -138,8 +138,13 @@ def _hoops(name, h, outer, length, material, seg):
                 zs = z + h["height"] / 2 + u / 2
                 ro = _interp(outer, zs) + t / 2
                 for a in angs:
-                    m = Matrix.Translation((ro * math.cos(a), ro * math.sin(a), zs))
-                    parts._box(bm, (t, w, u), m @ Matrix.Rotation(a, 4, "Z"))
+                    # Four faces: the back lies on the wall and the bottom on the band.
+                    m = (Matrix.Translation((ro * math.cos(a), ro * math.sin(a), zs))
+                         @ Matrix.Rotation(a, 4, "Z"))
+                    v = [bm.verts.new(m @ Vector((x * t / 2, y * w / 2, q * u / 2)))
+                         for x in (-1, 1) for y in (-1, 1) for q in (-1, 1)]
+                    for f in ((4, 6, 7, 5), (0, 4, 5, 1), (2, 3, 7, 6), (1, 5, 7, 3)):
+                        bm.faces.new([v[k] for k in f])
             else:
                 sg = st.get("segments", 8)
                 rad = st["diameter"] / 2 / math.cos(math.pi / sg)
