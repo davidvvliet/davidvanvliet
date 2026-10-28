@@ -405,6 +405,11 @@
       },
       "unit": "m",
       "source": "photo_b19_lift (crop 700-1220 x 170-520 of the 1600 px view): 9 strut feet across the visible half, so about 18 around; the top ring sits on the strut tops; the methane dome rises about 2.2 m above the tank's top edge (100 px below the ring top on a 680 px / 9 m body). Estimated."
+    },
+    "nose_tip_radius": {
+      "value": 1.2,
+      "unit": "m",
+      "source": "photo_pad_f13: the tip's width over its first 1.5 m (0.9 to 2.9 m wide at 0.2 to 1.5 m below the tip) fits a sphere of radius 0.9 to 1.5 m; 1.2 m, tangent to the ogive. Estimated."
     }
   },
   "materials": {

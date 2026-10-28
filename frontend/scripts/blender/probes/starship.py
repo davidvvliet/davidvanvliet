@@ -93,15 +93,36 @@ def build(spec):
         z0 = top - hs                       # ship base, on the hot-stage ring
         L = P["nose_length"]
         z_nose = top - L
-        rho = (R * R + L * L) / (2 * R)     # tangent ogive
+        rn = P["nose_tip_radius"]
+
+        # Blunted tangent ogive: a sphere of radius rn on the tip, tangent to the ogive. The
+        # sharp ogive's length Ls is solved so the blunted nose is L long (nose to full width).
+        def blunted(Ls):
+            rho = (R * R + Ls * Ls) / (2 * R)
+            x0 = Ls - math.sqrt((rho - rn) ** 2 - (rho - R) ** 2)   # sphere centre, from the sharp tip
+            yt = rn * (rho - R) / (rho - rn)
+            xt = x0 - math.sqrt(rn * rn - yt * yt)                  # where sphere meets ogive
+            return rho, x0, xt, x0 - rn                             # last: blunted apex
+        Ls = L
+        for _ in range(30):
+            Ls += L - (Ls - blunted(Ls)[3])
+        rho, x0, xt, xa = blunted(Ls)
 
         def r_at(z):
-            s = z - z_nose
-            return R if s <= 0 else max(0.0, math.sqrt(rho * rho - s * s) + R - rho)
+            x = (top - z) + xa              # distance from the sharp ogive's tip
+            if x >= Ls:
+                return R
+            if x <= xa:
+                return 0.0
+            if x < xt:
+                return math.sqrt(max(0.0, rn * rn - (x - x0) ** 2))
+            return math.sqrt(rho * rho - (Ls - x) ** 2) + R - rho
 
         prof = [(0, z0), (R, z0), (R, z_nose)]
-        prof += [(r_at(z_nose + L * t), z_nose + L * t) for t in [i / 12 for i in range(1, 12)]]
-        prof += [(0.35, top - 0.08), (0, top)]   # blunt tip
+        zt_join = top - (xt - xa)
+        prof += [(r_at(z), z) for z in [z_nose + (zt_join - z_nose) * i / 14 for i in range(1, 15)]]
+        prof += [(r_at(z), z) for z in [zt_join + (top - zt_join) * i / 6 for i in range(1, 6)]]
+        prof += [(0, top)]
         # Windward half black tiles, leeward half bare steel (facts.heat_shield).
         parts.lathe("ship_windward", prof, segments=32, sweep_deg=180, roll_deg=0,
                     material=tiles)
