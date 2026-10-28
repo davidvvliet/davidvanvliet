@@ -15,6 +15,9 @@
     "model:ref": "python3 scripts/blender/run.py ref",
     "model:explode": "python3 scripts/blender/run.py explode",
     "model:bake": "python3 scripts/blender/run.py bake",
+    "model:pieces": "python3 scripts/blender/run.py pieces",
+    "model:idview": "python3 scripts/blender/run.py idview",
+    "model:compare": "python3 scripts/blender/run.py compare",
     "model:status": "python3 scripts/blender/run.py status",
     "model:watch": "python3 scripts/blender/run.py watch"
   },

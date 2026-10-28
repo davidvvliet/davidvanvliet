@@ -12,6 +12,13 @@
 #   run.py ref <probe> <model>      measure a reference model: sheet + largest pieces
 #   run.py explode <probe> <model>  break the reference model into our parts: per-part
 #                                   comparison and the pieces none of our parts claim
+#   run.py pieces <model> x0 y0 z0 x1 y1 z1 [--min M] [--max M] [--struts] [--dump]
+#                                   list a reference model's loose pieces in a region
+#                                   (tools/pieces.py): sizes, strut end points, vertices
+#   run.py idview <model> <out.png> x0 y0 z0 x1 y1 z1 tx ty tz dx dy dz
+#                                   render the pieces in a region one colour each, with a legend
+#   run.py compare <probe> <reference> <out.png> tx,ty,tz,dx,dy,dz ...
+#                                   close-ups of the reference (top) and our last build (bottom)
 #   run.py dev [probe] [--headless] rebuild on every save of a probe script, spec or lib/
 #   run.py send <file.py | ->       run Python in the live session
 #   run.py status                   print the last build of every probe, and whether its
@@ -296,6 +303,42 @@ def cmd_bake(args):
     print(f"  projection only: {os.path.join(OUT, probe, 'bake_projection.png')}")
     print(f"  now rebuild: run.py build {probe}")
 
+def _tool(script, args, ok=None):
+    """Run a tools/ Blender script headless and pass its output through."""
+    check_version()
+    proc = subprocess.run([BLENDER, "--background", "--factory-startup", "--python-exit-code", "1",
+                           "--python", os.path.join(HERE, "tools", script), "--", *args],
+                          capture_output=True, text=True)
+    lines = [l for l in proc.stdout.splitlines()
+             if re.match(r"(PIECE|STRUT|COUNT|ID|IDVIEW_OK|COMPARE_OK|\S+ +v *\d+ )", l)]
+    if proc.returncode or (ok and not any(l.startswith(ok) for l in lines)):
+        die(proc.stdout[-4000:] + proc.stderr[-4000:])
+    print("\n".join(lines))
+
+def _model_arg(path):
+    path = os.path.abspath(path)
+    if not os.path.exists(path):
+        die(f"{path} not found")
+    return path
+
+def cmd_pieces(args):
+    if len(args) < 7:
+        die("usage: run.py pieces <model> x0 y0 z0 x1 y1 z1 [--min M] [--max M] [--struts] [--dump]")
+    _tool("pieces.py", [_model_arg(args[0]), *args[1:]], ok="COUNT")
+
+def cmd_idview(args):
+    if len(args) != 14:
+        die("usage: run.py idview <model> <out.png> x0 y0 z0 x1 y1 z1 tx ty tz dx dy dz")
+    _tool("idview.py", [_model_arg(args[0]), os.path.abspath(args[1]), *args[2:]], ok="IDVIEW_OK")
+
+def cmd_compare(args):
+    if len(args) < 4:
+        die("usage: run.py compare <probe> <reference> <out.png> tx,ty,tz,dx,dy,dz [...]  (after a build)")
+    ours = os.path.join(OUT, args[0], f"{args[0]}.glb")
+    if not os.path.exists(ours):
+        die(f"{ours} not found: run.py build {args[0]} first")
+    _tool("compare.py", [_model_arg(args[1]), ours, os.path.abspath(args[2]), *args[3:]], ok="COMPARE_OK")
+
 def cmd_dev(args):
     names = [a for a in args if not a.startswith("--")]
     headless = "--headless" in args
@@ -381,7 +424,8 @@ def cmd_watch(args):
         time.sleep(0.5)
 
 COMMANDS = {"blender": cmd_blender, "build": cmd_build, "all": cmd_all, "approve": cmd_approve,
-            "new": cmd_new, "ref": cmd_ref, "explode": cmd_explode, "bake": cmd_bake, "dev": cmd_dev, "send": cmd_send, "status": cmd_status, "watch": cmd_watch}
+            "new": cmd_new, "ref": cmd_ref, "explode": cmd_explode, "bake": cmd_bake, "pieces": cmd_pieces, "idview": cmd_idview,
+            "compare": cmd_compare, "dev": cmd_dev, "send": cmd_send, "status": cmd_status, "watch": cmd_watch}
 
 if __name__ == "__main__":
     if len(sys.argv) < 2 or sys.argv[1] not in COMMANDS:

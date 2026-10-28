@@ -56,6 +56,8 @@ More than one Claude session may be working in this harness.
    the reference, plus the reference pieces none of our parts claim (missing or misplaced
    parts). Read `out/<probe>/ref/explode.png`. Work down the unclaimed list and the largest
    offsets.
+   To measure or identify reference pieces, use `model:pieces` / `model:idview`, and check
+   each pass and bake with `model:compare` (README "Inspecting a reference model").
    Read `out/<probe>/sheet.png` (one image, four views, metric grid) against the
    references for proportions, then `out/<probe>/closeups.png` for joints and small parts:
    at sheet scale a bent boom or a floating part is a few pixels (both slipped through on

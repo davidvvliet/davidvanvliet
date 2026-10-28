@@ -19,6 +19,7 @@ Python; the command line needs only the system `python3`.
 - `ref.py`: reference-model measuring (same rig, pieces with sizes and main-axis lengths)
 - `explode.py`: splits a reference model into our parts (offsets, unclaimed pieces)
 - `bake.py`, `lib/bake.py`: bakes a reference model's colours onto a probe (one atlas)
+- `tools/pieces.py`, `tools/idview.py`, `tools/compare.py`: reference-model inspection (Blender scripts; see "Inspecting a reference model")
 - `tools/engraving.py`: fits a line drawing of an engraved plate onto a photo of it (plain Python)
 - `lib/sources.py`, `tools/sources.py`: a spec's sources (check, save texts; plain Python)
 - `refs/<probe>/sources/`: saved texts of the sources a spec uses
@@ -37,6 +38,7 @@ Python; the command line needs only the system `python3`.
 - `npm run model:ref <probe> <model.glb>`: measure a reference model (sheet, and close-ups through the spec's views, in `refs/<probe>/`; largest pieces in `out/<probe>/ref/parts.json`)
 - `npm run model:explode <probe> <model.glb>`: after a build, split the reference model into our parts (`out/<probe>/ref/explode.json` and `explode.png`)
 - `npm run model:bake <probe> <model.glb>`: project the reference model's colours onto the probe (`refs/<probe>/baked.jpg`); see "Baked colour"
+- `npm run model:pieces <model.glb> x0 y0 z0 x1 y1 z1 [--min M] [--max M] [--struts] [--dump]`, `model:idview`, `model:compare`: inspect a reference model region by region; see "Inspecting a reference model"
 - `npm run model:status`, `npm run model:watch` (contact sheets inline in iTerm2)
 - `python3 scripts/blender/run.py send <file.py>`: run any Python in the live session
 
@@ -168,6 +170,26 @@ fails when the geometry changed since the bake, or the layout differs: re-run it
 show where our shape is more than a few cm off the reference: shorten `max_ray_m`, or fix
 the shape. Parts with their own image (plates) are left out. Images export at JPEG quality
 90; Perseverance (4096 px colour and normal map) has a 7 MB budget (`budget.glb_bytes`).
+
+## Inspecting a reference model
+NASA's models are untitled piles of loose pieces (Voyager's bus area alone is hundreds). To
+measure one part, narrow down by region (all in metres, the reference model's frame):
+
+- `run.py pieces <model> x0 y0 z0 x1 y1 z1`: every loose piece whose bounds centre is in the
+  box: size, centre, principal axis, largest first. `--min/--max` filter by size (a thruster
+  hunt is `--max 0.16`). `--struts` merges the flat faces a strut is built from and prints its
+  end points and thickness (Voyager's under-bus legs, ring struts). `--dump` prints each
+  piece's vertices to fit a shape to (Voyager's bus-top blanket profile, the scan platform's
+  half cylinder).
+- `run.py idview <model> <out.png> <region> <target> <offset>`: the same pieces, one colour
+  each, with a legend: the quickest way to see which piece is which.
+- `run.py compare <probe> <model> <out.png> "tx,ty,tz,dx,dy,dz" ...`: the reference (top) and
+  our last build (bottom) from the same cameras, textures on. Run it after every pass and
+  every bake: a part shaped differently from the reference shows here first, as missing
+  geometry or as bake texture landing wrong (Voyager's scan platform underside was a box where
+  NASA's is a half cylinder, and the bake printed the cylinder's end flat on the box's side).
+
+Write what you measure into the spec's `from_reference_model` with how it was measured.
 
 ## From Blender to the site
 1. Every build exports `out/<probe>/<probe>.glb` (ignored by git), so nothing reaches the site.
