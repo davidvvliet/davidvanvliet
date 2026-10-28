@@ -371,13 +371,13 @@
     "catch_pins": {
       "value": {
         "count": 2,
-        "from_tower_deg": 50,
+        "from_tower_deg": 39,
         "below_tip": 14.8,
         "diameter": 0.9,
         "stands_out": 1.0
       },
       "unit": "m, degrees either side of the tower side (-x)",
-      "source": "photo_wdr (nose crop x 2510-2810, y 640-990): two stubby steel cylinders with dark end faces stick out where the nose meets the barrel, centre at y 902 (tip y 557, 0.0428 m/px along: 14.8 m below the tip), about 22 px (0.9 m) across. Taken as the catch pins nsf_block3_moon puts on the nose cone (inferred: not labelled). One points almost at the camera (45-55 degrees off the leeward side, see tile_layout) and the other is on the far limb, so they sit about 50 degrees either side of the tower side. Length estimated."
+      "source": "photo_wdr (nose crop x 2510-2810, y 640-990): two stubby steel cylinders with dark end faces stick out where the nose meets the barrel, centre at y 902 (tip y 557, 0.0428 m/px along: 14.8 m below the tip), about 22 px (0.9 m) across. Taken as the catch pins nsf_block3_moon puts on the nose cone (inferred: not labelled). One points almost at the camera (45-55 degrees off the leeward side, see tile_layout) and the other is on the far limb, the near one 5 px left of the axis (2 degrees), at about 141 degrees, so they sit about 39 degrees either side of the tower side. Length estimated. Corrected (2026-10-28): the camera looks along about 143 degrees, not 130. The two raceways, which sit 40 degrees apart in this photo, are mirrored about the tower side (a scale model of the ship seen from the tower side, user's photo), so the camera is at 180 - (17 + 56) / 2 = 143 degrees; every angle read from this photo moves by +13 degrees."
     },
     "tile_edge": {
       "value": "jagged: the tiles stop on whole hexagons, so the edge follows the tiles' sides and steps half a tile every row",
@@ -386,8 +386,8 @@
     "raceways": {
       "value": {
         "angles_deg": [
-          147,
-          186
+          160,
+          200
         ],
         "top_below_tip": 15.0,
         "bottom_below_tip": 48.5,
@@ -396,20 +396,20 @@
         "point_length": 1.0
       },
       "unit": "m, degrees from +x",
-      "source": "photo_wdr (pipes crop x 2640-2780, y 880-1180, and the aft crop): two steel covers run down the leeward side, flat-faced, about 20 px (0.75 m at 0.0383 m/px across) wide, with pointed tops level with the catch pins (y 905 and 925: 14.9 and 15.7 m below the tip at 0.0428 m/px) and ending just above the aft skirt (about y 1690, 48.5 m below the tip). Across the 235 px body (centre x 2647) they sit 34 px and 98 px right of the axis, 17 and 56 degrees round from the camera; with the camera looking along 130 degrees (catch_pins: the left pin points at it) that puts them at 147 and 186 degrees. How far they stand out is estimated. The clamps that give older ships' raceways a ladder look aren't visible under the frost here, so they aren't modelled."
+      "source": "photo_wdr (pipes crop x 2640-2780, y 880-1180, and the aft crop): two steel covers run down the leeward side, flat-faced, about 20 px (0.75 m at 0.0383 m/px across) wide, with pointed tops level with the catch pins (y 905 and 925: 14.9 and 15.7 m below the tip at 0.0428 m/px) and ending just above the aft skirt (about y 1690, 48.5 m below the tip). Across the 235 px body (centre x 2647) they sit 34 px and 98 px right of the axis, 17 and 56 degrees round from the camera; with the camera looking along 143 degrees that puts them at 160 and 200 degrees. How far they stand out is estimated. The clamps that give older ships' raceways a ladder look aren't visible under the frost here, so they aren't modelled. Corrected (2026-10-28): the camera looks along about 143 degrees, not 130. The two raceways, which sit 40 degrees apart in this photo, are mirrored about the tower side (a scale model of the ship seen from the tower side, user's photo), so the camera is at 180 - (17 + 56) / 2 = 143 degrees; every angle read from this photo moves by +13 degrees."
     },
     "tile_patches": {
       "value": {
         "stands_out": 0.03,
         "patches": [
           {
-            "from_tower_deg": 52,
+            "from_tower_deg": 39,
             "below_tip": 21.2,
             "width": 2.1,
             "height": 2.35
           },
           {
-            "from_tower_deg": 58,
+            "from_tower_deg": 45,
             "below_tip": 37.5,
             "width": 3.4,
             "height": 3.3
@@ -417,62 +417,62 @@
         ]
       },
       "unit": "m, degrees either side of the tower side (-x)",
-      "source": "photo_wdr: black tiled squares on the bare steel. Nose crop: one at x 2615-2670, y 1025-1080 (2.1 x 2.35 m, 21.2 m below the tip), almost facing the camera (about 128 degrees); aft crop: one at x 2575-2665, y 1395-1472 (3.4 x 3.3 m, 37.5 m below the tip, about 122 degrees). Both have a partner showing at the far limb at about the same height, so they are taken as mirrored about the tower side, like the catch pins. How far the tiles stand proud of the steel is estimated."
+      "source": "photo_wdr: black tiled squares on the bare steel. Nose crop: one at x 2615-2670, y 1025-1080 (2.1 x 2.35 m, 21.2 m below the tip), almost facing the camera (about 141 degrees); aft crop: one at x 2575-2665, y 1395-1472 (3.4 x 3.3 m, 37.5 m below the tip, about 135 degrees). Both have a partner showing at the far limb at about the same height, so they are taken as mirrored about the tower side, like the catch pins. How far the tiles stand proud of the steel is estimated. Corrected (2026-10-28): the camera looks along about 143 degrees, not 130. The two raceways, which sit 40 degrees apart in this photo, are mirrored about the tower side (a scale model of the ship seen from the tower side, user's photo), so the camera is at 180 - (17 + 56) / 2 = 143 degrees; every angle read from this photo moves by +13 degrees."
     },
     "ports": {
       "value": {
         "list": [
           {
-            "deg": 173,
+            "deg": 186,
             "below_tip": 15.6,
             "size": 0.57
           },
           {
-            "deg": 135,
+            "deg": 148,
             "below_tip": 18.4,
             "size": 0.27
           },
           {
-            "deg": 111,
+            "deg": 124,
             "below_tip": 43.3,
             "size": 0.26
           },
           {
-            "deg": 130,
+            "deg": 143,
             "below_tip": 44.6,
             "size": 0.26
           },
           {
-            "deg": 99,
+            "deg": 112,
             "below_tip": 50.9,
             "size": 0.29,
             "lift": 0.02
           },
           {
-            "deg": 138,
+            "deg": 151,
             "below_tip": 8.3,
             "size": 0.65,
             "shape": "square"
           },
           {
-            "deg": 131,
+            "deg": 144,
             "below_tip": 3.4,
             "size": 0.3
           },
           {
-            "deg": 123,
+            "deg": 136,
             "below_tip": 18.4,
             "size": 0.27
           },
           {
-            "deg": 106,
+            "deg": 119,
             "below_tip": 27.9,
             "size": 0.22
           }
         ]
       },
       "unit": "m, degrees from +x",
-      "source": "photo_wdr: dark round openings on the leeward steel at (x, y) 2727,921 (15 px, 0.57 m); 2658,987 and 2632,986 (a pair, 7 px); 2649,637 on the nose (8 px, 0.3 m); 2600,1210 (6 px, 0.22 m); 2595,1568; 2635,1598; 2571,1746 (7-8 px, 0.26-0.29 m); and a dark square on the nose at 2658,752 (17 px, 0.65 m). Heights at 0.0428 m/px below the tip (y 557). Angles as for the raceways: from each spot's offset from the body's axis in photo_wdr (x 2647 above the flaps, x 2637 at the aft end; half-widths 117.5 and 127 px), with the camera looking along 130 degrees. Only the openings visible in this photo are placed; the far side isn't seen. The lowest sits on the ribbed skirt, so its decal is lifted over the rib sheet. Masks are plain generated shapes (refs/starship/port_round.png, port_square.png). Found by scanning the leeward side for small spots much darker than their surroundings (crops x 2500-2790, y 600-1780), then checking each by eye: the rest were raceway joints, hinge parts, the walkway and frost shadows. This photo shows no more dark openings on the leeward steel."
+      "source": "photo_wdr: dark round openings on the leeward steel at (x, y) 2727,921 (15 px, 0.57 m); 2658,987 and 2632,986 (a pair, 7 px); 2649,637 on the nose (8 px, 0.3 m); 2600,1210 (6 px, 0.22 m); 2595,1568; 2635,1598; 2571,1746 (7-8 px, 0.26-0.29 m); and a dark square on the nose at 2658,752 (17 px, 0.65 m). Heights at 0.0428 m/px below the tip (y 557). Angles as for the raceways: from each spot's offset from the body's axis in photo_wdr (x 2647 above the flaps, x 2637 at the aft end; half-widths 117.5 and 127 px), with the camera looking along 143 degrees. Only the openings visible in this photo are placed; the far side isn't seen. The lowest sits on the ribbed skirt, so its decal is lifted over the rib sheet. Masks are plain generated shapes (refs/starship/port_round.png, port_square.png). Found by scanning the leeward side for small spots much darker than their surroundings (crops x 2500-2790, y 600-1780), then checking each by eye: the rest were raceway joints, hinge parts, the walkway and frost shadows. This photo shows no more dark openings on the leeward steel. Corrected (2026-10-28): the camera looks along about 143 degrees, not 130. The two raceways, which sit 40 degrees apart in this photo, are mirrored about the tower side (a scale model of the ship seen from the tower side, user's photo), so the camera is at 180 - (17 + 56) / 2 = 143 degrees; every angle read from this photo moves by +13 degrees."
     },
     "aft_skirt": {
       "value": {
@@ -501,13 +501,13 @@
     },
     "aft_fittings": {
       "value": {
-        "from_tower_deg": 50,
+        "from_tower_deg": 39,
         "z": 4.6,
         "diameter": 0.9,
         "stands_out": 1.4
       },
       "unit": "m",
-      "source": "photo_wdr (aft crop): a stubby steel cylinder like the catch pins at x 2633, y 1667 (z 4.6 m), about 23 px (0.9 m) across and 1.4 m long, pointing almost at the camera (about 130 degrees). The other side is hidden behind the tower's walkway; taken as mirrored about the tower side, like the catch pins (assumed)."
+      "source": "photo_wdr (aft crop): a stubby steel cylinder like the catch pins at x 2633, y 1667 (z 4.6 m), about 23 px (0.9 m) across and 1.4 m long, pointing almost at the camera (about 141 degrees). The other side is hidden behind the tower's walkway; taken as mirrored about the tower side, like the catch pins (assumed). Corrected (2026-10-28): the camera looks along about 143 degrees, not 130. The two raceways, which sit 40 degrees apart in this photo, are mirrored about the tower side (a scale model of the ship seen from the tower side, user's photo), so the camera is at 180 - (17 + 56) / 2 = 143 degrees; every angle read from this photo moves by +13 degrees."
     }
   },
   "materials": {
