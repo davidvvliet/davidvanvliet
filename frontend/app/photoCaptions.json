@@ -3,7 +3,7 @@
   "p01b": { "title": "Petrified Forest National Park", "caption": "Beats a motel", "slug": "petrified-forest", "loc": [34.93, -109.77] },
   "p03": { "title": "Emory Peak, Big Bend National Park", "slug": "emory-peak", "loc": [29.25, -103.3] },
   "p04b": { "title": "Guadalupe Peak, Guadalupe Mountains National Park", "caption": "Believe it or not, this is supposed to be a desert. I chose the one weekend where it turned into this.", "slug": "guadalupe-peak", "loc": [31.89, -104.86] },
-  "p05t": { "title": "Witnessing the SpaceX IPO", "slug": "spacex-ipo" },
+  "p05t": { "title": "Witnessing the SpaceX IPO", "slug": "spacex-ipo", "loc": [40.76, -73.99] },
   "p07": { "title": "On top of the founder house in Berkeley", "slug": "berkeley", "loc": [37.87, -122.27] },
   "p08": { "title": "Atlas", "slug": "atlas", "loc": [40.76, -73.98] },
   "p08b": { "title": "Los Angeles", "caption": "Road surprise", "slug": "los-angeles", "loc": [34.05, -118.24] },
