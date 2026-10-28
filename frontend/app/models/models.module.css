@@ -106,15 +106,12 @@
   position: relative; aspect-ratio: 1; display: block; color: inherit; text-decoration: none;
   border-right: var(--line); border-bottom: var(--line);
 }
-.section {
-  grid-column: 1 / -1; display: flex; align-items: center; min-height: 56px;
-  padding: 0.5rem 0.75rem; border-bottom: var(--line);
-}
 .cardView { position: absolute; inset: 0; }
 .thumb { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity 0.4s; }
 .thumbGone { opacity: 0; }
 .cardTitle { position: absolute; top: 0.5rem; left: 0.75rem; z-index: 1; color: #777; }
 .card:hover .cardTitle { color: #ededed; }
+.cardLogo { position: absolute; top: 0.6rem; right: 0.75rem; z-index: 1; width: auto; opacity: 0.85; pointer-events: none; }
 
 /* The public /models header: links | name (centred, as the home page's navbar title) | empty. */
 .siteHeader {

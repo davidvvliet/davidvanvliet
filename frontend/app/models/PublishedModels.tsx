@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Fragment, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { PerspectiveCamera, View, useGLTF } from "@react-three/drei";
 import StudioLights from "./StudioLights";
@@ -21,12 +21,13 @@ const FIT = 1.15; // bounding-sphere margin
 const VIEW_DIR = new THREE.Vector3(0.6, 0.45, 0.66).normalize(); // from the model's centre, y up
 const TURN_SECONDS = 20;
 
-// Who built the real vehicle: the grid has a section for each, in this order, headed by its logo
-// (public/logos, from Wikimedia Commons, public domain). Models of anyone else come last.
+// Who built the real vehicle: its logo sits in each card's top right corner (public/logos, from
+// Wikimedia Commons, public domain), and the grid lists them in this order. Anyone else comes last.
 const ORGS = [
-  { key: "nasa", name: "NASA/JPL", logo: "/logos/nasa.svg", height: 40 },
-  { key: "spacex", name: "SpaceX", logo: "/logos/spacex.svg", height: 14 },
+  { key: "nasa", name: "NASA/JPL", logo: "/logos/nasa.svg", height: 30 },
+  { key: "spacex", name: "SpaceX", logo: "/logos/spacex.svg", height: 10 },
 ];
+const orgRank = (m: Published) => { const i = ORGS.findIndex((o) => o.key === m.org); return i < 0 ? ORGS.length : i; };
 
 // /models on the live site. Without ?probe: a grid of the published models, each spinning in its
 // card. All cards draw into one shared canvas (one WebGL context however many models there are),
@@ -116,20 +117,8 @@ function Grid({ models }: { models: Published[] }) {
       <div className={styles.gridArea}>
         <div ref={scroller} className={styles.cards}>
           {models.length === 0 && <div className={styles.empty}>No published models yet.</div>}
-          {[...ORGS, { key: "other", name: "Other", logo: null, height: 0 }].map((o) => {
-            const own = models.filter((m) => m.org === o.key || (o.key === "other" && !ORGS.some((x) => x.key === m.org)));
-            return own.length > 0 && (
-              <Fragment key={o.key}>
-                <div className={styles.section}>
-                  {o.logo
-                    // eslint-disable-next-line @next/next/no-img-element
-                    ? <img src={o.logo} alt={o.name} title={o.name} style={{ height: o.height }} />
-                    : <span className={styles.dim}>{o.name}</span>}
-                </div>
-                {own.map((m) => <Card key={m.probe} model={m} spin={spin} root={scroller} />)}
-              </Fragment>
-            );
-          })}
+          {[...models].sort((a, b) => orgRank(a) - orgRank(b)).map((m) =>
+            <Card key={m.probe} model={m} spin={spin} root={scroller} />)}
         </div>
         <Canvas style={{ position: "absolute", inset: 0, pointerEvents: "none" }} dpr={[1, 2]} gl={{ alpha: true, antialias: true }}>
           <View.Port />
@@ -141,6 +130,7 @@ function Grid({ models }: { models: Published[] }) {
 
 function Card({ model, spin, root }: { model: Published; spin: boolean; root: React.RefObject<HTMLDivElement | null> }) {
   const card = useRef<HTMLAnchorElement>(null);
+  const org = ORGS.find((o) => o.key === model.org);
   const [seen, setSeen] = useState(false); // on screen at least once: load the model
   const [ready, setReady] = useState(false);
   const hover = useRef(false);
@@ -169,6 +159,10 @@ function Card({ model, spin, root }: { model: Published; spin: boolean; root: Re
         )}
       </View>
       <span className={styles.cardTitle}>{model.title}</span>
+      {org && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={org.logo} alt={org.name} title={org.name} className={styles.cardLogo} style={{ height: org.height }} />
+      )}
     </Link>
   );
 }
