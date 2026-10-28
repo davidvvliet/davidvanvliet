@@ -73,6 +73,10 @@ function Grid({ models }: { models: Published[] }) {
         <Link href="/" className={styles.dim}>← back</Link>
         <span>Models</span>
       </Header>
+      <p className={styles.intro}>
+        These models were created step by step using my Blender x Opus 5.5 harness. Only the direct sources were
+        used in the creation of each of these models for maximum accuracy.
+      </p>
       <div className={styles.gridArea}>
         <div ref={scroller} className={styles.cards}>
           {models.length === 0 && <div className={styles.empty}>No published models yet.</div>}

@@ -88,6 +88,10 @@
 
 /* /models grid: square cards with hairline borders; every card draws into one shared canvas
    laid over the scrolling cards (clicks pass through it to the cards). */
+.intro {
+  margin: 0; padding: 0.75rem; border-bottom: var(--line);
+  font-size: 0.8rem; line-height: 1.5; color: #00ff00;
+}
 .gridArea { flex: 1; position: relative; min-height: 0; }
 .cards {
   position: absolute; inset: 0; overflow-y: auto;
