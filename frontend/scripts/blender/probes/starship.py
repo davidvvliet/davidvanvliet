@@ -80,6 +80,14 @@ def build(spec):
                 parts.strut(f"hotstage_strut_{i:02d}_{j}", foot, head, radius=sr, segments=8,
                             material=steel)
 
+        # A ribbed band of fittings round the booster (from_photos.booster_band).
+        bd = P["booster_band"]
+        b1 = hb - bd["top_below_booster_top"]
+        b0 = b1 - bd["height"]
+        parts.lathe("booster_band", [(R - 0.05, b0), (R + bd["stands_out"], b0),
+                                     (R + bd["stands_out"], b1), (R - 0.05, b1)], closed=True,
+                    segments=64, smooth=False, material="dark_metal")
+
         # Grid fins: three, in a T (90/90/180): +y, -y and the heat-shield side (+x).
         gf = P["grid_fin"]
         zc = hb - gf["top_below_booster_top"] - gf["thickness"] / 2
@@ -119,16 +127,24 @@ def build(spec):
                 return math.sqrt(max(0.0, rn * rn - (x - x0) ** 2))
             return math.sqrt(rho * rho - (Ls - x) ** 2) + R - rho
 
-        prof = [(0, z0), (R, z0), (R, z_nose)]
+        tl = P["tile_layout"]
+        z_cap, z_wrap = top - tl["tip_cap_below_tip"], top - tl["flap_wrap_below_tip"]
         zt_join = top - (xt - xa)
-        prof += [(r_at(z), z) for z in [z_nose + (zt_join - z_nose) * i / 14 for i in range(1, 15)]]
-        prof += [(r_at(z), z) for z in [zt_join + (top - zt_join) * i / 6 for i in range(1, 6)]]
+        zs = [z_nose + (zt_join - z_nose) * i / 14 for i in range(1, 15)]
+        zs += [zt_join + (top - zt_join) * i / 6 for i in range(1, 6)]
+        zs = sorted(set(zs) | {z_cap})
+        prof = [(0, z0), (R, z0), (R, z_wrap), (R, z_nose)] + [(r_at(z), z) for z in zs]
         prof += [(0, top)]
-        # Windward half black tiles, leeward half bare steel (facts.heat_shield).
-        parts.lathe("ship_windward", prof, segments=32, sweep_deg=180, roll_deg=0,
-                    material=tiles)
-        parts.lathe("ship_leeward", prof, segments=32, sweep_deg=180, roll_deg=180,
-                    material=steel)
+        # One skin, tiles or steel per face (facts.heat_shield, from_photos.tile_layout):
+        # black on the windward half, all round the top of the nose, and round the forward
+        # flaps' roots; bare steel elsewhere. 64 segments put edges at 90 and 118.1 degrees.
+        body = parts.lathe("ship_body", prof, segments=64, material=[tiles, steel])
+        for poly in body.data.polygons:
+            c = poly.center
+            ang = abs(math.degrees(math.atan2(c.y, c.x)))
+            tiled = (c.z > z_cap or ang <= tl["barrel_to_deg"] + 0.1
+                     or (c.z > z_wrap and ang <= tl["flap_wrap_deg"] + 0.2))
+            poly.material_index = 0 if tiled else 1
 
         # Forward flaps: leeward, 140 degrees apart; root along the nose, bottom edge level.
         ff = P["forward_flap"]
@@ -156,3 +172,9 @@ def build(spec):
                           tip_le=(0, sign * (R + af["span"]), z0 + af["tip_chord"]),
                           tip_chord=af["tip_chord"], thickness=0.04, chord_dir=(0, 0, -1),
                           material=tiles)
+            # Actuator housing on the body at the top of the flap's root.
+            hz = P["aft_flap_housing"]
+            parts.box(f"ship_aft_flap_housing_{tag}", (hz["width"], hz["stands_out"] + 0.1, hz["height"]),
+                      location=(0, sign * (R + hz["stands_out"] / 2 - 0.05),
+                                z0 + af["root_chord"] - hz["height"] / 2),
+                      material=tiles)
