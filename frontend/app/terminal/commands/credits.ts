@@ -5,7 +5,7 @@ import modelCredits from "./model-credits.json";
 
 const credits: Command = {
   name: "credits",
-  description: "The giants on whose shoulders this website stands",
+  description: "The shoulders of the giants I stand on",
   execute: () => [
     "__SMALL__JPL Horizons, spacecraft and planet ephemerides: https://ssd.jpl.nasa.gov/horizons/",
     "__SMALL__VSOP87 (Bretagnon & Francou), the position of Mars",
