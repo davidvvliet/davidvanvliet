@@ -40,6 +40,12 @@ More than one Claude session may be working in this harness.
   `git hash-object -w` + `git update-index --cacheinfo`).
 - Approve only a probe you own, or after telling its session. A rebuild while another session
   is mid-change bakes its unfinished work into the build.
+- Work in your own git worktree so another session's uncommitted `lib/` edits don't reach
+  your builds: `git worktree add ../davidvanvliet-<probe> -b <probe> main`, then run the
+  harness from its `frontend/`. Never push the branch (Vercel would deploy a preview): rebase
+  on `origin/main` and `git push origin HEAD:main`. Builds there run headless (the live
+  Blender session only builds for the checkout it was started from), and the dashboard on
+  :3000 shows the main checkout's builds, so read the worktree's own `out/<probe>/` images.
 
 ## Loop
 1. `npm run model:new <probe> "Title"` (from `frontend/`), then research and fill in the spec
