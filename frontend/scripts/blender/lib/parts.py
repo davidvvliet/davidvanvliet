@@ -273,6 +273,41 @@ def plate(name, width, height, thickness, location=(0, 0, 0), direction=(0, 0, 1
             loop[uv].uv = (0.01, 0.01)
     return _object(name, bm, material, m, parent)
 
+def outline_plate(name, outline, width, height, thickness, location=(0, 0, 0), direction=(0, 0, 1),
+                  up=(0, 0, 1), side_uv=(0.5, 0.5), material="white_paint", parent=None):
+    """A plate cut to a shape: `outline` is the plate's edge as (u, v) points in its image
+    ([0, 1]^2, v up), scaled to `width` x `height`. Placed like `plate`; the front face shows
+    the image, the edges and back take the colour at `side_uv` (a point on the plate)."""
+    n = Vector(direction).normalized()
+    v = Vector(up) - n * Vector(up).dot(n)
+    if v.length < 1e-6:
+        raise ValueError(f"outline_plate {name}: `up` is along the plate's normal")
+    v.normalize()
+    m = Matrix((v.cross(n), v, n)).transposed().to_4x4()
+    m.translation = Vector(location)
+    pts = [(u, w) for u, w in outline]
+    # Counter-clockwise seen from the front, so the front face points along +z.
+    if sum(a[0] * b[1] - b[0] * a[1] for a, b in zip(pts, pts[1:] + pts[:1])) < 0:
+        pts.reverse()
+    bm = bmesh.new()
+    uv = bm.loops.layers.uv.new("UVMap")
+    back = [bm.verts.new(((u - 0.5) * width, (w - 0.5) * height, 0.0)) for u, w in pts]
+    front = [bm.verts.new(((u - 0.5) * width, (w - 0.5) * height, thickness)) for u, w in pts]
+    face = bm.faces.new(front)
+    for loop, (u, w) in zip(face.loops, pts):
+        loop[uv].uv = (u, w)
+    others = [bm.faces.new(list(reversed(back)))]
+    k = len(pts)
+    for i in range(k):
+        j = (i + 1) % k
+        others.append(bm.faces.new((back[i], back[j], front[j], front[i])))
+    for f in others:
+        for loop in f.loops:
+            loop[uv].uv = side_uv
+    # Concave outlines: split the two caps into triangles so every viewer draws them right.
+    bmesh.ops.triangulate(bm, faces=[face, others[0]])
+    return _object(name, bm, material, m, parent)
+
 def meshes(objs):
     """The mesh parts among `objs` (joints are empties)."""
     return [o for o in objs if o.type == "MESH"]

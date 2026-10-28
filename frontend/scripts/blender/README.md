@@ -128,6 +128,11 @@ labels and arrows, are dropped). Drawings made to explain a plate often space th
 differently from the plate, so each group is fitted on its own. Check `overlay` by eye. Only
 the fit, the drawing and the line image are kept in the repo; the photo is linked in the spec.
 
+Printed plates (flags, logos, calibration targets) are an image on `parts.plate()`, or on
+`parts.outline_plate()` when the plate isn't rectangular: that takes the plate's edge as
+(u, v) points in its image, kept beside the image in `refs/<probe>/<name>.json`, so the shape
+is geometry and the image needs no transparency.
+
 Builds with textured parts also check `textures`: every image has pixels, textured parts have
 UVs inside the image, and the export carries every image.
 

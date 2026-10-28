@@ -70,6 +70,12 @@ from the repo.
   fit a clean drawing onto it with `tools/engraving.py` and check the overlay, since
   explanatory drawings space their parts differently. Build with `parts.disc` +
   `textures.engraved` (see the README's "Engraved plates").
+- Give every marking its own assembly: the viewer focuses one assembly per click. Plates
+  that aren't rectangles get `parts.outline_plate` (the shape as geometry), not a
+  transparent image, which would also hide the plate's edges.
+- A stand-in box sized from a reference object's bounds can be far off: Perseverance's
+  deck box came out 0.11 m too tall from a thin stalk on top. Read a body's top from rays
+  cast down on it before mounting anything there.
 
 ## Rovers, landers and capsules
 - Build in a standing frame: z up, ground at z = 0, forward and left as the spec's `note` says.

@@ -3,7 +3,7 @@
 # Documented sizes come from the spec's dimensions; layout comes from the spec's
 # from_reference_model (measured on NASA's model, which agrees with the documents).
 # Numbers marked "est." are estimated from the reference model's sheet or the photos.
-import math, os
+import json, math, os
 import bpy
 from mathutils import Matrix, Vector
 from lib import materials, parts
@@ -62,7 +62,9 @@ def build(spec):
         parts.box("body_rear", (1.21, 0.17, 0.78), location=(0, 0.915, 1.08), material=BODY)
         parts.box("body_shelf", (1.15, 0.19, 0.06), location=(0, 1.085, 1.41), material=BODY)
         # Deck equipment (model objects 'box', 'Body_Parts.001', 'lab', 'RIMFAX').
-        parts.box("deck_box", (0.412, 0.387, 0.276), location=(-0.419, 0.4925, deck_z + 0.138), material=BODY)
+        # deck_box: model 'box' (the RPFA box); top z 1.3035 from rays down on it (its bounding
+        # box reaches 1.41 only through the SuperCam target's stalk).
+        parts.box("deck_box", (0.412, 0.387, 1.3035 - deck_z), location=(-0.419, 0.4925, (deck_z + 1.3035) / 2), material=BODY)
         parts.box("deck_box_2", (0.225, 0.17, 0.149), location=(0.3015, -0.099, deck_z + 0.0745), material=BODY)
         parts.box("sample_system", (0.556, 0.49, 0.505), location=(-0.032, -0.809, 1.1435), material=BODY)
         parts.box("rimfax", (0.612, 0.382, 0.204), location=(0, 1.056, 0.779), material=BODY)
@@ -227,26 +229,51 @@ def build(spec):
         shapes(ae["arm_turret"], "arm", BLACK, parent=turret)
         parts.cylinder("turret_drill", 0.04, 0.20, location=(0.39, -1.226, 1.30), material=TI, parent=turret)
 
-    # --- Markings (spec "markings"): image plates; positions in the spec's placement notes --
+    # --- Markings (spec "markings"): image plates, each its own assembly so the viewer can
+    # focus it; positions in the spec's placement notes ---
     def img(n):
-        return bpy.data.images.load(os.path.join(REFS, f"{n}.png"), check_existing=True)
+        return bpy.data.images.load(os.path.join(REFS, n if "." in n else f"{n}.png"), check_existing=True)
+    def outline(n):
+        with open(os.path.join(REFS, f"{n}.json")) as f:
+            return json.load(f)
     mk = spec["markings"]
-    with parts.assembly("markings"):
+    with parts.assembly("name_chips_placard"):
         p = mk["name_chips_placard"]["placement"]
         n = Vector(p["normal"]).normalized()
         parts.plate("name_chips_mount", p["size"][0], p["size"][1], 0.03, location=tuple(Vector(p["centre"]) - n * 0.03),
                     direction=tuple(n), up=(0, 1, 0), material=BODY)
         parts.plate("name_chips_placard", p["size"][0], p["size"][1], 0.002, location=tuple(p["centre"]), direction=tuple(n),
                     up=(0, 1, 0), material=materials.image("name_chips_placard", img("name_chips_placard"), metallic=0.3, roughness=0.5))
+    with parts.assembly("sherloc_cal_target"):
         p = mk["sherloc_cal_target"]["placement"]
         c = Vector(p["centre"])
         parts.box("sherloc_target_mount", (p["size"][0], 0.02, p["size"][1]), location=tuple(c + Vector((0, 0.01, 0))), material=BLACK)
         parts.plate("sherloc_cal_target", p["size"][0], p["size"][1], 0.002, location=tuple(c), direction=(0, -1, 0), up=(0, 0, 1),
-                    material=materials.image("sherloc_cal_target", img("sherloc_target"), metallic=0.6, roughness=0.4))
+                    material=materials.image("sherloc_cal_target", img("sherloc_target.jpg"), metallic=0.6, roughness=0.4))
+    with parts.assembly("healthcare_plaque"):
         p = mk["healthcare_plaque"]["placement"]
         parts.plate("healthcare_plaque", p["size"][0], p["size"][1], 0.003, location=tuple(p["centre"]), direction=(1, 0, 0),
                     up=(0, 0, 1), material=materials.image("healthcare_plaque", img("healthcare_plaque"), metallic=0.3, roughness=0.5))
-    with parts.assembly("mast"):
+    with parts.assembly("mastcam_z_cal_target"):
+        p = mk["mastcam_z_cal_target"]["placement"]
+        o = outline("mastcam_z_target")
+        c = Vector(p["centre"])
+        parts.outline_plate("mastcam_z_cal_target", o["outline"], p["size"][0], p["size"][1], p["thickness"],
+                            location=tuple(c), up=tuple(p["up"]), side_uv=tuple(o["side_uv"]),
+                            material=materials.image("mastcam_z_cal_target", img("mastcam_z_target.jpg"), metallic=0.3, roughness=0.5))
+        g = p["gnomon"]
+        top = c + Vector((0, 0, p["thickness"]))
+        parts.cylinder("mastcam_z_gnomon_base", g["base_radius"], g["base_height"], location=tuple(top), material=BLACK)
+        parts.cylinder("mastcam_z_gnomon", g["shaft_radius"], g["height"] - g["knob_height"], location=tuple(top), material=BLACK)
+        parts.cylinder("mastcam_z_gnomon_knob", g["knob_radius"], g["knob_height"],
+                       location=tuple(top + Vector((0, 0, g["height"] - g["knob_height"]))), material=BLACK)
+    with parts.assembly("jpl_logo_plate"):
+        p = mk["jpl_logo_plate"]["placement"]
+        o = outline("jpl_plate")
+        parts.outline_plate("jpl_logo_plate", o["outline"], p["size"][0], p["size"][1], p["thickness"],
+                            location=tuple(p["centre"]), direction=(0, -1, 0), up=(0, 0, 1), side_uv=tuple(o["side_uv"]),
+                            material=materials.image("jpl_logo_plate", img("jpl_plate.jpg"), metallic=0.5, roughness=0.45))
+    with parts.assembly("flag_plate"):
         p = mk["flag_plate"]["placement"]
         a = math.radians(p["facing_azimuth_deg"])
         f = (math.cos(a), math.sin(a), 0)

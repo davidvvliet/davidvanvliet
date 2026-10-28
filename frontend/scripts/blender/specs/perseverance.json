@@ -164,6 +164,13 @@
       "read": "2026-10-27",
       "licence": "public domain (NASA/JPL-Caltech)",
       "saved": "refs/perseverance/sources/pia26580.txt"
+    },
+    {
+      "id": "rover_evolution_cleanroom",
+      "title": "Rover Evolution Plate Getting Ready for Mars (cleanroom photo, KSC, 2020-03-16)",
+      "url": "https://mars.nasa.gov/resources/25662/",
+      "read": "2026-10-27",
+      "licence": "NASA/JPL-Caltech (credit line on the page)"
     }
   ],
   "reference_model": {
@@ -1338,21 +1345,59 @@
     },
     "rover_evolution_plate": {
       "value": "etched plate: Sojourner, Spirit and Opportunity, Curiosity, Perseverance, Ingenuity",
-      "where": "on the deck (exact spot not stated)",
+      "where": "'attached to the deck' (exact spot not stated); the bag label in the cleanroom photo reads 'LOGO PLATE, FOC CHANNEL ROVER EVOLUTION'",
       "size": "not published",
-      "source": "rover_evolution_plate, 'This artwork is etched onto a metal plate attached to the deck of the Mars Perseverance rover.'"
+      "source": [
+        "rover_evolution_plate, 'This artwork is etched onto a metal plate attached to the deck of the Mars Perseverance rover.'",
+        "rover_evolution_cleanroom, bag label 'LOGO PLATE, FOC CHANNEL ROVER EVOLUTION'"
+      ],
+      "not_built": "no position or size found: the label names the part it is on (an FOC channel), but no source places that on the rover, and the photo has nothing to scale the plate by"
     },
     "mastcam_z_cal_target": {
       "value": "colour swatches and shadow post; perimeter: fern, Apatosaurus, man and woman waving, rocket Earth to Mars, 'Two Worlds, One Beginning', inner solar system, DNA helix, cyanobacteria",
-      "where": "not stated",
-      "size": "not published",
-      "source": "pia24178, 'Symbols and mottos relevant to the mission are included around the target's perimeter'"
+      "where": "on the RPFA box on the rover deck",
+      "size": "98 x 98 x 8 mm base, plus 37.5 mm high gnomon",
+      "source": [
+        "pia24178, 'Symbols and mottos relevant to the mission are included around the target's perimeter'",
+        "bell2021 (Mastcam-Z characteristics table), 'Primary Cal Target 98 × 98 × 8 mm base, plus 37.5 mm high gnomon'",
+        "bell2021 §3.5, 'Mastcam-Z uses two passive calibration targets, mounted on the RPFA box on the rover deck'"
+      ],
+      "placement": {
+        "centre": [
+          -0.4152,
+          0.3757,
+          1.3035
+        ],
+        "up": [
+          0.18,
+          0.98,
+          0.0
+        ],
+        "size": [
+          0.098,
+          0.098
+        ],
+        "thickness": 0.008,
+        "source": "nasa_3d_perseverance: the target's image in texture mars_2020_01 (gold at px 716-852 x 718-854) maps onto the top of object 'box' at centre (-0.4152, 0.3757), image up (0.18, 0.98) (turned about 10 deg), the target face at z 1.3115 on the box top at z 1.3035 (8 mm, as bell2021). Gold edge to edge, tabs included, 136 px x 0.68 mm/px = 0.0925 m in the model against bell2021's 98 mm base: the plate is 98 mm across including its tabs. Box top: rays down on 'box' read 1.303 over the whole top (our deck_box was its bounding box, raised to 1.41 by the SuperCam target's stalk).",
+        "image": "mastcam_z_target.jpg: pia24178 cropped to the gold plate (px 103-961 x 39-896), 512 x 512; the outline in mastcam_z_target.json traced from the gold edge",
+        "gnomon": {
+          "height": 0.0375,
+          "base_radius": 0.0055,
+          "base_height": 0.003,
+          "shaft_radius": 0.003,
+          "knob_radius": 0.005,
+          "knob_height": 0.008,
+          "source": "bell2021 for the height (37.5 mm); widths estimated from pia24178, scaled by the plate's 98 mm (857 px): base disc about 95 px, shaft about 55 px, knob about 90 px across (the photo is taken at a slant, so these are rough)"
+        }
+      }
     },
     "sherloc_cal_target": {
       "value": "meteorite slice, spacesuit samples, laser maze; helmet-visor sample inscribed with Sherlock Holmes's address (geocache)",
       "where": "not stated",
       "size": "not published",
-      "source": "pia24261, 'inscribed with the address of the fictional detective Sherlock Holmes, it doubles as a geochache for the public'",
+      "source": [
+        "pia24261, 'inscribed with the address of the fictional detective Sherlock Holmes, it doubles as a geochache for the public'"
+      ],
       "placement": {
         "centre": [
           -0.488,
@@ -1363,7 +1408,8 @@
           0.15,
           0.061
         ],
-        "source": "nasa_3d_perseverance, object 'calibration_target' (front face y -1.228, x -0.563..-0.413, z 0.849..0.91), textured with a two-row sample plate matching pia24261's layout; image from that texture region"
+        "source": "nasa_3d_perseverance, object 'calibration_target' (front face y -1.228, x -0.563..-0.413, z 0.849..0.91), textured with a two-row sample plate matching pia24261's layout; image from that texture region",
+        "image": "sherloc_target.jpg: pia24261 (lab photo, straight on), cropped to the plate body (px 34-3477 x 284-1680 of 3560 x 1973; aspect 2.47 against the model's 2.46), 1400 x 568"
       }
     },
     "flag_plate": {
@@ -1385,7 +1431,7 @@
           0.0567,
           0.0374
         ],
-        "image": "flag_plate.png: flag_plate_artwork cropped to the flag plus 8 px of plate (px 95-433 x 87-310 of 512 x 360); the plate shows as a thin border, as David asked",
+        "image": "flag_plate.png: flag_plate_artwork at full size (1154 x 812, https://assets.science.nasa.gov/content/dam/science/psd/mars/downloadable_items/4/5/45734_Flag_1.png) cropped to the flag plus the same thin border as before (px 214-976 x 196-699, the earlier 512 x 360 crop scaled by 2.254); the plate shows as a thin border, as David asked",
         "source": "nasa_3d_perseverance: the model's flag decal, found by rendering the raised mast (frame 200) from every 10 deg and picking the flag's red and blue pixels, spans z 1.394-1.429 m (centre 1.4115), about 0.054 m across, centred at azimuth about -96 deg (from +x, about the mast axis), on the orange cable band around the tube. Plate size: the crop at the model's flag scale (0.054 m over the artwork's 323 px flag). Flat plate, back face touching the tube at its centre (pia26579: 'an aluminum plate mounted on the base of Perseverance's remote sensing mast')."
       }
     },
@@ -1400,6 +1446,28 @@
       "where": "on the mast",
       "size": "not published",
       "source": "nasa_hidden_gems, SuperCam meteorite calibration target (PIA24179 caption)"
+    },
+    "jpl_logo_plate": {
+      "value": "aluminium plate cut around the JPL logo, logo in orange, four bolts",
+      "where": "bolted to the chassis",
+      "size": "not published",
+      "source": [
+        "pia26580, 'This close-up view of the JPL logo – bolted to the chassis of NASA's Perseverance'"
+      ],
+      "placement": {
+        "centre": [
+          -0.1275,
+          -0.8776,
+          0.865
+        ],
+        "size": [
+          0.103,
+          0.0499
+        ],
+        "thickness": 0.003,
+        "source": "nasa_3d_perseverance: texture mars_2020_03 has a perforated JPL panel (px 397-464 x 842-884) that maps onto the front face of 'Body' (y -0.8776, facing forward) at x -0.179..-0.076, z 0.847..0.912 (centre z 0.8795). Width from that panel (0.103 m, est.); height from the photo's outline (2.19:1). Centre lowered 14.5 mm, to z 0.865, so its top meets our sample_system stand-in (bottom z 0.891), which is lower than NASA's sample handling there. Thickness est. 3 mm.",
+        "image": "jpl_plate.jpg: pia26580 straightened by its four bolt centres and cropped to the plate, 1024 x 496; the outline in jpl_plate.json"
+      }
     }
   },
   "mounts": {
@@ -1411,6 +1479,12 @@
     },
     "sherloc_cal_target": {
       "on": "sherloc_target_mount"
+    },
+    "mastcam_z_cal_target": {
+      "on": "deck_box"
+    },
+    "jpl_logo_plate": {
+      "on": "body"
     }
   },
   "bake": {
