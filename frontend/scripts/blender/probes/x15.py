@@ -166,6 +166,30 @@ def build(spec):
         with parts.assembly(f"window_{side_name}"):
             parts.loft(f"window_{side_name}", rings, material="x15_glass", smooth=False)
 
+    # Window frames: a raised band round each pane (photos), so the glass sits recessed in it.
+    # The outline in (x, z) runs along the sill, up the aft edge, then back along the top and
+    # down the windscreen slope; each point is pushed outward in that plane for the band's width.
+    wf = spec["from_photos"]["window_frame"]["value"]
+    xs_w = [x0 + (cw["aft_x"] - x0) * k / 24 for k in range(25)]
+    outline = ([(x, cw["z_low"]) for x in xs_w[:-1]]
+               + [(cw["aft_x"], cw["z_low"] + (z_top(cw["aft_x"]) - cw["z_low"]) * k / 6) for k in range(6)]
+               + [(x, max(z_top(x), cw["z_low"] + 0.01)) for x in reversed(xs_w[1:])])
+    m = len(outline)
+    for sign, side_name in parts.sides():
+        rings = []
+        for i in range(m + 1):
+            (xp, zp), (xn, zn) = outline[(i - 1) % m], outline[(i + 1) % m]
+            x, z = outline[i % m]
+            tx, tz = xn - xp, zn - zp
+            t = math.hypot(tx, tz)
+            nx, nz = tz / t, -tx / t  # outward in the (x, z) plane (the outline runs anticlockwise)
+            xi, zi = x - 0.01 * nx, z - 0.01 * nz
+            xo, zo = x + wf["width"] * nx, min(z + wf["width"] * nz, at(cs["top"], x + wf["width"] * nx) - 0.02)
+            rings.append([on_hood(xi, zi, sign, -0.01), on_hood(xi, zi, sign, wf["height"]),
+                          on_hood(xo, zo, sign, wf["height"]), on_hood(xo, zo, sign, -0.01)])
+        with parts.assembly(f"window_frame_{side_name}"):
+            parts.loft(f"window_frame_{side_name}", rings, material="x15_black", smooth=False)
+
     with parts.assembly("ball_nose"):
         # The sensor: a sphere in a lip, then a straight cone (its afterbody) to the base,
         # which meets the fuselage's first station.
