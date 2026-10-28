@@ -30,10 +30,10 @@
   }
  },
  "starship": {
-  "approved": "2026-10-28 16:50",
+  "approved": "2026-10-28 16:54",
   "inputs": {
-   "specs/starship.json": "1febb60773efbb10",
-   "probes/starship.py": "ac06dd9243f640f8",
+   "specs/starship.json": "fc62003ea899834c",
+   "probes/starship.py": "f1bc9f69aaabfa6e",
    "build.py": "6046dd94ba4984fb",
    "blender.json": "7bbc071b6e396ec4",
    "lib/__init__.py": "e3b0c44298fc1c14",
