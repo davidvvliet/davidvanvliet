@@ -16,6 +16,7 @@
 #   chamber:   diameter, length (cylinder), convergent_length (throat to the cylinder)
 #   powerhead: diameter, height (injector dome and the block above it)
 #   gimbal:    diameter, height (the mount on top), optional
+#   nozzle.tubes: optional tube-wall texture {count, split_below_throat, per_tile}, full lod only
 #   nozzle.hoops, extension.hoops: optional stiffening rings {count, height, stands_out, from,
 #              to} (from and to: fractions of that part's length from its exit), full lod only
 #   extension: optional nozzle extension below the nozzle {exit_diameter, length, wall}: a cone
@@ -44,7 +45,7 @@
 import json, math, os
 import bmesh
 from mathutils import Matrix, Vector
-from lib import parts
+from lib import materials, parts
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Per level of detail: segments round the axis, nozzle contour steps, chamber blend steps.
@@ -148,6 +149,36 @@ def _torus(name, m, seg, material):
     bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
     return parts._object(name, bm, material, Matrix(), smooth=True)
 
+def _tube_wall(obj, name, t, L, mat_name):
+    """Give the nozzle the tube-wall texture: t {count (tubes round the top), split_below_throat
+    (where each tube splits in two; omit for none), per_tile}. u counts tubes round the axis,
+    v runs from the exit (0) to the throat (1), with the split at v = 0.5."""
+    import bpy
+    from lib import tiling
+    col, metallic, rough = materials.definition(mat_name)
+    hexs = "#" + "".join(f"{int(round(255 * (c ** (1 / 2.2)))):02x}" for c in col)
+    per = t.get("per_tile", 2)
+    zs = L - t["split_below_throat"] if "split_below_throat" in t else None
+    base, nrm = tiling.tube_wall(name, f"{name}_tube_wall", hexs, per,
+                                 split=0.5 if zs is not None else 0.0)
+    obj.data.materials.clear()
+    obj.data.materials.append(materials.image(f"{name}_tube_wall", base, nrm, metallic=metallic,
+                                              roughness=rough))
+    reps = t["count"] / per
+    me = obj.data
+    uv = me.uv_layers.new(name="UVMap")
+    for poly in me.polygons:
+        ac = math.atan2(poly.center.y, poly.center.x)
+        for li in poly.loop_indices:
+            p = me.vertices[me.loops[li].vertex_index].co
+            a = math.atan2(p.y, p.x)
+            a = ac + ((a - ac + math.pi) % (2 * math.pi) - math.pi)
+            if zs is None:
+                vv = p.z / L
+            else:
+                vv = 0.5 * p.z / zs if p.z < zs else 0.5 + 0.5 * (p.z - zs) / (L - zs)
+            uv.data[li].uv = (a / (2 * math.pi) * reps, vv)
+
 def _rocket(name, e, lod):
     nz, ch, ph = e["nozzle"], e["chamber"], e["powerhead"]
     mats = e.get("materials", {})
@@ -161,6 +192,8 @@ def _rocket(name, e, lod):
     ring = outer + [(r, z) for r, z in reversed(inner)]
     objs = [parts.lathe(f"{name}_nozzle", ring, closed=True, segments=seg,
                         material=mats.get("nozzle", "dark_metal"))]
+    if lod == "full" and "tubes" in nz:
+        _tube_wall(objs[0], name, nz["tubes"], L, mats.get("nozzle", "dark_metal"))
     # Chamber: from the throat, a cosine blend out to the chamber's radius over the convergent
     # length, the cylinder, then the injector dome into the powerhead.
     rc = ch["diameter"] / 2

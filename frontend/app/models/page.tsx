@@ -34,7 +34,7 @@ function citationCounts(spec: Spec): Map<string, number> {
 
 // Who built each modelled vehicle (the grid's sections).
 const ORG: Record<string, string> = {
-  voyager: "nasa", perseverance: "nasa", x15: "nasa", starship: "spacex", superheavy: "spacex",
+  voyager: "nasa", perseverance: "nasa", x15: "nasa", f1: "nasa", starship: "spacex", superheavy: "spacex",
 };
 
 // Published models: public/models/<probe>.glb, written by `npm run model:approve` (fixtures never get there),

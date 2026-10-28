@@ -118,3 +118,23 @@ def plane_uv(obj, across, repeat_w, repeat_h):
     for li, loop in enumerate(me.loops):
         p = mw @ me.vertices[loop.vertex_index].co
         uv.data[li].uv = ((p.x * across[0] + p.y * across[1]) / repeat_w, p.z / repeat_h)
+
+def tube_wall(probe, name, tube_hex, per_tile, split=0.5, px_per_tube=32, h=512, groove=0.5):
+    """Colour and normal map of a tube-wall nozzle (tubes along v, side by side across u):
+    `per_tile` tubes across the image above v = `split`, twice as many below it (where each
+    tube splits in two, as on the F-1 below its 3:1 plane). Repeats across u only. Returns
+    (base, normal)."""
+    w = per_tile * px_per_tube
+    u = (np.arange(w) + 0.5) / w
+    v = (np.arange(h) + 0.5) / h
+    U, V = np.meshgrid(u, v)
+    n = np.where(V < split, 2 * per_tile, per_tile)
+    x = (U * n) % 1.0 * 2 - 1                          # -1..1 across each tube
+    hgt = np.sqrt(np.clip(1 - x * x, 0, 1))
+    shade = groove + (1 - groove) * hgt ** 0.5          # dark in the grooves between tubes
+    rgb = srgb(tube_hex)[None, None] * shade[..., None]
+    dx = np.where(np.abs(x) < 0.999, -x / np.maximum(hgt, 0.05), 0) * 0.6
+    nrm = np.stack([-dx, np.zeros_like(dx), np.ones_like(dx)], 2)
+    nrm /= np.linalg.norm(nrm, axis=2, keepdims=True)
+    return (image(probe, f"{name}_base", np.clip(rgb, 0, 1).astype(np.float32), "sRGB"),
+            image(probe, f"{name}_normal", (nrm * 0.5 + 0.5).astype(np.float32), "Non-Color"))

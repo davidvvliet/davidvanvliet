@@ -286,6 +286,14 @@
           "to": 0.62
         },
         "source": "photo_6862832: about ten reinforcing bands round the tubes between the exit and the bifurcation band. Estimated."
+      },
+      "tubes": {
+        "value": {
+          "count": 178,
+          "split_below_throat": 0.762,
+          "per_tile": 2
+        },
+        "source": "r3896_1, p.1-8: \"One hundred seventy-eight primary tubes ... make up the chamber body above the 3:1 expansion ratio plane (approximately 30 inches below the throat centerline plane). Three hundred fifty-six one-inch-outside-diameter secondary tubes ... form the chamber from the 3:1 to the 10:1 expansion ratio plane.\""
       }
     },
     "extension": {
