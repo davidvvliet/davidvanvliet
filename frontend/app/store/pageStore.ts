@@ -20,9 +20,16 @@ interface PageState {
   /** Trace a mission's trajectory (id from MISSIONS), or null to clear. */
   trackRequest: { id: string | null; seq: number } | null;
   requestTrack: (id: string | null) => void;
-  /** The clock rate in force before the first `launch`, restored by `launch off`. Null when no mission is running. */
-  clockRateBeforeMission: number | null;
-  setClockRateBeforeMission: (rate: number | null) => void;
+  /** The date and clock rate before the first `launch`: mission time only lasts the mission, so
+   *  endMission() puts them back (and any `date` or `time` change made during it is dropped).
+   *  Null when no mission is running. */
+  beforeMission: { jd: number; rate: number } | null;
+  setBeforeMission: (before: { jd: number; rate: number } | null) => void;
+  /** Clear the mission and return to the date and rate from before it. */
+  endMission: () => void;
+  /** Free-running mission videos still playing in the terminal; a finished mission ends only after them. */
+  missionVideos: number;
+  addMissionVideo: (delta: number) => void;
   /** Request to jump the clock to a Julian date. */
   dateRequest: { jd: number; seq: number } | null;
   requestDate: (jd: number) => void;
@@ -83,8 +90,19 @@ export const usePageStore = create<PageState>()(
   resetSettings: () => set({ ...DEFAULT_SETTINGS }),
   simJD: 0,
   setSimJD: (jd) => set({ simJD: jd }),
-  clockRateBeforeMission: null,
-  setClockRateBeforeMission: (rate) => set({ clockRateBeforeMission: rate }),
+  beforeMission: null,
+  setBeforeMission: (before) => set({ beforeMission: before }),
+  endMission: () => {
+    const s = usePageStore.getState();
+    s.requestTrack(null);
+    if (s.beforeMission) {
+      s.setSecondsPerDay(s.beforeMission.rate);
+      s.requestDate(s.beforeMission.jd);
+      s.setBeforeMission(null);
+    }
+  },
+  missionVideos: 0,
+  addMissionVideo: (delta) => set((state) => ({ missionVideos: Math.max(0, state.missionVideos + delta) })),
   trackRequest: null,
   requestTrack: (id) => set((state) => ({ trackRequest: { id, seq: (state.trackRequest?.seq ?? 0) + 1 } })),
   dateRequest: null,

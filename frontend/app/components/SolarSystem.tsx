@@ -190,6 +190,7 @@ const ROOT_NAME_VISIBLE_FACTOR = 1.15;                 // for the Sun, relative 
 const REFOCUS_FACTOR = 20 / MIN_DISTANCE_RADII;        // ~5.8x close-up: beyond this, clicking the focused body zooms back in
 const FOCUS_TRANSITION_SECONDS = 0.9;  // base duration; fly-ins add time per decade of distance covered
 const FOCUS_SECONDS_PER_DECADE = 0.45; // Earth -> Moon ~1.6 s, Earth -> Pluto ~3.5 s
+const MISSION_END_GRACE_MS = 2000;    // after the last sample, before a finished mission ends (see the clock)
 const RESTORE_FLY_IN_FACTOR = 50;      // on reload, the saved view is flown into from this many times its distance
 // The reload fly-in starts on the far side of the body, looking toward the Sun,
 // nudged sideways and up so the Sun shows beside the body instead of behind it.
@@ -1264,7 +1265,8 @@ export function SolarSystem({
     type SegmentCenter = 'Sun' | 'Earth' | 'Moon';
     // A static segment (a target's own path) is drawn in full for the whole mission and never carries the marker.
     type Segment = { center: SegmentCenter; points: number[][]; line: THREE.Line; positions: Float32Array; pristine: Float32Array; lastTipIndex: number; group: THREE.Group; isStatic: boolean };
-    type Mission = { spec: (typeof MISSIONS)[number]; segments: Segment[]; active: number; marker: THREE.Mesh; body: Body; cuesFired: number };
+    // endedAt: when the clock reached the last sample (performance.now()), null before.
+    type Mission = { spec: (typeof MISSIONS)[number]; segments: Segment[]; active: number; marker: THREE.Mesh; body: Body; cuesFired: number; endedAt: number | null };
     let mission: Mission | null = null;
     const toScene = (x: number, y: number, z: number, out: THREE.Vector3) => out.set(x * orbitScale, z * orbitScale, -y * orbitScale);
     const frameFor = (center: SegmentCenter) => (center === 'Earth' ? earthSystem : center === 'Moon' ? moonFrame : scene);
@@ -1314,7 +1316,7 @@ export function SolarSystem({
       segments[0].group.add(marker);
       const body: Body = { name: spec.name, object: marker, visual: marker, radius: markerRadius, parent: spec.center === 'Earth' ? earthBody : sunBody, systemRadius: 0, scale: 1 };
       bodies.push(body);
-      mission = { spec, segments, active: 0, marker, body, cuesFired: 0 };
+      mission = { spec, segments, active: 0, marker, body, cuesFired: 0, endedAt: null };
       for (const s of siteGroups) s.group.visible = s.mission === spec.id;
       // Start the clock at the first sample. Focus the craft itself (a cut, not a
       // flight), then ease the camera to the mission's preset: far out and above the
@@ -1478,6 +1480,20 @@ export function SolarSystem({
         const endJD = last[last.length - 1][0];
         if (before < endJD && simJD > endJD) simJD = endJD;
         else if (before === endJD && jump === null) simJD = endJD;
+        // The mission ends at the later of its last sample and its last video: then the date and
+        // clock rate go back to what they were before the launch. The pause lets a video pushed
+        // by the final cue reach the terminal and count itself first.
+        if (simJD < endJD) mission.endedAt = null;
+        else if (mission.endedAt === null) mission.endedAt = now;
+        else if (now - mission.endedAt > MISSION_END_GRACE_MS && usePageStore.getState().missionVideos === 0) {
+          const store = usePageStore.getState();
+          const back = store.beforeMission;
+          mission.endedAt = Infinity; // once
+          store.pushTerminalLines([back
+            ? `__GRAY__Mission complete. Back to ${new Date((back.jd - 2440587.5) * 86400000).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}.`
+            : '__GRAY__Mission complete.']);
+          store.endMission();
+        }
       }
       simJDRef.current = simJD;
 

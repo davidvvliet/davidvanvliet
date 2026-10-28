@@ -20,6 +20,7 @@ const reset: Command = {
       }, 300);
       return ["Resetting everything..."];
     }
+    usePageStore.getState().endMission(); // a running mission ends first, back to its starting date
     usePageStore.getState().resetSettings();
     try { localStorage.removeItem('explore-view'); } catch { /* storage unavailable */ }
     return ["Settings reset: compact scale, stars on, orbit paths shown, 10s per day. The saved view is cleared on next load."];

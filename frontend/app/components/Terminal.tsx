@@ -112,6 +112,19 @@ function VideoLine({ src: spec, restored, onSized }: { src: string; restored?: b
     }, 500);
     return () => clearInterval(id);
   }, [startJD, done]);
+  // A free-running mission video holds the mission open until it ends (see endMission in the
+  // store); one locked to the clock ends with the trajectory anyway. If the browser never plays
+  // it (autoplay blocked, a background tab), it lets go after a generous running time; the
+  // video itself is left alone.
+  const holds = !restored && startJD === null;
+  const [letGo, setLetGo] = useState(false);
+  const letGoTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  useEffect(() => {
+    if (!holds || done || letGo) return;
+    usePageStore.getState().addMissionVideo(1);
+    letGoTimer.current = setTimeout(() => setLetGo(true), 20000); // until the metadata gives the length
+    return () => { clearTimeout(letGoTimer.current); usePageStore.getState().addMissionVideo(-1); };
+  }, [holds, done, letGo]);
   // A restored video never loads metadata, so its size arrives with the poster image.
   // Runs once per mount (onSized is an inline callback and must not retrigger it).
   const onSizedRef = useRef(onSized);
@@ -135,6 +148,10 @@ function VideoLine({ src: spec, restored, onSized }: { src: string; restored?: b
       preload={done ? "none" : "auto"}
       onLoadedMetadata={(e) => {
         const el = e.currentTarget; el.playbackRate = rate; onSized();
+        if (holds && !letGo) {
+          clearTimeout(letGoTimer.current);
+          letGoTimer.current = setTimeout(() => setLetGo(true), (el.duration / rate) * 1500 + 5000);
+        }
         // If the browser refuses audio autoplay, fall back to muted rather than not playing.
         if (sound) el.play().catch(() => { el.muted = true; el.play().catch(() => {}); });
       }}

@@ -43,12 +43,7 @@ const launch: Command = {
       ];
     }
     if (arg === "off") {
-      store.requestTrack(null);
-      // Back to the clock rate the user had before launching.
-      if (store.clockRateBeforeMission !== null) {
-        store.setSecondsPerDay(store.clockRateBeforeMission);
-        store.setClockRateBeforeMission(null);
-      }
+      store.endMission(); // back to the date and clock rate from before the launch
       return ["Mission cleared."];
     }
     const mission = MISSIONS.find((m) => m.id === arg.replace(/\s+/g, "") || m.name.toLowerCase() === arg);
@@ -56,8 +51,8 @@ const launch: Command = {
     store.openPath("/");
     if (store.scaleMode !== "true") store.setScaleMode("true"); // flybys only line up at true scale
     if (!store.orbitsHighlighted) store.setOrbitsHighlighted(true); // paths make the flybys readable
-    // Remember the pre-mission rate once; launching another mission keeps the original.
-    if (store.clockRateBeforeMission === null) store.setClockRateBeforeMission(store.secondsPerDay);
+    // Remember the pre-mission date and rate once; launching another mission keeps the originals.
+    if (store.beforeMission === null) store.setBeforeMission({ jd: store.simJD, rate: store.secondsPerDay });
     store.requestTrack(mission.id);
     const note = mission.note ? [mission.note] : [];
     if (mission.secondsPerDay) {
