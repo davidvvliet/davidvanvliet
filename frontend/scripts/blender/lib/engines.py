@@ -19,8 +19,9 @@
 #   nozzle.tubes: optional tube-wall texture {count, split_below_throat, per_tile}, full lod only
 #   nozzle.hoops, extension.hoops: optional stiffening rings {count, height, stands_out, from,
 #              to, studs} (from and to: fractions of that part's length from its exit; studs
-#              {count, diameter, height, segments, every, on "band"|"wall", dense {count,
-#              bands}}: posts on every n-th ring or on the wall beside it), full lod only
+#              {shape "post"|"plate", count or angles {"ring": [deg]}, dense {count, bands},
+#              post: diameter, height, segments, every, on "band"|"wall"; plate: size [thick,
+#              across, up], resting on the ring's top}), full lod only
 #   extension: optional nozzle extension below the nozzle {exit_diameter, length, wall}: a cone
 #              from the nozzle's exit down to its own; the engine's z = 0 is then its exit
 #   manifold:  optional torus round the nozzle {diameter (centreline) or inner_diameter (the
@@ -116,32 +117,45 @@ def _hoops(name, h, outer, length, material, seg):
                                 material=material))
         st = h.get("studs")
         if st and i % st.get("every", 1) == 0:
-            # Studs: `segments`-sided posts (4: square), `diameter` across flats, `height` tall,
-            # `count` round, staggered on alternate rows. on "band": standing on the band's
-            # outer face; on "wall": on the shell's wall just below the band (exit side), lower
-            # than the band so they don't stand out past it. Bands listed in dense.bands get
-            # dense.count (index from the exit; -1 is the last band).
+            # Studs or brackets on ring i, at the angles listed for it in `angles` ({"i": [deg]}),
+            # else `count` evenly round (dense.count on the rings in dense.bands; index from the
+            # exit, -1 the last), staggered on alternate rows. shape "post": `segments`-sided
+            # posts (4: square) `diameter` across flats, `height` out, standing on the band;
+            # shape "plate": flat plates `size` [thick, across, up] lying on the wall with their
+            # lower edge on the band's top. on "wall" (posts): on the wall just below the band.
             dense = st.get("dense", {})
             full = {b % n for b in dense.get("bands", [])}
-            cnt = dense["count"] if i in full else st["count"]
-            sg = st.get("segments", 8)
-            rad = st["diameter"] / 2 / math.cos(math.pi / sg)
-            if st.get("on", "band") == "wall":
-                zs = z - h["height"] / 2 - st["diameter"] / 2 - 0.01
-                if zs < st["diameter"]:                      # no room below: above the band
-                    zs = z + h["height"] / 2 + st["diameter"] / 2 + 0.01
-                ro = _interp(outer, zs) + st["height"] / 2 - 0.003
+            listed = st.get("angles", {}).get(str(i))
+            if listed is not None:
+                angs = [math.radians(d) for d in listed]
             else:
-                zs, ro = z, r + h["stands_out"] + st["height"] / 2 - 0.003
+                cnt = dense["count"] if i in full else st["count"]
+                off = math.pi / cnt * (i // st.get("every", 1) % 2)
+                angs = [2 * math.pi * k / cnt + off for k in range(cnt)]
             bm = bmesh.new()
-            off = math.pi / cnt * (i // st.get("every", 1) % 2)
-            for k in range(cnt):
-                a = 2 * math.pi * k / cnt + off
-                m = (Matrix.Translation((ro * math.cos(a), ro * math.sin(a), zs))
-                     @ Matrix.Rotation(a, 4, "Z") @ Matrix.Rotation(math.pi / 2, 4, "Y")
-                     @ Matrix.Rotation(math.pi / sg, 4, "Z"))      # a flat face up
-                bmesh.ops.create_cone(bm, cap_ends=True, segments=sg, radius1=rad, radius2=rad,
-                                      depth=st["height"], matrix=m)
+            if st.get("shape", "post") == "plate":
+                t, w, u = st["size"]
+                zs = z + h["height"] / 2 + u / 2
+                ro = _interp(outer, zs) + t / 2
+                for a in angs:
+                    m = Matrix.Translation((ro * math.cos(a), ro * math.sin(a), zs))
+                    parts._box(bm, (t, w, u), m @ Matrix.Rotation(a, 4, "Z"))
+            else:
+                sg = st.get("segments", 8)
+                rad = st["diameter"] / 2 / math.cos(math.pi / sg)
+                if st.get("on", "band") == "wall":
+                    zs = z - h["height"] / 2 - st["diameter"] / 2 - 0.01
+                    if zs < st["diameter"]:                  # no room below: above the band
+                        zs = z + h["height"] / 2 + st["diameter"] / 2 + 0.01
+                    ro = _interp(outer, zs) + st["height"] / 2 - 0.003
+                else:
+                    zs, ro = z, r + h["stands_out"] + st["height"] / 2 - 0.003
+                for a in angs:
+                    m = (Matrix.Translation((ro * math.cos(a), ro * math.sin(a), zs))
+                         @ Matrix.Rotation(a, 4, "Z") @ Matrix.Rotation(math.pi / 2, 4, "Y")
+                         @ Matrix.Rotation(math.pi / sg, 4, "Z"))  # a flat face up
+                    bmesh.ops.create_cone(bm, cap_ends=True, segments=sg, radius1=rad,
+                                          radius2=rad, depth=st["height"], matrix=m)
             objs.append(parts._object(f"{name}_{i:02d}_studs", bm, st.get("material", material),
                                       Matrix()))
     return objs

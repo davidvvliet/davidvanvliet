@@ -327,17 +327,149 @@
           "from": 0.02,
           "to": 0.92,
           "studs": {
-            "count": 20,
-            "diameter": 0.05,
-            "height": 0.05,
-            "segments": 4,
-            "on": "wall"
+            "shape": "plate",
+            "size": [
+              0.025,
+              0.06,
+              0.06
+            ],
+            "dense": {
+              "count": 60,
+              "bands": [
+                0,
+                1
+              ]
+            },
+            "angles": {
+              "2": [
+                65,
+                99,
+                117,
+                123,
+                128,
+                144,
+                211,
+                217,
+                222,
+                236,
+                252,
+                273,
+                279,
+                311,
+                332,
+                336,
+                351
+              ],
+              "3": [
+                20,
+                28,
+                72,
+                99,
+                105,
+                121,
+                147,
+                199,
+                206,
+                220,
+                266,
+                293,
+                311
+              ],
+              "4": [
+                20,
+                26,
+                31,
+                45,
+                61,
+                82,
+                88,
+                120,
+                141,
+                145,
+                160,
+                264,
+                298,
+                316,
+                322,
+                327,
+                343
+              ],
+              "5": [
+                26,
+                33,
+                47,
+                93,
+                120,
+                138,
+                204,
+                212,
+                256,
+                283,
+                289,
+                305,
+                331
+              ],
+              "6": [
+                65,
+                99,
+                117,
+                123,
+                128,
+                144,
+                193,
+                200,
+                214,
+                260,
+                287,
+                305
+              ],
+              "7": [
+                20,
+                28,
+                72,
+                99,
+                105,
+                121,
+                147,
+                208,
+                214,
+                219,
+                233,
+                249,
+                270,
+                276,
+                308,
+                329,
+                333,
+                348
+              ],
+              "8": [
+                20,
+                26,
+                31,
+                45,
+                61,
+                82,
+                88,
+                120,
+                141,
+                145,
+                160,
+                179,
+                187,
+                231,
+                258,
+                264,
+                280,
+                306
+              ]
+            }
           }
         },
         "source": [
           "r3896_1, Figure 2-22: 147.00 in across the rings at the exit against the 139 in lip, so they stand out 4 in; Estimated.",
           "photo_0201422 and factsheet_1968 drawing: about nine rings on the extension. Estimated.",
-          "r3896_1, p.1-9B: \"CRES reinforcing channel bands welded to the outer wall circumference\"; p.1-25: \"Brackets with nutplates are provided to secure insulator panels to the nozzle extension\". Small square brackets on the wall beside each band, lower than the band, about 20 round (layout from the user's reference render). Estimated."
+          "r3896_1, p.1-9B: \"CRES reinforcing channel bands welded to the outer wall circumference\"; p.1-25: \"Brackets with nutplates are provided to secure insulator panels to the nozzle extension\". Layout from a reference illustration the user supplied: small flat plates resting on top of each band, a full row (about 30 on the visible half, so 60 round) on the lowest two bands, and singles, pairs and triples on the bands above, different on each band; the angles are read from its visible half (x offset from the axis over the half-width) and the back half reuses another band's clusters, turned. Plate size estimated."
         ]
       }
     },
