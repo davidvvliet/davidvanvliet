@@ -20,8 +20,10 @@
 #              to} (from and to: fractions of that part's length from its exit), full lod only
 #   extension: optional nozzle extension below the nozzle {exit_diameter, length, wall}: a cone
 #              from the nozzle's exit down to its own; the engine's z = 0 is then its exit
-#   manifold:  optional torus round the nozzle {diameter (centreline), tube_diameter (at the
-#              inlet), end_diameter (at the far end, for a tapering one), z, inlet_deg}
+#   manifold:  optional torus round the nozzle {diameter (centreline) or inner_diameter (the
+#              circle its inside edge hugs), tube_diameter (at the
+#              inlet), end_diameter (at the far end, for a tapering one), inlet_deg, and z (its
+#              centre plane) or sits_on (the plane its underside rests on, so a tapering one tilts)}
 #   parts:     [{"kind": "pump" | "pipe" | "box" | "actuator" | "lathe", "name": ..., ...}, ...]
 #              in the engine's frame: pump {diameter, length, at, axis}, pipe {diameter, points},
 #              box {size, at}, actuator {diameter, from, to}, lathe {profile [[r, z], ...], at,
@@ -117,7 +119,7 @@ def _interp(prof, z):
 def _torus(name, m, seg, material):
     """A torus whose tube narrows from tube_diameter at the inlet to end_diameter all the way
     round (a turbine exhaust manifold), both ends capped."""
-    R, z = m["diameter"] / 2, m["z"]
+    R0 = m["diameter"] / 2 if "diameter" in m else None
     r0 = m["tube_diameter"] / 2
     r1 = m.get("end_diameter", m["tube_diameter"]) / 2
     a0 = math.radians(m.get("inlet_deg", 0.0))
@@ -128,6 +130,11 @@ def _torus(name, m, seg, material):
         t = i / seg
         phi = a0 + 2 * math.pi * t * 0.995
         rr = r0 + (r1 - r0) * t
+        # "inner_diameter": the tube's inside edge hugs that circle, so a tapering torus's
+        # centreline moves in as it narrows; else "diameter" is the centreline.
+        R = R0 if R0 is not None else m["inner_diameter"] / 2 + rr
+        # "sits_on": the tube's underside rests on that plane, so a tapering torus tilts.
+        z = m["sits_on"] + rr if "sits_on" in m else m["z"]
         radial = Vector((math.cos(phi), math.sin(phi), 0))
         c = radial * R + Vector((0, 0, z))
         rings.append([bm.verts.new(c + radial * rr * math.cos(th) + Vector((0, 0, rr * math.sin(th))))
