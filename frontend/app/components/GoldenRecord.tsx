@@ -12,9 +12,9 @@ const URL = "/golden-record.glb";
 // The spin is slowest while the engraved face (toward the camera at angle 0) is in
 // view and speeds up while the plain back is turned: speed = front speed ×
 // (1 + (BACK_SPEEDUP − 1) × (1 − cos θ) / 2), a smooth slow-fast-slow. With these,
-// a turn takes about 4.1 s and the face is in view about 75% of it.
-const FRONT_TURN_SECONDS = 10; // a turn's length if it kept the front speed all the way round
-const BACK_SPEEDUP = 6; // how much faster it turns with its back to the camera
+// a turn takes about 4.7 s and the face is in view about 78% of it.
+const FRONT_TURN_SECONDS = 40 / 3; // a turn's length if it kept the front speed all the way round
+const BACK_SPEEDUP = 8; // how much faster it turns with its back to the camera
 const MODEL_PAGE = "/models"; // a click (not a drag) opens the models grid
 const CLICK_PX = 5;
 const DRAG_RADIANS_PER_PX = 0.012;
