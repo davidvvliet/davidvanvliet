@@ -93,11 +93,12 @@
       "credit": "NASA/MSFC, photo of an F-1 powerhead"
     },
     {
-      "id": "user_illustration",
-      "title": "Cutaway-style illustration of the F-1's thrust chamber (bands with bracket rows, straps, lines down the bell), screenshots shared by the user",
-      "url": "",
+      "id": "karp_illustration",
+      "title": "Steve Karp, \"Rocketdyne F-1\" Tech Notes illustration, in Mark Carlson, \"It Was the Most Powerful Engine Ever Created...\" (HistoryNet)",
+      "url": "https://historynet.com/rocketdyne-f-1-engines-powered-saturn-v-rockets-into-space/",
       "read": "2026-10-28",
-      "licence": "unknown; not saved in the repo"
+      "licence": "copyright Steve Karp / HistoryNet; used only as a visual reference, not saved in the repo",
+      "image": "https://historynet.com/wp-content/uploads/2016/12/Engine-640_849.jpg"
     }
   ],
   "facts": {
@@ -379,8 +380,8 @@
         },
         "source": [
           "r3896_1, p.1-8: tubes \"identified on reinforcing bands and straps below the thrust chamber throat\"; p.1-25 (par. 1-108): \"Protruding studs are percussion-welded onto hatbands of the thrust chamber to support and secure insulator panels\".",
-          "photo_6862832: about twenty bands from the exit to the throat region. user_illustration shows a tight row of small flat plates resting on every band of the nozzle, about 25 on the visible half, so about 44-50 round. Size estimated.",
-          "r3896_1, p.1-8: \"reinforcing bands and straps below the thrust chamber throat\". user_illustration: the top quarter of the bell (down to about 78% of the nozzle's length from the exit) shows bare tubes, and short straps join neighbouring bands at scattered places, one to three per gap, different in each gap. Strap angles are placed at random (seeded) to match that look; width estimated."
+          "photo_6862832: about twenty bands from the exit to the throat region. karp_illustration shows a tight row of small flat plates resting on every band of the nozzle, about 25 on the visible half, so about 44-50 round. Size estimated.",
+          "r3896_1, p.1-8: \"reinforcing bands and straps below the thrust chamber throat\". karp_illustration: the top quarter of the bell (down to about 78% of the nozzle's length from the exit) shows bare tubes, and short straps join neighbouring bands at scattered places, one to three per gap, different in each gap. Strap angles are placed at random (seeded) to match that look; width estimated."
         ]
       },
       "tubes": {
@@ -555,7 +556,7 @@
         "source": [
           "r3896_1, Figure 2-22: 147.00 in across the rings at the exit against the 139 in lip, so they stand out 4 in; Estimated.",
           "photo_0201422 and factsheet_1968 drawing: about nine rings on the extension. Estimated.",
-          "r3896_1, p.1-9B: \"CRES reinforcing channel bands welded to the outer wall circumference\"; p.1-25: \"Brackets with nutplates are provided to secure insulator panels to the nozzle extension\". user_illustration: small flat plates resting on top of each band, a full row (about 30 on the visible half, so 60 round) on the lowest two bands, and singles, pairs and triples on the bands above, different on each band; the angles are read from its visible half (x offset from the axis over the half-width) and the back half reuses another band's clusters, turned. Plate size estimated."
+          "r3896_1, p.1-9B: \"CRES reinforcing channel bands welded to the outer wall circumference\"; p.1-25: \"Brackets with nutplates are provided to secure insulator panels to the nozzle extension\". karp_illustration: small flat plates resting on top of each band, a full row (about 30 on the visible half, so 60 round) on the lowest two bands, and singles, pairs and triples on the bands above, different on each band; the angles are read from its visible half (x offset from the axis over the half-width) and the back half reuses another band's clusters, turned. Plate size estimated."
         ]
       }
     },
@@ -1749,7 +1750,7 @@
               2.214
             ]
           ],
-          "source": "user_illustration: A close pair of thin lines comes from the powerhead round the top of the bell from the heat exchanger's side, bends over the top at about 125 degrees from the heat exchanger and runs straight down over the bands to just above the exhaust manifold; a single line comes over the top further round and runs down near the far side. Estimated."
+          "source": "karp_illustration: A close pair of thin lines comes from the powerhead round the top of the bell from the heat exchanger's side, bends over the top at about 125 degrees from the heat exchanger and runs straight down over the bands to just above the exhaust manifold; a single line comes over the top further round and runs down near the far side. Estimated."
         },
         "bend_radius": 0.15,
         "material": "cres",
@@ -1812,7 +1813,7 @@
               2.214
             ]
           ],
-          "source": "user_illustration: A close pair of thin lines comes from the powerhead round the top of the bell from the heat exchanger's side, bends over the top at about 125 degrees from the heat exchanger and runs straight down over the bands to just above the exhaust manifold; a single line comes over the top further round and runs down near the far side. Estimated."
+          "source": "karp_illustration: A close pair of thin lines comes from the powerhead round the top of the bell from the heat exchanger's side, bends over the top at about 125 degrees from the heat exchanger and runs straight down over the bands to just above the exhaust manifold; a single line comes over the top further round and runs down near the far side. Estimated."
         },
         "bend_radius": 0.15,
         "material": "cres",
@@ -1870,7 +1871,7 @@
               2.214
             ]
           ],
-          "source": "user_illustration: A close pair of thin lines comes from the powerhead round the top of the bell from the heat exchanger's side, bends over the top at about 125 degrees from the heat exchanger and runs straight down over the bands to just above the exhaust manifold; a single line comes over the top further round and runs down near the far side. Estimated."
+          "source": "karp_illustration: A close pair of thin lines comes from the powerhead round the top of the bell from the heat exchanger's side, bends over the top at about 125 degrees from the heat exchanger and runs straight down over the bands to just above the exhaust manifold; a single line comes over the top further round and runs down near the far side. Estimated."
         },
         "bend_radius": 0.15,
         "material": "cres",
