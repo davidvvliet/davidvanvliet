@@ -169,6 +169,15 @@ def cmd_approve(args):
     if changed:
         die(f"Changed since the last build of '{probe}': {', '.join(changed)}.\n"
             f"Rebuild (run.py build {probe}), look at the result, then approve.")
+    # Shared code with uncommitted edits (often another session's work in progress) would be
+    # baked into this model and its fingerprint. The probe's own files may be uncommitted.
+    shared = [p for p in published.inputs(probe) if not published.own(probe, p)]
+    dirty = subprocess.run(["git", "status", "--porcelain", "--", *shared], cwd=HERE,
+                           capture_output=True, text=True).stdout.split("\n")
+    dirty = [line[3:] for line in dirty if line.strip()]
+    if dirty and "--force" not in args:
+        die(f"Shared harness code has uncommitted changes: {', '.join(dirty)}.\n"
+            "Commit them first (or ask the session editing them), rebuild, then approve.")
     spec = json.load(open(os.path.join(HERE, "specs", f"{probe}.json")))
     if not spec.get("fixture"):  # fixtures only guard lib/; they never ship
         os.makedirs(PUBLIC_MODELS, exist_ok=True)

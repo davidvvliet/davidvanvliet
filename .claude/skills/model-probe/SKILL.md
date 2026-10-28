@@ -24,7 +24,8 @@ from the repo.
   resets the baseline. Wiring a model into the solar-system scene is a separate change
   (see "From Blender to the site" in the README, including the scale problem).
 - Approve publishes the last build only if nothing it read has changed since. Otherwise it
-  refuses and lists the files: rebuild, look at the result, then approve.
+  refuses and lists the files: rebuild, look at the result, then approve. It also refuses while
+  shared code (`lib/`, `build.py`, `blender.json`) has uncommitted changes.
 
 ## Several sessions at once
 More than one Claude session may be working in this harness.
