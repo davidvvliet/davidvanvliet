@@ -77,14 +77,20 @@ def build(spec):
                       location=_at(a, R + so + am["clamp_stands_out"] / 2 - 0.1, rim1 + mh / 2),
                       roll_deg=a, material="dark_metal")
 
-        # Chines: strakes on +y and -y over the lower booster, tapering in at the top.
+        # Lower-body fairings (from_photos.chines): four box sections 90 degrees apart, their
+        # tops chamfered back into the body.
         ch = P["chines"]
-        for sign, tag in parts.sides():
-            y0, y1 = sign * (R - 0.05), sign * (R + ch["stands_out"])
-            z_top = aft + ch["top_above_aft_end"]
-            parts.surface(f"booster_chine_{tag}", root_le=(0, y0, z_top), root_chord=z_top - aft,
-                          tip_le=(0, y1, z_top - 3.0), tip_chord=z_top - 3.0 - aft,
-                          thickness=0.03, chord_dir=(0, 0, -1), material=steel)
+        depth = ch["stands_out"] + 0.05
+        z_top = aft + ch["top_above_aft_end"]
+        h = z_top - aft
+        c = ch["top_chamfer"] / h
+        for i, a in enumerate(ch["angles_deg"]):
+            t = Vector(_at(a + 90, 1, 0))
+            mid = Vector(_at(a, R - 0.05 + depth / 2, (aft + z_top) / 2))
+            # The plate's u runs inward here (up x tangent), so u = 0 is the outer face.
+            parts.outline_plate(f"booster_chine_{i}", [(1, 0), (0, 0), (0, 1 - c), (1, 1)],
+                                depth, h, ch["width"], location=tuple(mid - t * ch["width"] / 2),
+                                direction=tuple(t), material=steel)
 
         # Raceway (from_photos.raceway): a narrow cover down the body, swelling at its top into
         # a fairing with a pointed end; two pipes run beside it on clamps, the outer one bending

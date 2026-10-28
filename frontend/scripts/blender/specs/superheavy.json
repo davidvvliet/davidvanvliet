@@ -131,6 +131,15 @@
       "licence": "Wikipedia text (CC BY-SA 4.0); only a number is used",
       "saved": "",
       "credit": ""
+    },
+    {
+      "id": "render_b3_booster",
+      "title": "SpaceX render of the Block 3 booster, side view (\"Block 3 Booster\", 2550 x 1352, with height 72.3 m), published in nsf_block3_mars; read via the Wayback Machine",
+      "url": "https://web.archive.org/web/20260202234154im_/https://www.nasaspaceflight.com/wp-content/uploads/2025/05/Block-3-Booster.jpg",
+      "read": "2026-10-28",
+      "licence": "SpaceX copyright (credited \"SpaceX\" by NSF); used for measuring only, not in the repo",
+      "saved": "",
+      "credit": "SpaceX, render of the Block 3 booster (lower-body fairings)"
     }
   ],
   "reference_model": {
@@ -267,19 +276,29 @@
     },
     "chines": {
       "value": {
-        "count": 2,
-        "at": "+y and -y",
+        "count": 4,
+        "angles_deg": [
+          -55,
+          35,
+          125,
+          -145
+        ],
+        "width": 1.0,
+        "stands_out": 0.9,
         "top_above_aft_end": 28.0,
-        "stands_out": 0.9
+        "top_chamfer": 1.5
       },
       "unit": "m",
-      "source": "photo_pad_f13: strakes on both sides of the lower booster from y 885 (left) and 945 (right) down past the mount top (y 1140), standing out about 8 px (0.9 m); photo_f12_ascent shows one from about 31 m above the aft end. Estimated: 28 m for both."
+      "source": [
+        "photo_pad_f13 (lower-booster crop x 1244-1448, y 706-1151 of the 2600 px photo; the 9 m body is about 80 px across): box-section fairings, not thin fins: one faces the camera about 0.42 of the half-width left of centre and about 1.0 m wide, others stand out about 0.9 m past both edges. The grid fins place the camera about 30 degrees toward -y from the windward fin (the near fin sits about 0.5 of the half-width right of centre, the left fin at the left edge, the right one at the right edge and lower, so on the far side). Four fairings 90 degrees apart fit all three: -55, 35, 125 (hidden) and -145 degrees. Top 28 m kept from the earlier estimate: photo_pad_f13: strakes on both sides of the lower booster from y 885 (left) and 945 (right) down past the mount top (y 1140), standing out about 8 px (0.9 m); photo_f12_ascent shows one from about 31 m above the aft end. Estimated: 28 m for both.",
+        "render_b3_booster shows the same: three in view, about 1.1 m wide and out, tops chamfered over about 1.5 m, about 26 m above the aft end."
+      ]
     },
     "raceway": {
       "value": {
         "width": 0.25,
         "stands_out": 0.2,
-        "angle_from_x_deg": -17,
+        "angle_from_x_deg": 9,
         "fairing_top_below_top": 7.5,
         "fairing_length": 5.6,
         "fairing_width": 0.6,
@@ -303,7 +322,7 @@
         }
       },
       "unit": "m",
-      "source": "photo_pad_f13: a dark vertical line the full length of the booster, about 12 px (1.3 m) left of centre seen from +x, so about 17 degrees toward -y. Size estimated. Shape from photo_b19_transport (raceway crop x 6385-7112, y 2263-4526; the 9 m body is 2667 px across, 0.0034 m/px, and the 1.83 m rings measure 1.88 m along it): below its top the raceway is about 45 px (0.25 m) wide; at the top it swells into a fairing about 110 px (0.6 m) wide and 5.6 m long, its pointed top 1.36 m long, just under the heat-shield-side grid fin (the photo looks up from below, so heights scaled from it are unreliable: the tip is placed 0.1 m under the fin's bottom, grid_fin), tapering into the raceway over 0.5 m. Two pipes run beside it, 0.14 and 0.22 m across, about 0.6 and 1.0 m round from it (on the far side from the camera: 7.9 and 12.2 degrees), on clamps about every 1.8 m; both bend into the tank just under the fin, the wider one through a port. The pipes run on past the bottom of the photo; built down the raceway's whole length (assumed). Pipe stand-off estimated. The width 0.5 m estimated earlier from the pad photo was the raceway with its pipes.",
+      "source": "photo_pad_f13 (same crop as from_photos.chines): a line of pipe clamps the full length of the booster about 0.63 of the half-width right of centre, so 39 degrees from the camera's azimuth (-30, see from_photos.chines): 9 degrees, just under the windward fin as photo_b19_transport shows. (Earlier read as 17 degrees toward -y: that line was the edge of the fairing facing the camera.) Shape from photo_b19_transport (raceway crop x 6385-7112, y 2263-4526; the 9 m body is 2667 px across, 0.0034 m/px, and the 1.83 m rings measure 1.88 m along it): below its top the raceway is about 45 px (0.25 m) wide; at the top it swells into a fairing about 110 px (0.6 m) wide and 5.6 m long, its pointed top 1.36 m long, just under the heat-shield-side grid fin (the photo looks up from below, so heights scaled from it are unreliable: the tip is placed 0.1 m under the fin's bottom, grid_fin), tapering into the raceway over 0.5 m. Two pipes run beside it, 0.14 and 0.22 m across, about 0.6 and 1.0 m round from it (on the far side from the camera: 7.9 and 12.2 degrees), on clamps about every 1.8 m; both bend into the tank just under the fin, the wider one through a port. The pipes run on past the bottom of the photo; built down the raceway's whole length (assumed). Pipe stand-off estimated. The width 0.5 m estimated earlier from the pad photo was the raceway with its pipes.",
       "also": [
         {
           "source": "photo_b19_transport, raceway crop x 6385-7112, y 2263-4526",
@@ -519,7 +538,8 @@
     "Grid fins: no size in metres anywhere; photos give about 4.0 x 4.0 x 1.2 m. The two side fins are level in photo_b19_lift; whether the heat-shield fin is higher isn't clear (two photos disagree, both with strong perspective). Built level.",
     "Hot-stage struts: 18 V pairs estimated from the visible half of photo_b19_lift.",
     "Photos: SpaceX's licence for these isn't stated (their Flickr photos have been CC BY-NC 2.0). They stay out of the repo; the spec links them.",
-    "Not modelled: frost (only when fuelled), the tower and its chopsticks, small fittings."
+    "Not modelled: frost (only when fuelled), the tower and its chopsticks, small fittings, the booster quick-disconnect (no photo of it found: in the static-fire photo the base sits inside the launch mount).",
+    "Lower-body fairings: four, 90 degrees apart, is inferred from three in view in photo_pad_f13 and render_b3_booster. In photo_pad_f13 the one on the left edge looks about 6 m taller than the others; the render shows them level. Built level at 28 m."
   ],
   "sheet_frame": {
     "min": [
