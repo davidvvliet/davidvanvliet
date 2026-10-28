@@ -78,10 +78,19 @@ def build(spec):
     # ridge (the side view's top line) at the top view's angle, carrying the side windows. Aft of the frame the
     # fairing is a roof over a base inside the fuselage. Edges where the surface turns sharply
     # are marked hard, so the hood has crisp lines between smooth faces.
-    cs, cw, arch = dr["canopy"], dr["canopy_windows"], dr["canopy"]["arch"]
-    x_front, x_end = cs["top"][0][0], cs["top"][-1][0]
-    (r0x, r0z), (r1x, r1z) = cs["top"][0], cs["top"][1]
+    cs, arch = dr["canopy"], dr["canopy"]["arch"]
+    ct = spec["from_photos"]["canopy_top"]["value"]  # the drawn top line, raised to the photos
+    x_front, x_end = ct["top"][0][0], ct["top"][-1][0]
+    (r0x, r0z), (r1x, r1z) = ct["top"][0], ct["top"][1]
     rake = (r1x - r0x) / (r1z - r0z)  # ridge: ft aft per ft up
+
+    # The top line: straight between the given points, except the last span, from the roof's end
+    # down to the spine, which is one S-curve, level at both ends, so the hood runs smoothly
+    # into the fuselage.
+    (xr, zr), (xe, ze) = ct["top"][-2], ct["top"][-1]
+    top_line = [tuple(r) for r in ct["top"][:-1]] + [
+        (xr + (xe - xr) * i / 24, zr + (ze - zr) * (3 * (i / 24) ** 2 - 2 * (i / 24) ** 3)) for i in range(1, 25)]
+
     k = cs["windscreen_plan_tan"]
 
     def at(rows, x):
@@ -98,6 +107,8 @@ def build(spec):
 
     def resample(pts, n):
         """n points evenly spaced along a polyline, keeping both ends."""
+        if len(pts) == 1:
+            return [pts[0]] * n
         d = [0.0]
         for (y0, z0), (y1, z1) in zip(pts, pts[1:]):
             d.append(d[-1] + math.hypot(y1 - y0, z1 - z0))
@@ -114,12 +125,13 @@ def build(spec):
     def plane_y(x, z):  # a front face's half-width at station x, height z
         return (x - ridge_x(z)) * k
 
-    def profile(x, n_side=30, n_face=12):
-        """One side of the section at x, bottom to top (y, z): the arch's side and roof up to the
-        corner where a front face cuts it, then straight along the face to the ridge. The
-        corner is always a vertex, so the edge between face and side runs cleanly along the hood."""
+    def profile(x, n=48):
+        """One side of the section at x, bottom to top (y, z), n points: the arch clipped by the
+        front face's plane, so the face is exactly flat and fades out where the plane leaves the
+        hood. Each corner where arch and face meet is a vertex, so the edge between them runs
+        cleanly along the hood."""
         fx = cs["frame_x"]
-        top = max(at(cs["top"], x), r1z if x < r1x else 0)
+        top = max(at(top_line, x), r1z if x < r1x else 0)
         if x <= fx:
             a, base = at(arch["half_width"], x), at(cs["sill"], x)
         else:  # aft fairing: the same arch, narrowing as the drawn fairing does
@@ -128,25 +140,34 @@ def build(spec):
         zs = min(arch["z_shoulder"], top - 0.02)
         dense = [(a, base + (zs - base) * i / 20) for i in range(20)]
         dense += [(a * math.cos(t), zs + (top - zs) * math.sin(t)) for t in (math.pi / 2 * i / 200 for i in range(201))]
-        cut = next((i for i, (y, z) in enumerate(dense) if y > plane_y(x, z)), None)
-        if cut is None:  # the faces don't reach this station: plain arch, its last points at the top
-            side_pts = resample(dense, n_side)
-            return side_pts + [side_pts[-1]] * (n_face - 1)
-        if cut == 0:  # ahead of the hood's sides: all face
-            corner = (max(0.0, plane_y(x, base)), base)
-        else:  # the corner: where the arch crosses the face, between dense[cut - 1] and dense[cut]
-            (y0, z0), (y1, z1) = dense[cut - 1], dense[cut]
-            lo, hi = 0.0, 1.0
-            for _ in range(30):
-                m = (lo + hi) / 2
-                ym, zm = y0 + (y1 - y0) * m, z0 + (z1 - z0) * m
-                lo, hi = (m, hi) if ym <= plane_y(x, zm) else (lo, m)
-            corner = (y0 + (y1 - y0) * lo, z0 + (z1 - z0) * lo)
-        side_pts = resample(dense[:cut] + [corner], n_side) if cut > 0 else [corner] * n_side
-        z_ridge = min(top, r0z + (x - r0x) / rake)
-        face = [(corner[0] + (0.0 - corner[0]) * i / (n_face - 1), corner[1] + (z_ridge - corner[1]) * i / (n_face - 1))
-                for i in range(1, n_face)]
-        return side_pts + face
+        z_ridge = r0z + (x - r0x) / rake  # where the two faces meet on the centreline
+        arc = [q for q in dense if q[1] < z_ridge] + [dense[-1] if dense[-1][1] < z_ridge else (0.0, z_ridge)]
+        f = [y - max(0.0, plane_y(x, z)) for y, z in arc]  # > 0 where the arch is outside the plane
+        # The section is three pieces with fixed point counts, so every station has the same
+        # layout: arch below the face, the face (on the plane), arch above it. A piece that isn't
+        # there has zero length: with no face, both corners sit where the plane comes nearest.
+        def cross(i):  # point between arc[i] and arc[i + 1] where f changes sign
+            t = f[i] / (f[i] - f[i + 1])
+            return (i, (arc[i][0] + (arc[i + 1][0] - arc[i][0]) * t, arc[i][1] + (arc[i + 1][1] - arc[i][1]) * t))
+        ups = [cross(i) for i in range(len(arc) - 1) if f[i] <= 0 < f[i + 1]]
+        downs = [cross(i) for i in range(len(arc) - 1) if f[i] > 0 >= f[i + 1]]
+        if f[0] > 0:
+            c1 = (-1, (max(0.0, plane_y(x, arc[0][1])), arc[0][1]))
+        elif ups:
+            c1 = ups[0]
+        else:
+            i = max(range(len(arc)), key=lambda j: f[j])
+            c1 = (i - 1, arc[i])
+        later = [d for d in downs if d[0] >= c1[0]]
+        c2 = later[0] if later and (ups or f[0] > 0) else (c1 if not ups and f[0] <= 0 else (len(arc) - 1, (0.0, arc[-1][1])))
+        i1, p1 = c1
+        i2, p2 = c2
+        below = arc[:i1 + 1] + [p1]
+        face = [p1] + [(max(0.0, plane_y(x, z)), z) for _, z in arc[i1 + 1:i2 + 1]] + [p2]
+        above = [p2] + arc[i2 + 1:]
+        n1, n2 = n // 2, n // 4
+        n3 = n - n1 - n2 + 2
+        return resample(below, n1) + resample(face, n2)[1:] + resample(above, n3)[1:]
 
     def canopy_ring(x):
         half = profile(x)
@@ -169,13 +190,13 @@ def build(spec):
     cxs = [x_front + (x_end - x_front) * i / 80 for i in range(81)]
     with parts.assembly("canopy"):
         hood = parts.loft("canopy", [[P(x_front - 0.05, 0, r0z - 0.03)]] + [canopy_ring(x) for x in cxs[1:-1]]
-                          + [[P(x_end, 0, cs["top"][-1][1])]], material="x15_black")
+                          + [[P(x_end, 0, ct["top"][-1][1])]], material="x15_black")
         mark_hard_edges(hood)
 
-    # Windows, one each side on the hood's front face (photos): the side view's outline projected
+    # Windows, one each side on the hood's front face (photos): the photo-fitted outline projected
     # sideways onto the hood, as a thin pane standing a few millimetres out of it (a separate
     # solid, so it never flickers) inside a raised frame, so the glass sits recessed.
-    (xa, za), (xb, zb) = cw["front_low"], cw["front_high"]
+    win = spec["from_photos"]["canopy_window"]["value"]["outline"]
     wf = spec["from_photos"]["window_frame"]["value"]
 
     def on_side(x, z, sign, out):
@@ -189,9 +210,11 @@ def build(spec):
                 return P(x, sign * (y + out * ny / n), z + out * nz / n)
         raise ValueError(f"window point off the canopy: x {x}, z {z}")
 
-    def z_top(x):
-        front = za + (x - xa) * (zb - za) / (xb - xa)
-        return min(cw["z_high"], front, at(cs["top"], x) - 0.05)
+    def z_span(x):
+        """Lowest and highest z of the window outline at x."""
+        zs = [z0 + (z1 - z0) * (x - x0) / (x1 - x0) for (x0, z0), (x1, z1) in zip(win, win[1:] + win[:1])
+              if min(x0, x1) <= x <= max(x0, x1) and x1 != x0]
+        return min(zs), min(max(zs), at(top_line, x) - 0.05)
 
     def frame(name, outline, surf):
         """A raised band round a closed 2D outline, mapped onto the hood by surf(u, v, out)."""
@@ -215,24 +238,25 @@ def build(spec):
                           surf(uo, vo, wf["height"]), surf(uo, vo, -0.01)])
         parts.loft(name, rings, material="x15_black", smooth=False)
 
-    x0 = xa + (cw["z_low"] - za) * (xb - xa) / (zb - za) + 0.02
     pane = 0.02  # ft out of the hood
-    xs_w = [x0 + (cw["aft_x"] - x0) * i / 24 for i in range(25)]
-    side_outline = ([(x, cw["z_low"]) for x in xs_w[:-1]]
-                    + [(cw["aft_x"], cw["z_low"] + (z_top(cw["aft_x"]) - cw["z_low"]) * i / 6) for i in range(6)]
-                    + [(x, max(z_top(x), cw["z_low"] + 0.01)) for x in reversed(xs_w[1:])])
+    wx0, wx1 = min(x for x, _ in win) + 0.01, max(x for x, _ in win) - 0.01
+    side_outline = []  # the outline with each edge split every 0.1 ft, so it follows the hood
+    for (u0, v0), (u1, v1) in zip(win, win[1:] + win[:1]):
+        n = max(1, round(math.hypot(u1 - u0, v1 - v0) / 0.1))
+        side_outline += [(u0 + (u1 - u0) * i / n, v0 + (v1 - v0) * i / n) for i in range(n)]
     for sign, side_name in parts.sides():
         rings = []
-        for i in range(16):
-            x = x0 + (cw["aft_x"] - x0) * i / 15
-            zt = max(z_top(x), cw["z_low"] + 0.01)
-            zs = [cw["z_low"] + (zt - cw["z_low"]) * j / 9 for j in range(10)]
+        for i in range(24):
+            x = wx0 + (wx1 - wx0) * i / 23
+            zb, zt = z_span(x)
+            zt = max(zt, zb + 0.01)
+            zs = [zb + (zt - zb) * j / 9 for j in range(10)]
             rings.append([on_side(x, z, sign, pane) for z in zs] + [on_side(x, z, sign, -pane) for z in reversed(zs)])
         with parts.assembly(f"window_{side_name}"):
             parts.loft(f"window_{side_name}", rings, material="x15_glass", smooth=False)
         with parts.assembly(f"window_frame_{side_name}"):
             frame(f"window_frame_{side_name}", side_outline,
-                  lambda u, v, out, sign=sign: on_side(u, min(v, at(cs["top"], u) - 0.02), sign, out))
+                  lambda u, v, out, sign=sign: on_side(u, min(v, at(top_line, u) - 0.02), sign, out))
 
     with parts.assembly("ball_nose"):
         # The sensor: a sphere in a lip, then a straight cone (its afterbody) to the base,

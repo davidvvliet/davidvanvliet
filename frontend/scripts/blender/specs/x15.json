@@ -107,7 +107,9 @@
       ],
       "measure": "z",
       "source": "nasa_tnd3343, Table I, p.18-19",
-      "quote": "Maximum depth over canopy, ft . . . 4.97"
+      "quote": "Maximum depth over canopy, ft . . . 4.97",
+      "tolerance": 0.1,
+      "conflict": "This check measures the hood top to the lowest belly point, 30 ft aft (1.664 m, +9.8%). The hood is raised to photo NASM-SI-2008-5558 (from_photos.canopy_top, user's decision to trust the photo); measured at the canopy station the model is 4.75 ft deep (1.448 m, -4.4%), and nasa_tmx430 Fig. 1 draws about 4.8 ft there. Table I doesn't say where its 4.97 is measured. Tolerance widened to 10% until a check at a station exists."
     },
     "horizontal_tail_span": {
       "value": 5.511,
@@ -846,6 +848,70 @@
       },
       "unit": "ft",
       "source": "nasm_x15, photos NASM2018-10035 and -10039: each window pane sits in a raised frame round its whole outline, with the two front frames meeting at the centre post; the frame is about a sixth of the window's height wide (estimated; the window is 0.54 ft tall in nasa_tnd3343 Fig. 1) and stands slightly proud of the hood (height estimated)"
+    },
+    "canopy_top": {
+      "value": {
+        "top": [
+          [
+            6.81,
+            1.83
+          ],
+          [
+            9.53,
+            3.06
+          ],
+          [
+            10.0,
+            3.06
+          ],
+          [
+            11.0,
+            3.04
+          ],
+          [
+            11.74,
+            3.02
+          ],
+          [
+            17.2,
+            2.28
+          ]
+        ]
+      },
+      "unit": "ft",
+      "source": "nasm_x15, photos NASM-SI-2008-5558 and NASM-SI-2007-12578. 5558 (the whole aircraft from ahead and above, the hood outlined against the black background): a pinhole camera fitted to the aircraft's outline (hood excluded; 1 - IoU 0.085) puts the body and spine on the photo's outline, while the hood's outline, which in that view is its cross-section near the aft frame (x 11-12), runs 0.37-0.42 ft above the model's at the roof and within 0.1 ft at the sides below z 2.4. So the roof is the drawn top line (from_drawing.canopy.top) raised 0.38 ft, the windscreen ridge keeps the drawn slope from the front corner (6.81, 1.83) until it meets the raised roof. From the roof's end (11.74, 3.02) to the spine (17.2, 2.28) the line is one S-curve, level at both ends (photos 12578 and 5563: the hood's back runs smoothly into the fuselage); it passes within 0.05 ft of the photo-fitted heights at x 12.5, 15.5 and 16.5 (2.97, 2.45, 2.35) and 0.04 ft above 13.5 (2.80). The windscreen faces are flat: the ridge runs straight at the drawn slope up to the roof (user's review of the photos). The raised roof gives a depth of 4.75 ft at the canopy station (Table I: maximum depth over canopy 4.97; nasa_tmx430 Fig. 1, refs/x15/three-view-1960.png, draws about 4.8 there at its own scale)."
+    },
+    "canopy_window": {
+      "value": {
+        "outline": [
+          [
+            8.2,
+            2.13
+          ],
+          [
+            8.3,
+            2.34
+          ],
+          [
+            8.91,
+            2.63
+          ],
+          [
+            11.12,
+            2.57
+          ],
+          [
+            10.58,
+            2.1
+          ],
+          [
+            9.29,
+            2.12
+          ]
+        ]
+      },
+      "unit": "ft",
+      "source": "nasm_x15, photo NASM-SI-2008-5558 (the left window from ahead and above): the glass outline's corners, read at 5x zoom (pixels (551,352), (657,354), (683,409), (548,415), (537,389) and (615,412) on the bottom edge), each cast onto the model hood (from_photos.canopy_top) through the camera fitted to the aircraft's outline (see canopy_top), and kept as (x, z): front bottom (8.20, 2.13), front (8.30, 2.34), top front (8.91, 2.63), top rear (11.12, 2.57), bottom rear (10.58, 2.10), bottom (9.29, 2.12). The glass mostly lies on the flat front face. This replaces from_drawing.canopy_windows, whose window is 0.3 ft lower and smaller; the corners shift with the hood shape they are cast onto (estimated ±0.05 ft)."
     }
   }
 }
