@@ -19,9 +19,15 @@
 
 /* The photo's own box: as large as fits the frame at the photo's aspect. */
 .media {
+  --w: min(100cqw, 100cqh * var(--aspect));
   position: relative;
-  width: min(100cqw, 100cqh * var(--aspect));
+  width: var(--w);
   aspect-ratio: var(--aspect);
+}
+
+/* With the globe beside it: narrower if needed, to leave the globe its room. */
+.mediaBeside {
+  --w: min(100cqw - 2 * (var(--side) + 2 * var(--gap)), 100cqh * var(--aspect));
 }
 
 .mediaFill {
@@ -84,7 +90,7 @@
 .sideGlobe {
   position: absolute;
   top: 50%;
-  right: calc(100% + ((100cqw - min(100cqw, 100cqh * var(--aspect))) / 2 - 96px) / 2);
+  right: calc(100% + ((100cqw - var(--w)) / 2 - var(--side)) / 2);
   transform: translateY(-50%);
 }
 
