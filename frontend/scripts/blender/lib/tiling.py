@@ -82,15 +82,20 @@ def hex_tiles(probe, t, tile_hex, repeat_w, cols=4, rows=4, px_per_m=480):
             image(probe, "heat_shield_tiles_normal", (n * 0.5 + 0.5).astype(np.float32), "Non-Color"),
             H)
 
-def weld_lines(probe, steel_hex, ring_h, line, darken, px_per_m=280):
-    """Steel with a darker weld line every `ring_h` metres (u doesn't matter: 8 px wide)."""
+def weld_lines(probe, steel_hex, ring_h, line, darken, rings=1, shade_spread=0.0, px_per_m=280):
+    """Steel with a darker weld line every `ring_h` metres (u doesn't matter: 8 px wide).
+    With `rings` > 1 the image is that many rings tall and each ring's brightness is varied by
+    up to `shade_spread` (rings are rolled from different sheets), so map v over rings x ring_h."""
     h = int(round(ring_h * px_per_m))
     v = (np.arange(h) + 0.5) / h * ring_h
     dist = np.minimum(v, ring_h - v)
     k = np.clip(dist / (line / 2), 0, 1)
     shade = darken + (1 - darken) * k
+    if rings > 1:
+        rng = np.random.default_rng(19)
+        shade = np.concatenate([shade * (1 + shade_spread * rng.uniform(-1, 1)) for _ in range(rings)])
     rgb = srgb(steel_hex)[None, None] * shade[:, None, None] * np.ones((1, 8, 1))
-    return image(probe, "stainless_steel_welds", rgb.astype(np.float32), "sRGB")
+    return image(probe, "stainless_steel_welds", np.clip(rgb, 0, 1).astype(np.float32), "sRGB")
 
 def cyl_uv(obj, repeat_w, repeat_h, R):
     """UVs that wrap round the z axis: u = angle x R / repeat_w (the same at every height, so

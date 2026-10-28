@@ -29,13 +29,16 @@
 #   materials: {"nacelle", "fan", "spinner", "core"}
 #
 # Every leaf may be a bare value or {"value": ..., "source": ...}. `lod="simple"` drops the
-# parts, the fan's blades and most segments, for vehicles with many engines.
+# parts, the fan's blades and most segments, for vehicles with a few engines; `lod="low"`
+# drops more segments still, for clusters of dozens (Super Heavy's 33).
 import json, math, os
 import bmesh
 from mathutils import Matrix, Vector
 from lib import parts
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Per level of detail: segments round the axis, nozzle contour steps, chamber blend steps.
+LOD = {"full": (64, 24, 8), "simple": (20, 10, 4), "low": (12, 6, 2)}
 
 def _v(x):
     """A spec leaf's value: {"value": v, ...} or v itself (lists and dicts recursively)."""
@@ -84,9 +87,9 @@ def nozzle_profile(nz, steps=24):
 def _rocket(name, e, lod):
     nz, ch, ph = e["nozzle"], e["chamber"], e["powerhead"]
     mats = e.get("materials", {})
-    seg = 64 if lod == "full" else 20
+    seg, steps, n = LOD[lod]
     wall = nz.get("wall", 0.01)
-    inner = nozzle_profile(nz, 24 if lod == "full" else 10)
+    inner = nozzle_profile(nz, steps)
     L = nz["length"]
     rt = inner[-1][0]
     # Nozzle: a hollow shell, open at both ends (the chamber closes the top).
@@ -99,7 +102,6 @@ def _rocket(name, e, lod):
     rc = ch["diameter"] / 2
     zc = L + ch["convergent_length"]
     prof = [(rt + wall, L - wall)]
-    n = 8 if lod == "full" else 4
     prof += [(rt + wall + (rc - rt - wall) * (1 - math.cos(math.pi * i / n)) / 2,
               L + ch["convergent_length"] * i / n) for i in range(1, n + 1)]
     top = zc + ch["length"]
@@ -162,7 +164,7 @@ def _blade(name, r0, r1, z, chord, pitch, angle, thickness, material):
 def _jet(name, e, lod):
     nc, fan = e["nacelle"], e["fan"]
     mats = e.get("materials", {})
-    seg = 64 if lod == "full" else 20
+    seg = LOD[lod][0]
     L, R = nc["length"], nc["max_diameter"] / 2
     ri, rx = nc["inlet_diameter"] / 2, nc["exit_diameter"] / 2
     wall = nc.get("wall", 0.03)
@@ -211,8 +213,8 @@ def build(e, name, lod="full"):
     """Build the engine `e` (an "engine" block) at the origin in its own frame. Returns its
     objects."""
     e = _v(e)
-    if lod not in ("full", "simple"):
-        raise ValueError(f"lod must be 'full' or 'simple', not {lod!r}")
+    if lod not in LOD:
+        raise ValueError(f"lod must be one of {sorted(LOD)}, not {lod!r}")
     if e["kind"] == "rocket":
         return _rocket(name, e, lod)
     if e["kind"] == "jet":

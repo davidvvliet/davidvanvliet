@@ -104,6 +104,33 @@
       "licence": "SpaceX copyright (licence not stated); used for looking only",
       "saved": "",
       "credit": "SpaceX, photo of the Flight 12 ascent (ship height, engines)"
+    },
+    {
+      "id": "photo_b19_transport",
+      "title": "SpaceX, B19 in the high bay at Starbase (B19_Transport_2603083576.jpg, 11316 x 6365)",
+      "url": "https://sxcontent9668.azureedge.us/cms-assets/assets/B19_Transport_2603083576_1cc29f2c4f.jpg",
+      "read": "2026-10-28",
+      "licence": "SpaceX copyright (licence not stated); used for measuring only, not in the repo",
+      "saved": "",
+      "credit": "SpaceX, photo of Booster 19 in the high bay (raceway, pipes)"
+    },
+    {
+      "id": "render_aft_b3_booster",
+      "title": "SpaceX render of the aft end of a Block 3 booster (\"Aft of Block 3 Booster\", 1907 x 1011, captioned \"Move to Raptor 3 eliminates the need for heavy heatshields on the bottom of the booster\"), published in nsf_block3_mars; read via the Wayback Machine",
+      "url": "https://web.archive.org/web/20260202234154im_/https://www.nasaspaceflight.com/wp-content/uploads/2025/05/Aft-of-Block-3-Booster.jpg",
+      "read": "2026-10-28",
+      "licence": "SpaceX copyright (credited \"SpaceX\" by NSF); used for measuring only, not in the repo",
+      "saved": "",
+      "credit": "SpaceX, render of the Block 3 booster's aft end (engines, aft manifold)"
+    },
+    {
+      "id": "wiki_raptor",
+      "title": "Wikipedia, SpaceX Raptor (infobox), used to find a length; its reference [10] is the primary source",
+      "url": "https://en.wikipedia.org/wiki/SpaceX_Raptor",
+      "read": "2026-10-28",
+      "licence": "Wikipedia text (CC BY-SA 4.0); only a number is used",
+      "saved": "",
+      "credit": ""
     }
   ],
   "reference_model": {
@@ -114,7 +141,7 @@
     "height": {
       "value": 72.3,
       "object": [
-        "booster_engine_00",
+        "booster_engine_00_nozzle",
         "hotstage_ring"
       ],
       "measure": "z",
@@ -250,12 +277,39 @@
     },
     "raceway": {
       "value": {
-        "width": 0.5,
-        "stands_out": 0.3,
-        "angle_from_x_deg": -17
+        "width": 0.25,
+        "stands_out": 0.2,
+        "angle_from_x_deg": -17,
+        "fairing_top_below_top": 7.5,
+        "fairing_length": 5.6,
+        "fairing_width": 0.6,
+        "fairing_point": 1.36,
+        "fairing_taper": 0.5,
+        "pipes": {
+          "offsets_deg": [
+            7.9,
+            12.2
+          ],
+          "diameters": [
+            0.14,
+            0.22
+          ],
+          "top_below_top": [
+            8.0,
+            7.7
+          ],
+          "stands_out": 0.3,
+          "clamp_spacing": 1.8
+        }
       },
       "unit": "m",
-      "source": "photo_pad_f13: a dark vertical line the full length of the booster, about 12 px (1.3 m) left of centre seen from +x, so about 17 degrees toward -y. Size estimated."
+      "source": "photo_pad_f13: a dark vertical line the full length of the booster, about 12 px (1.3 m) left of centre seen from +x, so about 17 degrees toward -y. Size estimated. Shape from photo_b19_transport (raceway crop x 6385-7112, y 2263-4526; the 9 m body is 2667 px across, 0.0034 m/px, and the 1.83 m rings measure 1.88 m along it): below its top the raceway is about 45 px (0.25 m) wide; at the top it swells into a fairing about 110 px (0.6 m) wide and 5.6 m long, its pointed top 1.36 m long, just under the heat-shield-side grid fin (the photo looks up from below, so heights scaled from it are unreliable: the tip is placed 0.1 m under the fin's bottom, grid_fin), tapering into the raceway over 0.5 m. Two pipes run beside it, 0.14 and 0.22 m across, about 0.6 and 1.0 m round from it (on the far side from the camera: 7.9 and 12.2 degrees), on clamps about every 1.8 m; both bend into the tank just under the fin, the wider one through a port. The pipes run on past the bottom of the photo; built down the raceway's whole length (assumed). Pipe stand-off estimated. The width 0.5 m estimated earlier from the pad photo was the raceway with its pipes.",
+      "also": [
+        {
+          "source": "photo_b19_transport, raceway crop x 6385-7112, y 2263-4526",
+          "quote": "the fairing, pipes and clamps measured as the source above says"
+        }
+      ]
     },
     "band": {
       "value": {
@@ -269,16 +323,16 @@
     "hot_stage_ring_height": {
       "value": 3.8,
       "unit": "m",
-      "source": "photo_pad_f13: from the ship's base (y 529) to the bottom of the strut crown (about y 560), 31 px. Agrees with nsf_pad2's \"nearly four-meter hot staging ring\"."
+      "source": "photo_pad_f13: from the ship's base (y 529) to the bottom of the strut crown (about y 560), 31 px. Agrees with nsf_pad2's \"nearly four-meter hot staging ring\". Used as a cross-check only: the build takes the crown's height from hot_stage_crown."
     },
     "hot_stage_struts": {
       "value": {
         "v_pairs": 18,
-        "strut_diameter": 0.3,
-        "dome_height": 2.2
+        "strut_diameter": 0.19,
+        "dome_height": 1.75
       },
       "unit": "m",
-      "source": "photo_b19_lift (crop 700-1220 x 170-520 of the 1600 px view): 9 strut feet across the visible half, so about 18 around; the top ring sits on the strut tops; the methane dome rises about 2.2 m above the tank's top edge (100 px below the ring top on a 680 px / 9 m body). Estimated."
+      "source": "photo_b19_lift (crop 700-1220 x 170-520 of the 1600 px view): 9 strut feet across the visible half, so about 18 around; the top ring sits on the strut tops; the methane dome rises about 2.2 m above the tank's top edge (100 px below the ring top on a 680 px / 9 m body). Estimated. Strut diameter revised: photo_b19_lift (crown crop x 6062-8270, y 1299-2598 of the 12125 px photo, viewed at 0.00683 m/px: the 9 m body is 1330 px across) shows the struts about 28 px (0.19 m) across mid-length. Dome height revised: in the crown crop the dome's top is 222 px (1.52 m) below the ring's top, so 3.27 - 1.52 = 1.75 m above its base."
     },
     "grid_fin": {
       "value": {
@@ -296,10 +350,147 @@
     "weld_lines": {
       "value": {
         "line": 0.02,
-        "darken": 0.8
+        "darken": 0.8,
+        "rings": 7,
+        "shade_spread": 0.04
       },
       "unit": "m",
-      "source": "photo_wdr: the weld lines between the 1.83 m steel rings show in every photo but are under a pixel wide; line width (20 mm) and how dark (0.8 as bright as the steel) estimated."
+      "source": "photo_wdr: the weld lines between the 1.83 m steel rings show in every photo but are under a pixel wide; line width (20 mm) and how dark (0.8 as bright as the steel) estimated. photo_b19_transport shows neighbouring rings differing slightly in brightness (each rolled from its own sheet): each ring's brightness is varied by up to 4%, over a 7-ring repeat (estimated)."
+    },
+    "hot_stage_crown": {
+      "value": {
+        "ring_height": 0.2,
+        "ring_thickness": 0.06,
+        "strut_end_diameter": 0.08,
+        "taper_top": 0.4,
+        "taper_bottom": 0.55,
+        "foot_above_tank_top": 0.0,
+        "bracket": {
+          "depth": 0.25,
+          "width": 0.34,
+          "height": 0.9,
+          "prong": 0.08,
+          "base": 0.15
+        },
+        "steel_brackets_deg": [
+          120,
+          200,
+          220
+        ],
+        "height": 3.27
+      },
+      "unit": "m, degrees from +x",
+      "source": "photo_b19_lift (crown crop x 6062-8270, y 1299-2598 of the 12125 px photo, viewed at 0.00683 m/px: the 9 m body is 1330 px across): the top ring is a flat band about 30 px (0.2 m) tall; the struts are round tubes tapering over about 60 px (0.4 m) at the top and 80 px (0.55 m) at the bottom to about 12 px (0.08 m); each pair's feet meet at the tank's top edge in a bracket about 50 px (0.34 m) wide and 130 px (0.9 m) tall: most are dark forks, some steel boxes on a gold base. The camera looks from the tower side (the two side fins are at the limbs, the windward fin hidden), so the crop's centre is 180 degrees; the steel boxes are at about 120, 200 and 220 degrees, the visible forks at 140, 160, 180, 240 and 260. The far side isn't seen: built with forks. Ring thickness and bracket depth estimated. Height from the dome's base (where the strut feet meet, crop y 490) to the ring's top (y 40): 450 px, 3.07 m, plus the 0.2 m ring: 3.27 m. The pad photo's 3.8 m (hot_stage_ring_height) runs to the bottom of the crown, the brackets included, and agrees within its resolution."
+    },
+    "crown_ports": {
+      "value": {
+        "angles_deg": [
+          139,
+          197,
+          235
+        ],
+        "below_tank_top": 1.67,
+        "plate_diameter": 0.82,
+        "port_diameter": 0.34
+      },
+      "unit": "m, degrees from +x",
+      "source": "photo_b19_lift (crown crop x 6062-8270, y 1299-2598 of the 12125 px photo, viewed at 0.00683 m/px: the 9 m body is 1330 px across): three round ports, each in an octagonal plate about 120 px (0.82 m) across with a 50 px (0.34 m) port, 245 px (1.67 m) below the tank's top edge, at crop x 265, 895 and 1250 (body axis x 705, half-width 665 px): 139, 197 and 235 degrees. The far side isn't seen."
+    },
+    "grid_fin_mount": {
+      "value": {
+        "diameter": 0.9,
+        "stands_out": 0.3
+      },
+      "unit": "m",
+      "source": "photo_b19_lift (fin crop x 5542-9180, y 2598-3810, 0.0113 m/px): each fin turns on a round geared mount on the body at its root, about 80 px (0.9 m) across. How far it stands out estimated."
+    },
+    "engine": {
+      "value": {
+        "kind": "rocket",
+        "nozzle": {
+          "exit_diameter": {
+            "value": 1.2,
+            "source": "faa_plume, fitted, not measured: see from_photos.nozzle_exit"
+          },
+          "throat_diameter": {
+            "value": 0.2216,
+            "source": "faa_plume",
+            "quote": "Throat Radius (in) 4.362",
+            "note": "4.362 in = 0.1108 m radius"
+          },
+          "length": {
+            "value": 1.526,
+            "source": "faa_plume",
+            "quote": "Nozzle throat to exit length (in) 60.06"
+          },
+          "contour": "parabola",
+          "initial_angle_deg": {
+            "value": 32.0,
+            "source": "faa_plume",
+            "quote": "Tangency angle (deg) 32.0"
+          },
+          "exit_angle_deg": {
+            "value": 6.0,
+            "source": "faa_plume",
+            "quote": "Nozzle lip exit angle (deg) 6.0"
+          },
+          "wall": {
+            "value": 0.015,
+            "source": "render_aft_b3_booster, design value: a thin wall at the lip"
+          }
+        },
+        "chamber": {
+          "diameter": {
+            "value": 0.44,
+            "source": "render_aft_b3_booster, scaled by the 1.2 m nozzle exit (from_photos.nozzle_exit) on the second middle-ring engine from the left: exit about 77 px wide in the 1400 px view. Widths only; heights are foreshortened (the camera looks up). Estimated. Chamber stack about 85 px wide in a 3x crop of 230 px exit."
+          },
+          "convergent_length": {
+            "value": 0.2,
+            "source": "render_aft_b3_booster, design value: the throat-to-chamber blend is hidden by plumbing"
+          },
+          "length": {
+            "value": 0.35,
+            "source": "render_aft_b3_booster, design value: the chamber's ribbed stack, its height foreshortened"
+          }
+        },
+        "powerhead": {
+          "diameter": {
+            "value": 0.4,
+            "source": "render_aft_b3_booster, scaled by the 1.2 m nozzle exit (from_photos.nozzle_exit) on the second middle-ring engine from the left: exit about 77 px wide in the 1400 px view. Widths only; heights are foreshortened (the camera looks up). Estimated. Powerhead about 75 px in the same crop."
+          },
+          "height": {
+            "value": 1.024,
+            "source": "wiki_raptor: engine \"Length 3.1 m\", less the nozzle (1.526), convergent (0.2) and chamber (0.35)",
+            "quote": "Length 3.1 m (10 ft)"
+          }
+        },
+        "materials": {
+          "nozzle": "dark_metal",
+          "chamber": "dark_metal",
+          "powerhead": "dark_metal"
+        }
+      },
+      "source": "faa_plume and render_aft_b3_booster: A stand-in for the booster's sea-level Raptor 3 until it is modelled as an engine of its own: the nozzle from faa_plume's Raptor table (Raptor 1-era, nothing published for Raptor 3) with the exit fitted, the rest estimated from render_aft_b3_booster. Built at lod \"low\" (33 engines)."
+    },
+    "aft_manifold": {
+      "value": {
+        "height": 0.31,
+        "tubes": 5,
+        "stands_out": 0.12,
+        "clamps": 36,
+        "clamp_height": 0.22,
+        "clamp_width": 0.19,
+        "clamp_stands_out": 0.18,
+        "rim_height": 0.5,
+        "rim_holes": 20,
+        "rim_hole": 0.12
+      },
+      "unit": "m",
+      "source": "render_aft_b3_booster: a bundle of five tubes round the aft end, about 20 px tall (0.31 m) with a clamp block every ~10 degrees (about 18 across the visible half, so 36), each about 14 x 12 px; below it a dark rim about 32 px (0.5 m) tall with square holes (about 10 across the visible half, so 20). Scaled by the 1.2 m nozzle exit (77 px). Estimated."
+    },
+    "aft_plate": {
+      "value": true,
+      "source": "render_aft_b3_booster: a dark plate the engines hang from, no heavy heat shield (caption: \"Move to Raptor 3 eliminates the need for heavy heatshields on the bottom of the booster\"); spacex_v3 adds shielding between the engines."
     }
   },
   "materials": {
@@ -314,6 +505,12 @@
       "metallic": 0.3,
       "roughness": 0.7,
       "source": "photo_b19_lift and photo_pad_f13: the fins are near-black like the tiles; not sampled separately."
+    },
+    "bracket_gold": {
+      "hex": "#b4a885",
+      "metallic": 1.0,
+      "roughness": 0.4,
+      "source": "photo_b19_lift, the gold base of the steel strut bracket at about 200 degrees (crown crop 900, 607; 9 x 9 px). One spot; the other samples there were tinted by the sky."
     }
   },
   "open_questions": [
@@ -337,6 +534,20 @@
     ]
   },
   "closeups": [
+    {
+      "name": "hot-stage crown",
+      "target": [
+        -4.2,
+        0,
+        69.5
+      ],
+      "look": [
+        -1,
+        -0.25,
+        0.15
+      ],
+      "radius": 4
+    },
     {
       "name": "hot stage and grid fins",
       "target": [

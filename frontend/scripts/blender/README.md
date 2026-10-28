@@ -367,4 +367,7 @@ Engines are models of their own and parts other models use (`lib/engines.py`; th
   `engines.place(engines.load(spec, "raptor3"), name, location, direction, lod="simple")`.
   The list makes the vehicle behind when the engine's spec changes (`lib/published.py`) and
   adds the engine's credits to the vehicle's. `lod="simple"` drops the plumbing and most
-  segments, for vehicles with many engines.
+  segments, for vehicles with a few engines; `lod="low"` (12 segments) is for clusters of
+  dozens (Super Heavy's 33).
+- Until an engine has a spec of its own, a vehicle can pass a sourced `engine` block from its
+  own spec straight to `engines.place` (Super Heavy's `from_photos.engine`, a Raptor stand-in).
