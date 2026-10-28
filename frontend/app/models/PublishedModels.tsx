@@ -42,7 +42,7 @@ export default function PublishedModels({ models, dashboard }: { models: Publish
   if (probe) {
     return (
       <div className={styles.page}>
-        <Header back>
+        <Header>
           <Link href="/models" className={styles.dim}>← models</Link>
           <span>{models.find((m) => m.probe === probe)!.title}</span>
         </Header>
@@ -78,14 +78,12 @@ function Sources({ sources }: { sources: Published["sources"] }) {
   );
 }
 
-// Links on the left, the name centred in the home page's title style, and on a model's own
-// page a Back button on the right (to the grid).
-function Header({ children, back = false }: { children: React.ReactNode; back?: boolean }) {
+// Links on the left, the name centred in the home page's title style.
+function Header({ children }: { children: React.ReactNode }) {
   return (
     <header className={styles.siteHeader}>
       <nav className={styles.siteLinks}>{children}</nav>
       <Link href="/" className={styles.siteName}>David van Vliet</Link>
-      {back && <Link href="/models" className={styles.backButton}>Back</Link>}
     </header>
   );
 }

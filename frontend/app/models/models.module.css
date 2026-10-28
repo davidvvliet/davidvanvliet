@@ -122,11 +122,6 @@
 .siteLinks { display: flex; flex-wrap: wrap; gap: 1.5rem; }
 .siteLinks a { color: inherit; text-decoration: none; }
 .siteLinks a.dim { color: #777; }
-.backButton {
-  justify-self: end; padding: 0.2rem 0.75rem; border: var(--line); border-radius: 4px;
-  color: #ededed; text-decoration: none;
-}
-.backButton:hover { background: #1a1a1a; }
 .siteName {
   font-family: var(--font-roboto-mono); font-size: 1rem; letter-spacing: -0.025em;
   color: #ededed; text-decoration: none;
@@ -135,7 +130,6 @@
   .siteName { font-size: 0.875rem; }
   .siteHeader { grid-template-columns: 1fr; gap: 0.4rem; padding: 0.5rem 0.75rem; }
   .siteHeader .siteName { order: -1; justify-self: center; }
-  .backButton { justify-self: start; }
 }
 
 /* A model's own view: the viewer, and its sources in a column on the right (below it on phones). */
