@@ -8,7 +8,7 @@
       "url": "https://web.archive.org/web/http://history.msfc.nasa.gov/saturn_apollo/documents/F-1_Engine.pdf",
       "read": "2026-10-28",
       "licence": "NASA, public domain",
-      "saved": "",
+      "saved": "refs/f1/factsheet_drawing.jpg",
       "credit": "NASA/MSFC, Saturn V News Reference F-1 fact sheet (drawing and data)"
     },
     {
@@ -71,7 +71,7 @@
       "url": "https://images-assets.nasa.gov/image/6862832/6862832~orig.jpg",
       "read": "2026-10-28",
       "licence": "NASA image library (images.nasa.gov), public domain",
-      "saved": "",
+      "saved": "refs/f1/side_6862832.jpg",
       "credit": "NASA/MSFC, photo of an F-1 engine assembly"
     },
     {
@@ -80,7 +80,7 @@
       "url": "https://images-assets.nasa.gov/image/0201422/0201422~orig.jpg",
       "read": "2026-10-28",
       "licence": "NASA image library (images.nasa.gov), public domain",
-      "saved": "",
+      "saved": "refs/f1/saturn_v_engines_0201422.jpg",
       "credit": "NASA/MSFC, photo of the Saturn V's F-1 engines"
     },
     {
@@ -89,7 +89,7 @@
       "url": "https://images-assets.nasa.gov/image/6413912/6413912~orig.jpg",
       "read": "2026-10-28",
       "licence": "NASA image library (images.nasa.gov), public domain",
-      "saved": "",
+      "saved": "refs/f1/powerhead_6413912.jpg",
       "credit": "NASA/MSFC, photo of an F-1 powerhead"
     }
   ],
