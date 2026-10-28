@@ -1,7 +1,7 @@
 # Is a published model (public/models/<probe>.glb) behind the repo? Exports differ byte for byte
 # between identical builds, so approve records a fingerprint of what the build reads instead,
 # in published.json (committed, so it is true for the repo):
-#   specs/<probe>.json, probes/<probe>.py, build.py, blender.json, lib/*.py (but this file), and the files in
+#   specs/<probe>.json (and the specs of the engines it lists), probes/<probe>.py, build.py, blender.json, lib/*.py (but this file), and the files in
 #   refs/<probe>/ (outside sources/) that the spec, probe script, build.py or lib/ name.
 # Plain Python (no bpy). app/api/models/[...path]/route.ts reads the same file for the dashboard.
 import glob, hashlib, json, os, re, time
@@ -15,6 +15,10 @@ def _hash(path):
 def inputs(probe):
     """{path relative to the harness: content hash} of everything the build of `probe` reads."""
     code = [f"specs/{probe}.json", f"probes/{probe}.py", "build.py", "blender.json"]
+    try:  # the engine specs a vehicle uses (lib/engines.py)
+        code += [f"specs/{e}.json" for e in json.load(open(os.path.join(HERE, code[0]))).get("engines", [])]
+    except (OSError, ValueError):
+        pass
     code += sorted(os.path.relpath(p, HERE) for p in glob.glob(os.path.join(HERE, "lib", "*.py"))
                    if os.path.basename(p) != "published.py")
     code = [c for c in code if os.path.exists(os.path.join(HERE, c))]

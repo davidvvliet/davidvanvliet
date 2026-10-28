@@ -8,6 +8,7 @@ Python; the command line needs only the system `python3`.
 - `lib/parts.py`: shared parts (dish, prism bus, box, truss/rod boom, RTG, panel, cylinder, strut, disc with UVs and hub, lathe, wheel, bent tube, decal), assemblies, joints and poses, in metres
 - `lib/materials.py`: the shared material list (foil, paint, metal, solar cells), merged with a spec's `materials`, and `image()` (image colour + normal map, optionally cut out by the image's alpha), Principled BSDF only
 - `lib/textures.py`: textures made at build time from `refs/` data (`engraved()`: colour + normal map from a line image; `marking()`: colour + cut-out for a decal from traced masks)
+- `lib/engines.py`: rocket and jet engines from an engine spec (nozzle contour, chamber, powerhead, pumps, pipes; nacelle, fan, core), full or simple, and `place` for putting them on a vehicle
 - `lib/rig.py`: review rig and contact sheet (front, three-quarter / side, top; metric grid on the orthographic views)
 - `lib/checks.py`: dimension checks measured from the built geometry, `attached`, `mounted`, `ground`, `joints`, `materials`, `textures`, triangle and file-size budgets (plus `sources`, from `lib/sources.py`)
 - `probes/<probe>.py`: one script per probe, `build(spec)` using `lib/`
@@ -289,7 +290,9 @@ value". The same check runs without Blender, during research:
 ```
 `object` is a part name, a list of names, or `"*"` for the whole probe. `measure` is `x`, `y`
 or `z` (world extent), `length` (along the first object's local Z) or `diameter` (twice the
-largest distance from that axis). Tolerance is relative, default 3%.
+largest distance from that axis). For nozzles (a hollow shell, measured alone): `throat_diameter`
+(the narrowest inner diameter along that axis) and `area_ratio` (exit over throat area, inner
+wall). Tolerance is relative, default 3%.
 
 Every build also checks `attached`: each part must touch (within 2 cm) or sit inside another,
 so nothing floats. A spec can list checks to skip in `skip_checks` (only the fixture does).
@@ -317,5 +320,21 @@ A spec's `sheet_frame` (`{"min": [x, y, z], "max": [...]}`) fixes the contact-sh
 both the build and `model:ref`, so the two sheets overlay exactly (the dashboard's build/reference
 toggle then works as a blink comparator). Build the probe in the reference model's frame.
 
-`testprobe`, `testrover` and `testplane` are fixtures (`"fixture": true`), not spacecraft: one of every part
+`testprobe`, `testrover`, `testplane` and `testengine` are fixtures (`"fixture": true`), not spacecraft: one of every part
 with made-up values, so changes to `lib/` show against their baselines. Fixtures are never published.
+
+## Engines
+Engines are models of their own and parts other models use (`lib/engines.py`; the
+`model-engine` skill covers research and modelling).
+- An engine's spec has an `engine` block (see the top of `lib/engines.py` for every key), each
+  value sourced like a dimension, plus the usual `sources`, `dimensions` (check the nozzle with
+  `diameter`, `throat_diameter`, `area_ratio`, `length`), `materials` and `budget`. Its probe
+  is two lines: `engines.build(spec["engine"], "<engine>", lod="full")`.
+- Frame: the thrust axis is local z, the nozzle exit (a jet's exhaust plane) at z = 0.
+- Nozzle contours: `parabola` (initial and exit wall angles, the usual approximation of a bell),
+  `cone`, or `traced` (the wall's profile measured from a side photo, scaled by the exit).
+- A vehicle lists the engines it uses in its spec (`"engines": ["raptor3"]`) and calls
+  `engines.place(engines.load(spec, "raptor3"), name, location, direction, lod="simple")`.
+  The list makes the vehicle behind when the engine's spec changes (`lib/published.py`) and
+  adds the engine's credits to the vehicle's. `lod="simple"` drops the plumbing and most
+  segments, for vehicles with many engines.

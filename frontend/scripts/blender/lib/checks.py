@@ -8,6 +8,10 @@
 #   x, y, z     world-space extent
 #   length      extent along the (first) object's local Z axis
 #   diameter    twice the largest distance from that axis
+#   throat_diameter  a nozzle's narrowest inner diameter about that axis: in thin slices
+#               along it, the innermost wall; the smallest of those (a hollow nozzle shell,
+#               measured alone, as lib/engines.py builds it)
+#   area_ratio  a nozzle's exit area over its throat area, both on the inner wall
 #   distance    between two points, "from" and "to" (no "object"); each is
 #               {"object": name, "at": "centre" | "bottom" | "top" | "origin"} or a spec
 #               `points` name; "axis": "x" | "y" | "z" measures along one axis only
@@ -48,6 +52,17 @@ def measure(objs, kind):
         return max(vals) - min(vals)
     if kind == "diameter":
         return 2 * max(((p - origin) - axis * (p - origin).dot(axis)).length for p in pts)
+    if kind in ("throat_diameter", "area_ratio"):
+        ts = [(p - origin).dot(axis) for p in pts]
+        rs = [((p - origin) - axis * t).length for p, t in zip(pts, ts)]
+        lo, hi = min(ts), max(ts)
+        # The gas side: in each slice the innermost wall (a hollow nozzle shell).
+        bins = {}
+        for t, r in zip(ts, rs):
+            k = min(int((t - lo) / ((hi - lo) or 1) * 100), 99)
+            bins[k] = min(bins.get(k, r), r)
+        throat = 2 * min(bins.values())
+        return throat if kind == "throat_diameter" else (2 * max(bins.values()) / throat) ** 2
     raise ValueError(f"unknown measure '{kind}'")
 
 def _point(ref, by_name, spec):
