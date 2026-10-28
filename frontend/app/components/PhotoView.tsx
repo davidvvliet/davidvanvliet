@@ -9,7 +9,7 @@ import PhotoGlobe from "./PhotoGlobe";
 import styles from "./PhotoView.module.css";
 
 const SIDE_GLOBE = 96; // beside a portrait photo, in the space next to it
-const ROW_GLOBE = 48; // under a landscape photo, at its left edge
+const ROW_GLOBE = 64; // under a landscape photo, at its left edge
 const GAP = 12; // least space kept on each side of the side globe
 
 export default function PhotoView({ photo, count, prevSlug, nextSlug, globe }: { photo: Photo; count: number; prevSlug: string; nextSlug: string; globe?: GlobePaths }) {
@@ -62,8 +62,8 @@ export default function PhotoView({ photo, count, prevSlug, nextSlug, globe }: {
           ) : (
             <Image key={photo.image} src={photo.image!} alt={photo.title ?? ""} fill sizes="(max-width: 768px) 100vw, 62vw" className={styles.image} />
           )}
-          {sideGlobe && <PhotoGlobe globe={globe} size={SIDE_GLOBE} spritePx={28} className={styles.sideGlobe} />}
-          {rowGlobe && <PhotoGlobe globe={globe} size={ROW_GLOBE} spritePx={18} className={styles.underGlobe} />}
+          {sideGlobe && <PhotoGlobe globe={globe} size={SIDE_GLOBE} spritePx={40} className={styles.sideGlobe} />}
+          {rowGlobe && <PhotoGlobe globe={globe} size={ROW_GLOBE} spritePx={30} className={styles.underGlobe} />}
         </div>
       </div>
       {photo.title && (

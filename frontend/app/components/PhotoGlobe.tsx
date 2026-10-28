@@ -2,7 +2,7 @@ import { useId } from "react";
 import type { GlobePaths } from "../photoTypes";
 import styles from "./PhotoView.module.css";
 
-const DOT_COLOR = "#5b9bff";
+const DOT_COLOR = "#1a4dff";
 
 // The home page's Earth as a still (paths from photoGlobe.ts), marked where the
 // photo was taken with the scene's star sprite (makeStarTexture in
