@@ -74,13 +74,9 @@
   stroke-opacity: 0.85;
 }
 
-.globeDot {
-  fill: #3d8bff;
-}
-
-.globeGlow {
-  fill: #3d8bff;
-  opacity: 0.3;
+/* The star sprite's additive blending. */
+.globeLight {
+  mix-blend-mode: plus-lighter;
 }
 
 /* Centred in the blank space between the pane's edge and the photo:
@@ -92,17 +88,11 @@
   transform: translateY(-50%);
 }
 
-/* Landscape: the globe left of the title and caption, the pair centred. */
-.row {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-.row .text {
-  text-align: left;
+/* Landscape: under the photo at its left edge, apart from the centred title. */
+.underGlobe {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
 }
 
 .text {
