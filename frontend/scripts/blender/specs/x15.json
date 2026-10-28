@@ -255,6 +255,12 @@
       "metallic": 1.0,
       "roughness": 0.3,
       "source": "nasm_x15, photo NASM2018-10038 (ball nose and the bare cone behind it): the 85th-97th percentile of brightness inside the cone and inside the ball, below blow-out, averaged (the darker pixels are reflections of the room); roughness estimated from the sharp reflections in the same photo"
+    },
+    "x15_glass": {
+      "hex": "#474b48",
+      "metallic": 0.0,
+      "roughness": 0.05,
+      "source": "nasm_x15, photo NASM2018-10039 (canopy window from the side): six spots on the glass away from the lamp's reflection, averaged; roughness estimated from the sharp reflections"
     }
   },
   "open_questions": [
@@ -552,100 +558,100 @@
         "top",
         "bottom"
       ],
-      "source": "nasa_tnd3343, Fig. 1 p.20: estimated from refs/x15/three-view-1966.png (TN D-3343 Fig. 1, rendered at 400 dpi), scaled by its 49.5 ft length (1695 px). Side view for the profile: windscreen from x 6.7 (z 1.8) to the flat top at x 9.5-11.5, then the aft fairing down to the fuselage top by x 16; the drawn top (2.77) is lowered by up to 0.2 ft so the depth over the canopy is Table I's 4.97 with the 2.40 bottom, tapering to no change where the fairing meets the fuselage. Front view for the width (half-width 1.2 at the windows, flat sides, so a superellipse of exponent 3); top view for the aft fairing's taper (half-width 0.95 at x 13 to a point at about x 16-17). The bottom points sit inside the fuselage, along the drawn canopy sill (z 1.2).",
+      "source": "nasa_tnd3343, Fig. 1 p.20: estimated from refs/x15/three-view-1966.png (TN D-3343 Fig. 1, rendered at 400 dpi), scaled by its 49.5 ft length (1695 px). Side view for the profile: windscreen a straight slope from x 6.8 (z 1.8) to the flat top at x 8.7, flat to x 11.7, then the aft fairing down to the fuselage top by x 16; the drawn top (2.77) is lowered by up to 0.2 ft so the depth over the canopy is Table I's 4.97 with the 2.40 bottom, tapering to no change where the fairing meets the fuselage. Front view for the width and photo NASM2018-10035 for the section: sides sloping in steeply to a rounded top, with the windows on the slopes facing up and forward, so a superellipse of exponent 1.6 whose half-width at the sill is 1.35 (the top view's frame is 1.46) (estimated); top view for the aft fairing's taper (half-width 0.95 at x 13 to a point at about x 16-17). The bottom points sit inside the fuselage, along the drawn canopy sill (z 1.2).",
       "stations": [
         [
           6.7,
-          0,
+          0.0,
           1.8,
           1.8
         ],
         [
           7.0,
-          0.8,
+          0.9,
           1.9,
           1.3
         ],
         [
           7.5,
-          1.0,
-          2.06,
+          1.125,
+          2.13,
           1.2
         ],
         [
           8.0,
-          1.1,
-          2.25,
+          1.238,
+          2.34,
           1.2
         ],
         [
           8.5,
-          1.15,
-          2.45,
-          1.2
-        ],
-        [
-          9.0,
-          1.18,
+          1.294,
           2.52,
           1.2
         ],
         [
+          9.0,
+          1.327,
+          2.57,
+          1.2
+        ],
+        [
           9.5,
-          1.2,
+          1.35,
           2.57,
           1.2
         ],
         [
           11.5,
-          1.2,
+          1.35,
           2.57,
           1.25
         ],
         [
           12.0,
-          1.15,
+          1.294,
           2.55,
           1.35
         ],
         [
           12.5,
-          1.05,
+          1.181,
           2.5,
           1.5
         ],
         [
           13.0,
-          0.95,
+          1.069,
           2.48,
           1.65
         ],
         [
           14.0,
-          0.78,
+          0.878,
           2.42,
           1.85
         ],
         [
           15.0,
-          0.55,
+          0.619,
           2.36,
           1.95
         ],
         [
           15.5,
-          0.4,
+          0.45,
           2.34,
           2.0
         ],
         [
           16.3,
-          0,
+          0.0,
           2.28,
           2.28
         ]
       ],
-      "exponent": 3.0
+      "exponent": 1.6
     },
     "wing": {
       "tip_le_x": 32.0,
@@ -669,6 +675,22 @@
     "ball_nose": {
       "axis_z": 0.39,
       "source": "nasa_tnd3343, Fig. 1 p.20: estimated from refs/x15/three-view-1966.png (TN D-3343 Fig. 1, rendered at 400 dpi), scaled by its 49.5 ft length (1695 px); side view, nose tip at z 0.44 and the section centre at x 1.4 at 0.39. Shape (round front, cone back to the base) estimated from the same drawing; length and base diameter are Jenkins's."
+    },
+    "canopy_windows": {
+      "unit": "ft",
+      "front_low": [
+        7.69,
+        1.86
+      ],
+      "front_high": [
+        8.71,
+        2.35
+      ],
+      "aft_x": 10.17,
+      "z_low": 1.81,
+      "z_high": 2.35,
+      "centre_post_half_width": 0.12,
+      "source": "nasa_tnd3343, Fig. 1 p.20: estimated from refs/x15/three-view-1966.png, scaled by its 49.5 ft length: the side view draws each window as a trapezoid from x 7.69 to 10.17 ft between z 1.81 and 2.35, its front edge sloping from (7.69, 1.86) to (8.71, 2.35); the top view draws the two windows meeting near the centreline at the front. The window is that outline projected sideways onto the canopy. Centre post half-width estimated from photo NASM2018-10035 (front view, a narrow post between the two panes)."
     }
   },
   "closeups": [

@@ -82,6 +82,43 @@ def build(spec):
                 rings.append([P(x, y, z) for y, z in parts.section(w, t, b, 32, dr["canopy"]["exponent"])])
         parts.loft("canopy", rings, material="x15_black")
 
+    # Windows: the drawn side-view outline projected sideways onto the canopy, as a thin pane
+    # standing a few millimetres out of it (a separate solid, so it never flickers).
+    cw, cs = dr["canopy_windows"], dr["canopy"]
+    ce = cs["exponent"]
+    (xa, za), (xb, zb) = cw["front_low"], cw["front_high"]
+
+    def hood(x):
+        w, t, b = lerp(cs["stations"], x)
+        return w, (t + b) / 2, (t - b) / 2
+
+    def on_hood(x, z, sign, out):
+        w, zc, h = hood(x)
+        v = min(abs(z - zc) / h, 0.9999)
+        y = w * (1 - v ** ce) ** (1 / ce)
+        gy = ce * (y / w) ** (ce - 1) / w
+        gz = ce * v ** (ce - 1) / h * (1 if z >= zc else -1)
+        n = math.hypot(gy, gz)
+        return P(x + 0, sign * (y + out * gy / n), z + out * gz / n)
+
+    def z_top(x):
+        w, zc, h = hood(x)
+        post = (1 - (cw["centre_post_half_width"] / w) ** ce) ** (1 / ce) * h + zc
+        front = za + (x - xa) * (zb - za) / (xb - xa)
+        return min(cw["z_high"], front, post)
+
+    x0 = xa + (cw["z_low"] - za) * (xb - xa) / (zb - za) + 0.02
+    pane = 0.02  # ft out of the canopy surface
+    for sign, side in parts.sides():
+        rings = []
+        for k in range(14):
+            x = x0 + (cw["aft_x"] - x0) * k / 13
+            zt = max(z_top(x), cw["z_low"] + 0.01)
+            zs = [cw["z_low"] + (zt - cw["z_low"]) * i / 9 for i in range(10)]
+            rings.append([on_hood(x, z, sign, pane) for z in zs] + [on_hood(x, z, sign, -pane) for z in reversed(zs)])
+        with parts.assembly(f"window_{side}"):
+            parts.loft(f"window_{side}", rings, material="x15_glass", smooth=False)
+
     with parts.assembly("ball_nose"):
         # The sensor: a sphere in a lip, then a straight cone (its afterbody) to the base,
         # which meets the fuselage's first station.
