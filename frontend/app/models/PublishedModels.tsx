@@ -9,7 +9,10 @@ import * as THREE from "three";
 import ModelsDashboard, { Viewer } from "./ModelsDashboard";
 import styles from "./models.module.css";
 
-type Published = { probe: string; title: string; thumb: boolean };
+export type Published = {
+  probe: string; title: string; thumb: boolean;
+  sources: { title: string; url: string; licence: string | null; cited: number }[];
+};
 
 // The card camera; scripts/blender/thumbnail.py renders the thumbnail from the same view.
 const FOV = 35;
@@ -38,13 +41,36 @@ export default function PublishedModels({ models, dashboard }: { models: Publish
             </Link>
           ))}
         </Header>
-        <div className={styles.viewCell} style={{ flex: 1, borderRight: "none" }}>
-          <Viewer probe={probe} url={`/models/${probe}.glb`} breakdown={null} stale={false} />
+        <div className={styles.detail}>
+          <div className={styles.viewCell}>
+            <Viewer probe={probe} url={`/models/${probe}.glb`} breakdown={null} stale={false} />
+          </div>
+          <Sources sources={models.find((m) => m.probe === probe)!.sources} />
         </div>
       </div>
     );
   }
   return <Grid models={models} />;
+}
+
+// The sources the model was built from (its spec's list), and how many of its values cite each.
+function Sources({ sources }: { sources: Published["sources"] }) {
+  return (
+    <aside className={styles.sources}>
+      <div className={styles.sourcesTitle}>Sources</div>
+      {sources.length === 0 && <div className={styles.dim}>None listed.</div>}
+      <ol>
+        {sources.map((s) => (
+          <li key={s.url}>
+            <a href={s.url} target="_blank" rel="noopener noreferrer">{s.title}</a>
+            <div className={styles.dim}>
+              {s.licence ?? "licence not given"}{s.cited ? ` · ${s.cited} ${s.cited === 1 ? "value" : "values"}` : ""}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </aside>
+  );
 }
 
 // Links on the left, the name centred in the home page's title style.
@@ -76,7 +102,7 @@ function Grid({ models }: { models: Published[] }) {
       <p className={styles.intro}>
         <span>
         These models were created step by step using my Blender x Opus 5.5 harness. Only the direct sources were
-        used in the creation of each of these models for maximum accuracy. The sources for each model can be found...
+        used in the creation of each of these models for maximum accuracy. The sources for each model are listed next to it when you open it.
         </span>
       </p>
       <div className={styles.gridArea}>
