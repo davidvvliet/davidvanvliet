@@ -83,7 +83,12 @@ def build(spec):
             if max(vx) <= x_end + 1e-4 and min(vx) >= x_end - 0.01:
                 face.use_smooth = False
         nz = spec["from_photos"]["nozzle"]["value"]
-        parts.cap_hole(body_obj, P(xs[-1], 0, 0), (-1, 0, 0), nz["plate_outer_r"])
+        # The nozzle sits in the middle of the base's outline (photo NASM-SI-2008-5570: an even
+        # black rim all round the bare plate), which is below the axis: the drawing's last
+        # station reaches higher below the axis than above it.
+        base = dr["fuselage"]["stations"][-1]
+        nz_z = (base[2] + base[3]) / 2
+        parts.cap_hole(body_obj, P(xs[-1], 0, nz_z), (-1, 0, 0), nz["plate_outer_r"])
     # Ribs across the fairings' flat end faces (photo NASM-SI-2008-5570): bars standing out of
     # the face, each cut to the face's width at its height (between the body and the fairing).
     rb = spec["from_photos"]["fairing_end_ribs"]["value"]
@@ -113,15 +118,15 @@ def build(spec):
     with parts.assembly("nozzle"):
         x0, t = xs[-1], 0.02
         parts.lathe("nozzle_plate", [(nz["plate_outer_r"], 0), (nz["plate_outer_r"], t), (nz["rim_r"], t), (nz["rim_r"], 0)],
-                    location=P(x0, 0, 0), direction=(1, 0, 0), segments=64, closed=True, material="x15_nozzle_plate", smooth=False)
+                    location=P(x0, 0, nz_z), direction=(1, 0, 0), segments=64, closed=True, material="x15_nozzle_plate", smooth=False)
         parts.lathe("nozzle_rim", [(nz["rim_r"], -0.01), (nz["rim_r"], 0.03), (nz["rim_r"] - 0.017, 0.03), (nz["rim_r"] - 0.017, -0.01)],
-                    location=P(x0, 0, 0), direction=(1, 0, 0), segments=64, closed=True, material="x15_nozzle_rim", smooth=False)
+                    location=P(x0, 0, nz_z), direction=(1, 0, 0), segments=64, closed=True, material="x15_nozzle_rim", smooth=False)
         L, rt = nz["depth"], nz["throat_r"]
         rl = nz["rim_r"] - 0.017
         parts.lathe("nozzle_liner", [(rl, 0.03), (rt, L), (rt + t, L), (rl + t, 0.03)],
-                    location=P(x0, 0, 0), direction=(1, 0, 0), segments=64, closed=True, material="x15_nozzle_liner")
+                    location=P(x0, 0, nz_z), direction=(1, 0, 0), segments=64, closed=True, material="x15_nozzle_liner")
         parts.lathe("nozzle_throat", [(0, L - 0.01), (rt + t, L - 0.01), (rt + t, L + 0.01), (0, L + 0.01)],
-                    location=P(x0, 0, 0), direction=(1, 0, 0), segments=32, material="x15_black")
+                    location=P(x0, 0, nz_z), direction=(1, 0, 0), segments=32, material="x15_black")
 
     # Canopy (photos NASM-SI-2007-12573, -12578, NASM-SI-2008-5563, -5565): a round tube (upright
     # sides under the front view's arch) whose front is a sharp V: two flat faces cut back from the
