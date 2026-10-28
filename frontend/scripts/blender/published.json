@@ -93,16 +93,16 @@
   }
  },
  "x15": {
-  "approved": "2026-10-28 16:50",
+  "approved": "2026-10-28 17:03",
   "inputs": {
-   "specs/x15.json": "09aa79e1e6d07ad1",
+   "specs/x15.json": "44e5de9b47eac729",
    "probes/x15.py": "68f879e250926c0e",
    "build.py": "6046dd94ba4984fb",
    "blender.json": "7bbc071b6e396ec4",
    "lib/__init__.py": "e3b0c44298fc1c14",
    "lib/bake.py": "74d319683d9c87d6",
    "lib/checks.py": "b0a01db9668643a9",
-   "lib/livery.py": "5cc818898d1645ae",
+   "lib/livery.py": "01e8ff81f415aa81",
    "lib/materials.py": "a56545e8f35429f2",
    "lib/parts.py": "0c7a2b5bf5d6443d",
    "lib/rig.py": "87431e5e6051f10e",
