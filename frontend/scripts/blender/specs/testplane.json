@@ -4,9 +4,54 @@
   "note": "Harness fixture, not a real aircraft: the aircraft parts (fuselage, surface, loft) with design values chosen here. Frame: x forward, y left, z up.",
   "sources": [],
   "dimensions": {
-    "length": {"value": 7.0, "object": "fuselage", "measure": "x", "source": "design value"},
-    "wing_span": {"value": 6.0, "object": ["wing_left", "wing_right"], "measure": "y", "source": "design value"},
-    "fin_top": {"value": 1.6, "measure": "distance", "from": {"object": "fuselage", "at": "centre"}, "to": {"object": "fin", "at": "top"}, "axis": "z", "tolerance": 0.05, "source": "design value"}
+    "length": {
+      "value": 7.0,
+      "object": "fuselage",
+      "measure": "x",
+      "source": "design value"
+    },
+    "wing_span": {
+      "value": 6.0,
+      "object": [
+        "wing_left",
+        "wing_right"
+      ],
+      "measure": "y",
+      "source": "design value"
+    },
+    "fin_top": {
+      "value": 1.6,
+      "measure": "distance",
+      "from": {
+        "object": "fuselage",
+        "at": "centre"
+      },
+      "to": {
+        "object": "fin",
+        "at": "top"
+      },
+      "axis": "z",
+      "tolerance": 0.05,
+      "source": "design value"
+    }
   },
-  "budget": {"triangles": 50000, "glb_bytes": 1500000}
+  "budget": {
+    "triangles": 50000,
+    "glb_bytes": 1500000
+  },
+  "materials": {
+    "decal_paint": {
+      "hex": "#c8202a",
+      "metallic": 0.0,
+      "roughness": 0.5
+    }
+  },
+  "mounts": {
+    "decal_side": {
+      "on": "fuselage"
+    },
+    "decal_top": {
+      "on": "fuselage"
+    }
+  }
 }

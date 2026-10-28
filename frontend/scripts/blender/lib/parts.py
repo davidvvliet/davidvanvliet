@@ -608,3 +608,84 @@ def surface(name, root_le, root_chord, tip_le, tip_chord, thickness, kind="lens"
     bm = bmesh.new()
     _loft(bm, [ring(span[0]), ring(span[1])])
     return _object(name, bm, material, Matrix(), parent, smooth=False)
+
+# --- Painted markings -----------------------------------------------------------------
+
+def _host_tree(host):
+    from mathutils.bvhtree import BVHTree
+    dg = bpy.context.evaluated_depsgraph_get()
+    ev = host.evaluated_get(dg)
+    mesh = ev.to_mesh()
+    mw = ev.matrix_world.copy()
+    verts = [mw @ v.co for v in mesh.vertices]
+    mesh.calc_loop_triangles()
+    tree = BVHTree.FromPolygons(verts, [t.vertices[:] for t in mesh.loop_triangles])
+    ev.to_mesh_clear()
+    return tree
+
+def decal(name, host, center, direction, up, width, height, material, lift=0.002, step=0.02,
+          parent=None):
+    """A painted marking (lettering, an insignia) on a curved skin: a sheet laid on `host`,
+    `lift` m off it, so it follows the curve and never flickers against it. `center` is a
+    point at the marking's middle (on or near the skin), `direction` the way it is looked at
+    (into the skin), `up` the image's top. `width` x `height` is measured along the skin: the
+    sheet wraps by arc length, so lettering keeps its size where the skin curves away. Its
+    UVs cover the image's [0, 1]^2; give it a cut-out material (`materials.image(...,
+    cutout=True)` with a `textures.marking` image). Every vertex is in the vertex group "back",
+    which the `mounted` check reads as the face on the host. Raises if any of it misses."""
+    d = Vector(direction).normalized()
+    v0 = Vector(up) - d * Vector(up).dot(d)
+    if v0.length < 1e-6:
+        raise ValueError(f"decal {name}: `up` is along `direction`")
+    v0.normalize()
+    u0 = d.cross(v0)  # the image's right, seen from the front
+    c0 = Vector(center)
+    tree = _host_tree(host)
+    reach = 2 * max(width, height) + 1.0
+
+    def cast(p):
+        hit, normal, _, _ = tree.ray_cast(p - d * reach, d, 2 * reach)
+        if hit is None:
+            raise ValueError(f"decal {name}: misses {host.name} near {tuple(round(x, 3) for x in p)}")
+        return hit, (normal if normal.dot(d) < 0 else -normal)
+
+    def wrap(line, length, n):
+        """Plane offsets along `line(t)` whose arc lengths on the skin, from t = 0, are evenly
+        spaced over `length` (n + 1 of them). The skin is never shorter than the plane, so
+        sampling t over +-length/2 always reaches the ends."""
+        k = 64
+        ts = [length * (i / k - 0.5) for i in range(k + 1)]
+        pts = [cast(line(t))[0] for t in ts]
+        arc = [0.0]
+        for a, b in zip(pts, pts[1:]):
+            arc.append(arc[-1] + (b - a).length)
+        zero = arc[k // 2]
+        arc = [a - zero for a in arc]
+        out = []
+        for i in range(n + 1):
+            target = length * (i / n - 0.5)
+            j = next((j for j in range(k) if arc[j + 1] >= target), k - 1)
+            f = (target - arc[j]) / (arc[j + 1] - arc[j]) if arc[j + 1] > arc[j] else 0.0
+            out.append(ts[j] + (ts[j + 1] - ts[j]) * min(max(f, 0.0), 1.0))
+        return out
+
+    nu, nv = max(1, math.ceil(width / step)), max(1, math.ceil(height / step))
+    us = wrap(lambda t: c0 + u0 * t, width, nu)
+    bm = bmesh.new()
+    uv = bm.loops.layers.uv.new("UVMap")
+    grid = []
+    for s in us:
+        vs = wrap(lambda t, s=s: c0 + u0 * s + v0 * t, height, nv)
+        col = []
+        for t in vs:
+            hit, normal = cast(c0 + u0 * s + v0 * t)
+            col.append(bm.verts.new(hit + normal * lift))
+        grid.append(col)
+    for i in range(nu):
+        for j in range(nv):
+            f = bm.faces.new((grid[i][j], grid[i + 1][j], grid[i + 1][j + 1], grid[i][j + 1]))
+            for loop, (a, b) in zip(f.loops, ((i, j), (i + 1, j), (i + 1, j + 1), (i, j + 1))):
+                loop[uv].uv = (a / nu, b / nv)
+    obj = _object(name, bm, material, Matrix(), parent, smooth=True)
+    obj.vertex_groups.new(name="back").add(list(range(len(obj.data.vertices))), 1.0, "REPLACE")
+    return obj

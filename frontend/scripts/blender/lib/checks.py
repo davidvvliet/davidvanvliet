@@ -176,13 +176,18 @@ def _world(o):
 
 def mounted(part, host):
     """Problems with `part` sitting flush on `host`: its back face (lowest local z, the side
-    parts are built from) must lie on the host's surface everywhere, so a disc hanging over
-    an edge or corner fails, and no vertex may be buried inside the host. [] when it's fine."""
+    parts are built from, or the vertex group "back" when it has one: a decal) must lie on the
+    host's surface everywhere, so a disc hanging over an edge or corner fails, and no vertex
+    may be buried inside the host. [] when it's fine."""
     pv, pl, _ = _world(part)
     hv, _, ht = _world(host)
     tree = BVHTree.FromPolygons(hv, ht)
-    zmin = min(v.z for v in pl)
-    back = [w for w, l in zip(pv, pl) if l.z - zmin < 1e-4]
+    group = part.vertex_groups.get("back")
+    if group is not None:
+        back = [w for w, v in zip(pv, part.data.vertices) if any(g.group == group.index for g in v.groups)]
+    else:
+        zmin = min(v.z for v in pl)
+        back = [w for w, l in zip(pv, pl) if l.z - zmin < 1e-4]
     def signed(v):
         hit, normal, _, dist = tree.find_nearest(v)
         return dist if (v - hit).dot(normal) >= 0 else -dist
@@ -290,9 +295,31 @@ def textures(objs, glb):
             problems.append(f"{o.name}: UVs outside the image ({min(co):.2f}..{max(co):.2f})")
     if not images and not problems:
         return None
-    exported = len(_glb_json(glb).get("images", []))
+    doc = _glb_json(glb)
+    exported = len(doc.get("images", []))
     if exported < len(images):
         problems.append(f"export carries {exported} of {len(images)} images")
+    # Cut-out materials (decals): alpha rounded into the BSDF's Alpha. The export must say
+    # MASK, and the image must have transparent pixels, else the decal shows as a rectangle.
+    modes = {m.get("name"): m.get("alphaMode", "OPAQUE") for m in doc.get("materials", [])}
+    seen = set()
+    for o in objs:
+        for mat in (m for m in o.data.materials if m and m.node_tree and m.name not in seen):
+            seen.add(mat.name)
+            clip = next((n for n in mat.node_tree.nodes if n.type == "MATH" and n.operation == "ROUND"
+                         and any(l.to_socket.name == "Alpha" for l in n.outputs[0].links)), None)
+            if clip is None:
+                continue
+            if modes.get(mat.name) != "MASK":
+                problems.append(f"{mat.name}: cut-out in Blender, exported as {modes.get(mat.name)}")
+            src = clip.inputs[0].links[0].from_node if clip.inputs[0].links else None
+            img = getattr(src, "image", None)
+            if img is not None and img.size[0]:
+                import numpy as np
+                px = np.empty(img.size[0] * img.size[1] * 4, np.float32)
+                img.pixels.foreach_get(px)
+                if img.channels < 4 or px[3::4].min() >= 0.5:
+                    problems.append(f"{mat.name}: image {img.name} has no transparent pixels")
     return problems
 
 MATERIAL_TOL = 2e-3

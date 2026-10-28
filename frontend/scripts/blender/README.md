@@ -5,9 +5,9 @@ renders a contact sheet and exports `.glb` files for the site. Runs on Blender's
 Python; the command line needs only the system `python3`.
 
 ## Layout
-- `lib/parts.py`: shared parts (dish, prism bus, box, truss/rod boom, RTG, panel, cylinder, strut, disc with UVs and hub, lathe, wheel, bent tube), assemblies, joints and poses, in metres
-- `lib/materials.py`: the shared material list (foil, paint, metal, solar cells), merged with a spec's `materials`, and `image()` (image colour + normal map), Principled BSDF only
-- `lib/textures.py`: textures made at build time from `refs/` data (`engraved()`: colour + normal map from a line image)
+- `lib/parts.py`: shared parts (dish, prism bus, box, truss/rod boom, RTG, panel, cylinder, strut, disc with UVs and hub, lathe, wheel, bent tube, decal), assemblies, joints and poses, in metres
+- `lib/materials.py`: the shared material list (foil, paint, metal, solar cells), merged with a spec's `materials`, and `image()` (image colour + normal map, optionally cut out by the image's alpha), Principled BSDF only
+- `lib/textures.py`: textures made at build time from `refs/` data (`engraved()`: colour + normal map from a line image; `marking()`: colour + cut-out for a decal from traced masks)
 - `lib/rig.py`: review rig and contact sheet (front, three-quarter / side, top; metric grid on the orthographic views)
 - `lib/checks.py`: dimension checks measured from the built geometry, `attached`, `mounted`, `ground`, `joints`, `materials`, `textures`, triangle and file-size budgets (plus `sources`, from `lib/sources.py`)
 - `probes/<probe>.py`: one script per probe, `build(spec)` using `lib/`
@@ -142,6 +142,40 @@ is geometry and the image needs no transparency.
 Builds with textured parts also check `textures`: every image has pixels, textured parts have
 UVs inside the image, and the export carries every image.
 
+## Painted markings (decals)
+
+Paint on a curved skin (lettering, insignia, stripes) is a decal: `parts.decal()` lays a sheet
+on the host part, 2 mm off its skin (`lift`), so it follows the curve and never flickers:
+
+```python
+paint = materials.colour(spec["materials"]["marking_paint"])          # a sourced spec material
+img = textures.marking("lettering", [(os.path.join(REFS, "lettering-mask.png"), paint)],
+                       os.path.join(HARNESS, "out", probe, "textures"))
+mat = materials.image("lettering", img, metallic=0.0, roughness=0.5, cutout=True)
+with parts.assembly("lettering_left"):
+    parts.decal("lettering_left", body, center=(x, y, z), direction=(0, -1, 0), up=(0, 0, 1),
+                width=1.8, height=0.35, material=mat)
+```
+
+- `center` is the marking's middle, on or near the skin; `direction` is the way it is looked
+  at (into the skin); `up` is the image's top. `width` x `height` are measured along the skin:
+  the sheet wraps by arc length, so a marking keeps its painted size where the skin curves away
+  (a flat projection of the fixture's 0.6 m nose decal would be 13% short). It raises if any of
+  it misses the host.
+- The image is a mask per colour, traced from a photo (white = paint, grey PNG, all the same
+  size, covering the decal), painted in the spec's sourced colours by `textures.marking()`.
+  Colours never come from the mask.
+- `materials.image(..., cutout=True)` rounds the image's alpha into the shader, which exports as
+  glTF `alphaMode: MASK`: sharp edges, no transparency sorting, drawn as a cut-out by the site.
+- Give every decal its own assembly (the viewer focuses one per click) and list it in the
+  spec's `mounts`. Decal vertices are in the vertex group "back", which `mounted` reads as the
+  face on the host, so a decal floating more than 3 mm off or sunk more than 2 mm in fails.
+  `textures` also fails a cut-out material that doesn't export as MASK, or whose image has no
+  transparent pixels (it would show as a rectangle).
+- Place a marking from photos the way the X-15's windows were: fit a camera to the photo, cast
+  the marking's corners onto the model, and note it as estimated from that photo.
+- `testplane` has two decals (a flat-ish side and the curved nose).
+
 ## Baked colour
 
 A spec with a `bake` section (see `specs/perseverance.json`) gets one colour atlas for all
@@ -253,7 +287,7 @@ so nothing floats. A spec can list checks to skip in `skip_checks` (only the fix
 
 Parts that sit on a surface go in the spec's `mounts` (`{"golden_record": {"on": "bus"}}`).
 The `mounted` check fails if the part's back face (its lowest local Z, where parts are built
-from) is more than 3 mm off the host anywhere, or if any of it is more than 2 mm inside the host.
+from, or its vertex group "back": decals) is more than 3 mm off the host anywhere, or if any of it is more than 2 mm inside the host.
 That catches a plaque hanging over an edge, half buried, or floating.
 
 `run.py explode <probe> <model>` (npm `model:explode`, after a build) breaks a reference

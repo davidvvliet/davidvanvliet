@@ -66,9 +66,11 @@ def get(name):
     mat.diffuse_color = (*color, 1.0)  # viewport solid-mode colour
     return mat
 
-def image(name, base, normal=None, metallic=1.0, roughness=0.35):
+def image(name, base, normal=None, metallic=1.0, roughness=0.35, cutout=False):
     """Principled material with an image base colour and optional normal map, in the node
-    layout the glTF exporter turns into baseColorTexture / normalTexture."""
+    layout the glTF exporter turns into baseColorTexture / normalTexture. `cutout`: the image's
+    alpha cuts the surface out (alpha rounded, so the export is alphaMode MASK: sharp edges,
+    no sorting), for decals made with `textures.marking`."""
     mat = bpy.data.materials.get(name)
     if mat is not None:
         bpy.data.materials.remove(mat)
@@ -81,6 +83,11 @@ def image(name, base, normal=None, metallic=1.0, roughness=0.35):
     tex = nt.nodes.new("ShaderNodeTexImage")
     tex.image = base
     nt.links.new(tex.outputs["Color"], bsdf.inputs["Base Color"])
+    if cutout:
+        clip = nt.nodes.new("ShaderNodeMath")
+        clip.operation = "ROUND"
+        nt.links.new(tex.outputs["Alpha"], clip.inputs[0])
+        nt.links.new(clip.outputs["Value"], bsdf.inputs["Alpha"])
     if normal is not None:
         ntex = nt.nodes.new("ShaderNodeTexImage")
         ntex.image = normal
