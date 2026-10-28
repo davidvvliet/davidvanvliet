@@ -363,10 +363,13 @@
         "stands_out": 4.0,
         "thickness": 1.2,
         "top_below_booster_top": 6.2,
-        "width": 4.0
+        "width": 4.0,
+        "pitch": 0.57,
+        "notch": 0.35,
+        "wall": 0.05
       },
       "unit": "m",
-      "source": "photo_pad_f13_close: the side fins stand out about 105 px from a 230 px (9 m) body and are about 30 px thick; photo_pad_f13: the fins' tops are about 51 px below the top of the hot-stage ring. Estimated: the close photo looks up from below, so expect a few percent of error. Shape: a grid of cells in a flat box, wider than it stands out, its outer edge serrated (photo_b19_lift). Width along the circumference: the heat-shield-side fin in photo_pad_f13_close is about 100 px wide on the 230 px body, 3.9 m. photo_b19_lift shows both side fins at the same height, about 5.8 m below the top (pad photo 6.2 m)."
+      "source": "photo_pad_f13_close: the side fins stand out about 105 px from a 230 px (9 m) body and are about 30 px thick; photo_pad_f13: the fins' tops are about 51 px below the top of the hot-stage ring. Estimated: the close photo looks up from below, so expect a few percent of error. Shape: a grid of cells in a flat box, wider than it stands out, its outer edge serrated (photo_b19_lift). Width along the circumference: the heat-shield-side fin in photo_pad_f13_close is about 100 px wide on the 230 px body, 3.9 m. photo_b19_lift shows both side fins at the same height, about 5.8 m below the top (pad photo 6.2 m). Lattice: photo_b19_lift shows the fins' edges serrated, about 11 teeth along 342 px of a 680 px (9 m) body, so a tooth every 0.41 m; with walls at +-45 degrees, teeth fall every pitch/sqrt2 along an edge, so a wall spacing of 0.57 m. The teeth are cut about 0.35 m deep on the bottom edge; the top edge looks straight in the photo, so it isn't notched. Wall thickness 0.05 m estimated."
     },
     "booster_engines_below_skirt": {
       "value": 2.4,

@@ -84,9 +84,10 @@ def build(spec):
         gf = P["grid_fin"]
         zc = hb - gf["top_below_booster_top"] - gf["thickness"] / 2
         for a, tag in ((90, "left"), (-90, "right"), (0, "windward")):
-            parts.box(f"grid_fin_{tag}", (gf["stands_out"] + 0.1, gf["width"], gf["thickness"]),
-                      location=_at(a, R + gf["stands_out"] / 2 - 0.05, zc), roll_deg=a,
-                      material="grid_fin")
+            parts.grid_fin(f"grid_fin_{tag}", gf["stands_out"] + 0.1, gf["width"], gf["thickness"],
+                           gf["pitch"], location=_at(a, R - 0.1, zc), direction=_at(a, 1, 0),
+                           wall=gf["wall"], notch=gf["notch"], notch_top=0.0,
+                           material="grid_fin")
 
     # --- Starship ----------------------------------------------------------------------
     with parts.assembly("ship"):

@@ -658,6 +658,85 @@ def surface(name, root_le, root_chord, tip_le, tip_chord, thickness, kind="lens"
     _loft(bm, [ring(span[0]), ring(span[1])])
     return _object(name, bm, material, Matrix(), parent, smooth=False)
 
+def _notched_wall(bm, a, b, h, notch, wall, notch_top=None):
+    """A thin wall standing on the plan segment a-b (local z up), 2h tall and centred on
+    z = 0. `notch` cuts a V into its bottom edge at the middle, `notch_top` into its top
+    (default: the same as the bottom)."""
+    nt = notch if notch_top is None else notch_top
+    a, b, up = Vector(a), Vector(b), Vector((0, 0, 1))
+    side = (b - a).cross(up).normalized() * (wall / 2)
+    m = (a + b) / 2
+    outline = [a - up * h, m - up * (h - notch), b - up * h, b + up * h, m + up * (h - nt),
+               a + up * h]
+    front = [bm.verts.new(p + side) for p in outline]
+    back = [bm.verts.new(p - side) for p in outline]
+    bm.faces.new(list(reversed(front)))
+    bm.faces.new(back)
+    for i in range(6):
+        j = (i + 1) % 6
+        bm.faces.new((front[i], front[j], back[j], back[i]))
+
+def grid_fin(name, span, width, thickness, pitch, location=(0, 0, 0), direction=(1, 0, 0),
+             up=(0, 0, 1), wall=0.05, notch=0.0, notch_top=None, material="dark_metal",
+             parent=None):
+    """A lattice grid fin: a rectangular frame `span` out from `location` (the middle of its
+    root edge) along `direction`, `width` across and `thickness` deep along `up`, filled with
+    two families of walls at +-45 degrees, `pitch` apart. `notch` cuts a V into the top and
+    bottom edge of every wall between crossings (the serrated edges of Starship's fins);
+    `notch_top` sets the top edge's separately (default: the same)."""
+    n = Vector(direction).normalized()
+    v = Vector(up) - n * Vector(up).dot(n)
+    v.normalize()
+    m = Matrix((n, v.cross(n), v)).transposed().to_4x4()   # local x out, y across, z up
+    m.translation = Vector(location)
+    bm = bmesh.new()
+    h, w2 = thickness / 2, width / 2
+    step = pitch * math.sqrt(2)          # spacing of one family's lines along x
+    eps = 1e-6
+    lines = [-w2 - span + step / 2 + j * step for j in range(int((span + 2 * w2) / step) + 2)]
+    edge_hits = {"side": set(), "tip": set()}
+    for k in (1, -1):
+        d = Vector((1, k, 0)) / math.sqrt(2)
+        for c in lines:                  # the line x - k*y = c, through (c, 0)
+            p0 = Vector((c, 0, 0))
+            ts = []
+            for t in ((-c) * math.sqrt(2), (span - c) * math.sqrt(2),
+                      (-w2) * k * math.sqrt(2), w2 * k * math.sqrt(2)):
+                p = p0 + d * t
+                if -eps <= p.x <= span + eps and -w2 - eps <= p.y <= w2 + eps:
+                    ts.append(t)
+            if len(ts) < 2 or max(ts) - min(ts) < eps:
+                continue
+            t0, t1 = min(ts), max(ts)
+            for t in (t0, t1):
+                p = p0 + d * t
+                if abs(abs(p.y) - w2) < 1e-5:
+                    edge_hits["side"].add(round(p.x, 5))
+                elif abs(p.x - span) < 1e-5:
+                    edge_hits["tip"].add(round(p.y, 5))
+            # The other family's lines (x + k*y = c') cross this one at t = (c' - c) / sqrt2.
+            cuts = sorted({t0, t1} | {(c2 - c) / math.sqrt(2) for c2 in lines
+                                      if t0 < (c2 - c) / math.sqrt(2) < t1})
+            for s, e in zip(cuts, cuts[1:]):
+                full = e - s > pitch * 0.9
+                _notched_wall(bm, p0 + d * s, p0 + d * e, h, notch if full else 0.0, wall,
+                              (notch if notch_top is None else notch_top) if full else 0.0)
+    # The frame: notched between the points where the lattice meets it; the root edge (on
+    # the vehicle) stays straight.
+    def frame_edge(a, b, along):
+        a, b = Vector(a), Vector(b)
+        L = (b - a).length
+        cuts = sorted({0.0, L} | {x for x in along if eps < x < L - eps})
+        for s, e in zip(cuts, cuts[1:]):
+            _notched_wall(bm, a + (b - a) * (s / L), a + (b - a) * (e / L), h,
+                          notch if e - s > pitch * 0.5 else 0.0, wall,
+                          (notch if notch_top is None else notch_top) if e - s > pitch * 0.5 else 0.0)
+    frame_edge((0, -w2, 0), (span, -w2, 0), edge_hits["side"])
+    frame_edge((0, w2, 0), (span, w2, 0), edge_hits["side"])
+    frame_edge((span, -w2, 0), (span, w2, 0), [y + w2 for y in edge_hits["tip"]])
+    frame_edge((0, -w2, 0), (0, w2, 0), [])
+    return _object(name, bm, material, m, parent)
+
 # --- Painted markings -----------------------------------------------------------------
 
 def _host_tree(host):
