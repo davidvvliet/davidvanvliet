@@ -3,6 +3,10 @@ import type { GlobePaths } from "../photoTypes";
 import styles from "./PhotoView.module.css";
 
 const DOT_COLOR = "#1a4dff";
+// The sprite's body (core and halo) drawn larger than in the texture, so the
+// marker reads as a dot and not just spikes; the spikes keep their length.
+const CORE_SCALE = 2;
+const HALO_SCALE = 1.4;
 
 // The home page's Earth as a still (paths from photoGlobe.ts), marked where the
 // photo was taken with the scene's star sprite (makeStarTexture in
@@ -26,13 +30,13 @@ export default function PhotoGlobe({ globe, size, spritePx, className }: { globe
     <svg viewBox="-50 -50 100 100" width={size} height={size} className={`${styles.globe} ${className ?? ""}`} aria-hidden="true">
       <path d={globe.grid} className={styles.globeGrid} />
       <path d={globe.land} className={styles.globeLand} />
-      <radialGradient id={`${id}h`} gradientUnits="userSpaceOnUse" cx={0} cy={0} r={64 * s}>
+      <radialGradient id={`${id}h`} gradientUnits="userSpaceOnUse" cx={0} cy={0} r={64 * HALO_SCALE * s}>
         <stop offset={0} stopColor={DOT_COLOR} stopOpacity={1} />
         <stop offset={0.15} stopColor={DOT_COLOR} stopOpacity={0.65} />
         <stop offset={0.5} stopColor={DOT_COLOR} stopOpacity={0.15} />
         <stop offset={1} stopColor={DOT_COLOR} stopOpacity={0} />
       </radialGradient>
-      <radialGradient id={`${id}c`} gradientUnits="userSpaceOnUse" cx={0} cy={0} r={11.52 * s}>
+      <radialGradient id={`${id}c`} gradientUnits="userSpaceOnUse" cx={0} cy={0} r={11.52 * CORE_SCALE * s}>
         <stop offset={0} stopColor={DOT_COLOR} stopOpacity={1} />
         <stop offset={0.6} stopColor={DOT_COLOR} stopOpacity={1} />
         <stop offset={1} stopColor={DOT_COLOR} stopOpacity={0} />
@@ -41,8 +45,8 @@ export default function PhotoGlobe({ globe, size, spritePx, className }: { globe
       {spike(90, 128, 2.2, 0.9)}
       {spike(45, 70.4, 1.4, 0.35)}
       {spike(-45, 70.4, 1.4, 0.35)}
-      <circle r={64 * s} fill={`url(#${id}h)`} className={styles.globeLight} />
-      <circle r={11.52 * s} fill={`url(#${id}c)`} className={styles.globeLight} />
+      <circle r={64 * HALO_SCALE * s} fill={`url(#${id}h)`} className={styles.globeLight} />
+      <circle r={11.52 * CORE_SCALE * s} fill={`url(#${id}c)`} className={styles.globeLight} />
     </svg>
   );
 }
