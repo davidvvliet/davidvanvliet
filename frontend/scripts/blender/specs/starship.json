@@ -453,11 +453,26 @@
             "below_tip": 8.3,
             "size": 0.65,
             "shape": "square"
+          },
+          {
+            "deg": 131,
+            "below_tip": 3.4,
+            "size": 0.3
+          },
+          {
+            "deg": 123,
+            "below_tip": 18.4,
+            "size": 0.27
+          },
+          {
+            "deg": 106,
+            "below_tip": 27.9,
+            "size": 0.22
           }
         ]
       },
       "unit": "m, degrees from +x",
-      "source": "photo_wdr: dark round openings on the leeward steel at (x, y) 2727,921 (15 px, 0.57 m); 2658,987 (7 px); 2595,1568; 2635,1598; 2571,1746 (7-8 px, 0.26-0.29 m); and a dark square on the nose at 2658,752 (17 px, 0.65 m). Heights at 0.0428 m/px below the tip (y 557). Angles as for the raceways: from each spot's offset from the body's axis in photo_wdr (x 2647 above the flaps, x 2637 at the aft end; half-widths 117.5 and 127 px), with the camera looking along 130 degrees. Only the openings visible in this photo are placed; the far side isn't seen. The lowest sits on the ribbed skirt, so its decal is lifted over the rib sheet. Masks are plain generated shapes (refs/starship/port_round.png, port_square.png)."
+      "source": "photo_wdr: dark round openings on the leeward steel at (x, y) 2727,921 (15 px, 0.57 m); 2658,987 and 2632,986 (a pair, 7 px); 2649,637 on the nose (8 px, 0.3 m); 2600,1210 (6 px, 0.22 m); 2595,1568; 2635,1598; 2571,1746 (7-8 px, 0.26-0.29 m); and a dark square on the nose at 2658,752 (17 px, 0.65 m). Heights at 0.0428 m/px below the tip (y 557). Angles as for the raceways: from each spot's offset from the body's axis in photo_wdr (x 2647 above the flaps, x 2637 at the aft end; half-widths 117.5 and 127 px), with the camera looking along 130 degrees. Only the openings visible in this photo are placed; the far side isn't seen. The lowest sits on the ribbed skirt, so its decal is lifted over the rib sheet. Masks are plain generated shapes (refs/starship/port_round.png, port_square.png). Found by scanning the leeward side for small spots much darker than their surroundings (crops x 2500-2790, y 600-1780), then checking each by eye: the rest were raceway joints, hinge parts, the walkway and frost shadows. This photo shows no more dark openings on the leeward steel."
     },
     "aft_skirt": {
       "value": {
