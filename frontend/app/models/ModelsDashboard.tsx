@@ -113,7 +113,7 @@ function useParts(scene: THREE.Object3D) {
       }
     };
     visit(scene, zero);
-    return { parts: [...parts.values()], units, offsets, boxes };
+    return { parts: [...parts.values()], units, offsets, boxes, centre };
   }, [scene]);
 }
 
@@ -124,8 +124,9 @@ const smooth = (t: number) => t * t * (3 - 2 * t);
 
 type Controls = { target: THREE.Vector3; update: () => void };
 
-// Frames the model once it loads: camera on a fixed three-quarter line, far enough
-// that its bounding sphere fits the view, orbiting its centre. Explodes on `exploded`.
+// Frames the model once it loads: camera on a fixed three-quarter line, as far as its
+// bounding sphere needs, orbiting the core's centre (the body, not the middle of a long
+// boom). Explodes on `exploded`.
 // A clicked part (`focus`) gets the camera: it flies in keeping the current viewing
 // direction, orbits that part, follows it through explode/assemble, and flies back home
 // when the focus clears.
@@ -137,7 +138,7 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady }: {
   // A copy per mount (geometry is shared): explode, fades and Suspense hiding change the
   // objects, and useGLTF's cached scene is reused by the next mount and the /models grid.
   const scene = useMemo(() => gltf.scene.clone(true), [gltf.scene]);
-  const { parts, units, offsets, boxes } = useParts(scene);
+  const { parts, units, offsets, boxes, centre } = useParts(scene);
   const readyRef = useRef(onReady);
   readyRef.current = onReady;
   useEffect(() => { readyRef.current?.(); }, [scene]);
@@ -165,14 +166,14 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady }: {
     const sphere = new THREE.Box3().setFromObject(scene).getBoundingSphere(new THREE.Sphere());
     const fov = THREE.MathUtils.degToRad(camera.fov) * Math.min(1, camera.aspect);
     const dist = (sphere.radius * 1.15) / Math.sin(fov / 2);
-    camera.position.copy(sphere.center).addScaledVector(new THREE.Vector3(0.6, 0.45, 0.66).normalize(), dist);
+    camera.position.copy(centre).addScaledVector(new THREE.Vector3(0.6, 0.45, 0.66).normalize(), dist);
     camera.near = dist / 100;
     camera.far = dist * 10;
     camera.updateProjectionMatrix();
-    home.current = { pos: camera.position.clone(), target: sphere.center.clone(), near: camera.near };
-    if (controls) { controls.target.copy(sphere.center); controls.update(); }
-    else camera.lookAt(sphere.center);
-  }, [scene, camera, controls]);
+    home.current = { pos: camera.position.clone(), target: centre.clone(), near: camera.near };
+    if (controls) { controls.target.copy(centre); controls.update(); }
+    else camera.lookAt(centre);
+  }, [scene, camera, controls, centre]);
 
   // A focused part that isn't in this build (renamed or removed) clears the focus.
   useEffect(() => { if (focus && !boxes.has(focus)) setFocus(null); }, [focus, boxes, setFocus]);
