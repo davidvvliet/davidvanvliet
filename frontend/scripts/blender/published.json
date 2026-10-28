@@ -1,6 +1,6 @@
 {
  "perseverance": {
-  "approved": "2026-10-28 13:44",
+  "approved": "2026-10-28 14:40",
   "inputs": {
    "specs/perseverance.json": "5ce8fb0ef97a057e",
    "probes/perseverance.py": "69b064ed79be8a03",
@@ -10,7 +10,7 @@
    "lib/bake.py": "82d7195a5be3e7a0",
    "lib/checks.py": "d8412e83e763acad",
    "lib/materials.py": "a56545e8f35429f2",
-   "lib/parts.py": "323a0a7106990f90",
+   "lib/parts.py": "ca89bcb39d3893e4",
    "lib/rig.py": "87431e5e6051f10e",
    "lib/sources.py": "4ddbad4d784fab9f",
    "lib/textures.py": "7daa18205cf41859",
@@ -27,8 +27,25 @@
    "refs/perseverance/sherloc_target.jpg": "cc8bc44112431e4e"
   }
  },
+ "starship": {
+  "approved": "2026-10-28 14:40",
+  "inputs": {
+   "specs/starship.json": "f23590ca51048ce3",
+   "probes/starship.py": "f557c592be8d1768",
+   "build.py": "49ae0ce2d201b956",
+   "blender.json": "7bbc071b6e396ec4",
+   "lib/__init__.py": "e3b0c44298fc1c14",
+   "lib/bake.py": "82d7195a5be3e7a0",
+   "lib/checks.py": "d8412e83e763acad",
+   "lib/materials.py": "a56545e8f35429f2",
+   "lib/parts.py": "ca89bcb39d3893e4",
+   "lib/rig.py": "87431e5e6051f10e",
+   "lib/sources.py": "4ddbad4d784fab9f",
+   "lib/textures.py": "7daa18205cf41859"
+  }
+ },
  "voyager": {
-  "approved": "2026-10-28 13:45",
+  "approved": "2026-10-28 14:40",
   "inputs": {
    "specs/voyager.json": "5c5e659b36339595",
    "probes/voyager.py": "203d7bdecc38e083",
@@ -38,7 +55,7 @@
    "lib/bake.py": "82d7195a5be3e7a0",
    "lib/checks.py": "d8412e83e763acad",
    "lib/materials.py": "a56545e8f35429f2",
-   "lib/parts.py": "323a0a7106990f90",
+   "lib/parts.py": "ca89bcb39d3893e4",
    "lib/rig.py": "87431e5e6051f10e",
    "lib/sources.py": "4ddbad4d784fab9f",
    "lib/textures.py": "7daa18205cf41859",
