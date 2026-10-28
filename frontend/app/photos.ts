@@ -12,7 +12,7 @@ import captions from "./photoCaptions.json";
 const DIR = path.join(process.cwd(), "public", "photos");
 const IMAGE = /\.(webp|jpe?g|png|avif|gif)$/i;
 const VIDEO = /\.(webm|mp4)$/i;
-const CAPTIONS: Record<string, { title: string; caption?: string; slug?: string; loc?: number[] }> = captions;
+const CAPTIONS: Record<string, { title?: string; caption?: string; slug?: string; loc?: number[] }> = captions;
 
 // Pixel size from a WebP or PNG header, so the page knows portrait from
 // landscape without decoding the image. Other formats give undefined.
