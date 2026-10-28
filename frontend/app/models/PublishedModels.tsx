@@ -96,7 +96,7 @@ function Grid({ models }: { models: Published[] }) {
   return (
     <div className={styles.page}>
       <Header>
-        <Link href="/" className={styles.dim}>← back</Link>
+        <Link href="/" className={styles.dim}>← explore</Link>
         <span>Models</span>
       </Header>
       <p className={styles.intro}>
