@@ -21,7 +21,8 @@
 #              to, studs} (from and to: fractions of that part's length from its exit; studs
 #              {shape "post"|"plate", count or angles {"ring": [deg]}, dense {count, bands},
 #              post: diameter, height, segments, every, on "band"|"wall"; plate: size [thick,
-#              across, up], resting on the ring's top}), full lod only
+#              across, up], resting on the ring's top}, straps {width, angles {"gap": [deg]}}:
+#              flat links between ring gap and gap + 1), full lod only
 #   extension: optional nozzle extension below the nozzle {exit_diameter, length, wall}: a cone
 #              from the nozzle's exit down to its own; the engine's z = 0 is then its exit
 #   manifold:  optional torus round the nozzle {diameter (centreline) or inner_diameter (the
@@ -104,11 +105,13 @@ def _hoops(name, h, outer, length, material, seg):
     """Stiffening rings on a shell whose outer wall is `outer` [(r, z)] (z from its exit), at half
     the shell's segments: a ring's chord sags less than it stands out."""
     objs = []
+    zs_all = []
     n = h["count"]
     for i in range(n):
         f = h["from"] + (h["to"] - h["from"]) * (i / (n - 1) if n > 1 else 0.5)
         z = f * length
         r = _interp(outer, z)
+        zs_all.append(z)
         objs.append(parts.lathe(f"{name}_{i:02d}", [(r - 0.005, z - h["height"] / 2),
                                                     (r + h["stands_out"], z - h["height"] / 2),
                                                     (r + h["stands_out"], z + h["height"] / 2),
@@ -163,6 +166,29 @@ def _hoops(name, h, outer, length, material, seg):
                                           radius2=rad, depth=st["height"], matrix=m)
             objs.append(parts._object(f"{name}_{i:02d}_studs", bm, st.get("material", material),
                                       Matrix()))
+    sp = h.get("straps")
+    if sp:
+        # Straps: short flat links between neighbouring rings, flush with their faces, at the
+        # angles listed per gap (`angles` {"i": [deg]} joins ring i and ring i + 1).
+        bm = bmesh.new()
+        t, w = h["stands_out"], sp["width"]
+        for gi, degs in sp["angles"].items():
+            g = int(gi)
+            z0, z1 = zs_all[g] + h["height"] / 2, zs_all[g + 1] - h["height"] / 2
+            r0, r1 = _interp(outer, z0), _interp(outer, z1)
+            for d in degs:
+                a = math.radians(d)
+                c, s_, tx, ty = math.cos(a), math.sin(a), -math.sin(a), math.cos(a)
+                v = []
+                for (rr, zz) in ((r0, z0), (r1, z1)):
+                    for side in (-1, 1):
+                        for dr in (-0.005, t):
+                            v.append(bm.verts.new(((rr + dr) * c + side * w / 2 * tx,
+                                                   (rr + dr) * s_ + side * w / 2 * ty, zz)))
+                # v index: end*4 + side*2 + (0 inner, 1 outer)
+                for f in ((1, 3, 7, 5), (0, 1, 5, 4), (3, 2, 6, 7)):
+                    bm.faces.new([v[k] for k in f])
+        objs.append(parts._object(f"{name}_straps", bm, sp.get("material", material), Matrix()))
     return objs
 
 def _interp(prof, z):
@@ -338,7 +364,7 @@ def _rocket(name, e, lod):
                                         location=p["at"], direction=p.get("axis", (0, 0, 1)),
                                         segments=24, material=p.get("material", pm)))
             elif k == "pipe":
-                objs.append(parts.tube(pn, p["points"], p["diameter"] / 2, segments=12,
+                objs.append(parts.tube(pn, p["points"], p["diameter"] / 2, segments=p.get("segments", 12),
                                        bend_radius=p.get("bend_radius", p["diameter"]), material=p.get("material", pm)))
                 if p.get("flanges"):
                     objs.append(_flanges(f"{pn}_flanges", p, p.get("flange_material", p.get("material", pm))))

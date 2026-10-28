@@ -91,6 +91,13 @@
       "licence": "NASA image library (images.nasa.gov), public domain",
       "saved": "refs/f1/powerhead_6413912.jpg",
       "credit": "NASA/MSFC, photo of an F-1 powerhead"
+    },
+    {
+      "id": "user_illustration",
+      "title": "Cutaway-style illustration of the F-1's thrust chamber (bands with bracket rows, straps, lines down the bell), screenshots shared by the user",
+      "url": "",
+      "read": "2026-10-28",
+      "licence": "unknown; not saved in the repo"
     }
   ],
   "facts": {
@@ -283,7 +290,7 @@
           "height": 0.035,
           "stands_out": 0.025,
           "from": 0.0,
-          "to": 0.9,
+          "to": 0.78,
           "studs": {
             "shape": "plate",
             "size": [
@@ -291,12 +298,89 @@
               0.04,
               0.04
             ],
-            "count": 46
+            "count": 44
+          },
+          "straps": {
+            "width": 0.035,
+            "angles": {
+              "0": [
+                57,
+                150
+              ],
+              "1": [
+                27
+              ],
+              "2": [
+                138
+              ],
+              "3": [
+                348
+              ],
+              "4": [
+                12,
+                33
+              ],
+              "5": [
+                24,
+                90,
+                159
+              ],
+              "6": [
+                210
+              ],
+              "7": [
+                21,
+                216,
+                315
+              ],
+              "8": [
+                84
+              ],
+              "9": [
+                219
+              ],
+              "10": [
+                15,
+                18,
+                84
+              ],
+              "11": [
+                111,
+                159
+              ],
+              "12": [
+                45,
+                207
+              ],
+              "13": [
+                213,
+                312
+              ],
+              "14": [
+                39,
+                222
+              ],
+              "15": [
+                36,
+                141
+              ],
+              "16": [
+                216
+              ],
+              "17": [
+                237
+              ],
+              "18": [
+                189,
+                261
+              ]
+            }
           }
         },
         "source": [
           "r3896_1, p.1-8: tubes \"identified on reinforcing bands and straps below the thrust chamber throat\"; p.1-25 (par. 1-108): \"Protruding studs are percussion-welded onto hatbands of the thrust chamber to support and secure insulator panels\".",
-          "photo_6862832: about twenty bands from the exit to the throat region. Brackets: a reference illustration the user supplied shows a tight row of small flat plates resting on every band of the nozzle, about 25 on the visible half, so about 46-50 round. Size estimated."
+          "photo_6862832: about twenty bands from the exit to the throat region. user_illustration shows a tight row of small flat plates resting on every band of the nozzle, about 25 on the visible half, so about 44-50 round. Size estimated.",
+          "r3896_1, p.1-8: \"reinforcing bands and straps below the thrust chamber throat\". user_illustration: the top quarter of the bell (down to about 78% of the nozzle's length from the exit) shows bare tubes, and short straps join neighbouring bands at scattered places, one to three per gap, different in each gap. Strap angles are placed at random (seeded) to match that look; width estimated."
         ]
       },
       "tubes": {
@@ -471,7 +555,7 @@
         "source": [
           "r3896_1, Figure 2-22: 147.00 in across the rings at the exit against the 139 in lip, so they stand out 4 in; Estimated.",
           "photo_0201422 and factsheet_1968 drawing: about nine rings on the extension. Estimated.",
-          "r3896_1, p.1-9B: \"CRES reinforcing channel bands welded to the outer wall circumference\"; p.1-25: \"Brackets with nutplates are provided to secure insulator panels to the nozzle extension\". Layout from a reference illustration the user supplied: small flat plates resting on top of each band, a full row (about 30 on the visible half, so 60 round) on the lowest two bands, and singles, pairs and triples on the bands above, different on each band; the angles are read from its visible half (x offset from the axis over the half-width) and the back half reuses another band's clusters, turned. Plate size estimated."
+          "r3896_1, p.1-9B: \"CRES reinforcing channel bands welded to the outer wall circumference\"; p.1-25: \"Brackets with nutplates are provided to secure insulator panels to the nozzle extension\". user_illustration: small flat plates resting on top of each band, a full row (about 30 on the visible half, so 60 round) on the lowest two bands, and singles, pairs and triples on the bands above, different on each band; the angles are read from its visible half (x offset from the axis over the half-width) and the back half reuses another band's clusters, turned. Plate size estimated."
         ]
       }
     },
@@ -1611,86 +1695,186 @@
       {
         "kind": "pipe",
         "name": "drain_line_1",
-        "diameter": 0.05,
+        "diameter": 0.04,
         "points": {
           "value": [
             [
-              -0.614,
-              -0.223,
-              3.664
+              0.658,
+              -0.239,
+              4.25
             ],
             [
-              -0.814,
-              -0.296,
-              3.264
+              0.658,
+              -0.239,
+              3.95
             ],
             [
-              -0.991,
-              -0.361,
-              2.864
+              0.402,
+              -0.573,
+              3.95
             ],
             [
-              -1.147,
-              -0.418,
+              0.0,
+              -0.7,
+              3.95
+            ],
+            [
+              -0.402,
+              -0.573,
+              3.95
+            ],
+            [
+              -0.431,
+              -0.616,
+              3.514
+            ],
+            [
+              -0.533,
+              -0.761,
+              3.164
+            ],
+            [
+              -0.626,
+              -0.894,
+              2.814
+            ],
+            [
+              -0.709,
+              -1.012,
               2.464
             ],
             [
-              -1.266,
-              -0.461,
-              2.114
-            ],
-            [
-              -1.341,
-              -0.488,
-              1.864
+              -0.762,
+              -1.089,
+              2.214
             ]
           ],
-          "source": "photo_6862832 and factsheet_1968 drawing: small lines run down the bell from the injector end to the exit ring (the drawing shows them on the side away from the turbopump). Estimated."
+          "source": "user_illustration: A close pair of thin lines comes from the powerhead round the top of the bell from the heat exchanger's side, bends over the top at about 125 degrees from the heat exchanger and runs straight down over the bands to just above the exhaust manifold; a single line comes over the top further round and runs down near the far side. Estimated."
         },
-        "bend_radius": 0.3,
-        "material": "cres"
+        "bend_radius": 0.15,
+        "material": "cres",
+        "segments": 8
       },
       {
         "kind": "pipe",
         "name": "drain_line_2",
-        "diameter": 0.05,
+        "diameter": 0.04,
         "points": {
           "value": [
             [
-              -0.614,
-              0.223,
-              3.664
+              0.673,
+              -0.193,
+              4.25
             ],
             [
-              -0.814,
-              0.296,
-              3.264
+              0.673,
+              -0.193,
+              3.95
             ],
             [
-              -0.991,
-              0.361,
-              2.864
+              0.441,
+              -0.544,
+              3.95
             ],
             [
-              -1.147,
-              0.418,
+              0.049,
+              -0.698,
+              3.95
+            ],
+            [
+              -0.361,
+              -0.6,
+              3.95
+            ],
+            [
+              -0.387,
+              -0.645,
+              3.514
+            ],
+            [
+              -0.478,
+              -0.796,
+              3.164
+            ],
+            [
+              -0.562,
+              -0.936,
+              2.814
+            ],
+            [
+              -0.636,
+              -1.059,
               2.464
             ],
             [
-              -1.266,
-              0.461,
-              2.114
-            ],
-            [
-              -1.341,
-              0.488,
-              1.864
+              -0.684,
+              -1.139,
+              2.214
             ]
           ],
-          "source": "photo_6862832 and factsheet_1968 drawing: small lines run down the bell from the injector end to the exit ring (the drawing shows them on the side away from the turbopump). Estimated."
+          "source": "user_illustration: A close pair of thin lines comes from the powerhead round the top of the bell from the heat exchanger's side, bends over the top at about 125 degrees from the heat exchanger and runs straight down over the bands to just above the exhaust manifold; a single line comes over the top further round and runs down near the far side. Estimated."
         },
-        "bend_radius": 0.3,
-        "material": "cres"
+        "bend_radius": 0.15,
+        "material": "cres",
+        "segments": 8
+      },
+      {
+        "kind": "pipe",
+        "name": "drain_line_3",
+        "diameter": 0.04,
+        "points": {
+          "value": [
+            [
+              -0.606,
+              -0.35,
+              4.25
+            ],
+            [
+              -0.606,
+              -0.35,
+              3.95
+            ],
+            [
+              -0.671,
+              -0.201,
+              3.95
+            ],
+            [
+              -0.689,
+              -0.122,
+              3.95
+            ],
+            [
+              -0.741,
+              -0.131,
+              3.514
+            ],
+            [
+              -0.914,
+              -0.161,
+              3.164
+            ],
+            [
+              -1.075,
+              -0.19,
+              2.814
+            ],
+            [
+              -1.217,
+              -0.215,
+              2.464
+            ],
+            [
+              -1.309,
+              -0.231,
+              2.214
+            ]
+          ],
+          "source": "user_illustration: A close pair of thin lines comes from the powerhead round the top of the bell from the heat exchanger's side, bends over the top at about 125 degrees from the heat exchanger and runs straight down over the bands to just above the exhaust manifold; a single line comes over the top further round and runs down near the far side. Estimated."
+        },
+        "bend_radius": 0.15,
+        "material": "cres",
+        "segments": 8
       }
     ],
     "materials": {
