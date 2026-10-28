@@ -18,8 +18,8 @@ import bpy
 
 def _lib():
     # Reload so the live session picks up edits to the library without a restart.
-    from lib import materials, parts, rig, checks, textures, sources, bake
-    for m in (sources, materials, textures, parts, rig, checks, bake):
+    from lib import materials, parts, rig, checks, textures, sources, bake, published
+    for m in (sources, materials, textures, parts, rig, checks, bake, published):
         importlib.reload(m)
     return parts, rig, checks
 
@@ -70,6 +70,10 @@ def build(probe, export=True):
     entry = {"started": started}
     try:
         parts, rig, checks = _lib()
+        # What this build reads, taken before it starts: approve refuses the build when the repo
+        # has changed since (see lib/published.py).
+        from lib import published
+        entry["inputs"] = published.inputs(probe)
         _step(status, probe, "spec")
         with open(os.path.join(SPECS, f"{probe}.json")) as f:
             spec = json.load(f)

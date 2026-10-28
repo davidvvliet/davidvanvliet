@@ -32,7 +32,7 @@ Python; the command line needs only the system `python3`.
 - `npm run model <probe>`: build in the live session if one is open, else headless (`-- --headless` to force)
 - `npm run model:dev [probe]`: rebuild on every save of a probe script, spec or `lib/` file (a `lib/` change rebuilds the given probe, or the last one built)
 - `npm run model:all`: rebuild every probe; fails on a failing check or a sheet that changed against its baseline
-- `npm run model:approve <probe>`: copy the last passing build to `public/models/` (with a thumbnail for the `/models` grid) and make its sheet the baseline. It records what the build read in `published.json`, so `run.py status` and the dashboard header can say when the live version is behind the repo (see `lib/published.py`)
+- `npm run model:approve <probe>`: copy the last passing build to `public/models/` (with a thumbnail for the `/models` grid) and make its sheet the baseline. It records what the build read in `published.json`, so `run.py status` and the dashboard header can say when the live version is behind the repo (see `lib/published.py`). It refuses a build when anything that build read has changed since: rebuild, then approve
 - `npm run model:new <probe> "Title"`: start a probe from the templates
 - `npm run model:ref <probe> <model.glb>`: measure a reference model (sheet, and close-ups through the spec's views, in `refs/<probe>/`; largest pieces in `out/<probe>/ref/parts.json`)
 - `npm run model:explode <probe> <model.glb>`: after a build, split the reference model into our parts (`out/<probe>/ref/explode.json` and `explode.png`)

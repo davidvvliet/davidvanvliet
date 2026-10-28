@@ -159,6 +159,16 @@ def cmd_approve(args):
         die(f"No exported build of '{probe}' yet (run: run.py build {probe})")
     if not entry.get("ok") and "--force" not in args:
         die(f"The last build of '{probe}' has failing checks; fix them or pass --force.")
+    # Publish only what the repo builds now: another session (or an edit since) may have changed
+    # the probe's files or lib/ after the last build.
+    sys.path.insert(0, HERE)
+    from lib import published
+    changed = published.since_build(probe, entry.get("inputs"))
+    if changed is None:
+        die(f"The last build of '{probe}' predates input tracking; rebuild it (run.py build {probe}), then approve.")
+    if changed:
+        die(f"Changed since the last build of '{probe}': {', '.join(changed)}.\n"
+            f"Rebuild (run.py build {probe}), look at the result, then approve.")
     spec = json.load(open(os.path.join(HERE, "specs", f"{probe}.json")))
     if not spec.get("fixture"):  # fixtures only guard lib/; they never ship
         os.makedirs(PUBLIC_MODELS, exist_ok=True)
@@ -179,8 +189,7 @@ def cmd_approve(args):
         with open(MODEL_CREDITS, "w") as f:
             json.dump(dict(sorted(credits.items())), f, indent=2, ensure_ascii=False)
             f.write("\n")
-        from lib import published
-        published.record(probe)  # what this published model was built from (see lib/published.py)
+        published.record(probe, entry["inputs"])  # what this published model was built from
     shutil.copy(entry["sheet"], os.path.join(HERE, "baselines", f"{probe}.png"))
     entry["approved"] = time.time()
     entry["baseline"] = {"diff": 0.0, "changed": False}

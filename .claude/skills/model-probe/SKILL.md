@@ -23,6 +23,22 @@ from the repo.
 - Never run `model:approve` without the user's go-ahead: it writes `public/models/` and
   resets the baseline. Wiring a model into the solar-system scene is a separate change
   (see "From Blender to the site" in the README, including the scale problem).
+- Approve publishes the last build only if nothing it read has changed since. Otherwise it
+  refuses and lists the files: rebuild, look at the result, then approve.
+
+## Several sessions at once
+More than one Claude session may be working in this harness.
+- A probe's files (`specs/<probe>.json`, `probes/<probe>.py`, `refs/<probe>/`) belong to the
+  session working on that probe. Check `git status` before starting on one. If another session
+  has uncommitted changes there, message it (ListAgents, SendMessage) instead of editing.
+- `lib/`, `build.py`, `run.py` and the README are shared. Before changing them, tell the other
+  sessions what will change. Edit only your own lines.
+- Commit only your own work. Run `git diff --cached --name-only` first: another session may
+  have staged files, and a plain commit takes them along. In a file both sessions edited, stage
+  just your lines (index the committed version with your edits applied, via
+  `git hash-object -w` + `git update-index --cacheinfo`).
+- Approve only a probe you own, or after telling its session. A rebuild while another session
+  is mid-change bakes its unfinished work into the build.
 
 ## Loop
 1. `npm run model:new <probe> "Title"` (from `frontend/`), then research and fill in the spec

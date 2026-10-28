@@ -33,10 +33,18 @@ def _read():
     except (OSError, ValueError):
         return {}
 
-def record(probe):
-    """Called by approve: the published model now matches these inputs."""
+def since_build(probe, built):
+    """Input paths changed, added or removed since a build that read `built` (its status entry's
+    "inputs"); None when the build predates this record."""
+    if built is None:
+        return None
+    now = inputs(probe)
+    return sorted(p for p in set(now) | set(built) if now.get(p) != built.get(p))
+
+def record(probe, built):
+    """Called by approve: the published model is the build that read `built`."""
     rec = _read()
-    rec[probe] = {"approved": time.strftime("%Y-%m-%d %H:%M"), "inputs": inputs(probe)}
+    rec[probe] = {"approved": time.strftime("%Y-%m-%d %H:%M"), "inputs": built}
     with open(RECORD, "w") as f:
         json.dump(dict(sorted(rec.items())), f, indent=1)
         f.write("\n")
