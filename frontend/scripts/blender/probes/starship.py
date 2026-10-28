@@ -258,3 +258,29 @@ def build(spec):
             parts.cylinder(f"ship_catch_pin_{tag}", cp["diameter"] / 2, cp["stands_out"] + 0.2,
                            location=_at(a, R - 0.2, zp), direction=_at(a, 1, 0), segments=20,
                            material=steel)
+
+        # Raceways down the leeward side: two steel covers with pointed tops
+        # (from_photos.raceways).
+        rw = P["raceways"]
+        z_lo, z_hi = top - rw["bottom_below_tip"], top - rw["top_below_tip"]
+        tip = rw["point_length"] / (z_hi - z_lo)
+        for i, a in enumerate(rw["angles_deg"]):
+            parts.outline_plate(f"ship_raceway_{i}", [(0, 0), (1, 0), (1, 1 - tip), (0.5, 1), (0, 1 - tip)],
+                                rw["width"], z_hi - z_lo, rw["stands_out"] + 0.05,
+                                location=_at(a, R - 0.05, (z_lo + z_hi) / 2), direction=_at(a, 1, 0),
+                                up=(0, 0, 1), material=steel)
+
+        # Square tile patches on the bare steel, mirrored about the tower side
+        # (from_photos.tile_patches): slices of a slightly bigger cylinder, tiles standing proud.
+        tp = P["tile_patches"]
+        for i, p in enumerate(tp["patches"]):
+            for s in (1, -1):
+                a = 180 + s * p["from_tower_deg"]
+                zc = top - p["below_tip"]
+                rr = R + tp["stands_out"]
+                patch = parts.lathe(f"ship_tile_patch_{i}_{'l' if s > 0 else 'r'}",
+                                    [(0, zc - p["height"] / 2), (rr, zc - p["height"] / 2),
+                                     (rr, zc + p["height"] / 2), (0, zc + p["height"] / 2)],
+                                    segments=6, sweep_deg=math.degrees(p["width"] / R), roll_deg=a,
+                                    smooth=False, material=tiles_tex)
+                tiling.cyl_uv(patch, tile_w, tile_h, R)

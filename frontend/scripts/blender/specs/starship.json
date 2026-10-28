@@ -382,6 +382,42 @@
     "tile_edge": {
       "value": "jagged: the tiles stop on whole hexagons, so the edge follows the tiles' sides and steps half a tile every row",
       "source": "photo_s36 (a V2 ship, the clearest view of the edge): the boundary between the tiles and the bare steel steps along the hexagons on the nose and the barrel. Built on the barrel's two edges (+-90 degrees); the flap-wrap and nose-cap edges stay straight."
+    },
+    "raceways": {
+      "value": {
+        "angles_deg": [
+          147,
+          186
+        ],
+        "top_below_tip": 15.0,
+        "bottom_below_tip": 48.5,
+        "width": 0.75,
+        "stands_out": 0.4,
+        "point_length": 1.0
+      },
+      "unit": "m, degrees from +x",
+      "source": "photo_wdr (pipes crop x 2640-2780, y 880-1180, and the aft crop): two steel covers run down the leeward side, flat-faced, about 20 px (0.75 m at 0.0383 m/px across) wide, with pointed tops level with the catch pins (y 905 and 925: 14.9 and 15.7 m below the tip at 0.0428 m/px) and ending just above the aft skirt (about y 1690, 48.5 m below the tip). Across the 235 px body (centre x 2647) they sit 34 px and 98 px right of the axis, 17 and 56 degrees round from the camera; with the camera looking along 130 degrees (catch_pins: the left pin points at it) that puts them at 147 and 186 degrees. How far they stand out is estimated. The clamps that give older ships' raceways a ladder look aren't visible under the frost here, so they aren't modelled."
+    },
+    "tile_patches": {
+      "value": {
+        "stands_out": 0.03,
+        "patches": [
+          {
+            "from_tower_deg": 52,
+            "below_tip": 21.2,
+            "width": 2.1,
+            "height": 2.35
+          },
+          {
+            "from_tower_deg": 58,
+            "below_tip": 37.5,
+            "width": 3.4,
+            "height": 3.3
+          }
+        ]
+      },
+      "unit": "m, degrees either side of the tower side (-x)",
+      "source": "photo_wdr: black tiled squares on the bare steel. Nose crop: one at x 2615-2670, y 1025-1080 (2.1 x 2.35 m, 21.2 m below the tip), almost facing the camera (about 128 degrees); aft crop: one at x 2575-2665, y 1395-1472 (3.4 x 3.3 m, 37.5 m below the tip, about 122 degrees). Both have a partner showing at the far limb at about the same height, so they are taken as mirrored about the tower side, like the catch pins. How far the tiles stand proud of the steel is estimated."
     }
   },
   "materials": {
@@ -474,6 +510,20 @@
         0.1
       ],
       "radius": 6
+    },
+    {
+      "name": "leeward raceways and tile patches",
+      "target": [
+        -4.5,
+        0,
+        24
+      ],
+      "look": [
+        -1,
+        0,
+        0.15
+      ],
+      "radius": 14
     }
   ],
   "budget": {
