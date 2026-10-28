@@ -664,7 +664,7 @@
           0.0
         ]
       ],
-      "source": "nasa_tnd3343, Fig. 1 p.20: estimated from refs/x15/three-view-1966.png (TN D-3343 Fig. 1, rendered at 400 dpi), scaled by its 49.5 ft length (1695 px), measured to the middle of the drawn lines. Side view: the hood runs from its front corner at (6.81, 1.81) up a straight windscreen slope to the top at (8.71, 2.69), along the top to the aft frame at x 11.74 (z 2.64), and back along the sill, which drops to z 1.1 by x 8; the aft fairing runs from the frame down to the spine (2.39 at x 14.4) and ends at x 17.2. Top view: the frame (the hood's base) is a rounded rectangle 2.9 ft wide from x 6.8; above it the windscreen is a V: each pane's lower edge (z 1.81 in the side view) runs from 0.39 ft off the centreline at x 7.43 to 1.30 at x 10.5, its upper edge (z 2.35) from 0.32 at x 8.53 to 0.93 at x 10.57; the aft fairing tapers from 1.1 at the frame to a point at x 17.2. Each section is a polyline through those widths, with a rounded roof (a quarter ellipse, estimated from photo NASM2018-10035) from the upper level to the top. The top, 2.69, makes the depth over the canopy 5.09 ft with the 2.40 ft bottom: 2.4% over Table I's 4.97. To join the parts smoothly (estimated): the widths at the frame are eased to the fairing's (1.0 at the windows' upper edge), the upper level starts where the windscreen slope passes z 2.35 (x 7.96), the fairing's roof starts at 2.35 at the frame and at 2.0 by x 13, and the hood's front ends in a point at x 6.7. Revised from photos NASM-SI-2007-12573, -12578, NASM-SI-2008-5563 and -5565 (nasm_x15), which show a hood of upright sides under a round roof whose front is two flat windscreen faces meeting at a centre post: arch.half_width is the hood base in the top view (0.5 ft at x 6.81, 0.73 at 7.0, 0.97 at 7.2, 1.08 at 7.4, 1.15 at 8.0, mean of both sides) up to the front view's widest arch, 1.2 ft; the front view's arch fits a half-ellipse 1.2 ft wide from z_shoulder 2.0 to the top (half-widths 1.05, 0.79, 0.63 drawn at z 2.3, 2.5, 2.6; the fit gives 1.08, 0.84, 0.62). The centre post is the side view's top line from (6.81, 1.83) to (8.71, 2.69). windscreen_plan_tan (each face's sideways run per foot aft, 1.65) puts the corner between face and side 0.1 ft ahead of the side window's front edge at z 1.9 and 2.3. Aft of the frame the fairing keeps the hood's arch, narrowing in proportion to the drawn fairing_half_width (photos NASM-SI-2007-12573 and NASM-SI-2008-5563 show the roof running smoothly back into it).",
+      "source": "nasa_tnd3343, Fig. 1 p.20: estimated from refs/x15/three-view-1966.png (TN D-3343 Fig. 1, rendered at 400 dpi), scaled by its 49.5 ft length (1695 px), measured to the middle of the drawn lines. Side view: the hood runs from its front corner at (6.81, 1.81) up a straight windscreen slope to the top at (8.71, 2.69), along the top to the aft frame at x 11.74 (z 2.64), and back along the sill, which drops to z 1.1 by x 8; the aft fairing runs from the frame down to the spine (2.39 at x 14.4) and ends at x 17.2. Top view: the frame (the hood's base) is a rounded rectangle 2.9 ft wide from x 6.8; above it the windscreen is a V: each pane's lower edge (z 1.81 in the side view) runs from 0.39 ft off the centreline at x 7.43 to 1.30 at x 10.5, its upper edge (z 2.35) from 0.32 at x 8.53 to 0.93 at x 10.57; the aft fairing tapers from 1.1 at the frame to a point at x 17.2. Each section is a polyline through those widths, with a rounded roof (a quarter ellipse, estimated from photo NASM2018-10035) from the upper level to the top. The top, 2.69, makes the depth over the canopy 5.09 ft with the 2.40 ft bottom: 2.4% over Table I's 4.97. To join the parts smoothly (estimated): the widths at the frame are eased to the fairing's (1.0 at the windows' upper edge), the upper level starts where the windscreen slope passes z 2.35 (x 7.96), the fairing's roof starts at 2.35 at the frame and at 2.0 by x 13, and the hood's front ends in a point at x 6.7. Revised from photos NASM-SI-2007-12573, -12578, NASM-SI-2008-5563 and -5565 (nasm_x15) and the user's photo of the canopy from above: a round tube whose front is a sharp V of two flat faces, one window on each: arch.half_width is the hood base in the top view (0.5 ft at x 6.81, 0.73 at 7.0, 0.97 at 7.2, 1.08 at 7.4, 1.15 at 8.0, mean of both sides) up to the front view's widest arch, 1.2 ft; the front view's arch fits a half-ellipse 1.2 ft wide from z_shoulder 2.0 to the top (half-widths 1.05, 0.79, 0.63 drawn at z 2.3, 2.5, 2.6; the fit gives 1.08, 0.84, 0.62). The faces meet at the side view's top line from (6.81, 1.83) to (8.71, 2.69); windscreen_plan_tan (each face's sideways run per foot aft, 0.34) is the top view's V line, from the centreline at x 7.45 to 0.875 ft at x 10.0 (0.43, 0.58, 0.73 at x 8.5, 9.0, 9.5). Aft of the frame the fairing keeps the hood's arch, narrowing in proportion to the drawn fairing_half_width (photos NASM-SI-2007-12573 and NASM-SI-2008-5563 show the roof running smoothly back into it).",
       "arch": {
         "z_shoulder": 2.0,
         "half_width": [
@@ -698,7 +698,7 @@
           ]
         ]
       },
-      "windscreen_plan_tan": 1.65
+      "windscreen_plan_tan": 0.34
     },
     "wing": {
       "tip_le_x": 32.0,
@@ -738,15 +738,6 @@
       "z_high": 2.35,
       "centre_post_half_width": 0.12,
       "source": "nasa_tnd3343, Fig. 1 p.20: estimated from refs/x15/three-view-1966.png, scaled by its 49.5 ft length: the side view draws each window as a trapezoid from x 7.69 to 10.17 ft (the top view ends them at 10.5-10.57; the mean, 10.35, is used) between z 1.81 and 2.35, its front edge sloping from (7.69, 1.86) to (8.71, 2.35); the top view draws the two windows meeting near the centreline at the front. The window is that outline projected sideways onto the canopy. Centre post half-width estimated from photo NASM2018-10035 (front view, a narrow post between the two panes)."
-    },
-    "windscreen": {
-      "y_inner": 0.29,
-      "y_outer": 0.77,
-      "z_low": 1.72,
-      "z_side_top": 1.97,
-      "z_top": 2.12,
-      "unit": "ft",
-      "source": "nasa_tnd3343, Fig. 1 p.20: estimated from refs/x15/three-view-1966.png, front view, scaled by its 49.5 ft length (1695 px): each windscreen pane is a D (straight sides, round top) from 0.29 to 0.77 ft off the centreline (mean of both sides, to the middle of the drawn lines), its flat bottom at z 1.72, its sides straight to 1.97 and its top at 2.12. Photos NASM-SI-2007-12573, NASM-SI-2008-5565 and -16955 (nasm_x15) show the two panes on the hood's front faces, meeting at a centre post, each in its own frame ahead of the side window"
     }
   },
   "closeups": [
