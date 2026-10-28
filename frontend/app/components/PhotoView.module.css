@@ -71,7 +71,7 @@
 
 .globeLand {
   stroke: #ffffff;
-  stroke-opacity: 0.85;
+  stroke-opacity: 0.6; /* dimmer than the 3D globe's 0.85, so the marker stands out */
 }
 
 /* The star sprite's additive blending. */
