@@ -299,7 +299,7 @@
               0.04,
               0.04
             ],
-            "count": 44
+            "count": 38
           },
           "straps": {
             "width": 0.035,
@@ -380,7 +380,7 @@
         },
         "source": [
           "r3896_1, p.1-8: tubes \"identified on reinforcing bands and straps below the thrust chamber throat\"; p.1-25 (par. 1-108): \"Protruding studs are percussion-welded onto hatbands of the thrust chamber to support and secure insulator panels\".",
-          "photo_6862832: about twenty bands from the exit to the throat region. karp_illustration shows a tight row of small flat plates resting on every band of the nozzle, about 25 on the visible half, so about 44-50 round. Size estimated.",
+          "photo_6862832: about twenty bands from the exit to the throat region. karp_illustration shows a tight row of small flat plates resting on every band of the nozzle, about 25 on the visible half, so about 50 round; 38 here to stay within the size budget. Size estimated.",
           "r3896_1, p.1-8: \"reinforcing bands and straps below the thrust chamber throat\". karp_illustration: the top quarter of the bell (down to about 78% of the nozzle's length from the exit) shows bare tubes, and short straps join neighbouring bands at scattered places, one to three per gap, different in each gap. Strap angles are placed at random (seeded) to match that look; width estimated."
         ]
       },
@@ -391,6 +391,79 @@
           "per_tile": 2
         },
         "source": "r3896_1, p.1-8: \"One hundred seventy-eight primary tubes ... make up the chamber body above the 3:1 expansion ratio plane (approximately 30 inches below the throat centerline plane). Three hundred fifty-six one-inch-outside-diameter secondary tubes ... form the chamber from the 3:1 to the 10:1 expansion ratio plane.\""
+      },
+      "outer_profile": {
+        "value": [
+          [
+            0.629,
+            2.2225
+          ],
+          [
+            0.708,
+            2.1
+          ],
+          [
+            0.756,
+            1.98
+          ],
+          [
+            0.8,
+            1.86
+          ],
+          [
+            0.837,
+            1.73
+          ],
+          [
+            0.883,
+            1.61
+          ],
+          [
+            0.924,
+            1.49
+          ],
+          [
+            0.967,
+            1.36
+          ],
+          [
+            1.007,
+            1.24
+          ],
+          [
+            1.051,
+            1.12
+          ],
+          [
+            1.093,
+            0.99
+          ],
+          [
+            1.136,
+            0.87
+          ],
+          [
+            1.18,
+            0.75
+          ]
+        ],
+        "source": [
+          "karp_illustration: the bell's outline, traced at 97.5 px/m (the 1.2 m chamber) from y 366 (its top, which lands on the throat plane) to y 540 (0.44 m above the 10:1 plane, where it matches our outline): it leaves the chamber at about the chamber's width with a rounded shoulder and is up to 0.2 m wider than the nozzle wall in the upper half.",
+          "photo_6862832: about 1.15-1.27 m across at the top. Taken three quarters of the way from our wall to Karp's outline (0.63 m radius at the top, 1.26 m across), blending into the wall by 0.75 m above the 10:1 plane. Estimated."
+        ]
+      },
+      "ribs": {
+        "value": {
+          "count": 60,
+          "width": 0.05,
+          "stands_out": 0.012,
+          "from": 0.78,
+          "to": 1.0
+        },
+        "source": [
+          "karp_illustration: flat vertical ribs (light strips with dark gaps, about 30 on the visible half) cover the top of the bell from the joint ring down to the first band.",
+          "photo_6862832: a ring of flat plates at the top of the bell. Width estimated."
+        ]
       }
     },
     "extension": {
@@ -421,7 +494,7 @@
               0.06
             ],
             "dense": {
-              "count": 60,
+              "count": 50,
               "bands": [
                 0,
                 1
@@ -556,7 +629,7 @@
         "source": [
           "r3896_1, Figure 2-22: 147.00 in across the rings at the exit against the 139 in lip, so they stand out 4 in; Estimated.",
           "photo_0201422 and factsheet_1968 drawing: about nine rings on the extension. Estimated.",
-          "r3896_1, p.1-9B: \"CRES reinforcing channel bands welded to the outer wall circumference\"; p.1-25: \"Brackets with nutplates are provided to secure insulator panels to the nozzle extension\". karp_illustration: small flat plates resting on top of each band, a full row (about 30 on the visible half, so 60 round) on the lowest two bands, and singles, pairs and triples on the bands above, different on each band; the angles are read from its visible half (x offset from the axis over the half-width) and the back half reuses another band's clusters, turned. Plate size estimated."
+          "r3896_1, p.1-9B: \"CRES reinforcing channel bands welded to the outer wall circumference\"; p.1-25: \"Brackets with nutplates are provided to secure insulator panels to the nozzle extension\". karp_illustration: small flat plates resting on top of each band, a full row (about 30 on the visible half, so 60 round; 50 here to stay within the size budget) on the lowest two bands, and singles, pairs and triples on the bands above, different on each band; the angles are read from its visible half (x offset from the axis over the half-width) and the back half reuses another band's clusters, turned. Plate size estimated."
         ]
       }
     },
@@ -572,6 +645,10 @@
       "length": {
         "value": 0.6,
         "source": "r3896_1, design value within the 1.59 m (see convergent_length)"
+      },
+      "outside": {
+        "value": "cylinder",
+        "source": "karp_illustration: the combustion chamber is a straight cylinder standing directly on the ring at the top of the bell; no narrower throat shows outside."
       }
     },
     "powerhead": {
@@ -1694,55 +1771,93 @@
         "material": "cres"
       },
       {
+        "kind": "lathe",
+        "name": "bell_top_ring",
+        "profile": {
+          "value": [
+            [
+              0.58,
+              -0.06
+            ],
+            [
+              0.7,
+              -0.06
+            ],
+            [
+              0.7,
+              0.06
+            ],
+            [
+              0.58,
+              0.06
+            ]
+          ],
+          "source": "karp_illustration: a thick ring where the bell meets the chamber, the lines running round it. Size estimated."
+        },
+        "at": [
+          0,
+          0,
+          3.8862
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "smooth": false,
+        "material": "cres"
+      },
+      {
         "kind": "pipe",
         "name": "drain_line_1",
         "diameter": 0.04,
+        "segments": 8,
         "points": {
           "value": [
             [
-              0.658,
-              -0.239,
-              4.25
+              0.714,
+              -0.26,
+              4.206
             ],
             [
-              0.658,
-              -0.239,
-              3.95
+              0.714,
+              -0.26,
+              3.906
             ],
             [
-              0.402,
-              -0.573,
-              3.95
+              0.436,
+              -0.623,
+              3.906
             ],
             [
               0.0,
-              -0.7,
-              3.95
+              -0.76,
+              3.906
             ],
             [
-              -0.402,
-              -0.573,
-              3.95
+              -0.436,
+              -0.623,
+              3.906
             ],
             [
-              -0.431,
-              -0.616,
-              3.514
+              -0.483,
+              -0.69,
+              3.614
             ],
             [
-              -0.533,
-              -0.761,
-              3.164
+              -0.551,
+              -0.788,
+              3.264
             ],
             [
-              -0.626,
-              -0.894,
-              2.814
+              -0.619,
+              -0.884,
+              2.914
             ],
             [
-              -0.709,
-              -1.012,
-              2.464
+              -0.688,
+              -0.983,
+              2.564
             ],
             [
               -0.762,
@@ -1753,59 +1868,59 @@
           "source": "karp_illustration: A close pair of thin lines comes from the powerhead round the top of the bell from the heat exchanger's side, bends over the top at about 125 degrees from the heat exchanger and runs straight down over the bands to just above the exhaust manifold; a single line comes over the top further round and runs down near the far side. Estimated."
         },
         "bend_radius": 0.15,
-        "material": "cres",
-        "segments": 8
+        "material": "cres"
       },
       {
         "kind": "pipe",
         "name": "drain_line_2",
         "diameter": 0.04,
+        "segments": 8,
         "points": {
           "value": [
             [
-              0.673,
-              -0.193,
-              4.25
+              0.731,
+              -0.209,
+              4.206
             ],
             [
-              0.673,
-              -0.193,
-              3.95
+              0.731,
+              -0.209,
+              3.906
             ],
             [
-              0.441,
-              -0.544,
-              3.95
+              0.478,
+              -0.591,
+              3.906
             ],
             [
-              0.049,
-              -0.698,
-              3.95
+              0.053,
+              -0.758,
+              3.906
             ],
             [
-              -0.361,
-              -0.6,
-              3.95
+              -0.391,
+              -0.651,
+              3.906
             ],
             [
-              -0.387,
-              -0.645,
-              3.514
+              -0.434,
+              -0.722,
+              3.614
             ],
             [
-              -0.478,
-              -0.796,
-              3.164
+              -0.495,
+              -0.824,
+              3.264
             ],
             [
-              -0.562,
-              -0.936,
-              2.814
+              -0.556,
+              -0.925,
+              2.914
             ],
             [
-              -0.636,
-              -1.059,
-              2.464
+              -0.618,
+              -1.029,
+              2.564
             ],
             [
               -0.684,
@@ -1816,54 +1931,49 @@
           "source": "karp_illustration: A close pair of thin lines comes from the powerhead round the top of the bell from the heat exchanger's side, bends over the top at about 125 degrees from the heat exchanger and runs straight down over the bands to just above the exhaust manifold; a single line comes over the top further round and runs down near the far side. Estimated."
         },
         "bend_radius": 0.15,
-        "material": "cres",
-        "segments": 8
+        "material": "cres"
       },
       {
         "kind": "pipe",
         "name": "drain_line_3",
         "diameter": 0.04,
+        "segments": 8,
         "points": {
           "value": [
             [
-              -0.606,
-              -0.35,
-              4.25
+              -0.658,
+              -0.38,
+              4.206
             ],
             [
-              -0.606,
-              -0.35,
-              3.95
+              -0.658,
+              -0.38,
+              3.906
             ],
             [
-              -0.671,
-              -0.201,
-              3.95
+              -0.748,
+              -0.132,
+              3.906
             ],
             [
-              -0.689,
-              -0.122,
-              3.95
+              -0.829,
+              -0.146,
+              3.614
             ],
             [
-              -0.741,
-              -0.131,
-              3.514
+              -0.947,
+              -0.167,
+              3.264
             ],
             [
-              -0.914,
-              -0.161,
-              3.164
+              -1.062,
+              -0.187,
+              2.914
             ],
             [
-              -1.075,
-              -0.19,
-              2.814
-            ],
-            [
-              -1.217,
-              -0.215,
-              2.464
+              -1.182,
+              -0.208,
+              2.564
             ],
             [
               -1.309,
@@ -1874,8 +1984,7 @@
           "source": "karp_illustration: A close pair of thin lines comes from the powerhead round the top of the bell from the heat exchanger's side, bends over the top at about 125 degrees from the heat exchanger and runs straight down over the bands to just above the exhaust manifold; a single line comes over the top further round and runs down near the far side. Estimated."
         },
         "bend_radius": 0.15,
-        "material": "cres",
-        "segments": 8
+        "material": "cres"
       }
     ],
     "materials": {

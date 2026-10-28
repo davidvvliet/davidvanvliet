@@ -13,9 +13,12 @@
 #              of a thrust-optimised bell), "cone" (straight wall) or "traced" (profile: [[r, z],
 #              ...] as fractions of the exit radius and of the length, measured from a side photo,
 #              from the exit up to the throat)
-#   chamber:   diameter, length (cylinder), convergent_length (throat to the cylinder)
+#   chamber:   diameter, length (cylinder), convergent_length (throat to the cylinder), optional
+#              outside "cylinder" (a straight cylinder from the throat plane up)
 #   powerhead: diameter, height (injector dome and the block above it)
 #   gimbal:    diameter, height (the mount on top), optional
+#   nozzle.outer_profile: optional [(r, z)] outside of the bell where it is wider than the wall
+#   nozzle.ribs: optional flat strips down the bell {count, width, stands_out, from, to}, full lod
 #   nozzle.tubes: optional tube-wall texture {count, split_below_throat, per_tile}, full lod only
 #   nozzle.hoops, extension.hoops: optional stiffening rings {count, height, stands_out, from,
 #              to, studs} (from and to: fractions of that part's length from its exit; studs
@@ -112,12 +115,19 @@ def _hoops(name, h, outer, length, material, seg):
         z = f * length
         r = _interp(outer, z)
         zs_all.append(z)
-        objs.append(parts.lathe(f"{name}_{i:02d}", [(r - 0.005, z - h["height"] / 2),
-                                                    (r + h["stands_out"], z - h["height"] / 2),
-                                                    (r + h["stands_out"], z + h["height"] / 2),
-                                                    (r - 0.005, z + h["height"] / 2)],
-                                closed=True, segments=max(16, seg // 2), smooth=False,
-                                material=material))
+        # Bottom, outer and top faces; the inside face is buried in the wall.
+        bm = bmesh.new()
+        m = max(16, seg // 2)
+        zb, zt = z - h["height"] / 2, z + h["height"] / 2
+        prof = ((r - 0.005, zb), (r + h["stands_out"], zb), (r + h["stands_out"], zt),
+                (r - 0.005, zt))
+        rows = [[bm.verts.new((rr * math.cos(2 * math.pi * k / m), rr * math.sin(2 * math.pi * k / m),
+                               zz)) for rr, zz in prof] for k in range(m)]
+        for k in range(m):
+            a, b = rows[k], rows[(k + 1) % m]
+            for j in range(3):
+                bm.faces.new((a[j], b[j], b[j + 1], a[j + 1]))
+        objs.append(parts._object(f"{name}_{i:02d}", bm, material, Matrix()))
         st = h.get("studs")
         if st and i % st.get("every", 1) == 0:
             # Studs or brackets on ring i, at the angles listed for it in `angles` ({"i": [deg]}),
@@ -190,6 +200,27 @@ def _hoops(name, h, outer, length, material, seg):
                     bm.faces.new([v[k] for k in f])
         objs.append(parts._object(f"{name}_straps", bm, sp.get("material", material), Matrix()))
     return objs
+
+def _ribs(name, rb, outer, length, material):
+    """Flat strips running down a shell whose outer wall is `outer` [(r, z)]: rb {count, width,
+    stands_out, from, to} (from and to: fractions of the length from the exit)."""
+    z0, z1 = rb["from"] * length, rb["to"] * length
+    zs = [z0 + (z1 - z0) * i / rb.get("rows", 5) for i in range(rb.get("rows", 5) + 1)]
+    t, w = rb["stands_out"], rb["width"]
+    bm = bmesh.new()
+    for k in range(rb["count"]):
+        a = 2 * math.pi * k / rb["count"]
+        c, s_, tx, ty = math.cos(a), math.sin(a), -math.sin(a), math.cos(a)
+        rows = []
+        for z in zs:
+            r = _interp(outer, z)
+            rows.append([bm.verts.new(((r + dr) * c + side * w / 2 * tx,
+                                       (r + dr) * s_ + side * w / 2 * ty, z))
+                         for side, dr in ((-1, -0.005), (-1, t), (1, t), (1, -0.005))])
+        for lo, hi in zip(rows, rows[1:]):
+            for i in range(3):                          # side, face, side (the back is hidden)
+                bm.faces.new((lo[i], lo[i + 1], hi[i + 1], hi[i]))
+    return parts._object(name, bm, material, Matrix())
 
 def _interp(prof, z):
     """Radius of a profile [(r, z)] at height z (profile in either z order)."""
@@ -306,6 +337,14 @@ def _rocket(name, e, lod):
     rt = inner[-1][0]
     # Nozzle: a hollow shell, open at both ends (the chamber closes the top).
     outer = [(r + wall, z) for r, z in inner]
+    op = nz.get("outer_profile")
+    if op:
+        # The outside of the bell where it is wider than the wall (bands, manifolds, cover):
+        # [(r, z)] with z above the nozzle's exit; between its points the larger radius wins.
+        z0, z1 = min(z for _, z in op), max(z for _, z in op)
+        zs_ = sorted({z for _, z in outer} | {z for _, z in op if z <= L})
+        outer = [(max(_interp(outer, z), _interp(op, z)) if z0 <= z <= z1 else _interp(outer, z), z)
+                 for z in zs_]
     ring = outer + [(r, z) for r, z in reversed(inner)]
     objs = [parts.lathe(f"{name}_nozzle", ring, closed=True, segments=seg,
                         material=mats.get("nozzle", "dark_metal"))]
@@ -315,9 +354,12 @@ def _rocket(name, e, lod):
     # length, the cylinder, then the injector dome into the powerhead.
     rc = ch["diameter"] / 2
     zc = L + ch["convergent_length"]
-    prof = [(rt + wall, L - wall)]
-    prof += [(rt + wall + (rc - rt - wall) * (1 - math.cos(math.pi * i / n)) / 2,
-              L + ch["convergent_length"] * i / n) for i in range(1, n + 1)]
+    if ch.get("outside") == "cylinder":                # the convergent section hidden in a sleeve
+        prof = [(rc, L - wall), (rc, zc)]
+    else:
+        prof = [(rt + wall, L - wall)]
+        prof += [(rt + wall + (rc - rt - wall) * (1 - math.cos(math.pi * i / n)) / 2,
+                  L + ch["convergent_length"] * i / n) for i in range(1, n + 1)]
     top = zc + ch["length"]
     prof += [(rc, top), (0, top)]
     objs.append(parts.lathe(f"{name}_chamber", [(0, L - wall)] + prof, segments=seg,
@@ -332,6 +374,9 @@ def _rocket(name, e, lod):
         objs.append(parts.cylinder(f"{name}_gimbal", g["diameter"] / 2, g["height"] + 0.01,
                                    location=(0, 0, top + hp - 0.01), segments=seg // 2,
                                    material=mats.get("parts", "dark_metal")))
+    if lod == "full" and "ribs" in nz:
+        objs.append(_ribs(f"{name}_nozzle_ribs", nz["ribs"], outer, L,
+                          mats.get("hoops", mats.get("nozzle", "dark_metal"))))
     if lod == "full" and "hoops" in nz:
         objs += _hoops(f"{name}_nozzle_hoop", nz["hoops"], outer, L,
                        mats.get("hoops", mats.get("nozzle", "dark_metal")), seg)
