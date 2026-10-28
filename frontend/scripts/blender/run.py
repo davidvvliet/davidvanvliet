@@ -67,6 +67,16 @@ def live_available():
     except OSError:
         return False
 
+def live_here():
+    """A live session that serves this checkout. Another worktree's session would build its own files."""
+    if not live_available():
+        return False
+    try:
+        reply = send("import build as _b, os; print(os.path.realpath(os.path.dirname(_b.__file__)))", timeout=10)
+        return reply["ok"] and reply["output"].strip() == os.path.realpath(HERE)
+    except (OSError, ValueError, KeyError):
+        return False
+
 def send(code, timeout=600):
     with socket.create_connection(("127.0.0.1", PORT), timeout=timeout) as s:
         s.sendall(code.encode())
@@ -121,7 +131,7 @@ def build(probe, headless=False, export=True):
     if not os.path.exists(os.path.join(HERE, "specs", f"{probe}.json")):
         die(f"No spec for '{probe}'. Known: {', '.join(probes()) or 'none'} (start one with: run.py new {probe})")
     t0, log = time.time(), ""
-    if not headless and live_available():
+    if not headless and live_here():
         code = (f"import importlib, build as _b; importlib.reload(_b); "
                 f"_b.build({probe!r}, export={export!r})")
         reply = send(code)
@@ -348,7 +358,7 @@ def cmd_dev(args):
     if target and target not in probes():
         die(f"No spec for '{target}'. Known: {', '.join(probes())}")
     sys.stdout.reconfigure(line_buffering=True)
-    where = "the live session" if not headless and live_available() else "headless Blender"
+    where = "the live session" if not headless and live_here() else "headless Blender"
     print(f"Rebuilding {target or 'the probe you save'} on every save, in {where} (Ctrl+C to stop)...")
     seen = watched()
     if target:  # build once now, so a save made while starting up isn't missed
