@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 import { getPhotos } from "../../../photos";
 import PhotoView from "../../../components/PhotoView";
+import { globePaths } from "../../../photoGlobe";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -31,5 +32,6 @@ export default async function PhotoPage({ params }: Props) {
   }
   const prev = photos[(i - 1 + photos.length) % photos.length];
   const next = photos[(i + 1) % photos.length];
-  return <PhotoView photo={photos[i]} count={photos.length} prevSlug={prev.slug} nextSlug={next.slug} />;
+  const { loc } = photos[i];
+  return <PhotoView photo={photos[i]} count={photos.length} prevSlug={prev.slug} nextSlug={next.slug} globe={loc && globePaths(loc[0], loc[1])} />;
 }

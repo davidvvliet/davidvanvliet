@@ -14,6 +14,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  container-type: size;
+}
+
+/* The photo's own box: as large as fits the frame at the photo's aspect. */
+.media {
+  position: relative;
+  width: min(100cqw, 100cqh * var(--aspect));
+  aspect-ratio: var(--aspect);
+}
+
+.mediaFill {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 .image {
@@ -21,9 +35,74 @@
 }
 
 .video {
-  max-width: 100%;
-  max-height: 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
   display: block;
+}
+
+/* Location globe: the same lines, colours and opacities as the 3D Earth
+   (SolarSystem.tsx). THREE draws lines one device pixel wide. */
+.globe {
+  flex-shrink: 0;
+  display: block;
+  overflow: visible;
+}
+
+.globeGrid,
+.globeLand {
+  fill: none;
+  stroke-width: 1px;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+@media (min-resolution: 2dppx) {
+  .globeGrid,
+  .globeLand {
+    stroke-width: 0.5px;
+  }
+}
+
+.globeGrid {
+  stroke: #333333;
+  stroke-opacity: 0.4;
+}
+
+.globeLand {
+  stroke: #ffffff;
+  stroke-opacity: 0.85;
+}
+
+.globeDot {
+  fill: #3d8bff;
+}
+
+.globeGlow {
+  fill: #3d8bff;
+  opacity: 0.3;
+}
+
+/* Centred in the blank space between the pane's edge and the photo:
+   that space is half of what the photo leaves of the frame's width. */
+.sideGlobe {
+  position: absolute;
+  top: 50%;
+  right: calc(100% + ((100cqw - min(100cqw, 100cqh * var(--aspect))) / 2 - 96px) / 2);
+  transform: translateY(-50%);
+}
+
+/* Landscape: the globe left of the title and caption, the pair centred. */
+.row {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.row .text {
+  text-align: left;
 }
 
 .text {
