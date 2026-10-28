@@ -73,10 +73,16 @@ def build(spec):
     with parts.assembly("fuselage", core=True):
         parts.loft("fuselage", [ring(x) for x in xs], material="x15_black")
 
-    # Canopy: each section is a polyline (one side, bottom to top) through the widths the
-    # drawing gives at the sill and at the windows' lower and upper edges, then a rounded roof
-    # to the top. Aft of the frame, the fairing is a roof over a base inside the fuselage.
-    cs, cw = dr["canopy"], dr["canopy_windows"]
+    # Canopy (photos NASM-SI-2007-12573, -12578, NASM-SI-2008-5563, -5565): a hood of upright
+    # sides under a round roof (the front view's arch), whose front is two flat windscreen faces
+    # cut back from the centre-post ridge (the side view's top line). Aft of the frame the
+    # fairing is a roof over a base inside the fuselage. Edges where the surface turns sharply
+    # are marked hard, so the hood has crisp lines between smooth faces.
+    cs, cw, arch = dr["canopy"], dr["canopy_windows"], dr["canopy"]["arch"]
+    x_front, x_end = cs["top"][0][0], cs["top"][-1][0]
+    (r0x, r0z), (r1x, r1z) = cs["top"][0], cs["top"][1]
+    rake = (r1x - r0x) / (r1z - r0z)  # ridge: ft aft per ft up
+    k = cs["windscreen_plan_tan"]
 
     def at(rows, x):
         if x <= rows[0][0]:
@@ -87,108 +93,149 @@ def build(spec):
             if x0 <= x <= x1:
                 return v0 + (v1 - v0) * (x - x0) / (x1 - x0)
 
-    def side(x):
-        top = at(cs["top"], x)
-        if x <= cs["frame_x"]:
-            pts = [(at(cs["sill_half_width"], x), at(cs["sill"], x))]
-            for lv in ("low", "high"):
-                z = cs[lv]["z"]
-                if top > z + 0.02 and x >= cs[lv]["half_width"][0][0]:
-                    pts.append((at(cs[lv]["half_width"], x), z))
-        else:
-            hw = at(cs["fairing_half_width"], x)
-            pts = [(hw * 1.1, 1.6), (hw, at(cs["fairing_roof_from"], x))]
-        y0, z0 = pts[-1]
-        e = cs["roof_exponent"]
-        for k in range(1, 9):
-            t = math.pi / 2 * k / 8
-            pts.append((y0 * math.cos(t) ** (2 / e), z0 + (top - z0) * math.sin(t) ** (2 / e)))
-        for _ in range(3):  # round the corners (Chaikin), keeping both ends
-            pts = [pts[0]] + [q for a, b in zip(pts, pts[1:]) for q in
-                              ((0.75 * a[0] + 0.25 * b[0], 0.75 * a[1] + 0.25 * b[1]),
-                               (0.25 * a[0] + 0.75 * b[0], 0.25 * a[1] + 0.75 * b[1]))] + [pts[-1]]
-        return pts
+    def ridge_x(z):
+        return r0x + (z - r0z) * rake
 
-    def resample(pts, n=24):
+    def profile(x, n=64):
+        """One side of the section at x, bottom to top, densely sampled (y, z)."""
+        fx = cs["frame_x"]
+        top = max(at(cs["top"], x), r1z if x < r1x else 0)
+        if x <= fx:
+            a, base = at(arch["half_width"], x), at(cs["sill"], x)
+        else:  # aft fairing: the same arch, narrowing as the drawn fairing does
+            a = at(cs["fairing_half_width"], x) * at(arch["half_width"], fx) / at(cs["fairing_half_width"], fx)
+            base = at(cs["sill"], fx)
+        zs = min(arch["z_shoulder"], top - 0.02)
+        pts = [(a, base + (zs - base) * i / 8) for i in range(8)]
+        pts += [(a * math.cos(t), zs + (top - zs) * math.sin(t)) for t in (math.pi / 2 * i / (n - 8) for i in range(n - 7))]
+        out = []
+        for y, z in pts:  # the windscreen faces: no wider than they allow at this height
+            y = min(y, max(0.0, (x - ridge_x(z)) * k))
+            out.append((y, z))
+            if y == 0.0:
+                break
+        return out
+
+    def resample(pts, n=40):
         d = [0.0]
         for (y0, z0), (y1, z1) in zip(pts, pts[1:]):
             d.append(d[-1] + math.hypot(y1 - y0, z1 - z0))
-        out = []
+        res = []
         for i in range(n):
             s = d[-1] * i / (n - 1)
-            for k in range(len(pts) - 1):
-                if d[k] <= s <= d[k + 1] or k == len(pts) - 2:
-                    t = (s - d[k]) / (d[k + 1] - d[k]) if d[k + 1] > d[k] else 0
-                    out.append((pts[k][0] + (pts[k + 1][0] - pts[k][0]) * t, pts[k][1] + (pts[k + 1][1] - pts[k][1]) * t))
+            for j in range(len(pts) - 1):
+                if d[j] <= s <= d[j + 1] or j == len(pts) - 2:
+                    t = (s - d[j]) / (d[j + 1] - d[j]) if d[j + 1] > d[j] else 0
+                    res.append((pts[j][0] + (pts[j + 1][0] - pts[j][0]) * t, pts[j][1] + (pts[j + 1][1] - pts[j][1]) * t))
                     break
-        return out
+        return res
 
     def canopy_ring(x):
-        half = resample(side(x))
-        right = [(-y, z) for y, z in half]          # bottom to top
-        left = [(y, z) for y, z in reversed(half[:-1])]  # top to bottom, sharing the top
+        half = resample(profile(x))
+        right = [(-y, z) for y, z in half]
+        left = [(y, z) for y, z in reversed(half[:-1])]
         return [P(x, y, z) for y, z in right + left]
 
-    x_front, x_end = cs["top"][0][0], cs["top"][-1][0]
-    cxs = [x_front + (x_end - x_front) * k / 60 for k in range(60)]
+    def mark_hard_edges(obj, degrees=25):
+        import bmesh
+        bm = bmesh.new()
+        bm.from_mesh(obj.data)
+        for e in bm.edges:
+            if len(e.link_faces) == 2 and e.calc_face_angle(0) > math.radians(degrees):
+                e.smooth = False
+        bm.to_mesh(obj.data)
+        bm.free()
+
+    cxs = [x_front + (x_end - x_front) * i / 80 for i in range(81)]
     with parts.assembly("canopy"):
-        parts.loft("canopy", [[P(x_front - 0.1, 0, 1.8)]] + [canopy_ring(x) for x in cxs] + [[P(x_end, 0, cs["top"][-1][1])]],
-                   material="x15_black")
+        hood = parts.loft("canopy", [[P(x_front - 0.05, 0, r0z - 0.03)]] + [canopy_ring(x) for x in cxs[1:-1]]
+                          + [[P(x_end, 0, cs["top"][-1][1])]], material="x15_black")
+        mark_hard_edges(hood)
 
-    # Windows: the drawn side-view outline projected sideways onto the canopy, as a thin pane
-    # standing a few millimetres out of it (a separate solid, so it never flickers).
+    # Windows, two each side: a windscreen pane on the front face (the front view's D outline,
+    # projected aft onto the face) and a side window behind it (the side view's outline,
+    # projected sideways onto the side). Each is a thin pane standing a few millimetres out of
+    # the hood (a separate solid, so it never flickers) inside a raised frame (photos).
     (xa, za), (xb, zb) = cw["front_low"], cw["front_high"]
+    ws, wf = dr["windscreen"], spec["from_photos"]["window_frame"]["value"]
 
-    def on_hood(x, z, sign, out):
-        pts = side(x)
+    def on_side(x, z, sign, out):
+        pts = profile(x)
         for (y0, z0), (y1, z1) in zip(pts, pts[1:]):
             if z0 <= z <= z1 and z1 > z0:
                 t = (z - z0) / (z1 - z0)
                 y = y0 + (y1 - y0) * t
-                ny, nz = (z1 - z0), -(y1 - y0)  # outward normal of the segment
+                ny, nz = (z1 - z0), -(y1 - y0)
                 n = math.hypot(ny, nz)
                 return P(x, sign * (y + out * ny / n), z + out * nz / n)
         raise ValueError(f"window point off the canopy: x {x}, z {z}")
+
+    face_n = (-k, 1.0, k * rake)  # outward normal of a windscreen face: forward, out and up
+    face_len = math.sqrt(sum(c * c for c in face_n))
+
+    def on_face(y, z, sign, out):
+        x = ridge_x(z) + y / k
+        nx, ny, nz = (c / face_len for c in face_n)
+        return P(x + out * nx, sign * (y + out * ny), z + out * nz)
 
     def z_top(x):
         front = za + (x - xa) * (zb - za) / (xb - xa)
         return min(cw["z_high"], front, at(cs["top"], x) - 0.05)
 
-    x0 = xa + (cw["z_low"] - za) * (xb - xa) / (zb - za) + 0.02
-    pane = 0.02  # ft out of the canopy surface
-    for sign, side_name in parts.sides():
-        rings = []
-        for k in range(16):
-            x = x0 + (cw["aft_x"] - x0) * k / 15
-            zt = max(z_top(x), cw["z_low"] + 0.01)
-            zs = [cw["z_low"] + (zt - cw["z_low"]) * i / 9 for i in range(10)]
-            rings.append([on_hood(x, z, sign, pane) for z in zs] + [on_hood(x, z, sign, -pane) for z in reversed(zs)])
-        with parts.assembly(f"window_{side_name}"):
-            parts.loft(f"window_{side_name}", rings, material="x15_glass", smooth=False)
+    def ws_half(z):  # the windscreen's front-view outline: straight sides, then a round top
+        c, h = (ws["y_inner"] + ws["y_outer"]) / 2, (ws["y_outer"] - ws["y_inner"]) / 2
+        if z <= ws["z_side_top"]:
+            return c, h
+        t = (z - ws["z_side_top"]) / (ws["z_top"] - ws["z_side_top"])
+        return c, h * math.sqrt(max(0.0, 1 - t * t))
 
-    # Window frames: a raised band round each pane (photos), so the glass sits recessed in it.
-    # The outline in (x, z) runs along the sill, up the aft edge, then back along the top and
-    # down the windscreen slope; each point is pushed outward in that plane for the band's width.
-    wf = spec["from_photos"]["window_frame"]["value"]
-    xs_w = [x0 + (cw["aft_x"] - x0) * k / 24 for k in range(25)]
-    outline = ([(x, cw["z_low"]) for x in xs_w[:-1]]
-               + [(cw["aft_x"], cw["z_low"] + (z_top(cw["aft_x"]) - cw["z_low"]) * k / 6) for k in range(6)]
-               + [(x, max(z_top(x), cw["z_low"] + 0.01)) for x in reversed(xs_w[1:])])
-    m = len(outline)
-    for sign, side_name in parts.sides():
+    def frame(name, outline, surf):
+        """A raised band round a closed 2D outline, mapped onto the hood by surf(u, v, out)."""
+        m = len(outline)
+        area = sum(u0 * v1 - u1 * v0 for (u0, v0), (u1, v1) in zip(outline, outline[1:] + outline[:1]))
+        turn = 1 if area > 0 else -1  # anticlockwise: outward is the tangent turned clockwise
         rings = []
         for i in range(m + 1):
-            (xp, zp), (xn, zn) = outline[(i - 1) % m], outline[(i + 1) % m]
-            x, z = outline[i % m]
-            tx, tz = xn - xp, zn - zp
-            t = math.hypot(tx, tz)
-            nx, nz = tz / t, -tx / t  # outward in the (x, z) plane (the outline runs anticlockwise)
-            xi, zi = x - 0.01 * nx, z - 0.01 * nz
-            xo, zo = x + wf["width"] * nx, min(z + wf["width"] * nz, at(cs["top"], x + wf["width"] * nx) - 0.02)
-            rings.append([on_hood(xi, zi, sign, -0.01), on_hood(xi, zi, sign, wf["height"]),
-                          on_hood(xo, zo, sign, wf["height"]), on_hood(xo, zo, sign, -0.01)])
+            (up, vp), (un, vn) = outline[(i - 1) % m], outline[(i + 1) % m]
+            u, v = outline[i % m]
+            tu, tv = un - up, vn - vp
+            t = math.hypot(tu, tv)
+            nu, nv = turn * tv / t, -turn * tu / t
+            ui, vi = u - 0.01 * nu, v - 0.01 * nv
+            uo, vo = u + wf["width"] * nu, v + wf["width"] * nv
+            rings.append([surf(ui, vi, -0.01), surf(ui, vi, wf["height"]),
+                          surf(uo, vo, wf["height"]), surf(uo, vo, -0.01)])
+        parts.loft(name, rings, material="x15_black", smooth=False)
+
+    x0 = xa + (cw["z_low"] - za) * (xb - xa) / (zb - za) + 0.02
+    pane = 0.02  # ft out of the hood
+    xs_w = [x0 + (cw["aft_x"] - x0) * i / 24 for i in range(25)]
+    side_outline = ([(x, cw["z_low"]) for x in xs_w[:-1]]
+                    + [(cw["aft_x"], cw["z_low"] + (z_top(cw["aft_x"]) - cw["z_low"]) * i / 6) for i in range(6)]
+                    + [(x, max(z_top(x), cw["z_low"] + 0.01)) for x in reversed(xs_w[1:])])
+    zw = [ws["z_low"] + (ws["z_top"] - 0.005 - ws["z_low"]) * i / 14 for i in range(15)]
+    ws_outline = ([(sum(ws_half(z)), z) for z in zw] + [(ws_half(z)[0] - ws_half(z)[1], z) for z in reversed(zw)])
+    for sign, side_name in parts.sides():
+        rings = []
+        for i in range(16):
+            x = x0 + (cw["aft_x"] - x0) * i / 15
+            zt = max(z_top(x), cw["z_low"] + 0.01)
+            zs = [cw["z_low"] + (zt - cw["z_low"]) * j / 9 for j in range(10)]
+            rings.append([on_side(x, z, sign, pane) for z in zs] + [on_side(x, z, sign, -pane) for z in reversed(zs)])
+        with parts.assembly(f"window_{side_name}"):
+            parts.loft(f"window_{side_name}", rings, material="x15_glass", smooth=False)
+        rings = []
+        for z in zw:
+            c, h = ws_half(z)
+            ys = [c - h + 2 * h * j / 9 for j in range(10)]
+            rings.append([on_face(y, z, sign, pane) for y in ys] + [on_face(y, z, sign, -pane) for y in reversed(ys)])
+        with parts.assembly(f"windscreen_{side_name}"):
+            parts.loft(f"windscreen_{side_name}", rings, material="x15_glass", smooth=False)
         with parts.assembly(f"window_frame_{side_name}"):
-            parts.loft(f"window_frame_{side_name}", rings, material="x15_black", smooth=False)
+            frame(f"window_frame_{side_name}", side_outline,
+                  lambda u, v, out, sign=sign: on_side(u, min(v, at(cs["top"], u) - 0.02), sign, out))
+        with parts.assembly(f"windscreen_frame_{side_name}"):
+            frame(f"windscreen_frame_{side_name}", ws_outline, lambda u, v, out, sign=sign: on_face(u, v, sign, out))
 
     with parts.assembly("ball_nose"):
         # The sensor: a sphere in a lip, then a straight cone (its afterbody) to the base,
