@@ -4,6 +4,7 @@
 # specs/voyager.json `dimensions`; positions and angles no document gives come from its
 # `from_reference_model` (each with how it was measured).
 import math, os
+from mathutils import Vector
 from lib import materials, parts, textures
 
 HARNESS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -141,15 +142,23 @@ def build(spec):
     parts.boom("science_boom", length=d["science_boom_length"], width=0.3, location=(0, flat_r, sci_z),
                direction=(0, 1, 0), material="dark_metal")
     end = flat_r + d["science_boom_length"]
-    # Scan platform in three layers inside the reference model's box (spec scan_platform_box):
-    # instruments full width below, a narrower block above, a post on top.
-    b = ref["scan_platform_box"]
-    (x0, y0, z0), (x1, y1, z1) = b["min"], b["max"]
-    cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
-    for name, (w, l), za, zb in (("scan_lower", (x1 - x0, y1 - y0), z0, 0.44),
-                                 ("scan_upper", (0.49, 0.46), 0.44, 0.91),
-                                 ("scan_post", (0.15, 0.15), 0.91, z1)):
-        parts.box(name, (w, l, zb - za), location=(cx, cy, (za + zb) / 2), material="black")
+    # Scan platform: the reference model's pieces (spec scan_platform), wrapped boxes and
+    # the post, tube, camera barrels and telescope as cylinders.
+    sp = ref["scan_platform"]
+    for name, (lo, hi) in sp["boxes"].items():
+        parts.box(name, tuple(h - l for l, h in zip(lo, hi)), location=tuple((l + h) / 2 for l, h in zip(lo, hi)),
+                  material="black")
+    for name, c in sp["cylinders"].items():
+        a0, a1 = Vector(c["from"]), Vector(c["to"])
+        open_tube = c.get("open", False)
+        parts.cylinder(name, c["radius"], (a1 - a0).length, location=tuple(a0), direction=tuple(a1 - a0),
+                       segments=24, material="black", caps=not open_tube)
+        if open_tube:   # the lens at the back of a sunshade
+            parts.cylinder(name + "_lens", c["radius"] * 0.95, 0.01, location=tuple(a0), direction=tuple(a1 - a0),
+                           segments=24, material="black")
+    for name, c in sp["dishes"].items():
+        parts.dish(name, diameter=c["diameter"], depth=c["depth"], location=tuple(c["vertex"]),
+                   direction=tuple(c["direction"]), thickness=0.01, material="black")
 
     # Plasma wave / radio astronomy whips: two 10 m rods at 90 degrees (facts.whip_angle_deg),
     # symmetric about the reference model's mean whip direction, from its root point.

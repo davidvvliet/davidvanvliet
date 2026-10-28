@@ -382,21 +382,6 @@
       },
       "note": "region around the whip root, NASA model"
     },
-    "scan_platform_box": {
-      "value": {
-        "min": [
-          -0.38,
-          3.31,
-          -0.41
-        ],
-        "max": [
-          0.41,
-          4.21,
-          1.1
-        ]
-      },
-      "note": "region y > 3.3, NASA model; lower 0.75 m full width, narrower above"
-    },
     "science_boom_z": {
       "value": 0.5,
       "note": "boom core at y 1.4, NASA model"
@@ -479,15 +464,205 @@
     "record_roll_deg": {
       "value": 90,
       "note": "turns the texture upright (+z) on the +x face; the reference close-up shows the diagrams upright, record and stylus at upper left"
+    },
+    "scan_platform": {
+      "value": {
+        "boxes": {
+          "scan_lower": [
+            [
+              -0.351,
+              3.612,
+              -0.407
+            ],
+            [
+              0.139,
+              4.161,
+              -0.124
+            ]
+          ],
+          "scan_body": [
+            [
+              -0.199,
+              3.768,
+              -0.124
+            ],
+            [
+              0.133,
+              4.088,
+              0.334
+            ]
+          ],
+          "scan_end": [
+            [
+              -0.272,
+              4.088,
+              -0.068
+            ],
+            [
+              0.134,
+              4.209,
+              0.196
+            ]
+          ],
+          "scan_head": [
+            [
+              -0.202,
+              3.067,
+              0.041
+            ],
+            [
+              0.172,
+              3.576,
+              0.617
+            ]
+          ],
+          "scan_side": [
+            [
+              -0.381,
+              3.293,
+              -0.04
+            ],
+            [
+              -0.201,
+              3.576,
+              0.617
+            ]
+          ],
+          "scan_upper": [
+            [
+              -0.113,
+              3.322,
+              0.719
+            ],
+            [
+              0.101,
+              3.776,
+              0.945
+            ]
+          ]
+        },
+        "cylinders": {
+          "scan_post": {
+            "from": [
+              -0.006,
+              3.68,
+              0.14
+            ],
+            "to": [
+              -0.006,
+              3.68,
+              0.945
+            ],
+            "radius": 0.0675
+          },
+          "scan_post_tip": {
+            "from": [
+              -0.007,
+              3.714,
+              0.945
+            ],
+            "to": [
+              -0.007,
+              3.714,
+              1.103
+            ],
+            "radius": 0.0415
+          },
+          "scan_tube": {
+            "from": [
+              -0.006,
+              3.53,
+              0.197
+            ],
+            "to": [
+              -0.006,
+              3.78,
+              0.197
+            ],
+            "radius": 0.0575
+          },
+          "scan_telescope_secondary": {
+            "from": [
+              0.3,
+              3.887,
+              -0.137
+            ],
+            "to": [
+              0.408,
+              3.887,
+              -0.137
+            ],
+            "radius": 0.09
+          },
+          "scan_camera_1": {
+            "from": [
+              -0.042,
+              3.201,
+              0.169
+            ],
+            "to": [
+              0.342,
+              3.201,
+              0.169
+            ],
+            "radius": 0.122,
+            "open": true
+          },
+          "scan_camera_2": {
+            "from": [
+              -0.242,
+              3.242,
+              -0.09
+            ],
+            "to": [
+              0.378,
+              3.242,
+              -0.09
+            ],
+            "radius": 0.097,
+            "open": true
+          },
+          "scan_telescope_stalk": {
+            "from": [
+              0.15,
+              3.887,
+              -0.137
+            ],
+            "to": [
+              0.3,
+              3.887,
+              -0.137
+            ],
+            "radius": 0.0275
+          }
+        },
+        "dishes": {
+          "scan_telescope": {
+            "vertex": [
+              0.139,
+              3.887,
+              -0.137
+            ],
+            "direction": [
+              1,
+              0,
+              0
+            ],
+            "diameter": 0.485,
+            "depth": 0.155
+          }
+        }
+      },
+      "note": "the NASA model's loose pieces in y > 3.2 (77 pieces: open box faces, rings and discs), grouped into the volumes they bound and read off their bounds: six blanket-wrapped boxes, a vertical post with a tip and a short tube along the boom, two sideways barrels (0.244 and 0.19-0.197 m across) and a dish-shaped telescope 0.485 m across facing +x with a 0.18 m secondary on a stalk. Two gaps under 1 cm closed so the pieces touch (lower box top raised to the body box, telescope back moved to the lower box's side). Which instrument each piece is (ISS cameras, IRIS, UVS, PPS per kohlhase1977's list) is not stated in any opened source, so the names describe shapes. The two barrels are open sunshades with a lens at the back (NASA's are open tubes); the telescope is a bowl 0.485 m across and 0.155 m deep (its ring spans x 0.145-0.30) opening toward +x, its secondary on a 0.055 m stalk."
     }
   },
   "open_questions": [
-    "Scan platform size and layout: not found; would come from the NASA model and photos.",
     "Surface finishes (gold/black blankets, bare metal): no document; photos needed.",
     "Whip directions relative to the booms: PRA paper Fig. 5 text unreadable; needs a visual check.",
     "RTG boom geometry, HGA depth, magnetometer boom angle and support truss: only from the NASA model.",
     "MHW-RTG fin span: only from the NASA model (0.63 m).",
-    "Golden record cover: what the Smithsonian's 1.3 cm depth includes, engraving depth and method, hub height, and the exact turn on the bus are not documented; the gold finish method is not given by NASA."
+    "Golden record cover: what the Smithsonian's 1.3 cm depth includes, engraving depth and method, hub height, and the exact turn on the bus are not documented; the gold finish method is not given by NASA.",
+    "Scan platform: which piece is which instrument (ISS narrow/wide cameras, IRIS, UVS, PPS); layout and sizes now from the NASA model."
   ],
   "budget": {
     "triangles": 50000,

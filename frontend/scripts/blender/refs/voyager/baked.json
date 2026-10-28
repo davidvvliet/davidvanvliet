@@ -1,6 +1,6 @@
 {
- "fingerprint": "3d8fdde58904d9ae",
- "layout": "587285dcbc91b116",
+ "fingerprint": "88d1cd3a805b905e",
+ "layout": "bec894e2c738a128",
  "reference": "B.glb",
  "frame": 1,
  "size": 2048,
@@ -14,15 +14,15 @@
    "max_ray_m": 0.2
   }
  ],
- "parts": 37,
+ "parts": 50,
  "min_face_hit": 0.5,
- "coverage": 0.764,
+ "coverage": 0.847,
  "coverage_by_pass": {
-  "0": 0.515,
-  "1": 0.249
+  "0": 0.59,
+  "1": 0.257
  },
- "atlas_used": 0.428,
- "faces": 4443,
- "hidden_faces": 309,
+ "atlas_used": 0.429,
+ "faces": 5891,
+ "hidden_faces": 537,
  "normal_size": 0
 }

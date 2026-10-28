@@ -86,9 +86,10 @@ def _box(bm, size, matrix=Matrix()):
     bmesh.ops.create_cube(bm, size=1.0, matrix=matrix @ Matrix.Diagonal((*size, 1.0)))
 
 def cylinder(name, radius, length, location=(0, 0, 0), direction=(0, 0, 1), segments=32,
-             material="dark_metal", parent=None):
+             material="dark_metal", parent=None, caps=True):
+    """`caps=False`: an open tube (a camera's sunshade)."""
     bm = bmesh.new()
-    _cyl(bm, radius, length, segments)
+    _cyl(bm, radius, length, segments, cap=caps)
     return _object(name, bm, material, frame(location, direction), parent, smooth=True)
 
 def prism(name, sides, radius, height, location=(0, 0, 0), direction=(0, 0, 1), roll_deg=0.0,
