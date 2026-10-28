@@ -73,51 +73,94 @@ def build(spec):
     with parts.assembly("fuselage", core=True):
         parts.loft("fuselage", [ring(x) for x in xs], material="x15_black")
 
+    # Canopy: each section is a polyline (one side, bottom to top) through the widths the
+    # drawing gives at the sill and at the windows' lower and upper edges, then a rounded roof
+    # to the top. Aft of the frame, the fairing is a roof over a base inside the fuselage.
+    cs, cw = dr["canopy"], dr["canopy_windows"]
+
+    def at(rows, x):
+        if x <= rows[0][0]:
+            return rows[0][1]
+        if x >= rows[-1][0]:
+            return rows[-1][1]
+        for (x0, v0), (x1, v1) in zip(rows, rows[1:]):
+            if x0 <= x <= x1:
+                return v0 + (v1 - v0) * (x - x0) / (x1 - x0)
+
+    def side(x):
+        top = at(cs["top"], x)
+        if x <= cs["frame_x"]:
+            pts = [(at(cs["sill_half_width"], x), at(cs["sill"], x))]
+            for lv in ("low", "high"):
+                z = cs[lv]["z"]
+                if top > z + 0.02 and x >= cs[lv]["half_width"][0][0]:
+                    pts.append((at(cs[lv]["half_width"], x), z))
+        else:
+            hw = at(cs["fairing_half_width"], x)
+            pts = [(hw * 1.1, 1.6), (hw, at(cs["fairing_roof_from"], x))]
+        y0, z0 = pts[-1]
+        e = cs["roof_exponent"]
+        for k in range(1, 9):
+            t = math.pi / 2 * k / 8
+            pts.append((y0 * math.cos(t) ** (2 / e), z0 + (top - z0) * math.sin(t) ** (2 / e)))
+        return pts
+
+    def resample(pts, n=24):
+        d = [0.0]
+        for (y0, z0), (y1, z1) in zip(pts, pts[1:]):
+            d.append(d[-1] + math.hypot(y1 - y0, z1 - z0))
+        out = []
+        for i in range(n):
+            s = d[-1] * i / (n - 1)
+            for k in range(len(pts) - 1):
+                if d[k] <= s <= d[k + 1] or k == len(pts) - 2:
+                    t = (s - d[k]) / (d[k + 1] - d[k]) if d[k + 1] > d[k] else 0
+                    out.append((pts[k][0] + (pts[k + 1][0] - pts[k][0]) * t, pts[k][1] + (pts[k + 1][1] - pts[k][1]) * t))
+                    break
+        return out
+
+    def canopy_ring(x):
+        half = resample(side(x))
+        right = [(-y, z) for y, z in half]          # bottom to top
+        left = [(y, z) for y, z in reversed(half[:-1])]  # top to bottom, sharing the top
+        return [P(x, y, z) for y, z in right + left]
+
+    x_front, x_end = cs["top"][0][0], cs["top"][-1][0]
+    cxs = [x_front + (x_end - x_front) * k / 60 for k in range(60)]
     with parts.assembly("canopy"):
-        rings = []
-        for x, w, t, b in dr["canopy"]["stations"]:
-            if w <= 0:
-                rings.append([P(x, 0, t)])
-            else:
-                rings.append([P(x, y, z) for y, z in parts.section(w, t, b, 32, dr["canopy"]["exponent"])])
-        parts.loft("canopy", rings, material="x15_black")
+        parts.loft("canopy", [[P(x_front - 0.1, 0, 1.8)]] + [canopy_ring(x) for x in cxs] + [[P(x_end, 0, cs["top"][-1][1])]],
+                   material="x15_black")
 
     # Windows: the drawn side-view outline projected sideways onto the canopy, as a thin pane
     # standing a few millimetres out of it (a separate solid, so it never flickers).
-    cw, cs = dr["canopy_windows"], dr["canopy"]
-    ce = cs["exponent"]
     (xa, za), (xb, zb) = cw["front_low"], cw["front_high"]
 
-    def hood(x):
-        w, t, b = lerp(cs["stations"], x)
-        return w, (t + b) / 2, (t - b) / 2
-
     def on_hood(x, z, sign, out):
-        w, zc, h = hood(x)
-        v = min(abs(z - zc) / h, 0.9999)
-        y = w * (1 - v ** ce) ** (1 / ce)
-        gy = ce * (y / w) ** (ce - 1) / w
-        gz = ce * v ** (ce - 1) / h * (1 if z >= zc else -1)
-        n = math.hypot(gy, gz)
-        return P(x + 0, sign * (y + out * gy / n), z + out * gz / n)
+        pts = side(x)
+        for (y0, z0), (y1, z1) in zip(pts, pts[1:]):
+            if z0 <= z <= z1 and z1 > z0:
+                t = (z - z0) / (z1 - z0)
+                y = y0 + (y1 - y0) * t
+                ny, nz = (z1 - z0), -(y1 - y0)  # outward normal of the segment
+                n = math.hypot(ny, nz)
+                return P(x, sign * (y + out * ny / n), z + out * nz / n)
+        raise ValueError(f"window point off the canopy: x {x}, z {z}")
 
     def z_top(x):
-        w, zc, h = hood(x)
-        post = (1 - (cw["centre_post_half_width"] / w) ** ce) ** (1 / ce) * h + zc
         front = za + (x - xa) * (zb - za) / (xb - xa)
-        return min(cw["z_high"], front, post)
+        return min(cw["z_high"], front, at(cs["top"], x) - 0.05)
 
     x0 = xa + (cw["z_low"] - za) * (xb - xa) / (zb - za) + 0.02
     pane = 0.02  # ft out of the canopy surface
-    for sign, side in parts.sides():
+    for sign, side_name in parts.sides():
         rings = []
-        for k in range(14):
-            x = x0 + (cw["aft_x"] - x0) * k / 13
+        for k in range(16):
+            x = x0 + (cw["aft_x"] - x0) * k / 15
             zt = max(z_top(x), cw["z_low"] + 0.01)
             zs = [cw["z_low"] + (zt - cw["z_low"]) * i / 9 for i in range(10)]
             rings.append([on_hood(x, z, sign, pane) for z in zs] + [on_hood(x, z, sign, -pane) for z in reversed(zs)])
-        with parts.assembly(f"window_{side}"):
-            parts.loft(f"window_{side}", rings, material="x15_glass", smooth=False)
+        with parts.assembly(f"window_{side_name}"):
+            parts.loft(f"window_{side_name}", rings, material="x15_glass", smooth=False)
 
     with parts.assembly("ball_nose"):
         # The sensor: a sphere in a lip, then a straight cone (its afterbody) to the base,

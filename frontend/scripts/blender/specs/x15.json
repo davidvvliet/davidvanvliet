@@ -552,106 +552,202 @@
       "body_narrowing_to_x": 20.0
     },
     "canopy": {
-      "columns": [
-        "x",
-        "half_width",
-        "top",
-        "bottom"
-      ],
-      "source": "nasa_tnd3343, Fig. 1 p.20: estimated from refs/x15/three-view-1966.png (TN D-3343 Fig. 1, rendered at 400 dpi), scaled by its 49.5 ft length (1695 px). Side view for the profile: windscreen a straight slope from x 6.8 (z 1.8) to the flat top at x 8.7, flat to x 11.7, then the aft fairing down to the fuselage top by x 16; the drawn top (2.77) is lowered by up to 0.2 ft so the depth over the canopy is Table I's 4.97 with the 2.40 bottom, tapering to no change where the fairing meets the fuselage. Front view for the width and photo NASM2018-10035 for the section: sides sloping in steeply to a rounded top, with the windows on the slopes facing up and forward, so a superellipse of exponent 1.6 whose half-width at the sill is 1.35 (the top view's frame is 1.46) (estimated); top view for the aft fairing's taper (half-width 0.95 at x 13 to a point at about x 16-17). The bottom points sit inside the fuselage, along the drawn canopy sill (z 1.2).",
-      "stations": [
+      "unit": "ft",
+      "top": [
         [
-          6.7,
-          0.0,
-          1.8,
-          1.8
+          6.81,
+          1.83
         ],
         [
-          7.0,
-          0.9,
-          1.9,
-          1.3
+          8.71,
+          2.69
         ],
         [
-          7.5,
-          1.125,
-          2.13,
-          1.2
+          10.0,
+          2.68
         ],
         [
-          8.0,
-          1.238,
-          2.34,
-          1.2
+          11.0,
+          2.66
         ],
         [
-          8.5,
-          1.294,
-          2.52,
-          1.2
-        ],
-        [
-          9.0,
-          1.327,
-          2.57,
-          1.2
-        ],
-        [
-          9.5,
-          1.35,
-          2.57,
-          1.2
-        ],
-        [
-          11.5,
-          1.35,
-          2.57,
-          1.25
-        ],
-        [
-          12.0,
-          1.294,
-          2.55,
-          1.35
+          11.74,
+          2.64
         ],
         [
           12.5,
-          1.181,
-          2.5,
-          1.5
+          2.56
         ],
         [
-          13.0,
-          1.069,
-          2.48,
-          1.65
+          13.5,
+          2.47
         ],
         [
-          14.0,
-          0.878,
-          2.42,
-          1.85
-        ],
-        [
-          15.0,
-          0.619,
-          2.36,
-          1.95
+          14.4,
+          2.39
         ],
         [
           15.5,
-          0.45,
-          2.34,
-          2.0
+          2.33
         ],
         [
-          16.3,
-          0.0,
-          2.28,
+          16.5,
+          2.3
+        ],
+        [
+          17.2,
           2.28
         ]
       ],
-      "exponent": 1.6
+      "sill": [
+        [
+          6.81,
+          1.78
+        ],
+        [
+          7.0,
+          1.55
+        ],
+        [
+          7.3,
+          1.3
+        ],
+        [
+          7.6,
+          1.15
+        ],
+        [
+          8.0,
+          1.1
+        ],
+        [
+          10.0,
+          1.12
+        ],
+        [
+          11.0,
+          1.18
+        ],
+        [
+          11.74,
+          1.3
+        ]
+      ],
+      "sill_half_width": [
+        [
+          6.81,
+          0.3
+        ],
+        [
+          7.0,
+          0.9
+        ],
+        [
+          7.3,
+          1.2
+        ],
+        [
+          7.6,
+          1.4
+        ],
+        [
+          8.0,
+          1.46
+        ],
+        [
+          11.0,
+          1.46
+        ],
+        [
+          11.74,
+          1.2
+        ]
+      ],
+      "low": {
+        "z": 1.81,
+        "half_width": [
+          [
+            6.81,
+            0.1
+          ],
+          [
+            7.43,
+            0.39
+          ],
+          [
+            10.5,
+            1.3
+          ],
+          [
+            11.74,
+            1.15
+          ]
+        ]
+      },
+      "high": {
+        "z": 2.35,
+        "half_width": [
+          [
+            7.96,
+            0.12
+          ],
+          [
+            8.53,
+            0.32
+          ],
+          [
+            10.57,
+            0.93
+          ],
+          [
+            11.74,
+            1.0
+          ]
+        ]
+      },
+      "frame_x": 11.74,
+      "fairing_half_width": [
+        [
+          11.74,
+          1.0
+        ],
+        [
+          12.5,
+          0.95
+        ],
+        [
+          13.5,
+          0.85
+        ],
+        [
+          14.4,
+          0.68
+        ],
+        [
+          15.5,
+          0.45
+        ],
+        [
+          16.5,
+          0.22
+        ],
+        [
+          17.2,
+          0.0
+        ]
+      ],
+      "roof_exponent": 2.0,
+      "source": "nasa_tnd3343, Fig. 1 p.20: estimated from refs/x15/three-view-1966.png (TN D-3343 Fig. 1, rendered at 400 dpi), scaled by its 49.5 ft length (1695 px), measured to the middle of the drawn lines. Side view: the hood runs from its front corner at (6.81, 1.81) up a straight windscreen slope to the top at (8.71, 2.69), along the top to the aft frame at x 11.74 (z 2.64), and back along the sill, which drops to z 1.1 by x 8; the aft fairing runs from the frame down to the spine (2.39 at x 14.4) and ends at x 17.2. Top view: the frame (the hood's base) is a rounded rectangle 2.9 ft wide from x 6.8; above it the windscreen is a V: each pane's lower edge (z 1.81 in the side view) runs from 0.39 ft off the centreline at x 7.43 to 1.30 at x 10.5, its upper edge (z 2.35) from 0.32 at x 8.53 to 0.93 at x 10.57; the aft fairing tapers from 1.1 at the frame to a point at x 17.2. Each section is a polyline through those widths, with a rounded roof (a quarter ellipse, estimated from photo NASM2018-10035) from the upper level to the top. The top, 2.69, makes the depth over the canopy 5.09 ft with the 2.40 ft bottom: 2.4% over Table I's 4.97. To join the parts smoothly (estimated): the widths at the frame are eased to the fairing's (1.0 at the windows' upper edge), the upper level starts where the windscreen slope passes z 2.35 (x 7.96), the fairing's roof starts at 2.35 at the frame and at 2.0 by x 13, and the hood's front ends in a point at x 6.7.",
+      "fairing_roof_from": [
+        [
+          11.74,
+          2.35
+        ],
+        [
+          13.0,
+          2.0
+        ]
+      ]
     },
     "wing": {
       "tip_le_x": 32.0,
@@ -686,11 +782,11 @@
         8.71,
         2.35
       ],
-      "aft_x": 10.17,
+      "aft_x": 10.35,
       "z_low": 1.81,
       "z_high": 2.35,
       "centre_post_half_width": 0.12,
-      "source": "nasa_tnd3343, Fig. 1 p.20: estimated from refs/x15/three-view-1966.png, scaled by its 49.5 ft length: the side view draws each window as a trapezoid from x 7.69 to 10.17 ft between z 1.81 and 2.35, its front edge sloping from (7.69, 1.86) to (8.71, 2.35); the top view draws the two windows meeting near the centreline at the front. The window is that outline projected sideways onto the canopy. Centre post half-width estimated from photo NASM2018-10035 (front view, a narrow post between the two panes)."
+      "source": "nasa_tnd3343, Fig. 1 p.20: estimated from refs/x15/three-view-1966.png, scaled by its 49.5 ft length: the side view draws each window as a trapezoid from x 7.69 to 10.17 ft (the top view ends them at 10.5-10.57; the mean, 10.35, is used) between z 1.81 and 2.35, its front edge sloping from (7.69, 1.86) to (8.71, 2.35); the top view draws the two windows meeting near the centreline at the front. The window is that outline projected sideways onto the canopy. Centre post half-width estimated from photo NASM2018-10035 (front view, a narrow post between the two panes)."
     }
   },
   "closeups": [
