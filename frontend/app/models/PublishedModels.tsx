@@ -102,7 +102,7 @@ function Grid({ models }: { models: Published[] }) {
       <p className={styles.intro}>
         <span>
         These models were created step by step using my Blender x Opus 5.5 harness. Only the direct sources were
-        used in the creation of each of these models for maximum accuracy. The sources for each model are listed next to it when you open it.
+        used in the creation of each of these models for maximum accuracy. The sources for each model can be found in its detailed view.
         </span>
       </p>
       <div className={styles.gridArea}>
