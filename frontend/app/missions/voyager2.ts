@@ -6,6 +6,8 @@ export const voyager2: MissionSpec = {
   // Photos: NASA Photojournal PIA00459, NSSDC P-23953, PIA00347, PIA00143, PIA00058 (dates from their captions).
   // Closest approaches, verified against Horizons at 5-minute steps.
   cues: [
+    // On launch: the spacecraft itself (Voyager 1 and 2 share one design), to look around while the flybys play.
+    { jd: 0, lines: ['__MODEL__voyager', '__DIM__My 3D model of Voyager. Drag to turn it, hover a part for its size, click one to focus it.'] },
     { jd: 2444064.25, lines: ['__IMG__/voyager2-europa.jpg', "__DIM__Europa, 9 July 1979, from 246,000 km. Photo: NASA/JPL."] },
     { jd: 2444064.4375, lines: ['Closest approach to Jupiter, 9 July 1979.'] },
     { jd: 2444834.0, lines: ['__IMG__/voyager2-saturn-rings.jpg', "__DIM__Saturn's rings in false colour, 17 August 1981, from 8.9 million km. Photo: NASA/JPL."] },

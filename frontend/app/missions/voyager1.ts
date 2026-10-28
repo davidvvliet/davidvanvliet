@@ -5,6 +5,8 @@ export const voyager1: MissionSpec = {
   view: { distanceAU: 8, elevationDeg: 28 }, secondsPerDay: 0.01,
   // The Pale Blue Dot: 1990-02-14 04:48 GMT (NASA Photojournal PIA00452/PIA23645), 6.05 billion km from Earth on this trail.
   cues: [
+    // On launch: the spacecraft itself (Voyager 1 and 2 share one design), to look around while the flybys play.
+    { jd: 0, lines: ['__MODEL__voyager', '__DIM__My 3D model of Voyager. Drag to turn it, hover a part for its size, click one to focus it.'] },
     // Photos: NASA Photojournal PIA00014, PIA00010, PIA02238, PIA00335 (dates from their captions; times within the day are not published).
   // Closest approaches: Jupiter 1979-03-05 12:05 UTC, Saturn 1980-11-12 23:45 UTC (both verified against Horizons at 5-minute steps).
     { jd: 2443930.0, lines: ['__IMG__/voyager1-jupiter-grs.jpg', "__DIM__The Great Red Spot, 25 February 1979, from 9.2 million km. Photo: NASA/JPL."] },
