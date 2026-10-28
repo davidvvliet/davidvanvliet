@@ -211,10 +211,12 @@
     "ball_nose": {
       "value": {
         "length": 0.425,
-        "base_diameter": 0.349
+        "base_diameter": 0.349,
+        "sphere_diameter": 0.1651
       },
-      "source": "jenkins_sp2007, ch. 'ball nose', p.184",
-      "quote": "Officially called the “high-temperature flow-direction sensor,” the device was 16.75 inches long with a base diameter of 13.75 inches."
+      "source": "jenkins_sp2007, ch. 3 'Ball nose development', p.162",
+      "quote": "The core of the ball nose consisted of a 6.5-inch-diameter Inconel X sphere mounted on the extreme tip of the X-15 nose. ... The afterbody located behind the sphere contained the electronic amplifiers ... the device was 16.75 inches long with a base diameter of 13.75 inches.",
+      "note": "Length and base diameter are the whole sensor: sphere, lip and the cone (afterbody) behind it, which is the bare cone in photo NASM2018-10038."
     },
     "landing_gear": {
       "value": "dual nose wheel forward, two steel skids aft",
@@ -747,11 +749,6 @@
     }
   ],
   "from_photos": {
-    "bare_nose_end_x": {
-      "value": 3.5,
-      "unit": "ft",
-      "source": "nasm_x15, photo NASM2018-10038: estimated, scaled by the ball nose's 13.75 in base (jenkins_sp2007); the bare cone runs about 25 in behind the ball to the frame ahead of the two-hole panel. The view is slightly oblique, so this is a lower bound."
-    },
     "yellow_band": {
       "value": {
         "from_span_fraction": 0.38
@@ -764,7 +761,14 @@
         "blend_to_x": 10.0
       },
       "unit": "ft",
-      "source": "nasm_x15, photo NASM2018-10038: the cone behind the ball nose is round in section; its radius is taken as the mean of the drawn half-width and half-depth, starting at the ball's 13.75 in base (jenkins_sp2007) and blending into the drawn sections between x 3.5 and 10 ft (estimated)."
+      "source": "nasm_x15, photo NASM2018-10038: the cone behind the ball nose is round in section; its radius is taken as the mean of the drawn half-width and half-depth, starting at the ball nose's 13.75 in base (jenkins_sp2007) and blending into the drawn sections between x 3.5 and 10 ft (estimated)."
+    },
+    "ball_nose_shape": {
+      "value": {
+        "lip_radius_factor": 1.08,
+        "lip_from_tip_sphere_diameters": 0.75
+      },
+      "source": "nasm_x15, photo NASM2018-10038: the sphere sits in a lip slightly wider than itself (about 8%, estimated), which starts about three quarters of a sphere diameter behind the tip; from there a straight cone runs to the 13.75 in base. In the photo the sphere is about half the base's width (6.5/13.75 = 0.47) and the cone ends at the riveted frame ahead of the two-hole panel, so the bare metal is the sensor only."
     }
   }
 }

@@ -69,13 +69,9 @@ def build(spec):
             pts.append(P(x, lo * dy, zc + lo * dz))
         return pts
 
-    cut = spec["from_photos"]["bare_nose_end_x"]["value"]
-    xs = sorted({r[0] for r in body} | {r[0] for r in fair} | {cut, 4.25, 7.0, rn["blend_to_x"], 15.0, 17.0, fair[-1][0] + 0.01})
-    nose_xs, aft_xs = [x for x in xs if x <= cut], [x for x in xs if x >= cut]
+    xs = sorted({r[0] for r in body} | {r[0] for r in fair} | {2.5, 3.5, 4.25, 7.0, rn["blend_to_x"], 15.0, 17.0, fair[-1][0] + 0.01})
     with parts.assembly("fuselage", core=True):
-        parts.loft("fuselage", [ring(x) for x in aft_xs], material="x15_black")
-    with parts.assembly("nose_cone"):
-        parts.loft("nose_cone", [ring(x) for x in nose_xs], material="x15_bare")
+        parts.loft("fuselage", [ring(x) for x in xs], material="x15_black")
 
     with parts.assembly("canopy"):
         rings = []
@@ -87,11 +83,15 @@ def build(spec):
         parts.loft("canopy", rings, material="x15_black")
 
     with parts.assembly("ball_nose"):
-        bn = f["ball_nose"]
-        L, r = bn["length"], bn["base_diameter"] / 2
-        # Round front (radius r) then straight back to the base.
-        prof = [(0, 0)] + [(r * math.sin(a), r * (1 - math.cos(a)))
-                           for a in (math.pi / 2 * k / 8 for k in range(1, 9))] + [(r, L), (0, L)]
+        # The sensor: a sphere in a lip, then a straight cone (its afterbody) to the base,
+        # which meets the fuselage's first station.
+        bn, shape = f["ball_nose"], spec["from_photos"]["ball_nose_shape"]["value"]
+        L, rb, rs = bn["length"], bn["base_diameter"] / 2, bn["sphere_diameter"] / 2
+        lip_z = shape["lip_from_tip_sphere_diameters"] * 2 * rs
+        a_end = math.acos(1 - lip_z / rs)  # where the sphere meets the lip
+        prof = [(0, 0)] + [(rs * math.sin(a), rs * (1 - math.cos(a)))
+                           for a in (a_end * k / 10 for k in range(1, 11))]
+        prof += [(rs * shape["lip_radius_factor"], lip_z), (rb, L), (0, L)]
         parts.lathe("ball_nose", prof, location=P(0, 0, dr["ball_nose"]["axis_z"]),
                     direction=(-1, 0, 0), material="x15_bare")
 
