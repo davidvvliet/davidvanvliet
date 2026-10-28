@@ -53,6 +53,66 @@ def _show_orm(mats, on):
         else:
             nt.links.new(b.outputs["BSDF"], out.inputs["Surface"])
 
+def _show_position(mats, on):
+    """Materials emit their world position (for the finish's streaks), or go back."""
+    for m in mats:
+        b = _bsdf(m)
+        out = next((n for n in m.node_tree.nodes if n.type == "OUTPUT_MATERIAL" and n.is_active_output), None) if b else None
+        if out is None:
+            continue
+        nt = m.node_tree
+        if on:
+            geo = nt.nodes.get("_pos_geo") or nt.nodes.new("ShaderNodeNewGeometry")
+            geo.name = "_pos_geo"
+            em = nt.nodes.get("_pos") or nt.nodes.new("ShaderNodeEmission")
+            em.name = "_pos"
+            nt.links.new(geo.outputs["Position"], em.inputs["Color"])
+            nt.links.new(em.outputs["Emission"], out.inputs["Surface"])
+        else:
+            nt.links.new(b.outputs["BSDF"], out.inputs["Surface"])
+
+def _noise(pts, seed):
+    """Smooth value noise in 0..1 at points already divided by the feature size."""
+    rng = np.random.default_rng(seed)
+    table = rng.random(4096)
+    i = np.floor(pts).astype(np.int64)
+    f = pts - i
+    f = f * f * (3 - 2 * f)
+    def val(di, dj, dk):
+        h = (i[..., 0] + di) * 73856093 ^ (i[..., 1] + dj) * 19349663 ^ (i[..., 2] + dk) * 83492791
+        return table[h % 4096]
+    out = 0.0
+    for di in (0, 1):
+        for dj in (0, 1):
+            for dk in (0, 1):
+                w = ((f[..., 0] if di else 1 - f[..., 0]) * (f[..., 1] if dj else 1 - f[..., 1])
+                     * (f[..., 2] if dk else 1 - f[..., 2]))
+                out = out + w * val(di, dj, dk)
+    return out
+
+def _finish(spec, O, pos, pix_mat, me, a):
+    """A material's `finish` in the livery: its roughness varies in streaks (long along
+    `along`, narrow across it) by up to +-`roughness_spread`, centred on its own value."""
+    for k, m in enumerate(me.materials):
+        base = m.name[:-len("_livery")] if m.name.endswith("_livery") else m.name
+        cfg = spec["livery"].get("finish", {}).get(base)
+        if cfg is None:
+            continue
+        sel = pix_mat == k
+        if not sel.any():
+            continue
+        d = np.array(cfg.get("along", [1, 0, 0]), float)
+        d /= np.linalg.norm(d)
+        p = pos[sel]
+        along = p @ d
+        across = p - along[:, None] * d
+        L, w = cfg["streak_m"]
+        q = np.concatenate([along[:, None] / L, across / w], 1)
+        n = _noise(q, 1)
+        n = (n - np.median(n)) / max(float(np.percentile(np.abs(n - np.median(n)), 95)), 1e-6)
+        rough = O[sel, 1] + cfg["roughness_spread"] * np.clip(n, -1, 1) * (1 - a[sel])
+        O[sel, 1] = np.clip(rough, 0.02, 1.0)
+
 def _sheet_material(name, img, channel):
     """Emission of a marking image for the bake: its colour ("colour"), or (alpha, id, 0)
     ("alpha") where id marks which marking it is."""
@@ -113,6 +173,15 @@ def _bake_paint(spec, objs, harness, probe, size, tex_dir):
     bake.bake_into(ours, orm)
     _show_orm(mats, False)
     B, O = bake.pixels(base).copy(), bake.pixels(orm).copy()
+    pos = None
+    if spec["livery"].get("finish"):
+        _show_position(mats, True)
+        pimg = bpy.data.images.new("_livery_pos", size, size, alpha=True, float_buffer=True)
+        pimg.colorspace_settings.name = "Non-Color"
+        bake.bake_into(ours, pimg)
+        _show_position(mats, False)
+        pos = bake.pixels(pimg)[..., :3].copy()
+        bpy.data.images.remove(pimg)
     face = bake.face_ids(ours, size)
     inside = face >= 0
 
@@ -189,6 +258,8 @@ def _bake_paint(spec, objs, harness, probe, size, tex_dir):
     mi = np.empty(len(me.polygons), dtype=np.int64)
     me.polygons.foreach_get("material_index", mi)
     pix_mat = np.where(inside, mi[np.maximum(face, 0)], -1)
+    if pos is not None:
+        _finish(spec, O, pos, pix_mat, me, a)
     orm_off = []
     for k, m in enumerate(me.materials):
         bs = _bsdf(m)
@@ -207,7 +278,7 @@ def _bake_paint(spec, objs, harness, probe, size, tex_dir):
     # The bake's own nodes go again: the materials are the parts' own, and a leftover image
     # node would make every part look textured (left out of the atlas, and of the export).
     for m in mats:
-        for n in [n for n in m.node_tree.nodes if n.name in ("_bake", "_albedo", "_orm")]:
+        for n in [n for n in m.node_tree.nodes if n.name in ("_bake", "_albedo", "_orm", "_pos", "_pos_geo")]:
             m.node_tree.nodes.remove(n)
     for img in (base, orm):
         bpy.data.images.remove(img)
@@ -225,6 +296,10 @@ def _save(name, arr, path, colour, quality=88):
     a = arr.copy()
     a[..., 3] = 1.0
     img.pixels.foreach_set(a.astype(np.float32).ravel())
+    if path.endswith(".jpg") and not colour:  # data (roughness, metal): saved as is
+        img.file_format = "JPEG"
+        img.save(filepath=path, quality=quality)
+        return
     if path.endswith(".jpg"):  # colour: JPEG keeps the export small
         sc = bpy.context.scene
         keep = (sc.render.image_settings.file_format, sc.render.image_settings.color_mode, sc.render.image_settings.quality)
@@ -282,7 +357,7 @@ def paint(spec, objs, harness, probe, unwrapped=False):
     if not unwrapped:
         bake.unwrap(objs, fold=bake.HIDDEN_FOLD)  # a bent panel is not hidden by itself
     key = _key(spec, objs, harness, probe)
-    base_p, orm_p, info_p = (os.path.join(out, f) for f in ("base.jpg", "orm.png", "livery.json"))
+    base_p, orm_p, info_p = (os.path.join(out, f) for f in ("base.jpg", "orm.jpg", "livery.json"))
     try:
         info = json.load(open(info_p))
     except (OSError, ValueError):
@@ -293,7 +368,7 @@ def paint(spec, objs, harness, probe, unwrapped=False):
         # Roughness and metal only change between materials and markings: half size is plenty.
         k = max(1, size // cfg.get("orm_size", size // 2))
         h, w = O.shape[0] // k * k, O.shape[1] // k * k
-        _save("livery_orm", O[:h, :w].reshape(h // k, k, w // k, k, 4).mean((1, 3)), orm_p, False)
+        _save("livery_orm", O[:h, :w].reshape(h // k, k, w // k, k, 4).mean((1, 3)), orm_p, False, cfg.get("orm_quality", 75))
         info = {"key": key, "size": size, "texel_mm": texel_mm, "markings": report, "map_off": orm_off}
         json.dump(info, open(info_p, "w"), indent=1)
     apply(objs, base_p, orm_p)

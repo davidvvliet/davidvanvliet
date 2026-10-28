@@ -34,6 +34,15 @@
       "licence": "CC0 (record and images: \"Restrictions & Rights: CC0\")",
       "saved": "refs/x15/sources/nasm_x15.txt",
       "credit": "Smithsonian National Air and Space Museum, North American X-15 (A19690360000), CC0 photos for colours: https://airandspace.si.edu/collection-objects/north-american-x-15/nasm_A19690360000"
+    },
+    {
+      "id": "nasa_insignia",
+      "title": "NASA insignia (\"meatball\"), NASA_logo.svg on Wikimedia Commons",
+      "url": "https://commons.wikimedia.org/wiki/File:NASA_logo.svg",
+      "read": "2026-10-28",
+      "licence": "public domain ({{PD-USGov-NASA}} on the file page; also tagged {{Insignia}} and {{Trademark}})",
+      "saved": "refs/x15/sources/nasa_insignia.txt",
+      "credit": "NASA insignia, NASA_logo.svg, Wikimedia Commons (public domain): https://commons.wikimedia.org/wiki/File:NASA_logo.svg"
     }
   ],
   "reference_model": {
@@ -235,8 +244,8 @@
     "x15_black": {
       "hex": "#22211e",
       "metallic": 0.0,
-      "roughness": 0.45,
-      "source": "nasm_x15, photo NASM2018-10041 (black skin aft of the yellow band), four spots away from the highlight averaged; roughness estimated from the sheen in the same photo. Metallic 0 (paint): the highlights on the skin are neutral white, not tinted, at eight spots in photos SI-2008-5558, SI-2008-5559 and SI-2007-12583 (97th-99.5th percentile brightness, channels within 3% of each other)",
+      "roughness": 0.3,
+      "source": "nasm_x15, photo NASM2018-10041 (black skin aft of the yellow band), four spots away from the highlight averaged; roughness estimated from the sheen in photos NASM-SI-2008-5559 and -5563 (the room lights reflect as sharp streaks along the fuselage, a glossy finish). Metallic 0 (paint): the highlights on the skin are neutral white, not tinted, at eight spots in photos SI-2008-5558, SI-2008-5559 and SI-2007-12583 (97th-99.5th percentile brightness, channels within 3% of each other)",
       "quote": "black titanium skin with wedge shaped horizontal stablizer"
     },
     "x15_yellow": {
@@ -299,6 +308,18 @@
       "metallic": 1.0,
       "roughness": 0.4,
       "source": "nasm_x15, photo NASM-SI-2008-5570 flattened onto the fairing end plane: median of the end face's pixels outside the bright rib edges (the ribbed metal itself; the edges' brightness, #82868a, is its sheen, left to the lighting); roughness estimated from that sheen"
+    },
+    "x15_nasa_blue": {
+      "hex": "#0b3d91",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "nasa_insignia: \"NASA blue\" RGB 11 61 145 on the file page; finish as the yellow paint"
+    },
+    "x15_nasa_red": {
+      "hex": "#fc3d21",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "nasa_insignia: \"NASA red\" RGB 252 61 33 on the file page; finish as the yellow paint"
     }
   },
   "open_questions": [
@@ -1275,10 +1296,55 @@
           [
             "refs/x15/livery/nose-dart-yellow.png",
             "x15_yellow"
+          ],
+          [
+            "refs/x15/livery/nose-dart-nasa-blue.png",
+            "x15_nasa_blue"
+          ],
+          [
+            "refs/x15/livery/nose-dart-nasa-red.png",
+            "x15_nasa_red"
+          ],
+          [
+            "refs/x15/livery/nose-dart-nasa-white.png",
+            "x15_white"
           ]
         ],
-        "source": "nasm_x15. Drawn from points read off two photos flattened onto the left side of the nose: front tip from NASM-SI-2008-5559 (fitted camera), aft tips, notch and circle from NASM-SI-2007-12578 (camera fitted to seven points cast from 5559: RESCUE box corners and dart tips, 24 px rms). The two agree on its place within a few cm. Right side: the mirror image (photo NASM-SI-2008-5559 shows it there)."
+        "source": "nasm_x15. Drawn from points read off two photos flattened onto the left side of the nose: front tip from NASM-SI-2008-5559 (fitted camera), aft tips, notch and circle from NASM-SI-2007-12578 (camera fitted to seven points cast from 5559: RESCUE box corners and dart tips, 24 px rms). The two agree on its place within a few cm. Right side: the mirror image (photo NASM-SI-2008-5559 shows it there). The NASA insignia in its circle: nasa_insignia, its disc 0.85 of the yellow circle across (estimated from a recent photo of the airplane David sent; the 2007-2008 and 2018 NASM photos show the circle plain yellow). Right side: the insignia reads forwards there too.",
+        "right_layers": [
+          [
+            "refs/x15/livery/nose-dart-yellow.png",
+            "x15_yellow"
+          ],
+          [
+            "refs/x15/livery/nose-dart-nasa-blue-right.png",
+            "x15_nasa_blue"
+          ],
+          [
+            "refs/x15/livery/nose-dart-nasa-red-right.png",
+            "x15_nasa_red"
+          ],
+          [
+            "refs/x15/livery/nose-dart-nasa-white-right.png",
+            "x15_white"
+          ]
+        ]
       }
-    ]
+    ],
+    "finish": {
+      "x15_black": {
+        "roughness_spread": 0.15,
+        "along": [
+          1,
+          0,
+          0
+        ],
+        "streak_m": [
+          1.5,
+          0.08
+        ],
+        "source": "nasm_x15, photos NASM-SI-2008-5559 and NASM-SI-2008-5563: the black skin's reflections break up in streaks along the fuselage, a few cm wide; spread and streak size estimated from those photos"
+      }
+    }
   }
 }

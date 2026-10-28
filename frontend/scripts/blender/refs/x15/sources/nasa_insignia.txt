@@ -1,0 +1,28 @@
+== {{int:filedesc}} ==
+{{Information
+|description =
+{{en|1=The NASA insignia. Element RGB color values as defined in Encapsulated PostScript file obtained from the Publishing Office of NASA Glenn Research Center.}}
+{{de|1=Logo der {{W|NASA||de}}.}}
+{{es|1=Insignia de la NASA.}}
+{{it|1=Logo della NASA.}}
+{{pl|1=Logo {{W|NASA||pl}}.}}
+{{ru|1=Логотип [[:ru:Национальное управление по аэронавтике и исследованию космического пространства|НАСА]].}}
+|source =https://www.nasa.gov/wp-content/themes/nasa/assets/images/nasa-logo.svg
+|author =National Aeronautics and Space Administration
+|date =2013-07-30
+|permission =
+|other versions =
+|other fields = 
+{{Tbc|9|11|60|145|NASA blue|286}}
+{{Tbc|0|252|61|33|NASA red|185}}
+{{Tbc|4|255|255|255|white}}
+{{Image generation|Adobe|+|s=l}}
+}}
+
+== {{int:license-header}} ==
+{{PD-USGov-NASA}}
+{{Insignia}}
+{{Trademark}}
+
+[[Category:NASA "meatball" logo]]
+[[Category:SVG text logos with transparent background]]
