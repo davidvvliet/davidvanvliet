@@ -224,7 +224,7 @@ def disc(name, radius, thickness, location=(0, 0, 0), direction=(0, 0, 1), roll_
     square [0, 1]^2 (circle inscribed, +v = the plate's local +y, turned by `roll_deg`), so a
     square image of the face maps straight on; rim and back use the image's corner.
     `hub`: {"outer": r, "inner": r, "height": h}, a raised ring at the centre with a hole
-    (`hole_material`) down to the face; with "through": true the hole goes through the plate."""
+    (`hole_material`) through the plate."""
     bm = bmesh.new()
     uv = bm.loops.layers.uv.new("UVMap")
     corner = (0.01, 0.01)
@@ -234,8 +234,7 @@ def disc(name, radius, thickness, location=(0, 0, 0), direction=(0, 0, 1), roll_
     back = ring(radius, 0.0)
     rim = ring(radius, thickness - bevel)
     front = ring(radius - bevel, thickness)
-    through = bool(hub and hub.get("through"))
-    if through:  # the back as an annulus around the hole
+    if hub:  # the back as an annulus around the hole
         back_in = ring(hub["inner"], 0.0)
         faces = [bm.faces.new((back[(k + 1) % segments], back[k], back_in[k], back_in[(k + 1) % segments]))
                  for k in range(segments)]
@@ -263,14 +262,10 @@ def disc(name, radius, thickness, location=(0, 0, 0), direction=(0, 0, 1), roll_
             for k in range(segments):
                 k2 = (k + 1) % segments
                 face_uv(bm.faces.new((a[k], a[k2], b[k2], b[k])))
-        if through:  # the hole's wall on down to the back
-            for k in range(segments):
-                k2 = (k + 1) % segments
-                wall = bm.faces.new((h_floor[k], h_floor[k2], back_in[k2], back_in[k]))
-                wall.material_index = 1
-        else:
-            floor = bm.faces.new(h_floor)
-            floor.material_index = 1
+        for k in range(segments):  # the hole's wall on down to the back
+            k2 = (k + 1) % segments
+            wall = bm.faces.new((h_floor[k], h_floor[k2], back_in[k2], back_in[k]))
+            wall.material_index = 1
     else:
         face_uv(bm.faces.new(front))
     for f in faces:
