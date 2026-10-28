@@ -9,7 +9,12 @@ import { useRouter } from "next/navigation";
 // The golden record cover from our Voyager model (public/golden-record.glb: 30.7 cm across,
 // 1.3 cm thick, engravings as colour + normal maps), turning about its vertical axis like a spun coin.
 const URL = "/golden-record.glb";
-const TURN_SECONDS = 8;
+// The spin is slowest while the engraved face (toward the camera at angle 0) is in
+// view and speeds up while the plain back is turned: speed = front speed ×
+// (1 + (BACK_SPEEDUP − 1) × (1 − cos θ) / 2), a smooth slow-fast-slow. With these,
+// a turn takes 5 s and the face is in view about 70% of it.
+const FRONT_TURN_SECONDS = 10; // a turn's length if it kept the front speed all the way round
+const BACK_SPEEDUP = 4; // how much faster it turns with its back to the camera
 const MODEL_PAGE = "/models"; // a click (not a drag) opens the models grid
 const CLICK_PX = 5;
 const DRAG_RADIANS_PER_PX = 0.012;
@@ -36,7 +41,11 @@ function Record({ spin, drag }: { spin: boolean; drag: React.RefObject<Drag> }) 
     const d = drag.current;
     if (!held.current || !turn.current) return;
     // The spin pauses while hovered or held; on release the drag eases back to zero and the spin carries on.
-    if (spin && !d.active && !d.hover) turn.current.rotation.y += (dt * 2 * Math.PI) / TURN_SECONDS;
+    if (spin && !d.active && !d.hover) {
+      const r = turn.current.rotation;
+      const speedup = 1 + ((BACK_SPEEDUP - 1) * (1 - Math.cos(r.y))) / 2;
+      r.y = (r.y + (dt * 2 * Math.PI * speedup) / FRONT_TURN_SECONDS) % (2 * Math.PI);
+    }
     if (!d.active) {
       const k = Math.exp(-dt * RETURN_RATE);
       d.yaw *= k;
