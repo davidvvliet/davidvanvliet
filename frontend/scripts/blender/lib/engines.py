@@ -19,7 +19,8 @@
 #   nozzle.tubes: optional tube-wall texture {count, split_below_throat, per_tile}, full lod only
 #   nozzle.hoops, extension.hoops: optional stiffening rings {count, height, stands_out, from,
 #              to, studs} (from and to: fractions of that part's length from its exit; studs
-#              {count, size [out, along, up], every}: boxes on every n-th ring), full lod only
+#              {count, diameter, height, segments, dense {count, bands}}: posts centred on
+#              every ring, staggered; bands listed in dense get dense.count), full lod only
 #   extension: optional nozzle extension below the nozzle {exit_diameter, length, wall}: a cone
 #              from the nozzle's exit down to its own; the engine's z = 0 is then its exit
 #   manifold:  optional torus round the nozzle {diameter (centreline) or inner_diameter (the
@@ -114,16 +115,24 @@ def _hoops(name, h, outer, length, material, seg):
                                 closed=True, segments=max(16, seg // 2), smooth=False,
                                 material=material))
         st = h.get("studs")
-        if st and (i % st.get("every", 1) == 0):
-            # Studs or brackets standing on the ring, `count` round it, staggered on alternate rings.
+        if st:
+            # Studs (a `segments`-sided post, 8 or 4 for square, `diameter` across, `height` out) centred on the band,
+            # `count` round it, staggered on alternate bands; bands listed in `dense` get
+            # dense.count instead (index from the exit; -1 is the last band).
+            dense = st.get("dense", {})
+            full = {b % n for b in dense.get("bands", [])}
+            cnt = dense["count"] if i in full else st["count"]
+            sg = st.get("segments", 8)
             bm = bmesh.new()
-            sx, sy, sz = st["size"]
-            off = math.pi / st["count"] * (i // st.get("every", 1) % 2)
-            for k in range(st["count"]):
-                a = 2 * math.pi * k / st["count"] + off
-                m = Matrix.Translation(((r + h["stands_out"] + sx / 2 - 0.005) * math.cos(a),
-                                        (r + h["stands_out"] + sx / 2 - 0.005) * math.sin(a), z))
-                parts._box(bm, (sx, sy, sz), m @ Matrix.Rotation(a, 4, "Z"))
+            ro = r + h["stands_out"] + st["height"] / 2 - 0.003
+            off = math.pi / cnt * (i % 2)
+            for k in range(cnt):
+                a = 2 * math.pi * k / cnt + off
+                m = (Matrix.Translation((ro * math.cos(a), ro * math.sin(a), z))
+                     @ Matrix.Rotation(a, 4, "Z") @ Matrix.Rotation(math.pi / 2, 4, "Y")
+                     @ Matrix.Rotation(math.pi / sg, 4, "Z"))      # a flat face up
+                bmesh.ops.create_cone(bm, cap_ends=True, segments=sg, radius1=st["diameter"] / 2,
+                                      radius2=st["diameter"] / 2, depth=st["height"], matrix=m)
             objs.append(parts._object(f"{name}_{i:02d}_studs", bm, st.get("material", material),
                                       Matrix()))
     return objs

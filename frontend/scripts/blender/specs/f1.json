@@ -285,18 +285,15 @@
           "from": 0.0,
           "to": 0.9,
           "studs": {
-            "count": 32,
-            "size": [
-              0.05,
-              0.05,
-              0.05
-            ],
-            "every": 2
+            "count": 24,
+            "diameter": 0.03,
+            "height": 0.02,
+            "segments": 4
           }
         },
         "source": [
           "r3896_1, p.1-8: tubes \"identified on reinforcing bands and straps below the thrust chamber throat\"; p.1-25 (par. 1-108): \"Protruding studs are percussion-welded onto hatbands of the thrust chamber to support and secure insulator panels\".",
-          "photo_6862832: about twenty bands from the exit to the throat region, with rows of white stud caps on alternate bands, about 32 round. Estimated."
+          "photo_6862832: about twenty bands from the exit to the throat region; the studs sit centred on the bands, a few dozen round, as small square posts (under white caps in the photo). Count and size estimated."
         ]
       },
       "tubes": {
@@ -330,11 +327,9 @@
           "to": 0.92,
           "studs": {
             "count": 16,
-            "size": [
-              0.04,
-              0.06,
-              0.07
-            ]
+            "diameter": 0.05,
+            "height": 0.05,
+            "segments": 4
           }
         },
         "source": [
