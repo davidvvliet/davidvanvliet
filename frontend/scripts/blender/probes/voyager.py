@@ -178,6 +178,10 @@ def build(spec):
         if open_tube:   # the lens at the back of a sunshade
             parts.cylinder(name + "_lens", c["radius"] * 0.95, 0.01, location=tuple(a0), direction=tuple(a1 - a0),
                            segments=24, material="black")
+    for name, c in sp["troughs"].items():   # half cylinders, flat side up
+        parts.lathe(name, [tuple(q) for q in c["profile"]], location=tuple(c["location"]),
+                    direction=tuple(c["direction"]), segments=12, sweep_deg=c["sweep_deg"], smooth=False,
+                    material="black")
     for name, c in sp["dishes"].items():
         parts.dish(name, diameter=c["diameter"], depth=c["depth"], location=tuple(c["vertex"]),
                    direction=tuple(c["direction"]), thickness=0.01, material="black")

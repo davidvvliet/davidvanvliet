@@ -1,6 +1,6 @@
 {
- "fingerprint": "efd252481f0bb4e7",
- "layout": "12f39ab887db7fd0",
+ "fingerprint": "8afb1209bd925c0c",
+ "layout": "7f294f2b32e09c7f",
  "reference": "B.glb",
  "frame": 1,
  "size": 2048,
@@ -18,11 +18,11 @@
  "min_face_hit": 0.5,
  "coverage": 0.876,
  "coverage_by_pass": {
-  "0": 0.697,
-  "1": 0.179
+  "0": 0.706,
+  "1": 0.169
  },
- "atlas_used": 0.417,
- "faces": 6521,
+ "atlas_used": 0.415,
+ "faces": 6565,
  "hidden_faces": 657,
  "normal_size": 0
 }

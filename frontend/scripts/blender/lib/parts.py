@@ -399,19 +399,24 @@ def sides():
 
 # --- Shapes ---------------------------------------------------------------------------
 
-def _lathe(bm, profile, segments, matrix=Matrix()):
+def _lathe(bm, profile, segments, matrix=Matrix(), sweep_deg=360.0):
     """Spin a profile [(r, z), ...] about local Z. Points with r == 0 become poles. Give the
-    profile going up the outside of the shape so faces point outward."""
+    profile going up the outside of the shape so faces point outward. A sweep under 360
+    degrees is centred on local +X and leaves the cut open (the caller caps it)."""
+    full = sweep_deg >= 360.0
+    n = segments if full else segments + 1
+    sweep = math.radians(sweep_deg)
+    angles = [(sweep * k / segments) - (0.0 if full else sweep / 2) for k in range(n)]
     rings = []
     for r, z in profile:
         if r <= 1e-9:
             rings.append([bm.verts.new(matrix @ Vector((0, 0, z)))])
         else:
             rings.append([bm.verts.new(matrix @ Vector((r * math.cos(a), r * math.sin(a), z)))
-                          for a in (2 * math.pi * k / segments for k in range(segments))])
+                          for a in angles])
     for a, b in zip(rings, rings[1:]):
         for k in range(segments):
-            k2 = (k + 1) % segments
+            k2 = (k + 1) % n
             if len(a) == 1 and len(b) == 1:
                 continue
             if len(a) == 1:
@@ -423,16 +428,22 @@ def _lathe(bm, profile, segments, matrix=Matrix()):
     return rings
 
 def lathe(name, profile, location=(0, 0, 0), direction=(0, 0, 1), segments=48, closed=False,
-          material="white_paint", smooth=True, parent=None):
+          material="white_paint", smooth=True, parent=None, sweep_deg=360.0, roll_deg=0.0):
     """Body of revolution (capsule, heat shield, nozzle, tank, wheel hub, camera head): the
     profile [(r, z), ...] spun about `direction` from `location`. Start and end on the axis
     (r = 0) for a closed solid, or pass `closed=True` to join the last point back to the first
-    (a ring section, e.g. a tyre)."""
+    (a ring section, e.g. a tyre). `sweep_deg` under 360 spins only part of a turn (a half
+    cylinder, a trough), centred on the local +X that `roll_deg` turns, with flat caps on the
+    cut; the profile must then start and end on the axis."""
     bm = bmesh.new()
     pts = list(profile) + ([profile[0]] if closed else [])
-    _lathe(bm, pts, segments)
+    rings = _lathe(bm, pts, segments, sweep_deg=sweep_deg)
+    if sweep_deg < 360.0:
+        for end in (0, -1):
+            bm.faces.new([ring[end] for ring in rings])
+        bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
     bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=1e-7)
-    return _object(name, bm, material, frame(location, direction), parent, smooth=smooth)
+    return _object(name, bm, material, frame(location, direction, roll_deg), parent, smooth=smooth)
 
 def wheel(name, diameter, width, location=(0, 0, 0), axle=(1, 0, 0), rim=None, cleats=0,
           cleat_height=0.0, cleat_width=0.01, spokes=0, spoke_width=None, hub_diameter=None,
