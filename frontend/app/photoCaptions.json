@@ -8,5 +8,6 @@
   "p08b": { "title": "Los Angeles", "caption": "Road surprise", "slug": "los-angeles" },
   "p12": { "title": "Sequoia National Park", "caption": "A warm warm welcome to California. Driving down the 5000ft of elevation was a blast.", "slug": "sequoia" },
   "p14": { "title": "Montecatini Val di Cecina, Circa 2008", "slug": "montecatini" },
-  "p15": { "title": "Zion National Park speedrun", "caption": "Arrived at 5pm, topped Angels Landing at 6, and was on the road to Vegas by 6:45", "slug": "zion" }
+  "p15": { "title": "Zion National Park speedrun", "caption": "Arrived at 5pm, topped Angels Landing at 6, and was on the road to Vegas by 6:45", "slug": "zion" },
+  "p19": { "title": "Somewhere in the beautiful state of Arizona", "slug": "arizona" }
 }
