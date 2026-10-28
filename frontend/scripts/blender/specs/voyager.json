@@ -304,8 +304,8 @@
   },
   "from_reference_model": {
     "hga_depth": {
-      "value": 0.54,
-      "note": "rim to vertex, NASA model (no document found)"
+      "value": 0.6546,
+      "note": "rim to vertex at our 3.66 m diameter, from the same fit (1.83^2 / (4 x 1.279)). Was 0.54 (rim 1.394 minus the hub's 0.854); the rim height stays within 3 cm of the old one. The NASA dish is 3.81 m across (rim at r 1.90-1.91 m)."
     },
     "mag_boom_elevation_deg": {
       "value": 37.0,
@@ -424,11 +424,11 @@
         ],
         "radius": 0.92
       },
-      "note": "band of side faces 0.92 m from the axis between bus and dish, NASA model"
+      "note": "band of side faces 0.92 m from the axis between bus and dish, NASA model; an open band (no top): its upper edge meets the dish's back at r 0.92 and the dish's middle sits lower, inside it"
     },
     "hga_vertex_z": {
-      "value": 0.854,
-      "note": "dish vertex height, NASA model (old frame_bus_top_z + hga_vertex_above_bus)"
+      "value": 0.7116,
+      "note": "dish vertex height: least-squares paraboloid fitted to 662 rays cast down on the NASA model's reflector between r 0.5 and 1.85 m (vertex z 0.7116, focal length 1.279 m, rms 2.4 mm). Was 0.854, which was the hub under the dish, not the reflector."
     },
     "record_centre": {
       "value": {
@@ -491,7 +491,8 @@
   ],
   "budget": {
     "triangles": 50000,
-    "glb_bytes": 1500000
+    "glb_bytes": 2000000,
+    "note": "Raised from the 1.5 MB default (David, 2026-10-27, chose 'Raise to 2 MB') for the 2048 px baked colour atlas at JPEG quality 88."
   },
   "sheet_frame": {
     "min": [
@@ -617,5 +618,24 @@
       "on": "hga",
       "note": "stands on the dish centre"
     }
+  },
+  "bake": {
+    "note": "Base colour projected from NASA's 3D model (nasa_3d_voyager: one 1024 px photo-textured atlas, about 7.5 mm/px on the dish and 10 mm/px on the bus, so a 2048 px atlas holds all its detail). Two passes like Perseverance's: a near one, then a far one for stand-in faces the near pass misses. '_root' (a 24-vertex box with no material) is left out. No normal map: NASA's geometry adds little and the budget is 1.5 MB.",
+    "source": "nasa_3d_voyager",
+    "size": 2048,
+    "ignore": [
+      "_root"
+    ],
+    "jpeg_quality": 88,
+    "passes": [
+      {
+        "extrusion_m": 0.015,
+        "max_ray_m": 0.035
+      },
+      {
+        "extrusion_m": 0.08,
+        "max_ray_m": 0.2
+      }
+    ]
   }
 }

@@ -136,6 +136,13 @@ def _pixels(img):
     img.pixels.foreach_get(a)
     return a.reshape(img.size[1], img.size[0], 4)
 
+def _jpeg(sc, quality):
+    """save_render writes in the scene's output format, not the image's: set it to JPEG."""
+    s = sc.render.image_settings
+    s.file_format = "JPEG"
+    s.color_mode = "RGB"
+    s.quality = quality
+
 def main(probe, ref_path):
     bpy.ops.wm.read_factory_settings(use_empty=True)
     spec = json.load(open(os.path.join(HERE, "specs", f"{probe}.json")))
@@ -206,7 +213,7 @@ def main(probe, ref_path):
     jpg, info_path = bake.paths(HERE, probe)
     res.filepath_raw = jpg
     res.file_format = "JPEG"
-    sc.render.image_settings.quality = cfg.get("jpeg_quality", 88)
+    _jpeg(sc, cfg.get("jpeg_quality", 88))
     res.save_render(jpg, scene=sc)
     flat.filepath_raw = os.path.join(dbg_dir, "bake_flat.png")
     flat.file_format = "PNG"
@@ -239,7 +246,7 @@ def main(probe, ref_path):
         npath = bake.normal_path(HERE, probe)
         nres.filepath_raw = npath
         nres.file_format = "JPEG"
-        sc.render.image_settings.quality = cfg.get("normal_jpeg_quality", 92)
+        _jpeg(sc, cfg.get("normal_jpeg_quality", 92))
         nres.save_render(npath, scene=sc)
 
     px = np.bincount(face[inside], minlength=nfaces)

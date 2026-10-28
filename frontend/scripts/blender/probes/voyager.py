@@ -34,9 +34,9 @@ def build(spec):
     parts.cylinder("hga_mount", radius=0.35, length=ring["z"][0] - top, location=(0, 0, top), segments=20,
                    material="dark_metal")
     parts.prism("upper_ring", sides=20, radius=ring["radius"], height=ring["z"][1] - ring["z"][0],
-                location=(0, 0, ring["z"][0]), material="black")
+                location=(0, 0, ring["z"][0]), material="black", cap_top=False)
 
-    # High-gain antenna, vertex at the reference model's height.
+    # High-gain antenna: the reference model's paraboloid (vertex height and depth fitted to it).
     vertex = ref["hga_vertex_z"]
     parts.dish("hga", diameter=d["hga_diameter"], depth=ref["hga_depth"], location=(0, 0, vertex))
     # Feed: four legs from the dish surface up to a platform, a gold feed cylinder on top,

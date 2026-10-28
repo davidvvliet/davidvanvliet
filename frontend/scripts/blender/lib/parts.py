@@ -92,10 +92,15 @@ def cylinder(name, radius, length, location=(0, 0, 0), direction=(0, 0, 1), segm
     return _object(name, bm, material, frame(location, direction), parent, smooth=True)
 
 def prism(name, sides, radius, height, location=(0, 0, 0), direction=(0, 0, 1), roll_deg=0.0,
-          material="foil_gold", parent=None):
-    """Polygonal bus (Voyager's is a decagon). `radius` is to the corners."""
+          material="foil_gold", parent=None, cap_top=True):
+    """Polygonal bus (Voyager's is a decagon). `radius` is to the corners. `cap_top=False`
+    leaves the top open (a band under a dish, whose middle sits lower than the band's edge)."""
     bm = bmesh.new()
     _cyl(bm, radius, height, sides)
+    if not cap_top:
+        bm.normal_update()
+        top = max(bm.faces, key=lambda f: f.calc_center_median().z)
+        bmesh.ops.delete(bm, geom=[top], context="FACES_ONLY")
     return _object(name, bm, material, frame(location, direction, roll_deg), parent)
 
 def box(name, size, location=(0, 0, 0), direction=(0, 0, 1), roll_deg=0.0,
@@ -132,7 +137,26 @@ def dish(name, diameter, depth, location=(0, 0, 0), direction=(0, 0, 1), thickne
     # Give the shell its thickness in the mesh itself, so measurements and exports agree.
     bm.normal_update()
     bmesh.ops.solidify(bm, geom=bm.faces[:], thickness=thickness)
-    return _object(name, bm, material, frame(location, direction), parent, smooth=True)
+    return _object(name, _ordered(bm), material, frame(location, direction), parent, smooth=True)
+
+def _ordered(bm):
+    """The same mesh with vertices and faces in a fixed order (solidify's order changes from
+    run to run, and the baked atlas's layout depends on it). Each face keeps its winding and
+    starts at its lowest vertex."""
+    key = lambda co: (round(co.x, 6), round(co.y, 6), round(co.z, 6))
+    verts = sorted({key(v.co) for v in bm.verts})
+    index = {k: i for i, k in enumerate(verts)}
+    faces = []
+    for f in bm.faces:
+        ids = [index[key(v.co)] for v in f.verts]
+        s = ids.index(min(ids))
+        faces.append(tuple(ids[s:] + ids[:s]))
+    bm.free()
+    out = bmesh.new()
+    vs = [out.verts.new(k) for k in verts]
+    for ids in sorted(faces):
+        out.faces.new([vs[i] for i in ids])
+    return out
 
 def boom(name, length, width, location=(0, 0, 0), direction=(1, 0, 0), truss=True, bays=None,
          rod=None, material="dark_metal", parent=None):
