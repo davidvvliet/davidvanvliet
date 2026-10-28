@@ -1,0 +1,28 @@
+{
+ "fingerprint": "c12a386eb7dda7d8",
+ "layout": "2230c07c2a74d16f",
+ "reference": "model.glb",
+ "frame": 200,
+ "size": 4096,
+ "passes": [
+  {
+   "extrusion_m": 0.015,
+   "max_ray_m": 0.035
+  },
+  {
+   "extrusion_m": 0.08,
+   "max_ray_m": 0.2
+  }
+ ],
+ "parts": 107,
+ "min_face_hit": 0.5,
+ "coverage": 0.933,
+ "coverage_by_pass": {
+  "0": 0.642,
+  "1": 0.292
+ },
+ "atlas_used": 0.498,
+ "faces": 7652,
+ "hidden_faces": 671,
+ "normal_size": 4096
+}

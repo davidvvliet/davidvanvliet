@@ -13,6 +13,7 @@ REFS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
 BODY = "white_paint"      # spec materials (sourced from photos)
 BLACK = "anodized_black"
 TI = "bare_titanium"
+MAST_RADIUS = 0.065      # lower mast tube (from_reference_model.mast_raised.mast_tube)
 
 def _frame_from(centre, x_axis, y_axis):
     """World matrix with local x, y along the given axes (z completes the right-hand set)."""
@@ -32,6 +33,18 @@ def oriented_box(name, size, centre, x_axis, y_axis, material, parent=None):
         obj.parent = parent
         obj.matrix_parent_inverse = parent.matrix_world.inverted()
     return obj
+
+def shapes(items, prefix, material, parent=None):
+    """Build a list of measured pieces (spec from_reference_model): {"box": size, "at": centre}
+    or {"cyl": radius, "from": point, "to": point}, each named <prefix>_<part>."""
+    for it in items:
+        name = f"{prefix}_{it['part']}"
+        if "box" in it:
+            parts.box(name, tuple(it["box"]), location=tuple(it["at"]), material=material, parent=parent)
+        else:
+            a, b = Vector(it["from"]), Vector(it["to"])
+            parts.cylinder(name, it["cyl"], (b - a).length, location=tuple(a), direction=tuple(b - a),
+                           segments=24, material=material, parent=parent)
 
 def build(spec):
     ref = spec["from_reference_model"]
@@ -131,8 +144,7 @@ def build(spec):
     # --- Telecom: high-gain antenna on its gimbal, UHF can, X-band low-gain -----------------
     hga = ref["hga"]["value"]
     with parts.assembly("hga"):
-        parts.cylinder("hga_gimbal", 0.05, 0.24, location=(0.391, 0.309, deck_z), material=BLACK)
-        parts.box("hga_mount", (0.205, 0.344, 0.246), location=(0.484, 0.497, 1.311), material=BLACK)  # model gimbal block
+        shapes(ref["hga_gimbal_parts"]["value"], "hga", BLACK)   # measured gimbal pieces
         # Hex plate where the model's dish sits (unclaimed group: centre 0.391, 0.309, 1.401).
         parts.prism("hga", 6, d["hga_diameter"] / 2, 0.04, location=(0.391, 0.309, 1.37),
                     material=BODY)
@@ -152,7 +164,7 @@ def build(spec):
         parts.box("mast_base", (0.287, 0.227, 0.155), location=(-0.5635, -0.7205, 1.2115), material=BODY)
         deploy = parts.joint("mast_deploy", tuple(m["deploy_hinge"]["at"]), axis=tuple(m["deploy_hinge"]["axis"]))
         mx, my = -0.557, -0.713                  # mast axis (azimuth axis)
-        parts.cylinder("mast", 0.065, m["upper_mast"]["z"][0] - 1.17, location=(mx, my, 1.17), material=BODY, parent=deploy)
+        parts.cylinder("mast", MAST_RADIUS, m["upper_mast"]["z"][0] - 1.17, location=(mx, my, 1.17), material=BODY, parent=deploy)
         az = parts.joint("mast_azimuth", (mx, my, m["upper_mast"]["z"][0]), axis=(0, 0, 1), parent=deploy)
         parts.cylinder("mast_upper", 0.06, m["elevation_pivot"]["at"][2] - m["upper_mast"]["z"][0],
                        location=(mx, my, m["upper_mast"]["z"][0]), material=BODY, parent=az)
@@ -162,36 +174,57 @@ def build(spec):
         look = Vector((side.y, -side.x, 0))      # (0.84, 0.54): the head's facing in the model
         el = parts.joint("mast_elevation", (mx, my, ez), axis=tuple(side), parent=az)
         e = Vector((mx, my, ez))
-        parts.cylinder("mast_elevation_drive", 0.055, 0.30, location=tuple(e - side * 0.15), direction=tuple(side),
-                       material=BLACK, parent=el)
-        # Head: SuperCam box on top, camera plate with Mastcam-Z between the Navcams (Maki 2020).
-        oriented_box("mast_head", (0.29, 0.40, 0.20), tuple(e + Vector((0, 0, 0.21))), look, side, BODY, parent=el)
-        oriented_box("camera_plate", (0.14, 0.49, 0.02), tuple(e + Vector((0, 0, 0.10))), look, side, BODY, parent=el)
-        nav_half = 0.424 / 2                     # Navcam stereo baseline (facts.navcam_baseline)
-        mcz_half = 0.244 / 2                     # Mastcam-Z baseline (facts.mastcam_baseline)
-        plate_z = 1.98                           # navcam height (dimensions.navcam_height)
-        for s, tag in ((1, "left"), (-1, "right")):
-            oriented_box(f"navcam_{tag}", (0.125, 0.074, 0.088), tuple(Vector((mx, my, plate_z)) + side * s * nav_half),
-                         look, side, "black", parent=el)   # Navcam volume, Maki 2020 Table 2
-            p = Vector((mx, my, plate_z)) + side * s * mcz_half - look * 0.11
-            parts.cylinder(f"mastcam_z_{tag}", 0.045, 0.22, location=tuple(p), direction=tuple(look),
-                           material="black", parent=el)    # size est. from the model
+        # Head, as NASA's model lays it out (from_reference_model.mast_head_parts), in the head's
+        # frame: l forward (look), s along the elevation axis, u up, from the elevation pivot.
+        hp = ref["mast_head_parts"]["value"]
+        def at(l, s_, u):
+            return tuple(e + look * l + side * s_ + Vector((0, 0, u)))
+        def span_box(name, b, s_range, material):
+            (l0, l1), (s0, s1), (u0, u1) = b["l"], s_range, b["u"]
+            oriented_box(name, (l1 - l0, s1 - s0, u1 - u0), at((l0 + l1) / 2, (s0 + s1) / 2, (u0 + u1) / 2),
+                         look, side, material, parent=el)
+        span_box("supercam", hp["supercam_box"], hp["supercam_box"]["s"], BODY)
+        span_box("supercam_floor", hp["supercam_floor"], hp["supercam_floor"]["s"], BODY)
+        w = hp["supercam_window"]
+        parts.cylinder("supercam_window", w["diameter"] / 2, w["l"][1] - w["l"][0], location=at(w["l"][0], w["s"], w["u"]),
+                       direction=tuple(look), material=BODY, parent=el)
+        span_box("mast_head_block", hp["centre_block"], hp["centre_block"]["s"], BODY)
+        dr = hp["elevation_drum"]
+        parts.cylinder("mast_elevation_drive", dr["diameter"] / 2, dr["s"][1] - dr["s"][0],
+                       location=at(0, dr["s"][0], dr["u_centre"]), direction=tuple(side), material=BLACK, parent=el)
+        for sg, tag in ((1, "left"), (-1, "right")):
+            def mirrored(b):
+                a0, a1 = b["s_abs"]
+                return (a0, a1) if sg > 0 else (-a1, -a0)
+            nc = hp["navcam"]
+            span_box(f"navcam_{tag}", nc, mirrored(nc), BODY)
+            sm = sum(mirrored(nc)) / 2
+            parts.cylinder(f"navcam_{tag}_lens", nc["lens_diameter"] / 2, 0.006,
+                           location=at(nc["l"][1], sm, sum(nc["u"]) / 2), direction=tuple(look), material="black", parent=el)
+            span_box(f"mastcam_z_{tag}", hp["mastcam_z_body"], mirrored(hp["mastcam_z_body"]), BODY)
+            hd = hp["mastcam_z_hood"]
+            span_box(f"mastcam_z_{tag}_hood", hd, mirrored(hd), BODY)
+            sm = sum(mirrored(hd)) / 2
+            oriented_box(f"mastcam_z_{tag}_window", (0.004, 0.05, 0.045), at(hd["l"][1] + 0.002, sm, sum(hd["u"]) / 2),
+                         look, side, "black", parent=el)
         parts.cylinder("mast_neck", 0.05, 0.09, location=(mx, my, ez), material=BODY, parent=el)
 
     # --- Robotic arm, stowed across the front (arm_stowed) ----------------------------------
     a = ref["arm_stowed"]["value"]
     with parts.assembly("arm"):
+        ae = ref["arm_end_parts"]["value"]      # measured pieces, keyed by the joint they move with
         shoulder = parts.joint("arm_shoulder", tuple(a["shoulder"]), axis=(0, 0, 1))
-        parts.box("arm_shoulder", (0.30, 0.30, 0.235), location=(0.36, -1.19, 0.80), material=BLACK, parent=shoulder)
+        shapes(ae["shoulder"], "arm", BLACK, parent=shoulder)
         j2 = parts.joint("arm_elevation", tuple(a["joint_2"]), axis=(0, 1, 0), parent=shoulder)
+        shapes(ae["arm_elevation"], "arm", BLACK, parent=j2)
         parts.tube("arm_upper", [(0.30, -0.996, 0.92), (-0.50, -0.996, 0.96)], 0.055, material=BODY, parent=j2)
         elbow = parts.joint("arm_elbow", tuple(a["elbow"]), axis=(0, 1, 0), parent=j2)
         parts.cylinder("arm_elbow", 0.09, 0.30, location=(-0.52, -0.94, 1.0), direction=(0, -1, 0), material=BLACK, parent=elbow)
         parts.tube("arm_fore", [(-0.52, -1.18, 1.05), (0.25, -1.18, 1.06)], 0.055, material=BODY, parent=elbow)
         wrist = parts.joint("arm_wrist", tuple(a["wrist"]), axis=(0, 1, 0), parent=elbow)
-        parts.box("arm_wrist", (0.30, 0.25, 0.30), location=(0.37, -1.0, 1.05), material=BLACK, parent=wrist)
+        shapes(ae["arm_wrist"], "arm", BLACK, parent=wrist)
         turret = parts.joint("arm_turret", tuple(a["turret"]), axis=(1, 0, 0), parent=wrist)
-        parts.box("turret", (0.45, 0.50, 0.26), location=(0.43, -1.0, 1.36), material=BLACK, parent=turret)
+        shapes(ae["arm_turret"], "arm", BLACK, parent=turret)
         parts.cylinder("turret_drill", 0.04, 0.20, location=(0.39, -1.226, 1.30), material=TI, parent=turret)
 
     # --- Markings (spec "markings"): image plates; positions in the spec's placement notes --
@@ -215,7 +248,10 @@ def build(spec):
                     up=(0, 0, 1), material=materials.image("healthcare_plaque", img("healthcare_plaque"), metallic=0.3, roughness=0.5))
     with parts.assembly("mast"):
         p = mk["flag_plate"]["placement"]
-        parts.plate("flag_plate", p["size"][0], p["size"][1], 0.003, location=tuple(p["centre"]), direction=(0, -1, 0),
-                    up=(0, 0, 1), material=materials.image("flag_plate", img("flag_plate"), metallic=0.5, roughness=0.45), parent=deploy)
+        a = math.radians(p["facing_azimuth_deg"])
+        f = (math.cos(a), math.sin(a), 0)
+        parts.plate("flag_plate", p["size"][0], p["size"][1], 0.002,
+                    location=tuple(Vector(p["axis_point"]) + Vector(f) * MAST_RADIUS), direction=f, up=(0, 0, 1),
+                    material=materials.image("flag_plate", img("flag_plate"), metallic=0.5, roughness=0.45), parent=deploy)
 
     parts.pose({name: j["angle"] for name, j in spec.get("joints", {}).items()})

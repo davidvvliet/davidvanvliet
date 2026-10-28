@@ -256,6 +256,28 @@ def cmd_explode(args):
               f"{u['nearest_m'] * 100:.0f} cm from {u['nearest_part']}")
     print(f"  image: {os.path.join(out, 'explode.png')}")
 
+def cmd_bake(args):
+    if len(args) != 2:
+        die("usage: run.py bake <probe> <reference model .glb>  (spec needs a \"bake\" section)")
+    probe, model = args[0], os.path.abspath(args[1])
+    if not os.path.exists(model):
+        die(f"{model} not found")
+    check_version()
+    proc = subprocess.run([BLENDER, "--background", "--factory-startup", "--python-exit-code", "1",
+                           "--python", os.path.join(HERE, "bake.py"), "--", probe, model],
+                          capture_output=True, text=True)
+    line = next((l for l in proc.stdout.splitlines() if l.startswith("BAKE_OK ")), None)
+    if not line:
+        die(proc.stdout[-4000:] + proc.stderr[-4000:])
+    info = json.loads(line[8:])
+    print(f"baked {info['parts']} parts from {info['reference']} (frame {info['frame']}), by pass {info.get('coverage_by_pass')}: "
+          f"{info['coverage']:.0%} of the atlas from the reference, the rest our own colours")
+    print(f"  atlas {info['size']} px, {info['atlas_used']:.0%} used; {info['hidden_faces']} of {info['faces']} faces hidden"
+          + (f"; normal map {info['normal_size']} px" if info.get("normal_size") else ""))
+    print(f"  atlas: {os.path.join(HERE, 'refs', probe, 'baked.jpg')}")
+    print(f"  projection only: {os.path.join(OUT, probe, 'bake_projection.png')}")
+    print(f"  now rebuild: run.py build {probe}")
+
 def cmd_dev(args):
     names = [a for a in args if not a.startswith("--")]
     headless = "--headless" in args
@@ -341,7 +363,7 @@ def cmd_watch(args):
         time.sleep(0.5)
 
 COMMANDS = {"blender": cmd_blender, "build": cmd_build, "all": cmd_all, "approve": cmd_approve,
-            "new": cmd_new, "ref": cmd_ref, "explode": cmd_explode, "dev": cmd_dev, "send": cmd_send, "status": cmd_status, "watch": cmd_watch}
+            "new": cmd_new, "ref": cmd_ref, "explode": cmd_explode, "bake": cmd_bake, "dev": cmd_dev, "send": cmd_send, "status": cmd_status, "watch": cmd_watch}
 
 if __name__ == "__main__":
     if len(sys.argv) < 2 or sys.argv[1] not in COMMANDS:

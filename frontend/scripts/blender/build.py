@@ -18,8 +18,8 @@ import bpy
 
 def _lib():
     # Reload so the live session picks up edits to the library without a restart.
-    from lib import materials, parts, rig, checks, textures, sources
-    for m in (sources, materials, textures, parts, rig, checks):
+    from lib import materials, parts, rig, checks, textures, sources, bake
+    for m in (sources, materials, textures, parts, rig, checks, bake):
         importlib.reload(m)
     return parts, rig, checks
 
@@ -84,9 +84,20 @@ def build(probe, export=True):
         objs = parts.meshes(all_objs)
         if not objs:
             raise RuntimeError("the probe script built no objects")
+        baked = None
+        if spec.get("bake"):  # colours baked from the reference model (run.py bake)
+            from lib import bake
+            jpg, info = bake.paths(HERE, probe)
+            bake.unwrap(objs)
+            baked = bake.stale(objs, info) if os.path.exists(jpg) else "no baked.jpg: run `run.py bake`"
+            if os.path.exists(jpg):
+                bake.apply(objs, jpg, bake.normal_path(HERE, probe))
 
         _step(status, probe, "checks")
         results = checks.run(spec, all_objs)
+        if spec.get("bake"):
+            results.append({"name": "bake", "ok": baked is None, "measured": "fresh" if baked is None else "stale",
+                            "expected": "baked for this geometry", "unit": "", "detail": baked or "atlas matches the parts"})
         from lib import sources
         src = sources.check(spec)
         results.append({"name": "sources", "ok": not src, "measured": "ok" if not src else "off",
@@ -115,7 +126,8 @@ def build(probe, export=True):
             glb = os.path.join(out_dir, f"{probe}.glb")
             # Extras carry each part's assembly (and joints' axes) to the dashboard.
             bpy.ops.export_scene.gltf(filepath=glb, export_format="GLB", use_selection=True,
-                                      export_apply=True, export_yup=True, export_extras=True)
+                                      export_apply=True, export_yup=True, export_extras=True,
+                                      export_image_quality=90)
             entry["glb"] = glb
             results.append(checks.file_size(glb, spec))
             tex = checks.textures(objs, glb)

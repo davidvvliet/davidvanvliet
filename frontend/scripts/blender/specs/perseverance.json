@@ -630,6 +630,496 @@
     "ground_clearance": {
       "value": 0.674,
       "note": "WEB bottom z (see web_box). MSL's catalogue gives 'Clearance under the rover's body on flat ground is 66 cm.' (PDS hostMSL.cat, MSL not M2020): consistent."
+    },
+    "mast_head_parts": {
+      "value": {
+        "supercam_box": {
+          "l": [
+            -0.149,
+            0.111
+          ],
+          "s": [
+            -0.231,
+            0.217
+          ],
+          "u": [
+            0.124,
+            0.306
+          ]
+        },
+        "supercam_floor": {
+          "l": [
+            -0.15,
+            0.121
+          ],
+          "s": [
+            -0.251,
+            0.275
+          ],
+          "u": [
+            0.105,
+            0.124
+          ]
+        },
+        "supercam_window": {
+          "s": 0.112,
+          "u": 0.214,
+          "diameter": 0.15,
+          "l": [
+            0.111,
+            0.122
+          ]
+        },
+        "navcam": {
+          "l": [
+            -0.035,
+            0.1
+          ],
+          "s_abs": [
+            0.168,
+            0.256
+          ],
+          "u": [
+            0.008,
+            0.104
+          ],
+          "lens_diameter": 0.052
+        },
+        "mastcam_z_body": {
+          "l": [
+            -0.082,
+            0.057
+          ],
+          "s_abs": [
+            0.088,
+            0.157
+          ],
+          "u": [
+            0.034,
+            0.096
+          ]
+        },
+        "mastcam_z_hood": {
+          "l": [
+            0.055,
+            0.137
+          ],
+          "s_abs": [
+            0.077,
+            0.163
+          ],
+          "u": [
+            0.024,
+            0.1
+          ]
+        },
+        "centre_block": {
+          "l": [
+            -0.062,
+            0.062
+          ],
+          "s": [
+            -0.033,
+            0.066
+          ],
+          "u": [
+            -0.038,
+            0.105
+          ]
+        },
+        "elevation_drum": {
+          "s": [
+            0.087,
+            0.265
+          ],
+          "u_centre": -0.08,
+          "diameter": 0.151
+        }
+      },
+      "note": "NASA model's head at its mast animation frame 200, split into loose pieces and measured in the head's own frame: origin on the azimuth axis at the elevation pivot height (z 1.922), l along the head's facing (0.84, 0.54, 0), s along the elevation axis (-0.54, 0.84, 0), u up. Pieces by object: 'head' (SuperCam box, floor, centre block, drum), 'lens' (SuperCam window), 'NavCams', 'Mastcam_Z_cams'. Navcam centre u 0.056 puts the camera at z 1.978, agreeing with dimensions.navcam_height.",
+      "source": "nasa_3d_perseverance"
+    },
+    "arm_end_parts": {
+      "value": {
+        "shoulder": [
+          {
+            "part": "azimuth_drive",
+            "cyl": 0.102,
+            "from": [
+              0.451,
+              -1.176,
+              0.846
+            ],
+            "to": [
+              0.451,
+              -1.176,
+              0.915
+            ]
+          },
+          {
+            "part": "azimuth_motor",
+            "cyl": 0.04,
+            "from": [
+              0.451,
+              -1.176,
+              0.68
+            ],
+            "to": [
+              0.451,
+              -1.176,
+              0.824
+            ]
+          },
+          {
+            "part": "shoulder_housing",
+            "box": [
+              0.176,
+              0.149,
+              0.137
+            ],
+            "at": [
+              0.438,
+              -1.176,
+              0.827
+            ]
+          }
+        ],
+        "arm_elevation": [
+          {
+            "part": "elevation_plate",
+            "box": [
+              0.224,
+              0.072,
+              0.216
+            ],
+            "at": [
+              0.282,
+              -1.043,
+              0.8
+            ]
+          },
+          {
+            "part": "elevation_drive",
+            "cyl": 0.08,
+            "from": [
+              0.285,
+              -1.241,
+              0.823
+            ],
+            "to": [
+              0.285,
+              -1.127,
+              0.823
+            ]
+          },
+          {
+            "part": "elevation_motor",
+            "cyl": 0.04,
+            "from": [
+              0.285,
+              -1.372,
+              0.823
+            ],
+            "to": [
+              0.285,
+              -1.242,
+              0.823
+            ]
+          }
+        ],
+        "arm_wrist": [
+          {
+            "part": "wrist_housing",
+            "box": [
+              0.323,
+              0.266,
+              0.249
+            ],
+            "at": [
+              0.412,
+              -1.011,
+              1.017
+            ]
+          },
+          {
+            "part": "wrist_drive",
+            "cyl": 0.116,
+            "from": [
+              0.451,
+              -1.176,
+              0.938
+            ],
+            "to": [
+              0.451,
+              -1.176,
+              1.006
+            ]
+          },
+          {
+            "part": "turret_drive",
+            "cyl": 0.111,
+            "from": [
+              0.427,
+              -0.996,
+              1.01
+            ],
+            "to": [
+              0.427,
+              -0.996,
+              1.228
+            ]
+          }
+        ],
+        "arm_turret": [
+          {
+            "part": "turret_base",
+            "cyl": 0.115,
+            "from": [
+              0.427,
+              -0.993,
+              1.228
+            ],
+            "to": [
+              0.427,
+              -0.993,
+              1.267
+            ]
+          },
+          {
+            "part": "turret_hub",
+            "box": [
+              0.24,
+              0.407,
+              0.228
+            ],
+            "at": [
+              0.424,
+              -1.041,
+              1.403
+            ]
+          },
+          {
+            "part": "pixl",
+            "box": [
+              0.174,
+              0.189,
+              0.168
+            ],
+            "at": [
+              0.185,
+              -0.954,
+              1.403
+            ]
+          },
+          {
+            "part": "turret_plate",
+            "box": [
+              0.277,
+              0.214,
+              0.05
+            ],
+            "at": [
+              0.512,
+              -0.783,
+              1.291
+            ]
+          },
+          {
+            "part": "turret_block_1",
+            "box": [
+              0.069,
+              0.15,
+              0.195
+            ],
+            "at": [
+              0.469,
+              -0.755,
+              1.404
+            ]
+          },
+          {
+            "part": "turret_cylinder",
+            "cyl": 0.06,
+            "from": [
+              0.171,
+              -0.762,
+              1.409
+            ],
+            "to": [
+              0.311,
+              -0.762,
+              1.409
+            ]
+          },
+          {
+            "part": "turret_block_2",
+            "box": [
+              0.118,
+              0.105,
+              0.07
+            ],
+            "at": [
+              0.59,
+              -0.802,
+              1.327
+            ]
+          },
+          {
+            "part": "turret_block_3",
+            "box": [
+              0.144,
+              0.12,
+              0.162
+            ],
+            "at": [
+              0.648,
+              -0.814,
+              1.394
+            ]
+          },
+          {
+            "part": "turret_shelf",
+            "box": [
+              0.295,
+              0.139,
+              0.038
+            ],
+            "at": [
+              0.307,
+              -1.165,
+              1.285
+            ]
+          },
+          {
+            "part": "drill_side",
+            "box": [
+              0.225,
+              0.051,
+              0.244
+            ],
+            "at": [
+              0.387,
+              -1.247,
+              1.406
+            ]
+          },
+          {
+            "part": "turret_block_4",
+            "box": [
+              0.098,
+              0.279,
+              0.194
+            ],
+            "at": [
+              0.321,
+              -0.979,
+              1.381
+            ]
+          },
+          {
+            "part": "turret_block_5",
+            "box": [
+              0.15,
+              0.224,
+              0.119
+            ],
+            "at": [
+              0.487,
+              -1.006,
+              1.344
+            ]
+          },
+          {
+            "part": "turret_block_6",
+            "box": [
+              0.146,
+              0.078,
+              0.064
+            ],
+            "at": [
+              0.232,
+              -1.15,
+              1.323
+            ]
+          },
+          {
+            "part": "turret_block_7",
+            "box": [
+              0.123,
+              0.046,
+              0.22
+            ],
+            "at": [
+              0.527,
+              -0.824,
+              1.4
+            ]
+          }
+        ]
+      },
+      "note": "NASA model's stowed arm end (objects arm.003 shoulder, arm.001 and arm.004 wrist, turret_obj and PIXL turret), split into loose pieces; each entry is one large piece's world-axis bounds (box) or its axis and radius (cyl: round pieces whose two cross extents agree). The turret hub is rotated about 10 deg about z in the model; built axis-aligned. Instrument names are not in the model; only PIXL is (object PIXL). Keyed by the joint each group moves with.",
+      "source": "nasa_3d_perseverance"
+    },
+    "hga_gimbal_parts": {
+      "value": [
+        {
+          "part": "gimbal_base",
+          "cyl": 0.054,
+          "from": [
+            0.475,
+            0.46,
+            1.14
+          ],
+          "to": [
+            0.475,
+            0.46,
+            1.221
+          ]
+        },
+        {
+          "part": "gimbal_disc",
+          "cyl": 0.09,
+          "from": [
+            0.475,
+            0.46,
+            1.221
+          ],
+          "to": [
+            0.475,
+            0.46,
+            1.25
+          ]
+        },
+        {
+          "part": "gimbal_post",
+          "cyl": 0.03,
+          "from": [
+            0.475,
+            0.46,
+            1.25
+          ],
+          "to": [
+            0.475,
+            0.46,
+            1.32
+          ]
+        },
+        {
+          "part": "gimbal_arm",
+          "box": [
+            0.142,
+            0.187,
+            0.126
+          ],
+          "at": [
+            0.453,
+            0.426,
+            1.371
+          ]
+        }
+      ],
+      "note": "NASA model's antenna_hg object split into loose pieces: the plate (0.27 x 0.29 m at z 1.37-1.41, centre 0.391, 0.271) is carried by a gimbal arm (tilted piece, built axis-aligned) on a base cylinder and disc at (0.475, 0.46) on the deck. The post between disc and arm is not a separate piece in the model: est. to join them.",
+      "source": "nasa_3d_perseverance"
     }
   },
   "open_questions": [
@@ -653,7 +1143,8 @@
   },
   "budget": {
     "triangles": 50000,
-    "glb_bytes": 1500000
+    "glb_bytes": 7000000,
+    "note": "Raised from the 1.5 MB default (David, 2026-10-27: 'it can be higher quality') for a 4096 px colour atlas and a 4096 px normal map at NASA-model detail."
   },
   "materials": {
     "white_paint": {
@@ -696,10 +1187,11 @@
       "source": "nasa_3d_perseverance, mast animation: 0 = raised (frame 200), stowed about 90° away (frame 1); stow sign not yet checked"
     },
     "mast_azimuth": {
-      "angle": 0,
+      "angle": -122.7,
       "min": -181,
       "max": 181,
-      "source": "bell2021, p.23: 'point the cameras over ±181° in azimuth'. 0 = the model's raised azimuth"
+      "source": "bell2021, p.23: 'point the cameras over ±181° in azimuth'. 0 = the model's raised azimuth",
+      "pose": "Cameras facing forward (-y). At 0 the head faces NASA's model's parked direction, left-rear (look (0.84, 0.54), 32.7 deg from +x); -90 - 32.7 = -122.7 deg turns it to -y. Chosen by David (the parked direction looked wrong)."
     },
     "mast_elevation": {
       "angle": 0,
@@ -883,16 +1375,18 @@
         "flag_plate_artwork, 'This plate is located at the base of Perseverance's remote sensing mast.'"
       ],
       "placement": {
-        "centre": [
+        "axis_point": [
           -0.557,
-          -0.778,
-          1.4
+          -0.713,
+          1.4115
         ],
+        "facing_azimuth_deg": -96,
         "size": [
-          0.1,
-          0.0704
+          0.0567,
+          0.0374
         ],
-        "source": "pia26579, on the lower mast tube above its base; size est. (aspect from flag_plate_artwork, width about 0.7 of the tube's width in the photo); faces forward, est. (the arm imaged it); image: flag_plate_artwork"
+        "image": "flag_plate.png: flag_plate_artwork cropped to the flag plus 8 px of plate (px 95-433 x 87-310 of 512 x 360); the plate shows as a thin border, as David asked",
+        "source": "nasa_3d_perseverance: the model's flag decal, found by rendering the raised mast (frame 200) from every 10 deg and picking the flag's red and blue pixels, spans z 1.394-1.429 m (centre 1.4115), about 0.054 m across, centred at azimuth about -96 deg (from +x, about the mast axis), on the orange cable band around the tube. Plate size: the crop at the model's flag scale (0.054 m over the artwork's 323 px flag). Flat plate, back face touching the tube at its centre (pia26579: 'an aluminum plate mounted on the base of Perseverance's remote sensing mast')."
       }
     },
     "jpl_logo": {
@@ -918,5 +1412,26 @@
     "sherloc_cal_target": {
       "on": "sherloc_target_mount"
     }
+  },
+  "bake": {
+    "note": "Base colour projected from NASA's 3D model (nasa_3d_perseverance) with the mast raised (animation frame 200, as from_reference_model.mast_raised). Two passes: a near one (rays from 1.5 cm outside reaching 3.5 cm), then a far one (8 cm outside, 20 cm reach) for faces of stand-in shapes the near pass misses. A face missed by both keeps its sourced colour.",
+    "source": "nasa_3d_perseverance",
+    "frame": 200,
+    "size": 4096,
+    "ignore": [
+      "Icosphere"
+    ],
+    "normal_size": 4096,
+    "jpeg_quality": 92,
+    "passes": [
+      {
+        "extrusion_m": 0.015,
+        "max_ray_m": 0.035
+      },
+      {
+        "extrusion_m": 0.08,
+        "max_ray_m": 0.2
+      }
+    ]
   }
 }

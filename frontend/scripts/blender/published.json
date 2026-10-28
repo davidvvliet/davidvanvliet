@@ -1,18 +1,26 @@
 {
  "perseverance": {
-  "approved": "2026-10-27 17:26",
+  "approved": "2026-10-27 19:55",
   "inputs": {
-   "specs/perseverance.json": "6353e7f601e2cd34",
-   "probes/perseverance.py": "923a5a3972a6c094",
-   "build.py": "e7b462e72ab08d7c",
+   "specs/perseverance.json": "765c9cc70b689091",
+   "probes/perseverance.py": "de200cb3cecdd4e7",
+   "build.py": "97b06b58c763cc67",
    "blender.json": "7bbc071b6e396ec4",
    "lib/__init__.py": "e3b0c44298fc1c14",
+   "lib/bake.py": "82d7195a5be3e7a0",
    "lib/checks.py": "bc7ebe21b8fc211b",
    "lib/materials.py": "ae6b4a62f6bc1ae8",
-   "lib/parts.py": "6014e44d41773175",
+   "lib/parts.py": "6fb5266857f8407f",
    "lib/rig.py": "87431e5e6051f10e",
    "lib/sources.py": "4ddbad4d784fab9f",
-   "lib/textures.py": "02b2e1b14100938c"
+   "lib/textures.py": "02b2e1b14100938c",
+   "refs/perseverance/baked.jpg": "4365a46c6b46cec9",
+   "refs/perseverance/baked.json": "8c59a5fa95d6f608",
+   "refs/perseverance/baked_normal.jpg": "3644a58ee3f06206",
+   "refs/perseverance/flag_plate.png": "ed14d08340f0f8d6",
+   "refs/perseverance/healthcare_plaque.png": "1277d137fd5e175e",
+   "refs/perseverance/name_chips_placard.png": "4803aa20ab47d014",
+   "refs/perseverance/sherloc_target.png": "5fa6723f65e5d119"
   }
  },
  "voyager": {

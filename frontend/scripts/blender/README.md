@@ -18,6 +18,7 @@ Python; the command line needs only the system `python3`.
 - `addon/live_server.py`: runs inside Blender's GUI so builds land in the open session
 - `ref.py`: reference-model measuring (same rig, pieces with sizes and main-axis lengths)
 - `explode.py`: splits a reference model into our parts (offsets, unclaimed pieces)
+- `bake.py`, `lib/bake.py`: bakes a reference model's colours onto a probe (one atlas)
 - `tools/engraving.py`: fits a line drawing of an engraved plate onto a photo of it (plain Python)
 - `lib/sources.py`, `tools/sources.py`: a spec's sources (check, save texts; plain Python)
 - `refs/<probe>/sources/`: saved texts of the sources a spec uses
@@ -35,6 +36,7 @@ Python; the command line needs only the system `python3`.
 - `npm run model:new <probe> "Title"`: start a probe from the templates
 - `npm run model:ref <probe> <model.glb>`: measure a reference model (sheet, and close-ups through the spec's views, in `refs/<probe>/`; largest pieces in `out/<probe>/ref/parts.json`)
 - `npm run model:explode <probe> <model.glb>`: after a build, split the reference model into our parts (`out/<probe>/ref/explode.json` and `explode.png`)
+- `npm run model:bake <probe> <model.glb>`: project the reference model's colours onto the probe (`refs/<probe>/baked.jpg`); see "Baked colour"
 - `npm run model:status`, `npm run model:watch` (contact sheets inline in iTerm2)
 - `python3 scripts/blender/run.py send <file.py>`: run any Python in the live session
 
@@ -128,6 +130,35 @@ the fit, the drawing and the line image are kept in the repo; the photo is linke
 
 Builds with textured parts also check `textures`: every image has pixels, textured parts have
 UVs inside the image, and the export carries every image.
+
+## Baked colour
+
+A spec with a `bake` section (see `specs/perseverance.json`) gets one colour atlas for all
+its untextured parts, projected from the reference model, plus an optional normal map.
+`run.py bake <probe> <model>` (npm `model:bake`):
+- builds the probe and unwraps every part into one atlas (`lib/bake.py`, at rest pose, world
+  scale, packed). Faces nobody can see (rays from them hit another part within 1 cm, or the
+  inside of one) are unwrapped separately at 5% of the texel size, so the atlas goes to
+  visible surfaces;
+- poses the reference at `bake.frame` (its animation frame) and drops `bake.ignore` objects;
+- bakes base colour, not lit colour: every material is switched to an emission of its base
+  colour for the colour bake (a diffuse bake reads metal and glass as black);
+- projects in `passes`, nearest first: each pass's rays start `extrusion_m` outside our
+  surface and reach `max_ray_m`. Per face, all or nothing: a face takes the first pass that
+  hits at least `min_face_hit` (default 0.5) of it; a face no pass reaches keeps its sourced
+  colour (no patchwork). A far pass lets stand-in shapes pick up the reference's detail;
+- with `normal_size`, bakes the reference's surface detail (its geometry and its own normal
+  maps) as a tangent-space normal map on the faces that took its colour, flat elsewhere;
+- writes `refs/<probe>/baked.jpg`, `baked_normal.jpg` and `baked.json` (geometry fingerprint,
+  atlas layout hash, coverage, atlas use, hidden faces), plus `out/<probe>/bake_projection.png`
+  and `bake_flat.png` (the projection alone and the fallback, to see misses and smears).
+
+Every build unwraps the same way and applies both maps; metal and roughness stay as sourced.
+The atlas is laid out with every joint at 0, so posing needs no re-bake. The `bake` check
+fails when the geometry changed since the bake, or the layout differs: re-run it. Smears
+show where our shape is more than a few cm off the reference: shorten `max_ray_m`, or fix
+the shape. Parts with their own image (plates) are left out. Images export at JPEG quality
+90; Perseverance (4096 px colour and normal map) has a 7 MB budget (`budget.glb_bytes`).
 
 ## From Blender to the site
 1. Every build exports `out/<probe>/<probe>.glb` (ignored by git), so nothing reaches the site.
