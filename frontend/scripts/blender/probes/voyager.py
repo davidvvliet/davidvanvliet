@@ -75,7 +75,8 @@ def build(spec):
     rc = ref["record_centre"]
     a = math.radians(rc["azimuth_deg"])
     n = (math.cos(a), math.sin(a), 0.0)
-    hub = ref["record_hub"]
+    # The hole goes all the way through the record and its cover (David).
+    hub = dict(ref["record_hub"], through=True)
     base, normal = textures.engraved("golden_record", os.path.join(HARNESS, ref["record_texture"]["lines"]),
                                      os.path.join(HARNESS, "out", "voyager", "textures"), base=tuple(ref["record_gold"]))
     parts.disc("golden_record", radius=d["record_diameter"] / 2, thickness=d["record_depth"] - hub["height"],
