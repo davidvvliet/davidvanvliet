@@ -28,9 +28,9 @@
   }
  },
  "voyager": {
-  "approved": "2026-10-27 22:38",
+  "approved": "2026-10-27 22:58",
   "inputs": {
-   "specs/voyager.json": "2af738c1a0726773",
+   "specs/voyager.json": "5c5e659b36339595",
    "probes/voyager.py": "203d7bdecc38e083",
    "build.py": "49ae0ce2d201b956",
    "blender.json": "7bbc071b6e396ec4",
