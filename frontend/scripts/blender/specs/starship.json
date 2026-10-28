@@ -455,10 +455,13 @@
         "gap_brightness": 1.87,
         "shade_spread": 0.08,
         "weld_line": 0.02,
-        "weld_darken": 0.8
+        "weld_darken": 0.8,
+        "bevel": 0.012,
+        "gap_depth": 0.008,
+        "tilt": 0.07
       },
       "unit": "m",
-      "source": "photo_wdr: a tiled patch on the leeward side (x 2578-2662, y 1402-1466): the pattern repeats every 7 px across (tile centres in a row) and about 12 px up (two staggered rows), i.e. hexagons with a vertex up, 7 px x 0.0366 m/px = 0.26 m across the flats; fitted to 0.2618 m so 108 tiles go round. The gaps are 1.87 times as bright as the tiles there (sRGB means of the brightest 15% and darkest 30% of pixels). Gap width (12 mm), tile-to-tile shade spread and the weld line (20 mm, 0.8 as bright) are estimated: they're under a pixel in every photo."
+      "source": "photo_wdr: a tiled patch on the leeward side (x 2578-2662, y 1402-1466): the pattern repeats every 7 px across (tile centres in a row) and about 12 px up (two staggered rows), i.e. hexagons with a vertex up, 7 px x 0.0366 m/px = 0.26 m across the flats; fitted to 0.2618 m so 108 tiles go round. The gaps are 1.87 times as bright as the tiles there (sRGB means of the brightest 15% and darkest 30% of pixels). Gap width (12 mm), tile-to-tile shade spread and the weld line (20 mm, 0.8 as bright) are estimated: they're under a pixel in every photo. Edge bevel (12 mm), gap depth (8 mm) and each tile's random tilt (up to 0.07, about 4 degrees, in the normal map) are estimated, chosen so the tiles catch light one by one as they do in photo_s39_fire and photo_wdr."
     }
   },
   "materials": {

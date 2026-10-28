@@ -57,15 +57,21 @@ def _hex_tiles(t, tile_hex, repeat_w, px_per_m=480):
     d2 = np.take_along_axis(D2, order[..., 1:2], 2)[..., 0]
     edge = (d2 - d1) / (2 * d)                         # distance to the cell's edge (m)
     inside = np.clip((edge - t["gap"] / 2) / 0.004, 0, 1)
+    # Bevel: each tile's edge rounds down into the gap over `bevel`, so light draws a thin
+    # highlight and shadow round every tile.
+    bev = np.clip((edge - t["gap"] / 2) / t["bevel"], 0, 1)
+    bev = bev * bev * (3 - 2 * bev)
     rng = np.random.default_rng(39)
     shade = 1 + t["shade_spread"] * rng.uniform(-1, 1, 16)
+    tilt = rng.uniform(-1, 1, (16, 2)) * t["tilt"]     # each tile sits slightly off flush
     tile = _srgb(tile_hex)[None, None] * shade[ids[order[..., 0]]][..., None]
     gap = _srgb(tile_hex) * t["gap_brightness"]
     rgb = tile * inside[..., None] + gap[None, None] * (1 - inside[..., None])
-    hgt = -(1 - inside) * t["gap"] / 2                # gaps sit below the tile faces
+    hgt = -(1 - bev) * t["gap_depth"]                 # gaps sit below the tile faces
     step = repeat_w / w
     dy, dx = np.gradient(hgt, step)
-    n = np.stack([-dx, -dy, np.ones_like(hgt)], 2)
+    tl = tilt[ids[order[..., 0]]] * bev[..., None]
+    n = np.stack([-dx + tl[..., 0], -dy + tl[..., 1], np.ones_like(hgt)], 2)
     n /= np.linalg.norm(n, axis=2, keepdims=True)
     return (_image("heat_shield_tiles_base", np.clip(rgb, 0, 1).astype(np.float32), "sRGB"),
             _image("heat_shield_tiles_normal", (n * 0.5 + 0.5).astype(np.float32), "Non-Color"),
