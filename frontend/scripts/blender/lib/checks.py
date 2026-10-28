@@ -273,8 +273,9 @@ def _glb_json(path):
 
 def textures(objs, glb):
     """Problems with image-textured parts: every image must have pixels, every part using one
-    must have UVs inside [0, 1] (the images don't repeat), and the export must carry each
-    image. [] when fine; None when no part is textured (the check is then left out)."""
+    must have UVs inside [0, 1] (the images don't repeat) unless all its images are marked
+    `img["tiling"] = True` (a repeating pattern: tiles, weld lines), and the export must carry
+    each image. [] when fine; None when no part is textured (the check is then left out)."""
     images, problems = set(), []
     for o in objs:
         mats = [m for m in o.data.materials if m and m.node_tree]
@@ -289,6 +290,8 @@ def textures(objs, glb):
         uv = o.data.uv_layers.active
         if uv is None:
             problems.append(f"{o.name}: textured but has no UVs")
+            continue
+        if all(img is not None and img.get("tiling") for img in tex):
             continue
         co = [c for d in uv.data for c in d.uv]
         if co and (min(co) < -1e-4 or max(co) > 1 + 1e-4):
