@@ -1,6 +1,6 @@
 {
  "perseverance": {
-  "approved": "2026-10-28 17:05",
+  "approved": "2026-10-28 17:13",
   "inputs": {
    "specs/perseverance.json": "5ce8fb0ef97a057e",
    "probes/perseverance.py": "69b064ed79be8a03",
@@ -8,12 +8,13 @@
    "blender.json": "7bbc071b6e396ec4",
    "lib/__init__.py": "e3b0c44298fc1c14",
    "lib/bake.py": "74d319683d9c87d6",
-   "lib/checks.py": "b0a01db9668643a9",
+   "lib/checks.py": "ff15a079c5d56be3",
+   "lib/engines.py": "725991c59fa91be9",
    "lib/livery.py": "01e8ff81f415aa81",
    "lib/materials.py": "a56545e8f35429f2",
    "lib/parts.py": "0c7a2b5bf5d6443d",
    "lib/rig.py": "87431e5e6051f10e",
-   "lib/sources.py": "4ddbad4d784fab9f",
+   "lib/sources.py": "31d2e9cf18b27172",
    "lib/textures.py": "7daa18205cf41859",
    "lib/tiling.py": "fc2a12de77407ef0",
    "refs/perseverance/baked.jpg": "2611927c3c2d7b06",
@@ -30,7 +31,7 @@
   }
  },
  "starship": {
-  "approved": "2026-10-28 17:05",
+  "approved": "2026-10-28 17:13",
   "inputs": {
    "specs/starship.json": "cf9c578653ae9892",
    "probes/starship.py": "0e784d2ebf4fe725",
@@ -38,12 +39,13 @@
    "blender.json": "7bbc071b6e396ec4",
    "lib/__init__.py": "e3b0c44298fc1c14",
    "lib/bake.py": "74d319683d9c87d6",
-   "lib/checks.py": "b0a01db9668643a9",
+   "lib/checks.py": "ff15a079c5d56be3",
+   "lib/engines.py": "725991c59fa91be9",
    "lib/livery.py": "01e8ff81f415aa81",
    "lib/materials.py": "a56545e8f35429f2",
    "lib/parts.py": "0c7a2b5bf5d6443d",
    "lib/rig.py": "87431e5e6051f10e",
-   "lib/sources.py": "4ddbad4d784fab9f",
+   "lib/sources.py": "31d2e9cf18b27172",
    "lib/textures.py": "7daa18205cf41859",
    "lib/tiling.py": "fc2a12de77407ef0",
    "refs/starship/port_round.png": "3093d11c14fa7549",
@@ -51,7 +53,7 @@
   }
  },
  "superheavy": {
-  "approved": "2026-10-28 17:05",
+  "approved": "2026-10-28 17:13",
   "inputs": {
    "specs/superheavy.json": "48d5d8b43c5078bb",
    "probes/superheavy.py": "992f7ae80cc2cdd8",
@@ -59,18 +61,19 @@
    "blender.json": "7bbc071b6e396ec4",
    "lib/__init__.py": "e3b0c44298fc1c14",
    "lib/bake.py": "74d319683d9c87d6",
-   "lib/checks.py": "b0a01db9668643a9",
+   "lib/checks.py": "ff15a079c5d56be3",
+   "lib/engines.py": "725991c59fa91be9",
    "lib/livery.py": "01e8ff81f415aa81",
    "lib/materials.py": "a56545e8f35429f2",
    "lib/parts.py": "0c7a2b5bf5d6443d",
    "lib/rig.py": "87431e5e6051f10e",
-   "lib/sources.py": "4ddbad4d784fab9f",
+   "lib/sources.py": "31d2e9cf18b27172",
    "lib/textures.py": "7daa18205cf41859",
    "lib/tiling.py": "fc2a12de77407ef0"
   }
  },
  "voyager": {
-  "approved": "2026-10-28 17:05",
+  "approved": "2026-10-28 17:13",
   "inputs": {
    "specs/voyager.json": "5c5e659b36339595",
    "probes/voyager.py": "203d7bdecc38e083",
@@ -78,12 +81,13 @@
    "blender.json": "7bbc071b6e396ec4",
    "lib/__init__.py": "e3b0c44298fc1c14",
    "lib/bake.py": "74d319683d9c87d6",
-   "lib/checks.py": "b0a01db9668643a9",
+   "lib/checks.py": "ff15a079c5d56be3",
+   "lib/engines.py": "725991c59fa91be9",
    "lib/livery.py": "01e8ff81f415aa81",
    "lib/materials.py": "a56545e8f35429f2",
    "lib/parts.py": "0c7a2b5bf5d6443d",
    "lib/rig.py": "87431e5e6051f10e",
-   "lib/sources.py": "4ddbad4d784fab9f",
+   "lib/sources.py": "31d2e9cf18b27172",
    "lib/textures.py": "7daa18205cf41859",
    "lib/tiling.py": "fc2a12de77407ef0",
    "refs/voyager/baked.jpg": "a4adbe5cc46572a3",
@@ -95,7 +99,7 @@
   }
  },
  "x15": {
-  "approved": "2026-10-28 17:03",
+  "approved": "2026-10-28 17:13",
   "inputs": {
    "specs/x15.json": "44e5de9b47eac729",
    "probes/x15.py": "68f879e250926c0e",
@@ -103,12 +107,13 @@
    "blender.json": "7bbc071b6e396ec4",
    "lib/__init__.py": "e3b0c44298fc1c14",
    "lib/bake.py": "74d319683d9c87d6",
-   "lib/checks.py": "b0a01db9668643a9",
+   "lib/checks.py": "ff15a079c5d56be3",
+   "lib/engines.py": "725991c59fa91be9",
    "lib/livery.py": "01e8ff81f415aa81",
    "lib/materials.py": "a56545e8f35429f2",
    "lib/parts.py": "0c7a2b5bf5d6443d",
    "lib/rig.py": "87431e5e6051f10e",
-   "lib/sources.py": "4ddbad4d784fab9f",
+   "lib/sources.py": "31d2e9cf18b27172",
    "lib/textures.py": "7daa18205cf41859",
    "lib/tiling.py": "fc2a12de77407ef0",
    "refs/x15/three-view-1960.png": "73e41a89de222660",
