@@ -105,6 +105,22 @@
       "licence": "'These assets are free and without copyright.' (repo README)",
       "archive": "https://github.com/nasa/NASA-3D-Resources/tree/43016a2b2bf292ff5581ee760fa81732f8124a54/3D%20Models/Voyager%20Probe%20(B)",
       "credit": "NASA 3D Resources, Voyager model (layout reference): https://github.com/nasa/NASA-3D-Resources"
+    },
+    {
+      "id": "travel_guide",
+      "title": "The Voyager Neptune Travel Guide, JPL Publication 89-24 (NTRS 19900004096)",
+      "url": "https://ntrs.nasa.gov/api/citations/19900004096/downloads/19900004096.pdf",
+      "read": "2026-10-27",
+      "licence": "public domain (NASA/JPL)",
+      "saved": "refs/voyager/sources/travel_guide.txt"
+    },
+    {
+      "id": "nasa_tcm_2017",
+      "title": "NASA, Voyager 1 Fires Up Thrusters After 37 Years (Dec 2017)",
+      "url": "https://science.nasa.gov/missions/voyager-program/voyager-1-fires-up-thrusters-after-37-years",
+      "read": "2026-10-27",
+      "licence": "public domain (NASA)",
+      "saved": "refs/voyager/sources/nasa_tcm_2017.txt"
     }
   ],
   "reference_model": {
@@ -298,6 +314,47 @@
         {
           "source": "nasa_record_cover",
           "quote": "The drawing in the lower left-hand corner of the cover is the pulsar map previously sent as part of the plaques on Pioneers 10 and 11."
+        }
+      ]
+    },
+    "thrusters": {
+      "value": "16 hydrazine thrusters on the bus (8 of them a backup set); 4 of them TCM thrusters on the back (anti-dish) side. Not modelled: no source gives their positions, and the NASA model has neither geometry nor texture for them.",
+      "sources": [
+        {
+          "source": "pds_insthost",
+          "quote": "The propulsion system was part of the AACS and consisted of 16 hydrazine thrusters."
+        },
+        {
+          "source": "pds_insthost",
+          "quote": "A backup hydrazine system was connected to a redundant set of eight thrusters."
+        },
+        {
+          "source": "travel_guide",
+          "quote": "small thrusters which are attached to the bus. The thrusters are fueled by a liquid called hydrazine.",
+          "page": "printed p. 32 (PDF p. 43)"
+        },
+        {
+          "source": "travel_guide",
+          "quote": "Hydrazine Thrusters (16)",
+          "page": "Figure 4-2, printed p. 33 (PDF p. 44): leader to a small block on the bus rim, anti-dish side, near the science boom root"
+        },
+        {
+          "source": "nasa_tcm_2017",
+          "quote": "\"trajectory correction maneuver,\" or TCM, thrusters that are identical in size and functionality to the attitude control thrusters, and are located on the back side of the spacecraft"
+        },
+        {
+          "source": "nasa_tcm_2017",
+          "quote": "Voyager engineers fired up the four TCM thrusters for the first time in 37 years"
+        }
+      ]
+    },
+    "under_panel_identity": {
+      "value": "under_panel is the optical calibration target and radiator",
+      "sources": [
+        {
+          "source": "travel_guide",
+          "quote": "Optical Calibration Target and Radiator",
+          "page": "Figure 4-2, printed p. 33 (PDF p. 44): leader to the flat panel on struts below the bus on the science-boom side"
         }
       ]
     }
@@ -1043,7 +1100,8 @@
     "MHW-RTG fin span: only from the NASA model (0.63 m).",
     "Golden record cover: what the Smithsonian's 1.3 cm depth includes, engraving depth and method, hub height, and the exact turn on the bus are not documented; the gold finish method is not given by NASA.",
     "Scan platform: which piece is which instrument (ISS narrow/wide cameras, IRIS, UVS, PPS); layout and sizes now from the NASA model.",
-    "Bus details: what the panel under the bus (+y side), the boxes under the golden record and the two grille units on the bus top are; geometry from the NASA model, identities not found."
+    "Bus details: what the boxes under the golden record and the two grille units on the bus top are (geometry from the NASA model). The panel under the bus is the optical calibration target and radiator (facts.under_panel_identity).",
+    "Thrusters: positions, cluster layout and pointing of the 16 hydrazine thrusters are not in any opened source (facts.thrusters); NTRS 19810059702 and 19820062089 (AACS papers) may have them but list no PDF."
   ],
   "budget": {
     "triangles": 50000,

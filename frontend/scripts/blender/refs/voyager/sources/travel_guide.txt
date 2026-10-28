@@ -1,0 +1,29 @@
+The Voyager Neptune Travel Guide (JPL Publication 89-24, NTRS 19900004096), excerpts.
+https://ntrs.nasa.gov/api/citations/19900004096/downloads/19900004096.pdf
+
+--- printed p. 32 (PDF p. 43), pdftotext -layout:
+     Bus
+           The basic structure ofthe spacecraft is called the "bus," which carries
+      the various engineering subsystems and scientific instruments. It is like a
+      large ten-sided box, which can be seen in Figure 4-2. The centerline of the
+      bus is called the z-axis, or roll axis. The spacecraft will usually be aligned
+      so this z-axis (and thus t he High Gain Antenna) points to Earth. The
+      spacecraft is designed to r oll about this axis by firing small thrusters which
+      are attached to the bus. The thrusters are fueled by a liquid called hydrazine.
+            Each of the ten sides of the bus contains a compartment (a bay) that
+      houses various electronic assemblies. Bay 1, for exam pIe, contains the radio
+      transmitters. The bays are numbered from 1 to 10 (numbered clockwise as
+      seen from Earth).
+            Two additional turn axes, at right angles to the roll axis and to each
+      other, are needed to give the spacecraft full maneuverability. These are the
+      x-axis (pitch) and the y-axi.s (yaw). The booms supporting the nuclear power
+      sources and the scan platform lie along the y-axis.
+
+      High Gain Antenna (HGA)
+               On many spacecraft, a small antenna dish sits on the spacecraft bus
+       and is steerable. But Voyager is different; it may almost be said that the
+
+--- printed p. 33 (PDF p. 44), Figure 4-2, labels read from the page image (OCR misses some):
+"Hydrazine Thrusters (16)" (leader to a small block on the bus rim, anti-dish side, near the science boom root)
+"Optical Calibration Target and Radiator" (leader to the flat panel on struts below the bus, science-boom side)
+"(Spacecraft Shown Without Thermal Blankets for Clarity)"
