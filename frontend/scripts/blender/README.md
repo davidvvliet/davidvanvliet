@@ -65,6 +65,10 @@ Rovers, landers and capsules have moving parts, so their scripts declare structu
 - Shapes: `lathe` (a profile of `(r, z)` points turned about an axis: heads, cans, nozzles),
   `wheel` (tyre with rim, cleats, spokes and hub) and `tube` (a path of points with rounded
   bends: rocker and bogie beams, pipes).
+- Aircraft shapes: `section` (a superellipse cross-section as `(y, z)` points), `loft` (a skin
+  through rings of points: fairings, canopies), `fuselage` (a loft along x from
+  `(x, half_width, top, bottom)` stations) and `surface` (a wing, tail or fin from its root and
+  tip chords, with a lens or single-wedge section). `testplane` is their fixture.
 
 Frame for anything standing on a surface: z up, ground at z = 0, and the spec's `note` says which
 way is forward and which is left (the fixture: forward +y, left +x).
@@ -248,5 +252,5 @@ A spec's `sheet_frame` (`{"min": [x, y, z], "max": [...]}`) fixes the contact-sh
 both the build and `model:ref`, so the two sheets overlay exactly (the dashboard's build/reference
 toggle then works as a blink comparator). Build the probe in the reference model's frame.
 
-`testprobe` and `testrover` are fixtures (`"fixture": true`), not spacecraft: one of every part
+`testprobe`, `testrover` and `testplane` are fixtures (`"fixture": true`), not spacecraft: one of every part
 with made-up values, so changes to `lib/` show against their baselines. Fixtures are never published.

@@ -509,3 +509,89 @@ def tube(name, points, radius, segments=12, bend_radius=0.0, material="dark_meta
     bm.faces.new(list(reversed(rings[0])))
     bm.faces.new(rings[-1])
     return _object(name, bm, material, Matrix(), parent, smooth=True)
+
+# --- Aircraft shapes ------------------------------------------------------------------
+
+def section(half_width, top, bottom, n=32, exponent=2.0, y=0.0):
+    """A closed cross-section as (y, z) points: a superellipse `half_width` wide each side,
+    from `bottom` to `top` (z), centred on `y`. `exponent` 2 is an ellipse; larger is boxier.
+    Points go round counter-clockwise seen from +x, starting at the top."""
+    zc, h = (top + bottom) / 2, (top - bottom) / 2
+    pts = []
+    for k in range(n):
+        a = math.pi / 2 + 2 * math.pi * k / n
+        c, s = math.cos(a), math.sin(a)
+        pts.append((y + half_width * math.copysign(abs(c) ** (2 / exponent), c),
+                    zc + h * math.copysign(abs(s) ** (2 / exponent), s)))
+    return pts
+
+def _loft(bm, rings):
+    vs = [[bm.verts.new(Vector(p)) for p in ring] for ring in rings]
+    n = max(len(r) for r in vs)
+    for a, b in zip(vs, vs[1:]):
+        for k in range(n):
+            k2 = (k + 1) % n
+            if len(a) == 1 and len(b) == 1:
+                continue
+            if len(a) == 1:
+                bm.faces.new((a[0], b[k2], b[k]))
+            elif len(b) == 1:
+                bm.faces.new((a[k], a[k2], b[0]))
+            else:
+                bm.faces.new((a[k], a[k2], b[k2], b[k]))
+    caps = [bm.faces.new(end) for end in (vs[0], vs[-1]) if len(end) > 2]
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    bm.faces.index_update()
+    return [f.index for f in caps]
+
+def loft(name, rings, material="white_paint", smooth=True, parent=None):
+    """Skin through closed rings of (x, y, z) points (a fuselage, a fairing, a canopy): every
+    ring has the same number of points, or one point for a pointed end. Open ends are capped."""
+    bm = bmesh.new()
+    caps = _loft(bm, rings)
+    obj = _object(name, bm, material, Matrix(), parent, smooth=smooth)
+    for i in caps:  # flat caps, so smooth shading doesn't round the edge
+        obj.data.polygons[i].use_smooth = False
+    return obj
+
+def fuselage(name, stations, n=32, material="white_paint", parent=None):
+    """A body along +x from `stations` [(x, half_width, top, bottom[, exponent]), ...] in
+    order. A station with half_width 0 is a point (nose tip or tail cone end), at z midway."""
+    rings = []
+    for st in stations:
+        x, w, top, bottom = st[:4]
+        if w <= 0:
+            rings.append([(x, 0.0, (top + bottom) / 2)])
+        else:
+            rings.append([(x, y, z) for y, z in section(w, top, bottom, n, st[4] if len(st) > 4 else 2.0)])
+    return loft(name, rings, material, parent=parent)
+
+def _airfoil(kind, thickness, n):
+    """Upper surface half-thickness (fraction of chord) at chord stations 0..1: "lens" is a
+    symmetric biconvex section (sharp edges), "wedge" a single wedge with a blunt base."""
+    xs = [0.5 - 0.5 * math.cos(math.pi * i / (n - 1)) for i in range(n)] if kind == "lens" \
+        else [i / (n - 1) for i in range(n)]
+    if kind == "lens":
+        return [(x, 2 * thickness * x * (1 - x)) for x in xs]
+    if kind == "wedge":
+        return [(x, thickness / 2 * x) for x in xs]
+    raise ValueError(kind)
+
+def surface(name, root_le, root_chord, tip_le, tip_chord, thickness, kind="lens",
+            chord_dir=(-1, 0, 0), chords=9, material="white_paint", parent=None):
+    """A wing, tail or fin: a trapezoid from the root chord (leading edge at `root_le`) to the
+    tip chord (leading edge at `tip_le`), each chord running along `chord_dir` (aft). The
+    section is `kind` ("lens" or "wedge", see _airfoil), `thickness` a fraction of the chord
+    (a wedge's is its base). Thickness is across the plane of the span and chord."""
+    cd = Vector(chord_dir).normalized()
+    r0, t0 = Vector(root_le), Vector(tip_le)
+    normal = (t0 - r0).cross(cd).normalized()
+    foil = _airfoil(kind, thickness, chords)
+    def ring(le, c):
+        up = [le + cd * (x * c) + normal * (h * c) for x, h in foil]
+        lo = [le + cd * (x * c) - normal * (h * c) for x, h in reversed(foil)]
+        lo = lo[1:-1] if kind == "lens" else lo[:-1]  # drop points both surfaces share
+        return [tuple(p) for p in up + lo]
+    bm = bmesh.new()
+    _loft(bm, [ring(r0, root_chord), ring(t0, tip_chord)])
+    return _object(name, bm, material, Matrix(), parent, smooth=False)
