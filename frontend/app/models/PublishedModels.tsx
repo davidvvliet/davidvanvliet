@@ -75,7 +75,7 @@ function Grid({ models }: { models: Published[] }) {
       </Header>
       <p className={styles.intro}>
         These models were created step by step using my Blender x Opus 5.5 harness. Only the direct sources were
-        used in the creation of each of these models for maximum accuracy.
+        used in the creation of each of these models for maximum accuracy. The sources for each model can be found...
       </p>
       <div className={styles.gridArea}>
         <div ref={scroller} className={styles.cards}>
