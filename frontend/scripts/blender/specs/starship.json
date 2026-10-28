@@ -418,6 +418,81 @@
       },
       "unit": "m, degrees either side of the tower side (-x)",
       "source": "photo_wdr: black tiled squares on the bare steel. Nose crop: one at x 2615-2670, y 1025-1080 (2.1 x 2.35 m, 21.2 m below the tip), almost facing the camera (about 128 degrees); aft crop: one at x 2575-2665, y 1395-1472 (3.4 x 3.3 m, 37.5 m below the tip, about 122 degrees). Both have a partner showing at the far limb at about the same height, so they are taken as mirrored about the tower side, like the catch pins. How far the tiles stand proud of the steel is estimated."
+    },
+    "ports": {
+      "value": {
+        "list": [
+          {
+            "deg": 173,
+            "below_tip": 15.6,
+            "size": 0.57
+          },
+          {
+            "deg": 135,
+            "below_tip": 18.4,
+            "size": 0.27
+          },
+          {
+            "deg": 111,
+            "below_tip": 43.3,
+            "size": 0.26
+          },
+          {
+            "deg": 130,
+            "below_tip": 44.6,
+            "size": 0.26
+          },
+          {
+            "deg": 99,
+            "below_tip": 50.9,
+            "size": 0.29,
+            "lift": 0.02
+          },
+          {
+            "deg": 138,
+            "below_tip": 8.3,
+            "size": 0.65,
+            "shape": "square"
+          }
+        ]
+      },
+      "unit": "m, degrees from +x",
+      "source": "photo_wdr: dark round openings on the leeward steel at (x, y) 2727,921 (15 px, 0.57 m); 2658,987 (7 px); 2595,1568; 2635,1598; 2571,1746 (7-8 px, 0.26-0.29 m); and a dark square on the nose at 2658,752 (17 px, 0.65 m). Heights at 0.0428 m/px below the tip (y 557). Angles as for the raceways: from each spot's offset from the body's axis in photo_wdr (x 2647 above the flaps, x 2637 at the aft end; half-widths 117.5 and 127 px), with the camera looking along 130 degrees. Only the openings visible in this photo are placed; the far side isn't seen. The lowest sits on the ribbed skirt, so its decal is lifted over the rib sheet. Masks are plain generated shapes (refs/starship/port_round.png, port_square.png)."
+    },
+    "aft_skirt": {
+      "value": {
+        "half_width_deg": 88,
+        "ribs_from": 0.3,
+        "band_bottom": 4.8,
+        "band_top": 6.9,
+        "ribs": {
+          "period": 0.106,
+          "line": 0.02,
+          "darken": 0.8
+        },
+        "band": {
+          "slot_period": 0.24,
+          "slot_width": 0.08,
+          "stripe_width": 0.12,
+          "rim": 0.43,
+          "bottom_rim": 0.12,
+          "slot_from": 0.25,
+          "cap": 0.2,
+          "stands_out": 0.04
+        }
+      },
+      "unit": "m (z above the ship's base), degrees either side of the tower side",
+      "source": "photo_wdr (aft crop x 2500-2780, y 1560-1790, viewed at 3x): the leeward aft skirt is clad in fine vertical ribs, about one every 3 px (0.106 m at 0.0353 m/px across the aft end) from just above the base (y 1767) up to a band of hardware from y 1662 to 1613 (z 4.8 to 6.9 m). The band: a rim about 10 px (0.43 m) tall at the top with coloured vertical stripes, below it a row of dark slots about every 7 px (0.24 m), each about 0.08 m wide with a coloured fitting at its top. The windward side is tiled to the base (photo_s39_fire), so the ribs and band cover the leeward half only (+-88 degrees about the tower side, inside the tile edge). Line widths, cap and rim heights within a few cm estimated; the stripes cycle red, gold and steel."
+    },
+    "aft_fittings": {
+      "value": {
+        "from_tower_deg": 50,
+        "z": 4.6,
+        "diameter": 0.9,
+        "stands_out": 1.4
+      },
+      "unit": "m",
+      "source": "photo_wdr (aft crop): a stubby steel cylinder like the catch pins at x 2633, y 1667 (z 4.6 m), about 23 px (0.9 m) across and 1.4 m long, pointing almost at the camera (about 130 degrees). The other side is hidden behind the tower's walkway; taken as mirrored about the tower side, like the catch pins (assumed)."
     }
   },
   "materials": {
@@ -432,6 +507,30 @@
       "metallic": 0.0,
       "roughness": 0.8,
       "source": "photo_s39_fire, the ship's windward side in daylight, four 24 x 24 px spots on the barrel averaged (from #080d14 to #1a1f2a)."
+    },
+    "port": {
+      "hex": "#09121c",
+      "metallic": 0.0,
+      "roughness": 0.6,
+      "source": "photo_wdr, the large leeward port at x 2727, y 921 (7 x 7 px averaged)."
+    },
+    "aft_fitting_red": {
+      "hex": "#74554f",
+      "metallic": 0.3,
+      "roughness": 0.6,
+      "source": "photo_wdr, aft hardware band (x 2560-2660, y 1613-1662): mean of the pixels with hue under 20 or over 330 degrees, saturation over 0.25 (36 px)."
+    },
+    "aft_fitting_gold": {
+      "hex": "#625a45",
+      "metallic": 0.5,
+      "roughness": 0.5,
+      "source": "photo_wdr, aft hardware band (x 2560-2660, y 1613-1662): mean of the pixels with hue 25-60 degrees, saturation over 0.25 (28 px)."
+    },
+    "aft_hardware_dark": {
+      "hex": "#323132",
+      "metallic": 0.5,
+      "roughness": 0.5,
+      "source": "photo_wdr, aft hardware band (x 2560-2660, y 1613-1662): mean of the pixels darker than value 0.3 (398 px). Metallic and roughness estimated."
     }
   },
   "open_questions": [
@@ -524,6 +623,20 @@
         0.15
       ],
       "radius": 14
+    },
+    {
+      "name": "aft hardware band",
+      "target": [
+        -4.5,
+        -1,
+        5
+      ],
+      "look": [
+        -1,
+        -0.6,
+        0.1
+      ],
+      "radius": 5
     }
   ],
   "budget": {

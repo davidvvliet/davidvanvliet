@@ -2,10 +2,14 @@
 # specs/starship.json ("dimensions", "facts", "from_photos", each with its source).
 # Frame: z up, the ship's base (aft skirt) at z = 0, axis on x = y = 0; +x is the windward
 # (heat-shield) side, away from the tower. The booster is its own model (superheavy).
-import math
+import math, os
 import bmesh
+import numpy as np
 from mathutils import Vector
-from lib import materials, parts, tiling
+from lib import materials, parts, textures, tiling
+
+HARNESS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUT = os.path.join(HARNESS, "out", "starship", "textures")
 
 def _at(angle_deg, r, z):
     a = math.radians(angle_deg)
@@ -20,6 +24,32 @@ def _bell(exit_r, throat_r, throat_z, top, wall=0.03):
     inside = [(r - wall, z + wall * 0.5) for r, z in reversed(curve)]
     return ([(0, throat_z)] + inside + curve
             + [(throat_r * 1.6, throat_z + 0.3), (throat_r * 1.6, top), (0, top)])
+
+def _sheet(name, r, a0, a1, z0, z1, material, segments=48):
+    """A curved sheet on the leeward side: radius `r`, from angle `a0` to `a1` (degrees),
+    `z0` to `z1`, facing out, UVs in metres (u along the arc from a0, v = z - z0)."""
+    bm = bmesh.new()
+    uv = bm.loops.layers.uv.new("UVMap")
+    angs = [math.radians(a0 + (a1 - a0) * i / segments) for i in range(segments + 1)]
+    lo = [bm.verts.new((r * math.cos(a), r * math.sin(a), z0)) for a in angs]
+    hi = [bm.verts.new((r * math.cos(a), r * math.sin(a), z1)) for a in angs]
+    for i in range(segments):
+        f = bm.faces.new((lo[i], lo[i + 1], hi[i + 1], hi[i]))
+        f.normal_update()
+        c = f.calc_center_median()
+        if f.normal.dot(Vector((c.x, c.y, 0))) < 0:
+            f.normal_flip()
+        for loop in f.loops:
+            a = math.atan2(loop.vert.co.y, loop.vert.co.x) % (2 * math.pi)
+            loop[uv].uv = ((a - math.radians(a0)) * r, loop.vert.co.z - z0)
+    obj = parts._object(name, bm, material, parts.frame(), smooth=True)
+    obj.data.normals_split_custom_set_from_vertices(
+        [Vector((v.co.x, v.co.y, 0)).normalized() for v in obj.data.vertices])
+    return obj
+
+def _rgb(entry):
+    h = entry["hex"].lstrip("#")
+    return np.array([int(h[i:i + 2], 16) / 255 for i in (0, 2, 4)], np.float32)
 
 def build(spec):
     D = {k: v["value"] for k, v in spec["dimensions"].items()}
@@ -284,3 +314,87 @@ def build(spec):
                                     segments=6, sweep_deg=math.degrees(p["width"] / R), roll_deg=a,
                                     smooth=False, material=tiles_tex)
                 tiling.cyl_uv(patch, tile_w, tile_h, R)
+
+        # Aft skirt, leeward half (from_photos.aft_skirt): fine vertical ribs up to a band of
+        # slotted hardware with coloured fittings, as repeating textures on sheets over the steel.
+        ak = P["aft_skirt"]
+        a0, a1 = 180 - ak["half_width_deg"], 180 + ak["half_width_deg"]
+        rb = ak["ribs"]
+        w = 32
+        u = (np.arange(w) + 0.5) / w * rb["period"]
+        k = np.clip(np.abs(u - rb["period"] / 2) / (rb["line"] / 2), 0, 1)
+        shade = rb["darken"] + (1 - rb["darken"]) * (1 - (k < 1))
+        rib_img = tiling.image("starship", "aft_skirt_ribs",
+                               (_rgb(sm[steel])[None, None] * shade[None, :, None] * np.ones((8, 1, 1))).astype(np.float32),
+                               "sRGB")
+        rib_mat = materials.image("aft_skirt_ribs", rib_img, metallic=sm[steel]["metallic"],
+                                  roughness=sm[steel]["roughness"])
+        ribs = _sheet("ship_aft_skirt_ribs", R + 0.01, a0, a1, z0 + ak["ribs_from"], ak["band_bottom"], rib_mat)
+        uvl = ribs.data.uv_layers.active.data
+        for li in range(len(uvl)):
+            uu, vv = uvl[li].uv
+            uvl[li].uv = (uu / rb["period"], vv / 1.0)
+
+        hb_ = ak["band"]
+        ppm = 200
+        bw, bh = hb_["slot_period"] * 3, ak["band_top"] - ak["band_bottom"]
+        W, H = int(round(bw * ppm)), int(round(bh * ppm))
+        X = (np.arange(W) + 0.5) / ppm
+        Y = (np.arange(H) + 0.5) / ppm
+        XX, YY = np.meshgrid(X, Y)
+        col = {n: _rgb(sm[n]) for n in ("aft_fitting_red", "aft_fitting_gold", "aft_hardware_dark")}
+        cyc = [col["aft_fitting_red"], col["aft_fitting_gold"], _rgb(sm[steel])]
+        img = np.broadcast_to(_rgb(sm[steel]), (H, W, 3)).copy()
+        slot = (XX // hb_["slot_period"]).astype(int)
+        xin = XX % hb_["slot_period"] - hb_["slot_period"] / 2
+        top0 = bh - hb_["rim"]
+        img[YY < hb_["bottom_rim"]] = col["aft_hardware_dark"]
+        rim = YY >= top0
+        img[rim] = col["aft_hardware_dark"]
+        for i in range(3):
+            m = rim & (slot == i) & (np.abs(xin) < hb_["stripe_width"] / 2)
+            img[m] = cyc[i]
+            s_ = (slot == i) & (np.abs(xin) < hb_["slot_width"] / 2) & (YY > hb_["slot_from"]) & (YY < top0 - 0.12)
+            img[s_] = col["aft_hardware_dark"]
+            cap = s_ & (YY > top0 - 0.12 - hb_["cap"])
+            img[cap] = cyc[(i + 1) % 3]
+        band_img = tiling.image("starship", "aft_hardware_band", img.astype(np.float32), "sRGB")
+        band_mat = materials.image("aft_hardware_band", band_img, metallic=sm["aft_hardware_dark"]["metallic"],
+                                   roughness=sm["aft_hardware_dark"]["roughness"])
+        band = _sheet("ship_aft_hardware_band", R + hb_["stands_out"], a0, a1, ak["band_bottom"],
+                      ak["band_top"], band_mat)
+        uvl = band.data.uv_layers.active.data
+        for li in range(len(uvl)):
+            uu, vv = uvl[li].uv
+            uvl[li].uv = (uu / bw, vv / bh)
+        # Edges of the band, standing out from the skin.
+        for z_, tag in ((ak["band_bottom"], "bottom"), (ak["band_top"], "top")):
+            parts.lathe(f"ship_aft_band_edge_{tag}",
+                        [(0, z_ - 0.03), (R + hb_["stands_out"] + 0.01, z_ - 0.03),
+                         (R + hb_["stands_out"] + 0.01, z_ + 0.03), (0, z_ + 0.03)],
+                        segments=32, sweep_deg=2 * ak["half_width_deg"], roll_deg=180, smooth=False,
+                        material="aft_hardware_dark")
+
+        # Fittings at the aft end like the catch pins, mirrored about the tower side
+        # (from_photos.aft_fittings).
+        afp = P["aft_fittings"]
+        for a, tag in ((180 - afp["from_tower_deg"], "left"), (180 + afp["from_tower_deg"], "right")):
+            parts.cylinder(f"ship_aft_fitting_{tag}", afp["diameter"] / 2, afp["stands_out"] + 0.2,
+                           location=_at(a, R - 0.2, afp["z"]), direction=_at(a, 1, 0), segments=20,
+                           material=steel)
+
+        # Vents and ports: dark round (and one square) openings as cut-out decals on the skin
+        # (from_photos.ports).
+        dark = materials.colour(sm["port"])
+        mats = {}
+        for shape in ("round", "square"):
+            im = textures.marking(f"port_{shape}", [(os.path.join(HARNESS, "refs", "starship", f"port_{shape}.png"), dark)], OUT)
+            mats[shape] = materials.image(f"port_{shape}", im, metallic=sm["port"]["metallic"],
+                                          roughness=sm["port"]["roughness"], cutout=True)
+        for i, p in enumerate(P["ports"]["list"]):
+            z = top - p["below_tip"]
+            a = math.radians(p["deg"])
+            parts.decal(f"ship_port_{i:02d}", body, center=(R * math.cos(a), R * math.sin(a), z),
+                        direction=(-math.cos(a), -math.sin(a), 0), up=(0, 0, 1),
+                        width=p["size"], height=p["size"], material=mats[p.get("shape", "round")],
+                        lift=p.get("lift", 0.002))
