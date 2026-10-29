@@ -1,7 +1,7 @@
 {
   "title": "Reaction Motors XLR99",
   "logos": ["nasa", "thiokol"],
-  "listed": true,
+  "listed": false,
   "viewer": {
     "explore": false
   },
