@@ -111,10 +111,10 @@
   }
  },
  "starship": {
-  "approved": "2026-10-29 12:54",
+  "approved": "2026-10-29 13:35",
   "inputs": {
    "specs/starship.json": "45e77afea0c86047",
-   "probes/starship.py": "69f505b07da42c6c",
+   "probes/starship.py": "19fb3bfce6d84f70",
    "build.py": "6046dd94ba4984fb",
    "blender.json": "7bbc071b6e396ec4",
    "specs/raptor3.json": "cf24e366865a7b0e",
