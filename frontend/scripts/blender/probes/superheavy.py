@@ -3,6 +3,7 @@
 # Frame: z up, engine bell exits at z = 0, axis on x = y = 0; +x is the heat-shield side
 # of the ship it carries, away from the tower.
 import math
+import numpy as np
 from mathutils import Vector
 from lib import engines, materials, parts, tiling
 
@@ -51,8 +52,39 @@ def build(spec):
                                location=_at(a, r, top - 0.06), segments=8,
                                material="dark_metal")
                 k += 1
-        parts.cylinder("booster_aft_plate", R - 0.05, 0.05, location=(0, 0, aft - 0.04),
-                       segments=64, material="dark_metal")
+        # The aft plate, covered in metallic tiles (from_photos.aft_plate_tiles): one tile in a
+        # small repeating image, mapped flat from below.
+        tl = P["aft_plate_tiles"]
+        n = 64
+        lin = materials.definition("dark_metal")[0]   # stored linear; the image is sRGB
+        srgb = [c * 12.92 if c <= 0.0031308 else 1.055 * c ** (1 / 2.4) - 0.055 for c in lin]
+        base = np.tile(np.array(srgb, np.float32), (n, n, 1))
+        base[:2, :] *= tl["seam_darken"]
+        base[:, :2] *= tl["seam_darken"]
+        tile_img = tiling.image("superheavy", "aft_plate_tiles", base, "sRGB")
+        tile_mat = materials.image("aft_plate_tiles", tile_img, metallic=0.8, roughness=0.45)
+        plate = parts.cylinder("booster_aft_plate", R - 0.05, 0.05, location=(0, 0, aft - 0.04),
+                               segments=64, material=tile_mat)
+        uvl = plate.data.uv_layers.new(name="UVMap")
+        for loop in plate.data.loops:
+            co = plate.matrix_world @ plate.data.vertices[loop.vertex_index].co
+            uvl.data[loop.index].uv = (co.x / tl["tile"], co.y / tl["tile"])
+
+        # Shielding round the inner 13's actuators (from_photos.inner_shielding): a plate
+        # closing the inner structure, and a boot round each inner engine below it.
+        sh = P["inner_shielding"]
+        parts.cylinder("booster_inner_shield", el["inner_structure"]["r"], sh["thickness"],
+                       location=(0, 0, sh["z"] - sh["thickness"] / 2), segments=48,
+                       material="dark_metal")
+        for j, (r, angles, _) in enumerate(rings[:2]):
+            for a in angles:
+                x, y, _ = _at(a, r, 0)
+                parts.lathe(f"booster_inner_boot_{j}_{int(a) % 360:03d}",
+                            [(sh["boot_bottom_r"], sh["z"] - sh["boot_height"]),
+                             (sh["boot_top_r"], sh["z"]), (sh["boot_top_r"] - 0.03, sh["z"]),
+                             (sh["boot_bottom_r"] - 0.03, sh["z"] - sh["boot_height"])],
+                            closed=True, location=(x, y, 0), segments=10, smooth=False,
+                            material="dark_metal")
         it = el["inner_structure"]                     # the inner 13's own thrust structure
         parts.lathe("booster_inner_structure",
                     [(it["r"] - 0.04, aft), (it["r"], aft), (it["r"], it["bottom"]),
@@ -194,6 +226,32 @@ def build(spec):
                 parts.box(f"hotstage_bracket_{i:02d}_top", (br["depth"], br["width"], br["prong"]),
                           location=tuple(c + Vector((0, 0, br["height"] / 2 - br["prong"] / 2))),
                           roll_deg=a, material="grid_fin")
+
+        # Hot-stage actuators (from_photos.hot_stage_actuators): a box on the ring's inside and
+        # a rod reaching in to the dome, shown extended; and a pipe up from the dome's top and
+        # down its side.
+        ha = P["hot_stage_actuators"]
+        z_act = tank_top + ha["above_tank_top"]
+        st = math.asin(min(ha["above_tank_top"] / dh, 1.0))
+        r_dome = R * math.cos(st)                      # the dome's radius at the rods' height
+        bd_, bw_, bh_ = ha["box"]
+        for a in ha["angles_deg"]:
+            parts.box(f"hotstage_actuator_{a:03d}", (bd_, bw_, bh_), location=_at(a, ha["box_r"], z_act),
+                      roll_deg=a, material="dark_metal")
+            r0 = ha["box_r"] - bd_ / 2 + 0.02
+            parts.cylinder(f"hotstage_actuator_{a:03d}_rod", ha["rod_diameter"] / 2, r0 - r_dome + 0.08,
+                           location=_at(a, r_dome - 0.08, z_act), direction=_at(a, 1, 0), segments=8,
+                           material="raptor_steel")
+        hp = ha["pipe"]
+        off = hp["stands_off"]
+        pts = [_at(hp["angle_deg"], 0.0, tank_top + dh - 0.05),
+               _at(hp["angle_deg"], 0.0, tank_top + dh + hp["rise"])]
+        for deg in (75, 55, 35, 15, 3):
+            t_ = math.radians(deg)
+            pts.append(_at(hp["angle_deg"], (R + off) * math.cos(t_) - 0.3,
+                           tank_top + (dh + off) * math.sin(t_)))
+        parts.tube("hotstage_pipe", pts, hp["diameter"] / 2, segments=8, bend_radius=0.3,
+                   bend_steps=3, material=steel)
 
         # Round ports in octagonal plates below the crown (from_photos.crown_ports).
         cp = P["crown_ports"]

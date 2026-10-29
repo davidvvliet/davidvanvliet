@@ -136,6 +136,30 @@
       "read": "2026-10-29",
       "licence": "unknown; used for measuring only, not in the repo",
       "saved": ""
+    },
+    {
+      "id": "photo_hotstage",
+      "title": "Onboard camera inside the hot-stage ring before launch (T-00:31:23), looking up at a V3 ship's six engines; screenshot supplied by David, 2026-10-29",
+      "url": "supplied by David as a screenshot; original link not known",
+      "read": "2026-10-29",
+      "licence": "SpaceX webcast frame; used for looking only, not in the repo",
+      "saved": ""
+    },
+    {
+      "id": "nsf_moon",
+      "title": "NASASpaceflight, \"Starship Block 3 and HLS: The path to get back to the Moon\" (2025-11)",
+      "url": "https://www.nasaspaceflight.com/2025/11/starship-block-3-path-moon/",
+      "read": "2026-10-29",
+      "licence": "copyright; quoted only",
+      "saved": ""
+    },
+    {
+      "id": "raptor3_spec",
+      "title": "specs/raptor3.json in this repo: the sea-level Raptor 3 (chamber, powerhead and plumbing, each sourced there)",
+      "url": "https://github.com/davidvanvliet (this repo): frontend/scripts/blender/specs/raptor3.json",
+      "read": "2026-10-29",
+      "licence": "this repo",
+      "saved": ""
     }
   ],
   "reference_model": {
@@ -474,7 +498,7 @@
         "centre_r": 0.85,
         "inner_structure": {
           "r": 3.35,
-          "bottom": 2.5
+          "bottom": 1.9
         },
         "mount_r": 0.25
       },
@@ -482,7 +506,62 @@
       "source": [
         "photo_booster_base: the outer exits span x 165-945 (10.7 m outside edges) and the powerheads x 205-905, so the outer ring's centres sit at r about 4.6 m, beyond the 4.5 m tank wall; the inner bells show below the outer exits down to the bottom of the screenshot (y 552), so they hang at least 55 px (0.75 m) lower. photo_booster_base, scaled by the outer bells' exits (raptor3: 1.321 m outside, about 96 px, so about 13.7 mm/px). Estimated.",
         "render_aft_b3_booster: the centre and middle bells hang below the outer ring, on a structure of their own. Middle ring r 2.4 and centre r 0.85 kept from the first fit (they clear raptor3's 1.321 m bells: chords 1.48 m and 1.38 m). Ring clocking and the inner structure's radius and bottom estimated.",
-        "photo_booster_base: each outer engine's top is covered by a box about 37 px (0.5 m) wide in the skirt band; modelled as a 0.5 m cylinder from each engine's top up to the aft plate, the inner engines' too (hidden). Estimated."
+        "photo_booster_base: each outer engine's top is covered by a box about 37 px (0.5 m) wide in the skirt band; modelled as a 0.5 m cylinder from each engine's top up to the aft plate, the inner engines' too (hidden). Estimated.",
+        "spacex_v3: inner structure lowered to 1.9 m, the inner engines' shield level (from_photos.inner_shielding)."
+      ]
+    },
+    "inner_shielding": {
+      "value": {
+        "z": 1.9,
+        "thickness": 0.04,
+        "boot_top_r": 0.42,
+        "boot_bottom_r": 0.3,
+        "boot_height": 0.3
+      },
+      "unit": "m",
+      "source": [
+        "spacex_v3: \"shielding has been added to the surface area between engines and around the thrust vector control hardware on the inner 13 engines\"",
+        "nsf_block3_mars: \"only the Thrust Vector Control actuators and the Gimbal Mounts appear to be shielded\"",
+        "raptor3_spec: at low detail the chamber's top is at 1.9 m above the exit; the shield closes the inner structure there, with a boot round each inner engine below it. Its height and the boots' size aren't seen in any photo: estimated."
+      ]
+    },
+    "aft_plate_tiles": {
+      "value": {
+        "tile": 0.5,
+        "seam_darken": 0.55
+      },
+      "unit": "m",
+      "source": [
+        "nsf_block3_mars: \"the aft of the booster will now have metallic tiles on the aft plate for heating protection\"",
+        "nsf_moon: \"SpaceX has added metallic tiles to protect the aft plate of the booster on reentry\"",
+        "nsf_block3_mars: tile size and colour not given and not seen in any photo: square 0.5 m tiles in the plate's dark_metal, estimated."
+      ]
+    },
+    "hot_stage_actuators": {
+      "value": {
+        "angles_deg": [
+          90,
+          270
+        ],
+        "above_tank_top": 1.5,
+        "box": [
+          0.4,
+          0.7,
+          0.5
+        ],
+        "box_r": 4.15,
+        "rod_diameter": 0.08,
+        "pipe": {
+          "angle_deg": 0,
+          "diameter": 0.12,
+          "rise": 0.35,
+          "stands_off": 0.15
+        }
+      },
+      "unit": "m, degrees from +x",
+      "source": [
+        "spacex_v3: \"the actuators on the interstage that connect the ship and booster now retract after separation to further shield them from Raptor exhaust\"",
+        "photo_hotstage: two actuators on either side of the view, each a box on the ring's inside with a horizontal rod reaching in toward the dome, about level with the dome's top; a pipe rises from the dome's top and runs down its near side. The camera looks past a sea-level engine between two vacuum ones, so from one of the ship's sea-level engine angles (0, 120 or 240 degrees; which isn't known: 0 used), with the actuators about 90 degrees either side. Shown extended, as before launch. Sizes estimated (the photo is wide-angle, no scale)."
       ]
     }
   },
