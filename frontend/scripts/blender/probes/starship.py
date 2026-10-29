@@ -353,11 +353,13 @@ def build(spec):
             hz = P["aft_flap_housing"]
             out = hz["stands_out"] + 0.1
             ub_, uo = (0.0, 1.0) if sign > 0 else (1.0, 0.0)
+            # Raised so its sloping top clears the flap's root corner (so out from the body).
+            lift = (hz["height"] - hz["outer_height"]) * (so + 0.1) / out + 0.05
             parts.outline_plate(f"ship_aft_flap_housing_{tag}",
                                 [(ub_, 0), (uo, 0), (uo, hz["outer_height"] / hz["height"]), (ub_, 1)],
                                 out, hz["height"], hz["width"],
                                 location=(-hz["width"] / 2, sign * (R - 0.1 + out / 2),
-                                          z0 + af["root_chord"] - hz["height"] / 2),
+                                          z0 + af["root_chord"] - hz["height"] / 2 + lift),
                                 direction=(1, 0, 0), up=(0, 0, 1), material=steel)
 
         # Catch pins on the forward section, either side of the tower side (from_photos.catch_pins).
