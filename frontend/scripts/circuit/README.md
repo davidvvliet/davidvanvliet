@@ -1,6 +1,6 @@
 # Circuit harness
 
-Circuit boards for the site's `/circuit` page, built from KiCad files so every board rebuilds from the
+Circuit boards for the site's `/models` page, built from KiCad files so every board rebuilds from the
 repo. It sits next to the Blender harness (`scripts/blender`) and shares its dashboard and viewer
 (`/models?dashboard`), but has its own tools: KiCad designs, routes and checks the board, Blender only
 packs the result for the web.
@@ -51,7 +51,7 @@ out/<board>/        build output (git-ignored): <board>.glb, <board>.json; out/s
    - Warnings are listed, never fail a build.
    - **file size** at most 1.5 MB and **triangles** at most 300,000 (the web budget), **parts without a
      3D model** 0.
-3. `--publish` copies the build to `public/circuit/`, which the live `/circuit` page reads. Only with
+3. `--publish` copies the build to `public/models/` (`<board>.glb` and `<board>.board.json`), which the live `/models` page lists with its blocks. Only with
    the user's go-ahead, like `model:approve`.
 
 ## Imported boards

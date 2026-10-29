@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { Suspense } from "react";
 import { Metadata } from "next";
-import PublishedModels, { Published } from "./PublishedModels";
+import PublishedModels, { Board, Published } from "./PublishedModels";
 
 export const metadata: Metadata = {
   title: "Models",
@@ -33,7 +33,7 @@ function citationCounts(spec: Spec): Map<string, number> {
 }
 
 // Published models: public/models/<probe>.glb, written by `npm run model:approve` (fixtures never get there),
-// with their spec's title and sources.
+// with their spec's title and sources; and circuit boards, written by scripts/circuit/build.py --publish.
 function published(): Published[] {
   const specs = path.join(process.cwd(), "scripts", "blender", "specs");
   const spec = (probe: string): Spec => {
@@ -45,6 +45,14 @@ function published(): Published[] {
     // A spec with "listed": false (an engine shown only on its vehicle) stays off the page.
     return files.filter((f) => f.endsWith(".glb")).map((f) => f.slice(0, -4)).sort()
       .filter((probe) => spec(probe).listed !== false).map((probe) => {
+      // A circuit board (scripts/circuit/build.py --publish): <board>.board.json beside its model, no spec.
+      if (files.includes(`${probe}.board.json`)) {
+        const b = JSON.parse(fs.readFileSync(path.join(dir, `${probe}.board.json`), "utf8")) as Board;
+        return {
+          probe, title: b.title, logos: [], thumb: files.includes(`${probe}.webp`), explore: true, focus: [], board: b,
+          sources: [{ title: `${b.source.title}, by ${b.source.author}`, url: b.source.url, licence: b.source.licence, cited: 0 }],
+        };
+      }
       const s = spec(probe);
       const cited = citationCounts(s);
       // Licences are shown up to any ":" (the terms, not the harness's note on what it kept).

@@ -1,6 +1,6 @@
 ---
 name: model-board
-description: Build a circuit board with the circuit harness (frontend/scripts/circuit) for the site's /circuit page: write its recipe from building blocks, generate, route and check it with KiCad and Freerouting, and show it on the models dashboard. Use when asked to build, fix, change or publish a circuit board, import an open-source KiCad board, or change the circuit harness.
+description: Build a circuit board with the circuit harness (frontend/scripts/circuit) for the site's /models page: write its recipe from building blocks, generate, route and check it with KiCad and Freerouting, and show it on the models dashboard. Use when asked to build, fix, change or publish a circuit board, import an open-source KiCad board, or change the circuit harness.
 ---
 
 # Building a board
@@ -17,7 +17,7 @@ Nothing is edited by hand in KiCad's editors; a fix goes into the recipe, a bloc
   0 errors and schematic-matches-board 0 (recipe boards get their schematic from lib/schematic.py). Warnings are listed, never
   a reason to stop; fix them when they point at something real.
 - Web budget: at most 1.5 MB and 300,000 triangles; every part has a 3D model.
-- `--publish` (copies the build to `public/circuit/`, the live page) only with the user's go-ahead,
+- `--publish` (copies the build to `public/models/`, the live models page) only with the user's go-ahead,
   like `model:approve`.
 - Imported boards: only with a licence that allows it, credited in `board.json` with the licence quoted.
 - A change to `lib/` or a block affects every board that uses it: rebuild them all and compare.

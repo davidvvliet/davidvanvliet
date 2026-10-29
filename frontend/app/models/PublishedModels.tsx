@@ -13,6 +13,14 @@ import styles from "./models.module.css";
 export type Published = {
   probe: string; title: string; thumb: boolean; logos: string[]; explore: boolean; focus: Focusable[];
   sources: { title: string; url: string; licence: string | null; cited: number }[];
+  board?: Board;
+};
+
+// A circuit board's parts, grouped into blocks (scripts/circuit/build.py).
+export type Board = {
+  board: string; title: string; purpose: string;
+  source: { title: string; url: string; author: string; licence: string };
+  blocks: { name: string; parts: { ref: string; value: string; package: string }[] }[];
 };
 
 // The card camera; scripts/blender/thumbnail.py renders the thumbnail from the same view.
@@ -49,6 +57,7 @@ export default function PublishedModels({ models, dashboard }: { models: Publish
   if (dashboard && params.has("dashboard")) return <ModelsDashboard />;
   const asked = params.get("probe");
   const model = models.find((m) => m.probe === asked);
+  if (model?.board) return <BoardDetail model={model} board={model.board} />;
   if (model) {
     const probe = model.probe;
     return (
@@ -68,6 +77,51 @@ export default function PublishedModels({ models, dashboard }: { models: Publish
     );
   }
   return <Grid models={models} />;
+}
+
+// A circuit board: its blocks beside it (pick one, in the list or on the board, to focus it), then its source.
+function BoardDetail({ model, board }: { model: Published; board: Board }) {
+  const [focus, setFocus] = useState<string | null>(null);
+  const block = board.blocks.find((b) => b.name === focus);
+  return (
+    <div className={styles.page}>
+      <Header>
+        <Link href="/models" className={styles.dim}>← models</Link>
+        <span>{model.title}</span>
+      </Header>
+      <div className={styles.detail}>
+        <div className={styles.viewCell}>
+          <Viewer probe={model.probe} url={`/models/${model.probe}.glb`} breakdown={null} stale={false} focus={focus} onFocus={setFocus} />
+        </div>
+        <aside className={styles.sources}>
+          <div className={styles.dim}>{board.purpose}</div>
+          <ol className={styles.blocks}>
+            {board.blocks.map((b) => (
+              <li key={b.name}>
+                <button onClick={() => setFocus(b.name === focus ? null : b.name)} className={b.name === focus ? styles.active : ""}>
+                  {b.name}
+                </button>
+                <span className={styles.dim}>{b.parts.length}</span>
+              </li>
+            ))}
+          </ol>
+          {block && (
+            <table className={styles.parts}>
+              <tbody>
+                {block.parts.map((p) => (
+                  <tr key={p.ref}><td>{p.ref}</td><td>{p.value}</td><td className={styles.dim}>{p.package}</td></tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+          <div className={styles.dim}>
+            Design: <a href={board.source.url} target="_blank" rel="noopener noreferrer">{board.source.title}</a> by {board.source.author}, {board.source.licence}.
+            Parts are KiCad&apos;s 3D library models.
+          </div>
+        </aside>
+      </div>
+    </div>
+  );
 }
 
 // The sources the model was built from (its spec's list), and how many of its values cite each.

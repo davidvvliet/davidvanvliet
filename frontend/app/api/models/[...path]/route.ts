@@ -1,7 +1,7 @@
 // Dev-only window onto the Blender harness (scripts/blender) for the /models dashboard:
 //   /api/models/status                    build status, plus each probe's spec summary and refs
 //   /api/models/file/<worktree>/<path>    a file under that worktree's out/, refs/ or baselines/;
-//                                         circuit/<path>: under scripts/circuit/out/ (the /circuit boards)
+//                                         circuit/<path>: under scripts/circuit/out/ (the circuit boards)
 // Circuit boards (scripts/circuit/build.py) are listed as probes too, with kind "circuit".
 // Every git worktree of this repo is read, so sessions working in their own worktrees all show
 // up on the one dashboard: each probe lists the builds found per worktree, newest first.

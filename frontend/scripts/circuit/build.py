@@ -1,6 +1,6 @@
-# Build a board for /circuit (from frontend/; boards/<board>/ holds its KiCad files):
+# Build a board for /models (from frontend/; boards/<board>/ holds its KiCad files):
 #   python3 scripts/circuit/build.py <board>            out/<board>/<board>.glb and .json, shown on /models?dashboard
-#   python3 scripts/circuit/build.py <board> --publish  the same, then copied to public/circuit/ (the live /circuit page)
+#   python3 scripts/circuit/build.py <board> --publish  the same, then copied to public/models/ (the live /models page)
 # A board is either imported (board.json + someone's KiCad files) or ours (recipe.json + blocks/):
 # 0. Ours: lib/generate.py lays the blocks out as KiCad's board, lib/route.py and Freerouting route it.
 # 1. KiCad's checks (lib/checks.py): design rules on the board, electrical rules on the schematic.
@@ -130,16 +130,15 @@ def main(board, publish=False):
               {"name": "parts without a 3D model", "ok": not missing, "measured": len(missing), "expected": 0, "unit": "parts"}]
     record(board, {"started": started, "ok": all(c["ok"] for c in rows), "seconds": round(time.time() - started, 1),
                    "glb": f"{board}.glb", "checks": rows, "published": publish})
-    if publish:
-        dest = os.path.join(FRONTEND, "public", "circuit")
-        os.makedirs(dest, exist_ok=True)
-        for ext in ("glb", "json"):
-            shutil.copy(os.path.join(HERE, "out", board, f"{board}.{ext}"), os.path.join(dest, f"{board}.{ext}"))
+    if publish:  # the models page lists every public/models/<name>.glb; <name>.board.json makes it a board
+        dest = os.path.join(FRONTEND, "public", "models")
+        shutil.copy(out, os.path.join(dest, f"{board}.glb"))
+        shutil.copy(os.path.join(HERE, "out", board, f"{board}.json"), os.path.join(dest, f"{board}.board.json"))
     for c in rows:
         print(f"  {'✓' if c['ok'] else '✗'} {c['name']}: {c['measured']} {c['unit']}" + (f"  ({c['detail']})" if c.get("detail") else ""))
     if note: print(f"  {note}")
     print(f"{board}: {'PASS' if all(c['ok'] for c in rows) else 'FAIL'}, {mb:.2f} MB, {tris} triangles, {len(data['blocks'])} blocks"
-          + (f"; missing models: {missing}" if missing else "") + ("; published to public/circuit" if publish else ""))
+          + (f"; missing models: {missing}" if missing else "") + ("; published to public/models" if publish else ""))
 
 def record(board, build):
     """out/status.json, which /api/models/status reads for the dashboard."""
