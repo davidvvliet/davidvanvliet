@@ -162,9 +162,9 @@ function VideoLine({ src: spec, restored, onSized }: { src: string; restored?: b
   );
 }
 
-// `mobile`: the phone layout's terminal. Adds tappable keys for what a phone keyboard
-// lacks (Tab, arrows), a 16px input so iOS doesn't zoom on focus, no autocorrect, and
-// keeps the prompt in view as the cell resizes. `onFocusChange` reports the keyboard
+// `mobile`: the phone layout's terminal. Adds a tappable help button, a 16px input
+// so iOS doesn't zoom on focus, no autocorrect, and keeps the prompt in view as the
+// cell resizes. `onFocusChange` reports the keyboard
 // opening and closing (the prompt gaining and losing focus).
 export default function Terminal({ mobile = false, onFocusChange }: { mobile?: boolean; onFocusChange?: (focused: boolean) => void } = {}) {
   const [lines, setLines] = useState<Line[]>([]);
@@ -412,15 +412,6 @@ export default function Terminal({ mobile = false, onFocusChange }: { mobile?: b
     return () => ro.disconnect();
   }, [mobile]);
 
-  // Mobile keys: run help, step through history, complete. They don't take focus,
-  // so an open keyboard stays open; the editing keys open it when it's closed.
-  const mobileKeys: [string, string, () => void][] = [
-    ["help", "Run help", () => typeAndRun("help")],
-    ["↑", "Previous command", () => { browseHistory(-1); inputRef.current?.focus(); }],
-    ["↓", "Next command", () => { browseHistory(1); inputRef.current?.focus(); }],
-    ["tab", "Complete", () => { handleTab(); inputRef.current?.focus(); }],
-  ];
-
   return (
     <div ref={rootRef} className={mobile ? `${styles.terminal} ${styles.mobile}` : styles.terminal} onClick={() => inputRef.current?.focus()}>
       {lines.map((line, i) =>
@@ -505,11 +496,10 @@ export default function Terminal({ mobile = false, onFocusChange }: { mobile?: b
       </div>
       {mobile && !transcriptPlaying && (
         <div className={styles.keys}>
-          {mobileKeys.map(([label, name, action]) => (
-            <button key={label} type="button" aria-label={name} className={styles.key}
-              onPointerDown={(e) => e.preventDefault()} onMouseDown={(e) => e.preventDefault()}
-              onClick={(e) => { e.stopPropagation(); if (!typingRef.current) action(); }}>{label}</button>
-          ))}
+          {/* Doesn't take focus, so an open keyboard stays open. */}
+          <button type="button" className={styles.key}
+            onPointerDown={(e) => e.preventDefault()} onMouseDown={(e) => e.preventDefault()}
+            onClick={(e) => { e.stopPropagation(); if (!typingRef.current) typeAndRun("help"); }}>help</button>
         </div>
       )}
       <div ref={bottomRef} />
