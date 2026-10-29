@@ -31,50 +31,68 @@ def build(spec):
                               material=steel_tex)
         tiling.cyl_uv(tank, 1.0, F["ring_height"] * wl["rings"], R)
 
-        # 33 Raptors (from_photos.engine, a stand-in until Raptor 3 is modelled): 3 centre,
-        # 10 middle, 20 outer (facts.engine_rings), exits at z = 0, hanging from a dark aft
-        # plate (from_photos.aft_plate).
+        # 33 Raptor 3s (facts.engine_rings): 3 centre and 10 middle hanging lowest (exits at
+        # z = 0) from their own thrust structure, 20 outer on the aft skirt, beyond the tank wall,
+        # their exits from_photos.engine_layout.outer_raised higher.
+        el = P["engine_layout"]
+        rap = engines.load(spec, "raptor3")
         c = F["centre_engine_clocking_deg"]
         centre = [90, 90 + c[0], 90 + c[0] + c[1]]
-        rings = [(0.85, centre), (2.4, [18 + 36 * k for k in range(10)]),
-                 (3.9, [9 + 18 * k for k in range(20)])]
+        rings = [(el["centre_r"], centre, 0), (el["middle_r"], [18 + 36 * k for k in range(10)], 0),
+                 (el["outer_r"], [9 + 18 * k for k in range(20)], el["outer_raised"])]
         k = 0
-        for r, angles in rings:
+        for r, angles, z in rings:
             for a in angles:
-                engines.place(P["engine"], f"booster_engine_{k:02d}", location=_at(a, r, 0),
-                              roll_deg=a, lod="low")
+                objs = engines.place(rap, f"booster_engine_{k:02d}", location=_at(a, r, z),
+                                     roll_deg=a, lod="low")
+                # a mount from the engine's top up to the aft plate (the outer ones' covers)
+                top = max((o.matrix_world @ v.co).z for o in objs for v in o.data.vertices)
+                parts.cylinder(f"booster_engine_{k:02d}_mount", el["mount_r"], aft - top + 0.04,
+                               location=_at(a, r, top - 0.06), segments=8,
+                               material="dark_metal")
                 k += 1
         parts.cylinder("booster_aft_plate", R - 0.05, 0.05, location=(0, 0, aft - 0.04),
                        segments=64, material="dark_metal")
+        it = el["inner_structure"]                     # the inner 13's own thrust structure
+        parts.lathe("booster_inner_structure",
+                    [(it["r"] - 0.04, aft), (it["r"], aft), (it["r"], it["bottom"]),
+                     (it["r"] - 0.04, it["bottom"])], closed=True, segments=48, smooth=False,
+                    material="dark_metal")
 
-        # Aft end (from_photos.aft_manifold): a dark rim with square holes, and above it a
-        # bundle of tubes round the body held by clamp blocks.
+        # Aft end (from_photos.aft_manifold), from the bottom up: a skirt round the outer
+        # engines' tops with a square hole between each pair, a thick ring, then a band of
+        # tubes round the body with clamp blocks, three thin pipes running between them.
         am = P["aft_manifold"]
-        rim1 = aft + am["rim_height"]
-        parts.lathe("booster_aft_rim", [(R - 0.05, aft), (R + 0.02, aft), (R + 0.02, rim1),
-                                        (R - 0.05, rim1)], closed=True, segments=64, smooth=False,
-                    material="dark_metal")
-        for i in range(am["rim_holes"]):
-            a = 360 * (i + 0.5) / am["rim_holes"]
-            h = am["rim_hole"]
-            parts.box(f"booster_aft_rim_hole_{i:02d}", (0.02, h, h),
-                      location=_at(a, R + 0.025, aft + am["rim_height"] * 0.6), roll_deg=a,
-                      material="grid_fin")
-        mh, nt, so = am["height"], am["tubes"], am["stands_out"]
-        tr = mh / nt / 2
-        prof = [(R - 0.02, rim1)]
-        for j in range(nt):
-            zc = rim1 + tr * (2 * j + 1)
-            prof += [(R + so - tr + tr * math.cos(t), zc + tr * math.sin(t))
-                     for t in (-math.pi / 2, -math.pi / 4, 0, math.pi / 4)]
-        prof += [(R + so - tr, rim1 + mh), (R - 0.02, rim1 + mh)]
-        parts.lathe("booster_aft_manifold", prof, closed=True, segments=64, smooth=False,
-                    material="dark_metal")
+        sk_top = aft + am["skirt_height"]
+        ring_top = sk_top + am["ring_height"]
+        band_top = ring_top + am["band_height"]
+        parts.lathe("booster_aft_skirt",
+                    [(R - 0.05, aft), (am["skirt_r"], aft), (am["skirt_r"], sk_top),
+                     (am["ring_r"], sk_top), (am["ring_r"], ring_top), (am["band_r"], ring_top),
+                     (am["band_r"], band_top), (R - 0.05, band_top)],
+                    closed=True, segments=64, smooth=False, material="dark_metal")
+        hw, hh = am["hole"]
+        for i in range(am["holes"]):
+            a = 360 * i / am["holes"]
+            parts.box(f"booster_aft_skirt_hole_{i:02d}", (0.02, hw, hh),
+                      location=_at(a, am["skirt_r"] + 0.005, aft + am["skirt_height"] / 2),
+                      roll_deg=a, material="grid_fin")
+
+        def ring(name, z, d, r):
+            q = d / 2
+            pr = [(r + q * math.cos(t), z + q * math.sin(t))
+                  for t in [2 * math.pi * s / 6 for s in range(6)]]
+            parts.lathe(name, pr, closed=True, segments=48, smooth=False, material="dark_metal")
+
+        for n, (dz, d) in enumerate(am["tubes"]):
+            ring(f"booster_aft_tube_{n}", ring_top + dz, d, am["band_r"] + d / 2)
+        cw, ch_, cd = am["clamp"]
+        for n, dz in enumerate(am["pipes_at"]):
+            ring(f"booster_aft_pipe_{n}", ring_top + dz, am["pipe_d"], am["band_r"] + cd / 2)
         for i in range(am["clamps"]):
-            a = 360 * i / am["clamps"]
-            parts.box(f"booster_aft_clamp_{i:02d}",
-                      (am["clamp_stands_out"], am["clamp_width"], am["clamp_height"]),
-                      location=_at(a, R + so + am["clamp_stands_out"] / 2 - 0.1, rim1 + mh / 2),
+            a = 360 * (i + 0.5) / am["clamps"]
+            parts.box(f"booster_aft_clamp_{i:02d}", (cd, cw, ch_),
+                      location=_at(a, am["band_r"] + cd / 2 - 0.02, ring_top + am["clamps_at"]),
                       roll_deg=a, material="dark_metal")
 
         # Lower-body fairings (from_photos.chines): four box sections 90 degrees apart, their
@@ -82,11 +100,11 @@ def build(spec):
         ch = P["chines"]
         depth = ch["stands_out"] + 0.05
         z_top = aft + ch["top_above_aft_end"]
-        h = z_top - aft
+        h = z_top - band_top
         c = ch["top_chamfer"] / h
         for i, a in enumerate(ch["angles_deg"]):
             t = Vector(_at(a + 90, 1, 0))
-            mid = Vector(_at(a, R - 0.05 + depth / 2, (aft + z_top) / 2))
+            mid = Vector(_at(a, R - 0.05 + depth / 2, (band_top + z_top) / 2))
             # The plate's u runs inward here (up x tangent), so u = 0 is the outer face.
             parts.outline_plate(f"booster_chine_{i}", [(1, 0), (0, 0), (0, 1 - c), (1, 1)],
                                 depth, h, ch["width"], location=tuple(mid - t * ch["width"] / 2),

@@ -6,7 +6,7 @@ import math, os
 import bmesh
 import numpy as np
 from mathutils import Vector
-from lib import materials, parts, textures, tiling
+from lib import engines, materials, parts, textures, tiling
 
 HARNESS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(HARNESS, "out", "starship", "textures")
@@ -125,7 +125,9 @@ def build(spec):
         # (from_photos.engines).
         en = P["engines"]
         bay, wall = en["bay_depth"], en["skirt_wall"]
-        prof = [(0, bay), (R - wall, bay), (R - wall, z0), (R, z0), (R, z_wrap), (R, z_nose)]
+        # The bay's ceiling is the aft dome: the sea-level engines hang from its flat centre,
+        # the vacuum engines from its slope (from_photos.engines.aft_dome).
+        prof = [tuple(q) for q in en["aft_dome"]] + [(R - wall, z0), (R, z0), (R, z_wrap), (R, z_nose)]
         prof += [(r_at(z), z) for z in zs] + [(0, top)]
         # One skin, tiles or steel per face (facts.heat_shield, from_photos.tile_layout):
         # black on the windward half, all round the top of the nose, and round the forward
@@ -136,7 +138,7 @@ def build(spec):
         for poly in body.data.polygons:
             c = poly.center
             ang = abs(math.degrees(math.atan2(c.y, c.x)))
-            if c.z < bay + 1e-3 and math.hypot(c.x, c.y) < R - wall / 2:
+            if c.z < bay + 1e-3 and math.hypot(c.x, c.y) < R - wall / 2:  # bay, dome included
                 poly.material_index = 2
                 continue
             tiled = (c.z > z_cap or ang <= tl["barrel_to_deg"] + 0.1
@@ -205,16 +207,93 @@ def build(spec):
 
         # Engines: 3 sea-level Raptors in the middle, 3 Raptor Vacuums round them, inside the
         # skirt (facts.ship_engines, from_photos.engines).
-        sl = F["raptor_sl_nozzle_exit_m"] / 2
+        # The engines are models of their own (specs/raptor3.json, specs/raptor3vac.json): the
+        # engines in the bay at the simple level of detail (seen from below, low shows facets).
+        r3, r3v = engines.load(spec, "raptor3"), engines.load(spec, "raptor3vac")
         for i, a in enumerate(en["sl_angles_deg"]):
-            ze = en["sl_exit_above_base"]
-            parts.lathe(f"ship_engine_sl_{i}", _bell(sl, 0.25, 1.53, bay - ze + 0.05),
-                        location=_at(a, en["sl_ring_radius"], ze), segments=24, material="dark_metal")
-        rv = en["rvac_exit"] / 2
+            engines.place(r3, f"ship_engine_sl_{i}", location=_at(a, en["sl_ring_radius"], en["sl_exit_above_base"]),
+                          roll_deg=a + en["sl_roll_deg"], lod="simple")
         for i, a in enumerate(en["rvac_angles_deg"]):
-            ze = en["rvac_exit_above_base"]
-            parts.lathe(f"ship_engine_vac_{i}", _bell(rv, 0.25, 3.0, bay - ze + 0.05),
-                        location=_at(a, en["rvac_ring_radius"], ze), segments=32, material="dark_metal")
+            engines.place(r3v, f"ship_engine_vac_{i}", location=_at(a, en["rvac_ring_radius"], en["rvac_exit_above_base"]),
+                          roll_deg=a + en["rvac_roll_deg"], lod="simple")
+            # Heavy brackets on the skirt wall either side of each vacuum bell.
+            b = en["rvac_brackets"]
+            for side in (-1, 1):
+                ab = a + side * b["offset_deg"]
+                parts.box(f"ship_bay_bracket_{i}_{'ab'[side > 0]}", b["size"],
+                          location=_at(ab, R - wall - b["size"][0] / 2, b["z"]), roll_deg=ab,
+                          material="dark_metal")
+        # The aft dome's underside: bolted panels (from_photos.aft_dome_panels), a texture on a
+        # sheet just below the body's dome, mapped flat from below.
+        dp = P["aft_dome_panels"]
+        n = dp["texture_px"]
+        yy, xx = np.mgrid[0:n, 0:n]
+        X, Y = (xx + 0.5) / n * 2 * R - R, (yy + 0.5) / n * 2 * R - R
+        rr, aa = np.hypot(X, Y), np.degrees(np.arctan2(Y, X)) % 360
+        px_m = n / (2 * R)
+        plate, seam = _rgb(sm["aft_dome_plate"]), _rgb(sm["aft_dome_plate"]) * 0.55
+        img = np.repeat(np.repeat(plate[None, None], n, 0), n, 1)
+        da = (aa + dp["radial_every_deg"] / 2) % dp["radial_every_deg"] - dp["radial_every_deg"] / 2
+        on_radial = (np.abs(np.radians(da)) * rr * px_m < 1.0) & (rr > dp["rings_r"][0])
+        on_ring = np.zeros_like(on_radial)
+        for rk in dp["rings_r"]:
+            on_ring |= np.abs(rr - rk) * px_m < 1.0
+        img[on_radial | on_ring] = seam
+        # Bolt heads: dots beside each seam, `bolt_spacing` apart along it.
+        bs = dp["bolt_spacing"]
+        near_r = (np.abs(np.abs(np.radians(da)) * rr - 0.035) * px_m < 1.2) & (rr > dp["rings_r"][0])
+        along = (rr % bs) * px_m < 2.4
+        near_c = np.zeros_like(near_r)
+        for rk in dp["rings_r"]:
+            near_c |= np.abs(np.abs(rr - rk) - 0.035) * px_m < 1.2
+        along_c = ((np.radians(aa) * rr) % bs) * px_m < 2.4
+        img[(near_r & along) | (near_c & along_c)] = seam * 0.8
+        dome_img = tiling.image("starship", "aft_dome_panels", img.astype(np.float32), "sRGB")
+        dome_mat = materials.image("aft_dome_panels", dome_img, metallic=sm["aft_dome_plate"]["metallic"],
+                                   roughness=sm["aft_dome_plate"]["roughness"])
+        dome = parts.lathe("ship_aft_dome", [(r, z - 0.006) for r, z in en["aft_dome"]], segments=64,
+                           material=dome_mat)
+        uvl = dome.data.uv_layers.new(name="UVMap")
+        for loop in dome.data.loops:
+            co = dome.data.vertices[loop.vertex_index].co
+            uvl.data[loop.index].uv = (co.x / (2 * R) + 0.5, co.y / (2 * R) + 0.5)
+
+        def dome_z(r):
+            pts = en["aft_dome"]
+            for (r0, z0_), (r1, z1_) in zip(pts, pts[1:]):
+                if r0 <= r <= r1:
+                    return z0_ + (z1_ - z0_) * (r - r0) / (r1 - r0)
+            return pts[-1][1]
+
+        # Cables across the dome (from_photos.bay_cables).
+        bc = P["bay_cables"]
+        for k, run in enumerate(bc["runs"]):
+            parts.tube(f"ship_bay_cable_{k}", [_at(a, r, dome_z(r) - bc["hang"]) for r, a in run],
+                       bc["diameter"] / 2, segments=6, bend_radius=0.4, bend_steps=3, material="bay_cable")
+
+        # Aft flap actuators (from_photos.flap_actuators): one housing per flap on the skirt's
+        # inside wall, three motors standing out of it.
+        fa = P["flap_actuators"]
+        for tag, a in (("left", 90), ("right", 270)):
+            hr, hw, hh = fa["housing"]
+            parts.box(f"ship_flap_actuator_{tag}", (hr, hw, hh), location=_at(a, R - wall - hr / 2, fa["z"]),
+                      roll_deg=a, material="dark_metal")
+            for m in range(fa["motors"]):
+                off = (m - (fa["motors"] - 1) / 2) * hw / fa["motors"]
+                c = Vector(_at(a, R - wall - hr - fa["motor_length"] / 2 + 0.02, fa["z"] + hh * 0.15))
+                c += Vector(_at(a + 90, 1, 0)) * off
+                parts.cylinder(f"ship_flap_actuator_{tag}_motor_{m}", fa["motor_diameter"] / 2,
+                               fa["motor_length"], location=tuple(c), direction=_at(a + 180, 1, 0),
+                               segments=12, material="aft_hardware_dark")
+
+        # Stiffening rings round the inside of the skirt.
+        sr = en["skirt_rings"]
+        for k in range(sr["count"]):
+            z = sr["from"] + (sr["to"] - sr["from"]) * k / (sr["count"] - 1)
+            ri = R - wall - sr["stands_in"]
+            # Only the faces seen from the bay: the underside and the inner edge.
+            parts.lathe(f"ship_skirt_ring_{k:02d}", [(R - wall + 0.005, z), (ri, z), (ri, z + sr["height"])],
+                        segments=48, smooth=False, material="dark_metal")
 
         # Flap hinges (from_photos.flap_hinges): each flap stands off the body on brackets,
         # turning on a rod between them.

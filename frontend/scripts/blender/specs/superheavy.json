@@ -1,6 +1,11 @@
 {
   "title": "Super Heavy (Starship V3 booster)",
-  "logos": ["spacex"],
+  "logos": [
+    "spacex"
+  ],
+  "engines": [
+    "raptor3"
+  ],
   "note": "SpaceX Super Heavy, Starship V3 (Block 3) booster, as first flown on Flight 12 (booster B19; SpaceX photo names), on its own without the ship. Dry, unfuelled (no frost). Frame: z up, the engine bell exits at z = 0, the axis on x = y = 0. +x is the side the ship's heat shield faces (the heat-shield-side grid fin), away from the launch tower; -x faces the tower. y completes a right-handed frame. No reference 3D model exists (see reference_model): the layout comes from the sources below and from SpaceX photos, scaled by the 9 m diameter. The ship is its own model (starship).",
   "sources": [
     {
@@ -98,15 +103,6 @@
       "credit": "SpaceX, photo of Booster 19 at Pad 2 (grid fins, hot stage)"
     },
     {
-      "id": "photo_f12_ascent",
-      "title": "SpaceX, Flight 12 ascent (Flight_12_Website_Mobile_3.jpg)",
-      "url": "https://sxcontent9668.azureedge.us/cms-assets/assets/Flight_12_Website_Mobile_3_fba489c895.jpg",
-      "read": "2026-10-28",
-      "licence": "SpaceX copyright (licence not stated); used for looking only",
-      "saved": "",
-      "credit": "SpaceX, photo of the Flight 12 ascent (ship height, engines)"
-    },
-    {
       "id": "photo_b19_transport",
       "title": "SpaceX, B19 in the high bay at Starbase (B19_Transport_2603083576.jpg, 11316 x 6365)",
       "url": "https://sxcontent9668.azureedge.us/cms-assets/assets/B19_Transport_2603083576_1cc29f2c4f.jpg",
@@ -125,15 +121,6 @@
       "credit": "SpaceX, render of the Block 3 booster's aft end (engines, aft manifold)"
     },
     {
-      "id": "wiki_raptor",
-      "title": "Wikipedia, SpaceX Raptor (infobox), used to find a length; its reference [10] is the primary source",
-      "url": "https://en.wikipedia.org/wiki/SpaceX_Raptor",
-      "read": "2026-10-28",
-      "licence": "Wikipedia text (CC BY-SA 4.0); only a number is used",
-      "saved": "",
-      "credit": ""
-    },
-    {
       "id": "render_b3_booster",
       "title": "SpaceX render of the Block 3 booster, side view (\"Block 3 Booster\", 2550 x 1352, with height 72.3 m), published in nsf_block3_mars; read via the Wayback Machine",
       "url": "https://web.archive.org/web/20260202234154im_/https://www.nasaspaceflight.com/wp-content/uploads/2025/05/Block-3-Booster.jpg",
@@ -141,6 +128,14 @@
       "licence": "SpaceX copyright (credited \"SpaceX\" by NSF); used for measuring only, not in the repo",
       "saved": "",
       "credit": "SpaceX, render of the Block 3 booster (lower-body fairings)"
+    },
+    {
+      "id": "photo_booster_base",
+      "title": "Photo of a Block 3 Super Heavy's base, side-on, telephoto (1074 x 552 screenshot)",
+      "url": "supplied by David as a screenshot; original link not known",
+      "read": "2026-10-29",
+      "licence": "unknown; used for measuring only, not in the repo",
+      "saved": ""
     }
   ],
   "reference_model": {
@@ -266,14 +261,9 @@
       "source": "photo_pad_f13: ship and booster both 80.5 px wide (9 m). Along the axis the photo reads short against the ascent photo (ship 47.7 m vs 52.6 m), so it seems squashed vertically: lengths there are scaled by the 52.1 m ship (0.122 m/px), widths by the diameter (0.1118 m/px). The hot-stage ring then measures 3.8 m, matching nsf_pad2's 'nearly four-meter' ring."
     },
     "engines_below_skirt": {
-      "value": 2.4,
+      "value": 3.56,
       "unit": "m",
-      "source": "photo_f12_ascent (Desktop_3): the bells reach about 11 px below the aft end of the booster, whose width there is about 42 px (9 m). Estimated."
-    },
-    "nozzle_exit": {
-      "value": 1.2,
-      "unit": "m",
-      "source": "faa_plume, fitted, not measured: 20 outer bells of faa_plume's 1.30 m don't fit around a 9 m body (circumference at the bells' centres about 24.5 m, so at most 1.22 m each). Raptor 3's nozzle isn't published; 1.2 m for every booster engine, outer ring centres at r 3.9, middle (10) at r 2.4, centre (3) at r 0.85. Ring clocking estimated."
+      "source": "photo_booster_base: the aft skirt's bottom edge (y 290) is about 205 px (2.81 m) above the outer bells' exits (y 495), which sit outer_raised (0.75 m) above the inner exits. photo_booster_base, scaled by the outer bells' exits (raptor3: 1.321 m outside, about 96 px, so about 13.7 mm/px). Estimated."
     },
     "chines": {
       "value": {
@@ -424,93 +414,76 @@
       "unit": "m",
       "source": "photo_b19_lift (fin crop x 5542-9180, y 2598-3810, 0.0113 m/px): each fin turns on a round geared mount on the body at its root, about 80 px (0.9 m) across. How far it stands out estimated."
     },
-    "engine": {
-      "value": {
-        "kind": "rocket",
-        "nozzle": {
-          "exit_diameter": {
-            "value": 1.2,
-            "source": "faa_plume, fitted, not measured: see from_photos.nozzle_exit"
-          },
-          "throat_diameter": {
-            "value": 0.2216,
-            "source": "faa_plume",
-            "quote": "Throat Radius (in) 4.362",
-            "note": "4.362 in = 0.1108 m radius"
-          },
-          "length": {
-            "value": 1.526,
-            "source": "faa_plume",
-            "quote": "Nozzle throat to exit length (in) 60.06"
-          },
-          "contour": "parabola",
-          "initial_angle_deg": {
-            "value": 32.0,
-            "source": "faa_plume",
-            "quote": "Tangency angle (deg) 32.0"
-          },
-          "exit_angle_deg": {
-            "value": 6.0,
-            "source": "faa_plume",
-            "quote": "Nozzle lip exit angle (deg) 6.0"
-          },
-          "wall": {
-            "value": 0.015,
-            "source": "render_aft_b3_booster, design value: a thin wall at the lip"
-          }
-        },
-        "chamber": {
-          "diameter": {
-            "value": 0.44,
-            "source": "render_aft_b3_booster, scaled by the 1.2 m nozzle exit (from_photos.nozzle_exit) on the second middle-ring engine from the left: exit about 77 px wide in the 1400 px view. Widths only; heights are foreshortened (the camera looks up). Estimated. Chamber stack about 85 px wide in a 3x crop of 230 px exit."
-          },
-          "convergent_length": {
-            "value": 0.2,
-            "source": "render_aft_b3_booster, design value: the throat-to-chamber blend is hidden by plumbing"
-          },
-          "length": {
-            "value": 0.35,
-            "source": "render_aft_b3_booster, design value: the chamber's ribbed stack, its height foreshortened"
-          }
-        },
-        "powerhead": {
-          "diameter": {
-            "value": 0.4,
-            "source": "render_aft_b3_booster, scaled by the 1.2 m nozzle exit (from_photos.nozzle_exit) on the second middle-ring engine from the left: exit about 77 px wide in the 1400 px view. Widths only; heights are foreshortened (the camera looks up). Estimated. Powerhead about 75 px in the same crop."
-          },
-          "height": {
-            "value": 1.024,
-            "source": "wiki_raptor: engine \"Length 3.1 m\", less the nozzle (1.526), convergent (0.2) and chamber (0.35)",
-            "quote": "Length 3.1 m (10 ft)"
-          }
-        },
-        "materials": {
-          "nozzle": "dark_metal",
-          "chamber": "dark_metal",
-          "powerhead": "dark_metal"
-        }
-      },
-      "source": "faa_plume and render_aft_b3_booster: A stand-in for the booster's sea-level Raptor 3 until it is modelled as an engine of its own: the nozzle from faa_plume's Raptor table (Raptor 1-era, nothing published for Raptor 3) with the exit fitted, the rest estimated from render_aft_b3_booster. Built at lod \"low\" (33 engines)."
-    },
     "aft_manifold": {
       "value": {
-        "height": 0.31,
-        "tubes": 5,
-        "stands_out": 0.12,
-        "clamps": 36,
-        "clamp_height": 0.22,
-        "clamp_width": 0.19,
-        "clamp_stands_out": 0.18,
-        "rim_height": 0.5,
-        "rim_holes": 20,
-        "rim_hole": 0.12
+        "skirt_height": 0.55,
+        "skirt_r": 5.0,
+        "holes": 20,
+        "hole": [
+          0.16,
+          0.27
+        ],
+        "ring_height": 0.34,
+        "ring_r": 5.08,
+        "band_height": 1.5,
+        "band_r": 4.98,
+        "tubes": [
+          [
+            0.11,
+            0.12
+          ],
+          [
+            0.45,
+            0.14
+          ],
+          [
+            1.15,
+            0.12
+          ],
+          [
+            1.45,
+            0.12
+          ]
+        ],
+        "clamps": 40,
+        "clamp": [
+          0.25,
+          0.48,
+          0.2
+        ],
+        "clamps_at": 0.69,
+        "pipes_at": [
+          0.6,
+          0.69,
+          0.78
+        ],
+        "pipe_d": 0.045
       },
       "unit": "m",
-      "source": "render_aft_b3_booster: a bundle of five tubes round the aft end, about 20 px tall (0.31 m) with a clamp block every ~10 degrees (about 18 across the visible half, so 36), each about 14 x 12 px; below it a dark rim about 32 px (0.5 m) tall with square holes (about 10 across the visible half, so 20). Scaled by the 1.2 m nozzle exit (77 px). Estimated."
+      "source": "photo_booster_base, from the bottom up: a skirt round the outer engines' tops (y 290-250, about 730 px or 10.0 m across) with a square hole about 12 x 20 px between each pair of engines (20); a thick ring (y 250-225, 741 px, 10.15 m); then a band of tubes (y 225-115, up to 760 px across): tubes at y 217, 192 (thickest, bright collars), 140 and 113, and clamp blocks about 18 x 35 px centred at y 175, about 58 px apart at the middle of the face (so about 40 round), with three thin pipes between them. photo_booster_base, scaled by the outer bells' exits (raptor3: 1.321 m outside, about 96 px, so about 13.7 mm/px). Estimated."
     },
     "aft_plate": {
       "value": true,
       "source": "render_aft_b3_booster: a dark plate the engines hang from, no heavy heat shield (caption: \"Move to Raptor 3 eliminates the need for heavy heatshields on the bottom of the booster\"); spacex_v3 adds shielding between the engines."
+    },
+    "engine_layout": {
+      "value": {
+        "outer_r": 4.6,
+        "outer_raised": 0.75,
+        "middle_r": 2.4,
+        "centre_r": 0.85,
+        "inner_structure": {
+          "r": 3.35,
+          "bottom": 2.5
+        },
+        "mount_r": 0.25
+      },
+      "unit": "m",
+      "source": [
+        "photo_booster_base: the outer exits span x 165-945 (10.7 m outside edges) and the powerheads x 205-905, so the outer ring's centres sit at r about 4.6 m, beyond the 4.5 m tank wall; the inner bells show below the outer exits down to the bottom of the screenshot (y 552), so they hang at least 55 px (0.75 m) lower. photo_booster_base, scaled by the outer bells' exits (raptor3: 1.321 m outside, about 96 px, so about 13.7 mm/px). Estimated.",
+        "render_aft_b3_booster: the centre and middle bells hang below the outer ring, on a structure of their own. Middle ring r 2.4 and centre r 0.85 kept from the first fit (they clear raptor3's 1.321 m bells: chords 1.48 m and 1.38 m). Ring clocking and the inner structure's radius and bottom estimated.",
+        "photo_booster_base: each outer engine's top is covered by a box about 37 px (0.5 m) wide in the skirt band; modelled as a 0.5 m cylinder from each engine's top up to the aft plate, the inner engines' too (hidden). Estimated."
+      ]
     }
   },
   "materials": {

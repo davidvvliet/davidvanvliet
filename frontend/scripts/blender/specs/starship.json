@@ -1,6 +1,8 @@
 {
   "title": "Starship (V3 ship)",
-  "logos": ["spacex"],
+  "logos": [
+    "spacex"
+  ],
   "note": "SpaceX Starship V3 (Block 3) ship, the upper stage, as first flown on Flight 12 (ship S39; SpaceX photo names), on its own without the booster. Dry, unfuelled (no frost). Frame: z up, the ship's base (aft skirt) at z = 0, the axis on x = y = 0. +x is the windward (heat-shield) side, which faces away from the launch tower; -x faces the tower. y completes a right-handed frame. No reference 3D model exists (see reference_model): the layout comes from the sources below and from SpaceX photos, scaled by the 9 m diameter. The booster is its own model (superheavy).",
   "sources": [
     {
@@ -119,6 +121,38 @@
       "url": "https://sxcontent9668.azureedge.us/cms-assets/assets/Ship_36_a2506190485_d5e0f8b811.jpg",
       "read": "2026-10-28",
       "licence": "SpaceX copyright (licence not stated); used for looking only",
+      "saved": ""
+    },
+    {
+      "id": "raptor3_spec",
+      "title": "specs/raptor3.json in this repo: the sea-level Raptor 3 (chamber, powerhead and plumbing, each sourced there)",
+      "url": "https://github.com/davidvanvliet (this repo): frontend/scripts/blender/specs/raptor3.json",
+      "read": "2026-10-29",
+      "licence": "this repo",
+      "saved": ""
+    },
+    {
+      "id": "photo_hotstage",
+      "title": "Onboard camera inside the hot-stage ring before launch (T-00:31:23), looking up at a V3 ship's six engines; screenshot supplied by David, 2026-10-29",
+      "url": "supplied by David as a screenshot; original link not known",
+      "read": "2026-10-29",
+      "licence": "SpaceX webcast frame; used for looking only, not in the repo",
+      "saved": ""
+    },
+    {
+      "id": "photo_ship_underside",
+      "title": "A ship's engine bay from straight below (3 sea-level, 3 vacuum engines; ship version not known); screenshot supplied by David, 2026-10-29",
+      "url": "supplied by David as a screenshot; original link not known",
+      "read": "2026-10-29",
+      "licence": "unknown; used for measuring only, not in the repo",
+      "saved": ""
+    },
+    {
+      "id": "raptor3vac_spec",
+      "title": "specs/raptor3vac.json in this repo: the Raptor 3 Vacuum (4.74 m tall, 2.45 m exit; each number sourced there)",
+      "url": "https://github.com/davidvanvliet (this repo): frontend/scripts/blender/specs/raptor3vac.json",
+      "read": "2026-10-29",
+      "licence": "this repo",
       "saved": ""
     }
   ],
@@ -335,7 +369,7 @@
           120,
           240
         ],
-        "sl_exit_above_base": 0.8,
+        "sl_exit_above_base": 0.2,
         "rvac_exit": 2.45,
         "rvac_ring_radius": 3.2,
         "rvac_angles_deg": [
@@ -344,11 +378,79 @@
           300
         ],
         "rvac_exit_above_base": 0.2,
-        "bay_depth": 4.0,
-        "skirt_wall": 0.06
+        "bay_depth": 5.05,
+        "skirt_wall": 0.06,
+        "aft_dome": [
+          [
+            0,
+            3.15
+          ],
+          [
+            1.3,
+            3.15
+          ],
+          [
+            1.7,
+            3.3
+          ],
+          [
+            2.1,
+            3.6
+          ],
+          [
+            2.5,
+            4.0
+          ],
+          [
+            2.85,
+            4.45
+          ],
+          [
+            3.15,
+            4.8
+          ],
+          [
+            3.5,
+            4.98
+          ],
+          [
+            4.0,
+            5.04
+          ],
+          [
+            4.44,
+            5.05
+          ]
+        ],
+        "sl_roll_deg": 0,
+        "rvac_roll_deg": 180,
+        "skirt_rings": {
+          "count": 12,
+          "from": 0.35,
+          "to": 4.75,
+          "stands_in": 0.06,
+          "height": 0.035
+        },
+        "rvac_brackets": {
+          "offset_deg": 27,
+          "size": [
+            0.3,
+            0.28,
+            0.9
+          ],
+          "z": 0.55
+        }
       },
       "unit": "m, degrees from +x",
-      "source": "render_aft_b3, seen from below: the skirt's open end is 580 px across at the 1400 px view (9 m, 0.0155 m/px). Sea-level bells 83 px (1.29 m, agreeing with faa_plume's 1.30 m), their centres about 0.9 m from the axis in a triangle; vacuum bells 155-162 px (2.45 m), centres 3.2-3.3 m out (3.2 so they clear the skirt wall); all recessed inside the skirt, the vacuum bells' exits nearly at its edge, the sea-level ones higher. The render has six vacuum bells (a later nine-engine ship); V3 has three (facts.ship_engines), in every other slot. Which three, and how the layout is clocked against the flaps, isn't shown: built with a sea-level engine toward +x and the vacuum bells between them. Exit heights, bay depth and wall thickness estimated."
+      "source": [
+        "render_aft_b3, seen from below: the skirt's open end is 580 px across at the 1400 px view (9 m, 0.0155 m/px). Sea-level bells 83 px (1.29 m, agreeing with faa_plume's 1.30 m), their centres about 0.9 m from the axis in a triangle; vacuum bells 155-162 px (2.45 m), centres 3.2-3.3 m out (3.2 so they clear the skirt wall); all recessed inside the skirt, the vacuum bells' exits nearly at its edge, the sea-level ones higher. The render has six vacuum bells (a later nine-engine ship); V3 has three (facts.ship_engines), in every other slot. Which three, and how the layout is clocked against the flaps, isn't shown: built with a sea-level engine toward +x and the vacuum bells between them. Exit heights, bay depth and wall thickness estimated.",
+        "photo_hotstage (a V3 ship, the six engines from the hot-stage ring before launch): the sea-level bells' exits about level with the vacuum bells', so sl_exit_above_base 0.2 like the vacuum ones'.",
+        "photo_ship_underside: the bay's ceiling is the aft dome, a plate of bolted panels; the sea-level engines hang from its centre and the vacuum engines from its slope, so aft_dome runs from the sea-level engines' tops up its slope past the vacuum engines' tops to the skirt (heights below).",
+        "raptor3_spec: the sea-level engine is 2.94 m tall; with its exit at 0.2 m its top is at 3.14, so aft_dome's flat centre at 3.15.",
+        "raptor3vac_spec: the vacuum engine is 4.74 m tall; with its exit at 0.2 m its top is at 4.94 at r 3.2 (the dome there about 4.8, the engine's cap sitting in it); the dome meets the skirt at bay_depth 5.05. Its shape between estimated.",
+        "photo_ship_underside: about a dozen stiffening rings round the inside of the skirt (skirt_rings, spacing and size estimated); a heavy bracket on the skirt wall 27 degrees either side of each vacuum bell (centre 380 px out at 65 and 119 degrees round the 742 px skirt, the top vacuum bell at 91), size estimated.",
+        "photo_ship_underside: which way each engine's pump faces isn't seen; sea-level pumps outward, vacuum pumps inward (away from the skirt wall), estimated."
+      ]
     },
     "flap_hinges": {
       "value": {
@@ -509,6 +611,103 @@
       },
       "unit": "m",
       "source": "photo_wdr (aft crop): a stubby steel cylinder like the catch pins at x 2633, y 1667 (z 4.6 m), about 23 px (0.9 m) across and 1.4 m long, pointing almost at the camera (about 141 degrees). The other side is hidden behind the tower's walkway; taken as mirrored about the tower side, like the catch pins (assumed). Corrected (2026-10-28): the camera looks along about 143 degrees, not 130. The two raceways, which sit 40 degrees apart in this photo, are mirrored about the tower side (a scale model of the ship seen from the tower side, user's photo), so the camera is at 180 - (17 + 56) / 2 = 143 degrees; every angle read from this photo moves by +13 degrees."
+    },
+    "aft_dome_panels": {
+      "value": {
+        "radial_every_deg": 15,
+        "rings_r": [
+          1.3,
+          2.1,
+          2.9,
+          3.7
+        ],
+        "bolt_spacing": 0.12,
+        "texture_px": 1024
+      },
+      "unit": "m, degrees",
+      "source": "photo_ship_underside: the dome is a plate of bolted panels: long straight seams with rows of bolt heads along them (crop x 420-600, y 180-320). Seam layout estimated: radial every 15 degrees and rings at the dome's steps, bolts about 0.12 m apart."
+    },
+    "bay_cables": {
+      "value": {
+        "diameter": 0.045,
+        "runs": [
+          [
+            [
+              4.2,
+              128
+            ],
+            [
+              3.0,
+              133
+            ],
+            [
+              2.0,
+              138
+            ],
+            [
+              1.3,
+              142
+            ]
+          ],
+          [
+            [
+              4.2,
+              124
+            ],
+            [
+              3.0,
+              140
+            ],
+            [
+              2.0,
+              156
+            ],
+            [
+              1.4,
+              170
+            ]
+          ],
+          [
+            [
+              4.2,
+              236
+            ],
+            [
+              3.0,
+              228
+            ],
+            [
+              2.0,
+              220
+            ],
+            [
+              1.3,
+              214
+            ]
+          ]
+        ],
+        "hang": 0.04
+      },
+      "unit": "m; runs [[r, angle_deg], ...] along the dome, hanging `hang` below it",
+      "source": "photo_ship_underside: two reddish-brown cables run from the skirt wall on the right across the dome to the sea-level engines (from about (575, 215) to (470, 260) and (520, 350), 245 px out of the 742 px skirt); the photo's angles are the model's plus 89 degrees (its vacuum bell 90 degrees from the flaps, at 91, matches the model's at 180). A third run on the other side assumed. Diameter estimated."
+    },
+    "flap_actuators": {
+      "value": {
+        "housing": [
+          0.45,
+          0.7,
+          0.9
+        ],
+        "z": 2.6,
+        "motors": 3,
+        "motor_diameter": 0.18,
+        "motor_length": 0.32
+      },
+      "unit": "m: housing [radial, across, tall] on the skirt's inside wall at each aft flap (+y, -y)",
+      "source": [
+        "spacex_v3: \"The aft flap actuation system has also been upgraded from two actuators per flap to a single actuator with three motors.\"",
+        "photo_ship_underside: no actuator housing can be told apart from the brackets at the flaps' angles; placed inside the skirt behind each flap's root, above the brackets, and sized as a design value."
+      ]
     }
   },
   "materials": {
@@ -547,6 +746,18 @@
       "metallic": 0.5,
       "roughness": 0.5,
       "source": "photo_wdr, aft hardware band (x 2560-2660, y 1613-1662): mean of the pixels darker than value 0.3 (398 px). Metallic and roughness estimated."
+    },
+    "aft_dome_plate": {
+      "hex": "#484f5a",
+      "metallic": 0.5,
+      "roughness": 0.55,
+      "source": "photo_ship_underside, the aft dome's panels away from glare: (230-280, 250-290) #464c54 and (250-290, 440-470) #484f5a"
+    },
+    "bay_cable": {
+      "hex": "#6e6363",
+      "metallic": 0.1,
+      "roughness": 0.7,
+      "source": "photo_ship_underside, the reddish-brown cables across the aft dome at (450, 262) #494243, (470, 255) #6a6162 and (530, 235) #988585, averaged"
     }
   },
   "open_questions": [
@@ -666,5 +877,9 @@
       "Ship 52.1 m",
       "Ship and booster as two separate models"
     ]
-  }
+  },
+  "engines": [
+    "raptor3",
+    "raptor3vac"
+  ]
 }
