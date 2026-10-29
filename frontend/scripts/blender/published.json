@@ -194,9 +194,9 @@
   }
  },
  "x15": {
-  "approved": "2026-10-29 18:09",
+  "approved": "2026-10-29 18:12",
   "inputs": {
-   "specs/x15.json": "9fa403d4c90bd51b",
+   "specs/x15.json": "d0b502ff3e96855c",
    "probes/x15.py": "f289d6b2123f7b71",
    "build.py": "546ad99cac961e9b",
    "blender.json": "7bbc071b6e396ec4",

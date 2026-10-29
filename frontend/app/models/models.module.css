@@ -66,8 +66,6 @@
   background: none; border: 1px solid #00ff00; padding: 0.2rem 0.6rem; color: #bbb; font: inherit; cursor: pointer;
 }
 .explode:hover, .explode.active { color: #ededed; }
-.focusButtons { position: absolute; top: 0.5rem; left: 0.75rem; z-index: 1; display: flex; flex-wrap: wrap; gap: 0.4rem; }
-.focusButtons .explode { position: static; }
 /* Info for the hovered or focused part: fixed under the Explode button, never over the part. */
 .partLabel {
   position: absolute; top: 2.75rem; left: 0.75rem; z-index: 1; pointer-events: none;

@@ -430,22 +430,11 @@ export function Viewer({ probe, url, breakdown, stale, compact, onReady, focus: 
           {exploded ? "Assemble" : "Explode"}
         </button>
       )}
-      {!explore && (focusable.length > 0 || explodable.length > 0) && (
-        // Explode (only the spec's listed parts move), then one button per listed part to focus:
-        // the way to reach a part hidden inside the model.
-        <div className={styles.focusButtons}>
-          {explodable.length > 0 && (
-            <button className={`${styles.explode} ${exploded ? styles.active : ""}`} onClick={() => setExploded((x) => !x)}>
-              {exploded ? "Assemble" : "Explode"}
-            </button>
-          )}
-          {focusable.map((f) => (
-            <button key={f.part} className={`${styles.explode} ${focus === f.part ? styles.active : ""}`}
-              onClick={() => setFocus(focus === f.part ? null : f.part)}>
-              {f.label}
-            </button>
-          ))}
-        </div>
+      {!explore && explodable.length > 0 && (
+        // Only the spec's listed parts move; its focusable parts are clicked on the model.
+        <button className={`${styles.explode} ${exploded ? styles.active : ""}`} onClick={() => setExploded((x) => !x)}>
+          {exploded ? "Assemble" : "Explode"}
+        </button>
       )}
       {label && (
         <PartLabel name={label.name} size={label.size} row={breakdown?.families[label.name]}
