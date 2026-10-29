@@ -66,7 +66,7 @@ export default function SiteShell({ children, photos }: { children: React.ReactN
     { id: 5, lat: 40.7128, lon: -74.0060, color: '#00ff00', size: 4, label: 'New York City', subtitle: '2026-present', description: 'Based here' },
   ];
 
-  if (isMobile) return <MobilePage panel={isExplore ? null : <ViewPanel>{children}</ViewPanel>} />;
+  if (isMobile) return <MobilePage panel={isExplore ? null : <ViewPanel>{children}</ViewPanel>} photos={photos} />;
 
   return (
     <>

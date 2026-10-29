@@ -2,9 +2,10 @@
 
 import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
-import Image from 'next/image';
 import Navbar from './Navbar';
 import Terminal from './Terminal';
+import PhotoGrid from './PhotoGrid';
+import type { Photo } from '../photoTypes';
 import styles from './MobilePage.module.css';
 import labelStyles from '../page.module.css'; // the desktop label overlay, reused
 import { usePageStore } from '../store/pageStore';
@@ -14,6 +15,7 @@ import { MISSIONS } from '../missions';
 const SolarSystem = dynamic(() => import('./SolarSystem').then(mod => mod.SolarSystem), {
   ssr: false,
 });
+const GoldenRecord = dynamic(() => import('./GoldenRecord'), { ssr: false });
 
 const dots = [
   { id: 1, lat: 52.3676, lon: 4.9041, color: '#00ff00', size: 4, label: 'Amsterdam', subtitle: '2004-2022', description: 'Born here' },
@@ -24,7 +26,7 @@ const dots = [
 type Dot = (typeof dots)[number];
 
 // `panel`: a non-explore view (resume, a post) for the top cell; null shows the solar system.
-export default function MobilePage({ panel }: { panel: React.ReactNode }) {
+export default function MobilePage({ panel, photos }: { panel: React.ReactNode; photos: Photo[] }) {
   // Labels on touch: no hover, so a tapped dot, a tapped star, and the focused body.
   const [tappedDot, setTappedDot] = useState<Dot | null>(null);
   const [tappedStar, setTappedStar] = useState<{ name: string; lightYears: number; spectral?: string; fact?: string } | null>(null);
@@ -87,20 +89,11 @@ export default function MobilePage({ panel }: { panel: React.ReactNode }) {
             <Terminal />
           </div>
 
-          {/* Right 38.2%: linksContainer top (38.2%) | chess bottom (61.8%) */}
+          {/* Right 38.2%: links + record top (38.2%) | photos bottom (61.8%) */}
           <div className={styles.rightCell}>
 
-            {/* Top 38.2%: orbital left (38.2%) | links right (61.8%) */}
+            {/* Top 38.2%: links left (38.2%) | golden record right (61.8%) */}
             <div className={styles.linksContainer}>
-              <div className={styles.orbitalCell}>
-                <Image
-                  src="/orbital-2-1-0.png"
-                  alt="Orbital"
-                  width={200}
-                  height={200}
-                  className={styles.orbitalImage}
-                />
-              </div>
               <div className={styles.linksCell}>
                 <a href="https://github.com/davidvvliet" target="_blank" rel="noopener noreferrer" className={styles.link}>
                   github
@@ -112,17 +105,14 @@ export default function MobilePage({ panel }: { panel: React.ReactNode }) {
                   X
                 </a>
               </div>
+              <div className={styles.recordCell}>
+                <GoldenRecord />
+              </div>
             </div>
 
-            {/* Bottom 61.8%: pulsar map */}
-            <div className={styles.pulsarCell}>
-              <Image
-                src="/pulsar_mobile_0a0a0a.png"
-                alt="Pulsar Map"
-                width={600}
-                height={600}
-                className={styles.pulsarImage}
-              />
+            {/* Bottom 61.8%: photos */}
+            <div className={styles.photosCell}>
+              <PhotoGrid photos={photos} />
             </div>
 
           </div>
