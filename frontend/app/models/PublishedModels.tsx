@@ -23,20 +23,17 @@ const TURN_SECONDS = 20;
 
 // Who built the real vehicle: its logo sits in each card's top right corner (public/logos, from
 // Wikimedia Commons, public domain), and the grid lists them in this order. Anyone else comes last.
-// `aspect` is the image's width / height; `centre` is where the logo's visual middle sits across
-// it (the meatball's circle is left of its image's middle), so the column lines those up.
 const ORGS = [
-  { key: "nasa", name: "NASA", logo: "/logos/nasa.svg", height: 30, aspect: 110 / 92, centre: 50.05 / 110 },
-  { key: "spacex", name: "SpaceX", logo: "/logos/spacex.svg", height: 10, aspect: 8, centre: 0.5 },
+  { key: "nasa", name: "NASA", logo: "/logos/nasa.svg", height: 30 },
+  { key: "spacex", name: "SpaceX", logo: "/logos/spacex.svg", height: 10 },
 ];
-// Who else built it: their logos go down the right edge under the first one. JPL's red letters are
+// Who else built it: their logos go down the right edge under the first one, each centred on it. JPL's red letters are
 // from Wikimedia Commons (public domain, trademarked); North American Aviation's (copyright Boeing)
 // and Rocketdyne's 1959 logo are English Wikipedia's fair-use files, recoloured light for the dark cards.
 const PARTNERS = {
-  jpl: { name: "Jet Propulsion Laboratory", logo: "/logos/jpl.svg", height: 11, aspect: 194 / 57, centre: 0.5 },
-  // the triangle's apex
-  naa: { name: "North American Aviation", logo: "/logos/north-american.png", height: 30, aspect: 304 / 328, centre: 163.5 / 304 },
-  rocketdyne: { name: "Rocketdyne", logo: "/logos/rocketdyne.png", height: 24, aspect: 194 / 200, centre: 0.5 },
+  jpl: { name: "Jet Propulsion Laboratory", logo: "/logos/jpl.svg", height: 11 },
+  naa: { name: "North American Aviation", logo: "/logos/north-american.png", height: 30 },
+  rocketdyne: { name: "Rocketdyne", logo: "/logos/rocketdyne.png", height: 24 },
 };
 const PARTNERS_OF: Record<string, (keyof typeof PARTNERS)[]> = {
   voyager: ["jpl"], perseverance: ["jpl"], x15: ["naa"], f1: ["rocketdyne"],
@@ -142,7 +139,6 @@ function Card({ model, spin, root }: { model: Published; spin: boolean; root: Re
   const card = useRef<HTMLAnchorElement>(null);
   const org = ORGS.find((o) => o.key === model.org);
   const logos = [...(org ? [org] : []), ...(PARTNERS_OF[model.probe] ?? []).map((k) => PARTNERS[k])];
-  const right = (o: (typeof logos)[number]) => o.height * o.aspect * (1 - o.centre); // middle to right edge, px
   const [seen, setSeen] = useState(false); // on screen at least once: load the model
   const [ready, setReady] = useState(false);
   const hover = useRef(false);
@@ -174,8 +170,7 @@ function Card({ model, spin, root }: { model: Published; spin: boolean; root: Re
       <span className={styles.cardLogos}>
         {logos.map((o) => (
           // eslint-disable-next-line @next/next/no-img-element
-          <img key={o.logo} src={o.logo} alt={o.name} title={o.name}
-            style={{ height: o.height, marginRight: right(logos[0]) - right(o) }} />
+          <img key={o.logo} src={o.logo} alt={o.name} title={o.name} style={{ height: o.height }} />
         ))}
       </span>
     </Link>
