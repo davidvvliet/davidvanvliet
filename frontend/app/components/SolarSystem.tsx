@@ -1445,6 +1445,9 @@ export function SolarSystem({
     let lastTime = performance.now();
     let lastViewSaveAt = 0;
     let lastViewSaved = '';
+    // The first frame runs before the saved view is restored (below), while the
+    // focus is still the Earth placeholder: saving then would overwrite it.
+    let viewRestored = false;
     let transcriptPlaying = false;
     let earthSpinBank = 0;
     let lastEarthSpinBase = THREE.MathUtils.degToRad(gmstDeg(simJD) - 180);
@@ -1499,7 +1502,7 @@ export function SolarSystem({
       simJDRef.current = simJD;
 
       // Persist the view (focused body + camera offset) when it has settled and changed.
-      if (now - lastViewSaveAt > 1000 && !transition && !aim && !zoomEase && !(mission && focus === mission.body)) {
+      if (viewRestored && now - lastViewSaveAt > 1000 && !transition && !aim && !zoomEase && !(mission && focus === mission.body)) {
         lastViewSaveAt = now;
         const dir = camera.position.clone().sub(controls.target).normalize();
         const snapshot = JSON.stringify({ name: focus.name, dir: dir.toArray().map((x) => Math.round(x * 1e4) / 1e4), radii: Math.round(camera.position.distanceTo(controls.target) / focus.radius * 100) / 100 });
@@ -1793,6 +1796,7 @@ export function SolarSystem({
         reportFocus(camera.position.distanceTo(focusPoint));
       }
     }
+    viewRestored = true;
     const pending = usePageStore.getState().focusRequest;
     if (pending && pending.seq !== handledFocusSeqRef.current) {
       handledFocusSeqRef.current = pending.seq;
