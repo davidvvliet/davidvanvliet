@@ -68,3 +68,33 @@ List these first and mark each "unverified" until read in a source opened this s
   standing on its engines, (0, 0, 1)). The exit centre goes at `location`.
 - Watch the vehicle's triangle budget: 33 engines at full detail don't fit.
 - An engine's spec change marks every vehicle that lists it as behind; rebuild those too.
+
+## Lessons from the F-1
+- Agree on what a reference shows before modelling it. Describe it back to the user (which
+  part, where it sits, how many, what shape) and get a yes. On the F-1, plates went on the
+  wrong bands, tube crowns showing between double rings were read as plates, and ribs as
+  bare tubes; each cost a round.
+- Look early for one detailed illustration or cutaway of the whole engine (the F-1 used
+  Steve Karp's, HistoryNet). Manuals and photos give sizes; an illustration shows how the
+  parts are put together: band layers, straps, the dome, ducts, the interface panel. List it
+  in `sources` with its page URL, and keep a copyrighted image out of the repo.
+- Fittings are rarely a uniform pattern. Brackets come in clusters, dense rows on some bands
+  and sparse groups on others, and nozzles in layers with their own band spacing, colour and
+  fittings. Use per-ring `angles` lists and groups of `hoops` rather than "N evenly round".
+- The outside of a nozzle is not its inner contour: covers, bands and manifolds hide the
+  throat. Give the bell an `outer_profile`, but keep it shaped like a bell (wall angle easing
+  towards the exit). A traced illustration outline can come out as a cone; check its slope
+  from top to bottom, not just its end points.
+- Every change in size can collide with a neighbour. Widening the F-1's bell pushed it into
+  the heat exchanger, and moving that opened a gap at the turbopump. After each geometry change,
+  look for parts cutting into the body of revolution and for parts no longer touching what they
+  hang from.
+- Compare renders taken from the reference's own viewpoint, side by side with it. That
+  shows what is wrong far faster than the check table or the sheet.
+- Detail fills the budget fast (hundreds of plates and brackets). Leave out faces that can't
+  be seen (a band ring's inside, a plate's back and bottom) before thinning the detail.
+- Write new features into `lib/engines.py` as options any engine can use (outer profile,
+  ribs, hoop groups, double rings, straps, dome powerhead), so the next engine starts with them.
+- A change to `lib/engines.py` only affects engines and the vehicles that list them. While
+  working, rebuild those (and `testengine`) only, not every model; `published.py` still asks
+  for the others before publishing.
