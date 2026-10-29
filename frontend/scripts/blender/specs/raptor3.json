@@ -1488,26 +1488,26 @@
         0.327,
         1
       ],
-      "width": 0.11,
+      "width": 0.1,
       "height": 0.18,
-      "source": "photo_cmp: the \"1\" at x 3065-3135, y 1551-1651 (centre z 0.894 m, 0.204 m right of the axis on the bell's 0.439 m radius there, so 27.7 deg round from the front); 0.11 m wide along the skin (its 57 px unsheared width over cos 27.7) and 0.18 m tall along the bell's slope. Its slant in the photo is the bell narrowing upwards (about 11 px over its height), so it is drawn upright.",
+      "source": "photo_cmp: the \"1\" at x 3065-3135, y 1551-1651 (centre z 0.894 m, 0.204 m right of the axis on the bell's 0.439 m radius there, so 27.7 deg round from the front). Its blocks, in stem widths (22 px): the foot overhangs the stem 0.8 on each side (foot x 3082-3135, stem 3095-3116 above it), the flag 0.68 to the left; flag and foot each 16 px of the 100 px height. Foot 53 px across, 0.10 m along the skin (over cos 27.7); 0.18 m tall along the bell's slope. Its slant in the photo is the bell narrowing upwards (about 11 px over its height), so it is drawn upright.",
       "shapes": {
         "flag": [
+          0.046,
           0,
-          0,
-          0.62,
-          0.17
+          0.69,
+          0.16
         ],
         "stem": [
-          0.24,
-          0.17,
-          0.62,
+          0.31,
+          0.16,
+          0.69,
           0.84
         ],
         "foot": [
-          0.07,
+          0,
           0.84,
-          0.93,
+          1,
           1
         ]
       },

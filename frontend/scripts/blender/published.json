@@ -63,9 +63,9 @@
   }
  },
  "raptor3": {
-  "approved": "2026-10-29 00:33",
+  "approved": "2026-10-29 12:12",
   "inputs": {
-   "specs/raptor3.json": "0122a4ebf41cff8f",
+   "specs/raptor3.json": "ced2e2bfe32f186b",
    "probes/raptor3.py": "5f97d361046047f2",
    "build.py": "6046dd94ba4984fb",
    "blender.json": "7bbc071b6e396ec4",
