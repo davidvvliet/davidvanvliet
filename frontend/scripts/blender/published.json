@@ -87,9 +87,9 @@
   }
  },
  "raptor3vac": {
-  "approved": "2026-10-29 12:42",
+  "approved": "2026-10-29 12:54",
   "inputs": {
-   "specs/raptor3vac.json": "b3ba29e850ca9f98",
+   "specs/raptor3vac.json": "422b015ace099e0d",
    "probes/raptor3vac.py": "60ab4dae525b8b29",
    "build.py": "6046dd94ba4984fb",
    "blender.json": "7bbc071b6e396ec4",
@@ -111,14 +111,14 @@
   }
  },
  "starship": {
-  "approved": "2026-10-29 12:43",
+  "approved": "2026-10-29 12:54",
   "inputs": {
    "specs/starship.json": "45e77afea0c86047",
    "probes/starship.py": "69f505b07da42c6c",
    "build.py": "6046dd94ba4984fb",
    "blender.json": "7bbc071b6e396ec4",
    "specs/raptor3.json": "cf24e366865a7b0e",
-   "specs/raptor3vac.json": "b3ba29e850ca9f98",
+   "specs/raptor3vac.json": "422b015ace099e0d",
    "lib/__init__.py": "e3b0c44298fc1c14",
    "lib/bake.py": "74d319683d9c87d6",
    "lib/checks.py": "ff15a079c5d56be3",
