@@ -1103,14 +1103,14 @@
           "value": [
             1.82,
             0,
-            2.4765
+            2.5765
           ],
-          "source": "factsheet_1968 drawing: hangs from the turbine and drops into the manifold's inlet; leaned out so it clears the bell (photo_6862832 puts its axis about 1.5 m out). Estimated. Moved out 0.26 m at the bottom and 0.1 m at the top (still under the turbine) to clear the fuller bell from karp_illustration."
+          "source": "factsheet_1968 drawing: hangs from the turbine and drops into the manifold's inlet; leaned out so it clears the bell (photo_6862832 puts its axis about 1.5 m out). Estimated. Its top sits under the turbine (1.27 m out, 3.95 m up) and its bottom is leaned out to 1.82 m to clear the fuller bell from karp_illustration."
         },
         "axis": [
-          -0.45,
+          -0.55,
           0,
-          1.4732
+          1.3735
         ],
         "material": "bright_steel"
       },
@@ -1126,7 +1126,7 @@
             [
               1.825,
               0,
-              2.5265
+              2.6265
             ],
             [
               1.74,
