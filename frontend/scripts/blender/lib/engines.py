@@ -25,7 +25,7 @@
 #              {shape "post"|"plate", count or angles {"ring": [deg]}, dense {count, bands},
 #              post: diameter, height, segments, every, on "band"|"wall"; plate: size [thick,
 #              across, up], resting on the ring's top}, straps {width, angles {"gap": [deg]}}:
-#              flat links between ring gap and gap + 1), full lod only
+#              flat links between ring gap and gap + 1, double {gap}: each ring a pair), full lod only
 #   extension: optional nozzle extension below the nozzle {exit_diameter, length, wall}: a cone
 #              from the nozzle's exit down to its own; the engine's z = 0 is then its exit
 #   manifold:  optional torus round the nozzle {diameter (centreline) or inner_diameter (the
@@ -116,17 +116,23 @@ def _hoops(name, h, outer, length, material, seg):
         r = _interp(outer, z)
         zs_all.append(z)
         # Bottom, outer and top faces; the inside face is buried in the wall.
+        # With `double` {gap}: two rings `height` tall each, `gap` apart, the wall between them.
         bm = bmesh.new()
         m = max(16, seg // 2)
-        zb, zt = z - h["height"] / 2, z + h["height"] / 2
-        prof = ((r - 0.005, zb), (r + h["stands_out"], zb), (r + h["stands_out"], zt),
-                (r - 0.005, zt))
-        rows = [[bm.verts.new((rr * math.cos(2 * math.pi * k / m), rr * math.sin(2 * math.pi * k / m),
-                               zz)) for rr, zz in prof] for k in range(m)]
-        for k in range(m):
-            a, b = rows[k], rows[(k + 1) % m]
-            for j in range(3):
-                bm.faces.new((a[j], b[j], b[j + 1], a[j + 1]))
+        dbl = h.get("double")
+        offs = ((-(dbl["gap"] + h["height"]) / 2, (dbl["gap"] + h["height"]) / 2) if dbl else (0.0,))
+        for dz in offs:
+            zb, zt = z + dz - h["height"] / 2, z + dz + h["height"] / 2
+            rb_, rt_ = _interp(outer, zb), _interp(outer, zt)
+            prof = ((rb_ - 0.005, zb), (rb_ + h["stands_out"], zb), (rt_ + h["stands_out"], zt),
+                    (rt_ - 0.005, zt))
+            rows = [[bm.verts.new((rr * math.cos(2 * math.pi * k / m),
+                                   rr * math.sin(2 * math.pi * k / m), zz)) for rr, zz in prof]
+                    for k in range(m)]
+            for k in range(m):
+                a, b = rows[k], rows[(k + 1) % m]
+                for j in range(3):
+                    bm.faces.new((a[j], b[j], b[j + 1], a[j + 1]))
         objs.append(parts._object(f"{name}_{i:02d}", bm, material, Matrix()))
         st = h.get("studs")
         if st and i % st.get("every", 1) == 0:
@@ -184,7 +190,8 @@ def _hoops(name, h, outer, length, material, seg):
         t, w = h["stands_out"], sp["width"]
         for gi, degs in sp["angles"].items():
             g = int(gi)
-            z0, z1 = zs_all[g] + h["height"] / 2, zs_all[g + 1] - h["height"] / 2
+            half = h["height"] / 2 + ((h["double"]["gap"] + h["height"]) / 2 if h.get("double") else 0)
+            z0, z1 = zs_all[g] + half, zs_all[g + 1] - half
             r0, r1 = _interp(outer, z0), _interp(outer, z1)
             for d in degs:
                 a = math.radians(d)

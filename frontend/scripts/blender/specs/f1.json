@@ -289,167 +289,22 @@
         "value": [
           {
             "count": 13,
-            "height": 0.03,
+            "height": 0.015,
             "stands_out": 0.025,
             "from": 0.0,
             "to": 0.42,
             "material": "cres",
-            "studs": {
-              "shape": "plate",
-              "size": [
-                0.015,
-                0.04,
-                0.04
-              ],
-              "count": 44,
-              "material": "bright_steel"
+            "double": {
+              "gap": 0.03
             }
           },
           {
             "count": 9,
-            "height": 0.035,
+            "height": 0.015,
             "stands_out": 0.025,
             "from": 0.46,
             "to": 0.8,
             "material": "bright_steel",
-            "studs": {
-              "shape": "plate",
-              "size": [
-                0.015,
-                0.04,
-                0.04
-              ],
-              "angles": {
-                "0": [
-                  94,
-                  95,
-                  97,
-                  100,
-                  228,
-                  231,
-                  231,
-                  234,
-                  237,
-                  243,
-                  246,
-                  249,
-                  286,
-                  289,
-                  300
-                ],
-                "1": [
-                  46,
-                  49,
-                  52,
-                  231,
-                  234,
-                  237,
-                  304,
-                  307,
-                  319,
-                  332,
-                  355
-                ],
-                "2": [
-                  15,
-                  18,
-                  18,
-                  32,
-                  123,
-                  126,
-                  129,
-                  167,
-                  170,
-                  265,
-                  302,
-                  327,
-                  330
-                ],
-                "3": [
-                  2,
-                  15,
-                  42,
-                  45,
-                  161,
-                  208,
-                  211,
-                  214,
-                  234,
-                  237,
-                  262,
-                  265
-                ],
-                "4": [
-                  8,
-                  26,
-                  29,
-                  55,
-                  55,
-                  58,
-                  58,
-                  109,
-                  192,
-                  195,
-                  197,
-                  214
-                ],
-                "5": [
-                  5,
-                  7,
-                  10,
-                  60,
-                  126,
-                  159,
-                  162,
-                  172,
-                  322,
-                  345,
-                  348
-                ],
-                "6": [
-                  59,
-                  62,
-                  67,
-                  70,
-                  96,
-                  99,
-                  249,
-                  260,
-                  329,
-                  332,
-                  349,
-                  352,
-                  355
-                ],
-                "7": [
-                  51,
-                  107,
-                  108,
-                  138,
-                  141,
-                  144,
-                  155,
-                  201,
-                  204,
-                  207,
-                  328,
-                  331,
-                  334
-                ],
-                "8": [
-                  37,
-                  46,
-                  109,
-                  112,
-                  132,
-                  151,
-                  154,
-                  312,
-                  315
-                ]
-              },
-              "material": "cres"
-            },
             "straps": {
               "width": 0.035,
               "angles": {
@@ -497,13 +352,16 @@
                 ]
               },
               "material": "bright_steel"
+            },
+            "double": {
+              "gap": 0.03
             }
           }
         ],
         "source": [
           "r3896_1, p.1-8: tubes \"identified on reinforcing bands and straps below the thrust chamber throat\"; p.1-25 (par. 1-108): \"Protruding studs are percussion-welded onto hatbands of the thrust chamber to support and secure insulator panels\".",
           "photo_6862832: about twenty bands from the exit to the throat region. Estimated.",
-          "karp_illustration: below the ribbed top the bands come in two layers. Bottom (in the illustration y 300-400 at 97.5 px/m: from the exhaust manifold up to about 0.94 m above the 10:1 plane, 42% of the nozzle's length): darker bluish bands set closer together, each with a tight regular row of small light plates (about 22 on the visible half; 44 round), hardly any straps. Middle (y 125-300: up to about 1.8 m, 80%, where the ribs start): lighter bands with sparse irregular clusters of plates (singles, pairs, triples) and many short straps between neighbouring bands, two to four per gap. Cluster and strap angles are placed at random (seeded) to match that look; band counts, sizes and colours (spec materials cres and bright_steel) estimated.",
+          "karp_illustration: below the ribbed top the bands come in two layers. Bottom (in the illustration y 300-400 at 97.5 px/m: from the exhaust manifold up to about 0.94 m above the 10:1 plane, 42% of the nozzle's length): darker bluish bands set closer together, hardly any straps. Middle (y 125-300: up to about 1.8 m, 80%, where the ribs start): lighter bands with many short straps between neighbouring bands, two to four per gap. Each band is a pair of thin rings with the tube wall showing in the gap between them (the rows of light dashes are the tubes' crowns). Strap angles are placed at random (seeded) to match that look; band counts, sizes, gap and colours (spec materials cres and bright_steel) estimated.",
           "r3896_1, p.1-8: \"reinforcing bands and straps below the thrust chamber throat\"."
         ]
       },
