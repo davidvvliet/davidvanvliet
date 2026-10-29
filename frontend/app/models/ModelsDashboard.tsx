@@ -135,8 +135,9 @@ type Controls = { target: THREE.Vector3; update: () => void };
 // A clicked part (`focus`) gets the camera: it flies in keeping the current viewing
 // direction, orbits that part, follows it through explode/assemble, and flies back home
 // when the focus clears.
-function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = true }: {
+function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = true, focusable = NONE }: {
   url: string; exploded: boolean; focus: string | null; setFocus: (f: string | null) => void; explore?: boolean;
+  focusable?: Focusable[];
   onLabel: (label: { name: string; size: THREE.Vector3 } | null) => void; onReady?: () => void;
 }) {
   const gltf = useGLTF(url, "/draco/"); // compressed models (the /circuit boards) decode with the copy in public/draco
@@ -149,6 +150,8 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
   useEffect(() => { readyRef.current?.(); }, [scene]);
   const [hover, setHover] = useState<string | null>(null);
   const hinges = useHinges(scene);
+  // Without explore, only the spec's listed parts ("viewer": {"focus": [...]}) can be focused.
+  const canFocus = (g: string) => explore || focusable.some((f) => f.part === g);
   const t = useRef(0);
   const camera = useThree((s) => s.camera) as THREE.PerspectiveCamera;
   const controls = useThree((s) => s.controls) as unknown as Controls | null;
@@ -261,7 +264,7 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
           mat.opacity = p.group === hover ? HOVER_FADED : FADED;
         if (!mat.emissive) continue;
         if (!mat.userData.rest) mat.userData.rest = mat.emissive.clone();
-        mat.emissive.copy(explore && p.group === hover ? HIGHLIGHT : mat.userData.rest);
+        mat.emissive.copy((explore || canFocus(p.group)) && p.group === hover ? HIGHLIGHT : mat.userData.rest);
       }
     }
     // Without explore, `hover` is a hinge group: light up the parts that move.
@@ -270,18 +273,24 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
         if (mat.emissive && mat.userData.rest) mat.emissive.copy(HIGHLIGHT);
       }
     }
-  }, [hover, focus, parts, explore, hinges]);
+  }, [hover, focus, parts, explore, hinges]); // eslint-disable-line react-hooks/exhaustive-deps
   // The part under the pointer. While one is focused, the others are see-through, so a ray
   // that reaches the focused part picks it even through faded parts in front of it.
   const pick = (e: ThreeEvent<PointerEvent | MouseEvent>) => {
     const groups = e.intersections.map((i) => groupOf(i.object, scene));
+    if (!explore) {
+      // Only the listed parts: the one in front, or, while one is focused (the rest
+      // see-through), any listed part along the ray.
+      return focus ? groups.find(canFocus) ?? null : groups[0] && canFocus(groups[0]) ? groups[0] : null;
+    }
     return focus && groups.includes(focus) ? focus : groups[0] ?? groupOf(e.object, scene);
   };
   const onMove = (e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation();
     const h = hingeGroup(e.intersections[0]?.object ?? e.object, scene);
-    setHover(explore ? pick(e) : h);
-    gl.domElement.style.cursor = h ? "pointer" : "";
+    const g = h ?? pick(e);
+    setHover(explore ? pick(e) : g);
+    gl.domElement.style.cursor = h || (!explore && g) ? "pointer" : "";
   };
   const onClick = (e: ThreeEvent<MouseEvent>) => {
     if (e.delta > 4) return; // the end of an orbit drag, not a click
@@ -289,19 +298,23 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
     // A part on a hinge with somewhere to go (its joint's move_to) moves instead of focusing.
     const h = hingeGroup(e.intersections[0]?.object ?? e.object, scene);
     if (h) { hinges.toggle(h); return; }
-    if (!explore) return; // a plain model: only the moving parts answer clicks
-    const g = pick(e);
+    const g = pick(e); // without explore: a listed part, or nothing
+    if (!g) return;
     setFocus(g === focus ? null : g); // another part moves the focus to it
   };
   // The label is drawn by the Viewer in a fixed panel, so it never covers the part.
-  const label = explore ? hover ?? focus : null;
+  const label = explore ? hover ?? focus : (hover && canFocus(hover) ? hover : null) ?? focus;
   useEffect(() => {
     const box = label ? boxes.get(label) : undefined;
-    onLabel(label && box ? { name: label, size: box.getSize(new THREE.Vector3()) } : null);
-  }, [label, boxes, onLabel]);
+    const name = focusable.find((f) => f.part === label)?.label ?? label;
+    onLabel(label && box ? { name: name!, size: box.getSize(new THREE.Vector3()) } : null);
+  }, [label, boxes, onLabel, focusable]);
   return <primitive object={scene} onPointerMove={onMove} onClick={onClick}
     onPointerOut={() => { setHover(null); gl.domElement.style.cursor = ""; }} />;
 }
+
+export type Focusable = { part: string; label: string };
+const NONE: Focusable[] = [];
 
 // Hinged parts: joints the build exported with a "joint_move_to" (the spec's joints). A click
 // on a part under one turns every joint in its group to that angle, or back to rest. The axis
@@ -388,9 +401,9 @@ class ViewerBoundary extends Component<{ children: ReactNode; resetKey: string }
 
 // `compact`: embedded in a scrolling page (the terminal): no wheel zoom, so the wheel scrolls the page.
 // `focus`/`onFocus`: the focused part, when the page around the viewer also picks it (the /circuit block list).
-export function Viewer({ probe, url, breakdown, stale, compact, onReady, focus: shown, onFocus, explore = true }: {
+export function Viewer({ probe, url, breakdown, stale, compact, onReady, focus: shown, onFocus, explore = true, focusable = NONE }: {
   probe: string; url: string; breakdown: Breakdown | null; stale: boolean; compact?: boolean; onReady?: () => void;
-  focus?: string | null; onFocus?: (f: string | null) => void; explore?: boolean;
+  focus?: string | null; onFocus?: (f: string | null) => void; explore?: boolean; focusable?: Focusable[];
 }) {
   const [exploded, setExploded] = useState(false);
   const [own, setOwn] = useState<string | null>(null);
@@ -412,6 +425,17 @@ export function Viewer({ probe, url, breakdown, stale, compact, onReady, focus: 
           {exploded ? "Assemble" : "Explode"}
         </button>
       )}
+      {!explore && focusable.length > 0 && (
+        // One button per listed part: the way to reach a part hidden inside the model.
+        <div className={styles.focusButtons}>
+          {focusable.map((f) => (
+            <button key={f.part} className={`${styles.explode} ${focus === f.part ? styles.active : ""}`}
+              onClick={() => setFocus(focus === f.part ? null : f.part)}>
+              {f.label}
+            </button>
+          ))}
+        </div>
+      )}
       {label && (
         <PartLabel name={label.name} size={label.size} row={breakdown?.families[label.name]}
           hasBreakdown={!!breakdown} stale={stale} />
@@ -426,7 +450,7 @@ export function Viewer({ probe, url, breakdown, stale, compact, onReady, focus: 
         <color attach="background" args={["#090909"]} />
         <StudioLights />
         <Suspense fallback={null}>
-          <Model key={url} url={url} exploded={exploded} focus={focus} setFocus={setFocus} onLabel={setLabel} onReady={onReady} explore={explore} />
+          <Model key={url} url={url} exploded={exploded} focus={focus} setFocus={setFocus} onLabel={setLabel} onReady={onReady} explore={explore} focusable={focusable} />
         </Suspense>
         <OrbitControls makeDefault enableZoom={!compact} />
       </Canvas>

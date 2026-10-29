@@ -7,11 +7,11 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { PerspectiveCamera, View, useGLTF } from "@react-three/drei";
 import StudioLights from "./StudioLights";
 import * as THREE from "three";
-import ModelsDashboard, { Viewer } from "./ModelsDashboard";
+import ModelsDashboard, { Viewer, type Focusable } from "./ModelsDashboard";
 import styles from "./models.module.css";
 
 export type Published = {
-  probe: string; title: string; thumb: boolean; logos: string[]; explore: boolean;
+  probe: string; title: string; thumb: boolean; logos: string[]; explore: boolean; focus: Focusable[];
   sources: { title: string; url: string; licence: string | null; cited: number }[];
 };
 
@@ -41,7 +41,8 @@ const orgRank = (m: Published) => { const i = ORGS.indexOf(m.logos[0]); return i
 // card. All cards draw into one shared canvas (one WebGL context however many models there are),
 // and each shows its thumbnail until its model has loaded, which starts once the card is on screen.
 // With ?probe=<name>: that model in the dashboard's viewer (explode, part sizes, click to focus;
-// a spec's "viewer": {"explore": false} leaves only orbiting and its moving parts).
+// a spec's "viewer": {"explore": false} leaves only orbiting, its moving parts and the parts
+// listed in "viewer.focus").
 // Locally (`dashboard`), /models?dashboard is the build dashboard.
 export default function PublishedModels({ models, dashboard }: { models: Published[]; dashboard: boolean }) {
   const params = useSearchParams();
@@ -58,7 +59,7 @@ export default function PublishedModels({ models, dashboard }: { models: Publish
         </Header>
         <div className={styles.detail}>
           <div className={styles.viewCell}>
-            <Viewer probe={probe} url={`/models/${probe}.glb`} breakdown={null} stale={false} explore={model.explore} />
+            <Viewer probe={probe} url={`/models/${probe}.glb`} breakdown={null} stale={false} explore={model.explore} focusable={model.focus} />
             <Logos model={model} />
           </div>
           <Sources sources={model.sources} />
