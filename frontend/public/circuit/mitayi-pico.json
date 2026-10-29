@@ -1,0 +1,289 @@
+{
+ "board": "mitayi-pico",
+ "title": "Mitayi Pico",
+ "purpose": "Microcontroller development board: an RP2040 with flash, USB-C power and a 3.3 V regulator",
+ "source": {
+  "title": "Mitayi-Pico-D1 R0.6",
+  "url": "https://github.com/CIRCUITSTATE/Mitayi-Pico-RP2040",
+  "author": "Vishnu Mohanan, CIRCUITSTATE Electronics",
+  "licence": "MIT",
+  "quote": "README.md: \"All the design files of Mitayi-Pico are completely open-source and released under the MIT license.\" The purpose line is from its feature list: \"RP2040\", \"USB-C for power and communication\", \"MIC5219 LDO with 3.3V, 500 mA output\"."
+ },
+ "blocks": [
+  {
+   "name": "Bypass capacitors",
+   "parts": [
+    {
+     "ref": "C2",
+     "value": "0.1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C4",
+     "value": "1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C5",
+     "value": "1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C6",
+     "value": "0.1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C7",
+     "value": "0.1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C8",
+     "value": "0.1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C9",
+     "value": "0.1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C10",
+     "value": "0.1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C11",
+     "value": "0.1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C12",
+     "value": "0.1uF",
+     "package": "C_0402_1005Metric"
+    }
+   ]
+  },
+  {
+   "name": "+3.3V LDO",
+   "parts": [
+    {
+     "ref": "C13",
+     "value": "10uF",
+     "package": "C_0603_1608Metric"
+    },
+    {
+     "ref": "C14",
+     "value": "2.2uF",
+     "package": "CP_EIA-2012-12_Kemet-R"
+    },
+    {
+     "ref": "C15",
+     "value": "10uF",
+     "package": "C_0603_1608Metric"
+    },
+    {
+     "ref": "C16",
+     "value": "470pF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "JP4",
+     "value": "0R",
+     "package": "R_0402_1005Metric_Pad0.72x0.64mm_HandSolder"
+    },
+    {
+     "ref": "U2",
+     "value": "MIC5219-3.3YM5",
+     "package": "SOT-23-5"
+    }
+   ]
+  },
+  {
+   "name": "Crystal",
+   "parts": [
+    {
+     "ref": "C17",
+     "value": "30pF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C18",
+     "value": "30pF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "R10",
+     "value": "1K",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "Y1",
+     "value": "YIC-12M20P2/XT324-10/10",
+     "package": "Crystal_SMD_3225-4Pin_3.2x2.5mm"
+    }
+   ]
+  },
+  {
+   "name": "RP2040",
+   "parts": [
+    {
+     "ref": "JP1",
+     "value": "0R",
+     "package": "R_0402_1005Metric_Pad0.72x0.64mm_HandSolder"
+    },
+    {
+     "ref": "R5",
+     "value": "27R",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "R6",
+     "value": "27R",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "U3",
+     "value": "RP2040",
+     "package": "RP2040-QFN-56"
+    }
+   ]
+  },
+  {
+   "name": "USB-C",
+   "parts": [
+    {
+     "ref": "D1",
+     "value": "BS5817WS",
+     "package": "D_SOD-323_HandSoldering"
+    },
+    {
+     "ref": "J2",
+     "value": "USB-C-2.0",
+     "package": "USB_C_Receptacle_HRO_TYPE-C-31-M-12"
+    },
+    {
+     "ref": "R3",
+     "value": "5.1K",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "R4",
+     "value": "5.1K",
+     "package": "R_0402_1005Metric"
+    }
+   ]
+  },
+  {
+   "name": "Debug LED",
+   "parts": [
+    {
+     "ref": "D2",
+     "value": "BLUE",
+     "package": "LED_0603_1608Metric"
+    },
+    {
+     "ref": "JP5",
+     "value": "0R",
+     "package": "R_0402_1005Metric_Pad0.72x0.64mm_HandSolder"
+    },
+    {
+     "ref": "R7",
+     "value": "470R",
+     "package": "R_0402_1005Metric"
+    }
+   ]
+  },
+  {
+   "name": "Reset",
+   "parts": [
+    {
+     "ref": "C19",
+     "value": "1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "R9",
+     "value": "10K",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "SW1",
+     "value": "UK-B0273-SP25Y",
+     "package": "CK_SW_SPST_UK-B0273-SP25Y"
+    }
+   ]
+  },
+  {
+   "name": "Flash memory",
+   "parts": [
+    {
+     "ref": "C1",
+     "value": "0.1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "R2",
+     "value": "1K",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "U1",
+     "value": "W25Q32JVSSIQ",
+     "package": "SOIC-8_5.23x5.23mm_P1.27mm"
+    }
+   ]
+  },
+  {
+   "name": "Power LED",
+   "parts": [
+    {
+     "ref": "D3",
+     "value": "RED",
+     "package": "LED_0603_1608Metric"
+    },
+    {
+     "ref": "R8",
+     "value": "470R",
+     "package": "R_0402_1005Metric"
+    }
+   ]
+  },
+  {
+   "name": "User button",
+   "parts": [
+    {
+     "ref": "R11",
+     "value": "5.1K",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "SW2",
+     "value": "UK-B0273-SP25Y",
+     "package": "CK_SW_SPST_UK-B0273-SP25Y"
+    }
+   ]
+  },
+  {
+   "name": "SWD",
+   "parts": [
+    {
+     "ref": "J5",
+     "value": "SWD",
+     "package": "PinHeader_1x03_P2.54mm_Vertical"
+    }
+   ]
+  },
+  {
+   "name": "EXP8",
+   "parts": [
+    {
+     "ref": "J1",
+     "value": "EXP8",
+     "package": "PinHeader_2x04_P2.54mm_Vertical"
+    }
+   ]
+  }
+ ]
+}

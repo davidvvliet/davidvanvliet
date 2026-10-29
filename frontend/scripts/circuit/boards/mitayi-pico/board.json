@@ -1,0 +1,14 @@
+{
+  "title": "Mitayi Pico",
+  "purpose": "Microcontroller development board: an RP2040 with flash, USB-C power and a 3.3 V regulator",
+  "pcb": "Mitayi-Pico-D1.kicad_pcb",
+  "sch": "Mitayi-Pico-D1.kicad_sch",
+  "model_renames": {"SOIC-8_5.275x5.275mm_P1.27mm.step": "SOIC-8_5.3x5.3mm_P1.27mm.step"},
+  "source": {
+    "title": "Mitayi-Pico-D1 R0.6",
+    "url": "https://github.com/CIRCUITSTATE/Mitayi-Pico-RP2040",
+    "author": "Vishnu Mohanan, CIRCUITSTATE Electronics",
+    "licence": "MIT",
+    "quote": "README.md: \"All the design files of Mitayi-Pico are completely open-source and released under the MIT license.\" The purpose line is from its feature list: \"RP2040\", \"USB-C for power and communication\", \"MIC5219 LDO with 3.3V, 500 mA output\"."
+  }
+}

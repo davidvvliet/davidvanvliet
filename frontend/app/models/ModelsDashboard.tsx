@@ -138,7 +138,7 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady }: {
   url: string; exploded: boolean; focus: string | null; setFocus: (f: string | null) => void;
   onLabel: (label: { name: string; size: THREE.Vector3 } | null) => void; onReady?: () => void;
 }) {
-  const gltf = useGLTF(url);
+  const gltf = useGLTF(url, "/draco/"); // compressed models (the /circuit boards) decode with the copy in public/draco
   // A copy per mount (geometry is shared): explode, fades and Suspense hiding change the
   // objects, and useGLTF's cached scene is reused by the next mount and the /models grid.
   const scene = useMemo(() => gltf.scene.clone(true), [gltf.scene]);
@@ -290,7 +290,7 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady }: {
 
 // Blender's axes from the glTF's (exported y-up): x, -z, y; sizes just swap y and z.
 const blenderSize = (v: THREE.Vector3) => [v.x, v.z, v.y];
-const m2 = (v: number) => (v >= 1 ? `${v.toFixed(2)} m` : `${Math.round(v * 100)} cm`);
+const m2 = (v: number) => (v >= 1 ? `${v.toFixed(2)} m` : v >= 0.01 ? `${Math.round(v * 100)} cm` : `${(v * 1000).toFixed(1)} mm`);
 
 function PartLabel({ name, size, row, hasBreakdown, stale }: {
   name: string; size: THREE.Vector3; row?: Breakdown["families"][string]; hasBreakdown: boolean; stale: boolean;
@@ -320,13 +320,17 @@ class ViewerBoundary extends Component<{ children: ReactNode; resetKey: string }
 }
 
 // `compact`: embedded in a scrolling page (the terminal): no wheel zoom, so the wheel scrolls the page.
-export function Viewer({ probe, url, breakdown, stale, compact, onReady }: {
+// `focus`/`onFocus`: the focused part, when the page around the viewer also picks it (the /circuit block list).
+export function Viewer({ probe, url, breakdown, stale, compact, onReady, focus: shown, onFocus }: {
   probe: string; url: string; breakdown: Breakdown | null; stale: boolean; compact?: boolean; onReady?: () => void;
+  focus?: string | null; onFocus?: (f: string | null) => void;
 }) {
   const [exploded, setExploded] = useState(false);
-  const [focus, setFocus] = useState<string | null>(null);
+  const [own, setOwn] = useState<string | null>(null);
+  const focus = shown !== undefined ? shown : own;
+  const setFocus = onFocus ?? setOwn;
   // Another model starts from its overview; a rebuild of the same one keeps the focus.
-  useEffect(() => setFocus(null), [probe]);
+  useEffect(() => setFocus(null), [probe]); // eslint-disable-line react-hooks/exhaustive-deps
   const [label, setLabel] = useState<{ name: string; size: THREE.Vector3 } | null>(null);
   const down = useRef<{ x: number; y: number } | null>(null);
   useEffect(() => {
