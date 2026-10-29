@@ -289,19 +289,19 @@
         "value": [
           {
             "count": 13,
-            "height": 0.015,
-            "stands_out": 0.025,
+            "height": 0.022,
+            "stands_out": 0.012,
             "from": 0.0,
             "to": 0.42,
             "material": "cres",
             "double": {
-              "gap": 0.03
+              "gap": 0.012
             }
           },
           {
             "count": 9,
-            "height": 0.015,
-            "stands_out": 0.025,
+            "height": 0.022,
+            "stands_out": 0.012,
             "from": 0.46,
             "to": 0.8,
             "material": "bright_steel",
@@ -354,14 +354,14 @@
               "material": "bright_steel"
             },
             "double": {
-              "gap": 0.03
+              "gap": 0.012
             }
           }
         ],
         "source": [
           "r3896_1, p.1-8: tubes \"identified on reinforcing bands and straps below the thrust chamber throat\"; p.1-25 (par. 1-108): \"Protruding studs are percussion-welded onto hatbands of the thrust chamber to support and secure insulator panels\".",
           "photo_6862832: about twenty bands from the exit to the throat region. Estimated.",
-          "karp_illustration: below the ribbed top the bands come in two layers. Bottom (in the illustration y 300-400 at 97.5 px/m: from the exhaust manifold up to about 0.94 m above the 10:1 plane, 42% of the nozzle's length): darker bluish bands set closer together, hardly any straps. Middle (y 125-300: up to about 1.8 m, 80%, where the ribs start): lighter bands with many short straps between neighbouring bands, two to four per gap. Each band is a pair of thin rings with the tube wall showing in the gap between them (the rows of light dashes are the tubes' crowns). Strap angles are placed at random (seeded) to match that look; band counts, sizes, gap and colours (spec materials cres and bright_steel) estimated.",
+          "karp_illustration: below the ribbed top the bands come in two layers. Bottom (in the illustration y 300-400 at 97.5 px/m: from the exhaust manifold up to about 0.94 m above the 10:1 plane, 42% of the nozzle's length): darker bluish bands set closer together, hardly any straps. Middle (y 125-300: up to about 1.8 m, 80%, where the ribs start): lighter bands with many short straps between neighbouring bands, two to four per gap. Each band is a wide flat strap with a row of slots along its middle: built as two strips with a narrow gap where the tube wall shows. Strap angles are placed at random (seeded) to match that look; band counts, sizes, gap and colours (spec materials cres and bright_steel) estimated.",
           "r3896_1, p.1-8: \"reinforcing bands and straps below the thrust chamber throat\"."
         ]
       },
@@ -376,73 +376,82 @@
       "outer_profile": {
         "value": [
           [
-            0.629,
+            0.682,
             2.2225
           ],
           [
-            0.708,
+            0.785,
             2.1
           ],
           [
-            0.756,
+            0.846,
             1.98
           ],
           [
-            0.8,
+            0.897,
             1.86
           ],
           [
-            0.837,
+            0.938,
             1.73
           ],
           [
-            0.883,
+            0.99,
             1.61
           ],
           [
-            0.924,
+            1.031,
             1.49
           ],
           [
-            0.967,
+            1.072,
             1.36
           ],
           [
-            1.007,
+            1.103,
             1.24
           ],
           [
-            1.051,
+            1.144,
             1.12
           ],
           [
-            1.093,
+            1.174,
             0.99
           ],
           [
-            1.136,
+            1.205,
             0.87
           ],
           [
-            1.18,
+            1.236,
             0.75
+          ],
+          [
+            1.267,
+            0.62
+          ],
+          [
+            1.297,
+            0.5
           ]
         ],
         "source": [
           "karp_illustration: the bell's outline, traced at 97.5 px/m (the 1.2 m chamber) from y 366 (its top, which lands on the throat plane) to y 540 (0.44 m above the 10:1 plane, where it matches our outline): it leaves the chamber at about the chamber's width with a rounded shoulder and is up to 0.2 m wider than the nozzle wall in the upper half.",
-          "photo_6862832: about 1.15-1.27 m across at the top. Taken three quarters of the way from our wall to Karp's outline (0.63 m radius at the top, 1.26 m across), blending into the wall by 0.75 m above the 10:1 plane. Estimated."
+          "photo_6862832 puts the top at about 1.15-1.27 m across, a little narrower than Karp's 1.36 m; the model follows the illustration. Estimated."
         ]
       },
       "ribs": {
         "value": {
           "count": 60,
-          "width": 0.05,
-          "stands_out": 0.012,
+          "width": 0.055,
+          "stands_out": 0.015,
           "from": 0.82,
-          "to": 1.0
+          "to": 1.0,
+          "material": "bright_steel"
         },
         "source": [
-          "karp_illustration: flat vertical ribs (light strips with dark gaps, about 30 on the visible half) cover the top of the bell from the joint ring down to the first band.",
+          "karp_illustration: wide flat light panels with narrow dark gaps between them (, about 30 on the visible half) cover the top of the bell from the joint ring down to the first band.",
           "photo_6862832: a ring of flat plates at the top of the bell. Width estimated."
         ]
       }
@@ -640,6 +649,10 @@
       "height": {
         "value": 0.55,
         "source": "r3896_1, design value within the 1.59 m (see chamber.convergent_length)"
+      },
+      "shape": {
+        "value": "dome",
+        "source": "karp_illustration: the oxidizer (LOX) dome is a rounded dome rising from the fuel inlet manifold to the gimbal bearing."
       }
     },
     "gimbal": {
@@ -965,363 +978,6 @@
       },
       {
         "kind": "lathe",
-        "name": "oxidizer_valve_1",
-        "profile": {
-          "value": [
-            [
-              0,
-              0
-            ],
-            [
-              0.2184,
-              0
-            ],
-            [
-              0.2184,
-              0.762
-            ],
-            [
-              0,
-              0.762
-            ]
-          ],
-          "source": "r3896_1, Figure 1-22 (PDF p.51): oxidizer valve \"Length 30.0 in.\", \"Width 17.25 in.\""
-        },
-        "at": {
-          "value": [
-            0,
-            0.77,
-            4.636
-          ],
-          "source": "r3896_1, p.1-12: the two main oxidizer valves on the oxidizer dome, 180 degrees apart; photo_6413912 shows them standing along the engine's axis beside the dome. Estimated."
-        },
-        "axis": [
-          0,
-          0,
-          1
-        ],
-        "material": "cres",
-        "smooth": false
-      },
-      {
-        "kind": "lathe",
-        "name": "fuel_valve_1",
-        "profile": {
-          "value": [
-            [
-              0,
-              0
-            ],
-            [
-              0.1397,
-              0
-            ],
-            [
-              0.1397,
-              0.4064
-            ],
-            [
-              0,
-              0.4064
-            ]
-          ],
-          "source": "r3896_1, Figure 1-22 (PDF p.51): fuel valve \"Length 16.0 in.\", \"Width 11.0 in.\""
-        },
-        "at": {
-          "value": [
-            -0.3,
-            0.74,
-            4.42
-          ],
-          "source": "r3896_1, p.1-10: two flanges on the fuel inlet manifold, 180 degrees apart, for the main fuel valves; factsheet_1968 drawing: below and beside the oxidizer valve. Estimated."
-        },
-        "axis": [
-          0,
-          0,
-          1
-        ],
-        "material": "cres",
-        "smooth": false
-      },
-      {
-        "kind": "pipe",
-        "name": "lox_duct_1",
-        "diameter": {
-          "value": 0.33,
-          "source": "photo_6413912 (scaled by the 4 ft turbopump, about 370 px across: 0.0033 m/px): the oxidizer high-pressure ducts about 100 px across. Estimated."
-        },
-        "points": {
-          "value": [
-            [
-              1.27,
-              0.4,
-              5.2
-            ],
-            [
-              1.0,
-              0.98,
-              5.2
-            ],
-            [
-              0.35,
-              0.98,
-              5.2
-            ],
-            [
-              0.05,
-              0.8,
-              5.2
-            ]
-          ],
-          "source": "photo_6413912 and factsheet_1968 drawing: from the oxidizer pump's tangential outlets (factsheet_1968, p.3-3) round to the oxidizer valves. Estimated."
-        },
-        "bend_radius": 0.3,
-        "material": "cres",
-        "flanges": [
-          0.08,
-          0.45,
-          0.9
-        ]
-      },
-      {
-        "kind": "pipe",
-        "name": "fuel_duct_1",
-        "diameter": {
-          "value": 0.27,
-          "source": "photo_6413912 (scaled by the 4 ft turbopump, about 370 px across: 0.0033 m/px): the fuel high-pressure ducts about 80 px across. Estimated."
-        },
-        "points": {
-          "value": [
-            [
-              1.27,
-              0.4,
-              4.62
-            ],
-            [
-              1.0,
-              1.05,
-              4.62
-            ],
-            [
-              0.0,
-              1.05,
-              4.62
-            ],
-            [
-              -0.28,
-              0.78,
-              4.62
-            ]
-          ],
-          "source": "photo_6413912 and factsheet_1968 drawing: from the fuel pump's outlets round to the fuel valves. Estimated."
-        },
-        "bend_radius": 0.3,
-        "material": "cres",
-        "flanges": [
-          0.08,
-          0.45,
-          0.9
-        ]
-      },
-      {
-        "kind": "lathe",
-        "name": "oxidizer_valve_2",
-        "profile": {
-          "value": [
-            [
-              0,
-              0
-            ],
-            [
-              0.2184,
-              0
-            ],
-            [
-              0.2184,
-              0.762
-            ],
-            [
-              0,
-              0.762
-            ]
-          ],
-          "source": "r3896_1, Figure 1-22 (PDF p.51): oxidizer valve \"Length 30.0 in.\", \"Width 17.25 in.\""
-        },
-        "at": {
-          "value": [
-            0,
-            -0.77,
-            4.636
-          ],
-          "source": "r3896_1, p.1-12: the two main oxidizer valves on the oxidizer dome, 180 degrees apart; photo_6413912 shows them standing along the engine's axis beside the dome. Estimated."
-        },
-        "axis": [
-          0,
-          0,
-          1
-        ],
-        "material": "cres",
-        "smooth": false
-      },
-      {
-        "kind": "lathe",
-        "name": "fuel_valve_2",
-        "profile": {
-          "value": [
-            [
-              0,
-              0
-            ],
-            [
-              0.1397,
-              0
-            ],
-            [
-              0.1397,
-              0.4064
-            ],
-            [
-              0,
-              0.4064
-            ]
-          ],
-          "source": "r3896_1, Figure 1-22 (PDF p.51): fuel valve \"Length 16.0 in.\", \"Width 11.0 in.\""
-        },
-        "at": {
-          "value": [
-            -0.3,
-            -0.74,
-            4.42
-          ],
-          "source": "r3896_1, p.1-10: two flanges on the fuel inlet manifold, 180 degrees apart, for the main fuel valves; factsheet_1968 drawing: below and beside the oxidizer valve. Estimated."
-        },
-        "axis": [
-          0,
-          0,
-          1
-        ],
-        "material": "cres",
-        "smooth": false
-      },
-      {
-        "kind": "pipe",
-        "name": "lox_duct_2",
-        "diameter": {
-          "value": 0.33,
-          "source": "photo_6413912 (scaled by the 4 ft turbopump, about 370 px across: 0.0033 m/px): the oxidizer high-pressure ducts about 100 px across. Estimated."
-        },
-        "points": {
-          "value": [
-            [
-              1.27,
-              -0.4,
-              5.2
-            ],
-            [
-              1.0,
-              -0.98,
-              5.2
-            ],
-            [
-              0.35,
-              -0.98,
-              5.2
-            ],
-            [
-              0.05,
-              -0.8,
-              5.2
-            ]
-          ],
-          "source": "photo_6413912 and factsheet_1968 drawing: from the oxidizer pump's tangential outlets (factsheet_1968, p.3-3) round to the oxidizer valves. Estimated."
-        },
-        "bend_radius": 0.3,
-        "material": "cres",
-        "flanges": [
-          0.08,
-          0.45,
-          0.9
-        ]
-      },
-      {
-        "kind": "pipe",
-        "name": "fuel_duct_2",
-        "diameter": {
-          "value": 0.27,
-          "source": "photo_6413912 (scaled by the 4 ft turbopump, about 370 px across: 0.0033 m/px): the fuel high-pressure ducts about 80 px across. Estimated."
-        },
-        "points": {
-          "value": [
-            [
-              1.27,
-              -0.4,
-              4.62
-            ],
-            [
-              1.0,
-              -1.05,
-              4.62
-            ],
-            [
-              0.0,
-              -1.05,
-              4.62
-            ],
-            [
-              -0.28,
-              -0.78,
-              4.62
-            ]
-          ],
-          "source": "photo_6413912 and factsheet_1968 drawing: from the fuel pump's outlets round to the fuel valves. Estimated."
-        },
-        "bend_radius": 0.3,
-        "material": "cres",
-        "flanges": [
-          0.08,
-          0.45,
-          0.9
-        ]
-      },
-      {
-        "kind": "lathe",
-        "name": "fuel_inlet_manifold",
-        "profile": {
-          "value": [
-            [
-              0.45,
-              4.38
-            ],
-            [
-              0.72,
-              4.38
-            ],
-            [
-              0.72,
-              4.5
-            ],
-            [
-              0.45,
-              4.5
-            ]
-          ],
-          "source": "r3896_1, p.1-10: \"The fuel inlet manifold, welded to the upper end of the chamber body\"; size from photo_6413912. Estimated."
-        },
-        "at": [
-          0,
-          0,
-          0
-        ],
-        "axis": [
-          0,
-          0,
-          1
-        ],
-        "material": "cres",
-        "smooth": false
-      },
-      {
-        "kind": "lathe",
         "name": "dome_flange",
         "profile": {
           "value": [
@@ -1564,44 +1220,6 @@
         "material": "cres"
       },
       {
-        "kind": "actuator",
-        "name": "gimbal_outrigger_1",
-        "diameter": 0.12,
-        "from": {
-          "value": [
-            0.2,
-            0.58,
-            4.5
-          ],
-          "source": "r3896_1, p.1-8: \"two outrigger arms to which the gimbal actuators attach\"; position from r3896_1 Figure 1-8. Estimated."
-        },
-        "to": [
-          0,
-          1.3,
-          4.15
-        ],
-        "material": "cres"
-      },
-      {
-        "kind": "actuator",
-        "name": "gimbal_outrigger_1_lower",
-        "diameter": 0.12,
-        "from": {
-          "value": [
-            -0.2,
-            0.55,
-            3.98
-          ],
-          "source": "r3896_1, Figure 1-8: each gimbal outrigger arm is a V of two struts from the chamber body meeting at the actuator attach point. Estimated."
-        },
-        "to": [
-          0,
-          1.3,
-          4.15
-        ],
-        "material": "cres"
-      },
-      {
         "kind": "lathe",
         "name": "gimbal_outrigger_1_clevis",
         "profile": {
@@ -1627,8 +1245,8 @@
         },
         "at": [
           0,
-          1.3,
-          4.15
+          1.4,
+          4.2
         ],
         "axis": [
           0,
@@ -1636,44 +1254,6 @@
           0
         ],
         "smooth": false,
-        "material": "cres"
-      },
-      {
-        "kind": "actuator",
-        "name": "gimbal_outrigger_2",
-        "diameter": 0.12,
-        "from": {
-          "value": [
-            0.2,
-            -0.58,
-            4.5
-          ],
-          "source": "r3896_1, p.1-8 (see gimbal_outrigger_1). Estimated."
-        },
-        "to": [
-          0,
-          -1.3,
-          4.15
-        ],
-        "material": "cres"
-      },
-      {
-        "kind": "actuator",
-        "name": "gimbal_outrigger_2_lower",
-        "diameter": 0.12,
-        "from": {
-          "value": [
-            -0.2,
-            -0.55,
-            3.98
-          ],
-          "source": "r3896_1, Figure 1-8: each gimbal outrigger arm is a V of two struts from the chamber body meeting at the actuator attach point. Estimated."
-        },
-        "to": [
-          0,
-          -1.3,
-          4.15
-        ],
         "material": "cres"
       },
       {
@@ -1702,8 +1282,8 @@
         },
         "at": [
           0,
-          -1.3,
-          4.15
+          -1.4,
+          4.2
         ],
         "axis": [
           0,
@@ -1796,59 +1376,64 @@
         "points": {
           "value": [
             [
-              0.714,
-              -0.26,
-              4.206
+              0.639,
+              -0.233,
+              4.236
             ],
             [
               0.714,
               -0.26,
-              3.906
+              3.966
             ],
             [
               0.436,
               -0.623,
-              3.906
+              3.966
             ],
             [
               0.0,
               -0.76,
-              3.906
+              3.966
             ],
             [
               -0.436,
               -0.623,
-              3.906
+              3.966
             ],
             [
-              -0.483,
-              -0.69,
+              -0.469,
+              -0.67,
+              3.784
+            ],
+            [
+              -0.521,
+              -0.744,
               3.614
             ],
             [
-              -0.551,
-              -0.788,
+              -0.598,
+              -0.855,
               3.264
             ],
             [
-              -0.619,
-              -0.884,
-              2.914
+              -0.669,
+              -0.956,
+              2.864
             ],
             [
-              -0.688,
-              -0.983,
-              2.564
+              -0.73,
+              -1.043,
+              2.464
             ],
             [
-              -0.762,
-              -1.089,
-              2.214
+              -0.773,
+              -1.103,
+              2.164
             ]
           ],
           "source": "karp_illustration: A close pair of thin lines comes from the powerhead round the top of the bell from the heat exchanger's side, bends over the top at about 125 degrees from the heat exchanger and runs straight down over the bands to just above the exhaust manifold; a single line comes over the top further round and runs down near the far side. Estimated."
         },
-        "bend_radius": 0.15,
+        "bend_radius": 0.25,
         "material": "cres"
       },
       {
@@ -1859,59 +1444,64 @@
         "points": {
           "value": [
             [
-              0.731,
-              -0.209,
-              4.206
+              0.654,
+              -0.187,
+              4.236
             ],
             [
               0.731,
               -0.209,
-              3.906
+              3.966
             ],
             [
               0.478,
               -0.591,
-              3.906
+              3.966
             ],
             [
               0.053,
               -0.758,
-              3.906
+              3.966
             ],
             [
               -0.391,
               -0.651,
-              3.906
+              3.966
             ],
             [
-              -0.434,
-              -0.722,
+              -0.421,
+              -0.701,
+              3.784
+            ],
+            [
+              -0.468,
+              -0.779,
               3.614
             ],
             [
-              -0.495,
-              -0.824,
+              -0.537,
+              -0.894,
               3.264
             ],
             [
-              -0.556,
-              -0.925,
-              2.914
+              -0.601,
+              -1.0,
+              2.864
             ],
             [
-              -0.618,
-              -1.029,
-              2.564
+              -0.656,
+              -1.091,
+              2.464
             ],
             [
-              -0.684,
-              -1.139,
-              2.214
+              -0.694,
+              -1.155,
+              2.164
             ]
           ],
           "source": "karp_illustration: A close pair of thin lines comes from the powerhead round the top of the bell from the heat exchanger's side, bends over the top at about 125 degrees from the heat exchanger and runs straight down over the bands to just above the exhaust manifold; a single line comes over the top further round and runs down near the far side. Estimated."
         },
-        "bend_radius": 0.15,
+        "bend_radius": 0.25,
         "material": "cres"
       },
       {
@@ -1922,59 +1512,1605 @@
         "points": {
           "value": [
             [
-              -0.658,
-              -0.38,
-              4.206
+              -0.589,
+              -0.34,
+              4.236
             ],
             [
               -0.658,
               -0.38,
-              3.906
+              3.966
             ],
             [
               -0.748,
               -0.132,
-              3.906
+              3.966
             ],
             [
-              -0.829,
-              -0.146,
+              -0.806,
+              -0.142,
+              3.784
+            ],
+            [
+              -0.895,
+              -0.158,
               3.614
             ],
             [
-              -0.947,
-              -0.167,
+              -1.028,
+              -0.181,
               3.264
             ],
             [
-              -1.062,
-              -0.187,
-              2.914
+              -1.149,
+              -0.203,
+              2.864
             ],
             [
-              -1.182,
-              -0.208,
-              2.564
+              -1.254,
+              -0.221,
+              2.464
             ],
             [
-              -1.309,
-              -0.231,
-              2.214
+              -1.327,
+              -0.234,
+              2.164
             ]
           ],
           "source": "karp_illustration: A close pair of thin lines comes from the powerhead round the top of the bell from the heat exchanger's side, bends over the top at about 125 degrees from the heat exchanger and runs straight down over the bands to just above the exhaust manifold; a single line comes over the top further round and runs down near the far side. Estimated."
         },
-        "bend_radius": 0.15,
+        "bend_radius": 0.25,
+        "material": "cres"
+      },
+      {
+        "kind": "lathe",
+        "name": "fuel_inlet_manifold",
+        "profile": {
+          "value": [
+            [
+              0.59,
+              4.6662
+            ],
+            [
+              0.66,
+              4.6762
+            ],
+            [
+              0.69,
+              4.7362
+            ],
+            [
+              0.66,
+              4.8062
+            ],
+            [
+              0.59,
+              4.8162
+            ]
+          ],
+          "source": "karp_illustration: the fuel inlet manifold is a thick rounded ring round the top of the combustion chamber, just under the dome. Size estimated."
+        },
+        "at": [
+          0,
+          0,
+          0
+        ],
+        "closed": true,
+        "segments": 32,
+        "material": "bright_steel"
+      },
+      {
+        "kind": "lathe",
+        "name": "chamber_band_upper",
+        "profile": {
+          "value": [
+            [
+              0.595,
+              4.4362
+            ],
+            [
+              0.625,
+              4.4362
+            ],
+            [
+              0.625,
+              4.6362
+            ],
+            [
+              0.595,
+              4.6362
+            ]
+          ],
+          "source": "karp_illustration: a band of rectangular openings round the top of the combustion chamber, below the fuel inlet manifold, about 8 on the visible half. Size estimated."
+        },
+        "at": [
+          0,
+          0,
+          0
+        ],
+        "closed": true,
+        "segments": 32,
+        "smooth": false,
+        "material": "bright_steel"
+      },
+      {
+        "kind": "box",
+        "name": "chamber_window_00",
+        "size": [
+          0.02,
+          0.17,
+          0.12
+        ],
+        "at": {
+          "value": [
+            0.615,
+            0.122,
+            4.536
+          ],
+          "source": "karp_illustration: a band of rectangular openings round the top of the combustion chamber, below the fuel inlet manifold, about 8 on the visible half. Size estimated."
+        },
+        "roll_deg": 11.25,
+        "material": "dark_metal"
+      },
+      {
+        "kind": "box",
+        "name": "chamber_window_01",
+        "size": [
+          0.02,
+          0.17,
+          0.12
+        ],
+        "at": {
+          "value": [
+            0.521,
+            0.348,
+            4.536
+          ],
+          "source": "karp_illustration: a band of rectangular openings round the top of the combustion chamber, below the fuel inlet manifold, about 8 on the visible half. Size estimated."
+        },
+        "roll_deg": 33.75,
+        "material": "dark_metal"
+      },
+      {
+        "kind": "box",
+        "name": "chamber_window_02",
+        "size": [
+          0.02,
+          0.17,
+          0.12
+        ],
+        "at": {
+          "value": [
+            0.348,
+            0.521,
+            4.536
+          ],
+          "source": "karp_illustration: a band of rectangular openings round the top of the combustion chamber, below the fuel inlet manifold, about 8 on the visible half. Size estimated."
+        },
+        "roll_deg": 56.25,
+        "material": "dark_metal"
+      },
+      {
+        "kind": "box",
+        "name": "chamber_window_03",
+        "size": [
+          0.02,
+          0.17,
+          0.12
+        ],
+        "at": {
+          "value": [
+            0.122,
+            0.615,
+            4.536
+          ],
+          "source": "karp_illustration: a band of rectangular openings round the top of the combustion chamber, below the fuel inlet manifold, about 8 on the visible half. Size estimated."
+        },
+        "roll_deg": 78.75,
+        "material": "dark_metal"
+      },
+      {
+        "kind": "box",
+        "name": "chamber_window_04",
+        "size": [
+          0.02,
+          0.17,
+          0.12
+        ],
+        "at": {
+          "value": [
+            -0.122,
+            0.615,
+            4.536
+          ],
+          "source": "karp_illustration: a band of rectangular openings round the top of the combustion chamber, below the fuel inlet manifold, about 8 on the visible half. Size estimated."
+        },
+        "roll_deg": 101.25,
+        "material": "dark_metal"
+      },
+      {
+        "kind": "box",
+        "name": "chamber_window_05",
+        "size": [
+          0.02,
+          0.17,
+          0.12
+        ],
+        "at": {
+          "value": [
+            -0.348,
+            0.521,
+            4.536
+          ],
+          "source": "karp_illustration: a band of rectangular openings round the top of the combustion chamber, below the fuel inlet manifold, about 8 on the visible half. Size estimated."
+        },
+        "roll_deg": 123.75,
+        "material": "dark_metal"
+      },
+      {
+        "kind": "box",
+        "name": "chamber_window_06",
+        "size": [
+          0.02,
+          0.17,
+          0.12
+        ],
+        "at": {
+          "value": [
+            -0.521,
+            0.348,
+            4.536
+          ],
+          "source": "karp_illustration: a band of rectangular openings round the top of the combustion chamber, below the fuel inlet manifold, about 8 on the visible half. Size estimated."
+        },
+        "roll_deg": 146.25,
+        "material": "dark_metal"
+      },
+      {
+        "kind": "box",
+        "name": "chamber_window_07",
+        "size": [
+          0.02,
+          0.17,
+          0.12
+        ],
+        "at": {
+          "value": [
+            -0.615,
+            0.122,
+            4.536
+          ],
+          "source": "karp_illustration: a band of rectangular openings round the top of the combustion chamber, below the fuel inlet manifold, about 8 on the visible half. Size estimated."
+        },
+        "roll_deg": 168.75,
+        "material": "dark_metal"
+      },
+      {
+        "kind": "box",
+        "name": "chamber_window_08",
+        "size": [
+          0.02,
+          0.17,
+          0.12
+        ],
+        "at": {
+          "value": [
+            -0.615,
+            -0.122,
+            4.536
+          ],
+          "source": "karp_illustration: a band of rectangular openings round the top of the combustion chamber, below the fuel inlet manifold, about 8 on the visible half. Size estimated."
+        },
+        "roll_deg": 191.25,
+        "material": "dark_metal"
+      },
+      {
+        "kind": "box",
+        "name": "chamber_window_09",
+        "size": [
+          0.02,
+          0.17,
+          0.12
+        ],
+        "at": {
+          "value": [
+            -0.521,
+            -0.348,
+            4.536
+          ],
+          "source": "karp_illustration: a band of rectangular openings round the top of the combustion chamber, below the fuel inlet manifold, about 8 on the visible half. Size estimated."
+        },
+        "roll_deg": 213.75,
+        "material": "dark_metal"
+      },
+      {
+        "kind": "box",
+        "name": "chamber_window_10",
+        "size": [
+          0.02,
+          0.17,
+          0.12
+        ],
+        "at": {
+          "value": [
+            -0.348,
+            -0.521,
+            4.536
+          ],
+          "source": "karp_illustration: a band of rectangular openings round the top of the combustion chamber, below the fuel inlet manifold, about 8 on the visible half. Size estimated."
+        },
+        "roll_deg": 236.25,
+        "material": "dark_metal"
+      },
+      {
+        "kind": "box",
+        "name": "chamber_window_11",
+        "size": [
+          0.02,
+          0.17,
+          0.12
+        ],
+        "at": {
+          "value": [
+            -0.122,
+            -0.615,
+            4.536
+          ],
+          "source": "karp_illustration: a band of rectangular openings round the top of the combustion chamber, below the fuel inlet manifold, about 8 on the visible half. Size estimated."
+        },
+        "roll_deg": 258.75,
+        "material": "dark_metal"
+      },
+      {
+        "kind": "box",
+        "name": "chamber_window_12",
+        "size": [
+          0.02,
+          0.17,
+          0.12
+        ],
+        "at": {
+          "value": [
+            0.122,
+            -0.615,
+            4.536
+          ],
+          "source": "karp_illustration: a band of rectangular openings round the top of the combustion chamber, below the fuel inlet manifold, about 8 on the visible half. Size estimated."
+        },
+        "roll_deg": 281.25,
+        "material": "dark_metal"
+      },
+      {
+        "kind": "box",
+        "name": "chamber_window_13",
+        "size": [
+          0.02,
+          0.17,
+          0.12
+        ],
+        "at": {
+          "value": [
+            0.348,
+            -0.521,
+            4.536
+          ],
+          "source": "karp_illustration: a band of rectangular openings round the top of the combustion chamber, below the fuel inlet manifold, about 8 on the visible half. Size estimated."
+        },
+        "roll_deg": 303.75,
+        "material": "dark_metal"
+      },
+      {
+        "kind": "box",
+        "name": "chamber_window_14",
+        "size": [
+          0.02,
+          0.17,
+          0.12
+        ],
+        "at": {
+          "value": [
+            0.521,
+            -0.348,
+            4.536
+          ],
+          "source": "karp_illustration: a band of rectangular openings round the top of the combustion chamber, below the fuel inlet manifold, about 8 on the visible half. Size estimated."
+        },
+        "roll_deg": 326.25,
+        "material": "dark_metal"
+      },
+      {
+        "kind": "box",
+        "name": "chamber_window_15",
+        "size": [
+          0.02,
+          0.17,
+          0.12
+        ],
+        "at": {
+          "value": [
+            0.615,
+            -0.122,
+            4.536
+          ],
+          "source": "karp_illustration: a band of rectangular openings round the top of the combustion chamber, below the fuel inlet manifold, about 8 on the visible half. Size estimated."
+        },
+        "roll_deg": 348.75,
+        "material": "dark_metal"
+      },
+      {
+        "kind": "lathe",
+        "name": "chamber_band_lower",
+        "profile": {
+          "value": [
+            [
+              0.595,
+              3.9662
+            ],
+            [
+              0.63,
+              3.9662
+            ],
+            [
+              0.63,
+              4.0862
+            ],
+            [
+              0.595,
+              4.0862
+            ]
+          ],
+          "source": "karp_illustration: a band at the foot of the combustion chamber, above the ring at the top of the bell, carrying square blocks (the lower outrigger and turbopump arm attachments), about 6 on the visible half. Size estimated."
+        },
+        "at": [
+          0,
+          0,
+          0
+        ],
+        "closed": true,
+        "segments": 32,
+        "smooth": false,
+        "material": "bright_steel"
+      },
+      {
+        "kind": "box",
+        "name": "chamber_block_00",
+        "size": [
+          0.08,
+          0.14,
+          0.13
+        ],
+        "at": {
+          "value": [
+            0.638,
+            0.171,
+            4.026
+          ],
+          "source": "karp_illustration: a band at the foot of the combustion chamber, above the ring at the top of the bell, carrying square blocks (the lower outrigger and turbopump arm attachments), about 6 on the visible half. Size estimated."
+        },
+        "roll_deg": 15.0,
+        "material": "cres"
+      },
+      {
+        "kind": "box",
+        "name": "chamber_block_01",
+        "size": [
+          0.08,
+          0.14,
+          0.13
+        ],
+        "at": {
+          "value": [
+            0.467,
+            0.467,
+            4.026
+          ],
+          "source": "karp_illustration: a band at the foot of the combustion chamber, above the ring at the top of the bell, carrying square blocks (the lower outrigger and turbopump arm attachments), about 6 on the visible half. Size estimated."
+        },
+        "roll_deg": 45.0,
+        "material": "cres"
+      },
+      {
+        "kind": "box",
+        "name": "chamber_block_02",
+        "size": [
+          0.08,
+          0.14,
+          0.13
+        ],
+        "at": {
+          "value": [
+            0.171,
+            0.638,
+            4.026
+          ],
+          "source": "karp_illustration: a band at the foot of the combustion chamber, above the ring at the top of the bell, carrying square blocks (the lower outrigger and turbopump arm attachments), about 6 on the visible half. Size estimated."
+        },
+        "roll_deg": 75.0,
+        "material": "cres"
+      },
+      {
+        "kind": "box",
+        "name": "chamber_block_03",
+        "size": [
+          0.08,
+          0.14,
+          0.13
+        ],
+        "at": {
+          "value": [
+            -0.171,
+            0.638,
+            4.026
+          ],
+          "source": "karp_illustration: a band at the foot of the combustion chamber, above the ring at the top of the bell, carrying square blocks (the lower outrigger and turbopump arm attachments), about 6 on the visible half. Size estimated."
+        },
+        "roll_deg": 105.0,
+        "material": "cres"
+      },
+      {
+        "kind": "box",
+        "name": "chamber_block_04",
+        "size": [
+          0.08,
+          0.14,
+          0.13
+        ],
+        "at": {
+          "value": [
+            -0.467,
+            0.467,
+            4.026
+          ],
+          "source": "karp_illustration: a band at the foot of the combustion chamber, above the ring at the top of the bell, carrying square blocks (the lower outrigger and turbopump arm attachments), about 6 on the visible half. Size estimated."
+        },
+        "roll_deg": 135.0,
+        "material": "cres"
+      },
+      {
+        "kind": "box",
+        "name": "chamber_block_05",
+        "size": [
+          0.08,
+          0.14,
+          0.13
+        ],
+        "at": {
+          "value": [
+            -0.638,
+            0.171,
+            4.026
+          ],
+          "source": "karp_illustration: a band at the foot of the combustion chamber, above the ring at the top of the bell, carrying square blocks (the lower outrigger and turbopump arm attachments), about 6 on the visible half. Size estimated."
+        },
+        "roll_deg": 165.0,
+        "material": "cres"
+      },
+      {
+        "kind": "box",
+        "name": "chamber_block_06",
+        "size": [
+          0.08,
+          0.14,
+          0.13
+        ],
+        "at": {
+          "value": [
+            -0.638,
+            -0.171,
+            4.026
+          ],
+          "source": "karp_illustration: a band at the foot of the combustion chamber, above the ring at the top of the bell, carrying square blocks (the lower outrigger and turbopump arm attachments), about 6 on the visible half. Size estimated."
+        },
+        "roll_deg": 195.0,
+        "material": "cres"
+      },
+      {
+        "kind": "box",
+        "name": "chamber_block_07",
+        "size": [
+          0.08,
+          0.14,
+          0.13
+        ],
+        "at": {
+          "value": [
+            -0.467,
+            -0.467,
+            4.026
+          ],
+          "source": "karp_illustration: a band at the foot of the combustion chamber, above the ring at the top of the bell, carrying square blocks (the lower outrigger and turbopump arm attachments), about 6 on the visible half. Size estimated."
+        },
+        "roll_deg": 225.0,
+        "material": "cres"
+      },
+      {
+        "kind": "box",
+        "name": "chamber_block_08",
+        "size": [
+          0.08,
+          0.14,
+          0.13
+        ],
+        "at": {
+          "value": [
+            -0.171,
+            -0.638,
+            4.026
+          ],
+          "source": "karp_illustration: a band at the foot of the combustion chamber, above the ring at the top of the bell, carrying square blocks (the lower outrigger and turbopump arm attachments), about 6 on the visible half. Size estimated."
+        },
+        "roll_deg": 255.0,
+        "material": "cres"
+      },
+      {
+        "kind": "box",
+        "name": "chamber_block_09",
+        "size": [
+          0.08,
+          0.14,
+          0.13
+        ],
+        "at": {
+          "value": [
+            0.171,
+            -0.638,
+            4.026
+          ],
+          "source": "karp_illustration: a band at the foot of the combustion chamber, above the ring at the top of the bell, carrying square blocks (the lower outrigger and turbopump arm attachments), about 6 on the visible half. Size estimated."
+        },
+        "roll_deg": 285.0,
+        "material": "cres"
+      },
+      {
+        "kind": "box",
+        "name": "chamber_block_10",
+        "size": [
+          0.08,
+          0.14,
+          0.13
+        ],
+        "at": {
+          "value": [
+            0.467,
+            -0.467,
+            4.026
+          ],
+          "source": "karp_illustration: a band at the foot of the combustion chamber, above the ring at the top of the bell, carrying square blocks (the lower outrigger and turbopump arm attachments), about 6 on the visible half. Size estimated."
+        },
+        "roll_deg": 315.0,
+        "material": "cres"
+      },
+      {
+        "kind": "box",
+        "name": "chamber_block_11",
+        "size": [
+          0.08,
+          0.14,
+          0.13
+        ],
+        "at": {
+          "value": [
+            0.638,
+            -0.171,
+            4.026
+          ],
+          "source": "karp_illustration: a band at the foot of the combustion chamber, above the ring at the top of the bell, carrying square blocks (the lower outrigger and turbopump arm attachments), about 6 on the visible half. Size estimated."
+        },
+        "roll_deg": 345.0,
+        "material": "cres"
+      },
+      {
+        "kind": "lathe",
+        "name": "chamber_boss_1",
+        "profile": {
+          "value": [
+            [
+              0,
+              0
+            ],
+            [
+              0.06,
+              0
+            ],
+            [
+              0.06,
+              0.09
+            ],
+            [
+              0,
+              0.09
+            ]
+          ],
+          "source": "karp_illustration: small round bosses on the side of the combustion chamber. Size estimated."
+        },
+        "at": [
+          -0.249,
+          -0.535,
+          4.35
+        ],
+        "axis": [
+          -0.423,
+          -0.906,
+          0
+        ],
+        "smooth": false,
+        "material": "cres"
+      },
+      {
+        "kind": "lathe",
+        "name": "chamber_boss_2",
+        "profile": {
+          "value": [
+            [
+              0,
+              0
+            ],
+            [
+              0.06,
+              0
+            ],
+            [
+              0.06,
+              0.09
+            ],
+            [
+              0,
+              0.09
+            ]
+          ],
+          "source": "karp_illustration: small round bosses on the side of the combustion chamber. Size estimated."
+        },
+        "at": [
+          -0.511,
+          -0.295,
+          4.45
+        ],
+        "axis": [
+          -0.866,
+          -0.5,
+          0
+        ],
+        "smooth": false,
+        "material": "cres"
+      },
+      {
+        "kind": "lathe",
+        "name": "gimbal_disc",
+        "profile": {
+          "value": [
+            [
+              0,
+              0
+            ],
+            [
+              0.34,
+              0
+            ],
+            [
+              0.34,
+              0.05
+            ],
+            [
+              0,
+              0.05
+            ]
+          ],
+          "source": "karp_illustration: the gimbal bearing is a post with a wide disc on top. Size estimated."
+        },
+        "at": [
+          0,
+          0,
+          5.7023
+        ],
+        "smooth": false,
+        "material": "cres"
+      },
+      {
+        "kind": "lathe",
+        "name": "gimbal_outrigger_1",
+        "profile": {
+          "value": [
+            [
+              0,
+              0
+            ],
+            [
+              0.05,
+              0
+            ],
+            [
+              0.05,
+              0.054
+            ],
+            [
+              0.085,
+              0.054
+            ],
+            [
+              0.085,
+              0.107
+            ],
+            [
+              0.068,
+              0.107
+            ],
+            [
+              0.078,
+              0.403
+            ],
+            [
+              0.06,
+              0.735
+            ],
+            [
+              0.08,
+              0.735
+            ],
+            [
+              0.08,
+              0.788
+            ],
+            [
+              0.045,
+              0.788
+            ],
+            [
+              0.035,
+              0.896
+            ],
+            [
+              0,
+              0.896
+            ]
+          ],
+          "source": "karp_illustration: each gimbal outrigger arm is a V of two long tapered struts with collars near both ends, from the top and the foot of the combustion chamber to a clevis well outboard. Taper and collars estimated."
+        },
+        "at": [
+          0.2,
+          0.6,
+          4.55
+        ],
+        "axis": [
+          -0.2233,
+          0.893,
+          -0.3907
+        ],
+        "segments": 12,
+        "smooth": false,
+        "material": "cres"
+      },
+      {
+        "kind": "lathe",
+        "name": "gimbal_outrigger_1_lower",
+        "profile": {
+          "value": [
+            [
+              0,
+              0
+            ],
+            [
+              0.05,
+              0
+            ],
+            [
+              0.05,
+              0.049
+            ],
+            [
+              0.085,
+              0.049
+            ],
+            [
+              0.085,
+              0.099
+            ],
+            [
+              0.068,
+              0.099
+            ],
+            [
+              0.078,
+              0.371
+            ],
+            [
+              0.06,
+              0.675
+            ],
+            [
+              0.08,
+              0.675
+            ],
+            [
+              0.08,
+              0.725
+            ],
+            [
+              0.045,
+              0.725
+            ],
+            [
+              0.035,
+              0.824
+            ],
+            [
+              0,
+              0.824
+            ]
+          ],
+          "source": "karp_illustration: each gimbal outrigger arm is a V of two long tapered struts with collars near both ends, from the top and the foot of the combustion chamber to a clevis well outboard. Taper and collars estimated."
+        },
+        "at": [
+          -0.2,
+          0.62,
+          4.0262
+        ],
+        "axis": [
+          0.2428,
+          0.9469,
+          0.211
+        ],
+        "segments": 12,
+        "smooth": false,
+        "material": "cres"
+      },
+      {
+        "kind": "lathe",
+        "name": "gimbal_outrigger_2",
+        "profile": {
+          "value": [
+            [
+              0,
+              0
+            ],
+            [
+              0.05,
+              0
+            ],
+            [
+              0.05,
+              0.054
+            ],
+            [
+              0.085,
+              0.054
+            ],
+            [
+              0.085,
+              0.107
+            ],
+            [
+              0.068,
+              0.107
+            ],
+            [
+              0.078,
+              0.403
+            ],
+            [
+              0.06,
+              0.735
+            ],
+            [
+              0.08,
+              0.735
+            ],
+            [
+              0.08,
+              0.788
+            ],
+            [
+              0.045,
+              0.788
+            ],
+            [
+              0.035,
+              0.896
+            ],
+            [
+              0,
+              0.896
+            ]
+          ],
+          "source": "karp_illustration: each gimbal outrigger arm is a V of two long tapered struts with collars near both ends, from the top and the foot of the combustion chamber to a clevis well outboard. Taper and collars estimated."
+        },
+        "at": [
+          0.2,
+          -0.6,
+          4.55
+        ],
+        "axis": [
+          -0.2233,
+          -0.893,
+          -0.3907
+        ],
+        "segments": 12,
+        "smooth": false,
+        "material": "cres"
+      },
+      {
+        "kind": "lathe",
+        "name": "gimbal_outrigger_2_lower",
+        "profile": {
+          "value": [
+            [
+              0,
+              0
+            ],
+            [
+              0.05,
+              0
+            ],
+            [
+              0.05,
+              0.049
+            ],
+            [
+              0.085,
+              0.049
+            ],
+            [
+              0.085,
+              0.099
+            ],
+            [
+              0.068,
+              0.099
+            ],
+            [
+              0.078,
+              0.371
+            ],
+            [
+              0.06,
+              0.675
+            ],
+            [
+              0.08,
+              0.675
+            ],
+            [
+              0.08,
+              0.725
+            ],
+            [
+              0.045,
+              0.725
+            ],
+            [
+              0.035,
+              0.824
+            ],
+            [
+              0,
+              0.824
+            ]
+          ],
+          "source": "karp_illustration: each gimbal outrigger arm is a V of two long tapered struts with collars near both ends, from the top and the foot of the combustion chamber to a clevis well outboard. Taper and collars estimated."
+        },
+        "at": [
+          -0.2,
+          -0.62,
+          4.0262
+        ],
+        "axis": [
+          0.2428,
+          -0.9469,
+          0.211
+        ],
+        "segments": 12,
+        "smooth": false,
+        "material": "cres"
+      },
+      {
+        "kind": "pipe",
+        "name": "lox_duct_1",
+        "diameter": 0.33,
+        "points": {
+          "value": [
+            [
+              1.27,
+              0.4,
+              5.2
+            ],
+            [
+              1.0,
+              0.98,
+              5.2
+            ],
+            [
+              0.7,
+              0.98,
+              5.2
+            ]
+          ],
+          "source": [
+            "photo_6413912 and factsheet_1968 drawing: from the oxidizer pump's tangential outlets (factsheet_1968, p.3-3) round to the oxidizer valves. Estimated.",
+            "karp_illustration: the two high-pressure ducts run horizontally from the turbopump towards the front, the main oxidizer and main fuel valves sit in line at their ends, and short elbows turn them into the dome and the fuel inlet manifold. Estimated."
+          ]
+        },
+        "bend_radius": 0.3,
+        "material": "cres",
+        "flanges": [
+          0.15,
+          0.85
+        ]
+      },
+      {
+        "kind": "lathe",
+        "name": "oxidizer_valve_1",
+        "profile": {
+          "value": [
+            [
+              0,
+              0
+            ],
+            [
+              0.2184,
+              0
+            ],
+            [
+              0.2184,
+              0.762
+            ],
+            [
+              0,
+              0.762
+            ]
+          ],
+          "source": "r3896_1, Figure 1-22 (PDF p.51): oxidizer valve \"Length 30.0 in.\", \"Width 17.25 in.\""
+        },
+        "at": [
+          0.7,
+          0.98,
+          5.2
+        ],
+        "axis": [
+          -1,
+          0,
+          0
+        ],
+        "segments": 20,
+        "smooth": false,
+        "material": "cres"
+      },
+      {
+        "kind": "pipe",
+        "name": "lox_elbow_1",
+        "diameter": 0.3,
+        "points": {
+          "value": [
+            [
+              -0.062,
+              0.98,
+              5.2
+            ],
+            [
+              -0.25,
+              0.98,
+              5.2
+            ],
+            [
+              -0.25,
+              0.3,
+              5.2
+            ]
+          ],
+          "source": "karp_illustration: the two high-pressure ducts run horizontally from the turbopump towards the front, the main oxidizer and main fuel valves sit in line at their ends, and short elbows turn them into the dome and the fuel inlet manifold. Estimated."
+        },
+        "bend_radius": 0.25,
+        "material": "cres"
+      },
+      {
+        "kind": "pipe",
+        "name": "fuel_duct_1",
+        "diameter": 0.27,
+        "points": {
+          "value": [
+            [
+              1.27,
+              0.4,
+              4.62
+            ],
+            [
+              1.0,
+              1.05,
+              4.62
+            ],
+            [
+              0.45,
+              1.05,
+              4.62
+            ]
+          ],
+          "source": [
+            "photo_6413912 and factsheet_1968 drawing: from the fuel pump's outlets round to the fuel valves. Estimated.",
+            "karp_illustration: the two high-pressure ducts run horizontally from the turbopump towards the front, the main oxidizer and main fuel valves sit in line at their ends, and short elbows turn them into the dome and the fuel inlet manifold. Estimated."
+          ]
+        },
+        "bend_radius": 0.3,
+        "material": "cres",
+        "flanges": [
+          0.15,
+          0.85
+        ]
+      },
+      {
+        "kind": "lathe",
+        "name": "fuel_valve_1",
+        "profile": {
+          "value": [
+            [
+              0,
+              0
+            ],
+            [
+              0.1397,
+              0
+            ],
+            [
+              0.1397,
+              0.4064
+            ],
+            [
+              0,
+              0.4064
+            ]
+          ],
+          "source": "r3896_1, Figure 1-22 (PDF p.51): fuel valve \"Length 16.0 in.\", \"Width 11.0 in.\""
+        },
+        "at": [
+          0.45,
+          1.05,
+          4.62
+        ],
+        "axis": [
+          -1,
+          0,
+          0
+        ],
+        "segments": 20,
+        "smooth": false,
+        "material": "cres"
+      },
+      {
+        "kind": "pipe",
+        "name": "fuel_elbow_1",
+        "diameter": 0.25,
+        "points": {
+          "value": [
+            [
+              0.044,
+              1.05,
+              4.62
+            ],
+            [
+              -0.3,
+              1.05,
+              4.62
+            ],
+            [
+              -0.3,
+              0.55,
+              4.62
+            ]
+          ],
+          "source": "karp_illustration: the two high-pressure ducts run horizontally from the turbopump towards the front, the main oxidizer and main fuel valves sit in line at their ends, and short elbows turn them into the dome and the fuel inlet manifold. Estimated."
+        },
+        "bend_radius": 0.25,
+        "material": "cres"
+      },
+      {
+        "kind": "pipe",
+        "name": "lox_duct_2",
+        "diameter": 0.33,
+        "points": {
+          "value": [
+            [
+              1.27,
+              -0.4,
+              5.2
+            ],
+            [
+              1.0,
+              -0.98,
+              5.2
+            ],
+            [
+              0.7,
+              -0.98,
+              5.2
+            ]
+          ],
+          "source": [
+            "photo_6413912 and factsheet_1968 drawing: from the oxidizer pump's tangential outlets (factsheet_1968, p.3-3) round to the oxidizer valves. Estimated.",
+            "karp_illustration: the two high-pressure ducts run horizontally from the turbopump towards the front, the main oxidizer and main fuel valves sit in line at their ends, and short elbows turn them into the dome and the fuel inlet manifold. Estimated."
+          ]
+        },
+        "bend_radius": 0.3,
+        "material": "cres",
+        "flanges": [
+          0.15,
+          0.85
+        ]
+      },
+      {
+        "kind": "lathe",
+        "name": "oxidizer_valve_2",
+        "profile": {
+          "value": [
+            [
+              0,
+              0
+            ],
+            [
+              0.2184,
+              0
+            ],
+            [
+              0.2184,
+              0.762
+            ],
+            [
+              0,
+              0.762
+            ]
+          ],
+          "source": "r3896_1, Figure 1-22 (PDF p.51): oxidizer valve \"Length 30.0 in.\", \"Width 17.25 in.\""
+        },
+        "at": [
+          0.7,
+          -0.98,
+          5.2
+        ],
+        "axis": [
+          -1,
+          0,
+          0
+        ],
+        "segments": 20,
+        "smooth": false,
+        "material": "cres"
+      },
+      {
+        "kind": "pipe",
+        "name": "lox_elbow_2",
+        "diameter": 0.3,
+        "points": {
+          "value": [
+            [
+              -0.062,
+              -0.98,
+              5.2
+            ],
+            [
+              -0.25,
+              -0.98,
+              5.2
+            ],
+            [
+              -0.25,
+              -0.3,
+              5.2
+            ]
+          ],
+          "source": "karp_illustration: the two high-pressure ducts run horizontally from the turbopump towards the front, the main oxidizer and main fuel valves sit in line at their ends, and short elbows turn them into the dome and the fuel inlet manifold. Estimated."
+        },
+        "bend_radius": 0.25,
+        "material": "cres"
+      },
+      {
+        "kind": "pipe",
+        "name": "fuel_duct_2",
+        "diameter": 0.27,
+        "points": {
+          "value": [
+            [
+              1.27,
+              -0.4,
+              4.62
+            ],
+            [
+              1.0,
+              -1.05,
+              4.62
+            ],
+            [
+              0.45,
+              -1.05,
+              4.62
+            ]
+          ],
+          "source": [
+            "photo_6413912 and factsheet_1968 drawing: from the fuel pump's outlets round to the fuel valves. Estimated.",
+            "karp_illustration: the two high-pressure ducts run horizontally from the turbopump towards the front, the main oxidizer and main fuel valves sit in line at their ends, and short elbows turn them into the dome and the fuel inlet manifold. Estimated."
+          ]
+        },
+        "bend_radius": 0.3,
+        "material": "cres",
+        "flanges": [
+          0.15,
+          0.85
+        ]
+      },
+      {
+        "kind": "lathe",
+        "name": "fuel_valve_2",
+        "profile": {
+          "value": [
+            [
+              0,
+              0
+            ],
+            [
+              0.1397,
+              0
+            ],
+            [
+              0.1397,
+              0.4064
+            ],
+            [
+              0,
+              0.4064
+            ]
+          ],
+          "source": "r3896_1, Figure 1-22 (PDF p.51): fuel valve \"Length 16.0 in.\", \"Width 11.0 in.\""
+        },
+        "at": [
+          0.45,
+          -1.05,
+          4.62
+        ],
+        "axis": [
+          -1,
+          0,
+          0
+        ],
+        "segments": 20,
+        "smooth": false,
+        "material": "cres"
+      },
+      {
+        "kind": "pipe",
+        "name": "fuel_elbow_2",
+        "diameter": 0.25,
+        "points": {
+          "value": [
+            [
+              0.044,
+              -1.05,
+              4.62
+            ],
+            [
+              -0.3,
+              -1.05,
+              4.62
+            ],
+            [
+              -0.3,
+              -0.55,
+              4.62
+            ]
+          ],
+          "source": "karp_illustration: the two high-pressure ducts run horizontally from the turbopump towards the front, the main oxidizer and main fuel valves sit in line at their ends, and short elbows turn them into the dome and the fuel inlet manifold. Estimated."
+        },
+        "bend_radius": 0.25,
+        "material": "cres"
+      },
+      {
+        "kind": "lathe",
+        "name": "interface_band_end_1",
+        "profile": {
+          "value": [
+            [
+              0.37,
+              -0.25
+            ],
+            [
+              0.4,
+              -0.25
+            ],
+            [
+              0.4,
+              0
+            ],
+            [
+              0.37,
+              0
+            ]
+          ],
+          "source": "karp_illustration: the engine interface panel shows as a tall racetrack-shaped band (riveted) on top of the turbopump; outline from r3896_1 Figure 2-22 view B-B (51.75 in between the centres of 15.75 in radius ends). Height estimated."
+        },
+        "at": [
+          1.27,
+          0.6572,
+          5.4737
+        ],
+        "closed": true,
+        "sweep_deg": 180,
+        "roll_deg": 90,
+        "smooth": false,
+        "material": "cres"
+      },
+      {
+        "kind": "box",
+        "name": "interface_band_side_1",
+        "size": [
+          0.03,
+          1.3144,
+          0.25
+        ],
+        "at": {
+          "value": [
+            1.655,
+            0,
+            5.3487
+          ],
+          "source": "karp_illustration: the engine interface panel shows as a tall racetrack-shaped band (riveted) on top of the turbopump; outline from r3896_1 Figure 2-22 view B-B (51.75 in between the centres of 15.75 in radius ends). Height estimated."
+        },
+        "material": "cres"
+      },
+      {
+        "kind": "lathe",
+        "name": "interface_band_end_2",
+        "profile": {
+          "value": [
+            [
+              0.37,
+              -0.25
+            ],
+            [
+              0.4,
+              -0.25
+            ],
+            [
+              0.4,
+              0
+            ],
+            [
+              0.37,
+              0
+            ]
+          ],
+          "source": "karp_illustration: the engine interface panel shows as a tall racetrack-shaped band (riveted) on top of the turbopump; outline from r3896_1 Figure 2-22 view B-B (51.75 in between the centres of 15.75 in radius ends). Height estimated."
+        },
+        "at": [
+          1.27,
+          -0.6572,
+          5.4737
+        ],
+        "closed": true,
+        "sweep_deg": 180,
+        "roll_deg": -90,
+        "smooth": false,
+        "material": "cres"
+      },
+      {
+        "kind": "box",
+        "name": "interface_band_side_2",
+        "size": [
+          0.03,
+          1.3144,
+          0.25
+        ],
+        "at": {
+          "value": [
+            0.885,
+            0,
+            5.3487
+          ],
+          "source": "karp_illustration: the engine interface panel shows as a tall racetrack-shaped band (riveted) on top of the turbopump; outline from r3896_1 Figure 2-22 view B-B (51.75 in between the centres of 15.75 in radius ends). Height estimated."
+        },
         "material": "cres"
       }
     ],
     "materials": {
       "nozzle": "inconel_tubes",
-      "chamber": "inconel_tubes",
+      "chamber": "bright_steel",
       "hoops": "inconel_tubes",
       "extension": "cres",
       "manifold": "cres",
-      "powerhead": "cres",
+      "powerhead": "bright_steel",
       "parts": "cres"
     }
   },

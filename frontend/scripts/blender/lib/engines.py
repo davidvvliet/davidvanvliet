@@ -39,6 +39,8 @@
 #              axis, smooth (false for flat-ended discs)}; pipes may have flanges [fractions
 #              of their length]; each may set its material; each
 #              with its own source
+#   powerhead: optional shape "dome" (rounded up to the gimbal)
+#   parts kind lathe: optional segments, closed, sweep_deg, roll_deg; kind box: optional roll_deg
 #   materials: {"nozzle", "chamber", "powerhead", "parts"}: material names (spec or shared)
 # Jet ("kind": "jet"), the intake at the top (z = length), exhaust at z = 0:
 #   nacelle:   length, max_diameter, inlet_diameter, exit_diameter, wall; optional profile
@@ -372,9 +374,16 @@ def _rocket(name, e, lod):
     objs.append(parts.lathe(f"{name}_chamber", [(0, L - wall)] + prof, segments=seg,
                             material=mats.get("chamber", "dark_metal")))
     rp, hp = ph["diameter"] / 2, ph["height"]
-    objs.append(parts.lathe(f"{name}_powerhead",
-                            [(0, top - 0.01), (rp * 0.8, top - 0.01), (rp, top + hp * 0.25),
-                             (rp, top + hp * 0.8), (rp * 0.6, top + hp), (0, top + hp)],
+    if ph.get("shape") == "dome":                      # a rounded dome up to the gimbal
+        rg = e.get("gimbal", {}).get("diameter", rp) / 2
+        prof_ph = [(0, top - 0.01), (rp, top - 0.01)]
+        prof_ph += [(max(rp * math.cos(math.radians(t)), rg), top + hp * math.sin(math.radians(t)))
+                    for t in range(10, 91, 10)]
+        prof_ph += [(0, top + hp)]
+    else:
+        prof_ph = [(0, top - 0.01), (rp * 0.8, top - 0.01), (rp, top + hp * 0.25),
+                   (rp, top + hp * 0.8), (rp * 0.6, top + hp), (0, top + hp)]
+    objs.append(parts.lathe(f"{name}_powerhead", prof_ph,
                             segments=seg, material=mats.get("powerhead", "dark_metal")))
     if "gimbal" in e:
         g = e["gimbal"]
@@ -382,8 +391,8 @@ def _rocket(name, e, lod):
                                    location=(0, 0, top + hp - 0.01), segments=seg // 2,
                                    material=mats.get("parts", "dark_metal")))
     if lod == "full" and "ribs" in nz:
-        objs.append(_ribs(f"{name}_nozzle_ribs", nz["ribs"], outer, L,
-                          mats.get("hoops", mats.get("nozzle", "dark_metal"))))
+        objs.append(_ribs(f"{name}_nozzle_ribs", nz["ribs"], outer, L, nz["ribs"].get(
+            "material", mats.get("hoops", mats.get("nozzle", "dark_metal")))))
     if lod == "full" and "hoops" in nz:
         # One group of rings, or a list of groups (layers with their own spacing and fittings).
         groups = nz["hoops"] if isinstance(nz["hoops"], list) else [nz["hoops"]]
@@ -425,13 +434,17 @@ def _rocket(name, e, lod):
                 if p.get("flanges"):
                     objs.append(_flanges(f"{pn}_flanges", p, p.get("flange_material", p.get("material", pm))))
             elif k == "box":
-                objs.append(parts.box(pn, p["size"], location=p["at"], material=p.get("material", pm)))
+                objs.append(parts.box(pn, p["size"], location=p["at"], roll_deg=p.get("roll_deg", 0.0),
+                                      material=p.get("material", pm)))
             elif k == "actuator":
                 objs.append(parts.strut(pn, p["from"], p["to"], radius=p["diameter"] / 2,
                                         segments=10, material=p.get("material", pm)))
             elif k == "lathe":
                 objs.append(parts.lathe(pn, [tuple(q) for q in p["profile"]], location=p["at"],
-                                        direction=p.get("axis", (0, 0, 1)), segments=24,
+                                        direction=p.get("axis", (0, 0, 1)),
+                                        segments=p.get("segments", 24), closed=p.get("closed", False),
+                                        sweep_deg=p.get("sweep_deg", 360.0),
+                                        roll_deg=p.get("roll_deg", 0.0),
                                         smooth=p.get("smooth", True), material=p.get("material", pm)))
             else:
                 raise ValueError(f"{pn}: unknown engine part kind {k!r}")
