@@ -1,6 +1,8 @@
 // Dev-only window onto the Blender harness (scripts/blender) for the /models dashboard:
 //   /api/models/status                    build status, plus each probe's spec summary and refs
-//   /api/models/file/<worktree>/<path>    a file under that worktree's out/, refs/ or baselines/
+//   /api/models/file/<worktree>/<path>    a file under that worktree's out/, refs/ or baselines/;
+//                                         circuit/<path>: under scripts/circuit/out/ (the /circuit boards)
+// Circuit boards (scripts/circuit/build.py) are listed as probes too, with kind "circuit".
 // Every git worktree of this repo is read, so sessions working in their own worktrees all show
 // up on the one dashboard: each probe lists the builds found per worktree, newest first.
 // Returns 404 in production, where the harness output does not exist.
@@ -40,14 +42,16 @@ const run = (cmd: string, args: string[], cwd?: string) => new Promise<string | 
 type Worktree = { id: string; label: string; branch: string | null; root: string; working: string[] };
 
 async function working(dir: string, harness: string) {
+  const circuit = path.join(path.dirname(harness), "circuit");
   const [changed, ahead] = await Promise.all([
-    run("git", ["status", "--porcelain", "--untracked-files=all", "--", harness], dir),
-    run("git", ["diff", "--name-only", "origin/main...HEAD", "--", harness], dir),
+    run("git", ["status", "--porcelain", "--untracked-files=all", "--", harness, circuit], dir),
+    run("git", ["diff", "--name-only", "origin/main...HEAD", "--", harness, circuit], dir),
   ]);
   const files = [...(changed ?? "").split("\n").map((l) => l.slice(3).split(" -> ").pop()!), ...(ahead ?? "").split("\n")];
   const own = new RegExp(`^${harness.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}/(?:specs/([^/]+)\\.json|probes/([^/]+)\\.py|refs/([^/]+)/)`);
+  const board = new RegExp(`^${circuit.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}/boards/([^/]+)/`);
   const names = new Set<string>();
-  for (const f of files) { const m = f.match(own); if (m) names.add(m[1] ?? m[2] ?? m[3]); }
+  for (const f of files) { const m = f.match(own) ?? f.match(board); if (m) names.add(m[1] ?? m[2] ?? m[3]); }
   return [...names];
 }
 let treesCache: { at: number; value: Worktree[] } | null = null;
@@ -101,7 +105,12 @@ async function status() {
     const build = (await readJson(path.join(w.root, "out", "status.json"))) ?? {};
     let names: string[] = [];
     try { names = (await fs.readdir(path.join(w.root, "specs"))).filter((f) => f.endsWith(".json")).map((f) => f.slice(0, -5)); } catch {}
-    return { w, names, probes: (build.probes ?? {}) as Record<string, Build>, current: (build.current ?? null) as Current | null, updated: (build.updated ?? null) as number | null };
+    const circuit = path.join(w.root, "..", "circuit");
+    let boards: string[] = [];
+    try { boards = (await fs.readdir(path.join(circuit, "boards"))).filter((b) => !b.startsWith(".")); } catch {}
+    const boardBuilds = ((await readJson(path.join(circuit, "out", "status.json"))) ?? {}).boards ?? {};
+    return { w, names, probes: (build.probes ?? {}) as Record<string, Build>, current: (build.current ?? null) as Current | null, updated: (build.updated ?? null) as number | null,
+      boards, boardBuilds: boardBuilds as Record<string, Build> };
   }));
   const names = [...new Set(perTree.flatMap((t) => t.names))].sort();
   const probes = await Promise.all(names.map(async (name) => {
@@ -128,11 +137,28 @@ async function status() {
       worktrees: sources,
     };
   }));
+  const boardNames = [...new Set(perTree.flatMap((t) => t.boards))].sort();
+  const boards = await Promise.all(boardNames.map(async (name) => {
+    const rows = perTree.filter((t) => t.boards.includes(name)).map((t) => ({
+      worktree: t.w.id, label: t.w.label, branch: t.w.branch, working: t.w.working.includes(name),
+      build: t.boardBuilds[name] ?? null, refs: [] as string[],
+    }));
+    const shown = rows.filter((r) => r.build || r.working);
+    const sources = (shown.length ? shown : rows.slice(0, 1))
+      .sort((a, b) => Number(b.working) - Number(a.working) || (b.build?.started ?? -1) - (a.build?.started ?? -1));
+    const root = trees.find((w) => w.id === sources[0].worktree)!.root;
+    const meta = (await readJson(path.join(root, "..", "circuit", "boards", name, "board.json"))) ?? {};
+    return {
+      name, kind: "circuit", title: meta.title ?? name, fixture: false, note: meta.purpose ?? null,
+      sources: meta.source ? [{ title: meta.source.title, url: meta.source.url }] : [], referenceModel: null,
+      published: null, worktrees: sources,
+    };
+  }));
   // The build happening now: a running one anywhere, else the latest to finish.
   const currents = perTree.filter((t) => t.current).map((t) => ({ ...t.current!, worktree: t.w.id, label: t.w.label }));
   currents.sort((a, b) => Number(b.state === "running") - Number(a.state === "running") || b.at - a.at);
   const updated = Math.max(0, ...perTree.map((t) => t.updated ?? 0)) || null;
-  return Response.json({ updated, current: currents[0] ?? null, probes }, {
+  return Response.json({ updated, current: currents[0] ?? null, probes: [...probes, ...boards] }, {
     headers: { "Cache-Control": "no-store" },
   });
 }
@@ -141,11 +167,12 @@ export async function GET(_req: NextRequest, ctx: RouteContext<"/api/models/[...
   if (process.env.NODE_ENV === "production") return notFound();
   const { path: parts } = await ctx.params;
   if (parts.length === 1 && parts[0] === "status") return status();
-  if (parts[0] !== "file" || parts.length < 4 || !SERVED_DIRS.has(parts[2])) return notFound();
+  if (parts[0] !== "file" || parts.length < 4 || !(SERVED_DIRS.has(parts[2]) || parts[2] === "circuit")) return notFound();
   const tree = (await worktrees()).find((w) => w.id === parts[1]);
   if (!tree) return notFound();
-  const file = path.resolve(tree.root, ...parts.slice(2));
-  if (!file.startsWith(tree.root + path.sep)) return notFound();
+  const base = parts[2] === "circuit" ? path.resolve(tree.root, "..", "circuit", "out") : tree.root;
+  const file = path.resolve(base, ...parts.slice(parts[2] === "circuit" ? 3 : 2));
+  if (!file.startsWith(base + path.sep)) return notFound();
   try {
     const body = await fs.readFile(file);
     return new Response(body, {

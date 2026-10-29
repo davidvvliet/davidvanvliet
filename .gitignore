@@ -23,6 +23,7 @@ frontend/build
 
 # blender harness build output (rebuilt by npm run model)
 frontend/scripts/blender/out/
+frontend/scripts/circuit/out/
 __pycache__/
 
 # misc

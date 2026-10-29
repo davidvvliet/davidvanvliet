@@ -1,9 +1,10 @@
-# Build a board for /circuit: public/circuit/<board>.glb and .json.
-#   python3 scripts/circuit/build.py <board>      (from frontend/; boards/<board>/ holds its KiCad files)
+# Build a board for /circuit (from frontend/; boards/<board>/ holds its KiCad files):
+#   python3 scripts/circuit/build.py <board>            out/<board>/<board>.glb and .json, shown on /models?dashboard
+#   python3 scripts/circuit/build.py <board> --publish  the same, then copied to public/circuit/ (the live /circuit page)
 # 1. KiCad (kicad-cli) exports the layout in 3D, with its library's part models.
 # 2. Blender (pack.py) tags every part with the schematic section it is drawn in (sections.py),
 #    merges each block's pieces into one mesh per material and writes the web model.
-import json, os, re, subprocess, sys, tempfile
+import json, os, re, shutil, subprocess, sys, tempfile, time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 FRONTEND = os.path.dirname(os.path.dirname(HERE))
@@ -17,7 +18,8 @@ def nice(title):
     out = [w if not w.isalpha() or w in ("LDO", "LED", "SWD") else w.lower() for w in words]
     return " ".join(out)[:1].upper() + " ".join(out)[1:]
 
-def main(board):
+def main(board, publish=False):
+    started = time.time()
     src = os.path.join(HERE, "boards", board)
     meta = json.load(open(os.path.join(src, "board.json")))
     pcb = open(os.path.join(src, meta["pcb"])).read()
@@ -38,14 +40,16 @@ def main(board):
         if r.returncode or not os.path.exists(raw):
             sys.exit(r.stdout + r.stderr)
         tags = os.path.join(tmp, "blocks.json"); json.dump(blocks, open(tags, "w"))
-        out = os.path.join(FRONTEND, "public", "circuit", f"{board}.glb")
+        out = os.path.join(HERE, "out", board, f"{board}.glb")
         os.makedirs(os.path.dirname(out), exist_ok=True)
         r = subprocess.run([BLENDER, "-b", "--factory-startup", "--python", os.path.join(HERE, "pack.py"), "--", raw, tags, out],
                            capture_output=True, text=True)
         stats = [l for l in r.stdout.splitlines() if l.startswith("PACK")]
         if r.returncode or not stats:
+            record(board, {"started": started, "ok": False, "error": (r.stdout[-1500:] + r.stderr[-1500:])})
             sys.exit(r.stdout[-3000:] + r.stderr[-3000:])
-        placed = set(json.loads(stats[-1][5:])["placed"])
+        pack = json.loads(stats[-1][5:])
+        placed = set(pack["placed"])
     # Parts per block, from the layout (value and footprint), for the blocks that have a 3D part.
     parts = {}
     for m in re.finditer(r'\(footprint "([^"]+)"(.*?)\n\t\)', pcb, re.S):
@@ -57,9 +61,30 @@ def main(board):
     key = lambda p: (re.sub(r"\d", "", p["ref"]), int(re.sub(r"\D", "", p["ref"]) or 0))
     data = {"board": board, "title": meta["title"], "purpose": meta["purpose"], "source": meta["source"],
             "blocks": [{"name": n, "parts": sorted(ps, key=key)} for n, ps in sorted(parts.items(), key=lambda kv: -len(kv[1]))]}
-    json.dump(data, open(os.path.join(FRONTEND, "public", "circuit", f"{board}.json"), "w"), indent=1)
-    print(stats[-1][5:][:300])
-    print(f"{board}: {os.path.getsize(out) / 1e6:.2f} MB, {len(data['blocks'])} blocks" + (f"; missing models: {missing}" if missing else ""))
+    json.dump(data, open(os.path.join(HERE, "out", board, f"{board}.json"), "w"), indent=1)
+    mb, tris = os.path.getsize(out) / 1e6, sum(pack["tris"].values())
+    # The dashboard's check table (same shape as the Blender harness's checks).
+    checks = [{"name": "file size", "ok": mb <= 1.5, "measured": round(mb, 2), "expected": 1.5, "unit": "MB"},
+              {"name": "triangles", "ok": tris <= 300000, "measured": tris, "expected": 300000, "unit": "tris"},
+              {"name": "parts without a 3D model", "ok": not missing, "measured": len(missing), "expected": 0, "unit": "parts"}]
+    record(board, {"started": started, "ok": all(c["ok"] for c in checks), "seconds": round(time.time() - started, 1),
+                   "glb": f"{board}.glb", "checks": checks, "published": publish})
+    if publish:
+        dest = os.path.join(FRONTEND, "public", "circuit")
+        os.makedirs(dest, exist_ok=True)
+        for ext in ("glb", "json"):
+            shutil.copy(os.path.join(HERE, "out", board, f"{board}.{ext}"), os.path.join(dest, f"{board}.{ext}"))
+    print(f"{board}: {mb:.2f} MB, {tris} triangles, {len(data['blocks'])} blocks"
+          + (f"; missing models: {missing}" if missing else "") + ("; published to public/circuit" if publish else ""))
+
+def record(board, build):
+    """out/status.json, which /api/models/status reads for the dashboard."""
+    path = os.path.join(HERE, "out", "status.json")
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    try: status = json.load(open(path))
+    except (OSError, ValueError): status = {}
+    status.setdefault("boards", {})[board] = build
+    json.dump(status, open(path, "w"), indent=1)
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    main(sys.argv[1], "--publish" in sys.argv[2:])

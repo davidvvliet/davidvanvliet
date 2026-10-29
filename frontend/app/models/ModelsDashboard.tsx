@@ -16,6 +16,7 @@ type Build = {
 };
 type Probe = {
   name: string; title: string; fixture: boolean; note: string | null;
+  kind?: "circuit"; // a /circuit board (scripts/circuit/build.py): no sheet, its blocks instead
   sources: { title?: string; url?: string }[]; referenceModel: { url?: string; note?: string } | null;
   // Each git worktree that has this probe, newest build first (app/api/models/[...path]/route.ts).
   worktrees: Source[];
@@ -381,6 +382,27 @@ function Published({ p }: { p: Probe["published"] }) {
   return <span className={styles.ok}>live version current</span>;
 }
 
+// A circuit board's blocks (out/<board>/<board>.json): click one to focus it on the board.
+function BoardBlocks({ url, focus, setFocus }: { url: string; focus: string | null; setFocus: (f: string | null) => void }) {
+  const [data, setData] = useState<{ blocks: { name: string; parts: { ref: string; value: string; package: string }[] }[] } | null>(null);
+  useEffect(() => {
+    let alive = true;
+    fetch(url, { cache: "no-store" }).then((r) => (r.ok ? r.json() : null)).then((d) => { if (alive) setData(d); }).catch(() => {});
+    return () => { alive = false; };
+  }, [url]);
+  const block = data?.blocks.find((x) => x.name === focus);
+  return (
+    <div className={styles.boardBlocks}>
+      {data?.blocks.map((x) => (
+        <button key={x.name} onClick={() => setFocus(x.name === focus ? null : x.name)} className={x.name === focus ? styles.active : ""}>
+          {x.name} <span className={styles.dim}>{x.parts.length}</span>
+        </button>
+      ))}
+      {block && <div className={styles.dim}>{block.parts.map((p) => `${p.ref} ${p.value}`).join(" · ")}</div>}
+    </div>
+  );
+}
+
 export default function ModelsDashboard() {
   const [status, setStatus] = useState<Status | null>(null);
   const [error, setError] = useState(false);
@@ -445,7 +467,10 @@ export default function ModelsDashboard() {
     : shown === "reference" ? file(wt, `refs/${probe.name}/reference-sheet.png`)
     : shown === "close-ups" ? file(wt, `out/${probe.name}/closeups.png`, b?.started)
     : b?.sheet ? file(wt, `out/${probe.name}/sheet.png`, b.started) : null;
-  const glbUrl = probe && b?.glb ? file(wt, `out/${probe.name}/${probe.name}.glb`, b.started) : null;
+  const board = probe?.kind === "circuit";
+  const glbUrl = probe && b?.glb ? file(wt, board ? `circuit/${probe.name}/${b.glb}` : `out/${probe.name}/${probe.name}.glb`, b.started) : null;
+  const [focus, setFocus] = useState<string | null>(null); // a board's block, picked in its list or on the board
+  useEffect(() => setFocus(null), [probe?.name]);
 
   // The reference breakdown, if `run.py explode` has been run for this probe; re-read every
   // few seconds since it is written outside the build. Needs a measured reference model.
@@ -514,7 +539,7 @@ export default function ModelsDashboard() {
               ))}
             </span>
           ) : <span className={styles.dim} title={src.branch ? `branch ${src.branch}` : undefined}>from {src.label}{src.working ? " (changing)" : ""}</span>)}
-          {probe && !probe.fixture && <Published p={probe.published} />}
+          {probe && !probe.fixture && !board && <Published p={probe.published} />}
           {anyRunning && !running && (
             <span className={styles.dim}>building {status?.current?.probe} in {status?.current?.label}</span>
           )}
@@ -523,11 +548,13 @@ export default function ModelsDashboard() {
       </header>
       <div className={styles.grid}>
         <div className={styles.viewCell}>
-          {glbUrl ? <Viewer probe={probe!.name} url={glbUrl} breakdown={breakdown} stale={stale} /> : <div className={styles.empty}>{probe ? "no export" : ""}</div>}
+          {glbUrl ? <Viewer probe={probe!.name} url={glbUrl} breakdown={breakdown} stale={stale}
+            {...(board ? { focus, onFocus: setFocus } : {})} /> : <div className={styles.empty}>{probe ? "no export" : ""}</div>}
         </div>
         <div className={styles.side}>
           <div className={styles.sheetCell}>
-            {sheetUrl ? <img className={styles.sheet} src={sheetUrl} alt="" /> : <div className={styles.empty}>no sheet</div>}
+            {board && b?.glb ? <BoardBlocks url={file(wt, `circuit/${probe!.name}/${probe!.name}.json`, b.started)} focus={focus} setFocus={setFocus} />
+              : sheetUrl ? <img className={styles.sheet} src={sheetUrl} alt="" /> : <div className={styles.empty}>no sheet</div>}
             {views.length > 1 && (
               <div className={styles.toggle}>
                 {views.map((v) => (

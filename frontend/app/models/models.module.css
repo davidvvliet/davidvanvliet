@@ -152,3 +152,9 @@
   .detail > .viewCell { flex: none; height: 60vh; border-right: none; border-bottom: var(--line); }
   .sources { width: auto; flex: 1; }
 }
+
+/* A circuit board's blocks, in the dashboard's sheet cell. */
+.boardBlocks { position: absolute; inset: 0; overflow-y: auto; padding: 0.75rem; display: flex; flex-direction: column; align-items: flex-start; gap: 0.35rem; }
+.boardBlocks button { background: none; border: none; padding: 0; font: inherit; color: #aaa; cursor: pointer; text-align: left; }
+.boardBlocks button:hover { color: #ededed; }
+.boardBlocks button.active { color: #00ff00; }
