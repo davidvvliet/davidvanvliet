@@ -13,7 +13,6 @@ import styles from "./models.module.css";
 export type Published = {
   probe: string; title: string; thumb: boolean; logos: string[]; explore: boolean; focus: Focusable[];
   sources: { title: string; url: string; licence: string | null; cited: number }[];
-  board?: Board;
 };
 
 // A circuit board's parts, grouped into blocks (scripts/circuit/build.py).
@@ -52,12 +51,13 @@ const orgRank = (m: Published) => { const i = ORGS.indexOf(m.logos[0]); return i
 // a spec's "viewer": {"explore": false} leaves only orbiting, its moving parts and the parts
 // listed in "viewer.focus").
 // Locally (`dashboard`), /models?dashboard is the build dashboard.
-export default function PublishedModels({ models, dashboard }: { models: Published[]; dashboard: boolean }) {
+export default function PublishedModels({ models, circuit, dashboard }: {
+  models: Published[]; circuit: string | null; dashboard: boolean;
+}) {
   const params = useSearchParams();
   if (dashboard && params.has("dashboard")) return <ModelsDashboard />;
   const asked = params.get("probe");
   const model = models.find((m) => m.probe === asked);
-  if (model?.board) return <BoardDetail model={model} board={model.board} />;
   if (model) {
     const probe = model.probe;
     return (
@@ -76,22 +76,36 @@ export default function PublishedModels({ models, dashboard }: { models: Publish
       </div>
     );
   }
-  return <Grid models={models} />;
+  // The vehicles in ORGS order, then on a row of its own the way into /circuits, shown by one of its boards.
+  const cards: CardItem[] = [...models].sort((a, b) => orgRank(a) - orgRank(b)).map((m) => ({
+    key: m.probe, href: `/models?probe=${m.probe}`, url: `/models/${m.probe}.glb`, title: m.title,
+    thumb: m.thumb ? `/models/${m.probe}.webp` : undefined, corner: <Logos model={m} />,
+  }));
+  const more: CardItem[] = circuit ? [{
+    key: "circuits", href: "/circuits", url: `/circuits/${circuit}.glb`, title: "My circuit experiments",
+    corner: <span className={styles.cardArrow}>↗</span>,
+  }] : [];
+  return (
+    <Grid back={{ href: "/", label: "← explore" }} title="Models" rows={[cards, more]} empty="No published models yet.">
+      These models were created using my Blender harness with Opus 5.5. Only primary sources, mostly
+      NASA&apos;s own, were used for maximum accuracy. The sources for each model can be found in its detailed view.
+    </Grid>
+  );
 }
 
 // A circuit board: its blocks beside it (pick one, in the list or on the board, to focus it), then its source.
-function BoardDetail({ model, board }: { model: Published; board: Board }) {
+export function BoardDetail({ board }: { board: Board }) {
   const [focus, setFocus] = useState<string | null>(null);
   const block = board.blocks.find((b) => b.name === focus);
   return (
     <div className={styles.page}>
       <Header>
-        <Link href="/models" className={styles.dim}>← models</Link>
-        <span>{model.title}</span>
+        <Link href="/circuits" className={styles.dim}>← circuits</Link>
+        <span>{board.title}</span>
       </Header>
       <div className={styles.detail}>
         <div className={styles.viewCell}>
-          <Viewer probe={model.probe} url={`/models/${model.probe}.glb`} breakdown={null} stale={false} focus={focus} onFocus={setFocus} />
+          <Viewer probe={board.board} url={`/circuits/${board.board}.glb`} breakdown={null} stale={false} focus={focus} onFocus={setFocus} />
         </div>
         <aside className={styles.sources}>
           <div className={styles.dim}>{board.purpose}</div>
@@ -145,7 +159,7 @@ function Sources({ sources }: { sources: Published["sources"] }) {
 }
 
 // Links on the left, the name centred in the home page's title style.
-function Header({ children }: { children: React.ReactNode }) {
+export function Header({ children }: { children: React.ReactNode }) {
   return (
     <header className={styles.siteHeader}>
       <nav className={styles.siteLinks}>{children}</nav>
@@ -154,7 +168,14 @@ function Header({ children }: { children: React.ReactNode }) {
   );
 }
 
-function Grid({ models }: { models: Published[] }) {
+// A card in a grid: its model spinning (its thumbnail until then), a title, and a corner (logos or an arrow).
+export type CardItem = { key: string; href: string; url: string; title: string; thumb?: string; corner?: React.ReactNode };
+
+// A page of cards (/models, /circuits): the header, the intro in green, then the cards, each row of
+// `rows` starting a new line of the grid.
+export function Grid({ back, title, rows, empty, children }: {
+  back: { href: string; label: string }; title: string; rows: CardItem[][]; empty: string; children: React.ReactNode;
+}) {
   const scroller = useRef<HTMLDivElement>(null);
   const [spin, setSpin] = useState(true);
   useEffect(() => {
@@ -164,26 +185,21 @@ function Grid({ models }: { models: Published[] }) {
     q.addEventListener("change", set);
     return () => q.removeEventListener("change", set);
   }, []);
+  const groups = rows.filter((r) => r.length);
   return (
     <div className={styles.page}>
       <Header>
-        <Link href="/" className={styles.dim}>← explore</Link>
-        <span>Models</span>
+        <Link href={back.href} className={styles.dim}>{back.label}</Link>
+        <span>{title}</span>
       </Header>
-      <p className={styles.intro}>
-        <span>
-        These models were created using my Blender harness with Opus 5.5. Only primary sources, mostly
-        NASA's own, were used for maximum accuracy. The sources for each model can be found in its detailed view.
-        </span>
-      </p>
+      <p className={styles.intro}><span>{children}</span></p>
       <div className={styles.gridArea}>
         <div ref={scroller} className={styles.cards}>
-          {models.length === 0 && <div className={styles.empty}>No published models yet.</div>}
-          {[...models].filter((m) => !m.board).sort((a, b) => orgRank(a) - orgRank(b)).map((m) =>
-            <Card key={m.probe} model={m} spin={spin} root={scroller} />)}
-          {/* The circuit boards start a row of their own. */}
-          <div className={styles.rowBreak} />
-          {models.filter((m) => m.board).map((m) => <Card key={m.probe} model={m} spin={spin} root={scroller} />)}
+          {groups.length === 0 && <div className={styles.empty}>{empty}</div>}
+          {groups.map((row, i) => [
+            i > 0 && <div key={`break${i}`} className={styles.rowBreak} />,
+            ...row.map((c) => <Card key={c.key} item={c} spin={spin} root={scroller} />),
+          ])}
         </div>
         <Canvas style={{ position: "absolute", inset: 0, pointerEvents: "none" }} dpr={[1, 2]} gl={{ alpha: true, antialias: true }}>
           <View.Port />
@@ -193,7 +209,7 @@ function Grid({ models }: { models: Published[] }) {
   );
 }
 
-function Card({ model, spin, root }: { model: Published; spin: boolean; root: React.RefObject<HTMLDivElement | null> }) {
+function Card({ item, spin, root }: { item: CardItem; spin: boolean; root: React.RefObject<HTMLDivElement | null> }) {
   const card = useRef<HTMLAnchorElement>(null);
   const [seen, setSeen] = useState(false); // on screen at least once: load the model
   const [ready, setReady] = useState(false);
@@ -207,23 +223,23 @@ function Card({ model, spin, root }: { model: Published; spin: boolean; root: Re
     return () => io.disconnect();
   }, [root]);
   return (
-    <Link ref={card} href={`/models?probe=${model.probe}`} className={styles.card}
+    <Link ref={card} href={item.href} className={styles.card}
       onPointerEnter={() => (hover.current = true)} onPointerLeave={() => (hover.current = false)}>
-      {model.thumb && (
+      {item.thumb && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={`/models/${model.probe}.webp`} alt="" className={`${styles.thumb} ${ready ? styles.thumbGone : ""}`} />
+        <img src={item.thumb} alt="" className={`${styles.thumb} ${ready ? styles.thumbGone : ""}`} />
       )}
       <View className={styles.cardView}>
         <PerspectiveCamera makeDefault fov={FOV} />
         <StudioLights />
         {seen && (
           <Suspense fallback={null}>
-            <Spinning url={`/models/${model.probe}.glb`} spin={spin} hover={hover} onReady={() => setReady(true)} />
+            <Spinning url={item.url} spin={spin} hover={hover} onReady={() => setReady(true)} />
           </Suspense>
         )}
       </View>
-      <span className={styles.cardTitle}>{model.title}</span>
-      <Logos model={model} />
+      <span className={styles.cardTitle}>{item.title}</span>
+      {item.corner}
     </Link>
   );
 }
