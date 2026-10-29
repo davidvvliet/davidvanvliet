@@ -1,6 +1,9 @@
 {
   "title": "X-15",
-  "logos": ["nasa", "naa"],
+  "logos": [
+    "nasa",
+    "naa"
+  ],
   "note": "North American X-15, the basic airplane (not the X-15A-2). Frame: x forward (nose tip at the front), y left, z up; fuselage centreline on z = 0; gear up, lower (ventral) fin on, as in the three-view drawings. Feet from the sources are converted at 0.3048 m/ft. No reference 3D model exists (see reference_model): layout and shapes come from the dimensioned three-view drawings in refs/x15/ and Table I of NASA TN D-3343.",
   "sources": [
     {
@@ -1346,6 +1349,108 @@
         ],
         "source": "nasm_x15, photos NASM-SI-2008-5559 and NASM-SI-2008-5563: the black skin's reflections break up in streaks along the fuselage, a few cm wide; spread and streak size estimated from those photos"
       }
+    }
+  },
+  "joints": {
+    "flap_left_j": {
+      "angle": 0,
+      "min": 0,
+      "max": 32,
+      "move_to": 32,
+      "group": "flaps",
+      "source": "nasa_tnd3343, Table I, p.18-19",
+      "quote": "Flap: Type Plain ... Deflection, down (nominal design), deg: Original 40, Present 32 ... Sweepback angle of hinge line, deg 0",
+      "note": "Positive is trailing edge down. The present 32 degrees, not the original 40."
+    },
+    "flap_right_j": {
+      "angle": 0,
+      "min": 0,
+      "max": 32,
+      "move_to": 32,
+      "group": "flaps",
+      "source": "nasa_tnd3343, Table I, p.18-19",
+      "quote": "Flap: Type Plain ... Deflection, down (nominal design), deg: Original 40, Present 32 ... Sweepback angle of hinge line, deg 0",
+      "note": "Positive is trailing edge down. The present 32 degrees, not the original 40."
+    },
+    "htail_left_j": {
+      "angle": 0,
+      "min": -15,
+      "max": 35,
+      "move_to": -15,
+      "group": "horizontal_tail",
+      "source": "nasa_tnd3343, Table I, p.18-19",
+      "quote": "Horizontal tail - ... Deflection: Longitudinal, up, deg 15; Longitudinal, down, deg 35; Lateral differential (pilot authority), deg ±15",
+      "note": "Positive is trailing edge down. A click raises both trailing edges 15 degrees (nose up). Pivot: a spanwise line in the tail's plane through the quarter chord of its mean aerodynamic chord; Table I and Fig. 1 don't give it: estimated."
+    },
+    "htail_right_j": {
+      "angle": 0,
+      "min": -15,
+      "max": 35,
+      "move_to": -15,
+      "group": "horizontal_tail",
+      "source": "nasa_tnd3343, Table I, p.18-19",
+      "quote": "Horizontal tail - ... Deflection: Longitudinal, up, deg 15; Longitudinal, down, deg 35; Lateral differential (pilot authority), deg ±15",
+      "note": "Positive is trailing edge down. A click raises both trailing edges 15 degrees (nose up). Pivot: a spanwise line in the tail's plane through the quarter chord of its mean aerodynamic chord; Table I and Fig. 1 don't give it: estimated."
+    },
+    "upper_fin_rudder_j": {
+      "angle": 0,
+      "min": -7.5,
+      "max": 7.5,
+      "move_to": 7.5,
+      "group": "rudders",
+      "source": "nasa_tnd3343, Table I, p.18-19",
+      "quote": "Upper vertical tail - ... Movable surface area, ft2 26.45; Deflection, deg ±7.50; Sweepback of hinge line, deg 0. Lower vertical tail - ... Movable surface area, ft2 19.95; Deflection, deg ±7.50; Sweepback of hinge line, deg 0",
+      "note": "The moving part is the fin above the speed brakes (26.45 of 40.91 ft2 upper, 19.95 of 34.41 lower, about the share above the brakes' 1.60 ft mean span). Its pivot, square to the fuselage, through the quarter of its mean chord: not given, estimated."
+    },
+    "lower_fin_rudder_j": {
+      "angle": 0,
+      "min": -7.5,
+      "max": 7.5,
+      "move_to": 7.5,
+      "group": "rudders",
+      "source": "nasa_tnd3343, Table I, p.18-19",
+      "quote": "Upper vertical tail - ... Movable surface area, ft2 26.45; Deflection, deg ±7.50; Sweepback of hinge line, deg 0. Lower vertical tail - ... Movable surface area, ft2 19.95; Deflection, deg ±7.50; Sweepback of hinge line, deg 0",
+      "note": "The moving part is the fin above the speed brakes (26.45 of 40.91 ft2 upper, 19.95 of 34.41 lower, about the share above the brakes' 1.60 ft mean span). Its pivot, square to the fuselage, through the quarter of its mean chord: not given, estimated."
+    },
+    "speed_brake_upper_left_j": {
+      "angle": 0,
+      "min": 0,
+      "max": 35,
+      "move_to": 35,
+      "group": "speed_brakes",
+      "source": "nasa_tnd3343, Table I, p.18-19",
+      "quote": "Speed brake - Area (each), ft2 5.37; Mean span (each), ft 1.60; Chord (each), ft 3.36; Deflection, deg 35",
+      "note": "Each plate swings out about its leading edge, a left and a right half on each fin opening apart (fig. 1 shading; photos NASM-SI-2007-12585, -12586)."
+    },
+    "speed_brake_upper_right_j": {
+      "angle": 0,
+      "min": 0,
+      "max": 35,
+      "move_to": 35,
+      "group": "speed_brakes",
+      "source": "nasa_tnd3343, Table I, p.18-19",
+      "quote": "Speed brake - Area (each), ft2 5.37; Mean span (each), ft 1.60; Chord (each), ft 3.36; Deflection, deg 35",
+      "note": "Each plate swings out about its leading edge, a left and a right half on each fin opening apart (fig. 1 shading; photos NASM-SI-2007-12585, -12586)."
+    },
+    "speed_brake_lower_left_j": {
+      "angle": 0,
+      "min": 0,
+      "max": 35,
+      "move_to": 35,
+      "group": "speed_brakes",
+      "source": "nasa_tnd3343, Table I, p.18-19",
+      "quote": "Speed brake - Area (each), ft2 5.37; Mean span (each), ft 1.60; Chord (each), ft 3.36; Deflection, deg 35",
+      "note": "Each plate swings out about its leading edge, a left and a right half on each fin opening apart (fig. 1 shading; photos NASM-SI-2007-12585, -12586)."
+    },
+    "speed_brake_lower_right_j": {
+      "angle": 0,
+      "min": 0,
+      "max": 35,
+      "move_to": 35,
+      "group": "speed_brakes",
+      "source": "nasa_tnd3343, Table I, p.18-19",
+      "quote": "Speed brake - Area (each), ft2 5.37; Mean span (each), ft 1.60; Chord (each), ft 3.36; Deflection, deg 35",
+      "note": "Each plate swings out about its leading edge, a left and a right half on each fin opening apart (fig. 1 shading; photos NASM-SI-2007-12585, -12586)."
     }
   }
 }

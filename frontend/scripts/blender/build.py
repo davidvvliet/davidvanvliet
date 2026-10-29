@@ -85,6 +85,14 @@ def build(probe, export=True):
         parts.clear()
         _load_probe(probe).build(spec)
         all_objs = list(parts.collection().objects)  # parts and joints
+        # The spec's joint limits travel with the model (glTF extras) for viewers: a joint with
+        # "move_to" turns to that angle when its part is clicked, with every joint in its "group".
+        for jname, j in spec.get("joints", {}).items():
+            jo = bpy.data.objects.get(jname)
+            if jo is not None and "joint_axis" in jo:
+                for k in ("min", "max", "move_to", "group"):
+                    if k in j:
+                        jo[f"joint_{k}"] = j[k]
         objs = parts.meshes(all_objs)
         if not objs:
             raise RuntimeError("the probe script built no objects")

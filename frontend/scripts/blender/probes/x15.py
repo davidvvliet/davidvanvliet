@@ -15,6 +15,21 @@ def build(spec):
     def P(x, y, z):  # drawing feet -> world metres
         return ((length - x) * FT, y * FT, z * FT)
 
+    def hinge_on(name, objs, a, b, sample, want):
+        """A joint on the hinge line a-b carrying `objs`, its axis turned so a positive angle
+        moves `sample` (a point on the part) toward `want`: the spec's limits then read as
+        Table I gives them (flap down, tail trailing edge down, speed brake open)."""
+        from mathutils import Vector
+        a, b = Vector(a), Vector(b)
+        ax = (b - a).normalized()
+        if ax.cross(Vector(sample) - a).dot(Vector(want)) < 0:
+            ax = -ax
+        j = parts.joint(name, tuple(a), axis=tuple(ax))
+        for o in objs:
+            o.parent = j
+            o.matrix_parent_inverse = j.matrix_world.inverted()
+        return j
+
     def stations(rows):
         return [((length - x) * FT, w * FT, t * FT, b * FT) for x, w, t, b in rows]
 
@@ -371,8 +386,13 @@ def build(spec):
             for o in pieces[1:]:
                 bpy.data.objects.remove(o)
             s_end = s_out - gap / span
-            parts.surface(f"flap_{side}", *geom, span=(s_in, s_end),
-                          chord=((frac(s_in, gap), 1), (frac(s_end, gap), 1)), material="x15_black")
+            flap = parts.surface(f"flap_{side}", *geom, span=(s_in, s_end),
+                                 chord=((frac(s_in, gap), 1), (frac(s_end, gap), 1)), material="x15_black")
+            # Hinged along its leading edge (Table I: hinge line unswept).
+            s_mid = (s_in + s_end) / 2
+            hinge_on(f"flap_{side}_j", [flap], P(hinge(s_in) + gap, sign * s_in * span, wz),
+                     P(hinge(s_end) + gap, sign * s_end * span, wz),
+                     P(te(s_mid), sign * s_mid * span, wz), (0, 0, -1))
 
     ht = f["horizontal_tail"]
     hspan = spec["dimensions"]["horizontal_tail_span"]["value"] / FT / 2
@@ -386,6 +406,13 @@ def build(spec):
             # Bare metal underneath, black on top (spec materials x15_tail_bare).
             for face in tail.data.polygons:
                 face.material_index = 1 if face.normal.z < 0 else 0
+            # All-moving: it turns about a spanwise line in its own plane, through the quarter
+            # chord of its mean aerodynamic chord (spec joints: the pivot isn't drawn).
+            lam = ct / cr
+            y_mac = hspan * (1 + 2 * lam) / (3 * (1 + lam))
+            x_piv = rle + (tle - rle) * y_mac / hspan + 0.25 * (cr + (ct - cr) * y_mac / hspan)
+            hinge_on(f"htail_{side}_j", [tail], P(x_piv, 0, z0), P(x_piv, sign * hspan, z0 + hspan * dih),
+                     P(tle + ct, sign * hspan, z0 + hspan * dih), (0, 0, -1))
 
     # Fins: 10 deg single wedge, so the base is 2 tan 5 deg of the chord thick.
     wedge = 2 * math.tan(math.radians(5))
@@ -434,8 +461,8 @@ def build(spec):
         with parts.assembly(name):
             parts.surface(name, *geom, kind="wedge", span=(0, brake_top), chord=(0, brake_le),
                           material="x15_black")
-            parts.surface(f"{name}_upper" if up > 0 else f"{name}_lower", *geom, kind="wedge",
-                          span=(brake_top, band), material="x15_black")
+            moving = [parts.surface(f"{name}_upper" if up > 0 else f"{name}_lower", *geom, kind="wedge",
+                                    span=(brake_top, band), material="x15_black")]
             # Behind the hinge line, below the brakes: solid fin inside the fuselage.
             parts.surface(f"{name}_root", *geom, kind="wedge", span=(0, root_f), chord=(brake_le, 1),
                           material="x15_black")
@@ -449,9 +476,18 @@ def build(spec):
                 # part (photos NASM-SI-2007-12585, -12586 and NASM-SI-2008-5570).
                 parts.shell(brake, lambda face, vs: all(abs(v.y) > 1e-4 for v in vs),
                             spec["from_photos"]["speed_brake_plate"]["value"]["thickness_m"])
+                # Hinged at its leading edge, on the plate (Table I: opens 35 degrees).
+                from mathutils import Vector
+                g0, g2 = Vector(geom[0]), Vector(geom[2])
+                at = lambda fr, c: g0 + (g2 - g0) * fr + Vector((-c * (geom[1] + (geom[3] - geom[1]) * fr), 0, 0))
+                yb = sum((brake.matrix_world @ v.co).y for v in brake.data.vertices) / len(brake.data.vertices)
+                lo, hi, mid = at(root_f, brake_le), at(brake_top, brake_le), at((root_f + brake_top) / 2, 1)
+                lo.y = hi.y = mid.y = yb
+                hinge_on(f"{sname}_j", [brake], lo, hi, mid, (0, 1 if yb > 0 else -1, 0))
         if up > 0:
             with parts.assembly("fin_band"):
                 box_part = parts.surface("fin_band", *geom, kind="wedge", span=(band, 1), material="x15_black")
+            moving.append(box_part)
             # The moving part's blunt back face is ribbed like the fairing ends (photo
             # NASM-SI-2007-12585: ribs every 21.5 px over the face's 623 px = 0.87 m, so 3 cm).
             rb = spec["from_photos"]["fairing_end_ribs"]["value"]
@@ -468,4 +504,18 @@ def build(spec):
                 ribs.append(((rb["proud"], 2 * hw - 0.01, rb["height"]), (x_te - rb["proud"] / 2, 0, zz)))
                 zz += rb["spacing"]
             with parts.assembly("fin_ribs"):
-                parts.boxes("fin_ribs", ribs, material="x15_rib")
+                moving.append(parts.boxes("fin_ribs", ribs, material="x15_rib"))
+        # The part above the speed brakes is the rudder, all-moving about a line square to the
+        # fuselage (Table I: hinge line unswept), through the quarter chord of its mean chord
+        # (spec joints: the pivot isn't drawn).
+        from mathutils import Vector
+        fm = (brake_top + 1) / 2
+        g0, g2 = Vector(geom[0]), Vector(geom[2])
+        cm = geom[1] + (geom[3] - geom[1]) * fm
+        piv = g0 + (g2 - g0) * fm + Vector((-0.25 * cm, 0, 0))
+        with parts.assembly(name):
+            hinge_on(f"{name}_rudder_j", moving, piv, piv + Vector((0, 0, 1)),
+                     piv + Vector((-0.75 * cm, 0, 0)), (0, 1, 0))
+
+    # Posed from the spec's joints (all at rest: 0).
+    parts.pose({name: j["angle"] for name, j in spec["joints"].items()})

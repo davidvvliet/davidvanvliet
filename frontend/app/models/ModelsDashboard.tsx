@@ -148,6 +148,7 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady }: {
   readyRef.current = onReady;
   useEffect(() => { readyRef.current?.(); }, [scene]);
   const [hover, setHover] = useState<string | null>(null);
+  const hinges = useHinges(scene);
   const t = useRef(0);
   const camera = useThree((s) => s.camera) as THREE.PerspectiveCamera;
   const controls = useThree((s) => s.controls) as unknown as Controls | null;
@@ -273,10 +274,14 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady }: {
   const onMove = (e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation();
     setHover(pick(e));
+    gl.domElement.style.cursor = hingeGroup(e.intersections[0]?.object ?? e.object, scene) ? "pointer" : "";
   };
   const onClick = (e: ThreeEvent<MouseEvent>) => {
     if (e.delta > 4) return; // the end of an orbit drag, not a click
     e.stopPropagation();
+    // A part on a hinge with somewhere to go (its joint's move_to) moves instead of focusing.
+    const h = hingeGroup(e.intersections[0]?.object ?? e.object, scene);
+    if (h) { hinges.toggle(h); return; }
     const g = pick(e);
     setFocus(g === focus ? null : g); // another part moves the focus to it
   };
@@ -286,7 +291,52 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady }: {
     const box = label ? boxes.get(label) : undefined;
     onLabel(label && box ? { name: label, size: box.getSize(new THREE.Vector3()) } : null);
   }, [label, boxes, onLabel]);
-  return <primitive object={scene} onPointerMove={onMove} onPointerOut={() => setHover(null)} onClick={onClick} />;
+  return <primitive object={scene} onPointerMove={onMove} onClick={onClick}
+    onPointerOut={() => { setHover(null); gl.domElement.style.cursor = ""; }} />;
+}
+
+// Hinged parts: joints the build exported with a "joint_move_to" (the spec's joints). A click
+// on a part under one turns every joint in its group to that angle, or back to rest. The axis
+// is stored in Blender's frame (z up); the glTF is y up, so (x, y, z) -> (x, z, -y).
+type Hinge = { node: THREE.Object3D; axis: THREE.Vector3; rest: THREE.Quaternion; restDeg: number; to: number; group: string; now: number };
+
+function hingeGroup(o: THREE.Object3D | null, scene: THREE.Object3D): string | null {
+  for (let n = o; n && n !== scene; n = n.parent) {
+    if (typeof n.userData.joint_move_to === "number") return (n.userData.joint_group as string | undefined) ?? n.name;
+  }
+  return null;
+}
+
+function useHinges(scene: THREE.Object3D) {
+  const hinges = useMemo(() => {
+    const hs: Hinge[] = [];
+    scene.traverse((o) => {
+      const u = o.userData;
+      if (!Array.isArray(u.joint_axis) || typeof u.joint_move_to !== "number") return;
+      const restDeg = typeof u.angle_deg === "number" ? u.angle_deg : 0;
+      hs.push({ node: o, axis: new THREE.Vector3(u.joint_axis[0], u.joint_axis[2], -u.joint_axis[1]).normalize(),
+        rest: o.quaternion.clone(), restDeg, to: u.joint_move_to, group: u.joint_group ?? o.name, now: restDeg });
+    });
+    return hs;
+  }, [scene]);
+  const moved = useRef(new Set<string>());
+  useEffect(() => { moved.current = new Set(); }, [scene]);
+  const q = useMemo(() => new THREE.Quaternion(), []);
+  useFrame((_, dt) => {
+    const a = Math.min(1, dt * 6);
+    for (const h of hinges) {
+      const goal = moved.current.has(h.group) ? h.to : h.restDeg;
+      if (Math.abs(goal - h.now) < 1e-3) { if (h.now === goal) continue; h.now = goal; } else h.now += (goal - h.now) * a;
+      // About the axis in the parent's frame, from the exported pose.
+      h.node.quaternion.copy(q.setFromAxisAngle(h.axis, THREE.MathUtils.degToRad(h.now - h.restDeg)).multiply(h.rest));
+    }
+  });
+  return {
+    toggle: (group: string) => {
+      const s = moved.current;
+      if (s.has(group)) s.delete(group); else s.add(group);
+    },
+  };
 }
 
 // Blender's axes from the glTF's (exported y-up): x, -z, y; sizes just swap y and z.
