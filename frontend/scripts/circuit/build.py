@@ -46,7 +46,8 @@ def route(work, ground):
         text = open(dsn).read()
         text = re.sub(r"\(clearance (\d+(?:\.\d+)?)\)", lambda m: f"(clearance {float(m.group(1)) + ROUTE_MARGIN_UM:g})", text)
         open(dsn, "w").write(text)
-        r = subprocess.run([tools.tool("java"), "-jar", tools.tool("freerouting"), "--gui.enabled=false",
+        # Headless, and no Dock icon (apple.awt.UIElement): otherwise macOS gives Java focus and switches Spaces.
+        r = subprocess.run([tools.tool("java"), "-Djava.awt.headless=true", "-Dapple.awt.UIElement=true", "-jar", tools.tool("freerouting"), "--gui.enabled=false",
                             "--usage_and_diagnostic_data.disable_analytics=true", "--router.autorouter.max_passes=100",
                             "-de", dsn, "-do", ses], capture_output=True, text=True)
         if not os.path.exists(ses):
