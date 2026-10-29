@@ -1,7 +1,7 @@
 {
   "title": "__TITLE__",
   "purpose": "what the board is for, in one line",
-  "board": {"size_mm": [0, 0], "layers": 2, "thickness_mm": 1.6, "mask": "#062F66", "finish": "ENIG"},
+  "board": {"size_mm": [0, 0], "layers": 2, "thickness_mm": 1.6, "mask": "Black", "silk": "White", "finish": "ENIG"},
   "blocks": {
     "power": {"block": "usb_c_power", "at_mm": [0, 0], "rotation": 0}
   },

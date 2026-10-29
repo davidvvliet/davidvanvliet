@@ -265,26 +265,6 @@
    ]
   },
   {
-   "name": "Barometer",
-   "parts": [
-    {
-     "ref": "C22",
-     "value": "100nF",
-     "package": "C_0402_1005Metric"
-    },
-    {
-     "ref": "C23",
-     "value": "100nF",
-     "package": "C_0402_1005Metric"
-    },
-    {
-     "ref": "U21",
-     "value": "BMP280",
-     "package": "Bosch_LGA-8_2x2.5mm_P0.65mm_ClockwisePinNumbering"
-    }
-   ]
-  },
-  {
    "name": "IMU",
    "parts": [
     {
@@ -301,6 +281,26 @@
      "ref": "U20",
      "value": "BMI088",
      "package": "Bosch_LGA-16_4.5x3mm_P0.5mm_LayoutBorder7x1y_ClockwisePinNumbering"
+    }
+   ]
+  },
+  {
+   "name": "Barometer",
+   "parts": [
+    {
+     "ref": "C22",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C23",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "U21",
+     "value": "BMP280",
+     "package": "Bosch_LGA-8_2x2.5mm_P0.65mm_ClockwisePinNumbering"
     }
    ]
   },

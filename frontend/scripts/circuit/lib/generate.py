@@ -113,7 +113,31 @@ for a, b in zip(corners, corners[1:] + corners[:1]):
     s = pcbnew.PCB_SHAPE(board); s.SetShape(pcbnew.SHAPE_T_SEGMENT); s.SetLayer(pcbnew.Edge_Cuts); s.SetWidth(mm(0.05))
     s.SetStart(pcbnew.VECTOR2I(mm(a[0]), mm(a[1]))); s.SetEnd(pcbnew.VECTOR2I(mm(b[0]), mm(b[1]))); board.Add(s)
 
-pcbnew.SaveBoard(os.path.join(out, "board.kicad_pcb"), board)
+pcb_file = os.path.join(out, "board.kicad_pcb")
+pcbnew.SaveBoard(pcb_file, board)
+
+# Colours: the recipe's "mask" (solder mask, the board's colour; the traces show through it) and "silk"
+# (the printing), as KiCad colour names ("Black") or "#RRGGBB[AA]". KiCad's 3D export reads them from the
+# board's stackup, written here as the Mitayi's file has it (pcbnew's stackup calls abort outside the editor).
+# Without "mask", KiCad's default green.
+if recipe["board"].get("mask"):
+    text = open(pcb_file).read()
+    total = float(re.search(r"\(thickness ([\d.]+)\)", text).group(1))
+    mask, silk = recipe["board"]["mask"], recipe["board"].get("silk", "White")
+    def layer(name, kind, *extra): return f'(layer "{name}" (type "{kind}") {" ".join(extra)})'
+    stackup = " ".join([
+        "(stackup",
+        layer("F.SilkS", "Top Silk Screen", f'(color "{silk}")'), layer("F.Paste", "Top Solder Paste"),
+        layer("F.Mask", "Top Solder Mask", f'(color "{mask}")', "(thickness 0.01)"),
+        layer("F.Cu", "copper", "(thickness 0.035)"),
+        layer("dielectric 1", "core", '(color "FR4 natural")', f"(thickness {total - 0.09:g})", '(material "FR4")', "(epsilon_r 4.5)", "(loss_tangent 0.02)"),
+        layer("B.Cu", "copper", "(thickness 0.035)"),
+        layer("B.Mask", "Bottom Solder Mask", f'(color "{mask}")', "(thickness 0.01)"),
+        layer("B.Paste", "Bottom Solder Paste"), layer("B.SilkS", "Bottom Silk Screen", f'(color "{silk}")'),
+        *([f'(copper_finish "{recipe["board"]["finish"]}")'] if recipe["board"].get("finish") else []),
+        "(dielectric_constraints no))"])
+    assert "(stackup" not in text
+    open(pcb_file, "w").write(text.replace("(setup", "(setup " + stackup, 1))
 schematic.write(os.path.join(out, "board.kicad_sch"), BOARD, sch_parts, recipe["title"])
 json.dump(block_of, open(os.path.join(out, "blocks.json"), "w"), indent=1)
 print("GENERATED", len(block_of), "parts", len(nets), "nets", flush=True)

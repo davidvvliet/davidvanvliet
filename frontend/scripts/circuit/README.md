@@ -64,7 +64,8 @@ every box get no block.
 ## Own boards
 `boards/<board>/recipe.json` (templates/recipe.json): `title`, `purpose`, `source` (as board.json),
 `board` (size, `rules`: the project file with clearances and widths, `ground_fill`: the net poured on
-both sides), `blocks` (instance name -> block and position) and `connect` (groups of `instance.port`
+both sides, `mask` and `silk`: the solder mask and printing colours as KiCad colour names or
+`#RRGGBB[AA]`, `finish`: the pad finish; without `mask`, KiCad's default green), `blocks` (instance name -> block and position) and `connect` (groups of `instance.port`
 joined into one net, named after the first). A build generates the board into `out/<board>/kicad/`
 (open `board.kicad_pcb` or `board.kicad_sch` there in KiCad to look at it), routes it and checks it.
 The schematic (`lib/schematic.py`) is drawn from the same parts: one titled box per block, every pin
@@ -100,3 +101,6 @@ Routing (build.py does all of this; tested on the Mitayi Pico with every trace r
 6. Fill the ground net on both sides, then KiCad's design rule check. Freerouting's result varies between
    runs (about one run in two left a connection unrouted on the first recipe board), so the build tries up
    to 4 times and keeps the first clean one.
+
+- pcbnew's stackup calls (`GetStackupDescriptor`) abort outside the editor (wxApp assert, a macOS crash
+  dialog), like `GetBoundingBox` on a footprint: generate.py writes the stackup into the file instead.

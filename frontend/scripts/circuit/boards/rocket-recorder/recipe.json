@@ -14,7 +14,8 @@
   ],
   "layers": 2,
   "rules": "templates/rules.kicad_pro",
-  "ground_fill": "GND"
+  "ground_fill": "GND",
+  "mask": "Black"
  },
  "blocks": {
   "usb": {
