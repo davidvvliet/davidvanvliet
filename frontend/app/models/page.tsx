@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-type Spec = { title?: string; logos?: string[]; sources?: { id: string; title: string; url: string; licence?: string }[] };
+type Spec = { title?: string; logos?: string[]; listed?: boolean; sources?: { id: string; title: string; url: string; licence?: string }[] };
 
 // How many values in the spec cite each source: every `source` outside the top-level list, a
 // citation string that starts with the source's id ("nssdca, p.83"), as scripts/blender/lib/sources.py.
@@ -42,7 +42,9 @@ function published(): Published[] {
   const dir = path.join(process.cwd(), "public", "models");
   try {
     const files = fs.readdirSync(dir);
-    return files.filter((f) => f.endsWith(".glb")).map((f) => f.slice(0, -4)).sort().map((probe) => {
+    // A spec with "listed": false (an engine shown only on its vehicle) stays off the page.
+    return files.filter((f) => f.endsWith(".glb")).map((f) => f.slice(0, -4)).sort()
+      .filter((probe) => spec(probe).listed !== false).map((probe) => {
       const s = spec(probe);
       const cited = citationCounts(s);
       // Licences are shown up to any ":" (the terms, not the harness's note on what it kept).

@@ -3,6 +3,7 @@
   "logos": [
     "spacex"
   ],
+  "listed": false,
   "note": "Raptor 3 Vacuum, as on Starship V3: the sea-level Raptor 3's chamber, powerhead and plumbing (raptor3_spec) with a large tube-wall bell. Frame: thrust axis z up, nozzle exit at z = 0; +x towards the turbopump.",
   "sources": [
     {
