@@ -111,7 +111,11 @@
 .thumbGone { opacity: 0; }
 .cardTitle { position: absolute; top: 0.5rem; left: 0.75rem; z-index: 1; color: #777; }
 .card:hover .cardTitle { color: #ededed; }
-.cardLogo { position: absolute; top: 0.6rem; right: 0.75rem; z-index: 1; width: auto; opacity: 0.85; pointer-events: none; }
+.cardLogos {
+  position: absolute; top: 0.6rem; right: 0.75rem; z-index: 1; pointer-events: none;
+  display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem;
+}
+.cardLogos img { width: auto; opacity: 0.85; }
 
 /* The public /models header: links | name (centred, as the home page's navbar title) | empty. */
 .siteHeader {

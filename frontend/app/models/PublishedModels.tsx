@@ -24,9 +24,20 @@ const TURN_SECONDS = 20;
 // Who built the real vehicle: its logo sits in each card's top right corner (public/logos, from
 // Wikimedia Commons, public domain), and the grid lists them in this order. Anyone else comes last.
 const ORGS = [
-  { key: "nasa", name: "NASA/JPL", logo: "/logos/nasa.svg", height: 30 },
+  { key: "nasa", name: "NASA", logo: "/logos/nasa.svg", height: 30 },
   { key: "spacex", name: "SpaceX", logo: "/logos/spacex.svg", height: 10 },
 ];
+// Who else built it: their logos go down the right edge under the first one. JPL's red letters are
+// from Wikimedia Commons (public domain, trademarked); North American Aviation's (copyright Boeing)
+// and Rocketdyne's 1959 logo are English Wikipedia's fair-use files, recoloured light for the dark cards.
+const PARTNERS = {
+  jpl: { name: "Jet Propulsion Laboratory", logo: "/logos/jpl.svg", height: 11 },
+  naa: { name: "North American Aviation", logo: "/logos/north-american.png", height: 30 },
+  rocketdyne: { name: "Rocketdyne", logo: "/logos/rocketdyne.png", height: 24 },
+};
+const PARTNERS_OF: Record<string, (keyof typeof PARTNERS)[]> = {
+  voyager: ["jpl"], perseverance: ["jpl"], x15: ["naa"], f1: ["rocketdyne"],
+};
 const orgRank = (m: Published) => { const i = ORGS.findIndex((o) => o.key === m.org); return i < 0 ? ORGS.length : i; };
 
 // /models on the live site. Without ?probe: a grid of the published models, each spinning in its
@@ -155,10 +166,12 @@ function Card({ model, spin, root }: { model: Published; spin: boolean; root: Re
         )}
       </View>
       <span className={styles.cardTitle}>{model.title}</span>
-      {org && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={org.logo} alt={org.name} title={org.name} className={styles.cardLogo} style={{ height: org.height }} />
-      )}
+      <span className={styles.cardLogos}>
+        {[...(org ? [org] : []), ...(PARTNERS_OF[model.probe] ?? []).map((k) => PARTNERS[k])].map((o) => (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img key={o.logo} src={o.logo} alt={o.name} title={o.name} style={{ height: o.height }} />
+        ))}
+      </span>
     </Link>
   );
 }
