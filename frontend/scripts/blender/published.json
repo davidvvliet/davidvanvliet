@@ -87,7 +87,7 @@
   }
  },
  "starship": {
-  "approved": "2026-10-28 20:51",
+  "approved": "2026-10-29 00:35",
   "inputs": {
    "specs/starship.json": "2bc9f53519892097",
    "probes/starship.py": "0e784d2ebf4fe725",
@@ -96,14 +96,14 @@
    "lib/__init__.py": "e3b0c44298fc1c14",
    "lib/bake.py": "74d319683d9c87d6",
    "lib/checks.py": "ff15a079c5d56be3",
-   "lib/engines.py": "7ec952b8a95e8e67",
+   "lib/engines.py": "fb0179fd1fc4d93a",
    "lib/livery.py": "fe683f8f6dfc9308",
-   "lib/materials.py": "a56545e8f35429f2",
+   "lib/materials.py": "7f1ec57b22c0d1b5",
    "lib/parts.py": "8c1e4b2e2f77cf08",
    "lib/parts_aero.py": "3f33c19b46511f0f",
    "lib/parts_core.py": "1b1c40471bbfa3fa",
    "lib/parts_shapes.py": "4cbd73e08313c2c6",
-   "lib/parts_skin.py": "05a370e4c89f785f",
+   "lib/parts_skin.py": "b09e4ac33530b81d",
    "lib/rig.py": "87431e5e6051f10e",
    "lib/sources.py": "31d2e9cf18b27172",
    "lib/textures.py": "7daa18205cf41859",
