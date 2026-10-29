@@ -1,0 +1,3446 @@
+{
+  "title": "Reaction Motors XLR99",
+  "logos": [],
+  "listed": false,
+  "viewer": {
+    "explore": false
+  },
+  "note": "The X-15's rocket engine (Thiokol's Reaction Motors Division), as displayed at the National Museum of the USAF. Frame: thrust axis z up, the nozzle exit (the hoop round it) at z = 0; +x is up in photo_usaf (the side of the engine-mount truss's single top fitting), +y away from that photo's camera (its near side is -y).",
+  "sources": [
+    {
+      "id": "jenkins_sp2007",
+      "title": "Jenkins, X-15: Extending the Frontiers of Flight (NASA SP-2007-562), the XLR99 chapter",
+      "url": "https://ntrs.nasa.gov/api/citations/20080008340/downloads/20080008340.pdf",
+      "read": "2026-10-29",
+      "licence": "public domain (US government work)",
+      "saved": ""
+    },
+    {
+      "id": "bellman_demar",
+      "title": "Bellman and DeMar, XLR99 Engine Operating Experience (NASA, NTRS 19710070145)",
+      "url": "https://ntrs.nasa.gov/api/citations/19710070145/downloads/19710070145.pdf",
+      "read": "2026-10-29",
+      "licence": "public domain (US government work)",
+      "saved": ""
+    },
+    {
+      "id": "hjelm_bornhorst",
+      "title": "Hjelm and Bornhorst, XLR99 thrust chamber (NASA, NTRS 19710070146)",
+      "url": "https://ntrs.nasa.gov/api/citations/19710070146/downloads/19710070146.pdf",
+      "read": "2026-10-29",
+      "licence": "public domain (US government work)",
+      "saved": ""
+    },
+    {
+      "id": "nasm_xlr99",
+      "title": "Smithsonian National Air and Space Museum: Thiokol XLR99-RM-1 Pioneer Rocket Motor (A19930368000)",
+      "url": "https://airandspace.si.edu/collection-objects/thiokol-xlr99-rm-1-pioneer-rocket-motor/nasm_A19930368000",
+      "read": "2026-10-29",
+      "licence": "catalogue text quoted; its photos: usage conditions apply (not used)",
+      "saved": ""
+    },
+    {
+      "id": "photo_usaf",
+      "title": "USAF, XLR-99 rocket engine at the National Museum of the USAF (Wikimedia Commons, File:XLR-99 Rocket Engine USAF.jpg, 1800 x 1145)",
+      "url": "https://commons.wikimedia.org/wiki/File:XLR-99_Rocket_Engine_USAF.jpg",
+      "read": "2026-10-29",
+      "licence": "public domain (USAF photo; Commons: \"Public domain\")",
+      "saved": "refs/xlr99/usaf-side.jpg",
+      "credit": "USAF, photo of the XLR99 at the National Museum of the USAF"
+    },
+    {
+      "id": "photo_nasm",
+      "title": "Smithsonian National Air and Space Museum, the XLR99 (A19930368000) seen from the side, the catalogue page's main photo",
+      "url": "https://airandspace.si.edu/collection-objects/thiokol-xlr99-rm-1-pioneer-rocket-motor/nasm_A19930368000",
+      "read": "2026-10-29",
+      "licence": "Smithsonian usage conditions apply: measured only, not copied",
+      "saved": ""
+    },
+    {
+      "id": "photo_rear",
+      "title": "Steve Jurvetson, XLR-99 Rocket Engine at the Smithsonian (Flickr 52741307565), looking into the exit",
+      "url": "https://www.flickr.com/photos/jurvetson/52741307565",
+      "read": "2026-10-29",
+      "licence": "CC BY 2.0",
+      "saved": ""
+    },
+    {
+      "id": "bellman_demar_fig2",
+      "title": "Bellman and DeMar, XLR99 Engine Operating Experience (NTRS 19710070145), Figure 2: the engine on a stand, seen along its length",
+      "url": "https://ntrs.nasa.gov/api/citations/19710070145/downloads/19710070145.pdf",
+      "read": "2026-10-29",
+      "licence": "public domain (US government work)",
+      "saved": ""
+    },
+    {
+      "id": "photo_david_throat",
+      "title": "Photo of a real XLR99 looking up through the throat, shared by David in the modelling session (2026-10-29): the star rays and the injector with a round boss on the centreline",
+      "url": "none: a screenshot David shared in the session; origin to be added",
+      "read": "2026-10-29",
+      "licence": "not stored; used for layout only",
+      "saved": ""
+    },
+    {
+      "id": "render_reference",
+      "title": "A 3D artist's render of the X-15's engine exit, shared by David (2026-10-29): six round openings round the injector's centre",
+      "url": "none: a screenshot David shared in the session; origin to be added",
+      "read": "2026-10-29",
+      "licence": "not stored; used for layout only, not as a measurement",
+      "saved": ""
+    }
+  ],
+  "facts": {
+    "propellants": {
+      "value": "liquid oxygen and anhydrous ammonia; the turbopump driven by 90% hydrogen peroxide",
+      "source": "bellman_demar, p.2",
+      "quote": "Engine - liquid oxygen and ammonia; Pump - 90 percent hydrogen peroxide"
+    },
+    "thrust_lbf": {
+      "value": {
+        "sea_level": 50000,
+        "45000_ft": 57000
+      },
+      "source": "bellman_demar, p.2",
+      "quote": "Sea level - 50,000 pounds; 45,000 ft - 57,000 pounds",
+      "conflict": "nasm_xlr99: \"Rated at 50,000 lb thrust\" in its summary, \"60,000lb thrust\" in its physical description"
+    },
+    "throttle": {
+      "value": "50 to 100 percent",
+      "source": "bellman_demar, p.2",
+      "quote": "variable thrust over a continuous range from 50 percent to 100 percent of rated thrust"
+    },
+    "chamber_pressure_psia": {
+      "value": 600,
+      "source": "bellman_demar, p.2",
+      "quote": "Rated chamber pressure - 600 psia"
+    },
+    "dry_weight_lb": {
+      "value": 910,
+      "source": "bellman_demar, p.2",
+      "quote": "Dry weight - 910 pounds",
+      "also": "jenkins_sp2007 p.205: \"Engine dry weight (pounds) 540 856 910\""
+    },
+    "single_chamber": {
+      "value": true,
+      "source": "nasm_xlr99",
+      "quote": "has a single thrust chamber, injector, gas generator, two-stage ignitor, turbo-pump, and variable governor control, and lime green thrust mounts"
+    },
+    "turbopump": {
+      "value": "one turbine driving both pumps; exhausts into the thrust chamber",
+      "source": "jenkins_sp2007, p.197",
+      "quote": "A two-stage impulse turbine drove the single-inlet oxidizer pump and two-inlet fuel pump. The hydrogen-peroxide-driven turbopump exhausted into the thrust chamber."
+    },
+    "mount": {
+      "value": "rigid truss, three fittings on the fuselage; not gimballed",
+      "source": "jenkins_sp2007, p.200",
+      "quote": "they designed a rigid engine mount without any special vibration attenuation. The engine-mount truss attached to the fuselage at three fittings, and by adjusting the lower two fittings the engineers could tailor the thrust vector of the engine."
+    },
+    "nozzle_tubes": {
+      "value": 547,
+      "source": "hjelm_bornhorst, p.1",
+      "quote": "a brazed assembly of 547 stainless steel tubes, formed to shape, through which the anhydrous ammonia flows longitudinally as a coolant"
+    }
+  },
+  "open_questions": [
+    "Overall length: built 1.92 m (75 in) from photo_usaf, flange to the exit ring. Jenkins (p.198) gives the 1956 proposal's envelope as 71.7 in long and 43.2 in across; Wikipedia's infobox gives 82 in, citing Wilkinson's Aircraft Engines of the World 1964/65 (not read); nasm_xlr99 lists unlabelled sizes 40 1/4 x 87 x 56 x 95 x 48 in (with its stand). The photo's perspective may shorten the front end.",
+    "Exit diameter 0.69 m outside (27 in) from the photo; a dealer's page for a spare nozzle body says 30 in (weak source, not used).",
+    "The +y side comes from photo_nasm (a different engine, the Smithsonian's, which its catalogue says is missing a fuel pump): its long duct and teardrop housing are built there; their depth isn't seen in any photo. Neither side's dense small plumbing is modelled, only the larger lines.",
+    "Colours from one museum photo under warm light, white-balanced on the white exhaust duct.",
+    "The NASM engine's front end has red-capped fittings out to about z 2.0 instead of the USAF engine's white duct (z 1.9); the model follows the USAF engine."
+  ],
+  "dimensions": {
+    "exit_ring": {
+      "value": 1.0224,
+      "object": "xlr99_exit_ring",
+      "measure": "diameter",
+      "tolerance": 0.01,
+      "source": "nasm_xlr99",
+      "quote": "Overall: 40 1/4in., 910lb. (102.2cm, 412.8kg)",
+      "note": "Taken as the hoop round the exit, the engine's widest part (photo_usaf)."
+    },
+    "exit": {
+      "value": 0.694,
+      "object": "xlr99_nozzle",
+      "measure": "diameter",
+      "tolerance": 0.03,
+      "source": "photo_usaf, scaled by the exit ring: the tube wall at the exit plane, 536 px across (outside); estimated"
+    },
+    "area_ratio": {
+      "value": 9.8,
+      "unit": "x",
+      "object": "xlr99_nozzle",
+      "measure": "area_ratio",
+      "tolerance": 0.02,
+      "source": "bellman_demar, p.2",
+      "quote": "Expansion ratio (area) - 9.8",
+      "also": "jenkins_sp2007 p.226: \"9.8:1 used on the existing XLR99s\""
+    }
+  },
+  "materials": {
+    "xlr_tubes": {
+      "hex": "#686560",
+      "metallic": 0.8,
+      "roughness": 0.5,
+      "source": "photo_usaf, white-balanced on the exhaust duct (x 1.0, 1.135, 1.316): the bare tubes at the exit (1470-1500, 600-640)"
+    },
+    "xlr_skin": {
+      "hex": "#968f7c",
+      "metallic": 0.6,
+      "roughness": 0.5,
+      "source": "photo_usaf, white-balanced: the conical skin (1200-1260, 560-600) #8b816e and (1350-1400, 540-580) #a29d8a, averaged"
+    },
+    "xlr_ring": {
+      "hex": "#5f594a",
+      "metallic": 0.8,
+      "roughness": 0.45,
+      "source": "photo_usaf, white-balanced: the exit ring's band (1585-1595, 550-620)"
+    },
+    "xlr_metal": {
+      "hex": "#c5ced4",
+      "metallic": 0.7,
+      "roughness": 0.4,
+      "source": "photo_usaf, white-balanced: the pump body (300-340, 440-470)"
+    },
+    "xlr_box": {
+      "hex": "#b9bbad",
+      "metallic": 0.3,
+      "roughness": 0.6,
+      "source": "photo_usaf, white-balanced: the control box (770-810, 290-320)"
+    },
+    "xlr_duct": {
+      "hex": "#b6b6b6",
+      "metallic": 0.0,
+      "roughness": 0.7,
+      "source": "photo_usaf: the white exhaust duct (170-220, 450-480), the white-balance reference, so neutral at its brightness"
+    },
+    "xlr_red": {
+      "hex": "#9e4f33",
+      "metallic": 0.3,
+      "roughness": 0.5,
+      "source": "photo_usaf, white-balanced: the flange's red pixels (60-130, 440-620, red > 1.8 x green)"
+    },
+    "xlr_blanket": {
+      "hex": "#bfd0cc",
+      "metallic": 0.0,
+      "roughness": 0.9,
+      "source": "photo_usaf, white-balanced: the blanket's lit top (960-1000, 420-460) #eaffff and shaded side (1010-1030, 470-490) #93a299, averaged"
+    },
+    "xlr_truss": {
+      "hex": "#9b9b87",
+      "metallic": 0.1,
+      "roughness": 0.6,
+      "source": "photo_usaf, white-balanced: the truss's lit front (1115-1135, 560-620) #babca0 and shaded foot (1090-1100, 700-760) #7c7a6f, averaged; nasm_xlr99 calls them \"lime green thrust mounts\""
+    },
+    "xlr_dark": {
+      "hex": "#3d3b39",
+      "metallic": 0.5,
+      "roughness": 0.6,
+      "source": "photo_usaf, white-balanced: the shadowed machinery behind the lines (560-620, 730-780) #514d4c and (1180-1230, 700-760) #2a2926, averaged"
+    },
+    "xlr_zirconia": {
+      "hex": "#c1ae9d",
+      "metallic": 0.0,
+      "roughness": 0.85,
+      "source": "photo_rear, white-balanced on the white rays round the throat (taken as white zirconia: x 1.0, 1.009, 1.111): the coated tubes near the exit (330-420, 850-950) #ddc6b4 and (850-950, 330-420) #a69687, averaged. hjelm_bornhorst p.1: the inside is \"0.010 inch of Rokide Z flame-sprayed zirconia\""
+    },
+    "xlr_soot": {
+      "hex": "#2b2c2a",
+      "metallic": 0.0,
+      "roughness": 0.9,
+      "source": "photo_rear, white-balanced on the white rays round the throat (taken as white zirconia: x 1.0, 1.009, 1.111): the dark band round the throat (560-640, 780-830)"
+    },
+    "xlr_ray": {
+      "hex": "#f4f4f4",
+      "metallic": 0.0,
+      "roughness": 0.8,
+      "source": "photo_rear, white-balanced on the white rays round the throat (taken as white zirconia: x 1.0, 1.009, 1.111): the rays themselves (720-760, 500-560, brightest fifth), neutral by the white balance"
+    },
+    "xlr_plate": {
+      "hex": "#b7b1ab",
+      "metallic": 0.6,
+      "roughness": 0.5,
+      "source": "photo_rear, white-balanced on the white rays round the throat (taken as white zirconia: x 1.0, 1.009, 1.111): the exit plate (150-230, 300-400) #beb7b7 and (300-400, 1150-1220) #b1ab9f, averaged"
+    },
+    "xlr_sealant": {
+      "hex": "#dd7d59",
+      "metallic": 0.0,
+      "roughness": 0.9,
+      "source": "photo_rear, white-balanced on the white rays round the throat (taken as white zirconia: x 1.0, 1.009, 1.111): the red sealant round the nozzle's lip (232-250, 620-700)"
+    }
+  },
+  "budget": {
+    "triangles": 50000,
+    "glb_bytes": 2500000
+  },
+  "engine": {
+    "kind": "rocket",
+    "nozzle": {
+      "exit_diameter": {
+        "value": 0.654,
+        "source": "photo_usaf, scaled by the exit ring: 536 px across the tube wall's outside at the exit (0.694 m), less the 2 cm wall either side; estimated"
+      },
+      "area_ratio": {
+        "value": 9.8,
+        "source": "bellman_demar, p.2",
+        "quote": "Expansion ratio (area) - 9.8"
+      },
+      "length": {
+        "value": 0.611,
+        "source": "jenkins_sp2007 p.226 (\"the 20-degree conical nozzle used on the original 9.8:1 extension\"), derived: a 20-degree half-angle cone from the throat (exit / sqrt 9.8) to the exit. photo_usaf agrees: the skin slopes about 19 degrees, and the throat lands at x 1068, where the chamber narrows."
+      },
+      "contour": "cone",
+      "wall": {
+        "value": 0.02,
+        "source": "photo_usaf, estimated: the tube wall's thickness at the exit"
+      },
+      "tubes": {
+        "value": {
+          "count": 547,
+          "per_tile": 16,
+          "inner": {
+            "material": "xlr_zirconia",
+            "per_tile": 39,
+            "soot": {
+              "material": "xlr_soot",
+              "from": 0.3,
+              "to": 0.7
+            },
+            "rays": {
+              "material": "xlr_ray",
+              "from": 0.4,
+              "width": 0.18
+            },
+            "groove": 0.2
+          },
+          "groove": 0.3
+        },
+        "source": "hjelm_bornhorst, p.1: \"a brazed assembly of 547 stainless steel tubes\"; inside: hjelm_bornhorst p.1, the chamber \"shown with its characteristic star pattern\" as viewed from the rear, coated with white zirconia; from photo_rear (estimated): about 14 light rays round the throat (so 39 tubes per ray), reaching about 60% of the way out; the wall darkens from 30% to 70% of the way in; the gaps between tubes darkened (groove 0.3 outside, 0.2 inside, estimated) so single tubes read at viewing distance, as in photo_rear"
+      }
+    },
+    "chamber": {
+      "diameter": {
+        "value": 0.4,
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, +y towards the camera); estimated: the chamber's lower edge at y 690 (radius 156 px), above it under the blanket"
+      },
+      "length": {
+        "value": 0.2,
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, +y towards the camera); estimated: the cylinder between the throat (x 1068) and the injector, x 840-990"
+      },
+      "convergent_length": {
+        "value": 0.1,
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, +y towards the camera); estimated: throat to the cylinder"
+      },
+      "hollow": {
+        "value": true,
+        "source": "photo_rear: looking into the exit, the throat is an opening onto the black chamber (no surface seen through it); hjelm_bornhorst p.1: the chamber and nozzle are one brazed assembly of tubes, so the chamber is a shell open to the nozzle"
+      }
+    },
+    "powerhead": {
+      "diameter": {
+        "value": 0.4,
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, +y towards the camera); estimated: the injector's dome at the chamber's top, x 760-840"
+      },
+      "height": {
+        "value": 0.1,
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, +y towards the camera); estimated: x 760-840"
+      },
+      "shape": "dome"
+    },
+    "parts": [
+      {
+        "kind": "lathe",
+        "name": "exit_ring",
+        "profile": [
+          [
+            0.49,
+            -0.01
+          ],
+          [
+            0.511,
+            -0.01
+          ],
+          [
+            0.511,
+            0.05
+          ],
+          [
+            0.49,
+            0.05
+          ]
+        ],
+        "at": [
+          0,
+          0,
+          0
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 64,
+        "smooth": false,
+        "closed": true,
+        "material": "xlr_plate",
+        "keep": true,
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: the hoop round the exit, 790 px tall (its outside diameter is the scale), its band about 45 px (6 cm) along the axis, 2 cm thick."
+      },
+      {
+        "kind": "pipe",
+        "name": "ring_strut_0",
+        "diameter": 0.02,
+        "points": [
+          [
+            0.277,
+            0.115,
+            0.12
+          ],
+          [
+            0.457,
+            0.189,
+            0.02
+          ]
+        ],
+        "material": "xlr_ring",
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: rods from the nozzle's skin out to the ring, about 3 on the visible upper half and 2 below: 8 round, evenly spaced (estimated)."
+      },
+      {
+        "kind": "pipe",
+        "name": "ring_strut_1",
+        "diameter": 0.02,
+        "points": [
+          [
+            0.193,
+            0.23,
+            0.12
+          ],
+          [
+            0.315,
+            0.375,
+            0.02
+          ]
+        ],
+        "material": "xlr_ring",
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: rods from the nozzle's skin out to the ring, about 3 on the visible upper half and 2 below: 8 round, evenly spaced (estimated). This one moved to 50 degrees, clear of the turbine exhaust duct (estimated)."
+      },
+      {
+        "kind": "pipe",
+        "name": "ring_strut_2",
+        "diameter": 0.02,
+        "points": [
+          [
+            -0.115,
+            0.277,
+            0.12
+          ],
+          [
+            -0.189,
+            0.457,
+            0.02
+          ]
+        ],
+        "material": "xlr_ring",
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: rods from the nozzle's skin out to the ring, about 3 on the visible upper half and 2 below: 8 round, evenly spaced (estimated)."
+      },
+      {
+        "kind": "pipe",
+        "name": "ring_strut_3",
+        "diameter": 0.02,
+        "points": [
+          [
+            -0.277,
+            0.115,
+            0.12
+          ],
+          [
+            -0.457,
+            0.189,
+            0.02
+          ]
+        ],
+        "material": "xlr_ring",
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: rods from the nozzle's skin out to the ring, about 3 on the visible upper half and 2 below: 8 round, evenly spaced (estimated)."
+      },
+      {
+        "kind": "pipe",
+        "name": "ring_strut_4",
+        "diameter": 0.02,
+        "points": [
+          [
+            -0.277,
+            -0.115,
+            0.12
+          ],
+          [
+            -0.457,
+            -0.189,
+            0.02
+          ]
+        ],
+        "material": "xlr_ring",
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: rods from the nozzle's skin out to the ring, about 3 on the visible upper half and 2 below: 8 round, evenly spaced (estimated)."
+      },
+      {
+        "kind": "pipe",
+        "name": "ring_strut_5",
+        "diameter": 0.02,
+        "points": [
+          [
+            -0.115,
+            -0.277,
+            0.12
+          ],
+          [
+            -0.189,
+            -0.457,
+            0.02
+          ]
+        ],
+        "material": "xlr_ring",
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: rods from the nozzle's skin out to the ring, about 3 on the visible upper half and 2 below: 8 round, evenly spaced (estimated)."
+      },
+      {
+        "kind": "pipe",
+        "name": "ring_strut_6",
+        "diameter": 0.02,
+        "points": [
+          [
+            0.115,
+            -0.277,
+            0.12
+          ],
+          [
+            0.189,
+            -0.457,
+            0.02
+          ]
+        ],
+        "material": "xlr_ring",
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: rods from the nozzle's skin out to the ring, about 3 on the visible upper half and 2 below: 8 round, evenly spaced (estimated)."
+      },
+      {
+        "kind": "pipe",
+        "name": "ring_strut_7",
+        "diameter": 0.02,
+        "points": [
+          [
+            0.277,
+            -0.115,
+            0.12
+          ],
+          [
+            0.457,
+            -0.189,
+            0.02
+          ]
+        ],
+        "material": "xlr_ring",
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: rods from the nozzle's skin out to the ring, about 3 on the visible upper half and 2 below: 8 round, evenly spaced (estimated)."
+      },
+      {
+        "kind": "lathe",
+        "name": "nozzle_skin",
+        "profile": [
+          [
+            0.305,
+            0.116
+          ],
+          [
+            0.315,
+            0.116
+          ],
+          [
+            0.186,
+            0.505
+          ],
+          [
+            0.165,
+            0.505
+          ]
+        ],
+        "at": [
+          0,
+          0,
+          0
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 64,
+        "smooth": false,
+        "closed": true,
+        "material": "xlr_skin",
+        "keep": true,
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: the conical outer skin from x 1450 (radius 234 px, 0.30 m) to its front edge at x 1150 (radius 142 px, 0.18 m); behind it (x 1450-1540) the tube wall is bare. Texture: heat-tinted mottle with streaks running along the cone; photo_usaf's skin (1200-1420, 470-620) varies by 26% in brightness including shading, so about half of that is taken as the metal's own tint (estimated)",
+        "texture": {
+          "kind": "mottle",
+          "spread": 0.12,
+          "blob": [
+            0.15,
+            0.15
+          ],
+          "streak": {
+            "spread": 0.08,
+            "length": 0.4
+          },
+          "repeat": [
+            0.5,
+            0.5
+          ]
+        }
+      },
+      {
+        "kind": "box",
+        "name": "valve_block",
+        "size": [
+          0.22,
+          0.2,
+          0.25
+        ],
+        "at": [
+          0.2,
+          0.0,
+          1.3
+        ],
+        "material": "xlr_metal",
+        "keep": true,
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: the block behind the valve cylinders, x 450-640, y 260-470, made smaller so the cylinders and lines in front of it show (the photo shows lines, not a solid face)"
+      },
+      {
+        "kind": "box",
+        "name": "chamber_valves",
+        "size": [
+          0.18,
+          0.3,
+          0.31
+        ],
+        "at": [
+          -0.29,
+          0,
+          0.725
+        ],
+        "material": "xlr_box",
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: the grey valve housings under the chamber, x 860-1100, y 600-830; depth estimated. Its inner face at the chamber's wall (x -0.20), not inside the nozzle."
+      },
+      {
+        "kind": "pump",
+        "name": "main_valve",
+        "diameter": 0.065,
+        "length": 0.285,
+        "at": [
+          0.044,
+          -0.13,
+          1.307
+        ],
+        "axis": [
+          1,
+          0,
+          0
+        ],
+        "material": "xlr_metal",
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: the upright valve column at x 505-555, y 280-500, on the block's near side."
+      },
+      {
+        "kind": "lathe",
+        "name": "turbopump",
+        "at": [
+          0.14,
+          0.0,
+          1.45
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "material": "xlr_metal",
+        "keep": true,
+        "source": [
+          "photo_usaf, scaled by the exit ring (1.294 mm/px; axis at y 534, exit plane at x 1540); estimated: the cast pump case at the front, x 250-420 (z 1.45-1.67), y 330-520 (x 0.02-0.26), with a bolted flange near its front (about 0.28 m across).",
+          "jenkins_sp2007 p.199: the turbine drove \"the single-inlet oxidizer pump and two-inlet fuel pump\"; which case is which isn't identified in the photos. Texture: fine cast-metal grain (photo_usaf shows a dull cast case; jenkins_sp2007 mentions \"the magnesium pump case\"); grain size estimated"
+        ],
+        "profile": [
+          [
+            0,
+            0
+          ],
+          [
+            0.1,
+            0
+          ],
+          [
+            0.12,
+            0.025
+          ],
+          [
+            0.12,
+            0.165
+          ],
+          [
+            0.14,
+            0.175
+          ],
+          [
+            0.14,
+            0.195
+          ],
+          [
+            0.1,
+            0.22
+          ],
+          [
+            0,
+            0.22
+          ]
+        ],
+        "segments": 24,
+        "texture": {
+          "kind": "mottle",
+          "spread": 0.08,
+          "blob": [
+            0.02,
+            0.02
+          ],
+          "repeat": [
+            0.3,
+            0.3
+          ]
+        }
+      },
+      {
+        "kind": "bolts",
+        "name": "turbopump_bolts",
+        "count": 16,
+        "diameter": 0.012,
+        "length": 0.012,
+        "radius": 0.13,
+        "at": [
+          0.14,
+          0.0,
+          1.645
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "sides": 6,
+        "material": "xlr_metal",
+        "source": "photo_usaf, scaled by the exit ring (1.294 mm/px; axis at y 534, exit plane at x 1540); estimated: the bolt heads on the pump case's flange (x 300-360, y 340-400 show 5 on the visible quarter, so about 16 round)"
+      },
+      {
+        "kind": "lathe",
+        "name": "turbine_case",
+        "profile": [
+          [
+            0,
+            0
+          ],
+          [
+            0.17,
+            0
+          ],
+          [
+            0.19,
+            0.02
+          ],
+          [
+            0.19,
+            0.16
+          ],
+          [
+            0.17,
+            0.18
+          ],
+          [
+            0,
+            0.18
+          ]
+        ],
+        "at": [
+          0.14,
+          0.12,
+          1.63
+        ],
+        "axis": [
+          0,
+          1,
+          0
+        ],
+        "segments": 32,
+        "material": "xlr_metal",
+        "source": [
+          "photo_nasm, scaled by the exit ring (1.265 mm/px; axis at y 600, exit plane at x 150); estimated: the round case at the exhaust housing's front end, x 1520-1600 (z 1.73-1.83), y 350-650 (0.38 m across, centre x 0.13), seen past the bolted rim; a drum facing the exhaust housing's bolted round end (axis across the engine, as the bolt ring round the housing's end suggests), between it and the pump case; its depth estimated.",
+          "bellman_demar p.5: removing the turbine exhaust duct comes before the \"stator blades, rotor and inlet housing\", so the duct bolts to the turbine; jenkins_sp2007 p.198: \"a two-stage, impulse-type turbine\" Texture: fine cast-metal grain (photo_usaf shows a dull cast case; jenkins_sp2007 mentions \"the magnesium pump case\"); grain size estimated"
+        ],
+        "texture": {
+          "kind": "mottle",
+          "spread": 0.08,
+          "blob": [
+            0.02,
+            0.02
+          ],
+          "repeat": [
+            0.3,
+            0.3
+          ]
+        }
+      },
+      {
+        "kind": "pump",
+        "name": "turbine_casing",
+        "diameter": 0.155,
+        "length": 0.06,
+        "at": [
+          0.245,
+          -0.12,
+          1.566
+        ],
+        "axis": [
+          0,
+          -1,
+          0
+        ],
+        "material": "xlr_metal",
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: the round bolted casing facing the camera at x 270-390, y 285-405 (0.155 m across)."
+      },
+      {
+        "kind": "box",
+        "name": "control_box_0",
+        "size": [
+          0.1,
+          0.12,
+          0.13
+        ],
+        "at": [
+          0.296,
+          -0.25,
+          1.03
+        ],
+        "material": "xlr_box",
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: the grey box with red connectors centred at x 765, y 305, about 100 x 80 px; depth estimated."
+      },
+      {
+        "kind": "box",
+        "name": "control_box_1",
+        "size": [
+          0.1,
+          0.12,
+          0.13
+        ],
+        "at": [
+          0.296,
+          -0.25,
+          0.905
+        ],
+        "material": "xlr_box",
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: the grey box with red connectors centred at x 875, y 305, about 100 x 80 px; depth estimated."
+      },
+      {
+        "kind": "box",
+        "name": "control_bracket",
+        "size": [
+          0.04,
+          0.2,
+          0.36
+        ],
+        "at": [
+          0.24,
+          -0.15,
+          1.02
+        ],
+        "material": "xlr_box",
+        "source": "photo_usaf, estimated: the grey bracket the two control boxes sit on, behind them (x 760-980), reaching back to the valve block"
+      },
+      {
+        "kind": "lathe",
+        "name": "igniter_blanket",
+        "profile": [
+          [
+            0,
+            -0.11
+          ],
+          [
+            0.078,
+            -0.078
+          ],
+          [
+            0.11,
+            0
+          ],
+          [
+            0.078,
+            0.078
+          ],
+          [
+            0,
+            0.11
+          ]
+        ],
+        "at": [
+          0.155,
+          -0.18,
+          0.731
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 16,
+        "material": "xlr_blanket",
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: the pale green insulation blanket over the top of the chamber, x 900-1050, y 330-500 (about 0.2 m across)."
+      },
+      {
+        "kind": "pipe",
+        "name": "lower_bellows",
+        "diameter": 0.09,
+        "points": [
+          [
+            -0.17,
+            0.0,
+            1.4
+          ],
+          [
+            -0.17,
+            0.0,
+            1.62
+          ],
+          [
+            0.05,
+            0.0,
+            1.62
+          ]
+        ],
+        "bend_radius": 0.06,
+        "material": "xlr_metal",
+        "flanges": [
+          0.08,
+          0.16,
+          0.24,
+          0.32,
+          0.4
+        ],
+        "flange_size": [
+          0.01,
+          0.01
+        ],
+        "flange_segments": 12,
+        "source": "photo_usaf, scaled by the exit ring (1.294 mm/px; axis at y 534, exit plane at x 1540); estimated: the corrugated line low at the front, x 280-450 (z 1.47-1.63), y 630-700 (x -0.12 to -0.22), running forward into the pump; the bottom lines gather into it"
+      },
+      {
+        "kind": "pipe",
+        "name": "lox_inlet",
+        "diameter": 0.065,
+        "points": [
+          [
+            -0.17,
+            -0.03,
+            1.45
+          ],
+          [
+            -0.157,
+            -0.2,
+            1.5
+          ],
+          [
+            -0.157,
+            -0.2,
+            1.63
+          ]
+        ],
+        "material": "xlr_metal",
+        "flanges": [
+          0.0,
+          1.0
+        ],
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: the upper bellows line at x 280-450, y 630-680, about 50 px (0.065 m) across.",
+        "bend_radius": 0.04
+      },
+      {
+        "kind": "pipe",
+        "name": "ammonia_inlet",
+        "diameter": 0.065,
+        "points": [
+          [
+            -0.17,
+            -0.02,
+            1.42
+          ],
+          [
+            -0.325,
+            -0.2,
+            1.27
+          ],
+          [
+            -0.325,
+            -0.2,
+            1.475
+          ]
+        ],
+        "material": "xlr_metal",
+        "bend_radius": 0.06,
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: the lower bellows line at x 400-560, y 760-810, joined up into the valve block."
+      },
+      {
+        "kind": "pipe",
+        "name": "lower_line",
+        "diameter": 0.03,
+        "points": [
+          [
+            -0.17,
+            -0.02,
+            1.41
+          ],
+          [
+            -0.42,
+            -0.2,
+            1.0
+          ],
+          [
+            -0.42,
+            -0.2,
+            0.12
+          ],
+          [
+            -0.31,
+            -0.2,
+            0.06
+          ]
+        ],
+        "material": "xlr_metal",
+        "bend_radius": 0.05,
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: the lines along the engine's underside, x 690-1560 at y 860, ending at the nozzle's exposed tubes."
+      },
+      {
+        "kind": "pipe",
+        "name": "truss_top",
+        "diameter": 0.04,
+        "points": [
+          [
+            0.6,
+            0.0,
+            0.556
+          ],
+          [
+            0.245,
+            0.0,
+            1.1
+          ]
+        ],
+        "material": "xlr_truss",
+        "keep": true,
+        "source": "jenkins_sp2007 p.200: \"The engine-mount truss attached to the fuselage at three fittings\"; photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: the olive tubes (about 32 px, 4 cm) from the top fitting at x 1110, y 70 and the near lower one at x 1065, y 890 to the engine at x 680, y 345 and x 600, y 490. The far lower fitting isn't seen: mirrored, 0.35 m either side (estimated)."
+      },
+      {
+        "kind": "pipe",
+        "name": "truss_side_l",
+        "diameter": 0.04,
+        "points": [
+          [
+            0.6,
+            0.0,
+            0.556
+          ],
+          [
+            -0.461,
+            0.35,
+            0.615
+          ]
+        ],
+        "material": "xlr_truss",
+        "keep": true,
+        "source": "jenkins_sp2007 p.200: \"The engine-mount truss attached to the fuselage at three fittings\"; photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: the olive tubes (about 32 px, 4 cm) from the top fitting at x 1110, y 70 and the near lower one at x 1065, y 890 to the engine at x 680, y 345 and x 600, y 490. The far lower fitting isn't seen: mirrored, 0.35 m either side (estimated)."
+      },
+      {
+        "kind": "pipe",
+        "name": "truss_side_r",
+        "diameter": 0.04,
+        "points": [
+          [
+            0.6,
+            0.0,
+            0.556
+          ],
+          [
+            -0.461,
+            -0.35,
+            0.615
+          ]
+        ],
+        "material": "xlr_truss",
+        "keep": true,
+        "source": "jenkins_sp2007 p.200: \"The engine-mount truss attached to the fuselage at three fittings\"; photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: the olive tubes (about 32 px, 4 cm) from the top fitting at x 1110, y 70 and the near lower one at x 1065, y 890 to the engine at x 680, y 345 and x 600, y 490. The far lower fitting isn't seen: mirrored, 0.35 m either side (estimated)."
+      },
+      {
+        "kind": "pipe",
+        "name": "truss_low_l",
+        "diameter": 0.04,
+        "points": [
+          [
+            -0.461,
+            0.35,
+            0.615
+          ],
+          [
+            0.0,
+            0.14,
+            1.216
+          ]
+        ],
+        "material": "xlr_truss",
+        "keep": true,
+        "source": "jenkins_sp2007 p.200: \"The engine-mount truss attached to the fuselage at three fittings\"; photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: the olive tubes (about 32 px, 4 cm) from the top fitting at x 1110, y 70 and the near lower one at x 1065, y 890 to the engine at x 680, y 345 and x 600, y 490. The far lower fitting isn't seen: mirrored, 0.35 m either side (estimated)."
+      },
+      {
+        "kind": "pipe",
+        "name": "truss_low_r",
+        "diameter": 0.04,
+        "points": [
+          [
+            -0.461,
+            -0.35,
+            0.615
+          ],
+          [
+            0.0,
+            -0.14,
+            1.216
+          ]
+        ],
+        "material": "xlr_truss",
+        "keep": true,
+        "source": "jenkins_sp2007 p.200: \"The engine-mount truss attached to the fuselage at three fittings\"; photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: the olive tubes (about 32 px, 4 cm) from the top fitting at x 1110, y 70 and the near lower one at x 1065, y 890 to the engine at x 680, y 345 and x 600, y 490. The far lower fitting isn't seen: mirrored, 0.35 m either side (estimated)."
+      },
+      {
+        "kind": "pump",
+        "name": "fitting_top",
+        "diameter": 0.08,
+        "length": 0.1,
+        "at": [
+          0.6,
+          -0.05,
+          0.556
+        ],
+        "axis": [
+          0,
+          1,
+          0
+        ],
+        "material": "xlr_truss",
+        "source": "jenkins_sp2007 p.200: \"The engine-mount truss attached to the fuselage at three fittings\"; photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: the olive tubes (about 32 px, 4 cm) from the top fitting at x 1110, y 70 and the near lower one at x 1065, y 890 to the engine at x 680, y 345 and x 600, y 490. The far lower fitting isn't seen: mirrored, 0.35 m either side (estimated)."
+      },
+      {
+        "kind": "pump",
+        "name": "fitting_l",
+        "diameter": 0.08,
+        "length": 0.1,
+        "at": [
+          -0.461,
+          0.3,
+          0.615
+        ],
+        "axis": [
+          0,
+          1,
+          0
+        ],
+        "material": "xlr_truss",
+        "source": "jenkins_sp2007 p.200: \"The engine-mount truss attached to the fuselage at three fittings\"; photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: the olive tubes (about 32 px, 4 cm) from the top fitting at x 1110, y 70 and the near lower one at x 1065, y 890 to the engine at x 680, y 345 and x 600, y 490. The far lower fitting isn't seen: mirrored, 0.35 m either side (estimated)."
+      },
+      {
+        "kind": "pump",
+        "name": "fitting_r",
+        "diameter": 0.08,
+        "length": 0.1,
+        "at": [
+          -0.461,
+          -0.4,
+          0.615
+        ],
+        "axis": [
+          0,
+          1,
+          0
+        ],
+        "material": "xlr_truss",
+        "source": "jenkins_sp2007 p.200: \"The engine-mount truss attached to the fuselage at three fittings\"; photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: the olive tubes (about 32 px, 4 cm) from the top fitting at x 1110, y 70 and the near lower one at x 1065, y 890 to the engine at x 680, y 345 and x 600, y 490. The far lower fitting isn't seen: mirrored, 0.35 m either side (estimated)."
+      },
+      {
+        "kind": "pipe",
+        "name": "front_duct",
+        "diameter": 0.14,
+        "points": [
+          [
+            0.19,
+            0.0,
+            1.6
+          ],
+          [
+            0.15,
+            0.0,
+            1.72
+          ],
+          [
+            0.05,
+            0.0,
+            1.83
+          ],
+          [
+            0.025,
+            0.0,
+            1.88
+          ]
+        ],
+        "material": "xlr_duct",
+        "keep": true,
+        "bend_radius": 0.08,
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: the white duct from the turbine down and forward to the red flange at x 70, y 515; about 110 px (0.14 m) across."
+      },
+      {
+        "kind": "lathe",
+        "name": "front_cover",
+        "profile": [
+          [
+            0,
+            0
+          ],
+          [
+            0.115,
+            0
+          ],
+          [
+            0.115,
+            0.025
+          ],
+          [
+            0,
+            0.025
+          ]
+        ],
+        "at": [
+          0.025,
+          0.0,
+          1.88
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 24,
+        "smooth": false,
+        "material": "xlr_red",
+        "keep": true,
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: the red flange on the duct's end, about 180 px (0.23 m) tall."
+      },
+      {
+        "kind": "lathe",
+        "name": "exit_plate",
+        "profile": [
+          [
+            0.366,
+            0.0
+          ],
+          [
+            0.49,
+            0.0
+          ],
+          [
+            0.49,
+            0.012
+          ],
+          [
+            0.366,
+            0.012
+          ]
+        ],
+        "at": [
+          0,
+          0,
+          0
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 64,
+        "smooth": false,
+        "closed": true,
+        "material": "xlr_plate",
+        "keep": true,
+        "source": "photo_rear (the 1400 px copy), scaled by the exit ring (1335 px across = 1.0224 m, 0.766 mm/px; centre at 702, 700); estimated: a flat riveted plate fills the exit plane from the red sealant (outer edge 955 px across, radius 0.366 m) out to the ring; 12 mm thick (estimated)"
+      },
+      {
+        "kind": "lathe",
+        "name": "exit_sealant",
+        "profile": [
+          [
+            0.343,
+            -0.006
+          ],
+          [
+            0.366,
+            -0.006
+          ],
+          [
+            0.366,
+            0.012
+          ],
+          [
+            0.343,
+            0.012
+          ]
+        ],
+        "at": [
+          0,
+          0,
+          0
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 64,
+        "smooth": false,
+        "closed": true,
+        "material": "xlr_sealant",
+        "source": "photo_rear (the 1400 px copy), scaled by the exit ring (1335 px across = 1.0224 m, 0.766 mm/px; centre at 702, 700); estimated: the red sealant band between the tubes and the plate, 895 px (tubes) to 955 px across (radius 0.343-0.366 m), standing about 6 mm proud"
+      },
+      {
+        "kind": "lathe",
+        "name": "exit_plate_bead",
+        "profile": [
+          [
+            0.455,
+            -0.004
+          ],
+          [
+            0.465,
+            -0.004
+          ],
+          [
+            0.465,
+            0.0
+          ],
+          [
+            0.455,
+            0.0
+          ]
+        ],
+        "at": [
+          0,
+          0,
+          0
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 64,
+        "smooth": false,
+        "closed": true,
+        "material": "xlr_plate",
+        "source": "photo_rear (the 1400 px copy), scaled by the exit ring (1335 px across = 1.0224 m, 0.766 mm/px; centre at 702, 700); estimated: the raised ring on the plate, about 1200 px across (radius 0.46 m)"
+      },
+      {
+        "kind": "bolts",
+        "name": "exit_rivets_outer",
+        "count": 72,
+        "diameter": 0.008,
+        "length": 0.004,
+        "radius": 0.478,
+        "at": [
+          0,
+          0,
+          -0.003
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "sides": 6,
+        "material": "xlr_plate",
+        "source": "photo_rear (the 1400 px copy), scaled by the exit ring (1335 px across = 1.0224 m, 0.766 mm/px; centre at 702, 700); estimated: the rivets round the plate's rim, about 45 px (3.4 cm) apart on a 1250 px circle (radius 0.478 m), so about 72 (the photo's spacing is uneven); none across the turbine exhaust outlet",
+        "skip": [
+          13,
+          14,
+          15
+        ]
+      },
+      {
+        "kind": "bolts",
+        "name": "exit_rivets_inner",
+        "count": 56,
+        "diameter": 0.008,
+        "length": 0.004,
+        "radius": 0.385,
+        "at": [
+          0,
+          0,
+          -0.003
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "sides": 6,
+        "material": "xlr_plate",
+        "source": "photo_rear (the 1400 px copy), scaled by the exit ring (1335 px across = 1.0224 m, 0.766 mm/px; centre at 702, 700); estimated: the rivets just outside the sealant, about 45 px apart on a 1005 px circle (radius 0.385 m), so about 56; none across the turbine exhaust outlet",
+        "skip": [
+          10,
+          11,
+          12
+        ]
+      },
+      {
+        "kind": "lathe",
+        "name": "turbine_exhaust_bellows",
+        "profile": [
+          [
+            0.07,
+            0
+          ],
+          [
+            0.083,
+            0.0
+          ],
+          [
+            0.083,
+            0.012
+          ],
+          [
+            0.074,
+            0.024
+          ],
+          [
+            0.083,
+            0.036
+          ],
+          [
+            0.074,
+            0.048
+          ],
+          [
+            0.083,
+            0.06
+          ],
+          [
+            0.074,
+            0.072
+          ],
+          [
+            0.083,
+            0.084
+          ],
+          [
+            0.074,
+            0.096
+          ],
+          [
+            0.083,
+            0.108
+          ],
+          [
+            0.083,
+            0.125
+          ],
+          [
+            0.07,
+            0.125
+          ]
+        ],
+        "at": [
+          0.137,
+          0.402,
+          0.06
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 20,
+        "smooth": false,
+        "closed": true,
+        "material": "xlr_red",
+        "keep": true,
+        "source": "photo_nasm, scaled by the exit ring (808 px tall = 1.0224 m, so 1.265 mm/px; axis at y 600, exit plane at x 150; +x up in the photo, z along the axis, camera on the +y side); estimated: the red bellows at the duct's aft end, x 145-245 (z 0-0.125), 130 px (0.165 m) across, 5 ridges; its place in the exit plane from photo_rear: the round outlet right of and above the nozzle, centre 535 px right and 180 px up (y 0.414, x 0.139) (moved 3 cm forward of the plate: photo_rear shows only a dark outlet at the plate) Fitted inside the exit hoop (inner radius 0.49 m): centre 0.425 m from the axis, duct 0.12 m, outlet 0.13 m across with its lip; photo_rear's opening (about 0.14 m) reaches nearly to the rim."
+      },
+      {
+        "kind": "lathe",
+        "name": "turbine_exhaust_outlet",
+        "profile": [
+          [
+            0.0,
+            -0.005
+          ],
+          [
+            0.058,
+            -0.005
+          ],
+          [
+            0.058,
+            0.0
+          ],
+          [
+            0.0,
+            0.0
+          ]
+        ],
+        "at": [
+          0.137,
+          0.402,
+          0.0
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 24,
+        "smooth": false,
+        "closed": true,
+        "material": "xlr_soot",
+        "source": "photo_rear (the 1400 px copy), scaled by the exit ring (1335 px across = 1.0224 m, 0.766 mm/px; centre at 702, 700); estimated: the duct's outlet in the plate, a dark opening 195 px (0.15 m) across, centre 538 px right of and 190 px above the axis (y 0.412, x 0.146) Fitted inside the exit hoop (inner radius 0.49 m): centre 0.425 m from the axis, duct 0.12 m, outlet 0.13 m across with its lip; photo_rear's opening (about 0.14 m) reaches nearly to the rim."
+      },
+      {
+        "kind": "lathe",
+        "name": "turbine_exhaust_lip",
+        "profile": [
+          [
+            0.058,
+            -0.009
+          ],
+          [
+            0.066,
+            -0.009
+          ],
+          [
+            0.066,
+            0.0
+          ],
+          [
+            0.058,
+            0.0
+          ]
+        ],
+        "at": [
+          0.137,
+          0.402,
+          0.0
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 24,
+        "smooth": false,
+        "closed": true,
+        "material": "xlr_metal",
+        "source": "photo_rear (the 1400 px copy), scaled by the exit ring (1335 px across = 1.0224 m, 0.766 mm/px; centre at 702, 700); estimated: the metal lip round the outlet"
+      },
+      {
+        "kind": "pipe",
+        "name": "turbine_exhaust",
+        "diameter": 0.12,
+        "points": [
+          [
+            0.137,
+            0.402,
+            0.18
+          ],
+          [
+            0.137,
+            0.402,
+            0.86
+          ]
+        ],
+        "material": "xlr_skin",
+        "keep": true,
+        "source": [
+          "bellman_demar_fig2: the duct runs straight along the engine",
+          "photo_nasm, scaled by the exit ring (808 px tall = 1.0224 m, so 1.265 mm/px; axis at y 600, exit plane at x 150; +x up in the photo, z along the axis, camera on the +y side); estimated: the long duct along the +y side, x 245-810 (z 0.12-0.84), 103 px (0.13 m) across; its aft end from photo_rear (outlet 0.147 m across); straight along the axis, as bellman_demar_fig2 shows it from above. Identified as the turbine exhaust: bellman_demar p.5 mentions \"the turbine exhaust duct\" and that \"just to remove the exhaust ducts necessitates removal and re-safety wiring of 60 bolts\"; the duct is the one large line that ends at the nozzle exit (photo_rear) and its housing is bolted round its rim (photo_nasm). Fitted inside the exit hoop (inner radius 0.49 m): centre 0.425 m from the axis, duct 0.12 m, outlet 0.13 m across with its lip; photo_rear's opening (about 0.14 m) reaches nearly to the rim. Texture: photo_nasm: mottled bronze (1150-1350, 420-560: #796a58, 31% brightness spread with shading) with lighter worn patches (1300-1450, 585-612: #927d5f, 1.21/1.18/1.08 times brighter per channel, applied to xlr_skin as #b5a986) over about 15% (estimated)"
+        ],
+        "texture": {
+          "kind": "mottle",
+          "spread": 0.12,
+          "blob": [
+            0.12,
+            0.12
+          ],
+          "patches": {
+            "hex": "#b5a986",
+            "cover": 0.15,
+            "blob": 0.08
+          },
+          "repeat": [
+            0.5,
+            0.5
+          ]
+        }
+      },
+      {
+        "kind": "lathe",
+        "name": "turbine_exhaust_collar",
+        "profile": [
+          [
+            0.064,
+            0
+          ],
+          [
+            0.1,
+            0.0
+          ],
+          [
+            0.115,
+            0.02
+          ],
+          [
+            0.1,
+            0.04
+          ],
+          [
+            0.064,
+            0.04
+          ]
+        ],
+        "at": [
+          0.137,
+          0.402,
+          0.835
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 20,
+        "closed": true,
+        "material": "xlr_skin",
+        "source": "photo_nasm, scaled by the exit ring (808 px tall = 1.0224 m, so 1.265 mm/px; axis at y 600, exit plane at x 150; +x up in the photo, z along the axis, camera on the +y side); estimated: the round collar where the duct meets the bulb, x 815-850, 180 px (0.23 m) across Texture: photo_nasm: mottled bronze (1150-1350, 420-560: #796a58, 31% brightness spread with shading) with lighter worn patches (1300-1450, 585-612: #927d5f, 1.21/1.18/1.08 times brighter per channel, applied to xlr_skin as #b5a986) over about 15% (estimated)",
+        "texture": {
+          "kind": "mottle",
+          "spread": 0.12,
+          "blob": [
+            0.12,
+            0.12
+          ],
+          "patches": {
+            "hex": "#b5a986",
+            "cover": 0.15,
+            "blob": 0.08
+          },
+          "repeat": [
+            0.5,
+            0.5
+          ]
+        }
+      },
+      {
+        "kind": "lathe",
+        "name": "turbine_exhaust_housing",
+        "profile": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.073,
+            0.0
+          ],
+          [
+            0.073,
+            0.19
+          ],
+          [
+            0.12,
+            0.4
+          ],
+          [
+            0.17,
+            0.6
+          ],
+          [
+            0.195,
+            0.77
+          ],
+          [
+            0.17,
+            0.88
+          ],
+          [
+            0.1,
+            0.94
+          ],
+          [
+            0.0,
+            0.96
+          ]
+        ],
+        "at": [
+          0.137,
+          0.402,
+          0.86
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 24,
+        "material": "xlr_skin",
+        "keep": true,
+        "source": [
+          "bellman_demar_fig2: looking down on the engine, the housing is seen edge-on, not much thicker than the duct: flat, 0.55 of its height (0.21 m at the widest), estimated",
+          "photo_nasm, scaled by the exit ring (808 px tall = 1.0224 m, so 1.265 mm/px; axis at y 600, exit plane at x 150; +x up in the photo, z along the axis, camera on the +y side); estimated: the teardrop housing the duct runs into, from its neck at x 850-1000 (115 px, 0.145 m across) widening to 310 px (0.39 m) at x 1440 and rounding off with a bolted rim at x 1590 (z 1.82); centre 90 px above the axis (x 0.114); flat: bellman_demar_fig2, looking down on it, shows it edge-on, not much thicker than the duct (estimated 0.55 of its height, 0.21 m at the widest). Identified as the turbine exhaust: bellman_demar p.5 mentions \"the turbine exhaust duct\" and that \"just to remove the exhaust ducts necessitates removal and re-safety wiring of 60 bolts\"; the duct is the one large line that ends at the nozzle exit (photo_rear) and its housing is bolted round its rim (photo_nasm). Texture: photo_nasm: mottled bronze (1150-1350, 420-560: #796a58, 31% brightness spread with shading) with lighter worn patches (1300-1450, 585-612: #927d5f, 1.21/1.18/1.08 times brighter per channel, applied to xlr_skin as #b5a986) over about 15% (estimated)"
+        ],
+        "scale": [
+          1,
+          0.55,
+          1
+        ],
+        "texture": {
+          "kind": "mottle",
+          "spread": 0.12,
+          "blob": [
+            0.12,
+            0.12
+          ],
+          "patches": {
+            "hex": "#b5a986",
+            "cover": 0.15,
+            "blob": 0.08
+          },
+          "repeat": [
+            0.5,
+            0.5
+          ]
+        }
+      },
+      {
+        "kind": "bolts",
+        "name": "turbine_exhaust_bolts",
+        "count": 60,
+        "diameter": 0.012,
+        "length": 0.015,
+        "radius": 0.195,
+        "at": [
+          0.137,
+          0.402,
+          1.63
+        ],
+        "axis": [
+          0,
+          1,
+          0
+        ],
+        "radial": true,
+        "sides": 6,
+        "material": "xlr_metal",
+        "source": "bellman_demar p.5: \"60 bolts\" hold the exhaust ducts; placed round the housing's rim as photo_nasm shows them (a ring round its round end, radius 0.195 m about z 1.63, estimated)"
+      },
+      {
+        "kind": "box",
+        "name": "top_box",
+        "size": [
+          0.09,
+          0.13,
+          0.145
+        ],
+        "at": [
+          0.447,
+          0.0,
+          0.865
+        ],
+        "material": "xlr_box",
+        "source": "photo_nasm, scaled by the exit ring (808 px tall = 1.0224 m, so 1.265 mm/px; axis at y 600, exit plane at x 150; +x up in the photo, z along the axis, camera on the +y side): x 790-905, y 200-270 (z 0.81-0.955, x 0.42-0.51), and photo_usaf: x 830-940, y 165-235 (z 0.78-0.92, x 0.39-0.48), seen from both sides so on the centre plane; averaged; its depth estimated"
+      },
+      {
+        "kind": "pipe",
+        "name": "top_hose",
+        "diameter": 0.03,
+        "points": [
+          [
+            0.42,
+            0.05,
+            0.9
+          ],
+          [
+            0.39,
+            0.15,
+            1.0
+          ],
+          [
+            0.4,
+            0.15,
+            1.52
+          ],
+          [
+            0.15,
+            0.05,
+            1.55
+          ]
+        ],
+        "bend_radius": 0.06,
+        "material": "xlr_metal",
+        "flanges": [
+          0.03,
+          0.97
+        ],
+        "flange_material": "xlr_red",
+        "flange_size": [
+          0.006,
+          0.01
+        ],
+        "flange_segments": 8,
+        "source": "photo_nasm, scaled by the exit ring (808 px tall = 1.0224 m, so 1.265 mm/px; axis at y 600, exit plane at x 150; +x up in the photo, z along the axis, camera on the +y side); estimated: the braided hose along the top, y 285-300 (x 0.39), x 900-1350 (z 0.95-1.52), red fittings at both ends; its depth estimated Texture: woven wire braid (photo_nasm and photo_usaf show braided sheaths on these hoses); weave and pitch estimated",
+        "texture": {
+          "kind": "braid",
+          "carriers": 6,
+          "groove": 0.45,
+          "repeat": [
+            0.05,
+            0.025
+          ]
+        }
+      },
+      {
+        "kind": "pipe",
+        "name": "bellows_line",
+        "diameter": 0.06,
+        "points": [
+          [
+            0.15,
+            0.1,
+            0.86
+          ],
+          [
+            0.35,
+            0.2,
+            0.95
+          ],
+          [
+            0.35,
+            0.2,
+            1.29
+          ],
+          [
+            0.15,
+            0.05,
+            1.36
+          ]
+        ],
+        "material": "xlr_metal",
+        "flanges": [
+          0.3,
+          0.38,
+          0.46,
+          0.54,
+          0.62
+        ],
+        "flange_size": [
+          0.01,
+          0.008
+        ],
+        "flange_segments": 12,
+        "source": "photo_nasm, scaled by the exit ring (808 px tall = 1.0224 m, so 1.265 mm/px; axis at y 600, exit plane at x 150; +x up in the photo, z along the axis, camera on the +y side); estimated: the bellows line below it, y 300-345 (x 0.35), x 880-1170 (z 0.92-1.29); its depth estimated",
+        "bend_radius": 0.05
+      },
+      {
+        "kind": "box",
+        "name": "foil_box",
+        "size": [
+          0.1,
+          0.1,
+          0.25
+        ],
+        "at": [
+          -0.1,
+          0.23,
+          1.115
+        ],
+        "material": "xlr_metal",
+        "source": "photo_nasm, scaled by the exit ring (808 px tall = 1.0224 m, so 1.265 mm/px; axis at y 600, exit plane at x 150; +x up in the photo, z along the axis, camera on the +y side); estimated: the foil-wrapped block below the bulb, x 930-1130 (z 0.99-1.24), y 640-720 (x -0.05 to -0.15); depth estimated"
+      },
+      {
+        "kind": "pump",
+        "name": "side_port",
+        "diameter": 0.1,
+        "length": 0.2,
+        "at": [
+          -0.04,
+          0.12,
+          1.78
+        ],
+        "axis": [
+          0,
+          1,
+          0
+        ],
+        "material": "xlr_metal",
+        "source": "photo_nasm, scaled by the exit ring (808 px tall = 1.0224 m, so 1.265 mm/px; axis at y 600, exit plane at x 150; +x up in the photo, z along the axis, camera on the +y side); estimated: the port behind the red cover, x 1590-1690 (z 1.82-1.95), facing the camera (placed below the exhaust housing's tip so they don't overlap; it stands out from the turbine case)"
+      },
+      {
+        "kind": "lathe",
+        "name": "side_port_cover",
+        "profile": [
+          [
+            0,
+            0
+          ],
+          [
+            0.078,
+            0
+          ],
+          [
+            0.078,
+            0.02
+          ],
+          [
+            0,
+            0.02
+          ]
+        ],
+        "at": [
+          -0.04,
+          0.32,
+          1.78
+        ],
+        "axis": [
+          0,
+          1,
+          0
+        ],
+        "segments": 24,
+        "smooth": false,
+        "material": "xlr_red",
+        "source": "photo_nasm, scaled by the exit ring (808 px tall = 1.0224 m, so 1.265 mm/px; axis at y 600, exit plane at x 150; +x up in the photo, z along the axis, camera on the +y side); estimated: the red cover, x 1590-1690 and y 580-710 (0.155 m across, centre x -0.065)"
+      },
+      {
+        "kind": "pump",
+        "name": "valve_1",
+        "diameter": 0.06,
+        "length": 0.22,
+        "at": [
+          0.044,
+          -0.13,
+          1.215
+        ],
+        "axis": [
+          1,
+          0,
+          0
+        ],
+        "material": "xlr_metal",
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: the second upright valve cylinder, x 560-600 (z 1.22-1.27), y 300-470"
+      },
+      {
+        "kind": "pump",
+        "name": "valve_manifold",
+        "diameter": 0.05,
+        "length": 0.38,
+        "at": [
+          0.2,
+          -0.13,
+          1.09
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "material": "xlr_metal",
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: the run across the valve cylinders, y 370-390 (x 0.20), x 400-700 (z 1.09-1.47)"
+      },
+      {
+        "kind": "pipe",
+        "name": "lower_line_0",
+        "diameter": 0.022,
+        "points": [
+          [
+            -0.42,
+            -0.15,
+            0.012
+          ],
+          [
+            -0.42,
+            -0.15,
+            0.1
+          ],
+          [
+            -0.42,
+            -0.15,
+            0.3
+          ],
+          [
+            -0.42,
+            -0.15,
+            1.3
+          ],
+          [
+            -0.17,
+            -0.0375,
+            1.48
+          ]
+        ],
+        "bend_radius": 0.05,
+        "material": "xlr_metal",
+        "flanges": [
+          0.12,
+          0.33,
+          0.55,
+          0.78
+        ],
+        "flange_material": "xlr_red",
+        "flange_size": [
+          0.006,
+          0.01
+        ],
+        "flange_segments": 8,
+        "source": "photo_nasm, scaled by the exit ring (808 px tall = 1.0224 m, so 1.265 mm/px; axis at y 600, exit plane at x 150; +x up in the photo, z along the axis, camera on the +y side) and photo_usaf; estimated: the bundle of lines along the bottom from the exit plate (photo_rear: fittings 0.46 m below the axis, from 0.17 m left to 0.26 m right) forward, then up into the corrugated line at the front (where they go isn't seen; estimated), y 840-960 in photo_nasm (x -0.30 to -0.45), red clamps along them; 7 of the larger ones"
+      },
+      {
+        "kind": "pipe",
+        "name": "lower_line_1",
+        "diameter": 0.018,
+        "points": [
+          [
+            -0.44,
+            -0.08,
+            0.012
+          ],
+          [
+            -0.44,
+            -0.08,
+            0.1
+          ],
+          [
+            -0.4,
+            -0.08,
+            0.3
+          ],
+          [
+            -0.4,
+            -0.08,
+            1.3
+          ],
+          [
+            -0.17,
+            -0.02,
+            1.48
+          ]
+        ],
+        "bend_radius": 0.05,
+        "material": "xlr_metal",
+        "flanges": [
+          0.12,
+          0.33,
+          0.55,
+          0.78
+        ],
+        "flange_material": "xlr_red",
+        "flange_size": [
+          0.006,
+          0.01
+        ],
+        "flange_segments": 8,
+        "source": "photo_nasm, scaled by the exit ring (808 px tall = 1.0224 m, so 1.265 mm/px; axis at y 600, exit plane at x 150; +x up in the photo, z along the axis, camera on the +y side) and photo_usaf; estimated: the bundle of lines along the bottom from the exit plate (photo_rear: fittings 0.46 m below the axis, from 0.17 m left to 0.26 m right) forward, then up into the corrugated line at the front (where they go isn't seen; estimated), y 840-960 in photo_nasm (x -0.30 to -0.45), red clamps along them; 7 of the larger ones"
+      },
+      {
+        "kind": "pipe",
+        "name": "lower_line_2",
+        "diameter": 0.025,
+        "points": [
+          [
+            -0.44,
+            0.0,
+            0.012
+          ],
+          [
+            -0.44,
+            0.0,
+            0.1
+          ],
+          [
+            -0.36,
+            0.0,
+            0.3
+          ],
+          [
+            -0.36,
+            0.0,
+            1.3
+          ],
+          [
+            -0.17,
+            0.0,
+            1.48
+          ]
+        ],
+        "bend_radius": 0.05,
+        "material": "xlr_metal",
+        "flanges": [
+          0.12,
+          0.33,
+          0.55,
+          0.78
+        ],
+        "flange_material": "xlr_red",
+        "flange_size": [
+          0.006,
+          0.01
+        ],
+        "flange_segments": 8,
+        "source": "photo_nasm, scaled by the exit ring (808 px tall = 1.0224 m, so 1.265 mm/px; axis at y 600, exit plane at x 150; +x up in the photo, z along the axis, camera on the +y side) and photo_usaf; estimated: the bundle of lines along the bottom from the exit plate (photo_rear: fittings 0.46 m below the axis, from 0.17 m left to 0.26 m right) forward, then up into the corrugated line at the front (where they go isn't seen; estimated), y 840-960 in photo_nasm (x -0.30 to -0.45), red clamps along them; 7 of the larger ones"
+      },
+      {
+        "kind": "pipe",
+        "name": "lower_line_3",
+        "diameter": 0.016,
+        "points": [
+          [
+            -0.44,
+            0.07,
+            0.012
+          ],
+          [
+            -0.44,
+            0.07,
+            0.1
+          ],
+          [
+            -0.33,
+            0.07,
+            0.3
+          ],
+          [
+            -0.33,
+            0.07,
+            1.3
+          ],
+          [
+            -0.17,
+            0.0175,
+            1.48
+          ]
+        ],
+        "bend_radius": 0.05,
+        "material": "xlr_metal",
+        "flanges": [
+          0.12,
+          0.33,
+          0.55,
+          0.78
+        ],
+        "flange_material": "xlr_red",
+        "flange_size": [
+          0.006,
+          0.01
+        ],
+        "flange_segments": 8,
+        "source": "photo_nasm, scaled by the exit ring (808 px tall = 1.0224 m, so 1.265 mm/px; axis at y 600, exit plane at x 150; +x up in the photo, z along the axis, camera on the +y side) and photo_usaf; estimated: the bundle of lines along the bottom from the exit plate (photo_rear: fittings 0.46 m below the axis, from 0.17 m left to 0.26 m right) forward, then up into the corrugated line at the front (where they go isn't seen; estimated), y 840-960 in photo_nasm (x -0.30 to -0.45), red clamps along them; 7 of the larger ones"
+      },
+      {
+        "kind": "pipe",
+        "name": "lower_line_4",
+        "diameter": 0.02,
+        "points": [
+          [
+            -0.42,
+            0.14,
+            0.012
+          ],
+          [
+            -0.42,
+            0.14,
+            0.1
+          ],
+          [
+            -0.36,
+            0.14,
+            0.3
+          ],
+          [
+            -0.36,
+            0.14,
+            1.3
+          ],
+          [
+            -0.17,
+            0.035,
+            1.48
+          ]
+        ],
+        "bend_radius": 0.05,
+        "material": "xlr_metal",
+        "flanges": [
+          0.12,
+          0.33,
+          0.55,
+          0.78
+        ],
+        "flange_material": "xlr_red",
+        "flange_size": [
+          0.006,
+          0.01
+        ],
+        "flange_segments": 8,
+        "source": "photo_nasm, scaled by the exit ring (808 px tall = 1.0224 m, so 1.265 mm/px; axis at y 600, exit plane at x 150; +x up in the photo, z along the axis, camera on the +y side) and photo_usaf; estimated: the bundle of lines along the bottom from the exit plate (photo_rear: fittings 0.46 m below the axis, from 0.17 m left to 0.26 m right) forward, then up into the corrugated line at the front (where they go isn't seen; estimated), y 840-960 in photo_nasm (x -0.30 to -0.45), red clamps along them; 7 of the larger ones"
+      },
+      {
+        "kind": "pipe",
+        "name": "lower_line_5",
+        "diameter": 0.018,
+        "points": [
+          [
+            -0.41,
+            0.2,
+            0.012
+          ],
+          [
+            -0.41,
+            0.2,
+            0.1
+          ],
+          [
+            -0.4,
+            0.2,
+            0.3
+          ],
+          [
+            -0.4,
+            0.2,
+            1.3
+          ],
+          [
+            -0.17,
+            0.05,
+            1.48
+          ]
+        ],
+        "bend_radius": 0.05,
+        "material": "xlr_metal",
+        "flanges": [
+          0.12,
+          0.33,
+          0.55,
+          0.78
+        ],
+        "flange_material": "xlr_red",
+        "flange_size": [
+          0.006,
+          0.01
+        ],
+        "flange_segments": 8,
+        "source": "photo_nasm, scaled by the exit ring (808 px tall = 1.0224 m, so 1.265 mm/px; axis at y 600, exit plane at x 150; +x up in the photo, z along the axis, camera on the +y side) and photo_usaf; estimated: the bundle of lines along the bottom from the exit plate (photo_rear: fittings 0.46 m below the axis, from 0.17 m left to 0.26 m right) forward, then up into the corrugated line at the front (where they go isn't seen; estimated), y 840-960 in photo_nasm (x -0.30 to -0.45), red clamps along them; 7 of the larger ones"
+      },
+      {
+        "kind": "pipe",
+        "name": "lower_line_6",
+        "diameter": 0.022,
+        "points": [
+          [
+            -0.45,
+            0.03,
+            0.012
+          ],
+          [
+            -0.45,
+            0.03,
+            0.1
+          ],
+          [
+            -0.44,
+            0.03,
+            0.3
+          ],
+          [
+            -0.44,
+            0.03,
+            1.3
+          ],
+          [
+            -0.17,
+            0.0075,
+            1.48
+          ]
+        ],
+        "bend_radius": 0.05,
+        "material": "xlr_metal",
+        "flanges": [
+          0.12,
+          0.33,
+          0.55,
+          0.78
+        ],
+        "flange_material": "xlr_red",
+        "flange_size": [
+          0.006,
+          0.01
+        ],
+        "flange_segments": 8,
+        "source": "photo_nasm, scaled by the exit ring (808 px tall = 1.0224 m, so 1.265 mm/px; axis at y 600, exit plane at x 150; +x up in the photo, z along the axis, camera on the +y side) and photo_usaf; estimated: the bundle of lines along the bottom from the exit plate (photo_rear: fittings 0.46 m below the axis, from 0.17 m left to 0.26 m right) forward, then up into the corrugated line at the front (where they go isn't seen; estimated), y 840-960 in photo_nasm (x -0.30 to -0.45), red clamps along them; 7 of the larger ones"
+      },
+      {
+        "kind": "pipe",
+        "name": "side_hose_0",
+        "diameter": 0.025,
+        "points": [
+          [
+            -0.157,
+            -0.2,
+            1.5
+          ],
+          [
+            -0.08,
+            -0.3,
+            1.5
+          ],
+          [
+            -0.1,
+            -0.31,
+            1.1
+          ],
+          [
+            -0.1,
+            -0.31,
+            0.75
+          ],
+          [
+            -0.02,
+            -0.3,
+            0.58
+          ],
+          [
+            -0.02,
+            -0.12,
+            0.7
+          ]
+        ],
+        "bend_radius": 0.06,
+        "material": "xlr_duct",
+        "flanges": [
+          0.2,
+          0.5,
+          0.8
+        ],
+        "flange_material": "xlr_red",
+        "flange_size": [
+          0.006,
+          0.01
+        ],
+        "flange_segments": 8,
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: one of the larger lines across the -y side (white braided or bare), traced roughly; the many small lines and wires are left out Texture: woven wire braid (photo_nasm and photo_usaf show braided sheaths on these hoses); weave and pitch estimated",
+        "texture": {
+          "kind": "braid",
+          "carriers": 6,
+          "groove": 0.45,
+          "repeat": [
+            0.05,
+            0.025
+          ]
+        }
+      },
+      {
+        "kind": "pipe",
+        "name": "side_hose_1",
+        "diameter": 0.02,
+        "points": [
+          [
+            -0.325,
+            -0.2,
+            1.45
+          ],
+          [
+            -0.25,
+            -0.3,
+            1.25
+          ],
+          [
+            -0.3,
+            -0.3,
+            0.95
+          ],
+          [
+            -0.3,
+            -0.14,
+            0.8
+          ]
+        ],
+        "bend_radius": 0.06,
+        "material": "xlr_duct",
+        "flanges": [
+          0.2,
+          0.5,
+          0.8
+        ],
+        "flange_material": "xlr_red",
+        "flange_size": [
+          0.006,
+          0.01
+        ],
+        "flange_segments": 8,
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: one of the larger lines across the -y side (white braided or bare), traced roughly; the many small lines and wires are left out Texture: woven wire braid (photo_nasm and photo_usaf show braided sheaths on these hoses); weave and pitch estimated",
+        "texture": {
+          "kind": "braid",
+          "carriers": 6,
+          "groove": 0.45,
+          "repeat": [
+            0.05,
+            0.025
+          ]
+        }
+      },
+      {
+        "kind": "pipe",
+        "name": "side_hose_2",
+        "diameter": 0.018,
+        "points": [
+          [
+            0.05,
+            -0.1,
+            1.45
+          ],
+          [
+            0.05,
+            -0.3,
+            1.45
+          ],
+          [
+            0.0,
+            -0.31,
+            1.2
+          ],
+          [
+            -0.05,
+            -0.3,
+            0.95
+          ],
+          [
+            -0.02,
+            -0.15,
+            0.9
+          ]
+        ],
+        "bend_radius": 0.06,
+        "material": "xlr_metal",
+        "flanges": [
+          0.2,
+          0.5,
+          0.8
+        ],
+        "flange_material": "xlr_red",
+        "flange_size": [
+          0.006,
+          0.01
+        ],
+        "flange_segments": 8,
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: one of the larger lines across the -y side (white braided or bare), traced roughly; the many small lines and wires are left out"
+      },
+      {
+        "kind": "pipe",
+        "name": "side_hose_3",
+        "diameter": 0.025,
+        "points": [
+          [
+            0.12,
+            -0.1,
+            1.58
+          ],
+          [
+            0.3,
+            -0.25,
+            1.6
+          ],
+          [
+            0.32,
+            -0.25,
+            1.3
+          ],
+          [
+            0.3,
+            -0.25,
+            1.0
+          ],
+          [
+            0.08,
+            -0.1,
+            0.95
+          ]
+        ],
+        "bend_radius": 0.06,
+        "material": "xlr_metal",
+        "flanges": [
+          0.2,
+          0.5,
+          0.8
+        ],
+        "flange_material": "xlr_red",
+        "flange_size": [
+          0.006,
+          0.01
+        ],
+        "flange_segments": 8,
+        "source": "photo_usaf, scaled by the exit ring (nasm_xlr99's 40 1/4 in = 790 px, so 1.294 mm/px; axis at y 534, exit plane at x 1540; +x up in the photo, z along the axis, -y towards the camera); estimated: one of the larger lines across the -y side (white braided or bare), traced roughly; the many small lines and wires are left out"
+      },
+      {
+        "kind": "pipe",
+        "name": "braided_hose_0",
+        "diameter": 0.032,
+        "points": [
+          [
+            -0.05,
+            0.25,
+            1.15
+          ],
+          [
+            -0.114,
+            0.28,
+            1.33
+          ],
+          [
+            -0.127,
+            0.28,
+            1.58
+          ],
+          [
+            -0.114,
+            0.28,
+            1.68
+          ],
+          [
+            0.0,
+            0.2,
+            1.7
+          ]
+        ],
+        "bend_radius": 0.05,
+        "material": "xlr_metal",
+        "flanges": [
+          0.25,
+          0.5,
+          0.75
+        ],
+        "flange_material": "xlr_red",
+        "flange_size": [
+          0.006,
+          0.01
+        ],
+        "flange_segments": 8,
+        "source": "photo_nasm, scaled by the exit ring (1.265 mm/px; axis at y 600, exit plane at x 150; the +y side); estimated: the upper of the two braided hoses sagging under the exhaust housing, x 1060-1540, y 640-700 (z 1.15-1.76, x -0.05 to -0.13), about 25 px (3 cm) thick; from the foil-wrapped block forward to the turbine case; depth estimated Texture: woven wire braid (photo_nasm and photo_usaf show braided sheaths on these hoses); weave and pitch estimated",
+        "texture": {
+          "kind": "braid",
+          "carriers": 6,
+          "groove": 0.45,
+          "repeat": [
+            0.05,
+            0.025
+          ]
+        }
+      },
+      {
+        "kind": "pipe",
+        "name": "braided_hose_1",
+        "diameter": 0.032,
+        "points": [
+          [
+            -0.1,
+            0.23,
+            1.22
+          ],
+          [
+            -0.152,
+            0.27,
+            1.33
+          ],
+          [
+            -0.177,
+            0.27,
+            1.52
+          ],
+          [
+            -0.2,
+            0.27,
+            1.62
+          ],
+          [
+            -0.02,
+            0.2,
+            1.7
+          ]
+        ],
+        "bend_radius": 0.05,
+        "material": "xlr_metal",
+        "flanges": [
+          0.25,
+          0.5,
+          0.75
+        ],
+        "flange_material": "xlr_red",
+        "flange_size": [
+          0.006,
+          0.01
+        ],
+        "flange_segments": 8,
+        "source": "photo_nasm, scaled by the exit ring (1.265 mm/px; axis at y 600, exit plane at x 150; the +y side); estimated: the lower braided hose, x 1200-1540, y 720-760 (z 1.33-1.76, x -0.15 to -0.20); depth estimated Texture: woven wire braid (photo_nasm and photo_usaf show braided sheaths on these hoses); weave and pitch estimated",
+        "texture": {
+          "kind": "braid",
+          "carriers": 6,
+          "groove": 0.45,
+          "repeat": [
+            0.05,
+            0.025
+          ]
+        }
+      },
+      {
+        "kind": "pipe",
+        "name": "long_line_0",
+        "diameter": 0.02,
+        "points": [
+          [
+            -0.25,
+            0.14,
+            0.62
+          ],
+          [
+            -0.25,
+            0.25,
+            0.7
+          ],
+          [
+            -0.25,
+            0.25,
+            1.4
+          ],
+          [
+            -0.17,
+            0.05,
+            1.45
+          ]
+        ],
+        "bend_radius": 0.05,
+        "material": "xlr_metal",
+        "flanges": [
+          0.25,
+          0.5,
+          0.75
+        ],
+        "flange_material": "xlr_red",
+        "flange_size": [
+          0.006,
+          0.01
+        ],
+        "flange_segments": 8,
+        "source": "photo_nasm, scaled by the exit ring (1.265 mm/px; axis at y 600, exit plane at x 150; the +y side); estimated: the two long straight lines low along the side, y 800-830 (x -0.25 to -0.29), x 600-1300 (z 0.57-1.45), from the square valve at the chamber forward to the corrugated line; depth estimated"
+      },
+      {
+        "kind": "pipe",
+        "name": "long_line_1",
+        "diameter": 0.02,
+        "points": [
+          [
+            -0.29,
+            0.14,
+            0.62
+          ],
+          [
+            -0.29,
+            0.22,
+            0.7
+          ],
+          [
+            -0.29,
+            0.22,
+            1.38
+          ],
+          [
+            -0.17,
+            0.03,
+            1.5
+          ]
+        ],
+        "bend_radius": 0.05,
+        "material": "xlr_metal",
+        "flanges": [
+          0.25,
+          0.5,
+          0.75
+        ],
+        "flange_material": "xlr_red",
+        "flange_size": [
+          0.006,
+          0.01
+        ],
+        "flange_segments": 8,
+        "source": "photo_nasm, scaled by the exit ring (1.265 mm/px; axis at y 600, exit plane at x 150; the +y side); estimated: the second of the two long straight lines (see long_line_0)"
+      },
+      {
+        "kind": "pipe",
+        "name": "chamber_line",
+        "diameter": 0.018,
+        "points": [
+          [
+            -0.02,
+            0.17,
+            0.7
+          ],
+          [
+            -0.05,
+            0.26,
+            0.7
+          ],
+          [
+            -0.3,
+            0.26,
+            0.7
+          ],
+          [
+            -0.3,
+            0.12,
+            0.75
+          ]
+        ],
+        "bend_radius": 0.05,
+        "material": "xlr_metal",
+        "flanges": [
+          0.3,
+          0.6
+        ],
+        "flange_material": "xlr_red",
+        "flange_size": [
+          0.006,
+          0.01
+        ],
+        "flange_segments": 8,
+        "source": "photo_nasm, scaled by the exit ring (1.265 mm/px; axis at y 600, exit plane at x 150; the +y side); estimated: the line dropping past the chamber by the truss, x 700-720 (z 0.70), y 600-900, into the square valve; depth estimated"
+      },
+      {
+        "kind": "pipe",
+        "name": "lower_line_u0",
+        "diameter": 0.02,
+        "points": [
+          [
+            -0.17,
+            -0.03,
+            1.42
+          ],
+          [
+            -0.215,
+            -0.27,
+            1.41
+          ],
+          [
+            -0.24,
+            -0.27,
+            1.22
+          ],
+          [
+            -0.29,
+            -0.27,
+            1.02
+          ],
+          [
+            -0.29,
+            -0.12,
+            0.85
+          ]
+        ],
+        "bend_radius": 0.05,
+        "material": "xlr_metal",
+        "flanges": [
+          0.25,
+          0.5,
+          0.75
+        ],
+        "flange_material": "xlr_red",
+        "flange_size": [
+          0.006,
+          0.01
+        ],
+        "flange_segments": 8,
+        "source": "photo_usaf, scaled by the exit ring (1.294 mm/px; axis at y 534, exit plane at x 1540; the -y side); estimated: the line falling back along the lower side, (450, 700) to (750, 760) (z 1.41-1.02, x -0.21 to -0.29), into the square valve at the chamber; depth estimated"
+      },
+      {
+        "kind": "pipe",
+        "name": "lower_line_u1",
+        "diameter": 0.02,
+        "points": [
+          [
+            -0.17,
+            -0.03,
+            1.48
+          ],
+          [
+            -0.32,
+            -0.25,
+            1.24
+          ],
+          [
+            -0.38,
+            -0.25,
+            0.95
+          ],
+          [
+            -0.42,
+            -0.22,
+            0.7
+          ],
+          [
+            -0.3,
+            -0.12,
+            0.66
+          ]
+        ],
+        "bend_radius": 0.05,
+        "material": "xlr_metal",
+        "flanges": [
+          0.25,
+          0.5,
+          0.75
+        ],
+        "flange_material": "xlr_red",
+        "flange_size": [
+          0.006,
+          0.01
+        ],
+        "flange_segments": 8,
+        "source": "photo_usaf, scaled by the exit ring (1.294 mm/px; axis at y 534, exit plane at x 1540; the -y side); estimated: the lines along the lower truss tube, x 580-1000, y 780-860 (z 1.24-0.70, x -0.32 to -0.42); depth estimated"
+      },
+      {
+        "kind": "pump",
+        "name": "line_valve",
+        "diameter": 0.05,
+        "length": 0.08,
+        "at": [
+          -0.236,
+          -0.27,
+          1.27
+        ],
+        "axis": [
+          0,
+          0,
+          -1
+        ],
+        "material": "xlr_metal",
+        "source": "photo_usaf, scaled by the exit ring (1.294 mm/px; axis at y 534, exit plane at x 1540; the -y side); estimated: the small valve body on that line, x 620-660, y 640-700"
+      },
+      {
+        "kind": "lathe",
+        "name": "injector_face",
+        "profile": [
+          [
+            0,
+            0
+          ],
+          [
+            0.181,
+            0
+          ],
+          [
+            0.181,
+            0.004
+          ],
+          [
+            0,
+            0.004
+          ]
+        ],
+        "at": [
+          0,
+          0,
+          0.887
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 32,
+        "smooth": false,
+        "closed": true,
+        "material": "xlr_metal",
+        "source": [
+          "photo_david_throat: the injector face is seen through the throat, lit metal; it fills the chamber's top (radius 0.18 m inside the wall)",
+          "jenkins_sp2007 p.197: \"The igniter was located along the centerline at the top of the chamber\""
+        ]
+      },
+      {
+        "kind": "lathe",
+        "name": "injector_igniter",
+        "profile": [
+          [
+            0.012,
+            0
+          ],
+          [
+            0.032,
+            0
+          ],
+          [
+            0.032,
+            0.012
+          ],
+          [
+            0.012,
+            0.012
+          ]
+        ],
+        "at": [
+          0,
+          0,
+          0.875
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 24,
+        "smooth": false,
+        "closed": true,
+        "material": "xlr_metal",
+        "source": [
+          "photo_david_throat: a round boss with a hole on the centreline, about a sixth of the face across (0.064 m, estimated)",
+          "jenkins_sp2007 p.197: \"The igniter was located along the centerline at the top of the chamber\""
+        ]
+      },
+      {
+        "kind": "lathe",
+        "name": "injector_igniter_hole",
+        "profile": [
+          [
+            0,
+            0
+          ],
+          [
+            0.012,
+            0
+          ],
+          [
+            0.012,
+            0.002
+          ],
+          [
+            0,
+            0.002
+          ]
+        ],
+        "at": [
+          0,
+          0,
+          0.885
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 16,
+        "smooth": false,
+        "closed": true,
+        "material": "xlr_soot",
+        "source": [
+          "photo_david_throat: the dark hole in the boss's middle (estimated)"
+        ]
+      },
+      {
+        "kind": "lathe",
+        "name": "injector_opening_0",
+        "profile": [
+          [
+            0,
+            0
+          ],
+          [
+            0.042,
+            0
+          ],
+          [
+            0.042,
+            0.002
+          ],
+          [
+            0,
+            0.002
+          ]
+        ],
+        "at": [
+          0.0,
+          0.105,
+          0.885
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 20,
+        "smooth": false,
+        "closed": true,
+        "material": "xlr_soot",
+        "source": [
+          "render_reference: six round openings evenly round the centre boss, each about a quarter of the face across (0.084 m), centres 0.105 m out (estimated from the render's proportions; the real photos show the boss but are too dark to count them)",
+          "jenkins_sp2007 p.197: \"The igniter was located along the centerline at the top of the chamber\""
+        ]
+      },
+      {
+        "kind": "lathe",
+        "name": "injector_opening_1",
+        "profile": [
+          [
+            0,
+            0
+          ],
+          [
+            0.042,
+            0
+          ],
+          [
+            0.042,
+            0.002
+          ],
+          [
+            0,
+            0.002
+          ]
+        ],
+        "at": [
+          -0.0909,
+          0.0525,
+          0.885
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 20,
+        "smooth": false,
+        "closed": true,
+        "material": "xlr_soot",
+        "source": [
+          "render_reference: six round openings evenly round the centre boss, each about a quarter of the face across (0.084 m), centres 0.105 m out (estimated from the render's proportions; the real photos show the boss but are too dark to count them)",
+          "jenkins_sp2007 p.197: \"The igniter was located along the centerline at the top of the chamber\""
+        ]
+      },
+      {
+        "kind": "lathe",
+        "name": "injector_opening_2",
+        "profile": [
+          [
+            0,
+            0
+          ],
+          [
+            0.042,
+            0
+          ],
+          [
+            0.042,
+            0.002
+          ],
+          [
+            0,
+            0.002
+          ]
+        ],
+        "at": [
+          -0.0909,
+          -0.0525,
+          0.885
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 20,
+        "smooth": false,
+        "closed": true,
+        "material": "xlr_soot",
+        "source": [
+          "render_reference: six round openings evenly round the centre boss, each about a quarter of the face across (0.084 m), centres 0.105 m out (estimated from the render's proportions; the real photos show the boss but are too dark to count them)",
+          "jenkins_sp2007 p.197: \"The igniter was located along the centerline at the top of the chamber\""
+        ]
+      },
+      {
+        "kind": "lathe",
+        "name": "injector_opening_3",
+        "profile": [
+          [
+            0,
+            0
+          ],
+          [
+            0.042,
+            0
+          ],
+          [
+            0.042,
+            0.002
+          ],
+          [
+            0,
+            0.002
+          ]
+        ],
+        "at": [
+          -0.0,
+          -0.105,
+          0.885
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 20,
+        "smooth": false,
+        "closed": true,
+        "material": "xlr_soot",
+        "source": [
+          "render_reference: six round openings evenly round the centre boss, each about a quarter of the face across (0.084 m), centres 0.105 m out (estimated from the render's proportions; the real photos show the boss but are too dark to count them)",
+          "jenkins_sp2007 p.197: \"The igniter was located along the centerline at the top of the chamber\""
+        ]
+      },
+      {
+        "kind": "lathe",
+        "name": "injector_opening_4",
+        "profile": [
+          [
+            0,
+            0
+          ],
+          [
+            0.042,
+            0
+          ],
+          [
+            0.042,
+            0.002
+          ],
+          [
+            0,
+            0.002
+          ]
+        ],
+        "at": [
+          0.0909,
+          -0.0525,
+          0.885
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 20,
+        "smooth": false,
+        "closed": true,
+        "material": "xlr_soot",
+        "source": [
+          "render_reference: six round openings evenly round the centre boss, each about a quarter of the face across (0.084 m), centres 0.105 m out (estimated from the render's proportions; the real photos show the boss but are too dark to count them)",
+          "jenkins_sp2007 p.197: \"The igniter was located along the centerline at the top of the chamber\""
+        ]
+      },
+      {
+        "kind": "lathe",
+        "name": "injector_opening_5",
+        "profile": [
+          [
+            0,
+            0
+          ],
+          [
+            0.042,
+            0
+          ],
+          [
+            0.042,
+            0.002
+          ],
+          [
+            0,
+            0.002
+          ]
+        ],
+        "at": [
+          0.0909,
+          0.0525,
+          0.885
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 20,
+        "smooth": false,
+        "closed": true,
+        "material": "xlr_soot",
+        "source": [
+          "render_reference: six round openings evenly round the centre boss, each about a quarter of the face across (0.084 m), centres 0.105 m out (estimated from the render's proportions; the real photos show the boss but are too dark to count them)",
+          "jenkins_sp2007 p.197: \"The igniter was located along the centerline at the top of the chamber\""
+        ]
+      },
+      {
+        "kind": "lathe",
+        "name": "injector_manifold",
+        "profile": [
+          [
+            0,
+            0
+          ],
+          [
+            0.17,
+            0
+          ],
+          [
+            0.17,
+            0.06
+          ],
+          [
+            0.12,
+            0.09
+          ],
+          [
+            0,
+            0.09
+          ]
+        ],
+        "at": [
+          0,
+          0,
+          1.0
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 32,
+        "material": "xlr_metal",
+        "source": [
+          "nasm_xlr99: the engine had a \"fuel injector\"; estimated: the injector's manifold on the chamber's top, as wide as the chamber (0.34 m), 9 cm tall, where the main lines arrive (hidden behind the plumbing in the photos)"
+        ]
+      },
+      {
+        "kind": "pipe",
+        "name": "oxidizer_duct",
+        "diameter": 0.09,
+        "points": [
+          [
+            0.08,
+            0.0,
+            1.47
+          ],
+          [
+            0.03,
+            0.0,
+            1.32
+          ],
+          [
+            0.0,
+            0.0,
+            1.15
+          ],
+          [
+            0.0,
+            0.0,
+            1.07
+          ]
+        ],
+        "bend_radius": 0.08,
+        "material": "xlr_metal",
+        "flanges": [
+          0.04,
+          0.96
+        ],
+        "source": [
+          "jenkins_sp2007 p.205: each pump \"had an output pressure of approximately 1,200 psi. The combined oxidizer/fuel flow rate at maximum thrust was 13,000 pounds per minute\"; estimated: the oxidizer line from the pump case straight down into the injector's centre; size and route not in any source (the flow needs a large line), hidden behind the valves in the photos"
+        ]
+      },
+      {
+        "kind": "pipe",
+        "name": "fuel_duct",
+        "diameter": 0.08,
+        "points": [
+          [
+            0.14,
+            -0.08,
+            1.47
+          ],
+          [
+            0.15,
+            -0.13,
+            1.4
+          ],
+          [
+            0.15,
+            -0.13,
+            1.22
+          ],
+          [
+            0.08,
+            -0.1,
+            1.06
+          ]
+        ],
+        "bend_radius": 0.06,
+        "material": "xlr_metal",
+        "flanges": [
+          0.05,
+          0.95
+        ],
+        "source": [
+          "jenkins_sp2007 p.205: each pump \"had an output pressure of approximately 1,200 psi. The combined oxidizer/fuel flow rate at maximum thrust was 13,000 pounds per minute\"; estimated: the ammonia line from the pump down through the two upright valve bodies (photo_usaf) into the injector's manifold; where the ammonia first enters the 547 cooling tubes (hjelm_bornhorst) isn't shown in any source, so that loop is left out"
+        ]
+      },
+      {
+        "kind": "pump",
+        "name": "gas_generator",
+        "diameter": 0.09,
+        "length": 0.2,
+        "at": [
+          0.0,
+          0.2,
+          1.3
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "material": "xlr_metal",
+        "source": [
+          "jenkins_sp2007 p.198: \"The gas generator consisted of a simple catalyst bed that decomposed the hydrogen peroxide into steam\" to drive the turbine; nasm_xlr99 lists a \"gas generator\"; estimated: a short canister feeding the turbine case from below; its size and place aren't in any source or photo"
+        ]
+      },
+      {
+        "kind": "pipe",
+        "name": "peroxide_line",
+        "diameter": 0.022,
+        "points": [
+          [
+            0.0,
+            0.2,
+            1.31
+          ],
+          [
+            -0.05,
+            0.22,
+            1.22
+          ],
+          [
+            -0.1,
+            0.23,
+            1.2
+          ]
+        ],
+        "bend_radius": 0.04,
+        "material": "xlr_metal",
+        "flanges": [
+          0.5
+        ],
+        "flange_material": "xlr_red",
+        "flange_size": [
+          0.006,
+          0.01
+        ],
+        "flange_segments": 8,
+        "source": [
+          "jenkins_sp2007 p.199: \"Regulating the amount of hydrogen peroxide that was decomposed to drive the turbopump provided the throttle control\"; estimated: the peroxide feed from the foil-wrapped block (photo_nasm) to the gas generator"
+        ]
+      }
+    ],
+    "materials": {
+      "nozzle": "xlr_tubes",
+      "chamber": "xlr_skin",
+      "powerhead": "xlr_metal",
+      "parts": "xlr_metal",
+      "chamber_inside": "xlr_soot"
+    }
+  },
+  "closeups": [
+    {
+      "name": "exit",
+      "target": [
+        0,
+        0,
+        0.1
+      ],
+      "look": [
+        0.2,
+        1,
+        -0.6
+      ],
+      "radius": 0.7
+    },
+    {
+      "name": "powerhead",
+      "target": [
+        0.1,
+        0,
+        1.4
+      ],
+      "look": [
+        0.1,
+        1,
+        0.2
+      ],
+      "radius": 0.7
+    },
+    {
+      "name": "truss",
+      "target": [
+        0.1,
+        0,
+        0.9
+      ],
+      "look": [
+        -0.5,
+        1,
+        0.1
+      ],
+      "radius": 0.9
+    },
+    {
+      "name": "far side",
+      "target": [
+        0,
+        0,
+        1.0
+      ],
+      "look": [
+        0,
+        -1,
+        0.1
+      ],
+      "radius": 1.2
+    },
+    {
+      "name": "duct side",
+      "target": [
+        0.1,
+        0.2,
+        1.0
+      ],
+      "look": [
+        0,
+        1,
+        0.05
+      ],
+      "radius": 1.2
+    }
+  ]
+}

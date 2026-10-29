@@ -119,11 +119,14 @@ def plane_uv(obj, across, repeat_w, repeat_h):
         p = mw @ me.vertices[loop.vertex_index].co
         uv.data[li].uv = ((p.x * across[0] + p.y * across[1]) / repeat_w, p.z / repeat_h)
 
-def tube_wall(probe, name, tube_hex, per_tile, split=0.5, px_per_tube=32, h=512, groove=0.5):
+def tube_wall(probe, name, tube_hex, per_tile, split=0.5, px_per_tube=32, h=512, groove=0.5,
+              soot=None, rays=None):
     """Colour and normal map of a tube-wall nozzle (tubes along v, side by side across u):
     `per_tile` tubes across the image above v = `split`, twice as many below it (where each
-    tube splits in two, as on the F-1 below its 3:1 plane). Repeats across u only. Returns
-    (base, normal)."""
+    tube splits in two, as on the F-1 below its 3:1 plane). Repeats across u only. Optional
+    for a coated inside: soot {hex, from, to} darkens it towards the throat (v from `from` to
+    `to`), rays {hex, from, width} draws one light streak per tile (the "star" seen down a
+    nozzle) from v = `from` to the throat, `width` a fraction of the tile. Returns (base, normal)."""
     w = per_tile * px_per_tube
     u = (np.arange(w) + 0.5) / w
     v = (np.arange(h) + 0.5) / h
@@ -131,10 +134,78 @@ def tube_wall(probe, name, tube_hex, per_tile, split=0.5, px_per_tube=32, h=512,
     n = np.where(V < split, 2 * per_tile, per_tile)
     x = (U * n) % 1.0 * 2 - 1                          # -1..1 across each tube
     hgt = np.sqrt(np.clip(1 - x * x, 0, 1))
-    shade = groove + (1 - groove) * hgt ** 0.5          # dark in the grooves between tubes
-    rgb = srgb(tube_hex)[None, None] * shade[..., None]
+    shade = groove + (1 - groove) * hgt ** (0.5 if groove >= 0.5 else 0.25)   # dark in the grooves
+    col = np.broadcast_to(srgb(tube_hex)[None, None], V.shape + (3,)).copy()
+    if soot:
+        t = np.clip((V - soot["from"]) / (soot["to"] - soot["from"]), 0, 1)
+        t = (t * t * (3 - 2 * t))[..., None]
+        col = col * (1 - t) + srgb(soot["hex"])[None, None] * t
+    if rays:
+        d = np.minimum(np.abs(U - 0.5), 1 - np.abs(U - 0.5))      # distance from the tile's middle
+        m = np.exp(-(d / (rays["width"] / 2)) ** 2)
+        m = m * np.clip((V - rays["from"]) / max(1e-6, 1 - rays["from"]), 0, 1) ** 0.7
+        col = col * (1 - m[..., None]) + srgb(rays["hex"])[None, None] * m[..., None]
+    rgb = col * shade[..., None]
     dx = np.where(np.abs(x) < 0.999, -x / np.maximum(hgt, 0.05), 0) * 0.6
     nrm = np.stack([-dx, np.zeros_like(dx), np.ones_like(dx)], 2)
+    nrm /= np.linalg.norm(nrm, axis=2, keepdims=True)
+    return (image(probe, f"{name}_base", np.clip(rgb, 0, 1).astype(np.float32), "sRGB"),
+            image(probe, f"{name}_normal", (nrm * 0.5 + 0.5).astype(np.float32), "Non-Color"))
+
+def _noise(h, w, size_v, size_u, seed):
+    """Seamless smooth noise in [-1, 1]: white noise low-passed in the frequency domain, so
+    it wraps at the edges. `size_u`, `size_v`: blob size in pixels across and along."""
+    rng = np.random.default_rng(seed)
+    f = np.fft.fft2(rng.standard_normal((h, w)))
+    fy = np.fft.fftfreq(h)[:, None] * size_v
+    fx = np.fft.fftfreq(w)[None, :] * size_u
+    n = np.real(np.fft.ifft2(f * np.exp(-(fx * fx + fy * fy) * 8)))
+    n -= n.mean()
+    return n / (np.abs(n).max() + 1e-9)
+
+def mottle(probe, name, base_hex, spread=0.12, blob=(0.25, 0.25), streak=None, patches=None,
+           repeat=(0.5, 0.5), px=256, seed=1):
+    """Colour map of a mottled finish (heat tint, cast metal, weathered paint), `repeat` metres
+    wide and tall: the base colour brightened and darkened by up to `spread` in blobs `blob`
+    metres across (u, v); `streak` {spread, length}: extra streaks `length` metres long along v
+    (heat tint running down a nozzle); `patches` {hex, cover, blob}: a second colour over about
+    `cover` of the surface in blobs (paint worn through to the metal). Returns base."""
+    w = px
+    h = max(8, int(round(px * repeat[1] / repeat[0])))
+    mpp = repeat[0] / w                                  # metres per pixel
+    n = _noise(h, w, blob[1] / mpp, blob[0] / mpp, seed)
+    n += 0.35 * _noise(h, w, blob[1] / mpp / 4, blob[0] / mpp / 4, seed + 1)   # finer grain
+    col = srgb(base_hex)[None, None] * (1 + spread * n)[..., None]
+    if streak:
+        s = _noise(h, w, streak["length"] / mpp, 0.01 / mpp, seed + 2)
+        col = col * (1 + streak["spread"] * s)[..., None]
+    if patches:
+        m = _noise(h, w, patches["blob"] / mpp, patches["blob"] / mpp, seed + 3)
+        t = np.quantile(m, 1 - patches["cover"])
+        a = np.clip((m - t) / 0.08, 0, 1)[..., None]
+        col = col * (1 - a) + srgb(patches["hex"])[None, None] * a
+    return image(probe, f"{name}_base", np.clip(col, 0, 1).astype(np.float32), "sRGB")
+
+def braid(probe, name, base_hex, carriers=6, groove=0.45, px=128):
+    """Colour and normal map of a braided hose sheath: two sets of `carriers` strand bands
+    winding opposite ways, over two, under two, one tile round the hose and one pitch along.
+    Returns (base, normal)."""
+    u = (np.arange(px) + 0.5) / px
+    U, V = np.meshgrid(u, u)
+    a = (U + V) * carriers % 1.0                         # position across a band, one way
+    b = (U - V) * carriers % 1.0                         # and the other way
+    ia = np.floor((U + V) * carriers).astype(int)
+    ib = np.floor((U - V) * carriers).astype(int)
+    over = ((ia + ib) // 2) % 2 == 0                     # which band is on top here
+    pa = np.sin(np.pi * a) ** 0.6
+    pb = np.sin(np.pi * b) ** 0.6
+    hgt = np.where(over, pa, pb * 0.8)
+    # strand lines within a band (the wires of each carrier)
+    fine = np.where(over, np.abs(np.sin(np.pi * a * 4)), np.abs(np.sin(np.pi * b * 4)))
+    shade = groove + (1 - groove) * hgt * (0.8 + 0.2 * fine)
+    rgb = srgb(base_hex)[None, None] * shade[..., None]
+    gy, gx = np.gradient(hgt)
+    nrm = np.stack([-gx * 6, -gy * 6, np.ones_like(hgt)], 2)
     nrm /= np.linalg.norm(nrm, axis=2, keepdims=True)
     return (image(probe, f"{name}_base", np.clip(rgb, 0, 1).astype(np.float32), "sRGB"),
             image(probe, f"{name}_normal", (nrm * 0.5 + 0.5).astype(np.float32), "Non-Color"))

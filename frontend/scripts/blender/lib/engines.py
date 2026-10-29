@@ -14,12 +14,15 @@
 #              ...] as fractions of the exit radius and of the length, measured from a side photo,
 #              from the exit up to the throat)
 #   chamber:   diameter, length (cylinder), convergent_length (throat to the cylinder), optional
+#              hollow (open at the throat, its inside in materials.chamber_inside; full lod), optional
 #              outside "cylinder" (a straight cylinder from the throat plane up)
 #   powerhead: diameter, height (injector dome and the block above it)
 #   gimbal:    diameter, height (the mount on top), optional
 #   nozzle.outer_profile: optional [(r, z)] outside of the bell where it is wider than the wall
 #   nozzle.ribs: optional flat strips down the bell {count, width, stands_out, from, to}, full lod
-#   nozzle.tubes: optional tube-wall texture {count, split_below_throat, per_tile}, full lod only
+#   nozzle.tubes: optional tube-wall texture {count, split_below_throat, per_tile, groove (brightness
+#              between tubes, 0-1, default 0.5), inner (the
+#              coated inside, see _tube_wall)}, full lod only
 #   nozzle.hoops (one group or a list), extension.hoops: optional stiffening rings {count, height, stands_out, from,
 #              to, studs} (from and to: fractions of that part's length from its exit; studs
 #              {shape "post"|"plate", count or angles {"ring": [deg]}, dense {count, bands},
@@ -37,14 +40,19 @@
 #              in the engine's frame: pump {diameter, length, at, axis}, pipe {diameter, points},
 #              box {size, at}, actuator {diameter, from, to}, lathe {profile [[r, z], ...], at,
 #              axis, smooth (false for flat-ended discs)}; pipes may have flanges [fractions
-#              of their length]; each may set its material; each
+#              of their length] (flange_size [stands out, half length], flange_material,
+#              flange_segments: thin clamps on small lines); each may set its material; each
 #              with its own source
 #   powerhead: optional shape "dome" (rounded up to the gimbal), or profile [[r, dz], ...] traced
 #              from a side photo, dz above the chamber's top, from the bottom up (then height and
 #              diameter are not used)
-#   parts kind lathe: optional segments, closed, sweep_deg, roll_deg; kind box: optional roll_deg
+#   parts kind lathe: optional segments, closed, sweep_deg, roll_deg, scale [x, y, z] (squashed
+#              about `at` along the engine's axes: a flat housing); kind box: optional roll_deg
 #   parts kind bolts: a ring of posts {count, diameter, length, radius, at, axis, sides, radial,
-#              start_deg}
+#              start_deg, skip [indices left out]}
+#   parts "texture": optional {kind "mottle" (spread, blob, streak, patches) | "braid" (carriers,
+#              groove), repeat [w, h] metres}: a generated texture in the part's material colour,
+#              full lod only (see _texture)
 #   parts "keep": true also builds the part at lod simple, "low" at simple and low (silhouette
 #              parts: the big pipes and pumps); the rest are full lod only
 #   materials: {"nozzle", "chamber", "powerhead", "parts"}: material names (spec or shared)
@@ -296,26 +304,44 @@ def _torus(name, m, seg, material):
         objs.append(parts._object(f"{name}_joints", bm, material, Matrix()))
     return objs
 
+def _hex(mat_name):
+    col, metallic, rough = materials.definition(mat_name)
+    return "#" + "".join(f"{int(round(255 * (c ** (1 / 2.2)))):02x}" for c in col), metallic, rough
+
 def _tube_wall(obj, name, t, L, mat_name):
     """Give the nozzle the tube-wall texture: t {count (tubes round the top), split_below_throat
     (where each tube splits in two; omit for none), per_tile}. u counts tubes round the axis,
-    v runs from the exit (0) to the throat (1), with the split at v = 0.5."""
+    v runs from the exit (0) to the throat (1), with the split at v = 0.5. Optional inner
+    {material, per_tile, soot {material, from, to}, rays {material, from, width}}: the inside
+    faces get their own texture (a coated wall, see tiling.tube_wall), no split."""
     import bpy
     from lib import tiling
-    col, metallic, rough = materials.definition(mat_name)
-    hexs = "#" + "".join(f"{int(round(255 * (c ** (1 / 2.2)))):02x}" for c in col)
+    hexs, metallic, rough = _hex(mat_name)
     per = t.get("per_tile", 2)
     zs = L - t["split_below_throat"] if "split_below_throat" in t else None
     base, nrm = tiling.tube_wall(name, f"{name}_tube_wall", hexs, per,
-                                 split=0.5 if zs is not None else 0.0)
+                                 split=0.5 if zs is not None else 0.0, groove=t.get("groove", 0.5))
     obj.data.materials.clear()
     obj.data.materials.append(materials.image(f"{name}_tube_wall", base, nrm, metallic=metallic,
                                               roughness=rough))
     reps = t["count"] / per
+    inn = t.get("inner")
+    if inn:
+        ih, im_, ir = _hex(inn["material"])
+        so = dict(inn["soot"], hex=_hex(inn["soot"]["material"])[0]) if "soot" in inn else None
+        ra = dict(inn["rays"], hex=_hex(inn["rays"]["material"])[0]) if "rays" in inn else None
+        ib, inr = tiling.tube_wall(name, f"{name}_tube_wall_inner", ih, inn["per_tile"], split=0.0,
+                                   soot=so, rays=ra, groove=inn.get("groove", 0.5))
+        obj.data.materials.append(materials.image(f"{name}_tube_wall_inner", ib, inr, metallic=im_,
+                                                  roughness=ir))
+        reps_in = t["count"] / inn["per_tile"]
     me = obj.data
     uv = me.uv_layers.new(name="UVMap")
     for poly in me.polygons:
         ac = math.atan2(poly.center.y, poly.center.x)
+        inside = bool(inn) and (poly.normal.x * poly.center.x + poly.normal.y * poly.center.y) < 0
+        poly.material_index = 1 if inside else 0
+        rp = reps_in if inside else reps
         for li in poly.loop_indices:
             p = me.vertices[me.loops[li].vertex_index].co
             a = math.atan2(p.y, p.x)
@@ -324,7 +350,7 @@ def _tube_wall(obj, name, t, L, mat_name):
                 vv = p.z / L
             else:
                 vv = 0.5 * p.z / zs if p.z < zs else 0.5 + 0.5 * (p.z - zs) / (L - zs)
-            uv.data[li].uv = (a / (2 * math.pi) * reps, vv)
+            uv.data[li].uv = (a / (2 * math.pi) * rp, p.z / L if inside else vv)
 
 def _flanges(name, p, material):
     """Rings round a pipe at fractions of its length along its straight runs (bends ignored)."""
@@ -332,14 +358,15 @@ def _flanges(name, p, material):
     lens = [(b - a).length for a, b in zip(pts, pts[1:])]
     total = sum(lens)
     r = p["diameter"] / 2
+    out, h = p.get("flange_size", (0.035, 0.03))      # how far it stands out, half its length
     bm = bmesh.new()
     for f in p["flanges"]:
         d = f * total
         for a, b, l in zip(pts, pts[1:], lens):
             if d <= l:
                 c = a + (b - a) * (d / l)
-                parts._lathe(bm, [(r - 0.01, -0.03), (r + 0.035, -0.03), (r + 0.035, 0.03),
-                                  (r - 0.01, 0.03), (r - 0.01, -0.03)], 16,
+                parts._lathe(bm, [(r - 0.01, -h), (r + out, -h), (r + out, h),
+                                  (r - 0.01, h), (r - 0.01, -h)], p.get("flange_segments", 16),
                              parts.frame(tuple(c), tuple(b - a)))
                 break
             d -= l
@@ -354,7 +381,10 @@ def _bolts(name, p, material):
     sg, n, R, L = p.get("sides", 6), p["count"], p["radius"], p["length"]
     rad = p["diameter"] / 2 / math.cos(math.pi / sg)
     bm = bmesh.new()
+    skip = set(p.get("skip", []))                     # left out (an opening in the ring)
     for i in range(n):
+        if i in skip:
+            continue
         a = math.radians(p.get("start_deg", 0.0)) + 2 * math.pi * i / n
         if p.get("radial"):
             m = (Matrix.Translation(((R + L / 2) * math.cos(a), (R + L / 2) * math.sin(a), 0))
@@ -364,6 +394,100 @@ def _bolts(name, p, material):
         bmesh.ops.create_cone(bm, cap_ends=True, segments=sg, radius1=rad, radius2=rad,
                               depth=L, matrix=m0 @ m)
     return parts._object(name, bm, material, Matrix())
+
+def _path_uv(obj, pts, diameter, rep):
+    """UVs that follow a pipe: v = length along its points / rep[1], u = angle round it, a whole
+    number of repeats of rep[0] round the pipe (a frame carried along the bends, so no twist)."""
+    pts = [Vector(q) for q in pts]
+    segs, cum, ref = [], 0.0, None
+    for a, b in zip(pts, pts[1:]):
+        d = (b - a)
+        L = d.length or 1e-9
+        t = d / L
+        if ref is None:
+            ref = t.orthogonal().normalized()
+        else:
+            ref = (ref - t * ref.dot(t)).normalized()
+        segs.append((a, t, L, cum, ref.copy(), t.cross(ref)))
+        cum += L
+    n_round = max(1, round(math.pi * diameter / rep[0]))
+    me, mw = obj.data, obj.matrix_world
+    uv = me.uv_layers.new(name="UVMap")
+    def map_(p):
+        best = None
+        for a, t, L, c0, r, s in segs:
+            k = min(max((p - a).dot(t), 0.0), L)
+            dd = (p - (a + t * k)).length
+            if best is None or dd < best[0]:
+                best = (dd, a, t, k, c0, r, s)
+        _, a, t, k, c0, r, s = best
+        w = p - (a + t * k)
+        return math.atan2(w.dot(s), w.dot(r)), (c0 + k) / rep[1]
+    for poly in me.polygons:
+        ac, _ = map_(mw @ poly.center)
+        for li in poly.loop_indices:
+            ang, v = map_(mw @ me.vertices[me.loops[li].vertex_index].co)
+            ang = ac + ((ang - ac + math.pi) % (2 * math.pi) - math.pi)
+            uv.data[li].uv = (ang / (2 * math.pi) * n_round, v)
+
+def _axis_uv(obj, at, axis, radius, rep):
+    """UVs round a lathe or pump part's own axis: u = angle (a whole number of repeats round
+    `radius`), v = height along the axis / rep[1]."""
+    inv = parts.frame(tuple(at), tuple(axis)).inverted()
+    n_round = max(1, round(2 * math.pi * radius / rep[0]))
+    me, mw = obj.data, obj.matrix_world
+    uv = me.uv_layers.new(name="UVMap")
+    for poly in me.polygons:
+        c = inv @ (mw @ poly.center)
+        ac = math.atan2(c.y, c.x)
+        for li in poly.loop_indices:
+            q = inv @ (mw @ me.vertices[me.loops[li].vertex_index].co)
+            a = math.atan2(q.y, q.x) if math.hypot(q.x, q.y) > 1e-6 else ac
+            a = ac + ((a - ac + math.pi) % (2 * math.pi) - math.pi)
+            uv.data[li].uv = (a / (2 * math.pi) * n_round, q.z / rep[1])
+
+def _box_uv(obj, rep):
+    """UVs projected along each face's main axis, rep metres per repeat."""
+    me, mw = obj.data, obj.matrix_world
+    uv = me.uv_layers.new(name="UVMap")
+    for poly in me.polygons:
+        n = poly.normal
+        k = max(range(3), key=lambda i: abs(n[i]))
+        i, j = [x for x in range(3) if x != k]
+        for li in poly.loop_indices:
+            p = mw @ me.vertices[me.loops[li].vertex_index].co
+            uv.data[li].uv = (p[i] / rep[0], p[j] / rep[1])
+
+_TEX = {}
+def _texture(obj, p, name, mat_name):
+    """A part's "texture": {kind "mottle" | "braid", repeat [w, h] metres, ...} (see
+    tiling.mottle and tiling.braid), on its own UVs: along a pipe, round a lathe's or pump's
+    axis, or projected on a box. Parts with the same texture and material share the images."""
+    from lib import tiling
+    t = p["texture"]
+    hexs, metallic, rough = _hex(mat_name)
+    key = json.dumps([mat_name, t], sort_keys=True)
+    if key not in _TEX:
+        tag = f"{name}_{t['kind']}_{len(_TEX)}"
+        if t["kind"] == "braid":
+            base, nrm = tiling.braid(name, tag, hexs, carriers=t.get("carriers", 6),
+                                     groove=t.get("groove", 0.45))
+        else:
+            base = tiling.mottle(name, tag, hexs, spread=t.get("spread", 0.12),
+                                 blob=t.get("blob", (0.25, 0.25)), streak=t.get("streak"),
+                                 patches=t.get("patches"), repeat=t["repeat"], seed=len(_TEX) + 1)
+            nrm = None
+        _TEX[key] = materials.image(tag, base, nrm, metallic=metallic, roughness=rough)
+    obj.data.materials.clear()
+    obj.data.materials.append(_TEX[key])
+    rep = t["repeat"]
+    if p["kind"] == "pipe":
+        _path_uv(obj, p["points"], p["diameter"], rep)
+    elif p["kind"] in ("lathe", "pump"):
+        r = p.get("diameter", 0) / 2 or max(q[0] for q in p["profile"])
+        _axis_uv(obj, p["at"], p.get("axis", (0, 0, 1)), r, rep)
+    else:
+        _box_uv(obj, rep)
 
 def _rocket(name, e, lod):
     nz, ch, ph = e["nozzle"], e["chamber"], e["powerhead"]
@@ -399,9 +523,23 @@ def _rocket(name, e, lod):
         prof += [(rt + wall + (rc - rt - wall) * (1 - math.cos(math.pi * i / n)) / 2,
                   L + ch["convergent_length"] * i / n) for i in range(1, n + 1)]
     top = zc + ch["length"]
-    prof += [(rc, top), (0, top)]
-    objs.append(parts.lathe(f"{name}_chamber", [(0, L - wall)] + prof, segments=seg,
-                            material=mats.get("chamber", "dark_metal")))
+    if ch.get("hollow") and lod == "full" and ch.get("outside") != "cylinder":
+        # Open at the throat, so the chamber is seen from the exit: a shell `wall` thick up to
+        # the injector face, its inside in the "chamber_inside" material.
+        out = prof + [(rc, top), (0, top)]
+        inn = [(0, top - wall), (rc - wall, top - wall)] + [(r - wall, z) for r, z in reversed(prof)]
+        objs.append(parts.lathe(f"{name}_chamber", out + inn, closed=True, segments=seg, smooth=False,
+                                material=[mats.get("chamber", "dark_metal"),
+                                          mats.get("chamber_inside", mats.get("chamber", "dark_metal"))]))
+        me = objs[-1].data
+        for poly in me.polygons:
+            c = poly.center
+            r = math.hypot(c.x, c.y)
+            poly.material_index = 1 if (c.z < top - wall / 2 and r < _interp(prof, c.z) - wall / 2) else 0
+    else:
+        prof += [(rc, top), (0, top)]
+        objs.append(parts.lathe(f"{name}_chamber", [(0, L - wall)] + prof, segments=seg,
+                                material=mats.get("chamber", "dark_metal")))
     rp, hp = ph.get("diameter", 0) / 2, ph.get("height", 0)
     if "profile" in ph:                                # traced: [[r, dz]] above the chamber's top
         pp = ph["profile"]
@@ -466,6 +604,7 @@ def _rocket(name, e, lod):
             if lod == "low":
                 p["bend_radius"] = 0.0                 # straight runs, no bends
         k, pn = p["kind"], f"{name}_{p['name']}"
+        n0 = len(objs)
         if k == "pump":
             r, l = p["diameter"] / 2, p["length"]
             cap = min(r * 0.6, l / 3)
@@ -494,8 +633,18 @@ def _rocket(name, e, lod):
                                     sweep_deg=p.get("sweep_deg", 360.0),
                                     roll_deg=p.get("roll_deg", 0.0),
                                     smooth=p.get("smooth", True), material=p.get("material", pm)))
+            if p.get("scale"):                        # squash it along the engine's axes, about `at`
+                o = objs[-1]
+                o.data.transform(o.matrix_world)
+                o.matrix_world = Matrix()
+                at = Vector(p["at"])
+                o.data.transform(Matrix.Translation(at) @ Matrix.Diagonal(Vector(p["scale"])).to_4x4()
+                                 @ Matrix.Translation(-at))
+                o.data.update()
         else:
             raise ValueError(f"{pn}: unknown engine part kind {k!r}")
+        if lod == "full" and p.get("texture"):
+            _texture(objs[n0], p, name, p.get("material", pm))
     return objs
 
 # --- Jet -------------------------------------------------------------------------------
@@ -572,6 +721,7 @@ def build(e, name, lod="full"):
     e = _v(e)
     if lod not in LOD:
         raise ValueError(f"lod must be one of {sorted(LOD)}, not {lod!r}")
+    _TEX.clear()                                       # texture materials are per build
     if e["kind"] == "rocket":
         return _rocket(name, e, lod)
     if e["kind"] == "jet":
