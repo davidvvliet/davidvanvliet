@@ -9,7 +9,6 @@ import StudioLights from "./StudioLights";
 import * as THREE from "three";
 import ModelsDashboard, { Viewer, type Focusable } from "./ModelsDashboard";
 import styles from "./models.module.css";
-import BackArrow from "../components/BackArrow";
 
 export type Published = {
   probe: string; title: string; thumb: boolean; logos: string[]; explore: boolean; focus: Focusable[];
@@ -64,7 +63,7 @@ export default function PublishedModels({ models, circuit, dashboard }: {
     return (
       <div className={styles.page}>
         <Header>
-          <Link href="/models" className={styles.dim}><BackArrow />models</Link>
+          <Link href="/models" className={styles.dim}>← models</Link>
           <span>{model.title}</span>
         </Header>
         <div className={styles.detail}>
@@ -87,7 +86,7 @@ export default function PublishedModels({ models, circuit, dashboard }: {
     corner: <span className={styles.cardArrow}>↗</span>,
   }] : [];
   return (
-    <Grid back={{ href: "/", label: "explore" }} title="Models" rows={[cards, more]} empty="No published models yet.">
+    <Grid back={{ href: "/", label: "← explore" }} title="Models" rows={[cards, more]} empty="No published models yet.">
       These models were created using my Blender harness with Opus 5.5. Only primary sources, mostly
       NASA&apos;s own, were used for maximum accuracy. The sources for each model can be found in its detailed view.
     </Grid>
@@ -101,7 +100,7 @@ export function BoardDetail({ board }: { board: Board }) {
   return (
     <div className={styles.page}>
       <Header>
-        <Link href="/circuits" className={styles.dim}><BackArrow />circuits</Link>
+        <Link href="/circuits" className={styles.dim}>← circuits</Link>
         <span>{board.title}</span>
       </Header>
       <div className={styles.detail}>
@@ -190,7 +189,7 @@ export function Grid({ back, title, rows, empty, children }: {
   return (
     <div className={styles.page}>
       <Header>
-        <Link href={back.href} className={styles.dim}><BackArrow />{back.label}</Link>
+        <Link href={back.href} className={styles.dim}>{back.label}</Link>
         <span>{title}</span>
       </Header>
       <p className={styles.intro}><span>{children}</span></p>
