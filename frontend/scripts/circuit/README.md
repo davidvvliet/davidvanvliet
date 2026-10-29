@@ -23,10 +23,12 @@ build.py            python3 scripts/circuit/build.py <board> [--publish]   (from
 boards/<board>/     one board: board.json plus either
                       imported KiCad files (someone else's finished design), or
                       recipe.json (our own, from blocks; see "Own boards")
-blocks/<block>.json the building-block library (templates/block.json)
+blocks/<block>.json the building-block library (templates/block.json): usb_c_power, ldo_3v3, rp2040_core, led
+footprints/         footprints KiCad's library doesn't have (mitayi.pretty: the Mitayi Pico's own, MIT)
 lib/tools.py        where each tool is
 lib/checks.py       KiCad's design rule and electrical checks, as dashboard check rows
 lib/sections.py     an imported schematic's titled boxes, as the board's blocks
+lib/extract.py      lifts a block out of an imported board (KiCad's Python): parts, wiring, ports, layout
 lib/pack.py         Blender: tag parts by block, merge pieces, Draco-compress, export
 templates/          a blank block and a blank recipe
 out/<board>/        build output (git-ignored): <board>.glb, <board>.json; out/status.json for the dashboard

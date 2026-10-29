@@ -1,0 +1,176 @@
+{
+ "name": "led",
+ "title": "LED",
+ "purpose": "Indicator LED with its series resistor",
+ "taken_from": {
+  "board": "Mitayi-Pico-D1.kicad_pcb",
+  "refs": [
+   "D3",
+   "R8"
+  ],
+  "missing": []
+ },
+ "sources": [
+  {
+   "id": "mitayi",
+   "title": "Mitayi-Pico-D1 R0.6 (CIRCUITSTATE)",
+   "url": "https://github.com/CIRCUITSTATE/Mitayi-Pico-RP2040",
+   "licence": "MIT (\"All the design files of Mitayi-Pico are completely open-source and released under the MIT license.\")",
+   "read": "Mitayi-Pico-D1.kicad_pcb and .kicad_sch: parts, values, wiring, placement and traces (lib/extract.py)"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "D3",
+   "value": "RED",
+   "symbol": "Device:LED",
+   "footprint": "LED_SMD:LED_0603_1608Metric",
+   "source": "mitayi",
+   "quote": ""
+  },
+  {
+   "ref": "R8",
+   "value": "470R",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "mitayi",
+   "quote": ""
+  }
+ ],
+ "nets": {
+  "+3V3": [
+   "D3.2"
+  ],
+  "GND": [
+   "R8.1"
+  ],
+  "Net-(D3-K)": [
+   "D3.1",
+   "R8.2"
+  ]
+ },
+ "ports": {
+  "+3V3": {
+   "net": "+3V3",
+   "kind": "power_in",
+   "elsewhere_on_board": [
+    "C1",
+    "C10",
+    "C11",
+    "C12",
+    "C14",
+    "C15",
+    "C5",
+    "C6",
+    "C7",
+    "C8",
+    "C9",
+    "J1",
+    "J4",
+    "JP1",
+    "R1",
+    "R11",
+    "R9",
+    "U1",
+    "U2",
+    "U3"
+   ]
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground",
+   "elsewhere_on_board": [
+    "C1",
+    "C10",
+    "C11",
+    "C12",
+    "C13",
+    "C14",
+    "C15",
+    "C16",
+    "C17",
+    "C18",
+    "C19",
+    "C2",
+    "C4",
+    "C5",
+    "C6",
+    "C7",
+    "C8",
+    "C9",
+    "J1",
+    "J10",
+    "J2",
+    "J3",
+    "J4",
+    "J5",
+    "R3",
+    "R4",
+    "R7",
+    "SW1",
+    "SW2",
+    "U1",
+    "U2",
+    "U3",
+    "Y1"
+   ]
+  }
+ },
+ "layout": {
+  "size_mm": [
+   5.185,
+   0.95
+  ],
+  "place": {
+   "D3": {
+    "at_mm": [
+     1.225,
+     0.475
+    ],
+    "rotation": 180.0,
+    "side": "front"
+   },
+   "R8": {
+    "at_mm": [
+     4.405,
+     0.505
+    ],
+    "rotation": 180.0,
+    "side": "front"
+   }
+  },
+  "traces": [
+   {
+    "net": "Net-(D3-K)",
+    "layer": "F.Cu",
+    "width_mm": 0.2,
+    "from_mm": [
+     3.807,
+     0.505
+    ],
+    "to_mm": [
+     2.043,
+     0.505
+    ]
+   },
+   {
+    "net": "Net-(D3-K)",
+    "layer": "F.Cu",
+    "width_mm": 0.2,
+    "from_mm": [
+     2.043,
+     0.505
+    ],
+    "to_mm": [
+     2.013,
+     0.475
+    ]
+   }
+  ],
+  "vias": [],
+  "rules": ""
+ },
+ "open_questions": [
+  "470 \u03a9 and the red LED are the Mitayi's choice; the LED's datasheet (forward voltage, current) isn't read yet, so its current is unchecked."
+ ]
+}

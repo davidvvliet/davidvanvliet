@@ -1,0 +1,288 @@
+{
+ "name": "ldo_3v3",
+ "title": "3.3 V regulator",
+ "purpose": "MIC5219 low-dropout regulator: VSYS in, 3.3 V out",
+ "taken_from": {
+  "board": "Mitayi-Pico-D1.kicad_pcb",
+  "refs": [
+   "U2",
+   "C13",
+   "C14",
+   "C15",
+   "C16",
+   "JP4"
+  ],
+  "missing": []
+ },
+ "sources": [
+  {
+   "id": "mitayi",
+   "title": "Mitayi-Pico-D1 R0.6 (CIRCUITSTATE)",
+   "url": "https://github.com/CIRCUITSTATE/Mitayi-Pico-RP2040",
+   "licence": "MIT (\"All the design files of Mitayi-Pico are completely open-source and released under the MIT license.\")",
+   "read": "Mitayi-Pico-D1.kicad_pcb and .kicad_sch: parts, values, wiring, placement and traces (lib/extract.py)"
+  },
+  {
+   "id": "mic5219",
+   "title": "Microchip MIC5219 datasheet DS20006021A",
+   "url": "https://ww1.microchip.com/downloads/aemDocuments/documents/OTH/ProductDocuments/DataSheets/MIC5219-500mA-Peak-Output-LDO-Regulator-DS20006021A.pdf",
+   "licence": "\u00a9 Microchip: link and quotes only",
+   "read": "p12 Table 3-1 (pins), p13 \u00a74.1-4.5 (capacitors, enable)"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "U2",
+   "value": "MIC5219-3.3YM5",
+   "symbol": "Regulator_Linear:MIC5219-3.3YM5",
+   "footprint": "Package_TO_SOT_SMD:SOT-23-5",
+   "source": "mic5219, p12 Table 3-1",
+   "quote": "SOT23-5 pins: IN 1, GND 2, EN 3, BYP 4, OUT 5"
+  },
+  {
+   "ref": "C13",
+   "value": "10uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0603_1608Metric",
+   "source": "mic5219, p13 \u00a74.2; value from mitayi",
+   "quote": "A 1 \u03bcF capacitor should be placed from IN to GND if there is more than 10 inches of wire between the input and the AC filter capacitor or if a battery is used as the input. (the board fits 10 \u00b5F)"
+  },
+  {
+   "ref": "C14",
+   "value": "2.2uF",
+   "symbol": "Device:C_Polarized",
+   "footprint": "Capacitor_Tantalum_SMD:CP_EIA-2012-12_Kemet-R",
+   "source": "mic5219, p13 \u00a74.3",
+   "quote": "2.2 \u03bcF minimum is recommended when CBYP is 470 pF"
+  },
+  {
+   "ref": "C15",
+   "value": "10uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0603_1608Metric",
+   "source": "mitayi; mic5219, p13 \u00a74.5",
+   "quote": "output capacitors of 2.2 \u03bcF or greater are generally required to maintain stability (C15 is a second, 10 \u00b5F output capacitor)"
+  },
+  {
+   "ref": "C16",
+   "value": "470pF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "mic5219, p12 Table 3-1",
+   "quote": "Reference bypass: Connect an external 470 pF capacitor to GND to reduce output noise. May be left open."
+  },
+  {
+   "ref": "JP4",
+   "value": "0R",
+   "symbol": "Jumper:SolderJumper_2_Open",
+   "footprint": "Resistor_SMD:R_0402_1005Metric_Pad0.72x0.64mm_HandSolder",
+   "source": "mic5219, p13 \u00a74.1; mitayi",
+   "quote": "If the enable/shutdown feature is not required, connect EN to IN (a 0 \u03a9 link from VSYS; cut it to drive V_EN from the header)"
+  }
+ ],
+ "nets": {
+  "+3V3": [
+   "C14.1",
+   "C15.1",
+   "U2.5"
+  ],
+  "/VSYS": [
+   "C13.1",
+   "JP4.1",
+   "U2.1"
+  ],
+  "/V_EN": [
+   "JP4.2",
+   "U2.3"
+  ],
+  "GND": [
+   "C13.2",
+   "C14.2",
+   "C15.2",
+   "C16.2",
+   "U2.2"
+  ],
+  "Net-(U2-BP)": [
+   "C16.1",
+   "U2.4"
+  ]
+ },
+ "ports": {
+  "+3V3": {
+   "net": "+3V3",
+   "kind": "power_out",
+   "elsewhere_on_board": [
+    "C1",
+    "C10",
+    "C11",
+    "C12",
+    "C5",
+    "C6",
+    "C7",
+    "C8",
+    "C9",
+    "D3",
+    "J1",
+    "J4",
+    "JP1",
+    "R1",
+    "R11",
+    "R9",
+    "U1",
+    "U3"
+   ]
+  },
+  "/VSYS": {
+   "net": "/VSYS",
+   "kind": "power_in",
+   "elsewhere_on_board": [
+    "D1",
+    "J4"
+   ]
+  },
+  "/V_EN": {
+   "net": "/V_EN",
+   "kind": "signal_in",
+   "elsewhere_on_board": [
+    "J4"
+   ]
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground",
+   "elsewhere_on_board": [
+    "C1",
+    "C10",
+    "C11",
+    "C12",
+    "C17",
+    "C18",
+    "C19",
+    "C2",
+    "C4",
+    "C5",
+    "C6",
+    "C7",
+    "C8",
+    "C9",
+    "J1",
+    "J10",
+    "J2",
+    "J3",
+    "J4",
+    "J5",
+    "R3",
+    "R4",
+    "R7",
+    "R8",
+    "SW1",
+    "SW2",
+    "U1",
+    "U3",
+    "Y1"
+   ]
+  }
+ },
+ "layout": {
+  "size_mm": [
+   10.32,
+   3.7
+  ],
+  "place": {
+   "U2": {
+    "at_mm": [
+     5.435,
+     1.8
+    ],
+    "rotation": -90.0,
+    "side": "front"
+   },
+   "C13": {
+    "at_mm": [
+     0.475,
+     2.34
+    ],
+    "rotation": -90.0,
+    "side": "front"
+   },
+   "C14": {
+    "at_mm": [
+     8.165,
+     2.115
+    ],
+    "rotation": 90.0,
+    "side": "front"
+   },
+   "C15": {
+    "at_mm": [
+     9.845,
+     2.36
+    ],
+    "rotation": 90.0,
+    "side": "front"
+   },
+   "C16": {
+    "at_mm": [
+     2.445,
+     3.39
+    ],
+    "rotation": 180.0,
+    "side": "front"
+   },
+   "JP4": {
+    "at_mm": [
+     2.515,
+     1.4
+    ],
+    "rotation": 0.0,
+    "side": "front"
+   }
+  },
+  "traces": [
+   {
+    "net": "Net-(U2-BP)",
+    "layer": "F.Cu",
+    "width_mm": 0.3,
+    "from_mm": [
+     4.485,
+     2.938
+    ],
+    "to_mm": [
+     4.222,
+     3.2
+    ]
+   },
+   {
+    "net": "Net-(U2-BP)",
+    "layer": "F.Cu",
+    "width_mm": 0.3,
+    "from_mm": [
+     4.222,
+     3.2
+    ],
+    "to_mm": [
+     3.202,
+     3.2
+    ]
+   },
+   {
+    "net": "Net-(U2-BP)",
+    "layer": "F.Cu",
+    "width_mm": 0.3,
+    "from_mm": [
+     3.202,
+     3.2
+    ],
+    "to_mm": [
+     3.012,
+     3.39
+    ]
+   }
+  ],
+  "vias": [],
+  "rules": "mitayi placement; mic5219 gives no layout advice beyond capacitors at IN and OUT"
+ },
+ "open_questions": [
+  "EN: datasheet says 'logic-low or open = shutdown'; with JP4 cut, V_EN must be driven or the regulator stays off."
+ ]
+}
