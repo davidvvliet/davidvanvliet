@@ -1,0 +1,138 @@
+{
+ "title": "Rocket flight recorder",
+ "purpose": "Records a model rocket's flight: altitude from a barometer, acceleration and rotation from an IMU, logged to the RP2040's flash; runs from a LiPo charged over USB-C",
+ "source": {
+  "title": "rocket-recorder recipe",
+  "url": "https://github.com/davidvvliet/davidvanvliet/tree/main/frontend/scripts/circuit/boards/rocket-recorder",
+  "author": "the circuit harness: Mitayi-Pico blocks (CIRCUITSTATE, MIT), new blocks from Bosch, Microchip and Raspberry Pi datasheets, charger after the Adafruit Feather RP2040 (CC BY-SA)",
+  "licence": "MIT blocks; charger circuit after a CC BY-SA design"
+ },
+ "board": {
+  "size_mm": [
+   66,
+   21
+  ],
+  "layers": 2,
+  "rules": "templates/rules.kicad_pro",
+  "ground_fill": "GND"
+ },
+ "blocks": {
+  "usb": {
+   "block": "usb_c_power",
+   "at_mm": [
+    0.63,
+    3.65
+   ]
+  },
+  "ldo": {
+   "block": "ldo_3v3",
+   "at_mm": [
+    9.285,
+    3.9
+   ]
+  },
+  "core": {
+   "block": "rp2040_core",
+   "at_mm": [
+    7.3,
+    3.23
+   ]
+  },
+  "led": {
+   "block": "led",
+   "at_mm": [
+    3.625,
+    16.375
+   ]
+  },
+  "pull": {
+   "block": "i2c_pullups",
+   "at_mm": [
+    41,
+    5
+   ]
+  },
+  "baro": {
+   "block": "baro_bmp280",
+   "at_mm": [
+    42,
+    15
+   ]
+  },
+  "imu": {
+   "block": "imu_bmi088",
+   "at_mm": [
+    48.5,
+    9
+   ]
+  },
+  "chg": {
+   "block": "lipo_charger",
+   "at_mm": [
+    56,
+    13
+   ]
+  }
+ },
+ "connect": [
+  [
+   "usb./VSYS",
+   "ldo./VSYS",
+   "chg./VSYS"
+  ],
+  [
+   "usb.VBUS",
+   "chg.VBUS"
+  ],
+  [
+   "ldo.+3V3",
+   "core.+3V3",
+   "led.+3V3",
+   "imu.+3V3",
+   "baro.+3V3",
+   "pull.+3V3"
+  ],
+  [
+   "usb.GND",
+   "ldo.GND",
+   "core.GND",
+   "led.GND",
+   "imu.GND",
+   "baro.GND",
+   "chg.GND"
+  ],
+  [
+   "usb./USB_D+",
+   "core./USB_D+"
+  ],
+  [
+   "usb./USB_D-",
+   "core./USB_D-"
+  ],
+  [
+   "pull./I2C_SDA",
+   "imu./I2C_SDA",
+   "baro./I2C_SDA",
+   "core./GPIO4"
+  ],
+  [
+   "pull./I2C_SCL",
+   "imu./I2C_SCL",
+   "baro./I2C_SCL",
+   "core./GPIO5"
+  ],
+  [
+   "imu./IMU_INT_ACC",
+   "core./GPIO6"
+  ],
+  [
+   "imu./IMU_INT_GYR",
+   "core./GPIO7"
+  ]
+ ],
+ "open_questions": [
+  "Battery capacity not chosen (charge current 100 mA).",
+  "\u00b124 g may be too little for fast motors.",
+  "No power switch: unplug the battery to turn off."
+ ]
+}

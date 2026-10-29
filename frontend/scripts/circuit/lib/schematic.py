@@ -50,7 +50,14 @@ def write(path, board, parts, title=""):
     """parts: [{ref, value, footprint, symbol, uuid, block, nets: {pin: net}, datasheet}]. Writes path; returns {ref: uuid}."""
     root = uid(board, "root")
     lib = {}
-    for p in parts: lib.setdefault(p["symbol"], symbols.get(p["symbol"]))
+    for p in parts:
+        lib.setdefault(p["symbol"], symbols.get(p["symbol"]))
+        # A block can correct a library pin's electrical type where its datasheet says otherwise
+        # (a part's "pin_types", with "pin_types_why"): the electrical check then judges the real circuit.
+        for u in sexpr.find(lib[p["symbol"]], "symbol"):
+            for pin in sexpr.find(u, "pin"):
+                t = p.get("pin_types", {}).get(str(sexpr.first(pin, "number")[1]))
+                if t: pin[1] = t
     net_pins = {}
     for p in parts:
         for n in p["nets"].values(): net_pins[n] = net_pins.get(n, 0) + 1

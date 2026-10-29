@@ -79,9 +79,12 @@ for inst, spec in recipe["blocks"].items():
         f.SetOrientationDegrees(pl["rotation"])
         f.SetPosition(pcbnew.VECTOR2I(mm(ox + pl["at_mm"][0]), mm(oy + pl["at_mm"][1])))
         f.SetReference(rename[p["ref"]]); f.SetValue(p["value"])
-        pin_net = {}
+        pin_net, names = {}, schematic.symbols.pin_names(schematic.symbols.get(p["symbol"]))
         for pad in f.Pads():
             n = pad_net.get((p["ref"], pad.GetNumber()))
+            if not n and pad.GetNumber() in names:  # a pin the block leaves open: no-connect, named as KiCad names it
+                name = names[pad.GetNumber()]
+                n = f"unconnected-({rename[p['ref']]}{'-' + name.replace('/', '{slash}') if name and name != '~' else ''}-Pad{pad.GetNumber()})"
             if n: pad.SetNet(net(n)); pin_net[pad.GetNumber()] = n
         block_of[rename[p["ref"]]] = blk["title"] or spec["block"]
         # The footprint points at its symbol in the schematic (KiCad's schematic-to-board comparison).
@@ -89,7 +92,8 @@ for inst, spec in recipe["blocks"].items():
         f.SetPath(pcbnew.KIID_PATH("/" + sym)); f.SetSheetname("/"); f.SetSheetfile("board.kicad_sch")
         sch_parts.append({"ref": rename[p["ref"]], "value": p["value"], "footprint": p["footprint"], "symbol": p["symbol"],
                           "uuid": sym, "block": block_of[rename[p["ref"]]], "nets": pin_net,
-                          "datasheet": f.GetField(pcbnew.FIELD_T_DATASHEET).GetText()})
+                          "datasheet": f.GetField(pcbnew.FIELD_T_DATASHEET).GetText(),
+                          "pin_types": p.get("pin_types", {})})
     for t in blk["layout"]["traces"]:
         tr = pcbnew.PCB_TRACK(board)
         tr.SetStart(pcbnew.VECTOR2I(mm(ox + t["from_mm"][0]), mm(oy + t["from_mm"][1])))

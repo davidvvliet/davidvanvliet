@@ -23,7 +23,8 @@ build.py            python3 scripts/circuit/build.py <board> [--publish]   (from
 boards/<board>/     one board: board.json plus either
                       imported KiCad files (someone else's finished design), or
                       recipe.json (our own, from blocks; see "Own boards")
-blocks/<block>.json the building-block library (templates/block.json): usb_c_power, ldo_3v3, rp2040_core, led
+blocks/<block>.json the building-block library (templates/block.json): usb_c_power, ldo_3v3, rp2040_core, led,
+                    lipo_charger, imu_bmi088, baro_bmp280, i2c_pullups
 footprints/         footprints KiCad's library doesn't have (mitayi.pretty: the Mitayi Pico's own, MIT)
 lib/tools.py        where each tool is
 lib/checks.py       KiCad's design rule and electrical checks, as dashboard check rows
@@ -71,6 +72,8 @@ tied to its net by a global label (a local label would rename the net "/<name>")
 no-connect and their pads named as KiCad names them (`unconnected-(<ref>-<pin>-Pad<n>)`, a "/" in a
 pin name written `{slash}`), and a power flag on each power net nothing on the board drives. Each
 footprint points at its symbol by a UUID that stays the same between builds, so all four checks run.
+A block part's `pin_types` (with `pin_types_why`, quoting the datasheet) corrects a library pin's
+electrical type where the datasheet uses it otherwise (the BMI088's SDO pins are address inputs in I2C mode).
 
 A board is a recipe (`templates/recipe.json`): which blocks, where, and which ports connect. A block
 (`templates/block.json`) is a small circuit made once and reused: its parts (KiCad library symbol and

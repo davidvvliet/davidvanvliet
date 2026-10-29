@@ -1,0 +1,153 @@
+{
+ "name": "imu_bmi088",
+ "title": "IMU",
+ "purpose": "Accelerometer and gyroscope (BMI088) on I2C, with its decoupling",
+ "sources": [
+  {
+   "id": "bmi088",
+   "title": "Bosch Sensortec BMI088 datasheet, rev. 1.9 (01/2024)",
+   "url": "https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmi088-ds001.pdf",
+   "licence": "copyright Bosch Sensortec: link and quotes only",
+   "read": "p7 supply, p9-10 ranges, p44 protocol select, p48 I2C addresses and pull-ups, p52 pin table, p53 I2C connection figure (image)"
+  },
+  {
+   "id": "kicad",
+   "title": "KiCad 10 standard libraries (symbols, footprints, 3D models)",
+   "url": "https://gitlab.com/kicad/libraries",
+   "licence": "CC BY-SA 4.0 with design exception",
+   "read": "symbol pin numbers, footprint pads, 3D models"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "U20",
+   "value": "BMI088",
+   "symbol": "Sensor_Motion:BMI088",
+   "footprint": "Package_LGA:Bosch_LGA-16_4.5x3mm_P0.5mm_LayoutBorder7x1y_ClockwisePinNumbering",
+   "source": "bmi088, p9-10, p52",
+   "quote": "\"gFS24g ±24 g, Selectable via serial digital interface\"; gyro \"RFS2000 2000 °/s\"; \"Supply Voltage VDD 2.4 3.6 V\", \"Supply Voltage VDDIO 1.2 3.6 V\" (p7)",
+   "pin_types": {
+    "10": "input",
+    "15": "input"
+   },
+   "pin_types_why": "bmi088 p52, I2C column: SDO1 \"GND for default addr.\", SDO2 \"GND\"; p48: \"SDO1 pin pulled to 'GND': 0011000b (0x18)\". In I2C mode the SDO pins set the address, so they are inputs tied to GND, not outputs."
+  },
+  {
+   "ref": "C20",
+   "value": "100nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "bmi088, p53 (Fig. 9, image)",
+   "quote": "\"100nF\" on VDD in the I2C connection figure"
+  },
+  {
+   "ref": "C21",
+   "value": "100nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "bmi088, p53 (Fig. 9, image)",
+   "quote": "\"100nF\" on VDDIO in the I2C connection figure"
+  }
+ ],
+ "nets": {
+  "+3V3": [
+   "U20.3",
+   "U20.11",
+   "U20.7",
+   "U20.14",
+   "C20.1",
+   "C21.1"
+  ],
+  "GND": [
+   "U20.2",
+   "U20.4",
+   "U20.6",
+   "U20.15",
+   "U20.10",
+   "C20.2",
+   "C21.2"
+  ],
+  "/I2C_SDA": [
+   "U20.9"
+  ],
+  "/I2C_SCL": [
+   "U20.8"
+  ],
+  "/IMU_INT_ACC": [
+   "U20.16"
+  ],
+  "/IMU_INT_GYR": [
+   "U20.12"
+  ]
+ },
+ "ports": {
+  "+3V3": {
+   "net": "+3V3",
+   "kind": "power_in",
+   "note": "VDD and VDDIO, both 2.4-3.6 V / 1.2-3.6 V (bmi088 p7)"
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground"
+  },
+  "/I2C_SDA": {
+   "net": "/I2C_SDA",
+   "kind": "data",
+   "note": "pin 9 SDI/SDA (bmi088 p52)"
+  },
+  "/I2C_SCL": {
+   "net": "/I2C_SCL",
+   "kind": "data",
+   "note": "pin 8 SCK/SCL (bmi088 p52)"
+  },
+  "/IMU_INT_ACC": {
+   "net": "/IMU_INT_ACC",
+   "kind": "gpio",
+   "note": "INT1, accelerometer interrupt #1 (bmi088 p18, p52)"
+  },
+  "/IMU_INT_GYR": {
+   "net": "/IMU_INT_GYR",
+   "kind": "gpio",
+   "note": "INT3, gyroscope interrupt #1 (bmi088 p18, p52)"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   8,
+   4
+  ],
+  "place": {
+   "U20": {
+    "at_mm": [
+     0,
+     0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C20": {
+    "at_mm": [
+     -3.8,
+     -0.9
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C21": {
+    "at_mm": [
+     -3.8,
+     0.9
+    ],
+    "rotation": 0,
+    "side": "front"
+   }
+  },
+  "traces": [],
+  "vias": [],
+  "rules": "Capacitors next to VDD (pin 3) and VDDIO (pin 11). I2C wiring from bmi088 p52/p53: PS (7) and CSB1 (14) to VDDIO, SDO1 (15) and SDO2 (10) to GND (addresses 0x18 accel, 0x68 gyro, p48), NC (2) to GND, CSB2 (5), INT2 (1) and INT4 (13) not connected (\"If INT are not used, do not connect them (DNC)!\", p52)."
+ },
+ "open_questions": [
+  "Range: ±24 g is the BMI088's largest accelerometer range (p9). Peak boost acceleration of the rockets it will fly is not researched yet; above 24 g a high-g accelerometer is needed.",
+  "Capacitor package (0402) and dielectric are not given by the datasheet."
+ ]
+}

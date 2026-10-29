@@ -1,0 +1,133 @@
+{
+ "name": "baro_bmp280",
+ "title": "Barometer",
+ "purpose": "Pressure sensor (BMP280) on I2C for altitude, with its decoupling",
+ "sources": [
+  {
+   "id": "bmp280",
+   "title": "Bosch Sensortec BMP280 datasheet, rev. 1.26 (10/2021)",
+   "url": "https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmp280-ds001.pdf",
+   "licence": "copyright Bosch Sensortec: link and quotes only",
+   "read": "p2 ranges, p8 supply, p29 interface select and I2C address, p35 pin-out, p38 I2C connection diagram (printed page numbers)"
+  },
+  {
+   "id": "kicad",
+   "title": "KiCad 10 standard libraries (symbols, footprints, 3D models)",
+   "url": "https://gitlab.com/kicad/libraries",
+   "licence": "CC BY-SA 4.0 with design exception",
+   "read": "symbol pin numbers, footprint pads, 3D models"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "U21",
+   "value": "BMP280",
+   "symbol": "Sensor_Pressure:BMP280",
+   "footprint": "Package_LGA:Bosch_LGA-8_2x2.5mm_P0.65mm_ClockwisePinNumbering",
+   "source": "bmp280, p2, p38",
+   "quote": "\"Pressure range 300 … 1100 hPa (equiv. to +9000…-500 m above/below sea level)\"; \"Relative accuracy ±0.12 hPa, equiv. to ±1 m\"",
+   "pin_types": {
+    "5": "input"
+   },
+   "pin_types_why": "bmp280 p35, I2C column: SDO \"GND for default address\"; p29: \"Connecting SDO to GND results in slave address 1110110 (0x76)\". In I2C mode SDO sets the address bit, an input tied to GND."
+  },
+  {
+   "ref": "C22",
+   "value": "100nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "bmp280, p38",
+   "quote": "\"The recommended value for C1, C2 is 100 nF.\""
+  },
+  {
+   "ref": "C23",
+   "value": "100nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "bmp280, p38",
+   "quote": "\"The recommended value for C1, C2 is 100 nF.\""
+  }
+ ],
+ "nets": {
+  "+3V3": [
+   "U21.8",
+   "U21.6",
+   "U21.2",
+   "C22.1",
+   "C23.1"
+  ],
+  "GND": [
+   "U21.1",
+   "U21.7",
+   "U21.5",
+   "C22.2",
+   "C23.2"
+  ],
+  "/I2C_SDA": [
+   "U21.3"
+  ],
+  "/I2C_SCL": [
+   "U21.4"
+  ]
+ },
+ "ports": {
+  "+3V3": {
+   "net": "+3V3",
+   "kind": "power_in",
+   "note": "VDD 1.71-3.6 V, VDDIO 1.2-3.6 V (bmp280 p8)"
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground"
+  },
+  "/I2C_SDA": {
+   "net": "/I2C_SDA",
+   "kind": "data",
+   "note": "pin 3 SDI = SDA (bmp280 p35)"
+  },
+  "/I2C_SCL": {
+   "net": "/I2C_SCL",
+   "kind": "data",
+   "note": "pin 4 SCK = SCL (bmp280 p35)"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   5,
+   3.5
+  ],
+  "place": {
+   "U21": {
+    "at_mm": [
+     0,
+     0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C22": {
+    "at_mm": [
+     3.0,
+     -0.9
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C23": {
+    "at_mm": [
+     3.0,
+     0.9
+    ],
+    "rotation": 0,
+    "side": "front"
+   }
+  },
+  "traces": [],
+  "vias": [],
+  "rules": "I2C wiring from bmp280 p35/p38: CSB (2) straight to VDDIO (\"A direct connection between CSB and VDDIO is recommended\"), SDO (5) to GND for address 0x76 (p29: \"Connecting SDO to GND results in slave address 1110110 (0x76)\"; \"The SDO pin cannot be left floating\")."
+ },
+ "open_questions": [
+  "The vent hole must stay open (no conformal coat over it); light and airflow from the ejection charge affect readings: a foam cover is usual in rocketry, not researched yet.",
+  "Range: 300 hPa lower limit is equivalent to about 9000 m (p2), enough for model rockets."
+ ]
+}

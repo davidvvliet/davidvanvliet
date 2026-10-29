@@ -1,0 +1,102 @@
+{
+ "name": "i2c_pullups",
+ "title": "I2C pull-ups",
+ "purpose": "Pull-up resistors for the sensors' I2C bus",
+ "sources": [
+  {
+   "id": "i2c",
+   "title": "NXP UM10204 I2C-bus specification and user manual, rev. 7.0",
+   "url": "https://www.nxp.com/docs/en/user-guide/UM10204.pdf",
+   "licence": "copyright NXP: link and quotes only",
+   "read": "Table 10 (rise time), section 7.1 pull-up resistor sizing"
+  },
+  {
+   "id": "bmi088",
+   "title": "Bosch Sensortec BMI088 datasheet, rev. 1.9 (01/2024)",
+   "url": "https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmi088-ds001.pdf",
+   "licence": "copyright Bosch Sensortec: link and quotes only",
+   "read": "p7 supply, p9-10 ranges, p44 protocol select, p48 I2C addresses and pull-ups, p52 pin table, p53 I2C connection figure (image)"
+  },
+  {
+   "id": "bmp280",
+   "title": "Bosch Sensortec BMP280 datasheet, rev. 1.26 (10/2021)",
+   "url": "https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmp280-ds001.pdf",
+   "licence": "copyright Bosch Sensortec: link and quotes only",
+   "read": "p2 ranges, p8 supply, p29 interface select and I2C address, p35 pin-out, p38 I2C connection diagram (printed page numbers)"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "R20",
+   "value": "2.2k",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "i2c, section 7.1 and Table 10",
+   "quote": "Rp(min) = (VDD - VOL(max)) / IOL with \"VOL = 0.4 V\" at \"3\" mA: (3.3 - 0.4) / 0.003 = 0.97 kΩ; Rp(max) = tr / (0.8473 × Cb) with Fast-mode tr \"300\" ns: 2.2 kΩ holds up to Cb ≈ 160 pF"
+  },
+  {
+   "ref": "R21",
+   "value": "2.2k",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "i2c, section 7.1 and Table 10",
+   "quote": "as R20"
+  }
+ ],
+ "nets": {
+  "+3V3": [
+   "R20.1",
+   "R21.1"
+  ],
+  "/I2C_SDA": [
+   "R20.2"
+  ],
+  "/I2C_SCL": [
+   "R21.2"
+  ]
+ },
+ "ports": {
+  "+3V3": {
+   "net": "+3V3",
+   "kind": "power_in"
+  },
+  "/I2C_SDA": {
+   "net": "/I2C_SDA",
+   "kind": "data"
+  },
+  "/I2C_SCL": {
+   "net": "/I2C_SCL",
+   "kind": "data"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   2.5,
+   1.5
+  ],
+  "place": {
+   "R20": {
+    "at_mm": [
+     0,
+     0
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "R21": {
+    "at_mm": [
+     1.2,
+     0
+    ],
+    "rotation": 90,
+    "side": "front"
+   }
+  },
+  "traces": [],
+  "vias": [],
+  "rules": "Pull-ups to VDDIO (3.3 V): bmi088 p48 \"Both lines are connected to VDDIO externally via pull-up resistors\"."
+ },
+ "open_questions": [
+  "Bus capacitance Cb is estimated (short traces, two sensors), not measured: below ~160 pF 2.2 kΩ meets the 300 ns Fast-mode rise time."
+ ]
+}
