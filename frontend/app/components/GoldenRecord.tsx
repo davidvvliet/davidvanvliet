@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Environment, Lightformer, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 import { useRouter } from "next/navigation";
@@ -62,7 +62,19 @@ function Record({ spin, drag }: { spin: boolean; drag: React.RefObject<Drag> }) 
   );
 }
 
-export default function GoldenRecord() {
+const CAMERA_Z = 0.66;
+
+// In a cell narrower than it is tall (the phone layout), back the camera off so
+// the disc fits the width instead of the height and its face isn't cut off.
+function FitWidth() {
+  const { camera, size } = useThree();
+  useEffect(() => {
+    camera.position.z = CAMERA_Z / Math.min(1, size.width / size.height);
+  }, [camera, size.width, size.height]);
+  return null;
+}
+
+export default function GoldenRecord({ fitWidth = false }: { fitWidth?: boolean }) {
   const [spin, setSpin] = useState(true);
   useEffect(() => {
     const q = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -108,7 +120,7 @@ export default function GoldenRecord() {
       onLostPointerCapture={release}
       onPointerEnter={() => (drag.current.hover = true)} onPointerLeave={() => (drag.current.hover = false)} role="link" aria-label="Models"
       style={{ width: "100%", height: "100%", touchAction: "none", cursor: grabbing ? "grabbing" : "pointer" }}>
-    <Canvas camera={{ fov: 30, position: [0, 0, 0.66], near: 0.05, far: 5 }} dpr={[1, 2]}
+    <Canvas camera={{ fov: 30, position: [0, 0, CAMERA_Z], near: 0.05, far: 5 }} dpr={[1, 2]}
       gl={{ alpha: true, antialias: true }} aria-label="Voyager golden record cover">
       {/* The models dashboard's lighting (app/models/ModelsDashboard.tsx), which shows the gold best. */}
       <ambientLight intensity={0.25} />
@@ -119,6 +131,7 @@ export default function GoldenRecord() {
         <Lightformer form="rect" intensity={0.8} position={[-5, 1, 3]} scale={[6, 4, 1]} rotation-y={Math.PI / 3} />
         <Lightformer form="rect" intensity={0.4} position={[5, -1, -3]} scale={[6, 4, 1]} rotation-y={-Math.PI / 1.5} />
       </Environment>
+      {fitWidth && <FitWidth />}
       <Suspense fallback={null}>
         <Record spin={spin} drag={drag} />
       </Suspense>

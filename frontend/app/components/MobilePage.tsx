@@ -106,7 +106,7 @@ export default function MobilePage({ panel, photos }: { panel: React.ReactNode; 
                 </a>
               </div>
               <div className={styles.recordCell}>
-                <GoldenRecord />
+                <GoldenRecord fitWidth />
               </div>
             </div>
 
