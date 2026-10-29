@@ -1,6 +1,8 @@
 # Build a board for /circuit (from frontend/; boards/<board>/ holds its KiCad files):
 #   python3 scripts/circuit/build.py <board>            out/<board>/<board>.glb and .json, shown on /models?dashboard
 #   python3 scripts/circuit/build.py <board> --publish  the same, then copied to public/circuit/ (the live /circuit page)
+# A board is either imported (board.json + someone's KiCad files) or ours (recipe.json + blocks/):
+# 0. Ours: lib/generate.py lays the blocks out as KiCad's board, lib/route.py and Freerouting route it.
 # 1. KiCad's checks (lib/checks.py): design rules on the board, electrical rules on the schematic.
 # 2. KiCad (kicad-cli) exports the layout in 3D, with its library's part models.
 # 3. Blender (lib/pack.py) tags every part with the schematic section it is drawn in (lib/sections.py),
@@ -20,24 +22,78 @@ def nice(title):
     out = [w if not w.isalpha() or w in ("LDO", "LED", "SWD") else w.lower() for w in words]
     return " ".join(out)[:1].upper() + " ".join(out)[1:]
 
+ROUTE_TRIES = 4
+ROUTE_MARGIN_UM = 25  # extra clearance for the router (see README: "Routing")
+
+def kpy(*args):
+    """Run a lib/ script in KiCad's Python; its lines starting with an upper-case tag."""
+    r = subprocess.run([tools.tool("kicad-python"), "-I", "-u", *args], capture_output=True, text=True)
+    lines = [l for l in r.stdout.splitlines() if re.match(r"^[A-Z]+ ", l)]
+    if r.returncode or not lines:
+        sys.exit(f"{os.path.basename(args[0])} failed:\n" + "\n".join(l for l in (r.stdout + r.stderr).splitlines()
+                                                                      if not re.search(r"swig/python|Fontconfig|assert", l))[-3000:])
+    return lines
+
+def route(work, ground):
+    """Route work/board.kicad_pcb, trying again (the router varies between runs) until KiCad's design
+    rule check finds no error and nothing unconnected; keeps the best try. Returns its report."""
+    best = None
+    for i in range(ROUTE_TRIES):
+        t = os.path.join(work, f"try{i}"); os.makedirs(t, exist_ok=True)
+        for ext in ("kicad_pcb", "kicad_pro"): shutil.copy(os.path.join(work, f"unrouted.{ext}"), os.path.join(t, f"board.{ext}"))
+        pcb, dsn, ses = (os.path.join(t, f) for f in ("board.kicad_pcb", "board.dsn", "board.ses"))
+        kpy(os.path.join(HERE, "lib", "route.py"), "export", pcb, dsn)
+        text = open(dsn).read()
+        text = re.sub(r"\(clearance (\d+(?:\.\d+)?)\)", lambda m: f"(clearance {float(m.group(1)) + ROUTE_MARGIN_UM:g})", text)
+        open(dsn, "w").write(text)
+        r = subprocess.run([tools.tool("java"), "-jar", tools.tool("freerouting"), "--gui.enabled=false",
+                            "--usage_and_diagnostic_data.disable_analytics=true", "--router.autorouter.max_passes=100",
+                            "-de", dsn, "-do", ses], capture_output=True, text=True)
+        if not os.path.exists(ses):
+            sys.exit("Freerouting failed:\n" + (r.stdout + r.stderr)[-2000:])
+        kpy(os.path.join(HERE, "lib", "route.py"), "import", pcb, ses, ground or "")
+        rows = checks.drc(pcb, parity=False)
+        bad = sum(c["measured"] for c in rows if not c["ok"])
+        if best is None or bad < best[0]: best = (bad, pcb, i + 1)
+        if bad == 0: break
+    shutil.copy(best[1], os.path.join(work, "board.kicad_pcb"))
+    shutil.copy(os.path.join(work, "unrouted.kicad_pro"), os.path.join(work, "board.kicad_pro"))
+    return f"routed in {best[2]} of {ROUTE_TRIES} tries" + ("" if best[0] == 0 else f", best has {best[0]} problems")
+
 def main(board, publish=False):
     started = time.time()
     src = os.path.join(HERE, "boards", board)
-    meta = json.load(open(os.path.join(src, "board.json")))
-    pcb = open(os.path.join(src, meta["pcb"])).read()
+    work = os.path.join(HERE, "out", board, "kicad")  # the generated board, kept for opening in KiCad
+    note = None
+    if os.path.exists(os.path.join(src, "recipe.json")):
+        recipe = json.load(open(os.path.join(src, "recipe.json")))
+        shutil.rmtree(work, ignore_errors=True); os.makedirs(work)
+        kpy(os.path.join(HERE, "lib", "generate.py"), os.path.join(src, "recipe.json"), work)
+        for ext in ("kicad_pcb", "kicad_pro"): os.rename(os.path.join(work, f"board.{ext}"), os.path.join(work, f"unrouted.{ext}"))
+        note = route(work, recipe["board"].get("ground_fill"))
+        meta = {"title": recipe["title"], "purpose": recipe["purpose"], "source": recipe["source"], "pcb": "kicad/board.kicad_pcb", "sch": None}
+        pcb_path, sch_path = os.path.join(work, "board.kicad_pcb"), None
+        blocks = json.load(open(os.path.join(work, "blocks.json")))
+    else:
+        meta = json.load(open(os.path.join(src, "board.json")))
+        pcb_path, sch_path = os.path.join(src, meta["pcb"]), os.path.join(src, meta["sch"])
+        blocks = {ref: nice(s) for ref, s in find_sections(sch_path).items() if s}
+    pcb = open(pcb_path).read()
     # Older projects name the model folder by KiCad version, and KiCad 10 ships STEP models only.
     pcb = re.sub(r"\$\{(KICAD\d*_3DMODEL_DIR|KISYS3DMOD)\}", "${KICAD10_3DMODEL_DIR}", pcb)
     pcb = re.sub(r'(\(model "[^"]+)\.wrl"', r'\1.step"', pcb)
     for a, b in meta.get("model_renames", {}).items():
         pcb = pcb.replace(a, b)
-    blocks = {ref: nice(s) for ref, s in find_sections(os.path.join(src, meta["sch"])).items() if s}
     with tempfile.TemporaryDirectory() as tmp:
         # One project: the checks need its rules (.kicad_pro) and schematic beside the board, all named alike.
         p = os.path.join(tmp, "board.kicad_pcb"); open(p, "w").write(pcb)
-        shutil.copy(os.path.join(src, meta["sch"]), os.path.join(tmp, "board.kicad_sch"))
-        pro = os.path.splitext(os.path.join(src, meta["pcb"]))[0] + ".kicad_pro"
+        pro = os.path.splitext(pcb_path)[0] + ".kicad_pro"
         if os.path.exists(pro): shutil.copy(pro, os.path.join(tmp, "board.kicad_pro"))
-        kicad_checks = checks.drc(p) + checks.erc(os.path.join(tmp, "board.kicad_sch"))
+        if sch_path:
+            shutil.copy(sch_path, os.path.join(tmp, "board.kicad_sch"))
+            kicad_checks = checks.drc(p) + checks.erc(os.path.join(tmp, "board.kicad_sch"))
+        else:  # a recipe board has no schematic yet: no electrical check, no schematic-to-board comparison
+            kicad_checks = checks.drc(p, parity=False)
         raw = os.path.join(tmp, "raw.glb")
         r = subprocess.run([tools.tool("kicad-cli"), "pcb", "export", "glb", "-f", "-o", raw, "--no-dnp", "--include-tracks", "--include-pads",
                             "--include-zones", "--include-silkscreen", "--include-soldermask", p], capture_output=True, text=True)
@@ -81,6 +137,7 @@ def main(board, publish=False):
             shutil.copy(os.path.join(HERE, "out", board, f"{board}.{ext}"), os.path.join(dest, f"{board}.{ext}"))
     for c in rows:
         print(f"  {'✓' if c['ok'] else '✗'} {c['name']}: {c['measured']} {c['unit']}" + (f"  ({c['detail']})" if c.get("detail") else ""))
+    if note: print(f"  {note}")
     print(f"{board}: {'PASS' if all(c['ok'] for c in rows) else 'FAIL'}, {mb:.2f} MB, {tris} triangles, {len(data['blocks'])} blocks"
           + (f"; missing models: {missing}" if missing else "") + ("; published to public/circuit" if publish else ""))
 

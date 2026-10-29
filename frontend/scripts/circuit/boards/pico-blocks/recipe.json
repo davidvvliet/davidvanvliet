@@ -1,0 +1,86 @@
+{
+  "title": "Pico from blocks",
+  "purpose": "The first board built from our own blocks: USB-C power, a 3.3 V regulator, an RP2040 core and an LED, laid out as on the Mitayi Pico",
+  "board": {
+    "size_mm": [
+      51,
+      21
+    ],
+    "layers": 2,
+    "rules": "templates/rules.kicad_pro",
+    "ground_fill": "GND"
+  },
+  "blocks": {
+    "usb": {
+      "block": "usb_c_power",
+      "at_mm": [
+        0.63,
+        3.65
+      ]
+    },
+    "ldo": {
+      "block": "ldo_3v3",
+      "at_mm": [
+        9.285,
+        3.9
+      ]
+    },
+    "core": {
+      "block": "rp2040_core",
+      "at_mm": [
+        7.3,
+        3.23
+      ]
+    },
+    "led": {
+      "block": "led",
+      "at_mm": [
+        3.625,
+        16.375
+      ]
+    }
+  },
+  "connect": [
+    [
+      "usb./VSYS",
+      "ldo./VSYS"
+    ],
+    [
+      "ldo.+3V3",
+      "core.+3V3",
+      "led.+3V3"
+    ],
+    [
+      "usb.GND",
+      "ldo.GND",
+      "core.GND",
+      "led.GND"
+    ],
+    [
+      "usb./USB_D+",
+      "core./USB_D+"
+    ],
+    [
+      "usb./USB_D-",
+      "core./USB_D-"
+    ]
+  ],
+  "sources": [
+    {
+      "id": "mitayi",
+      "title": "Mitayi-Pico-D1 R0.6 (CIRCUITSTATE)",
+      "url": "https://github.com/CIRCUITSTATE/Mitayi-Pico-RP2040",
+      "licence": "MIT",
+      "read": "board size 51 x 21 mm (README: 'Dimensions: 51 x 21 mm') and each block's position on it"
+    }
+  ],
+  "open_questions": [
+    "No headers, buttons' GPIO breakout or mounting holes yet: only the four blocks."
+  ],
+  "source": {
+    "title": "blocks from Mitayi-Pico-D1 R0.6",
+    "url": "https://github.com/CIRCUITSTATE/Mitayi-Pico-RP2040",
+    "author": "CIRCUITSTATE (blocks), laid out and routed by the circuit harness",
+    "licence": "MIT"
+  }
+}

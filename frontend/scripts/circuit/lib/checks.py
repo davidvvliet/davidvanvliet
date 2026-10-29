@@ -14,18 +14,19 @@ def _rows(name, violations, extra_errors=0):
             {"name": f"{name}: warnings", "ok": True, "measured": warnings, "expected": 0, "unit": "warnings",
              "detail": ", ".join(f"{t} ×{n}" for (s, t), n in by.most_common() if s == "warning")}]
 
-def drc(pcb):
+def drc(pcb, parity=True):
     """Design rule check of a .kicad_pcb (its .kicad_pro beside it holds the rules)."""
     with tempfile.TemporaryDirectory() as tmp:
         out = os.path.join(tmp, "drc.json")
-        subprocess.run([tools.tool("kicad-cli"), "pcb", "drc", "--format", "json", "--schematic-parity", "-o", out, pcb],
+        subprocess.run([tools.tool("kicad-cli"), "pcb", "drc", "--format", "json", *(["--schematic-parity"] if parity else []), "-o", out, pcb],
                        capture_output=True, text=True)
         d = json.load(open(out))
     unconnected = len(d.get("unconnected_items", []))
-    parity = len(d.get("schematic_parity", []))
     rows = _rows("design rules", d.get("violations", []))
     rows.insert(1, {"name": "unconnected", "ok": unconnected == 0, "measured": unconnected, "expected": 0, "unit": "connections"})
-    rows.insert(2, {"name": "schematic matches board", "ok": parity == 0, "measured": parity, "expected": 0, "unit": "differences"})
+    if parity:
+        diffs = len(d.get("schematic_parity", []))
+        rows.insert(2, {"name": "schematic matches board", "ok": diffs == 0, "measured": diffs, "expected": 0, "unit": "differences"})
     return rows
 
 def erc(sch):

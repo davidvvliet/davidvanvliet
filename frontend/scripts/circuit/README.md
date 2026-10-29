@@ -28,6 +28,8 @@ footprints/         footprints KiCad's library doesn't have (mitayi.pretty: the 
 lib/tools.py        where each tool is
 lib/checks.py       KiCad's design rule and electrical checks, as dashboard check rows
 lib/sections.py     an imported schematic's titled boxes, as the board's blocks
+lib/generate.py     a recipe as a KiCad board (KiCad's Python): blocks placed with their own traces, ports joined, outline
+lib/route.py        the router's input out, its traces back in (widened to the minimum), ground fill on both sides
 lib/extract.py      lifts a block out of an imported board (KiCad's Python): parts, wiring, ports, layout
 lib/pack.py         Blender: tag parts by block, merge pieces, Draco-compress, export
 templates/          a blank block and a blank recipe
@@ -55,7 +57,14 @@ licence), and `model_renames` for 3D models KiCad has since renamed. Only boards
 (the Mitayi Pico is MIT). The blocks are the designer's own titled boxes on the schematic; parts outside
 every box get no block.
 
-## Own boards (being built: blocks, recipes, routing)
+## Own boards
+`boards/<board>/recipe.json` (templates/recipe.json): `title`, `purpose`, `source` (as board.json),
+`board` (size, `rules`: the project file with clearances and widths, `ground_fill`: the net poured on
+both sides), `blocks` (instance name -> block and position) and `connect` (groups of `instance.port`
+joined into one net, named after the first). A build generates the board into `out/<board>/kicad/`
+(open `board.kicad_pcb` there in KiCad to look at it), routes it and checks it. A recipe board has no
+schematic yet, so there is no electrical check or schematic comparison.
+
 A board is a recipe (`templates/recipe.json`): which blocks, where, and which ports connect. A block
 (`templates/block.json`) is a small circuit made once and reused: its parts (KiCad library symbol and
 footprint names, so KiCad supplies the real pad pattern and 3D model), its wiring, its ports and its
@@ -68,10 +77,16 @@ Rules, as for the spacecraft specs:
 - A part KiCad's library doesn't have is flagged: its footprint has to be drawn from the datasheet's
   package drawing.
 
-Routing (tested on the Mitayi Pico with every trace removed):
+Routing (build.py does all of this; tested on the Mitayi Pico with every trace removed):
 1. Remove the copper fills (zones) before routing: filled, they block the router. Refill after.
 2. KiCad's Python exports the board for the router (`pcbnew.ExportSpecctraDSN`).
-3. `java -jar freerouting-2.5.0.jar --gui.enabled=false --usage_and_diagnostic_data.disable_analytics=true
-   --router.automatic_neckdown=false -de board.dsn -do board.ses -mp 100`
-4. `pcbnew.ImportSpecctraSES` brings the traces back. Freerouting still narrows some traces below the
-   board's minimum width at pads: widen them to the minimum, then run the checks.
+3. Every clearance in the router's input is raised by 25 µm (`ROUTE_MARGIN_UM`).
+4. `java -jar freerouting-2.5.0.jar --gui.enabled=false --usage_and_diagnostic_data.disable_analytics=true
+   --router.autorouter.max_passes=100 -de board.dsn -do board.ses`
+5. `pcbnew.ImportSpecctraSES` brings the traces back. Freerouting narrows some traces below the board's
+   minimum width at pads, and none of its settings stops it (`automatic_neckdown`, `neck_width_um` tried):
+   they are widened to the minimum, which the margin from step 3 leaves room for. Without the margin,
+   widening left 2 to 6 clearance errors.
+6. Fill the ground net on both sides, then KiCad's design rule check. Freerouting's result varies between
+   runs (about one run in two left a connection unrouted on the first recipe board), so the build tries up
+   to 4 times and keeps the first clean one.
