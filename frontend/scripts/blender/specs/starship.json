@@ -318,13 +318,13 @@
     },
     "aft_flap_housing": {
       "value": {
-        "height": 2.0,
-        "stands_out": 1.0,
-        "width": 1.2,
-        "outer_height": 1.0
+        "height": 1.7,
+        "stands_out": 0.55,
+        "width": 0.8,
+        "outer_height": 0.3
       },
       "unit": "m",
-      "source": "photo_wdr (aft flap crop): a dark angular block on the body at the top of the flap's root, about 50 px tall (2.1 m at 0.0428 m/px) and about 25 px (1 m) out. Estimated. Shape: a steel wedge whose top slopes down outward, the outer edge about half the height at the body (photo_wdr, aft flap crop). Material: bare steel in the same crop."
+      "source": "photo_wdr (aft flap crop): a dark angular block on the body at the top of the flap's root, about 50 px tall (2.1 m at 0.0428 m/px) and about 25 px (1 m) out. Estimated. Shape: a steel wedge whose top slopes down outward, the outer edge about half the height at the body (photo_wdr, aft flap crop). Material: bare steel in the same crop. Reshaped 2026-10-29 from the same crop: a slim wedge over the top of the flap's root, not a block standing out past it: about 1.7 m tall at the body, sloping down outward to about 0.3 m where it meets the flap's root (aft_standoff out, plus 0.1 m), so the flap's top corner sits inside it; about 21 px (0.9 m) across where its point faces the camera, so 0.8 m wide. Estimated (the crop is frosted)."
     },
     "tile_layout": {
       "value": {

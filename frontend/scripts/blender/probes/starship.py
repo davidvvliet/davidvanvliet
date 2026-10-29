@@ -348,18 +348,16 @@ def build(spec):
             tiling.plane_uv(flap, (0, sign), tile_w, tile_h)
             hinge(f"ship_aft_flap_{tag}", (0, sign * R, z0 + af["root_chord"] - 0.3),
                   (0, sign * R, z0 + 0.3), (0, sign), so, fh["aft_brackets"], lambda z: R)
-            # Actuator cover on the body at the top of the flap's root: a steel wedge, its top
-            # sloping down outward.
+            # Actuator cover over the top of the flap's root: a slim steel wedge sloping down
+            # from the body to the root, the flap's top corner inside it.
             hz = P["aft_flap_housing"]
             out = hz["stands_out"] + 0.1
             ub_, uo = (0.0, 1.0) if sign > 0 else (1.0, 0.0)
-            # Raised so its sloping top clears the flap's root corner (so out from the body).
-            lift = (hz["height"] - hz["outer_height"]) * (so + 0.1) / out + 0.05
             parts.outline_plate(f"ship_aft_flap_housing_{tag}",
                                 [(ub_, 0), (uo, 0), (uo, hz["outer_height"] / hz["height"]), (ub_, 1)],
                                 out, hz["height"], hz["width"],
                                 location=(-hz["width"] / 2, sign * (R - 0.1 + out / 2),
-                                          z0 + af["root_chord"] - hz["height"] / 2 + lift),
+                                          z0 + af["root_chord"] - hz["outer_height"] + hz["height"] / 2),
                                 direction=(1, 0, 0), up=(0, 0, 1), material=steel)
 
         # Catch pins on the forward section, either side of the tower side (from_photos.catch_pins).
