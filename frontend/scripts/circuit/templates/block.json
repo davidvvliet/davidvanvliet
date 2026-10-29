@@ -1,0 +1,24 @@
+{
+  "name": "__BLOCK__",
+  "title": "__TITLE__",
+  "purpose": "what this block does, in one line",
+  "sources": [
+    {"id": "", "title": "", "url": "", "licence": "", "read": "what was read: pages, sections"}
+  ],
+  "parts": [
+    {"ref": "U1", "value": "", "symbol": "Library:Symbol", "footprint": "Library:Footprint",
+     "source": "id, page: where the part and its value come from", "quote": ""}
+  ],
+  "nets": {
+    "NET_NAME": ["U1.1", "C1.1"]
+  },
+  "ports": {
+    "VIN": {"net": "NET_NAME", "kind": "power_in", "note": "what the rest of the board connects here"}
+  },
+  "layout": {
+    "size_mm": [0, 0],
+    "place": {"U1": {"at_mm": [0, 0], "rotation": 0, "side": "front"}},
+    "rules": "layout advice from the datasheet (what sits close to what), with its source"
+  },
+  "open_questions": []
+}
