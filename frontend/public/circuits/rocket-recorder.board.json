@@ -265,26 +265,6 @@
    ]
   },
   {
-   "name": "IMU",
-   "parts": [
-    {
-     "ref": "C20",
-     "value": "100nF",
-     "package": "C_0402_1005Metric"
-    },
-    {
-     "ref": "C21",
-     "value": "100nF",
-     "package": "C_0402_1005Metric"
-    },
-    {
-     "ref": "U20",
-     "value": "BMI088",
-     "package": "Bosch_LGA-16_4.5x3mm_P0.5mm_LayoutBorder7x1y_ClockwisePinNumbering"
-    }
-   ]
-  },
-  {
    "name": "Barometer",
    "parts": [
     {
@@ -305,17 +285,22 @@
    ]
   },
   {
-   "name": "I2C pull-ups",
+   "name": "IMU",
    "parts": [
     {
-     "ref": "R20",
-     "value": "2.2k",
-     "package": "R_0402_1005Metric"
+     "ref": "C20",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
     },
     {
-     "ref": "R21",
-     "value": "2.2k",
-     "package": "R_0402_1005Metric"
+     "ref": "C21",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "U20",
+     "value": "BMI088",
+     "package": "Bosch_LGA-16_4.5x3mm_P0.5mm_LayoutBorder7x1y_ClockwisePinNumbering"
     }
    ]
   },
@@ -330,6 +315,21 @@
     {
      "ref": "R8",
      "value": "470R",
+     "package": "R_0402_1005Metric"
+    }
+   ]
+  },
+  {
+   "name": "I2C pull-ups",
+   "parts": [
+    {
+     "ref": "R20",
+     "value": "2.2k",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "R21",
+     "value": "2.2k",
      "package": "R_0402_1005Metric"
     }
    ]

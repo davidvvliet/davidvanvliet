@@ -27,9 +27,15 @@ for o in [o for o in bpy.data.objects if o.type == "MESH"]:
 
 placed = sorted({r for v in groups.values() for _, r in v if r})
 mat_key = {}
+MASK_ALPHA = 0.95
 def canonical(m):
     if m is None: return None
     b = m.node_tree.nodes.get("Principled BSDF") if m.use_nodes else None
+    # The solder mask (KiCad: see-through, 0.8 to 0.83, coloured; the silkscreen is see-through white): more
+    # opaque, or the shiny copper under it reflects the viewer's bright overhead light through it and washes
+    # the colour out (a black mask looked beige). At 0.95 the traces still show faintly, as on a real board.
+    if b and 0.5 < b.inputs["Alpha"].default_value < MASK_ALPHA and max(b.inputs["Base Color"].default_value[:3]) < 0.9:
+        b.inputs["Alpha"].default_value = MASK_ALPHA
     k = tuple(round(x, 3) for x in b.inputs["Base Color"].default_value) + (round(b.inputs["Metallic"].default_value, 2),
          round(b.inputs["Roughness"].default_value, 2), round(b.inputs["Alpha"].default_value, 2)) if b else (m.name,)
     return mat_key.setdefault(k, m)
