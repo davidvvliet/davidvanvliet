@@ -21,7 +21,7 @@
   min-height: 36px;
   flex-wrap: wrap;
 }
-.tabs { display: flex; gap: 1rem; }
+.tabs { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; }
 .tabs button {
   display: inline-flex; align-items: center; gap: 0.4rem;
   background: none; border: none; padding: 0; color: #666; font: inherit; cursor: pointer;
