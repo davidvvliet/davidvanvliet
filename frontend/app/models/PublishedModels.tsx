@@ -179,8 +179,11 @@ function Grid({ models }: { models: Published[] }) {
       <div className={styles.gridArea}>
         <div ref={scroller} className={styles.cards}>
           {models.length === 0 && <div className={styles.empty}>No published models yet.</div>}
-          {[...models].sort((a, b) => orgRank(a) - orgRank(b)).map((m) =>
+          {[...models].filter((m) => !m.board).sort((a, b) => orgRank(a) - orgRank(b)).map((m) =>
             <Card key={m.probe} model={m} spin={spin} root={scroller} />)}
+          {/* The circuit boards start a row of their own. */}
+          <div className={styles.rowBreak} />
+          {models.filter((m) => m.board).map((m) => <Card key={m.probe} model={m} spin={spin} root={scroller} />)}
         </div>
         <Canvas style={{ position: "absolute", inset: 0, pointerEvents: "none" }} dpr={[1, 2]} gl={{ alpha: true, antialias: true }}>
           <View.Port />
