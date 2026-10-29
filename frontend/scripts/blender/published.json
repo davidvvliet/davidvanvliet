@@ -221,9 +221,9 @@
   }
  },
  "xlr99": {
-  "approved": "2026-10-29 18:01",
+  "approved": "2026-10-29 18:02",
   "inputs": {
-   "specs/xlr99.json": "e21869ec1d8d1eab",
+   "specs/xlr99.json": "28f52e08eeca03ca",
    "probes/xlr99.py": "7146aa99c5a91f84",
    "build.py": "546ad99cac961e9b",
    "blender.json": "7bbc071b6e396ec4",
