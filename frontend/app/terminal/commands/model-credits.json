@@ -11,6 +11,10 @@
     "Material colours sampled from NASA/JPL-Caltech photo PIA23499",
     "NASA 3D Resources, Mars 2020 Perseverance Rover model (layout reference): https://github.com/nasa/NASA-3D-Resources"
   ],
+  "raptor3": [
+    "SpaceX, \"Introducing Starship V3\"",
+    "SpaceX, photo of Raptor 1, 2 and 3 (measured, not reproduced)"
+  ],
   "starship": [
     "SpaceX, \"Introducing Starship V3\" (engines, grid fins, hot stage)",
     "SpaceX, photo of the Flight 13 Starship stack on Pad 2 (proportions, flaps, hot-stage ring)",
