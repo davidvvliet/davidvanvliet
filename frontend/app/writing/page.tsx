@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { getAllPosts } from "./index";
 import styles from "./writing.module.css";
+import BackArrow from "../components/BackArrow";
 
 export const metadata: Metadata = {
   title: "Writing",
@@ -14,7 +15,7 @@ export default function WritingPage() {
 
   return (
     <main className={styles.page}>
-      <Link href="/" className={styles.back}>← davidvvliet.com</Link>
+      <Link href="/" className={styles.back}><BackArrow />davidvvliet.com</Link>
       <div className={styles.title}>Writing</div>
       {posts.length === 0 ? (
         <div>Nothing here yet.</div>
