@@ -45,6 +45,14 @@ def use(spec_materials):
         _ACTIVE[name] = (col, e.get("metallic", base[1]), e.get("roughness", base[2]))
     return problems
 
+def extend(spec_materials):
+    """Add spec materials (another spec's, e.g. an engine's) to this build where no material of
+    that name is defined yet."""
+    for name, e in (spec_materials or {}).items():
+        if name not in _ACTIVE:
+            base = PALETTE.get(name, ((0.5, 0.5, 0.5), 0.0, 0.5))
+            _ACTIVE[name] = (colour(e), e.get("metallic", base[1]), e.get("roughness", base[2]))
+
 def definition(name):
     """(linear colour, metallic, roughness) of a material this build, or None."""
     return _ACTIVE.get(name)

@@ -71,7 +71,7 @@ def _host_tree(host):
     return tree
 
 def decal(name, host, center, direction, up, width, height, material, lift=0.002, step=0.02,
-          parent=None, clip=False):
+          parent=None, clip=False, shapes=None):
     """A painted marking (lettering, an insignia) on a curved skin: a sheet laid on `host`,
     `lift` m off it, so it follows the curve and never flickers against it. `center` is a
     point at the marking's middle (on or near the skin), `direction` the way it is looked at
@@ -81,7 +81,10 @@ def decal(name, host, center, direction, up, width, height, material, lift=0.002
     cutout=True)` with a `textures.marking` image). Every vertex is in the vertex group "back",
     which the `mounted` check reads as the face on the host. Raises if any of it misses, unless
     `clip`: then the part hanging past the skin's edge (a leading edge) is left out; its image
-    there should be clear."""
+    there should be clear. `shapes`: [[x0, y0, x1, y1], ...] rectangles in the image's [0, 1]^2
+    (y down from its top): only those are kept, as one mesh whose grid runs along their edges, so
+    a block numeral or stripe is painted by geometry with exact, sharp edges (a plain material,
+    no image)."""
     d = Vector(direction).normalized()
     v0 = Vector(up) - d * Vector(up).dot(d)
     if v0.length < 1e-6:
@@ -100,10 +103,10 @@ def decal(name, host, center, direction, up, width, height, material, lift=0.002
             raise ValueError(f"decal {name}: misses {host.name} near {tuple(round(x, 3) for x in p)}")
         return hit, (normal if normal.dot(d) < 0 else -normal)
 
-    def wrap(line, length, n):
-        """Plane offsets along `line(t)` whose arc lengths on the skin, from t = 0, are evenly
-        spaced over `length` (n + 1 of them). The skin is never shorter than the plane, so
-        sampling t over +-length/2 always reaches the ends."""
+    def wrap(line, length, fracs):
+        """Plane offsets along `line(t)` whose arc lengths on the skin, from t = 0, sit at
+        `fracs` (0 to 1) of `length`. The skin is never shorter than the plane, so sampling t
+        over +-length/2 always reaches the ends."""
         k = 64
         ts = [length * (i / k - 0.5) for i in range(k + 1)]
         pts = [cast(line(t))[0] or line(t) for t in ts]
@@ -113,20 +116,30 @@ def decal(name, host, center, direction, up, width, height, material, lift=0.002
         zero = arc[k // 2]
         arc = [a - zero for a in arc]
         out = []
-        for i in range(n + 1):
-            target = length * (i / n - 0.5)
+        for fr in fracs:
+            target = length * (fr - 0.5)
             j = next((j for j in range(k) if arc[j + 1] >= target), k - 1)
             f = (target - arc[j]) / (arc[j + 1] - arc[j]) if arc[j + 1] > arc[j] else 0.0
             out.append(ts[j] + (ts[j + 1] - ts[j]) * min(max(f, 0.0), 1.0))
         return out
 
     nu, nv = max(1, math.ceil(width / step)), max(1, math.ceil(height / step))
-    us = wrap(lambda t: c0 + u0 * t, width, nu)
+    fu = sorted({i / nu for i in range(nu + 1)} | {e for s in shapes or [] for e in (s[0], s[2])})
+    fv = sorted({j / nv for j in range(nv + 1)} | {1 - e for s in shapes or [] for e in (s[1], s[3])})
+    nu, nv = len(fu) - 1, len(fv) - 1
+
+    def kept(i, j):
+        if not shapes:
+            return True
+        x, y = (fu[i] + fu[i + 1]) / 2, 1 - (fv[j] + fv[j + 1]) / 2
+        return any(s[0] <= x <= s[2] and s[1] <= y <= s[3] for s in shapes)
+
+    us = wrap(lambda t: c0 + u0 * t, width, fu)
     bm = bmesh.new()
     uv = bm.loops.layers.uv.new("UVMap")
     grid = []
     for s in us:
-        vs = wrap(lambda t, s=s: c0 + u0 * s + v0 * t, height, nv)
+        vs = wrap(lambda t, s=s: c0 + u0 * s + v0 * t, height, fv)
         col = []
         for t in vs:
             hit, normal = cast(c0 + u0 * s + v0 * t)
@@ -134,11 +147,11 @@ def decal(name, host, center, direction, up, width, height, material, lift=0.002
         grid.append(col)
     for i in range(nu):
         for j in range(nv):
-            if None in (grid[i][j], grid[i + 1][j], grid[i + 1][j + 1], grid[i][j + 1]):
+            if None in (grid[i][j], grid[i + 1][j], grid[i + 1][j + 1], grid[i][j + 1]) or not kept(i, j):
                 continue
             f = bm.faces.new((grid[i][j], grid[i + 1][j], grid[i + 1][j + 1], grid[i][j + 1]))
             for loop, (a, b) in zip(f.loops, ((i, j), (i + 1, j), (i + 1, j + 1), (i, j + 1))):
-                loop[uv].uv = (a / nu, b / nv)
+                loop[uv].uv = (fu[a], fv[b])
     for v in [v for v in bm.verts if not v.link_faces]:
         bm.verts.remove(v)
     if not bm.faces:

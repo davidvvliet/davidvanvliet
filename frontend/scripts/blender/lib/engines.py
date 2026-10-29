@@ -39,8 +39,14 @@
 #              axis, smooth (false for flat-ended discs)}; pipes may have flanges [fractions
 #              of their length]; each may set its material; each
 #              with its own source
-#   powerhead: optional shape "dome" (rounded up to the gimbal)
+#   powerhead: optional shape "dome" (rounded up to the gimbal), or profile [[r, dz], ...] traced
+#              from a side photo, dz above the chamber's top, from the bottom up (then height and
+#              diameter are not used)
 #   parts kind lathe: optional segments, closed, sweep_deg, roll_deg; kind box: optional roll_deg
+#   parts kind bolts: a ring of posts {count, diameter, length, radius, at, axis, sides, radial,
+#              start_deg}
+#   parts "keep": true also builds the part at lod simple, "low" at simple and low (silhouette
+#              parts: the big pipes and pumps); the rest are full lod only
 #   materials: {"nozzle", "chamber", "powerhead", "parts"}: material names (spec or shared)
 # Jet ("kind": "jet"), the intake at the top (z = length), exhaust at z = 0:
 #   nacelle:   length, max_diameter, inlet_diameter, exit_diameter, wall; optional profile
@@ -72,11 +78,14 @@ def _v(x):
 
 def load(spec, engine):
     """The "engine" block of specs/<engine>.json, for a vehicle whose spec lists it in
-    "engines" (that list is what marks the vehicle behind when the engine changes)."""
+    "engines" (that list is what marks the vehicle behind when the engine changes). Makes the
+    engine spec's materials available to the build, under the vehicle's own."""
     if engine not in spec.get("engines", []):
         raise ValueError(f"{engine}: list it in the spec's \"engines\" before using it")
     with open(os.path.join(HERE, "specs", f"{engine}.json")) as f:
-        return json.load(f)["engine"]
+        es = json.load(f)
+    materials.extend(es.get("materials", {}))       # the engine's own finishes, if not defined
+    return es["engine"]
 
 # --- Rocket ----------------------------------------------------------------------------
 
@@ -336,6 +345,26 @@ def _flanges(name, p, material):
             d -= l
     return parts._object(name, bm, material, Matrix())
 
+def _bolts(name, p, material):
+    """A ring of `count` bolts (studs, nut heads): `sides`-sided posts `diameter` across flats and
+    `length` long, on a circle of `radius` round `at` in the plane normal to `axis`, standing
+    along `axis` (or pointing out from the circle with `radial`), the first at `start_deg`
+    from the frame's x."""
+    m0 = parts.frame(tuple(p["at"]), tuple(p.get("axis", (0, 0, 1))), 0.0)
+    sg, n, R, L = p.get("sides", 6), p["count"], p["radius"], p["length"]
+    rad = p["diameter"] / 2 / math.cos(math.pi / sg)
+    bm = bmesh.new()
+    for i in range(n):
+        a = math.radians(p.get("start_deg", 0.0)) + 2 * math.pi * i / n
+        if p.get("radial"):
+            m = (Matrix.Translation(((R + L / 2) * math.cos(a), (R + L / 2) * math.sin(a), 0))
+                 @ Matrix.Rotation(a, 4, "Z") @ Matrix.Rotation(math.pi / 2, 4, "Y"))
+        else:
+            m = Matrix.Translation((R * math.cos(a), R * math.sin(a), L / 2))
+        bmesh.ops.create_cone(bm, cap_ends=True, segments=sg, radius1=rad, radius2=rad,
+                              depth=L, matrix=m0 @ m)
+    return parts._object(name, bm, material, Matrix())
+
 def _rocket(name, e, lod):
     nz, ch, ph = e["nozzle"], e["chamber"], e["powerhead"]
     mats = e.get("materials", {})
@@ -346,7 +375,7 @@ def _rocket(name, e, lod):
     rt = inner[-1][0]
     # Nozzle: a hollow shell, open at both ends (the chamber closes the top).
     outer = [(r + wall, z) for r, z in inner]
-    op = nz.get("outer_profile")
+    op = nz.get("outer_profile") if lod != "low" else None   # bands too small for a cluster
     if op:
         # The outside of the bell where it is wider than the wall (bands, manifolds, cover):
         # [(r, z)] with z above the nozzle's exit; between its points the larger radius wins.
@@ -373,8 +402,12 @@ def _rocket(name, e, lod):
     prof += [(rc, top), (0, top)]
     objs.append(parts.lathe(f"{name}_chamber", [(0, L - wall)] + prof, segments=seg,
                             material=mats.get("chamber", "dark_metal")))
-    rp, hp = ph["diameter"] / 2, ph["height"]
-    if ph.get("shape") == "dome":                      # a rounded dome up to the gimbal
+    rp, hp = ph.get("diameter", 0) / 2, ph.get("height", 0)
+    if "profile" in ph:                                # traced: [[r, dz]] above the chamber's top
+        prof_ph = [(0, top - 0.01)] + [(r, top + dz) for r, dz in ph["profile"]]
+        hp = ph["profile"][-1][1]
+        prof_ph += [(0, top + hp)]
+    elif ph.get("shape") == "dome":                    # a rounded dome up to the gimbal
         rg = e.get("gimbal", {}).get("diameter", rp) / 2
         prof_ph = [(0, top - 0.01), (rp, top - 0.01)]
         prof_ph += [(max(rp * math.cos(math.radians(t)), rg), top + hp * math.sin(math.radians(t)))
@@ -417,37 +450,48 @@ def _rocket(name, e, lod):
     if "manifold" in e:
         objs += (_torus(f"{name}_manifold", e["manifold"], seg,
                            mats.get("manifold", mats.get("nozzle", "dark_metal"))))
-    if lod == "full":
-        pm = mats.get("parts", "dark_metal")
-        for p in e.get("parts", []):
-            k, pn = p["kind"], f"{name}_{p['name']}"
-            if k == "pump":
-                r, l = p["diameter"] / 2, p["length"]
-                cap = min(r * 0.6, l / 3)
-                objs.append(parts.lathe(pn, [(0, 0), (r * 0.7, 0), (r, cap), (r, l - cap),
-                                             (r * 0.7, l), (0, l)],
-                                        location=p["at"], direction=p.get("axis", (0, 0, 1)),
-                                        segments=24, material=p.get("material", pm)))
-            elif k == "pipe":
-                objs.append(parts.tube(pn, p["points"], p["diameter"] / 2, segments=p.get("segments", 12),
-                                       bend_radius=p.get("bend_radius", p["diameter"]), material=p.get("material", pm)))
-                if p.get("flanges"):
-                    objs.append(_flanges(f"{pn}_flanges", p, p.get("flange_material", p.get("material", pm))))
-            elif k == "box":
-                objs.append(parts.box(pn, p["size"], location=p["at"], roll_deg=p.get("roll_deg", 0.0),
-                                      material=p.get("material", pm)))
-            elif k == "actuator":
-                objs.append(parts.strut(pn, p["from"], p["to"], radius=p["diameter"] / 2,
-                                        segments=10, material=p.get("material", pm)))
-            elif k == "lathe":
-                objs.append(parts.lathe(pn, [tuple(q) for q in p["profile"]], location=p["at"],
-                                        direction=p.get("axis", (0, 0, 1)),
-                                        segments=p.get("segments", 24), closed=p.get("closed", False),
-                                        sweep_deg=p.get("sweep_deg", 360.0),
-                                        roll_deg=p.get("roll_deg", 0.0),
-                                        smooth=p.get("smooth", True), material=p.get("material", pm)))
-            else:
-                raise ValueError(f"{pn}: unknown engine part kind {k!r}")
+    pm = mats.get("parts", "dark_metal")
+    # Full detail builds every part; simple and low only the parts marked "keep" (the ones that
+    # shape the silhouette), with fewer segments round them.
+    few = {"full": None, "simple": 12, "low": 6}[lod]
+    for p in e.get("parts", []):
+        if lod != "full" and not p.get("keep") or lod == "low" and p.get("keep") != "low":
+            continue
+        if few:
+            p = dict(p, segments=min(p.get("segments", 24), few))
+            p.pop("flanges", None)
+            if lod == "low":
+                p["bend_radius"] = 0.0                 # straight runs, no bends
+        k, pn = p["kind"], f"{name}_{p['name']}"
+        if k == "pump":
+            r, l = p["diameter"] / 2, p["length"]
+            cap = min(r * 0.6, l / 3)
+            objs.append(parts.lathe(pn, [(0, 0), (r * 0.7, 0), (r, cap), (r, l - cap),
+                                         (r * 0.7, l), (0, l)],
+                                    location=p["at"], direction=p.get("axis", (0, 0, 1)),
+                                    segments=p.get("segments", 24), material=p.get("material", pm)))
+        elif k == "bolts":
+            objs.append(_bolts(pn, p, p.get("material", pm)))
+        elif k == "pipe":
+            objs.append(parts.tube(pn, p["points"], p["diameter"] / 2, segments=p.get("segments", 12),
+                                   bend_radius=p.get("bend_radius", p["diameter"]), material=p.get("material", pm)))
+            if p.get("flanges"):
+                objs.append(_flanges(f"{pn}_flanges", p, p.get("flange_material", p.get("material", pm))))
+        elif k == "box":
+            objs.append(parts.box(pn, p["size"], location=p["at"], roll_deg=p.get("roll_deg", 0.0),
+                                  material=p.get("material", pm)))
+        elif k == "actuator":
+            objs.append(parts.strut(pn, p["from"], p["to"], radius=p["diameter"] / 2,
+                                    segments=10, material=p.get("material", pm)))
+        elif k == "lathe":
+            objs.append(parts.lathe(pn, [tuple(q) for q in p["profile"]], location=p["at"],
+                                    direction=p.get("axis", (0, 0, 1)),
+                                    segments=p.get("segments", 24), closed=p.get("closed", False),
+                                    sweep_deg=p.get("sweep_deg", 360.0),
+                                    roll_deg=p.get("roll_deg", 0.0),
+                                    smooth=p.get("smooth", True), material=p.get("material", pm)))
+        else:
+            raise ValueError(f"{pn}: unknown engine part kind {k!r}")
     return objs
 
 # --- Jet -------------------------------------------------------------------------------
