@@ -1,6 +1,7 @@
 .container {
   width: 100vw;
   height: calc(100vh - 80px);
+  height: calc(100dvh - 80px); /* the visible height on phones, without the browser bars */
   display: grid;
   grid-template-rows: 61.8% 38.2%;
   background-color: #0a0a0a;
@@ -29,6 +30,34 @@
   border-right: 1px solid rgba(255, 255, 255, 0.3);
   overflow: hidden;
   min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* The terminal while its keyboard is open: the whole visible screen (top and height set inline) */
+.terminalFull {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100dvh;
+  z-index: 1000;
+  background-color: #0a0a0a;
+  border-right: none;
+}
+
+.terminalClose {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.5rem;
+  font-family: var(--font-roboto-mono);
+  font-size: 1.4rem;
+  line-height: 1;
+  color: #00ff00;
+  background: transparent;
+  border: none;
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
 }
 
 /* Right 38.2%: linksContainer (38.2%) top | pulsar (61.8%) bottom */

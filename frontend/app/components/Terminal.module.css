@@ -230,3 +230,37 @@
   font-size: 0.75rem;
 }
 .modelOpen:hover { color: #ededed; }
+
+/* Phone layout (Terminal's `mobile` prop) */
+.mobile {
+  padding: 0.75rem;
+}
+
+/* iOS zooms in on a focused field under 16px; this one is invisible, so it costs nothing */
+.mobile .hiddenInput {
+  font-size: 16px;
+}
+
+.keys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+.key {
+  font-family: var(--font-roboto-mono);
+  font-size: 0.75rem;
+  color: #00ff00;
+  background: transparent;
+  border: 1px solid rgba(0, 255, 0, 0.4);
+  border-radius: 4px;
+  padding: 0.3rem 0.6rem;
+  min-width: 2.2rem;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.key:active {
+  background: rgba(0, 255, 0, 0.15);
+}

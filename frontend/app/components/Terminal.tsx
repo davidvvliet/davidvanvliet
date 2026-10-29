@@ -162,7 +162,11 @@ function VideoLine({ src: spec, restored, onSized }: { src: string; restored?: b
   );
 }
 
-export default function Terminal() {
+// `mobile`: the phone layout's terminal. Adds tappable keys for what a phone keyboard
+// lacks (Tab, arrows), a 16px input so iOS doesn't zoom on focus, no autocorrect, and
+// keeps the prompt in view as the cell resizes. `onFocusChange` reports the keyboard
+// opening and closing (the prompt gaining and losing focus).
+export default function Terminal({ mobile = false, onFocusChange }: { mobile?: boolean; onFocusChange?: (focused: boolean) => void } = {}) {
   const [lines, setLines] = useState<Line[]>([]);
   const terminalPush = usePageStore((s) => s.terminalPush);
   const transcriptPlaying = usePageStore((s) => s.transcriptPlaying); // prompt hidden while a mission transcript plays
@@ -397,8 +401,28 @@ export default function Terminal() {
   const beforeCaret = input.slice(0, cursorPos);
   const afterCaret = input.slice(cursorPos);
 
+  // Mobile: when the terminal changes size (it goes full screen, the keyboard opens),
+  // keep its newest lines and the prompt in view.
+  const rootRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!mobile || !el) return;
+    const ro = new ResizeObserver(() => { el.scrollTop = el.scrollHeight; });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [mobile]);
+
+  // Mobile keys: run help, step through history, complete. They don't take focus,
+  // so an open keyboard stays open; the editing keys open it when it's closed.
+  const mobileKeys: [string, string, () => void][] = [
+    ["help", "Run help", () => typeAndRun("help")],
+    ["↑", "Previous command", () => { browseHistory(-1); inputRef.current?.focus(); }],
+    ["↓", "Next command", () => { browseHistory(1); inputRef.current?.focus(); }],
+    ["tab", "Complete", () => { handleTab(); inputRef.current?.focus(); }],
+  ];
+
   return (
-    <div className={styles.terminal} onClick={() => inputRef.current?.focus()}>
+    <div ref={rootRef} className={mobile ? `${styles.terminal} ${styles.mobile}` : styles.terminal} onClick={() => inputRef.current?.focus()}>
       {lines.map((line, i) =>
         line.type === "output" && line.text.startsWith("__VIDEO__") ? (
           <div key={i} className={styles.imageRow}>
@@ -470,12 +494,24 @@ export default function Terminal() {
             onKeyDown={handleKeyDown}
             onKeyUp={syncCursor}
             onClick={syncCursor}
-            autoFocus
+            onFocus={onFocusChange && (() => onFocusChange(true))}
+            onBlur={onFocusChange && (() => onFocusChange(false))}
+            autoFocus={!mobile} // on a phone a focused prompt opens the keyboard (and full screen)
             spellCheck={false}
             autoComplete="off"
+            {...(mobile && { autoCapitalize: "off", autoCorrect: "off", enterKeyHint: "go" as const })}
           />
         </div>
       </div>
+      {mobile && !transcriptPlaying && (
+        <div className={styles.keys}>
+          {mobileKeys.map(([label, name, action]) => (
+            <button key={label} type="button" aria-label={name} className={styles.key}
+              onPointerDown={(e) => e.preventDefault()} onMouseDown={(e) => e.preventDefault()}
+              onClick={(e) => { e.stopPropagation(); if (!typingRef.current) action(); }}>{label}</button>
+          ))}
+        </div>
+      )}
       <div ref={bottomRef} />
     </div>
   );

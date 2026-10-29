@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Navbar from './Navbar';
 import Terminal from './Terminal';
@@ -40,6 +40,29 @@ export default function MobilePage({ panel, photos }: { panel: React.ReactNode; 
           ? { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }
           : { month: 'long', year: 'numeric', timeZone: 'UTC' })
     : null;
+
+  // The terminal fills the screen while its keyboard is open, sized to the visible
+  // viewport so the prompt sits just above the keyboard. Leaving the prompt (keyboard
+  // closed, a tap outside, or ×) shrinks it back after a beat, so a tap that keeps
+  // the focus inside doesn't flicker it.
+  const [termFull, setTermFull] = useState(false);
+  const [viewport, setViewport] = useState<{ top: number; height: number } | null>(null);
+  const blurTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const onTermFocus = (focused: boolean) => {
+    if (blurTimer.current) clearTimeout(blurTimer.current);
+    if (focused) setTermFull(true);
+    else blurTimer.current = setTimeout(() => setTermFull(false), 150);
+  };
+  useEffect(() => () => { if (blurTimer.current) clearTimeout(blurTimer.current); }, []);
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!termFull || !vv) return;
+    const fit = () => setViewport({ top: vv.offsetTop, height: vv.height });
+    fit();
+    vv.addEventListener('resize', fit);
+    vv.addEventListener('scroll', fit);
+    return () => { vv.removeEventListener('resize', fit); vv.removeEventListener('scroll', fit); };
+  }, [termFull]);
 
   return (
     <>
@@ -85,8 +108,15 @@ export default function MobilePage({ panel, photos }: { panel: React.ReactNode; 
         <div className={styles.bottomCell}>
 
           {/* Left 61.8%: terminal */}
-          <div className={styles.terminalCell}>
-            <Terminal />
+          <div
+            className={termFull ? `${styles.terminalCell} ${styles.terminalFull}` : styles.terminalCell}
+            style={termFull && viewport ? { top: viewport.top, height: viewport.height } : undefined}
+          >
+            <Terminal mobile onFocusChange={onTermFocus} />
+            {termFull && (
+              <button type="button" className={styles.terminalClose} aria-label="Close terminal"
+                onClick={() => (document.activeElement as HTMLElement | null)?.blur()}>×</button>
+            )}
           </div>
 
           {/* Right 38.2%: links + record top (38.2%) | photos bottom (61.8%) */}

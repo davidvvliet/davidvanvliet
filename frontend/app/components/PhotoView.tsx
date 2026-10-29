@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import type { GlobePaths, Photo } from "../photoTypes";
 import PhotoGlobe from "./PhotoGlobe";
+import { useIsMobile } from "./useIsMobile";
 import styles from "./PhotoView.module.css";
 
 const SIDE_GLOBE = 120; // beside a portrait photo, in the space next to it
@@ -13,7 +14,8 @@ const ROW_GLOBE = 64; // under a landscape photo, at its left edge
 const GAP = 12; // least space kept on each side of the side globe
 const MIN_FIT = 0.8; // a photo may shrink to this share of its full size to make room beside it
 
-export default function PhotoView({ photo, count, prevSlug, nextSlug, globe }: { photo: Photo; count: number; prevSlug: string; nextSlug: string; globe?: GlobePaths }) {
+export default function PhotoView({ photo, count, prevSlug, nextSlug, globe: globePaths }: { photo: Photo; count: number; prevSlug: string; nextSlug: string; globe?: GlobePaths }) {
+  const globe = useIsMobile() ? undefined : globePaths; // no location globe on phones
   const router = useRouter();
   const frameRef = useRef<HTMLDivElement>(null);
   const aspect = photo.width && photo.height ? photo.width / photo.height : undefined;
