@@ -404,7 +404,10 @@ def _rocket(name, e, lod):
                             material=mats.get("chamber", "dark_metal")))
     rp, hp = ph.get("diameter", 0) / 2, ph.get("height", 0)
     if "profile" in ph:                                # traced: [[r, dz]] above the chamber's top
-        prof_ph = [(0, top - 0.01)] + [(r, top + dz) for r, dz in ph["profile"]]
+        pp = ph["profile"]
+        if lod == "low":                               # every other step, ends kept
+            pp = pp[:-1:2] + [pp[-1]]
+        prof_ph = [(0, top - 0.01)] + [(r, top + dz) for r, dz in pp]
         hp = ph["profile"][-1][1]
         prof_ph += [(0, top + hp)]
     elif ph.get("shape") == "dome":                    # a rounded dome up to the gimbal
@@ -474,7 +477,8 @@ def _rocket(name, e, lod):
             objs.append(_bolts(pn, p, p.get("material", pm)))
         elif k == "pipe":
             objs.append(parts.tube(pn, p["points"], p["diameter"] / 2, segments=p.get("segments", 12),
-                                   bend_radius=p.get("bend_radius", p["diameter"]), material=p.get("material", pm)))
+                                   bend_radius=p.get("bend_radius", p["diameter"]), material=p.get("material", pm),
+                                   bend_steps=6 if lod == "full" else 2))
             if p.get("flanges"):
                 objs.append(_flanges(f"{pn}_flanges", p, p.get("flange_material", p.get("material", pm))))
         elif k == "box":

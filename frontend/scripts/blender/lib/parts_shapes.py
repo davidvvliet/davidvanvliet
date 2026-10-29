@@ -386,10 +386,11 @@ def _round_corners(points, radius, steps=6):
     out.append(points[-1])
     return out
 
-def tube(name, points, radius, segments=12, bend_radius=0.0, material="dark_metal", parent=None):
+def tube(name, points, radius, segments=12, bend_radius=0.0, material="dark_metal", parent=None,
+         bend_steps=6):
     """A tube through `points` (rover suspension arms, handrails, cables), corners bent with
-    `bend_radius`, ends capped."""
-    pts = _round_corners([Vector(p) for p in points], bend_radius)
+    `bend_radius` in `bend_steps` steps each, ends capped."""
+    pts = _round_corners([Vector(p) for p in points], bend_radius, bend_steps)
     bm = bmesh.new()
     _tube(bm, pts, radius, segments)
     return _object(name, bm, material, Matrix(), parent, smooth=True)
