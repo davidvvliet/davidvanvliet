@@ -1,8 +1,8 @@
 {
  "f1": {
-  "approved": "2026-10-28 20:54",
+  "approved": "2026-10-28 20:51",
   "inputs": {
-   "specs/f1.json": "519aa3a57426c741",
+   "specs/f1.json": "82979e736cf2f722",
    "probes/f1.py": "8a0fa7839183248f",
    "build.py": "6046dd94ba4984fb",
    "blender.json": "7bbc071b6e396ec4",
