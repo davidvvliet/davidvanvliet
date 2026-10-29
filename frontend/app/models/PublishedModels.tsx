@@ -83,7 +83,6 @@ export default function PublishedModels({ models, circuit, dashboard }: {
   }));
   const more: CardItem[] = circuit ? [{
     key: "circuits", href: "/circuits", url: `/circuits/${circuit}.glb`, title: "My circuit experiments",
-    corner: <span className={styles.cardArrow}>↗</span>,
   }] : [];
   return (
     <Grid back={{ href: "/", label: "← explore" }} title="Models" rows={[cards, more]} empty="No published models yet.">
@@ -168,7 +167,7 @@ export function Header({ children }: { children: React.ReactNode }) {
   );
 }
 
-// A card in a grid: its model spinning (its thumbnail until then), a title, and a corner (logos or an arrow).
+// A card in a grid: its model spinning (its thumbnail until then), a title, and a corner (logos).
 export type CardItem = { key: string; href: string; url: string; title: string; thumb?: string; corner?: React.ReactNode };
 
 // A page of cards (/models, /circuits): the header, the intro in green, then the cards, each row of
