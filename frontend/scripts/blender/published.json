@@ -139,10 +139,10 @@
   }
  },
  "superheavy": {
-  "approved": "2026-10-29 12:43",
+  "approved": "2026-10-29 14:51",
   "inputs": {
-   "specs/superheavy.json": "b29e2badbbbae655",
-   "probes/superheavy.py": "274a12760ca39064",
+   "specs/superheavy.json": "3fd6442799324526",
+   "probes/superheavy.py": "fc8adb9005acd417",
    "build.py": "6046dd94ba4984fb",
    "blender.json": "7bbc071b6e396ec4",
    "specs/raptor3.json": "cf24e366865a7b0e",
