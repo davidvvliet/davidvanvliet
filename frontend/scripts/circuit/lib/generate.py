@@ -1,12 +1,15 @@
 # A recipe (boards/<board>/recipe.json) as a KiCad board: every block's parts placed, wired and with its
 # own traces, the blocks' ports joined as the recipe says, and the board outline. Routing is lib/route.py.
 # Runs in KiCad's Python:
-#   <kicad-python> lib/generate.py <recipe.json> <out dir>    -> board.kicad_pcb, board.kicad_pro, blocks.json
+#   <kicad-python> lib/generate.py <recipe.json> <out dir>    -> board.kicad_pcb, .kicad_pro, .kicad_sch, blocks.json
 import json, os, re, shutil, sys
 import pcbnew
 
 HARNESS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-recipe_path, out = sys.argv[1], sys.argv[2]
+sys.path.insert(0, HARNESS)
+from lib import schematic
+BOARD = os.path.basename(os.path.dirname(os.path.abspath(recipe_path := sys.argv[1])))
+out = sys.argv[2]
 recipe = json.load(open(recipe_path))
 KICAD_FP = os.path.normpath(os.path.join(os.path.dirname(sys.executable), *[".."] * 5, "SharedSupport", "footprints"))
 KICAD_FP = os.environ.get("KICAD_FOOTPRINTS", KICAD_FP)
@@ -35,13 +38,16 @@ for group in recipe["connect"]:
     for port in group:
         inst, net = port.split(".", 1)
         alias[(inst, net)] = name
+def local(inst, n):
+    """The board's name for a block's net: joined ports' shared name, else "core:XIN" (no "/", which a schematic label can't hold)."""
+    return alias.get((inst, n), f"{inst}:{n.lstrip('/')}")
 nets = {}
 def net(name):
     if name not in nets:
         n = pcbnew.NETINFO_ITEM(board, name); board.Add(n); nets[name] = n
     return nets[name]
 
-refs_used, block_of = set(), {}
+refs_used, block_of, sch_parts = set(), {}, []
 for inst, spec in recipe["blocks"].items():
     blk = json.load(open(os.path.join(HARNESS, "blocks", f"{spec['block']}.json")))
     ox, oy = spec["at_mm"]
@@ -58,7 +64,12 @@ for inst, spec in recipe["blocks"].items():
     for n, pins in blk["nets"].items():
         for pin in pins:
             ref, pad = pin.split(".", 1)
-            pad_net[(ref, pad)] = alias.get((inst, n), f"{inst}:{n}")
+            if len(pins) == 1 and (inst, n) not in alias:  # a pin on its own: no-connect in the schematic, named as KiCad names it
+                part = next(q for q in blk["parts"] if q["ref"] == ref)
+                name = schematic.symbols.pin_names(schematic.symbols.get(part["symbol"])).get(pad, "")
+                pad_net[(ref, pad)] = f"unconnected-({rename[ref]}{'-' + name.replace('/', '{slash}') if name and name != '~' else ''}-Pad{pad})"
+            else:
+                pad_net[(ref, pad)] = local(inst, n)
     for p in blk["parts"]:
         f = footprint(p["footprint"])
         pl = blk["layout"]["place"][p["ref"]]
@@ -68,21 +79,28 @@ for inst, spec in recipe["blocks"].items():
         f.SetOrientationDegrees(pl["rotation"])
         f.SetPosition(pcbnew.VECTOR2I(mm(ox + pl["at_mm"][0]), mm(oy + pl["at_mm"][1])))
         f.SetReference(rename[p["ref"]]); f.SetValue(p["value"])
+        pin_net = {}
         for pad in f.Pads():
             n = pad_net.get((p["ref"], pad.GetNumber()))
-            if n: pad.SetNet(net(n))
+            if n: pad.SetNet(net(n)); pin_net[pad.GetNumber()] = n
         block_of[rename[p["ref"]]] = blk["title"] or spec["block"]
+        # The footprint points at its symbol in the schematic (KiCad's schematic-to-board comparison).
+        sym = schematic.uid(BOARD, "symbol", rename[p["ref"]])
+        f.SetPath(pcbnew.KIID_PATH("/" + sym)); f.SetSheetname("/"); f.SetSheetfile("board.kicad_sch")
+        sch_parts.append({"ref": rename[p["ref"]], "value": p["value"], "footprint": p["footprint"], "symbol": p["symbol"],
+                          "uuid": sym, "block": block_of[rename[p["ref"]]], "nets": pin_net,
+                          "datasheet": f.GetField(pcbnew.FIELD_T_DATASHEET).GetText()})
     for t in blk["layout"]["traces"]:
         tr = pcbnew.PCB_TRACK(board)
         tr.SetStart(pcbnew.VECTOR2I(mm(ox + t["from_mm"][0]), mm(oy + t["from_mm"][1])))
         tr.SetEnd(pcbnew.VECTOR2I(mm(ox + t["to_mm"][0]), mm(oy + t["to_mm"][1])))
         tr.SetWidth(mm(t["width_mm"])); tr.SetLayer(board.GetLayerID(t["layer"]))
-        tr.SetNet(net(alias.get((inst, t["net"]), f"{inst}:{t['net']}"))); board.Add(tr)
+        tr.SetNet(net(local(inst, t["net"]))); board.Add(tr)
     for v in blk["layout"]["vias"]:
         via = pcbnew.PCB_VIA(board)
         via.SetPosition(pcbnew.VECTOR2I(mm(ox + v["at_mm"][0]), mm(oy + v["at_mm"][1])))
         via.SetDrill(mm(v["drill_mm"])); via.SetWidth(mm(v["size_mm"]))
-        via.SetNet(net(alias.get((inst, v["net"]), f"{inst}:{v['net']}"))); board.Add(via)
+        via.SetNet(net(local(inst, v["net"]))); board.Add(via)
 
 # Outline: a rectangle on Edge.Cuts.
 w, h = recipe["board"]["size_mm"]
@@ -92,5 +110,6 @@ for a, b in zip(corners, corners[1:] + corners[:1]):
     s.SetStart(pcbnew.VECTOR2I(mm(a[0]), mm(a[1]))); s.SetEnd(pcbnew.VECTOR2I(mm(b[0]), mm(b[1]))); board.Add(s)
 
 pcbnew.SaveBoard(os.path.join(out, "board.kicad_pcb"), board)
+schematic.write(os.path.join(out, "board.kicad_sch"), BOARD, sch_parts, recipe["title"])
 json.dump(block_of, open(os.path.join(out, "blocks.json"), "w"), indent=1)
 print("GENERATED", len(block_of), "parts", len(nets), "nets", flush=True)

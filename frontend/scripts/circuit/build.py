@@ -71,8 +71,8 @@ def main(board, publish=False):
         kpy(os.path.join(HERE, "lib", "generate.py"), os.path.join(src, "recipe.json"), work)
         for ext in ("kicad_pcb", "kicad_pro"): os.rename(os.path.join(work, f"board.{ext}"), os.path.join(work, f"unrouted.{ext}"))
         note = route(work, recipe["board"].get("ground_fill"))
-        meta = {"title": recipe["title"], "purpose": recipe["purpose"], "source": recipe["source"], "pcb": "kicad/board.kicad_pcb", "sch": None}
-        pcb_path, sch_path = os.path.join(work, "board.kicad_pcb"), None
+        meta = {"title": recipe["title"], "purpose": recipe["purpose"], "source": recipe["source"], "pcb": "kicad/board.kicad_pcb", "sch": "kicad/board.kicad_sch"}
+        pcb_path, sch_path = os.path.join(work, "board.kicad_pcb"), os.path.join(work, "board.kicad_sch")
         blocks = json.load(open(os.path.join(work, "blocks.json")))
     else:
         meta = json.load(open(os.path.join(src, "board.json")))
@@ -92,7 +92,7 @@ def main(board, publish=False):
         if sch_path:
             shutil.copy(sch_path, os.path.join(tmp, "board.kicad_sch"))
             kicad_checks = checks.drc(p) + checks.erc(os.path.join(tmp, "board.kicad_sch"))
-        else:  # a recipe board has no schematic yet: no electrical check, no schematic-to-board comparison
+        else:
             kicad_checks = checks.drc(p, parity=False)
         raw = os.path.join(tmp, "raw.glb")
         r = subprocess.run([tools.tool("kicad-cli"), "pcb", "export", "glb", "-f", "-o", raw, "--no-dnp", "--include-tracks", "--include-pads",

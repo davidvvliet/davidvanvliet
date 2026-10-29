@@ -28,7 +28,10 @@ footprints/         footprints KiCad's library doesn't have (mitayi.pretty: the 
 lib/tools.py        where each tool is
 lib/checks.py       KiCad's design rule and electrical checks, as dashboard check rows
 lib/sections.py     an imported schematic's titled boxes, as the board's blocks
-lib/generate.py     a recipe as a KiCad board (KiCad's Python): blocks placed with their own traces, ports joined, outline
+lib/schematic.py    a recipe board's schematic: a box per block, pins labelled with their nets
+lib/symbols.py      schematic symbols by library id (imported boards' own first, then KiCad's)
+lib/sexpr.py        KiCad's file format (S-expressions), read and written
+lib/generate.py     a recipe as a KiCad board and schematic (KiCad's Python): blocks placed with their own traces, ports joined, outline
 lib/route.py        the router's input out, its traces back in (widened to the minimum), ground fill on both sides
 lib/extract.py      lifts a block out of an imported board (KiCad's Python): parts, wiring, ports, layout
 lib/pack.py         Blender: tag parts by block, merge pieces, Draco-compress, export
@@ -62,8 +65,12 @@ every box get no block.
 `board` (size, `rules`: the project file with clearances and widths, `ground_fill`: the net poured on
 both sides), `blocks` (instance name -> block and position) and `connect` (groups of `instance.port`
 joined into one net, named after the first). A build generates the board into `out/<board>/kicad/`
-(open `board.kicad_pcb` there in KiCad to look at it), routes it and checks it. A recipe board has no
-schematic yet, so there is no electrical check or schematic comparison.
+(open `board.kicad_pcb` or `board.kicad_sch` there in KiCad to look at it), routes it and checks it.
+The schematic (`lib/schematic.py`) is drawn from the same parts: one titled box per block, every pin
+tied to its net by a global label (a local label would rename the net "/<name>"), lone pins marked
+no-connect and their pads named as KiCad names them (`unconnected-(<ref>-<pin>-Pad<n>)`, a "/" in a
+pin name written `{slash}`), and a power flag on each power net nothing on the board drives. Each
+footprint points at its symbol by a UUID that stays the same between builds, so all four checks run.
 
 A board is a recipe (`templates/recipe.json`): which blocks, where, and which ports connect. A block
 (`templates/block.json`) is a small circuit made once and reused: its parts (KiCad library symbol and
