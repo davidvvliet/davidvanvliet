@@ -3,6 +3,9 @@
   "logos": [
     "spacex"
   ],
+  "viewer": {
+    "explore": false
+  },
   "engines": [
     "raptor3"
   ],

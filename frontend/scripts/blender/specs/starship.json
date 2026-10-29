@@ -3,6 +3,9 @@
   "logos": [
     "spacex"
   ],
+  "viewer": {
+    "explore": false
+  },
   "note": "SpaceX Starship V3 (Block 3) ship, the upper stage, as first flown on Flight 12 (ship S39; SpaceX photo names), on its own without the booster. Dry, unfuelled (no frost). Frame: z up, the ship's base (aft skirt) at z = 0, the axis on x = y = 0. +x is the windward (heat-shield) side, which faces away from the launch tower; -x faces the tower. y completes a right-handed frame. No reference 3D model exists (see reference_model): the layout comes from the sources below and from SpaceX photos, scaled by the 9 m diameter. The booster is its own model (superheavy).",
   "sources": [
     {

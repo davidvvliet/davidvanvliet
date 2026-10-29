@@ -11,7 +11,7 @@ import ModelsDashboard, { Viewer } from "./ModelsDashboard";
 import styles from "./models.module.css";
 
 export type Published = {
-  probe: string; title: string; thumb: boolean; logos: string[];
+  probe: string; title: string; thumb: boolean; logos: string[]; explore: boolean;
   sources: { title: string; url: string; licence: string | null; cited: number }[];
 };
 
@@ -40,7 +40,8 @@ const orgRank = (m: Published) => { const i = ORGS.indexOf(m.logos[0]); return i
 // /models on the live site. Without ?probe: a grid of the published models, each spinning in its
 // card. All cards draw into one shared canvas (one WebGL context however many models there are),
 // and each shows its thumbnail until its model has loaded, which starts once the card is on screen.
-// With ?probe=<name>: that model in the dashboard's viewer (explode, part sizes, click to focus).
+// With ?probe=<name>: that model in the dashboard's viewer (explode, part sizes, click to focus;
+// a spec's "viewer": {"explore": false} leaves only orbiting and its moving parts).
 // Locally (`dashboard`), /models?dashboard is the build dashboard.
 export default function PublishedModels({ models, dashboard }: { models: Published[]; dashboard: boolean }) {
   const params = useSearchParams();
@@ -57,7 +58,7 @@ export default function PublishedModels({ models, dashboard }: { models: Publish
         </Header>
         <div className={styles.detail}>
           <div className={styles.viewCell}>
-            <Viewer probe={probe} url={`/models/${probe}.glb`} breakdown={null} stale={false} />
+            <Viewer probe={probe} url={`/models/${probe}.glb`} breakdown={null} stale={false} explore={model.explore} />
             <Logos model={model} />
           </div>
           <Sources sources={model.sources} />

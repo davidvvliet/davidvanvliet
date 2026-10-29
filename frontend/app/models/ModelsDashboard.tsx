@@ -135,8 +135,8 @@ type Controls = { target: THREE.Vector3; update: () => void };
 // A clicked part (`focus`) gets the camera: it flies in keeping the current viewing
 // direction, orbits that part, follows it through explode/assemble, and flies back home
 // when the focus clears.
-function Model({ url, exploded, focus, setFocus, onLabel, onReady }: {
-  url: string; exploded: boolean; focus: string | null; setFocus: (f: string | null) => void;
+function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = true }: {
+  url: string; exploded: boolean; focus: string | null; setFocus: (f: string | null) => void; explore?: boolean;
   onLabel: (label: { name: string; size: THREE.Vector3 } | null) => void; onReady?: () => void;
 }) {
   const gltf = useGLTF(url, "/draco/"); // compressed models (the /circuit boards) decode with the copy in public/draco
@@ -261,10 +261,16 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady }: {
           mat.opacity = p.group === hover ? HOVER_FADED : FADED;
         if (!mat.emissive) continue;
         if (!mat.userData.rest) mat.userData.rest = mat.emissive.clone();
-        mat.emissive.copy(p.group === hover ? HIGHLIGHT : mat.userData.rest);
+        mat.emissive.copy(explore && p.group === hover ? HIGHLIGHT : mat.userData.rest);
       }
     }
-  }, [hover, focus, parts]);
+    // Without explore, `hover` is a hinge group: light up the parts that move.
+    if (!explore) for (const m of hinges.meshes(hover)) {
+      for (const mat of (Array.isArray(m.material) ? m.material : [m.material]) as THREE.MeshStandardMaterial[]) {
+        if (mat.emissive && mat.userData.rest) mat.emissive.copy(HIGHLIGHT);
+      }
+    }
+  }, [hover, focus, parts, explore, hinges]);
   // The part under the pointer. While one is focused, the others are see-through, so a ray
   // that reaches the focused part picks it even through faded parts in front of it.
   const pick = (e: ThreeEvent<PointerEvent | MouseEvent>) => {
@@ -273,8 +279,9 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady }: {
   };
   const onMove = (e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation();
-    setHover(pick(e));
-    gl.domElement.style.cursor = hingeGroup(e.intersections[0]?.object ?? e.object, scene) ? "pointer" : "";
+    const h = hingeGroup(e.intersections[0]?.object ?? e.object, scene);
+    setHover(explore ? pick(e) : h);
+    gl.domElement.style.cursor = h ? "pointer" : "";
   };
   const onClick = (e: ThreeEvent<MouseEvent>) => {
     if (e.delta > 4) return; // the end of an orbit drag, not a click
@@ -282,11 +289,12 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady }: {
     // A part on a hinge with somewhere to go (its joint's move_to) moves instead of focusing.
     const h = hingeGroup(e.intersections[0]?.object ?? e.object, scene);
     if (h) { hinges.toggle(h); return; }
+    if (!explore) return; // a plain model: only the moving parts answer clicks
     const g = pick(e);
     setFocus(g === focus ? null : g); // another part moves the focus to it
   };
   // The label is drawn by the Viewer in a fixed panel, so it never covers the part.
-  const label = hover ?? focus;
+  const label = explore ? hover ?? focus : null;
   useEffect(() => {
     const box = label ? boxes.get(label) : undefined;
     onLabel(label && box ? { name: label, size: box.getSize(new THREE.Vector3()) } : null);
@@ -331,12 +339,20 @@ function useHinges(scene: THREE.Object3D) {
       h.node.quaternion.copy(q.setFromAxisAngle(h.axis, THREE.MathUtils.degToRad(h.now - h.restDeg)).multiply(h.rest));
     }
   });
-  return {
+  const byGroup = useMemo(() => {
+    const m = new Map<string, THREE.Mesh[]>();
+    for (const h of hinges) h.node.traverse((o) => {
+      if ((o as THREE.Mesh).isMesh) m.set(h.group, [...(m.get(h.group) ?? []), o as THREE.Mesh]);
+    });
+    return m;
+  }, [hinges]);
+  return useMemo(() => ({
+    meshes: (group: string | null) => (group ? byGroup.get(group) ?? [] : []),
     toggle: (group: string) => {
       const s = moved.current;
       if (s.has(group)) s.delete(group); else s.add(group);
     },
-  };
+  }), [byGroup]);
 }
 
 // Blender's axes from the glTF's (exported y-up): x, -z, y; sizes just swap y and z.
@@ -372,9 +388,9 @@ class ViewerBoundary extends Component<{ children: ReactNode; resetKey: string }
 
 // `compact`: embedded in a scrolling page (the terminal): no wheel zoom, so the wheel scrolls the page.
 // `focus`/`onFocus`: the focused part, when the page around the viewer also picks it (the /circuit block list).
-export function Viewer({ probe, url, breakdown, stale, compact, onReady, focus: shown, onFocus }: {
+export function Viewer({ probe, url, breakdown, stale, compact, onReady, focus: shown, onFocus, explore = true }: {
   probe: string; url: string; breakdown: Breakdown | null; stale: boolean; compact?: boolean; onReady?: () => void;
-  focus?: string | null; onFocus?: (f: string | null) => void;
+  focus?: string | null; onFocus?: (f: string | null) => void; explore?: boolean;
 }) {
   const [exploded, setExploded] = useState(false);
   const [own, setOwn] = useState<string | null>(null);
@@ -391,9 +407,11 @@ export function Viewer({ probe, url, breakdown, stale, compact, onReady, focus: 
   }, []);
   return (
     <ViewerBoundary resetKey={url}>
-      <button className={`${styles.explode} ${exploded ? styles.active : ""}`} onClick={() => setExploded((x) => !x)}>
-        {exploded ? "Assemble" : "Explode"}
-      </button>
+      {explore && (
+        <button className={`${styles.explode} ${exploded ? styles.active : ""}`} onClick={() => setExploded((x) => !x)}>
+          {exploded ? "Assemble" : "Explode"}
+        </button>
+      )}
       {label && (
         <PartLabel name={label.name} size={label.size} row={breakdown?.families[label.name]}
           hasBreakdown={!!breakdown} stale={stale} />
@@ -408,7 +426,7 @@ export function Viewer({ probe, url, breakdown, stale, compact, onReady, focus: 
         <color attach="background" args={["#090909"]} />
         <StudioLights />
         <Suspense fallback={null}>
-          <Model key={url} url={url} exploded={exploded} focus={focus} setFocus={setFocus} onLabel={setLabel} onReady={onReady} />
+          <Model key={url} url={url} exploded={exploded} focus={focus} setFocus={setFocus} onLabel={setLabel} onReady={onReady} explore={explore} />
         </Suspense>
         <OrbitControls makeDefault enableZoom={!compact} />
       </Canvas>
