@@ -1,6 +1,6 @@
 {
  "f1": {
-  "approved": "2026-10-29 15:34",
+  "approved": "2026-10-29 17:51",
   "inputs": {
    "specs/f1.json": "310c2b158f7a3d1a",
    "probes/f1.py": "8a0fa7839183248f",
@@ -9,7 +9,7 @@
    "lib/__init__.py": "e3b0c44298fc1c14",
    "lib/bake.py": "74d319683d9c87d6",
    "lib/checks.py": "ff15a079c5d56be3",
-   "lib/engines.py": "dae4488530bf3a8a",
+   "lib/engines.py": "8aaed6ea0715f1d2",
    "lib/livery.py": "fe683f8f6dfc9308",
    "lib/materials.py": "7f1ec57b22c0d1b5",
    "lib/parts.py": "8c1e4b2e2f77cf08",
@@ -20,7 +20,7 @@
    "lib/rig.py": "87431e5e6051f10e",
    "lib/sources.py": "31d2e9cf18b27172",
    "lib/textures.py": "7daa18205cf41859",
-   "lib/tiling.py": "123dde9b159d01eb",
+   "lib/tiling.py": "6a5734a1e52117f6",
    "refs/f1/factsheet_drawing.jpg": "3dfe5330d7b20b66",
    "refs/f1/powerhead_6413912.jpg": "474b40f091be4288",
    "refs/f1/saturn_v_engines_0201422.jpg": "20879e50de70e914",
@@ -28,7 +28,7 @@
   }
  },
  "perseverance": {
-  "approved": "2026-10-29 15:28",
+  "approved": "2026-10-29 17:51",
   "inputs": {
    "specs/perseverance.json": "67aaa81ad29f041f",
    "probes/perseverance.py": "69b064ed79be8a03",
@@ -37,7 +37,7 @@
    "lib/__init__.py": "e3b0c44298fc1c14",
    "lib/bake.py": "74d319683d9c87d6",
    "lib/checks.py": "ff15a079c5d56be3",
-   "lib/engines.py": "dae4488530bf3a8a",
+   "lib/engines.py": "8aaed6ea0715f1d2",
    "lib/livery.py": "fe683f8f6dfc9308",
    "lib/materials.py": "7f1ec57b22c0d1b5",
    "lib/parts.py": "8c1e4b2e2f77cf08",
@@ -48,7 +48,7 @@
    "lib/rig.py": "87431e5e6051f10e",
    "lib/sources.py": "31d2e9cf18b27172",
    "lib/textures.py": "7daa18205cf41859",
-   "lib/tiling.py": "123dde9b159d01eb",
+   "lib/tiling.py": "6a5734a1e52117f6",
    "refs/perseverance/baked.jpg": "2611927c3c2d7b06",
    "refs/perseverance/baked.json": "266c4e21c7b3dd95",
    "refs/perseverance/baked_normal.jpg": "dc18f6cfc3261949",
@@ -63,7 +63,7 @@
   }
  },
  "raptor3": {
-  "approved": "2026-10-29 15:34",
+  "approved": "2026-10-29 17:51",
   "inputs": {
    "specs/raptor3.json": "c74139892494bdaf",
    "probes/raptor3.py": "5f97d361046047f2",
@@ -72,7 +72,7 @@
    "lib/__init__.py": "e3b0c44298fc1c14",
    "lib/bake.py": "74d319683d9c87d6",
    "lib/checks.py": "ff15a079c5d56be3",
-   "lib/engines.py": "dae4488530bf3a8a",
+   "lib/engines.py": "8aaed6ea0715f1d2",
    "lib/livery.py": "fe683f8f6dfc9308",
    "lib/materials.py": "7f1ec57b22c0d1b5",
    "lib/parts.py": "8c1e4b2e2f77cf08",
@@ -83,11 +83,11 @@
    "lib/rig.py": "87431e5e6051f10e",
    "lib/sources.py": "31d2e9cf18b27172",
    "lib/textures.py": "7daa18205cf41859",
-   "lib/tiling.py": "123dde9b159d01eb"
+   "lib/tiling.py": "6a5734a1e52117f6"
   }
  },
  "raptor3vac": {
-  "approved": "2026-10-29 15:34",
+  "approved": "2026-10-29 17:52",
   "inputs": {
    "specs/raptor3vac.json": "2503467832e3842a",
    "probes/raptor3vac.py": "60ab4dae525b8b29",
@@ -96,7 +96,7 @@
    "lib/__init__.py": "e3b0c44298fc1c14",
    "lib/bake.py": "74d319683d9c87d6",
    "lib/checks.py": "ff15a079c5d56be3",
-   "lib/engines.py": "dae4488530bf3a8a",
+   "lib/engines.py": "8aaed6ea0715f1d2",
    "lib/livery.py": "fe683f8f6dfc9308",
    "lib/materials.py": "7f1ec57b22c0d1b5",
    "lib/parts.py": "8c1e4b2e2f77cf08",
@@ -107,11 +107,11 @@
    "lib/rig.py": "87431e5e6051f10e",
    "lib/sources.py": "31d2e9cf18b27172",
    "lib/textures.py": "7daa18205cf41859",
-   "lib/tiling.py": "123dde9b159d01eb"
+   "lib/tiling.py": "6a5734a1e52117f6"
   }
  },
  "starship": {
-  "approved": "2026-10-29 15:34",
+  "approved": "2026-10-29 17:52",
   "inputs": {
    "specs/starship.json": "433ea0d6f3ba7373",
    "probes/starship.py": "23bc164576f69226",
@@ -122,7 +122,7 @@
    "lib/__init__.py": "e3b0c44298fc1c14",
    "lib/bake.py": "74d319683d9c87d6",
    "lib/checks.py": "ff15a079c5d56be3",
-   "lib/engines.py": "dae4488530bf3a8a",
+   "lib/engines.py": "8aaed6ea0715f1d2",
    "lib/livery.py": "fe683f8f6dfc9308",
    "lib/materials.py": "7f1ec57b22c0d1b5",
    "lib/parts.py": "8c1e4b2e2f77cf08",
@@ -133,13 +133,13 @@
    "lib/rig.py": "87431e5e6051f10e",
    "lib/sources.py": "31d2e9cf18b27172",
    "lib/textures.py": "7daa18205cf41859",
-   "lib/tiling.py": "123dde9b159d01eb",
+   "lib/tiling.py": "6a5734a1e52117f6",
    "refs/starship/port_round.png": "3093d11c14fa7549",
    "refs/starship/port_square.png": "ed16b35211ed91db"
   }
  },
  "superheavy": {
-  "approved": "2026-10-29 15:34",
+  "approved": "2026-10-29 17:52",
   "inputs": {
    "specs/superheavy.json": "4718d2a912ac1741",
    "probes/superheavy.py": "fc8adb9005acd417",
@@ -149,7 +149,7 @@
    "lib/__init__.py": "e3b0c44298fc1c14",
    "lib/bake.py": "74d319683d9c87d6",
    "lib/checks.py": "ff15a079c5d56be3",
-   "lib/engines.py": "dae4488530bf3a8a",
+   "lib/engines.py": "8aaed6ea0715f1d2",
    "lib/livery.py": "fe683f8f6dfc9308",
    "lib/materials.py": "7f1ec57b22c0d1b5",
    "lib/parts.py": "8c1e4b2e2f77cf08",
@@ -160,11 +160,11 @@
    "lib/rig.py": "87431e5e6051f10e",
    "lib/sources.py": "31d2e9cf18b27172",
    "lib/textures.py": "7daa18205cf41859",
-   "lib/tiling.py": "123dde9b159d01eb"
+   "lib/tiling.py": "6a5734a1e52117f6"
   }
  },
  "voyager": {
-  "approved": "2026-10-29 15:28",
+  "approved": "2026-10-29 17:52",
   "inputs": {
    "specs/voyager.json": "6a5a955d0fe8fdcd",
    "probes/voyager.py": "203d7bdecc38e083",
@@ -173,7 +173,7 @@
    "lib/__init__.py": "e3b0c44298fc1c14",
    "lib/bake.py": "74d319683d9c87d6",
    "lib/checks.py": "ff15a079c5d56be3",
-   "lib/engines.py": "dae4488530bf3a8a",
+   "lib/engines.py": "8aaed6ea0715f1d2",
    "lib/livery.py": "fe683f8f6dfc9308",
    "lib/materials.py": "7f1ec57b22c0d1b5",
    "lib/parts.py": "8c1e4b2e2f77cf08",
@@ -184,7 +184,7 @@
    "lib/rig.py": "87431e5e6051f10e",
    "lib/sources.py": "31d2e9cf18b27172",
    "lib/textures.py": "7daa18205cf41859",
-   "lib/tiling.py": "123dde9b159d01eb",
+   "lib/tiling.py": "6a5734a1e52117f6",
    "refs/voyager/baked.jpg": "a4adbe5cc46572a3",
    "refs/voyager/baked.json": "5498cac69067e3e2",
    "refs/voyager/record-cover-fit.json": "358b646cedb84579",
@@ -194,7 +194,7 @@
   }
  },
  "x15": {
-  "approved": "2026-10-29 15:48",
+  "approved": "2026-10-29 17:52",
   "inputs": {
    "specs/x15.json": "9275006950c3115d",
    "probes/x15.py": "86d97fdbac4eea65",
@@ -203,7 +203,7 @@
    "lib/__init__.py": "e3b0c44298fc1c14",
    "lib/bake.py": "74d319683d9c87d6",
    "lib/checks.py": "ff15a079c5d56be3",
-   "lib/engines.py": "dae4488530bf3a8a",
+   "lib/engines.py": "8aaed6ea0715f1d2",
    "lib/livery.py": "fe683f8f6dfc9308",
    "lib/materials.py": "7f1ec57b22c0d1b5",
    "lib/parts.py": "8c1e4b2e2f77cf08",
@@ -214,9 +214,34 @@
    "lib/rig.py": "87431e5e6051f10e",
    "lib/sources.py": "31d2e9cf18b27172",
    "lib/textures.py": "7daa18205cf41859",
-   "lib/tiling.py": "123dde9b159d01eb",
+   "lib/tiling.py": "6a5734a1e52117f6",
    "refs/x15/three-view-1960.png": "73e41a89de222660",
    "refs/x15/three-view-1966.png": "f2ae8ffd5d73e68a"
+  }
+ },
+ "xlr99": {
+  "approved": "2026-10-29 17:51",
+  "inputs": {
+   "specs/xlr99.json": "e21869ec1d8d1eab",
+   "probes/xlr99.py": "7146aa99c5a91f84",
+   "build.py": "546ad99cac961e9b",
+   "blender.json": "7bbc071b6e396ec4",
+   "lib/__init__.py": "e3b0c44298fc1c14",
+   "lib/bake.py": "74d319683d9c87d6",
+   "lib/checks.py": "ff15a079c5d56be3",
+   "lib/engines.py": "8aaed6ea0715f1d2",
+   "lib/livery.py": "fe683f8f6dfc9308",
+   "lib/materials.py": "7f1ec57b22c0d1b5",
+   "lib/parts.py": "8c1e4b2e2f77cf08",
+   "lib/parts_aero.py": "3f33c19b46511f0f",
+   "lib/parts_core.py": "1b1c40471bbfa3fa",
+   "lib/parts_shapes.py": "c310da692f8c932b",
+   "lib/parts_skin.py": "b09e4ac33530b81d",
+   "lib/rig.py": "87431e5e6051f10e",
+   "lib/sources.py": "31d2e9cf18b27172",
+   "lib/textures.py": "7daa18205cf41859",
+   "lib/tiling.py": "6a5734a1e52117f6",
+   "refs/xlr99/usaf-side.jpg": "890a5424632fef31"
   }
  }
 }
