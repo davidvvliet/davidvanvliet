@@ -1,5 +1,6 @@
 {
   "title": "Super Heavy (Starship V3 booster)",
+  "logos": ["spacex"],
   "note": "SpaceX Super Heavy, Starship V3 (Block 3) booster, as first flown on Flight 12 (booster B19; SpaceX photo names), on its own without the ship. Dry, unfuelled (no frost). Frame: z up, the engine bell exits at z = 0, the axis on x = y = 0. +x is the side the ship's heat shield faces (the heat-shield-side grid fin), away from the launch tower; -x faces the tower. y completes a right-handed frame. No reference 3D model exists (see reference_model): the layout comes from the sources below and from SpaceX photos, scaled by the 9 m diameter. The ship is its own model (starship).",
   "sources": [
     {

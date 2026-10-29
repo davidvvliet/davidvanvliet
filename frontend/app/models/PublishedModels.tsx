@@ -11,7 +11,7 @@ import ModelsDashboard, { Viewer } from "./ModelsDashboard";
 import styles from "./models.module.css";
 
 export type Published = {
-  probe: string; title: string; thumb: boolean; org: string;
+  probe: string; title: string; thumb: boolean; logos: string[];
   sources: { title: string; url: string; licence: string | null; cited: number }[];
 };
 
@@ -21,24 +21,21 @@ const FIT = 1.15; // bounding-sphere margin
 const VIEW_DIR = new THREE.Vector3(0.6, 0.45, 0.66).normalize(); // from the model's centre, y up
 const TURN_SECONDS = 20;
 
-// Who built the real vehicle: its logo sits in each card's top right corner (public/logos, from
-// Wikimedia Commons, public domain), and the grid lists them in this order. Anyone else comes last.
-const ORGS = [
-  { key: "nasa", name: "NASA", logo: "/logos/nasa.svg", height: 30 },
-  { key: "spacex", name: "SpaceX", logo: "/logos/spacex.svg", height: 10 },
-];
-// Who else built it: their logos go down the right edge under the first one, each centred on it. JPL's red letters are
-// from Wikimedia Commons (public domain, trademarked); North American Aviation's (copyright Boeing)
-// and Rocketdyne's 1959 logo are English Wikipedia's fair-use files, recoloured light for the dark cards.
-const PARTNERS = {
+// The logos in each card's top right corner (and the detailed view's), from the spec's "logos": who
+// built the real vehicle first (the grid lists models in ORGS order, anyone else last), then who else
+// built it, each centred under the first. NASA's and SpaceX's are from Wikimedia Commons (public domain);
+// JPL's red letters too (public domain, trademarked). North American Aviation's (copyright Boeing) and
+// Rocketdyne's 1959 logo are English Wikipedia's fair-use files, recoloured light for the dark cards.
+const LOGOS = {
+  nasa: { name: "NASA", logo: "/logos/nasa.svg", height: 30 },
+  spacex: { name: "SpaceX", logo: "/logos/spacex.svg", height: 10 },
   jpl: { name: "Jet Propulsion Laboratory", logo: "/logos/jpl.svg", height: 11 },
   naa: { name: "North American Aviation", logo: "/logos/north-american.png", height: 30 },
   rocketdyne: { name: "Rocketdyne", logo: "/logos/rocketdyne.png", height: 24 },
 };
-const PARTNERS_OF: Record<string, (keyof typeof PARTNERS)[]> = {
-  voyager: ["jpl"], perseverance: ["jpl"], x15: ["naa"], f1: ["rocketdyne"],
-};
-const orgRank = (m: Published) => { const i = ORGS.findIndex((o) => o.key === m.org); return i < 0 ? ORGS.length : i; };
+const ORGS = ["nasa", "spacex"];
+const logosOf = (m: Published) => m.logos.filter((k): k is keyof typeof LOGOS => k in LOGOS).map((k) => LOGOS[k]);
+const orgRank = (m: Published) => { const i = ORGS.indexOf(m.logos[0]); return i < 0 ? ORGS.length : i; };
 
 // /models on the live site. Without ?probe: a grid of the published models, each spinning in its
 // card. All cards draw into one shared canvas (one WebGL context however many models there are),
@@ -49,19 +46,21 @@ export default function PublishedModels({ models, dashboard }: { models: Publish
   const params = useSearchParams();
   if (dashboard && params.has("dashboard")) return <ModelsDashboard />;
   const asked = params.get("probe");
-  const probe = models.find((m) => m.probe === asked)?.probe;
-  if (probe) {
+  const model = models.find((m) => m.probe === asked);
+  if (model) {
+    const probe = model.probe;
     return (
       <div className={styles.page}>
         <Header>
           <Link href="/models" className={styles.dim}>← models</Link>
-          <span>{models.find((m) => m.probe === probe)!.title}</span>
+          <span>{model.title}</span>
         </Header>
         <div className={styles.detail}>
           <div className={styles.viewCell}>
             <Viewer probe={probe} url={`/models/${probe}.glb`} breakdown={null} stale={false} />
+            <Logos model={model} />
           </div>
-          <Sources sources={models.find((m) => m.probe === probe)!.sources} />
+          <Sources sources={model.sources} />
         </div>
       </div>
     );
@@ -137,8 +136,6 @@ function Grid({ models }: { models: Published[] }) {
 
 function Card({ model, spin, root }: { model: Published; spin: boolean; root: React.RefObject<HTMLDivElement | null> }) {
   const card = useRef<HTMLAnchorElement>(null);
-  const org = ORGS.find((o) => o.key === model.org);
-  const logos = [...(org ? [org] : []), ...(PARTNERS_OF[model.probe] ?? []).map((k) => PARTNERS[k])];
   const [seen, setSeen] = useState(false); // on screen at least once: load the model
   const [ready, setReady] = useState(false);
   const hover = useRef(false);
@@ -167,13 +164,20 @@ function Card({ model, spin, root }: { model: Published; spin: boolean; root: Re
         )}
       </View>
       <span className={styles.cardTitle}>{model.title}</span>
-      <span className={styles.cardLogos}>
-        {logos.map((o) => (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img key={o.logo} src={o.logo} alt={o.name} title={o.name} style={{ height: o.height }} />
-        ))}
-      </span>
+      <Logos model={model} />
     </Link>
+  );
+}
+
+// Who built it, as a column in the top right corner (cards and the detailed view).
+function Logos({ model }: { model: Published }) {
+  return (
+    <span className={styles.cardLogos}>
+      {logosOf(model).map((o) => (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img key={o.logo} src={o.logo} alt={o.name} title={o.name} style={{ height: o.height }} />
+      ))}
+    </span>
   );
 }
 

@@ -1,5 +1,6 @@
 {
   "title": "SpaceX Raptor 3",
+  "logos": ["spacex"],
   "note": "Raptor 3 sea-level engine, as revealed (SN1, August 2024); the engine of Super Heavy Block 3 and Starship V3. Frame: thrust axis z up, nozzle exit at z = 0; +x towards the turbopump and ribbed duct (right in photo_cmp), +y away from photo_cmp's camera.",
   "sources": [
     {

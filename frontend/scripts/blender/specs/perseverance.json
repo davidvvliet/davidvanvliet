@@ -1,5 +1,6 @@
 {
   "title": "Perseverance (Mars 2020)",
+  "logos": ["nasa", "jpl"],
   "note": "Frame: the NASA reference model's. z up, ground (wheel bottoms) at z = 0, forward -y (arm end; the RTG is at +y), left (port) +x. NAIF rover frame (naif_fk) M2020_ROVER is +X forward, +Y right, +Z down, origin between the middle wheels on their axle: ours x = -Y, y = -X, z = -Z + 0.263 m, with the middle axle at y = 0.09 here.",
   "sources": [
     {

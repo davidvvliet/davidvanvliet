@@ -1,5 +1,6 @@
 {
   "title": "X-15",
+  "logos": ["nasa", "naa"],
   "note": "North American X-15, the basic airplane (not the X-15A-2). Frame: x forward (nose tip at the front), y left, z up; fuselage centreline on z = 0; gear up, lower (ventral) fin on, as in the three-view drawings. Feet from the sources are converted at 0.3048 m/ft. No reference 3D model exists (see reference_model): layout and shapes come from the dimensioned three-view drawings in refs/x15/ and Table I of NASA TN D-3343.",
   "sources": [
     {

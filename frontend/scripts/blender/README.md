@@ -272,7 +272,9 @@ Write what you measure into the spec's `from_reference_model` with how it was me
 ## From Blender to the site
 1. Every build exports `out/<probe>/<probe>.glb` (ignored by git), so nothing reaches the site.
 2. `npm run model:approve <probe>` copies the last passing build to `public/models/<probe>.glb`;
-   once committed and deployed it is served at `/models/<probe>.glb`.
+   once committed and deployed it is served at `/models/<probe>.glb`. The /models page shows the
+   spec's `"logos"` in the card's corner: who built the real vehicle first (`nasa`, `spacex`), then
+   partners (`jpl`, `naa`, `rocketdyne`); the images are listed in `app/models/PublishedModels.tsx`.
 3. Not built yet: the scene loading it. A mission's craft is drawn as a small blue sphere
    (`marker` in `app/components/SolarSystem.tsx`, where the mission is set up). The plan is
    to load the `.glb` with three's glTF loader and show it in place of the sphere when the

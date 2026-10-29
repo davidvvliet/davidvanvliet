@@ -1,5 +1,6 @@
 {
   "title": "Rocketdyne F-1",
+  "logos": ["nasa", "rocketdyne"],
   "note": "The Saturn V first-stage engine, flight configuration with the nozzle extension. Frame: thrust axis z up, the extension's exit at z = 0.",
   "sources": [
     {

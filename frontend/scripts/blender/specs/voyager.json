@@ -1,5 +1,6 @@
 {
   "title": "Voyager",
+  "logos": ["nasa", "jpl"],
   "note": "Voyager 1 and 2 share one design. Frame (PDS host catalog): HGA boresight -z (dish faces Earth), science boom +y, RTG boom generally -y; the magnetometer boom is on the side opposite the science boom. Values marked 'NASA model' are measured from NASA 3D Resources 'Voyager Probe (B)' where no document gives them.",
   "sources": [
     {

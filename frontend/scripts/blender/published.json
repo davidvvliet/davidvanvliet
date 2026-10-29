@@ -1,8 +1,8 @@
 {
  "f1": {
-  "approved": "2026-10-29 00:34",
+  "approved": "2026-10-29 12:16",
   "inputs": {
-   "specs/f1.json": "9dc48928c86e689b",
+   "specs/f1.json": "2b0912c992bcf09b",
    "probes/f1.py": "8a0fa7839183248f",
    "build.py": "6046dd94ba4984fb",
    "blender.json": "7bbc071b6e396ec4",
@@ -28,9 +28,9 @@
   }
  },
  "perseverance": {
-  "approved": "2026-10-29 00:35",
+  "approved": "2026-10-29 12:16",
   "inputs": {
-   "specs/perseverance.json": "5ce8fb0ef97a057e",
+   "specs/perseverance.json": "67aaa81ad29f041f",
    "probes/perseverance.py": "69b064ed79be8a03",
    "build.py": "6046dd94ba4984fb",
    "blender.json": "7bbc071b6e396ec4",
@@ -63,9 +63,9 @@
   }
  },
  "raptor3": {
-  "approved": "2026-10-29 12:12",
+  "approved": "2026-10-29 12:16",
   "inputs": {
-   "specs/raptor3.json": "ced2e2bfe32f186b",
+   "specs/raptor3.json": "9fd047202aefbc0f",
    "probes/raptor3.py": "5f97d361046047f2",
    "build.py": "6046dd94ba4984fb",
    "blender.json": "7bbc071b6e396ec4",
@@ -87,9 +87,9 @@
   }
  },
  "starship": {
-  "approved": "2026-10-29 00:35",
+  "approved": "2026-10-29 12:16",
   "inputs": {
-   "specs/starship.json": "2bc9f53519892097",
+   "specs/starship.json": "72e5abe14062eee3",
    "probes/starship.py": "0e784d2ebf4fe725",
    "build.py": "6046dd94ba4984fb",
    "blender.json": "7bbc071b6e396ec4",
@@ -113,9 +113,9 @@
   }
  },
  "superheavy": {
-  "approved": "2026-10-29 00:34",
+  "approved": "2026-10-29 12:16",
   "inputs": {
-   "specs/superheavy.json": "8a531699b91d058f",
+   "specs/superheavy.json": "b65876938d2d9999",
    "probes/superheavy.py": "6e1528e78792115f",
    "build.py": "6046dd94ba4984fb",
    "blender.json": "7bbc071b6e396ec4",
@@ -137,9 +137,9 @@
   }
  },
  "voyager": {
-  "approved": "2026-10-29 00:35",
+  "approved": "2026-10-29 12:16",
   "inputs": {
-   "specs/voyager.json": "5c5e659b36339595",
+   "specs/voyager.json": "6a5a955d0fe8fdcd",
    "probes/voyager.py": "203d7bdecc38e083",
    "build.py": "6046dd94ba4984fb",
    "blender.json": "7bbc071b6e396ec4",
@@ -167,9 +167,9 @@
   }
  },
  "x15": {
-  "approved": "2026-10-29 00:35",
+  "approved": "2026-10-29 12:16",
   "inputs": {
-   "specs/x15.json": "44e5de9b47eac729",
+   "specs/x15.json": "77c3e3f75a8528fa",
    "probes/x15.py": "29a844620cf41676",
    "build.py": "6046dd94ba4984fb",
    "blender.json": "7bbc071b6e396ec4",
