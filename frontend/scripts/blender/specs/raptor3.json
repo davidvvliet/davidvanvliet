@@ -1,6 +1,8 @@
 {
   "title": "SpaceX Raptor 3",
-  "logos": ["spacex"],
+  "logos": [
+    "spacex"
+  ],
   "note": "Raptor 3 sea-level engine, as revealed (SN1, August 2024); the engine of Super Heavy Block 3 and Starship V3. Frame: thrust axis z up, nozzle exit at z = 0; +x towards the turbopump and ribbed duct (right in photo_cmp), +y away from photo_cmp's camera.",
   "sources": [
     {
@@ -655,15 +657,15 @@
             0
           ],
           [
-            0.2,
+            0.22,
             0
           ],
           [
-            0.2,
+            0.22,
             0.14
           ],
           [
-            0.17,
+            0.19,
             0.16
           ],
           [
@@ -683,7 +685,8 @@
         ],
         "segments": 32,
         "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated (the disc's right part reaches x 3370, r 0.65, at y 915-1000) and photo_sn1 (camera about 75 deg round from photo_cmp's, worked out from the painted \"1\" on the bell), with x from photo_cmp; estimated",
-        "keep": "low"
+        "keep": "low",
+        "note": "the disc's right part reaches x 3370 at y 915-1000: 0.67 m from the axis (x 2975 there), so 0.22 m round the pump's axis at x 0.45"
       },
       {
         "kind": "lathe",

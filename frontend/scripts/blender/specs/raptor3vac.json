@@ -1,0 +1,1447 @@
+{
+  "title": "SpaceX Raptor 3 Vacuum",
+  "logos": [
+    "spacex"
+  ],
+  "note": "Raptor 3 Vacuum, as on Starship V3: the sea-level Raptor 3's chamber, powerhead and plumbing (raptor3_spec) with a large tube-wall bell. Frame: thrust axis z up, nozzle exit at z = 0; +x towards the turbopump.",
+  "sources": [
+    {
+      "id": "spacex_v3",
+      "title": "SpaceX, \"Introducing Starship V3\" (update, 2026-05-12)",
+      "url": "https://www.spacex.com/updates",
+      "read": "2026-10-29",
+      "licence": "SpaceX copyright; quoted only",
+      "saved": "",
+      "note": "Read through SpaceX's content API (https://content.spacex.com/api/spacex-website/updates, updateId starship-v3). Its Raptor 3 image is photo_sn1.",
+      "credit": "SpaceX, \"Introducing Starship V3\""
+    },
+    {
+      "id": "faa_plume",
+      "title": "FAA, Starship/Super Heavy draft EA, Appendix G: Exhaust plume calculations (Sierra Engineering, 2019), Table 1",
+      "url": "https://www.faa.gov/sites/faa.gov/files/space/stakeholder_engagement/spacex_starship/Appendix_G_Exhaust_Plume_Calculations.pdf",
+      "read": "2026-10-28",
+      "licence": "public domain (US government work)",
+      "saved": "",
+      "note": "The 2019 (Raptor 1-era) sea-level nozzle. Nothing newer is published; photo_cmp shows Raptor 3's bell the same size and shape (facts.bell_matches_faa)."
+    },
+    {
+      "id": "photo_cmp",
+      "title": "SpaceX photo: Raptor 1, Raptor 2 and Raptor 3 side by side, labelled (3840 x 2414), in spacex_x_r3",
+      "url": "https://pbs.twimg.com/media/GUEhFjla8AANpDp.jpg?name=orig",
+      "read": "2026-10-29",
+      "licence": "SpaceX copyright; used for measuring only, not in the repo",
+      "saved": "",
+      "credit": "SpaceX, photo of Raptor 1, 2 and 3 (measured, not reproduced)"
+    },
+    {
+      "id": "photo_sn1",
+      "title": "SpaceX photo: Raptor 3 SN1 outdoors, from the side (1920 x 1280), in Elon Musk's post of 2024-08-02 and spacex_v3",
+      "url": "https://pbs.twimg.com/media/GUBYMb0WsAAurC9.jpg?name=orig",
+      "read": "2026-10-29",
+      "licence": "SpaceX copyright; used for measuring only, not in the repo",
+      "saved": "",
+      "note": "Post: https://x.com/elonmusk/status/1819551225504768286"
+    },
+    {
+      "id": "photo_stand",
+      "title": "SpaceX photo: Raptor 3 SN1 on a test stand, side view of the chamber and plumbing (3840 x 3363), in spacex_x_r3",
+      "url": "https://pbs.twimg.com/media/GUEhKc9a0AA93nW.jpg?name=orig",
+      "read": "2026-10-29",
+      "licence": "SpaceX copyright; used for looking only, not in the repo",
+      "saved": ""
+    },
+    {
+      "id": "render_aft_b3",
+      "title": "SpaceX render of the aft end of a Block 3 ship with nine engines (\"Aft of Block 3 Ship with Nine Engines\", 2551 x 1364), published in nsf_block3_mars; read via the Wayback Machine",
+      "url": "https://web.archive.org/web/20260202234154im_/https://www.nasaspaceflight.com/wp-content/uploads/2025/05/Aft-of-Block-3-Ship-with-Nine-Engines.jpg",
+      "read": "2026-10-28",
+      "licence": "SpaceX copyright (credited \"SpaceX\" by NSF); used for measuring only, not in the repo",
+      "saved": "",
+      "credit": "SpaceX, render of the Block 3 ship's aft end (engine layout, flap hinges)"
+    },
+    {
+      "id": "raptor3_spec",
+      "title": "specs/raptor3.json in this repo: the sea-level Raptor 3 (chamber, powerhead and plumbing, each sourced there)",
+      "url": "https://github.com/davidvanvliet (this repo): frontend/scripts/blender/specs/raptor3.json",
+      "read": "2026-10-29",
+      "licence": "this repo",
+      "saved": ""
+    },
+    {
+      "id": "design_rao",
+      "title": "Design convention: the 80% (Rao) bell, length 0.8 x a 15-degree conical nozzle of the same throat and exit; used where nothing is published",
+      "url": "https://en.wikipedia.org/wiki/Rocket_engine_nozzle",
+      "read": "2026-10-29",
+      "licence": "convention, stated here",
+      "saved": ""
+    },
+    {
+      "id": "photo_hotstage",
+      "title": "Onboard camera inside the hot-stage ring before launch (T-00:31:23), looking up at a V3 ship's six engines; screenshot supplied by David, 2026-10-29",
+      "url": "supplied by David as a screenshot; original link not known",
+      "read": "2026-10-29",
+      "licence": "SpaceX webcast frame; used for looking only, not in the repo",
+      "saved": ""
+    },
+    {
+      "id": "photo_ship_underside",
+      "title": "A ship's engine bay from straight below (3 sea-level, 3 vacuum engines; ship version not known); screenshot supplied by David, 2026-10-29",
+      "url": "supplied by David as a screenshot; original link not known",
+      "read": "2026-10-29",
+      "licence": "unknown; used for measuring only, not in the repo",
+      "saved": ""
+    }
+  ],
+  "facts": {
+    "thrust_tf": {
+      "value": 275,
+      "source": "spacex_v3",
+      "quote": "vacuum engines produce 275 tf (606,000 lbf) up from 258 tf (568,000 lbf)."
+    },
+    "height_m": {
+      "value": 4.741,
+      "source": "raptor3_spec (2.94 m) plus the longer bell (design_rao: 3.327 m against 1.526 m)"
+    }
+  },
+  "open_questions": [
+    "Bell length and contour: design_rao's 80% bell (3.33 m), not measured; nothing published for any Raptor Vacuum found. A side photo would fix it.",
+    "Above the throat it is the sea-level Raptor 3 (raptor3_spec); the vacuum engine's own plumbing may differ.",
+    "Bell finish: sampled from photo_ship_underside, whose ship version isn't known."
+  ],
+  "dimensions": {
+    "exit": {
+      "value": 2.474,
+      "object": "raptor3vac_nozzle",
+      "measure": "diameter",
+      "source": "render_aft_b3: 2.45 m plus the 0.012 m wall either side"
+    },
+    "throat": {
+      "value": 0.2216,
+      "object": "raptor3vac_nozzle",
+      "measure": "throat_diameter",
+      "source": "faa_plume: \"Throat Radius (in) 4.362\""
+    },
+    "height": {
+      "value": 4.741,
+      "object": [
+        "raptor3vac_nozzle",
+        "raptor3vac_powerhead",
+        "raptor3vac_gimbal_cap"
+      ],
+      "measure": "z",
+      "source": "raptor3_spec plus design_rao (facts.height_m)"
+    }
+  },
+  "materials": {
+    "raptor_black": {
+      "hex": "#2b313c",
+      "metallic": 0.2,
+      "roughness": 0.7,
+      "source": "photo_cmp, the bell where no sky reflects: its lit left (2700-2760, 1900-2000) #343a45 and shaded right (3200-3260, 1900-2000) #212833, averaged. The cone above the bell reads lighter (#6b7688 at 2880-2930, 1330-1380) only where it faces the sky."
+    },
+    "raptor_dark": {
+      "hex": "#232931",
+      "metallic": 0.4,
+      "roughness": 0.55,
+      "source": "photo_cmp, the chamber (2870-2930, 1075-1110) #1f242d, the disc (2830-2900, 930-990) #313945 and the ribbed duct (3230-3280, 1050-1100) #181e26"
+    },
+    "raptor_steel": {
+      "hex": "#707986",
+      "metallic": 0.9,
+      "roughness": 0.35,
+      "source": "photo_cmp, the top flange (2860-2960, 582-595) #5b646a and the gimbal cap (2920-2980, 420-460) #858d9f"
+    },
+    "rvac_bell": {
+      "hex": "#848c92",
+      "metallic": 0.8,
+      "roughness": 0.45,
+      "source": "photo_ship_underside, the vacuum bells' walls in daylight: (285-320, 60-140) #707b86, (445-480, 60-140) #acaba1, (60-110, 500-580) #657589, (650-700, 500-580) #909697, averaged"
+    }
+  },
+  "budget": {
+    "triangles": 50000,
+    "glb_bytes": 1500000
+  },
+  "engine": {
+    "kind": "rocket",
+    "nozzle": {
+      "exit_diameter": {
+        "value": 2.45,
+        "source": "render_aft_b3, seen from below: the vacuum bells 155-162 px across where the skirt's open end (9 m) is 580 px; as specs/starship.json from_photos.engines.rvac_exit"
+      },
+      "throat_diameter": {
+        "value": 0.2216,
+        "source": "faa_plume: \"Throat Radius (in) 4.362\"; the vacuum engine's chamber and throat taken as the sea-level Raptor 3's (raptor3_spec)"
+      },
+      "length": {
+        "value": 3.327,
+        "source": "design_rao: an 80% bell (0.8 x the 15-degree cone from the 0.1108 m throat to the 1.225 m exit, 4.158 m); not measured, no Raptor Vacuum length found"
+      },
+      "contour": "parabola",
+      "initial_angle_deg": {
+        "value": 32.0,
+        "source": "faa_plume: \"Tangency angle (deg) 32.0\" (the sea-level nozzle's; same chamber and throat)"
+      },
+      "exit_angle_deg": {
+        "value": 8.0,
+        "source": "design_rao: a typical exit angle for an 80% bell of area ratio about 120; not measured"
+      },
+      "wall": {
+        "value": 0.012,
+        "source": "design_rao, design value: a thin tube-wall lip"
+      },
+      "outer_profile": {
+        "value": [
+          [
+            0.355,
+            2.881
+          ],
+          [
+            0.37,
+            2.891
+          ],
+          [
+            0.37,
+            2.951
+          ],
+          [
+            0.33,
+            2.961
+          ]
+        ],
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: the collar under the big ring (y 1452-1490) (on the vacuum bell, the same distance below the throat)"
+      },
+      "tubes": {
+        "count": {
+          "value": 360,
+          "source": "photo_hotstage: fine tube wall over the whole bell; tube count estimated (about 2 cm tubes at the exit)"
+        },
+        "split_below_throat": 0.0,
+        "per_tile": 2
+      },
+      "hoops": {
+        "count": {
+          "value": 2,
+          "source": "photo_hotstage: two bands round each vacuum bell, at about a quarter and half of its visible length up from the exit; estimated"
+        },
+        "height": 0.05,
+        "stands_out": 0.015,
+        "from": 0.22,
+        "to": 0.48
+      }
+    },
+    "chamber": {
+      "diameter": {
+        "value": 0.41,
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: the cylinder below the disc, x 2850-3090 at y 1068-1125"
+      },
+      "convergent_length": {
+        "value": 0.184,
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: the throat (faa_plume, z 1.526) to the cylinder's bottom (y 1120, z 1.71)"
+      },
+      "length": {
+        "value": 0.19,
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: y 1120-1008 (z 1.71-1.90)"
+      }
+    },
+    "powerhead": {
+      "profile": {
+        "value": [
+          [
+            0.305,
+            0.0
+          ],
+          [
+            0.31,
+            0.01
+          ],
+          [
+            0.31,
+            0.145
+          ],
+          [
+            0.29,
+            0.162
+          ],
+          [
+            0.237,
+            0.162
+          ],
+          [
+            0.237,
+            0.225
+          ],
+          [
+            0.165,
+            0.225
+          ],
+          [
+            0.165,
+            0.69
+          ],
+          [
+            0.216,
+            0.69
+          ]
+        ],
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: half-widths about the axis, from the disc (y 1008-912), the bolt ring (y 905-870), the injector body (y 870-600), the top flange (y 600-575), the neck under its studs (y 575-525) and the gimbal cap (y 500-395); dz from the chamber's top at z 1.90"
+      }
+    },
+    "materials": {
+      "nozzle": "rvac_bell",
+      "chamber": "raptor_dark",
+      "powerhead": "raptor_dark",
+      "parts": "raptor_dark",
+      "hoops": "raptor_dark"
+    },
+    "parts": [
+      {
+        "kind": "lathe",
+        "name": "top_flange",
+        "profile": [
+          [
+            0,
+            0
+          ],
+          [
+            0.216,
+            0
+          ],
+          [
+            0.216,
+            0.045
+          ],
+          [
+            0,
+            0.045
+          ]
+        ],
+        "at": [
+          0,
+          0,
+          4.391
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 48,
+        "smooth": false,
+        "material": "raptor_steel",
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: the bolted plate at y 600-575, x 2825-3080"
+      },
+      {
+        "kind": "lathe",
+        "name": "gimbal_cap",
+        "profile": [
+          [
+            0,
+            0
+          ],
+          [
+            0.14,
+            0
+          ],
+          [
+            0.14,
+            0.085
+          ],
+          [
+            0.127,
+            0.085
+          ],
+          [
+            0.127,
+            0.135
+          ],
+          [
+            0.116,
+            0.135
+          ],
+          [
+            0.116,
+            0.295
+          ],
+          [
+            0.113,
+            0.305
+          ],
+          [
+            0,
+            0.305
+          ]
+        ],
+        "at": [
+          0,
+          0,
+          4.436
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 40,
+        "smooth": false,
+        "material": "raptor_steel",
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: the stud ring over the flange (y 575-525, studs out to x 2890-3060) and the stepped cap above it (y 500-395, x 2885-3035 then 2895-3030)"
+      },
+      {
+        "kind": "lathe",
+        "name": "ring_upper",
+        "profile": [
+          [
+            0.2875,
+            0.0
+          ],
+          [
+            0.2811,
+            0.0237
+          ],
+          [
+            0.2637,
+            0.0411
+          ],
+          [
+            0.24,
+            0.0475
+          ],
+          [
+            0.2162,
+            0.0411
+          ],
+          [
+            0.1989,
+            0.0237
+          ],
+          [
+            0.1925,
+            0.0
+          ],
+          [
+            0.1989,
+            -0.0238
+          ],
+          [
+            0.2162,
+            -0.0411
+          ],
+          [
+            0.24,
+            -0.0475
+          ],
+          [
+            0.2637,
+            -0.0411
+          ],
+          [
+            0.2811,
+            -0.0238
+          ]
+        ],
+        "closed": true,
+        "at": [
+          0,
+          0,
+          3.649
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 48,
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: the ring under the disc, y 1012-1068, outer edge x 2800 (axis 2970)",
+        "note": "a ring round the axis: tube 0.095 m across, centreline radius 0.24 m, centre at z 1.848",
+        "keep": true
+      },
+      {
+        "kind": "lathe",
+        "name": "ring_chamber",
+        "profile": [
+          [
+            0.2325,
+            0.0
+          ],
+          [
+            0.2275,
+            0.0187
+          ],
+          [
+            0.2137,
+            0.0325
+          ],
+          [
+            0.195,
+            0.0375
+          ],
+          [
+            0.1763,
+            0.0325
+          ],
+          [
+            0.1625,
+            0.0187
+          ],
+          [
+            0.1575,
+            0.0
+          ],
+          [
+            0.1625,
+            -0.0188
+          ],
+          [
+            0.1762,
+            -0.0325
+          ],
+          [
+            0.195,
+            -0.0375
+          ],
+          [
+            0.2137,
+            -0.0325
+          ],
+          [
+            0.2275,
+            -0.0188
+          ]
+        ],
+        "closed": true,
+        "at": [
+          0,
+          0,
+          3.471
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 48,
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: the ring at y 1120-1165, outer edge x 2835",
+        "note": "a ring round the axis: tube 0.075 m across, centreline radius 0.195 m, centre at z 1.67"
+      },
+      {
+        "kind": "lathe",
+        "name": "throat_manifold",
+        "profile": [
+          [
+            0.282,
+            0.0
+          ],
+          [
+            0.2753,
+            0.0287
+          ],
+          [
+            0.257,
+            0.0498
+          ],
+          [
+            0.232,
+            0.0575
+          ],
+          [
+            0.207,
+            0.0498
+          ],
+          [
+            0.1887,
+            0.0287
+          ],
+          [
+            0.182,
+            0.0
+          ],
+          [
+            0.1887,
+            -0.0288
+          ],
+          [
+            0.207,
+            -0.0498
+          ],
+          [
+            0.232,
+            -0.0575
+          ],
+          [
+            0.257,
+            -0.0498
+          ],
+          [
+            0.2753,
+            -0.0288
+          ]
+        ],
+        "closed": true,
+        "at": [
+          0,
+          0,
+          3.273
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 48,
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: the ring at y 1225-1295 that the S-shaped pipe feeds, outer edge x 2820 (r 0.28 about the axis at x 2980)",
+        "note": "a ring round the axis, 0.115 m tall and 0.10 m deep (oval, so its inside rests on the wall, not in it), centreline radius 0.232 m, centre at z 1.472",
+        "keep": true
+      },
+      {
+        "kind": "lathe",
+        "name": "nozzle_manifold",
+        "profile": [
+          [
+            0.399,
+            0.0
+          ],
+          [
+            0.3936,
+            0.02
+          ],
+          [
+            0.379,
+            0.0346
+          ],
+          [
+            0.359,
+            0.04
+          ],
+          [
+            0.339,
+            0.0346
+          ],
+          [
+            0.3244,
+            0.02
+          ],
+          [
+            0.319,
+            0.0
+          ],
+          [
+            0.3244,
+            -0.02
+          ],
+          [
+            0.339,
+            -0.0346
+          ],
+          [
+            0.359,
+            -0.04
+          ],
+          [
+            0.379,
+            -0.0346
+          ],
+          [
+            0.3936,
+            -0.02
+          ]
+        ],
+        "closed": true,
+        "at": [
+          0,
+          0,
+          2.988
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 48,
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: the big ring at y 1405-1452, x 2745-3215",
+        "note": "a ring round the axis: tube 0.08 m across, centreline radius 0.359 m, centre at z 1.187",
+        "keep": true
+      },
+      {
+        "kind": "lathe",
+        "name": "turbopump_housing",
+        "profile": [
+          [
+            0,
+            0
+          ],
+          [
+            0.22,
+            0
+          ],
+          [
+            0.22,
+            0.14
+          ],
+          [
+            0.19,
+            0.16
+          ],
+          [
+            0,
+            0.16
+          ]
+        ],
+        "at": [
+          0.45,
+          0.24,
+          3.701
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 32,
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated (the disc's right part reaches x 3370, r 0.65, at y 915-1000) and photo_sn1 (camera about 75 deg round from photo_cmp's, worked out from the painted \"1\" on the bell), with x from photo_cmp; estimated",
+        "keep": "low",
+        "note": "the disc's right part reaches x 3370 at y 915-1000: 0.67 m from the axis (x 2975 there), so 0.22 m round the pump's axis at x 0.45"
+      },
+      {
+        "kind": "lathe",
+        "name": "turbopump",
+        "profile": [
+          [
+            0,
+            0
+          ],
+          [
+            0.125,
+            0
+          ],
+          [
+            0.125,
+            0.2
+          ],
+          [
+            0.11,
+            0.25
+          ],
+          [
+            0.085,
+            0.25
+          ],
+          [
+            0.085,
+            0.3
+          ],
+          [
+            0,
+            0.3
+          ]
+        ],
+        "at": [
+          0.45,
+          0.24,
+          3.861
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 32,
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: the pump under the blue-lidded cap, x 3170-3330 at y 740-870, cap top y 690; photo_sn1 (camera about 75 deg round from photo_cmp's, worked out from the painted \"1\" on the bell), with x from photo_cmp; estimated",
+        "keep": "low"
+      },
+      {
+        "kind": "lathe",
+        "name": "ribbed_duct",
+        "profile": [
+          [
+            0,
+            0
+          ],
+          [
+            0.085,
+            0
+          ],
+          [
+            0.1,
+            0.06
+          ],
+          [
+            0.09,
+            0.12
+          ],
+          [
+            0.11,
+            0.2
+          ],
+          [
+            0.1,
+            0.28
+          ],
+          [
+            0.125,
+            0.36
+          ],
+          [
+            0.115,
+            0.44
+          ],
+          [
+            0.13,
+            0.5
+          ],
+          [
+            0.13,
+            0.54
+          ],
+          [
+            0,
+            0.54
+          ]
+        ],
+        "at": [
+          0.48,
+          0.22,
+          3.161
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 24,
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: the convoluted duct hanging under the pump, x 3195-3350 at y 1010 narrowing to x 3200-3300 at y 1250, bottom at y 1330; photo_sn1 (camera about 75 deg round from photo_cmp's, worked out from the painted \"1\" on the bell), with x from photo_cmp; estimated",
+        "keep": "low"
+      },
+      {
+        "kind": "pipe",
+        "name": "ribbed_duct_elbow",
+        "diameter": 0.16,
+        "points": [
+          [
+            0.48,
+            0.22,
+            3.221
+          ],
+          [
+            0.48,
+            0.22,
+            3.131
+          ],
+          [
+            0.338,
+            0.155,
+            3.122
+          ],
+          [
+            0.249,
+            0.114,
+            3.071
+          ]
+        ],
+        "source": [
+          "photo_stand: the duct turns at its bottom in towards the nozzle's neck; estimated",
+          "photo_sn1: the elbow's opening faces down and in"
+        ],
+        "keep": true,
+        "bend_radius": 0.08,
+        "note": "ends square to the bell's neck at z 1.27, its cap on the outside of the wall (the wall is 0.01 m)"
+      },
+      {
+        "kind": "pipe",
+        "name": "s_pipe",
+        "diameter": 0.1,
+        "segments": 16,
+        "points": [
+          [
+            0.59,
+            0.24,
+            3.971
+          ],
+          [
+            0.59,
+            0.02,
+            3.991
+          ],
+          [
+            0.56,
+            -0.16,
+            4.021
+          ],
+          [
+            0.5,
+            -0.31,
+            3.921
+          ],
+          [
+            0.38,
+            -0.36,
+            3.711
+          ],
+          [
+            0.28,
+            -0.33,
+            3.541
+          ],
+          [
+            0.17,
+            -0.28,
+            3.371
+          ],
+          [
+            0.12,
+            -0.2,
+            3.281
+          ]
+        ],
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: x 0.59 at the volute's outlet (x 3335, y 840, z 2.18), 0.50 at z 2.08, 0.38 at 1.91, 0.28 at 1.74, 0.17 at 1.57, into the throat manifold at x 0.12, z 1.49; y from photo_sn1 (camera about 75 deg round from photo_cmp's, worked out from the painted \"1\"; the long straight run about 0.25 m left of the axis there), estimated",
+        "flanges": [
+          0.06
+        ],
+        "flange_material": "raptor_steel",
+        "note": "the steel clamp where it leaves the pump (photo_sn1)",
+        "keep": "low"
+      },
+      {
+        "kind": "pipe",
+        "name": "sense_line",
+        "diameter": 0.025,
+        "material": "raptor_steel",
+        "points": [
+          [
+            0.15,
+            -0.08,
+            4.291
+          ],
+          [
+            0.26,
+            -0.08,
+            4.291
+          ],
+          [
+            0.29,
+            -0.08,
+            4.241
+          ],
+          [
+            0.29,
+            -0.1,
+            4.161
+          ]
+        ],
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: the bent steel tube from the injector body (x 3030, y 650) over to the block (x 3120, y 760)"
+      },
+      {
+        "kind": "pipe",
+        "name": "drain_left",
+        "diameter": 0.04,
+        "points": [
+          [
+            -0.2,
+            -0.08,
+            3.271
+          ],
+          [
+            -0.33,
+            -0.05,
+            3.201
+          ],
+          [
+            -0.35,
+            0,
+            3.101
+          ],
+          [
+            -0.36,
+            0,
+            3.001
+          ]
+        ],
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: the pipe from the throat manifold out to the big ring on the left, x 2770-2830 at y 1240-1400"
+      },
+      {
+        "kind": "pipe",
+        "name": "drain_right",
+        "diameter": 0.025,
+        "points": [
+          [
+            0.26,
+            -0.06,
+            3.401
+          ],
+          [
+            0.33,
+            -0.06,
+            3.301
+          ],
+          [
+            0.33,
+            -0.06,
+            3.021
+          ]
+        ],
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: the thin pipe at x 3175 from y 1180 down to the big ring at y 1410"
+      },
+      {
+        "kind": "pump",
+        "name": "injector_port_90",
+        "diameter": 0.085,
+        "length": 0.05,
+        "at": [
+          0.0,
+          0.18,
+          4.251
+        ],
+        "axis": [
+          0.0,
+          1.0,
+          0
+        ],
+        "material": "raptor_dark",
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: round ports on the injector body at y 660-700, seen at x 2840 (side), 2900 and 2990 (front); the far side assumed the same"
+      },
+      {
+        "kind": "pump",
+        "name": "injector_port_135",
+        "diameter": 0.085,
+        "length": 0.05,
+        "at": [
+          -0.127,
+          0.127,
+          4.251
+        ],
+        "axis": [
+          -0.707,
+          0.707,
+          0
+        ],
+        "material": "raptor_dark",
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: round ports on the injector body at y 660-700, seen at x 2840 (side), 2900 and 2990 (front); the far side assumed the same"
+      },
+      {
+        "kind": "pump",
+        "name": "injector_port_180",
+        "diameter": 0.085,
+        "length": 0.05,
+        "at": [
+          -0.18,
+          0.0,
+          4.251
+        ],
+        "axis": [
+          -1.0,
+          0.0,
+          0
+        ],
+        "material": "raptor_dark",
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: round ports on the injector body at y 660-700, seen at x 2840 (side), 2900 and 2990 (front); the far side assumed the same"
+      },
+      {
+        "kind": "pump",
+        "name": "injector_port_225",
+        "diameter": 0.085,
+        "length": 0.05,
+        "at": [
+          -0.127,
+          -0.127,
+          4.251
+        ],
+        "axis": [
+          -0.707,
+          -0.707,
+          0
+        ],
+        "material": "raptor_dark",
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: round ports on the injector body at y 660-700, seen at x 2840 (side), 2900 and 2990 (front); the far side assumed the same"
+      },
+      {
+        "kind": "pump",
+        "name": "injector_port_270",
+        "diameter": 0.085,
+        "length": 0.05,
+        "at": [
+          -0.0,
+          -0.18,
+          4.251
+        ],
+        "axis": [
+          -0.0,
+          -1.0,
+          0
+        ],
+        "material": "raptor_dark",
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: round ports on the injector body at y 660-700, seen at x 2840 (side), 2900 and 2990 (front); the far side assumed the same"
+      },
+      {
+        "kind": "lathe",
+        "name": "turbopump_volute",
+        "keep": true,
+        "profile": [
+          [
+            0.14,
+            0.0
+          ],
+          [
+            0.1333,
+            0.025
+          ],
+          [
+            0.115,
+            0.0433
+          ],
+          [
+            0.09,
+            0.05
+          ],
+          [
+            0.065,
+            0.0433
+          ],
+          [
+            0.0467,
+            0.025
+          ],
+          [
+            0.04,
+            0.0
+          ],
+          [
+            0.0467,
+            -0.025
+          ],
+          [
+            0.065,
+            -0.0433
+          ],
+          [
+            0.09,
+            -0.05
+          ],
+          [
+            0.115,
+            -0.0433
+          ],
+          [
+            0.1333,
+            -0.025
+          ]
+        ],
+        "closed": true,
+        "at": [
+          0.45,
+          0.24,
+          3.971
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "segments": 32,
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: the pump's spiral casing at y 800-870 (z 2.05-2.17), out to x 3380, its outlet flanged to the S-shaped pipe"
+      },
+      {
+        "kind": "bolts",
+        "name": "volute_outlet_bolts",
+        "count": 10,
+        "diameter": 0.014,
+        "length": 0.03,
+        "radius": 0.075,
+        "at": [
+          0.59,
+          0.205,
+          3.973
+        ],
+        "axis": [
+          0,
+          -1,
+          0.09
+        ],
+        "material": "raptor_steel",
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: the ring of bolt heads round the S-pipe's flange at x 3290-3390, y 800-870"
+      },
+      {
+        "kind": "bolts",
+        "name": "flange_studs",
+        "count": 20,
+        "diameter": 0.016,
+        "length": 0.055,
+        "radius": 0.19,
+        "at": [
+          0,
+          0,
+          4.436
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "material": "raptor_steel",
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: about ten studs across the front half of the top flange, standing 0.05 m (y 575-525)"
+      },
+      {
+        "kind": "bolts",
+        "name": "disc_bolts",
+        "count": 24,
+        "diameter": 0.03,
+        "length": 0.045,
+        "radius": 0.265,
+        "at": [
+          0,
+          0,
+          3.863
+        ],
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "material": "raptor_steel",
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: about twelve nut heads across the front of the bolt ring on the disc, y 875-905, out to x 2820"
+      },
+      {
+        "kind": "box",
+        "name": "valve_block",
+        "size": [
+          0.15,
+          0.12,
+          0.15
+        ],
+        "at": [
+          0.17,
+          -0.17,
+          4.081
+        ],
+        "material": "raptor_steel",
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: the machined block at x 3020-3110, y 740-830"
+      },
+      {
+        "kind": "box",
+        "name": "valve_block_lower",
+        "size": [
+          0.1,
+          0.1,
+          0.09
+        ],
+        "at": [
+          0.13,
+          -0.17,
+          3.951
+        ],
+        "material": "raptor_steel",
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: the smaller block under it, x 3010-3080, y 830-880"
+      },
+      {
+        "kind": "pump",
+        "name": "valve",
+        "diameter": 0.12,
+        "length": 0.06,
+        "at": [
+          0.27,
+          -0.13,
+          4.001
+        ],
+        "axis": [
+          0,
+          -1,
+          0
+        ],
+        "material": "raptor_steel",
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: the round flanged valve facing the camera, x 3150-3220, y 800-870"
+      },
+      {
+        "kind": "bolts",
+        "name": "valve_bolts",
+        "count": 10,
+        "diameter": 0.012,
+        "length": 0.015,
+        "radius": 0.048,
+        "at": [
+          0.27,
+          -0.19,
+          4.001
+        ],
+        "axis": [
+          0,
+          -1,
+          0
+        ],
+        "material": "raptor_steel",
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: its ring of bolt heads"
+      },
+      {
+        "kind": "pipe",
+        "name": "valve_line",
+        "diameter": 0.03,
+        "material": "raptor_steel",
+        "points": [
+          [
+            0.22,
+            -0.17,
+            4.101
+          ],
+          [
+            0.3,
+            -0.17,
+            4.101
+          ],
+          [
+            0.33,
+            -0.15,
+            4.041
+          ],
+          [
+            0.33,
+            -0.1,
+            4.011
+          ]
+        ],
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: the short tubes between the block and the valve"
+      },
+      {
+        "kind": "bolts",
+        "name": "injector_port_90_bolts",
+        "count": 8,
+        "diameter": 0.01,
+        "length": 0.012,
+        "radius": 0.032,
+        "at": [
+          0.0,
+          0.23,
+          4.251
+        ],
+        "axis": [
+          0.0,
+          1.0,
+          0
+        ],
+        "material": "raptor_steel",
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: each round port's ring of bolt heads, y 660-700"
+      },
+      {
+        "kind": "bolts",
+        "name": "injector_port_135_bolts",
+        "count": 8,
+        "diameter": 0.01,
+        "length": 0.012,
+        "radius": 0.032,
+        "at": [
+          -0.163,
+          0.163,
+          4.251
+        ],
+        "axis": [
+          -0.707,
+          0.707,
+          0
+        ],
+        "material": "raptor_steel",
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: each round port's ring of bolt heads, y 660-700"
+      },
+      {
+        "kind": "bolts",
+        "name": "injector_port_180_bolts",
+        "count": 8,
+        "diameter": 0.01,
+        "length": 0.012,
+        "radius": 0.032,
+        "at": [
+          -0.23,
+          0.0,
+          4.251
+        ],
+        "axis": [
+          -1.0,
+          0.0,
+          0
+        ],
+        "material": "raptor_steel",
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: each round port's ring of bolt heads, y 660-700"
+      },
+      {
+        "kind": "bolts",
+        "name": "injector_port_225_bolts",
+        "count": 8,
+        "diameter": 0.01,
+        "length": 0.012,
+        "radius": 0.032,
+        "at": [
+          -0.163,
+          -0.163,
+          4.251
+        ],
+        "axis": [
+          -0.707,
+          -0.707,
+          0
+        ],
+        "material": "raptor_steel",
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: each round port's ring of bolt heads, y 660-700"
+      },
+      {
+        "kind": "bolts",
+        "name": "injector_port_270_bolts",
+        "count": 8,
+        "diameter": 0.01,
+        "length": 0.012,
+        "radius": 0.032,
+        "at": [
+          -0.0,
+          -0.23,
+          4.251
+        ],
+        "axis": [
+          -0.0,
+          -1.0,
+          0
+        ],
+        "material": "raptor_steel",
+        "source": "photo_cmp, scaled by Raptor 1's nozzle exit in the same photo (faa_plume's 51.226 in = 767 px, so 1.696 mm/px; all three engines stand side by side on identical pallets, camera level with their middles); estimated: each round port's ring of bolt heads, y 660-700"
+      }
+    ]
+  },
+  "closeups": [
+    {
+      "name": "powerhead",
+      "target": [
+        0.15,
+        -0.05,
+        4.101
+      ],
+      "look": [
+        -0.15,
+        1,
+        -0.35
+      ],
+      "radius": 0.6
+    },
+    {
+      "name": "bell",
+      "target": [
+        0,
+        0,
+        1.2
+      ],
+      "look": [
+        0.3,
+        1,
+        -0.1
+      ],
+      "radius": 1.8
+    },
+    {
+      "name": "exit",
+      "target": [
+        0,
+        0,
+        0.1
+      ],
+      "look": [
+        -0.3,
+        1,
+        0.6
+      ],
+      "radius": 1.6
+    }
+  ]
+}
