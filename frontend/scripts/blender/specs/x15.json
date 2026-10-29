@@ -6,11 +6,8 @@
   ],
   "viewer": {
     "explore": false,
-    "focus": [
-      {
-        "part": "engine",
-        "label": "Engine"
-      }
+    "explode": [
+      "engine"
     ]
   },
   "engines": [

@@ -11,7 +11,7 @@ import ModelsDashboard, { Viewer, type Focusable } from "./ModelsDashboard";
 import styles from "./models.module.css";
 
 export type Published = {
-  probe: string; title: string; thumb: boolean; logos: string[]; explore: boolean; focus: Focusable[];
+  probe: string; title: string; thumb: boolean; logos: string[]; explore: boolean; focus: Focusable[]; explode: string[];
   sources: { title: string; url: string; licence: string | null; cited: number }[];
 };
 
@@ -51,8 +51,8 @@ const orgRank = (m: Published) => { const i = ORGS.indexOf(m.logos[0]); return i
 // card. All cards draw into one shared canvas (one WebGL context however many models there are),
 // and each shows its thumbnail until its model has loaded, which starts once the card is on screen.
 // With ?probe=<name>: that model in the dashboard's viewer (explode, part sizes, click to focus;
-// a spec's "viewer": {"explore": false} leaves only orbiting, its moving parts and the parts
-// listed in "viewer.focus").
+// a spec's "viewer": {"explore": false} leaves only orbiting, its moving parts, the parts
+// listed in "viewer.focus" and an explode of the parts listed in "viewer.explode").
 // Locally (`dashboard`), /models?dashboard is the build dashboard.
 export default function PublishedModels({ models, circuit, dashboard }: {
   models: Published[]; circuit: string | null; dashboard: boolean;
@@ -71,7 +71,7 @@ export default function PublishedModels({ models, circuit, dashboard }: {
         </Header>
         <div className={styles.detail}>
           <div className={styles.viewCell}>
-            <Viewer probe={probe} url={`/models/${probe}.glb`} breakdown={null} stale={false} explore={model.explore} focusable={model.focus} />
+            <Viewer probe={probe} url={`/models/${probe}.glb`} breakdown={null} stale={false} explore={model.explore} focusable={model.focus} explodable={model.explode} />
             <Logos model={model} />
           </div>
           <Sources sources={model.sources} />

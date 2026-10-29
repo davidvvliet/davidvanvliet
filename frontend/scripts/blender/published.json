@@ -194,13 +194,13 @@
   }
  },
  "x15": {
-  "approved": "2026-10-29 18:00",
+  "approved": "2026-10-29 18:09",
   "inputs": {
-   "specs/x15.json": "15475b754cbcb1af",
+   "specs/x15.json": "9fa403d4c90bd51b",
    "probes/x15.py": "f289d6b2123f7b71",
    "build.py": "546ad99cac961e9b",
    "blender.json": "7bbc071b6e396ec4",
-   "specs/xlr99.json": "e21869ec1d8d1eab",
+   "specs/xlr99.json": "b1ae8c553c54fba2",
    "lib/__init__.py": "e3b0c44298fc1c14",
    "lib/bake.py": "74d319683d9c87d6",
    "lib/checks.py": "ff15a079c5d56be3",
