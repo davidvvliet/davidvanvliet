@@ -4,7 +4,7 @@
 # World frame: x forward with the fuselage base at x = 0, y left, z up.
 import math
 import bpy
-from lib import parts
+from lib import engines, parts
 
 FT = 0.3048
 
@@ -103,7 +103,10 @@ def build(spec):
         # station reaches higher below the axis than above it.
         base = dr["fuselage"]["stations"][-1]
         nz_z = (base[2] + base[3]) / 2
-        parts.cap_hole(body_obj, P(xs[-1], 0, nz_z), (-1, 0, 0), nz["plate_outer_r"])
+        # The XLR99 fills the base: the hole is its exit hoop's outside (specs/xlr99.json).
+        xlr = engines.load(spec, "xlr99")
+        hoop_r = max(r for r, _ in next(q for q in xlr["parts"] if q["name"] == "exit_ring")["profile"])
+        parts.cap_hole(body_obj, P(xs[-1], 0, nz_z), (-1, 0, 0), hoop_r)
     # Ribs across the fairings' flat end faces (photo NASM-SI-2008-5570): bars standing out of
     # the face, each cut to the face's width at its height (between the body and the fairing).
     rb = spec["from_photos"]["fairing_end_ribs"]["value"]
@@ -130,18 +133,13 @@ def build(spec):
         z += rb["spacing"]
     with parts.assembly("fairing_ribs"):
         parts.boxes("fairing_ribs", ribs, material="x15_rib")
-    with parts.assembly("nozzle"):
-        x0, t = xs[-1], 0.02
-        parts.lathe("nozzle_plate", [(nz["plate_outer_r"], 0), (nz["plate_outer_r"], t), (nz["rim_r"], t), (nz["rim_r"], 0)],
-                    location=P(x0, 0, nz_z), direction=(1, 0, 0), segments=64, closed=True, material="x15_nozzle_plate", smooth=False)
-        parts.lathe("nozzle_rim", [(nz["rim_r"], -0.01), (nz["rim_r"], 0.03), (nz["rim_r"] - 0.017, 0.03), (nz["rim_r"] - 0.017, -0.01)],
-                    location=P(x0, 0, nz_z), direction=(1, 0, 0), segments=64, closed=True, material="x15_nozzle_rim", smooth=False)
-        L, rt = nz["depth"], nz["throat_r"]
-        rl = nz["rim_r"] - 0.017
-        parts.lathe("nozzle_liner", [(rl, 0.03), (rt, L), (rt + t, L), (rl + t, 0.03)],
-                    location=P(x0, 0, nz_z), direction=(1, 0, 0), segments=64, closed=True, material="x15_nozzle_liner")
-        parts.lathe("nozzle_throat", [(0, L - 0.01), (rt + t, L - 0.01), (rt + t, L + 0.01), (0, L + 0.01)],
-                    location=P(x0, 0, nz_z), direction=(1, 0, 0), segments=32, material="x15_black")
+    # The engine (specs/xlr99.json): its exit at the base, centred where the nozzle is in photo
+    # NASM-SI-2008-5570, thrust axis forward. Rolled 180 degrees so the mount truss's single
+    # fitting is on top and the turbine exhaust outlet is at the upper right seen from behind,
+    # where that photo shows a cover plate. The lower mount fittings and their truss tubes are left out (they stand outside the belly).
+    with parts.assembly("engine"):
+        engines.place(xlr, "xlr99", location=P(xs[-1], 0, nz_z), direction=(1, 0, 0), roll_deg=180.0, lod="full",
+                      omit=spec["engine_omit"]["value"])
 
     # Canopy (photos NASM-SI-2007-12573, -12578, NASM-SI-2008-5563, -5565): a round tube (upright
     # sides under the front view's arch) whose front is a sharp V: two flat faces cut back from the

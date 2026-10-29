@@ -728,11 +728,14 @@ def build(e, name, lod="full"):
         return _jet(name, e, lod)
     raise ValueError(f"unknown engine kind {e['kind']!r}")
 
-def place(e, name, location=(0, 0, 0), direction=(0, 0, 1), roll_deg=0.0, lod="simple"):
+def place(e, name, location=(0, 0, 0), direction=(0, 0, 1), roll_deg=0.0, lod="simple", omit=()):
     """Build the engine `e` and move it so its exit centre is at `location` and its thrust axis
     (exit to top) points along `direction`. For a vehicle's engines, `direction` is usually
-    up the vehicle: (0, 0, 1) for a rocket standing on its engines."""
+    up the vehicle: (0, 0, 1) for a rocket standing on its engines. `omit`: names of the
+    engine's parts to leave out in this vehicle (mount fittings its airframe replaces)."""
     m = parts.frame(location, direction, roll_deg)
+    if omit:
+        e = dict(e, parts=[p for p in e.get("parts", []) if _v(p.get("name")) not in omit])
     objs = build(e, name, lod)
     for o in objs:
         o.matrix_world = m @ o.matrix_world
