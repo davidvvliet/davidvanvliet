@@ -20,7 +20,7 @@
 #   nozzle.outer_profile: optional [(r, z)] outside of the bell where it is wider than the wall
 #   nozzle.ribs: optional flat strips down the bell {count, width, stands_out, from, to}, full lod
 #   nozzle.tubes: optional tube-wall texture {count, split_below_throat, per_tile}, full lod only
-#   nozzle.hoops, extension.hoops: optional stiffening rings {count, height, stands_out, from,
+#   nozzle.hoops (one group or a list), extension.hoops: optional stiffening rings {count, height, stands_out, from,
 #              to, studs} (from and to: fractions of that part's length from its exit; studs
 #              {shape "post"|"plate", count or angles {"ring": [deg]}, dense {count, bands},
 #              post: diameter, height, segments, every, on "band"|"wall"; plate: size [thick,
@@ -378,8 +378,12 @@ def _rocket(name, e, lod):
         objs.append(_ribs(f"{name}_nozzle_ribs", nz["ribs"], outer, L,
                           mats.get("hoops", mats.get("nozzle", "dark_metal"))))
     if lod == "full" and "hoops" in nz:
-        objs += _hoops(f"{name}_nozzle_hoop", nz["hoops"], outer, L,
-                       mats.get("hoops", mats.get("nozzle", "dark_metal")), seg)
+        # One group of rings, or a list of groups (layers with their own spacing and fittings).
+        groups = nz["hoops"] if isinstance(nz["hoops"], list) else [nz["hoops"]]
+        for gi, g in enumerate(groups):
+            tag = f"{name}_nozzle_hoop" + (f"{gi}" if len(groups) > 1 else "")
+            objs += _hoops(tag, g, outer, L, g.get("material", mats.get("hoops", mats.get(
+                "nozzle", "dark_metal"))), seg)
     # Nozzle extension: everything so far stands on it, so z = 0 becomes its exit.
     ext = e.get("extension")
     if ext:
