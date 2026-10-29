@@ -305,21 +305,6 @@
    ]
   },
   {
-   "name": "LED",
-   "parts": [
-    {
-     "ref": "D3",
-     "value": "RED",
-     "package": "LED_0603_1608Metric"
-    },
-    {
-     "ref": "R8",
-     "value": "470R",
-     "package": "R_0402_1005Metric"
-    }
-   ]
-  },
-  {
    "name": "I2C pull-ups",
    "parts": [
     {
@@ -330,6 +315,21 @@
     {
      "ref": "R21",
      "value": "2.2k",
+     "package": "R_0402_1005Metric"
+    }
+   ]
+  },
+  {
+   "name": "LED",
+   "parts": [
+    {
+     "ref": "D3",
+     "value": "RED",
+     "package": "LED_0603_1608Metric"
+    },
+    {
+     "ref": "R8",
+     "value": "470R",
      "package": "R_0402_1005Metric"
     }
    ]

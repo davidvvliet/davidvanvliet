@@ -28,6 +28,7 @@ for o in [o for o in bpy.data.objects if o.type == "MESH"]:
 placed = sorted({r for v in groups.values() for _, r in v if r})
 mat_key = {}
 MASK_ALPHA = 0.95
+MASK_SPECULAR = 0.1  # Principled default 0.5
 def canonical(m):
     if m is None: return None
     b = m.node_tree.nodes.get("Principled BSDF") if m.use_nodes else None
@@ -36,6 +37,9 @@ def canonical(m):
     # the colour out (a black mask looked beige). At 0.95 the traces still show faintly, as on a real board.
     if b and 0.5 < b.inputs["Alpha"].default_value < MASK_ALPHA and max(b.inputs["Base Color"].default_value[:3]) < 0.9:
         b.inputs["Alpha"].default_value = MASK_ALPHA
+        # Less sheen too (exported as KHR_materials_specular): a flat board faces the viewer's big overhead
+        # panel, and its reflection at the default level turned a black mask mid grey and hid the traces.
+        b.inputs["Specular IOR Level"].default_value = MASK_SPECULAR
     k = tuple(round(x, 3) for x in b.inputs["Base Color"].default_value) + (round(b.inputs["Metallic"].default_value, 2),
          round(b.inputs["Roughness"].default_value, 2), round(b.inputs["Alpha"].default_value, 2)) if b else (m.name,)
     return mat_key.setdefault(k, m)
