@@ -63,7 +63,7 @@ function published(): Published[] {
 // same page, plus /models?dashboard: the build dashboard, which watches the Blender harness in
 // scripts/blender (see its README).
 // The board the "My circuit experiments" card shows (public/circuits/, see app/circuits).
-const CIRCUIT_CARD = "mitayi-pico";
+const CIRCUIT_CARD = "rocket-recorder";
 
 export default function ModelsPage() {
   const circuit = fs.existsSync(path.join(process.cwd(), "public", "circuits", `${CIRCUIT_CARD}.glb`)) ? CIRCUIT_CARD : null;
