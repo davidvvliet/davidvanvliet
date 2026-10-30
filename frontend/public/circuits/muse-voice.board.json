@@ -120,7 +120,7 @@
     {
      "ref": "U4",
      "value": "MAX98357A",
-     "package": "TQFN-16-1EP_3x3mm_P0.5mm_EP1.6x1.6mm"
+     "package": "MAX98357A_TQFN-16-1EP_3x3mm_P0.5mm_EP1.5x1.5mm_Adafruit"
     }
    ]
   },
@@ -186,6 +186,21 @@
      "ref": "U2",
      "value": "AP2112K-3.3",
      "package": "SOT-23-5"
+    }
+   ]
+  },
+  {
+   "name": "USB ESD protection",
+   "parts": [
+    {
+     "ref": "C10",
+     "value": "0.1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "U6",
+     "value": "TPD3E001DRLR",
+     "package": "SOT-553"
     }
    ]
   },
