@@ -1,0 +1,97 @@
+{
+ "name": "co2_scd41",
+ "title": "CO2 sensor",
+ "purpose": "CO2 (and humidity, temperature) sensor, Sensirion SCD41 on I2C, on its own 3.3 V regulator",
+ "sources": [
+  {
+   "id": "scd4x",
+   "title": "Sensirion SCD4x datasheet, version 1.7 (April 2025)",
+   "url": "https://sensirion.com/media/documents/48C4B7FB/67FE0194/CD_DS_SCD4x_Datasheet_D1.pdf",
+   "licence": "copyright Sensirion: link and quotes only",
+   "read": "p5 pin assignment, supply and typical circuit; p24 package outline and land pattern"
+  },
+  {
+   "id": "scd4x_designin",
+   "title": "Sensirion SCD4x design-in guide",
+   "url": "https://sensirion.com/media/documents/0D0C9129/623B1183/Sensirion_CO2_Sensors_SCD4x_design-in_guide.pdf",
+   "licence": "copyright Sensirion: link and quotes only",
+   "read": "1.2 decoupling from external heat sources"
+  },
+  {
+   "id": "kicad",
+   "title": "KiCad 10 standard libraries (symbols, footprints, 3D models)",
+   "url": "https://gitlab.com/kicad/libraries",
+   "licence": "CC BY-SA 4.0 with design exception",
+   "read": "symbol pin numbers, footprint pads, 3D models"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "U30",
+   "value": "SCD41",
+   "symbol": "Sensor_Gas:SCD41-D-R2",
+   "footprint": "air:Sensirion_SCD4x-1EP_10.1x10.1mm_P1.25mm_EP4.8x4.8mm",
+   "source": "scd4x, p5, p24; kicad (footprint copied into footprints/air.pretty with our own box model: KiCad has no 3D model of it)",
+   "quote": "\"VDD and VDDH must be connected to each other close to the sensor on the customer PCB.\"; DNC: \"Do not connect, pads must be soldered to a floating pad on the customer PCB\""
+  }
+ ],
+ "nets": {
+  "/VDD_CO2": [
+   "U30.7",
+   "U30.19"
+  ],
+  "GND": [
+   "U30.6",
+   "U30.20",
+   "U30.21"
+  ],
+  "/I2C_SDA": [
+   "U30.10"
+  ],
+  "/I2C_SCL": [
+   "U30.9"
+  ]
+ },
+ "ports": {
+  "/VDD_CO2": {
+   "net": "/VDD_CO2",
+   "kind": "power_in",
+   "note": "its own LDO: \"Operating the sensor with a separate LDO is recommended.\" (scd4x p5)"
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground"
+  },
+  "/I2C_SDA": {
+   "net": "/I2C_SDA",
+   "kind": "data"
+  },
+  "/I2C_SCL": {
+   "net": "/I2C_SCL",
+   "kind": "data"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   10.1,
+   10.1
+  ],
+  "place": {
+   "U30": {
+    "at_mm": [
+     0,
+     0
+    ],
+    "rotation": 0,
+    "side": "front"
+   }
+  },
+  "traces": [],
+  "vias": [],
+  "rules": "Far from heat sources: \"Significant heat sources within devices typically ... voltage regulators and batteries\" (scd4x_designin 1.2); a slit in the board beside it is the guide's best option (not done: the harness draws only a rectangular outline). I2C address 0x62."
+ },
+ "open_questions": [
+  "No slit in the board next to the sensor (the design-in guide's best option for heat); placed at the far end from the regulators instead.",
+  "The datasheet's circuit has no decoupling capacitor at the sensor; the separate LDO's own output capacitors are its only ones."
+ ]
+}

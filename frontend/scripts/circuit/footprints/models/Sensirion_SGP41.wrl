@@ -1,0 +1,10 @@
+#VRML V2.0 utf8
+# Sensirion SGP41: DFN 2.44 x 2.44 x 0.85 mm (SGP41 datasheet v1.0, p1)
+# A box at the datasheet's size, for the circuit harness (KiCad has no model of this part); colours not sourced.
+Shape {
+  appearance Appearance { material Material { diffuseColor 0.15 0.15 0.15 } }
+  geometry IndexedFaceSet {
+    coord Coordinate { point [ -0.48031 -0.48031 0.00000, 0.48031 -0.48031 0.00000, 0.48031 0.48031 0.00000, -0.48031 0.48031 0.00000, -0.48031 -0.48031 0.33465, 0.48031 -0.48031 0.33465, 0.48031 0.48031 0.33465, -0.48031 0.48031 0.33465 ] }
+    coordIndex [ 0 3 2 1 -1, 4 5 6 7 -1, 0 1 5 4 -1, 1 2 6 5 -1, 2 3 7 6 -1, 3 0 4 7 -1 ]
+  }
+}

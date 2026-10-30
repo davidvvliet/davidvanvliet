@@ -1,0 +1,170 @@
+{
+ "title": "Air quality monitor",
+ "purpose": "Measures CO2, VOC and NOx, and dust (PM1/PM2.5/PM10) in a room and shows them on a Qwiic I2C display; USB-C powered",
+ "source": {
+  "title": "air-quality recipe",
+  "url": "https://github.com/davidvvliet/davidvanvliet/tree/main/frontend/scripts/circuit/boards/air-quality",
+  "author": "the circuit harness: Mitayi-Pico blocks (CIRCUITSTATE, MIT), new blocks from Sensirion, Plantower, SparkFun and Raspberry Pi documents",
+  "licence": "MIT blocks; new blocks quote their datasheets"
+ },
+ "board": {
+  "size_mm": [
+   88,
+   24
+  ],
+  "layers": 2,
+  "rules": "templates/rules.kicad_pro",
+  "ground_fill": "GND",
+  "mask": "Black"
+ },
+ "blocks": {
+  "usb": {
+   "block": "usb_c_power",
+   "at_mm": [
+    0.63,
+    3.65
+   ]
+  },
+  "ldo": {
+   "block": "ldo_3v3",
+   "at_mm": [
+    9.285,
+    3.9
+   ]
+  },
+  "core": {
+   "block": "rp2040_core",
+   "at_mm": [
+    7.3,
+    3.23
+   ]
+  },
+  "led": {
+   "block": "led",
+   "at_mm": [
+    3.625,
+    16.375
+   ]
+  },
+  "pull": {
+   "block": "i2c_pullups",
+   "at_mm": [
+    41,
+    5
+   ]
+  },
+  "voc": {
+   "block": "voc_sgp41",
+   "at_mm": [
+    47,
+    10.5
+   ]
+  },
+  "qwiic": {
+   "block": "qwiic",
+   "at_mm": [
+    51,
+    4
+   ]
+  },
+  "ldo2": {
+   "block": "ldo_3v3",
+   "at_mm": [
+    44,
+    18
+   ]
+  },
+  "pm": {
+   "block": "pm_pms5003",
+   "at_mm": [
+    70.5,
+    19.6
+   ]
+  },
+  "co2": {
+   "block": "co2_scd41",
+   "at_mm": [
+    81.5,
+    9
+   ]
+  }
+ },
+ "connect": [
+  [
+   "usb./VSYS",
+   "ldo./VSYS",
+   "ldo2./VSYS"
+  ],
+  [
+   "usb.VBUS",
+   "pm.VBUS"
+  ],
+  [
+   "ldo.+3V3",
+   "core.+3V3",
+   "led.+3V3",
+   "pull.+3V3",
+   "voc.+3V3",
+   "qwiic.+3V3"
+  ],
+  [
+   "co2./VDD_CO2",
+   "ldo2.+3V3"
+  ],
+  [
+   "usb.GND",
+   "ldo.GND",
+   "ldo2.GND",
+   "core.GND",
+   "led.GND",
+   "voc.GND",
+   "qwiic.GND",
+   "pm.GND",
+   "co2.GND"
+  ],
+  [
+   "usb./USB_D+",
+   "core./USB_D+"
+  ],
+  [
+   "usb./USB_D-",
+   "core./USB_D-"
+  ],
+  [
+   "pull./I2C_SDA",
+   "voc./I2C_SDA",
+   "co2./I2C_SDA",
+   "qwiic./I2C_SDA",
+   "core./GPIO4"
+  ],
+  [
+   "pull./I2C_SCL",
+   "voc./I2C_SCL",
+   "co2./I2C_SCL",
+   "qwiic./I2C_SCL",
+   "core./GPIO5"
+  ],
+  [
+   "pm./PM_RXD",
+   "core./GPIO12"
+  ],
+  [
+   "pm./PM_TXD",
+   "core./GPIO13"
+  ],
+  [
+   "pm./PM_SET",
+   "core./GPIO6"
+  ],
+  [
+   "pm./PM_RESET",
+   "core./GPIO7"
+  ]
+ ],
+ "open_questions": [
+  "PMS5003 connector part from a blog post (Molex PicoBlade 53261-0871), not a maker document.",
+  "No slit beside the CO2 sensor (the harness outline is a rectangle).",
+  "Display not chosen (Qwiic, any I2C address but 0x59 and 0x62).",
+  "The SGP41 footprint is drawn from its datasheet's Figure 18."
+ ]
+}

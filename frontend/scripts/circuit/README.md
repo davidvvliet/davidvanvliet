@@ -24,13 +24,17 @@ boards/<board>/     one board: board.json plus either
                       imported KiCad files (someone else's finished design), or
                       recipe.json (our own, from blocks; see "Own boards")
 blocks/<block>.json the building-block library (templates/block.json): usb_c_power, ldo_3v3, rp2040_core, led,
-                    lipo_charger, imu_bmi088, baro_bmp280, i2c_pullups
-footprints/         footprints KiCad's library doesn't have (mitayi.pretty: the Mitayi Pico's own, MIT)
+                    lipo_charger, imu_bmi088, baro_bmp280, i2c_pullups, co2_scd41, voc_sgp41, pm_pms5003, qwiic
+footprints/         footprints KiCad's library doesn't have (mitayi.pretty: the Mitayi Pico's own, MIT; air.pretty: drawn
+                    from datasheets, or KiCad's with our own model)
+footprints/models/  3D models for parts KiCad has none of: datasheet-sized boxes (VRML, 1 unit = 2.54 mm), referenced
+                    as ${CIRCUIT_3DMODELS}/<name>.wrl
+symbols/            schematic symbols KiCad doesn't have (air.kicad_sym: SGP41)
 lib/tools.py        where each tool is
 lib/checks.py       KiCad's design rule and electrical checks, as dashboard check rows
 lib/sections.py     an imported schematic's titled boxes, as the board's blocks
 lib/schematic.py    a recipe board's schematic: a box per block, pins labelled with their nets
-lib/symbols.py      schematic symbols by library id (imported boards' own first, then KiCad's)
+lib/symbols.py      schematic symbols by library id (imported boards' own first, then symbols/, then KiCad's)
 lib/sexpr.py        KiCad's file format (S-expressions), read and written
 lib/generate.py     a recipe as a KiCad board and schematic (KiCad's Python): blocks placed with their own traces, ports joined, outline
 lib/route.py        the router's input out, its traces back in (widened to the minimum), ground fill on both sides

@@ -1,0 +1,85 @@
+{
+ "name": "qwiic",
+ "title": "Display connector",
+ "purpose": "Qwiic / STEMMA QT connector for an I2C display (or any Qwiic board)",
+ "sources": [
+  {
+   "id": "qwiic",
+   "title": "SparkFun Qwiic connect system",
+   "url": "https://www.sparkfun.com/qwiic",
+   "licence": "link and quotes only",
+   "read": "pinout and connector part"
+  },
+  {
+   "id": "kicad",
+   "title": "KiCad 10 standard libraries (symbols, footprints, 3D models)",
+   "url": "https://gitlab.com/kicad/libraries",
+   "licence": "CC BY-SA 4.0 with design exception",
+   "read": "symbol pin numbers, footprint pads, 3D models"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "J33",
+   "value": "Qwiic",
+   "symbol": "Connector_Generic_MountingPin:Conn_01x04_MountingPin",
+   "footprint": "Connector_JST:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal",
+   "source": "qwiic; kicad",
+   "quote": "\"For obvious compatibility reasons you must follow the same pinout: GND / 3.3V / SDA / SCL.\"; \"The cable connector is part #: SHR-04V-S or equivalent.\""
+  }
+ ],
+ "nets": {
+  "GND": [
+   "J33.1"
+  ],
+  "+3V3": [
+   "J33.2"
+  ],
+  "/I2C_SDA": [
+   "J33.3"
+  ],
+  "/I2C_SCL": [
+   "J33.4"
+  ]
+ },
+ "ports": {
+  "+3V3": {
+   "net": "+3V3",
+   "kind": "power_out"
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground"
+  },
+  "/I2C_SDA": {
+   "net": "/I2C_SDA",
+   "kind": "data"
+  },
+  "/I2C_SCL": {
+   "net": "/I2C_SCL",
+   "kind": "data"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   6,
+   5
+  ],
+  "place": {
+   "J33": {
+    "at_mm": [
+     0,
+     0
+    ],
+    "rotation": 0,
+    "side": "front"
+   }
+  },
+  "traces": [],
+  "vias": [],
+  "rules": "Pins in the Qwiic order, pin 1 GND (qwiic)."
+ },
+ "open_questions": [
+  "Display not chosen; any Qwiic I2C display works if its address differs from 0x59, 0x62."
+ ]
+}

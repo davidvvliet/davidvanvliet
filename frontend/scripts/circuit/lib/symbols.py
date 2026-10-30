@@ -1,7 +1,7 @@
 # Schematic symbols by library id ("Device:R"), flattened (a symbol that extends another gets the
 # other's drawing and pins), as a schematic's lib_symbols needs them. Looked up in the schematics of
 # imported boards first (their designers' own symbols, embedded and already flattened), then in
-# KiCad's symbol libraries.
+# symbols/ (ours, for parts KiCad doesn't have), then in KiCad's symbol libraries.
 import copy, glob, os
 from . import sexpr, tools
 
@@ -20,7 +20,8 @@ def _embedded_symbols():
 
 def _library(lib):
     if lib not in _libs:
-        path = os.path.join(SYMBOLS, f"{lib}.kicad_sym")
+        path = os.path.join(tools.HARNESS, "symbols", f"{lib}.kicad_sym")  # ours (symbols/), else KiCad's
+        if not os.path.exists(path): path = os.path.join(SYMBOLS, f"{lib}.kicad_sym")
         tree = sexpr.parse(open(path).read())[0] if os.path.exists(path) else []
         _libs[lib] = {str(s[1]): s for s in sexpr.find(tree, "symbol")}
     return _libs[lib]

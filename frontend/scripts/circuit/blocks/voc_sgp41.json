@@ -1,0 +1,149 @@
+{
+ "name": "voc_sgp41",
+ "title": "VOC sensor",
+ "purpose": "VOC and NOx gas sensor, Sensirion SGP41 on I2C, with the datasheet's RC decoupling",
+ "sources": [
+  {
+   "id": "sgp41",
+   "title": "Sensirion SGP41 datasheet, version 1.0 (December 2021)",
+   "url": "https://sensirion.com/media/documents/5FE8673C/61E96F50/Sensirion_Gas_Sensors_Datasheet_SGP41.pdf",
+   "licence": "copyright Sensirion: link and quotes only",
+   "read": "p1 package, p8 typical application circuit and pin assignment, p12 I2C address, p19 land pattern"
+  },
+  {
+   "id": "kicad",
+   "title": "KiCad 10 standard libraries (symbols, footprints, 3D models)",
+   "url": "https://gitlab.com/kicad/libraries",
+   "licence": "CC BY-SA 4.0 with design exception",
+   "read": "symbol pin numbers, footprint pads, 3D models"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "U31",
+   "value": "SGP41",
+   "symbol": "air:SGP41",
+   "footprint": "air:Sensirion_DFN-6-1EP_2.44x2.44mm_P0.8mm_EP1.25x1.7mm",
+   "source": "sgp41, p8 (pins), p19 (land pattern); symbol and footprint drawn for the harness (KiCad has neither)",
+   "quote": "pins: \"1 VDD, 2 VSS, 3 SDA, 4 n/a Connect to ground (no electrical function), 5 VDDH, 6 SCL\"; \"The die pad or center pad is electrically connected to GND.\"",
+   "pin_types": {
+    "4": "passive"
+   },
+   "pin_types_why": "sgp41 p8: pin 4 \"Connect to ground (no electrical function)\""
+  },
+  {
+   "ref": "R30",
+   "value": "4.7R",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "sgp41, p8, Figure 6",
+   "quote": "\"The VDD pin must be decoupled with an RC element.\" Figure 6: 4.7 Ω from the supply to VDD"
+  },
+  {
+   "ref": "C30",
+   "value": "1uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "sgp41, p8, Figure 6",
+   "quote": "Figure 6: 1 µF from VDD to ground"
+  },
+  {
+   "ref": "C31",
+   "value": "1uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "sgp41, p8",
+   "quote": "\"The required decoupling for VDDH depends on the power supply network connected to the sensor, a capacitor of 1 µF is recommended.\" (Figure 6: 1 µF)"
+  }
+ ],
+ "nets": {
+  "+3V3": [
+   "R30.1",
+   "U31.5",
+   "C31.1"
+  ],
+  "/VDD_RC": [
+   "R30.2",
+   "U31.1",
+   "C30.1"
+  ],
+  "GND": [
+   "U31.2",
+   "U31.4",
+   "U31.7",
+   "C30.2",
+   "C31.2"
+  ],
+  "/I2C_SDA": [
+   "U31.3"
+  ],
+  "/I2C_SCL": [
+   "U31.6"
+  ]
+ },
+ "ports": {
+  "+3V3": {
+   "net": "+3V3",
+   "kind": "power_in",
+   "note": "VDD and VDDH 1.7-3.6 V, \"connected to one single supply\" (sgp41 p8)"
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground"
+  },
+  "/I2C_SDA": {
+   "net": "/I2C_SDA",
+   "kind": "data"
+  },
+  "/I2C_SCL": {
+   "net": "/I2C_SCL",
+   "kind": "data"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   7,
+   4
+  ],
+  "place": {
+   "U31": {
+    "at_mm": [
+     0,
+     0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "R30": {
+    "at_mm": [
+     -2.6,
+     -1.0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C30": {
+    "at_mm": [
+     -2.6,
+     1.0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C31": {
+    "at_mm": [
+     2.6,
+     0
+    ],
+    "rotation": 90,
+    "side": "front"
+   }
+  },
+  "traces": [],
+  "vias": [],
+  "rules": "I2C address 0x59 (sgp41 p12). Keep out of bright light (sgp41 p8: \"should not be exposed to bright illumination\")."
+ },
+ "open_questions": [
+  "Footprint drawn from Figure 18 for this board; not yet compared with Sensirion's own CAD files (no licence stated on them)."
+ ]
+}

@@ -82,7 +82,9 @@ def main(board, publish=False):
     pcb = open(pcb_path).read()
     # Older projects name the model folder by KiCad version, and KiCad 10 ships STEP models only.
     pcb = re.sub(r"\$\{(KICAD\d*_3DMODEL_DIR|KISYS3DMOD)\}", "${KICAD10_3DMODEL_DIR}", pcb)
-    pcb = re.sub(r'(\(model "[^"]+)\.wrl"', r'\1.step"', pcb)
+    pcb = re.sub(r'(\(model "(?!\$\{CIRCUIT_3DMODELS\})[^"]+)\.wrl"', r'\1.step"', pcb)
+    # Our own 3D models (footprints/models/: datasheet-sized boxes for parts KiCad has no model of).
+    pcb = pcb.replace("${CIRCUIT_3DMODELS}", os.path.join(HERE, "footprints", "models"))
     for a, b in meta.get("model_renames", {}).items():
         pcb = pcb.replace(a, b)
     with tempfile.TemporaryDirectory() as tmp:
