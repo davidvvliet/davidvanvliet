@@ -1,7 +1,7 @@
 {
  "board": "air-quality",
  "title": "Air quality monitor",
- "purpose": "Measures CO2, VOC and NOx, and dust (PM1/PM2.5/PM10) in a room and shows them on a Qwiic I2C display; USB-C powered",
+ "purpose": "Measures CO2, VOC and NOx, and dust (PM1/PM2.5/PM10) in a room and shows them on an e-paper screen (or a Qwiic I2C display); USB-C powered",
  "source": {
   "title": "air-quality recipe",
   "url": "https://github.com/davidvvliet/davidvanvliet/tree/main/frontend/scripts/circuit/boards/air-quality",
@@ -265,21 +265,6 @@
    ]
   },
   {
-   "name": "I2C pull-ups",
-   "parts": [
-    {
-     "ref": "R20",
-     "value": "2.2k",
-     "package": "R_0402_1005Metric"
-    },
-    {
-     "ref": "R21",
-     "value": "2.2k",
-     "package": "R_0402_1005Metric"
-    }
-   ]
-  },
-  {
    "name": "LED",
    "parts": [
     {
@@ -290,6 +275,21 @@
     {
      "ref": "R8",
      "value": "470R",
+     "package": "R_0402_1005Metric"
+    }
+   ]
+  },
+  {
+   "name": "I2C pull-ups",
+   "parts": [
+    {
+     "ref": "R20",
+     "value": "2.2k",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "R21",
+     "value": "2.2k",
      "package": "R_0402_1005Metric"
     }
    ]
@@ -311,6 +311,16 @@
      "ref": "U30",
      "value": "SCD41",
      "package": "Sensirion_SCD4x-1EP_10.1x10.1mm_P1.25mm_EP4.8x4.8mm"
+    }
+   ]
+  },
+  {
+   "name": "E-paper screen",
+   "parts": [
+    {
+     "ref": "J34",
+     "value": "e-Paper",
+     "package": "PinHeader_1x08_P2.54mm_Vertical"
     }
    ]
   },
