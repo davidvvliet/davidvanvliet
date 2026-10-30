@@ -1,12 +1,13 @@
 # Blender side of build.py: KiCad's GLB in, the web model out.
-#   Blender -b --python pack.py -- raw.glb blocks.json out.glb
+#   Blender -b --python pack.py -- raw.glb blocks.json out.glb [top|back]
 # Every part goes under an empty named after its block (glTF extras "assembly", the board "core"),
 # which the /models viewer uses to focus and explode. KiCad writes each track and pad as its own
 # piece; merging each block into one mesh per material keeps the page fast.
 import bpy, bmesh, json, sys, math
 from mathutils import Vector
 
-raw, tags, out = sys.argv[sys.argv.index("--") + 1:]
+raw, tags, out, *rest = sys.argv[sys.argv.index("--") + 1:]
+view = rest[0] if rest else "top"
 blocks = json.load(open(tags))
 bpy.ops.wm.read_factory_settings(use_empty=True)
 bpy.ops.import_scene.gltf(filepath=raw)
@@ -74,6 +75,11 @@ for block, items in groups.items():
                                  delimit={"MATERIAL"})
     bm.to_mesh(me); bm.free()
     joined[block] = o
+
+# A board whose screen is on its back is shown back up (recipe "view": "back"): turned over about its long axis.
+if view == "back":
+    from mathutils import Matrix
+    for o in joined.values(): o.matrix_world = Matrix.Rotation(math.pi, 4, "X") @ o.matrix_world
 
 # Board centre at the origin.
 board = joined["Board"]

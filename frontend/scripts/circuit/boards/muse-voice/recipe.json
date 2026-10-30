@@ -15,7 +15,8 @@
   "layers": 2,
   "rules": "templates/rules.kicad_pro",
   "ground_fill": "GND",
-  "mask": "Black"
+  "mask": "Black",
+  "view": "back"
  },
  "blocks": {
   "core": {
