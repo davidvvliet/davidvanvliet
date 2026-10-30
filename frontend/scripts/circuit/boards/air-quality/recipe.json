@@ -1,6 +1,6 @@
 {
  "title": "Air quality monitor",
- "purpose": "Measures CO2, VOC and NOx, and dust (PM1/PM2.5/PM10) in a room and shows them on an e-paper screen (or a Qwiic I2C display); USB-C powered",
+ "purpose": "Measures CO2, VOC and NOx, and dust (PM1/PM2.5/PM10) in a room and shows them on a 1.54\" e-paper panel on the back (or a Qwiic I2C display); USB-C powered",
  "source": {
   "title": "air-quality recipe",
   "url": "https://github.com/davidvvliet/davidvanvliet/tree/main/frontend/scripts/circuit/boards/air-quality",
@@ -10,7 +10,7 @@
  "board": {
   "size_mm": [
    88,
-   28
+   36
   ],
   "layers": 2,
   "rules": "templates/rules.kicad_pro",
@@ -22,77 +22,77 @@
    "block": "usb_c_power",
    "at_mm": [
     0.63,
-    3.65
+    11.65
    ]
   },
   "ldo": {
    "block": "ldo_3v3",
    "at_mm": [
     9.285,
-    3.9
+    11.9
    ]
   },
   "core": {
    "block": "rp2040_core",
    "at_mm": [
     7.3,
-    3.23
+    11.23
    ]
   },
   "led": {
    "block": "led",
    "at_mm": [
     3.625,
-    16.375
+    24.375
    ]
   },
   "pull": {
    "block": "i2c_pullups",
    "at_mm": [
     41,
-    5
+    13
    ]
   },
   "voc": {
    "block": "voc_sgp41",
    "at_mm": [
     47,
-    12.5
+    20.5
    ]
   },
   "qwiic": {
    "block": "qwiic",
    "at_mm": [
     51,
-    4
+    12
    ]
   },
   "ldo2": {
    "block": "ldo_3v3",
    "at_mm": [
     44,
-    22
+    30
    ]
   },
   "pm": {
    "block": "pm_pms5003",
    "at_mm": [
     70.5,
-    23.6
+    31.6
    ]
   },
   "co2": {
    "block": "co2_scd41",
    "at_mm": [
     81.5,
-    11
+    19
    ]
   },
   "epd": {
-   "block": "epaper_header",
+   "block": "epd_panel154",
    "at_mm": [
-    57,
-    2.4
+    70,
+    18
    ]
   }
  },

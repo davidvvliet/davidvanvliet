@@ -102,5 +102,22 @@ def sgp41():
     disc(m, "0.6 0.6 0.6", -2.44 / 2 + 0.27, 2.44 / 2 - 0.38, 0.28, 0.85 + 0.005)
     m.write(os.path.join(HERE, "Sensirion_SGP41.wrl"), "Sensirion SGP41 VOC sensor (sgp41 datasheet v1.0, Figure 17, p18)")
 
+def epd154():
+    """Waveshare 1.54inch e-Paper V2 datasheet, 1.4 Mechanical Drawing p5: "TFT OD 37.32" x "TFT OD 31.80", "Total
+    1.05" thick; "TFT AA 27.00" square, 2.40 from the far edge and from the side (so centred across the 31.80);
+    FPC 0.10 thick, "FPC+PI stiffener Total Thickness 0.30", 24 contacts at 0.50 pitch, 12.50 wide at its end;
+    the tail reaches 14.30 from the glass (bottom view). Drawn here flat (its "Bending Area" unbent), its end
+    inserted 0.5 mm past the connector's origin, so it sits on this footprint's Hirose FH12 (estimated: Hirose's
+    drawing wasn't readable). The tail centred on the edge: estimated off the front view."""
+    m = Mesh()
+    end, tail, L, W = -0.5, 14.30, 37.32, 31.80   # model y is up: the panel lies towards -y, away from the pins
+    g0 = end - tail
+    prism(m, "0.78 0.62 0.25", [(6.25, end), (-6.25, end), (-6.25, g0), (6.25, g0)], 0.35, 0.45, shine=0.3)  # FPC
+    prism(m, "0.70 0.52 0.18", [(6.25, end), (-6.25, end), (-6.25, end - 3.5), (6.25, end - 3.5)], 0.25, 0.55)  # stiffener
+    prism(m, "0.55 0.56 0.55", [(W / 2, g0), (-W / 2, g0), (-W / 2, g0 - L), (W / 2, g0 - L)], 0, 1.05, shine=0.2)  # glass
+    a1 = g0 - L + 2.40
+    prism(m, "0.86 0.86 0.83", [(13.5, a1 + 27), (-13.5, a1 + 27), (-13.5, a1), (13.5, a1)], 1.05, 1.06)  # active area
+    m.write(os.path.join(HERE, "Waveshare_EPD_1.54in.wrl"), "Waveshare 1.54inch e-Paper V2 panel (datasheet 1.4, p5)")
+
 if __name__ == "__main__":
-    scd4x(); sgp41()
+    scd4x(); sgp41(); epd154()

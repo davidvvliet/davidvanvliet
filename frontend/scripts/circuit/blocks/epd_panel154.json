@@ -1,0 +1,470 @@
+{
+ "name": "epd_panel154",
+ "title": "E-paper display",
+ "purpose": "Waveshare 1.54\" e-Paper V2 bare panel (200x200, SSD1681) on the back of the board, on a 24-pin FPC connector, with the datasheet's reference boost circuit for its gate and source voltages; 4-wire SPI",
+ "sources": [
+  {
+   "id": "epd154",
+   "title": "Waveshare 1.54inch e-Paper V2 datasheet",
+   "url": "https://files.waveshare.com/upload/e/e5/1.54inch_e-paper_V2_Datasheet.pdf",
+   "licence": "© Waveshare: link and quotes only",
+   "read": "1.4 mechanical drawing p5, 1.5 pins p6, 1.6 reference circuit p8"
+  },
+  {
+   "id": "si1308",
+   "title": "Vishay Si1308EDL datasheet (Document 63399)",
+   "url": "https://www.vishay.com/docs/63399/si1308edl.pdf",
+   "licence": "© Vishay: link and quotes only",
+   "read": "pinout, SOT-323 package"
+  },
+  {
+   "id": "mbr0530",
+   "title": "onsemi MBR0530 datasheet",
+   "url": "https://www.onsemi.com/pdf/datasheet/mbr0530t1-d.pdf",
+   "licence": "© onsemi: link and quotes only",
+   "read": "rating, SOD-123 package"
+  },
+  {
+   "id": "kicad",
+   "title": "KiCad 10 standard libraries (symbols, footprints, 3D models)",
+   "url": "https://gitlab.com/kicad/libraries",
+   "licence": "CC BY-SA 4.0 with design exception",
+   "read": "symbol pins, footprints, 3D models; the Hirose FH12-24 footprint copied with the panel added"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "J40",
+   "value": "1.54in e-Paper",
+   "symbol": "Connector_Generic_MountingPin:Conn_01x24_MountingPin",
+   "footprint": "air:Hirose_FH12-24S-0.5SH_Waveshare_EPD_1.54in",
+   "source": "epd154, p5-p6; kicad",
+   "quote": "FPC 24 pins, 0.50 pitch, \"FPC+PI stiffener Total Thickness 0.30\"; panel 37.32 x 31.80 x 1.05, active area 27.00 square"
+  },
+  {
+   "ref": "L40",
+   "value": "10uH 1A",
+   "symbol": "Device:L",
+   "footprint": "Inductor_SMD:L_1210_3225Metric",
+   "source": "epd154, p8 1.6 Reference Circuit",
+   "quote": "L1 10uH 1A; \"Inductor L1 is wire-wound inductor.\""
+  },
+  {
+   "ref": "Q40",
+   "value": "Si1308EDL",
+   "symbol": "Transistor_FET:Si1308EDL",
+   "footprint": "Package_TO_SOT_SMD:SOT-323_SC-70",
+   "source": "epd154, p8 1.6 Reference Circuit; si1308",
+   "quote": "Q1 Si1308EDL; \"Suggests using Si1304BDL or Si1308EDL TUBE MOS (Q1), otherwise it may affect the normal boost\"; SOT-323 pins 1 G, 2 S, 3 D"
+  },
+  {
+   "ref": "R40",
+   "value": "10k",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0603_1608Metric",
+   "source": "epd154, p8 1.6 Reference Circuit",
+   "quote": "R1 10K from GDR to GND"
+  },
+  {
+   "ref": "R41",
+   "value": "3R",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0603_1608Metric",
+   "source": "epd154, p8 1.6 Reference Circuit",
+   "quote": "R2 3Ω from RESE (Q1 source) to GND"
+  },
+  {
+   "ref": "D40",
+   "value": "MBR0530",
+   "symbol": "Diode:MBR0530",
+   "footprint": "Diode_SMD:D_SOD-123",
+   "source": "epd154, p8 1.6 Reference Circuit; mbr0530",
+   "quote": "D1 MBR0530, cathode to C3, anode PREVGL; \"0.5 AMPERES 30 VOLTS\" SOD-123"
+  },
+  {
+   "ref": "D41",
+   "value": "MBR0530",
+   "symbol": "Diode:MBR0530",
+   "footprint": "Diode_SMD:D_SOD-123",
+   "source": "epd154, p8 1.6 Reference Circuit; mbr0530",
+   "quote": "D2 MBR0530, anode to C3, cathode to GND"
+  },
+  {
+   "ref": "D42",
+   "value": "MBR0530",
+   "symbol": "Diode:MBR0530",
+   "footprint": "Diode_SMD:D_SOD-123",
+   "source": "epd154, p8 1.6 Reference Circuit; mbr0530",
+   "quote": "D3 MBR0530, anode to the switch node, cathode PREVGH"
+  },
+  {
+   "ref": "C40",
+   "value": "4.7uF/50V",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_1206_3216Metric",
+   "source": "epd154, p8 1.6 Reference Circuit",
+   "quote": "C4 4.7uF/50V on 3.3V at the inductor"
+  },
+  {
+   "ref": "C41",
+   "value": "4.7uF/50V",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_1206_3216Metric",
+   "source": "epd154, p8 1.6 Reference Circuit",
+   "quote": "C3 4.7uF/50V from the switch node to D1/D2"
+  },
+  {
+   "ref": "C42",
+   "value": "1uF/50V",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0603_1608Metric",
+   "source": "epd154, p8 1.6 Reference Circuit",
+   "quote": "C5 1uF/50V on PREVGH; \"Default voltage value of all capacitors is 50V.\""
+  },
+  {
+   "ref": "C43",
+   "value": "1uF/50V",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0603_1608Metric",
+   "source": "epd154, p8 1.6 Reference Circuit",
+   "quote": "C2 1uF/50V on VSH2 (pin 5); \"Default voltage value of all capacitors is 50V.\""
+  },
+  {
+   "ref": "C44",
+   "value": "1uF/50V",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0603_1608Metric",
+   "source": "epd154, p8 1.6 Reference Circuit",
+   "quote": "C6 1uF/50V on VCI (pin 16); \"Default voltage value of all capacitors is 50V.\""
+  },
+  {
+   "ref": "C45",
+   "value": "1uF/50V",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0603_1608Metric",
+   "source": "epd154, p8 1.6 Reference Circuit",
+   "quote": "C7 1uF/50V on VDD (pin 18); \"Default voltage value of all capacitors is 50V.\""
+  },
+  {
+   "ref": "C46",
+   "value": "1uF/50V",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0603_1608Metric",
+   "source": "epd154, p8 1.6 Reference Circuit",
+   "quote": "C9 1uF/50V on VSH1 (pin 20); \"Default voltage value of all capacitors is 50V.\""
+  },
+  {
+   "ref": "C47",
+   "value": "1uF/50V",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0603_1608Metric",
+   "source": "epd154, p8 1.6 Reference Circuit",
+   "quote": "C10 1uF/50V on VSL (pin 22); \"Default voltage value of all capacitors is 50V.\""
+  },
+  {
+   "ref": "C48",
+   "value": "1uF/50V",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0603_1608Metric",
+   "source": "epd154, p8 1.6 Reference Circuit",
+   "quote": "C11 1uF/50V on PREVGL (pin 23); \"Default voltage value of all capacitors is 50V.\""
+  },
+  {
+   "ref": "C49",
+   "value": "1uF/50V",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0603_1608Metric",
+   "source": "epd154, p8 1.6 Reference Circuit",
+   "quote": "C12 1uF/50V on VCOM (pin 24); \"Default voltage value of all capacitors is 50V.\""
+  }
+ ],
+ "nets": {
+  "+3V3": [
+   "L40.1",
+   "C40.1",
+   "J40.15",
+   "J40.16",
+   "C44.1"
+  ],
+  "GND": [
+   "C40.2",
+   "C42.2",
+   "C43.2",
+   "C44.2",
+   "C45.2",
+   "C46.2",
+   "C47.2",
+   "C48.2",
+   "C49.2",
+   "D41.1",
+   "J40.17",
+   "J40.8",
+   "R40.2",
+   "R41.2"
+  ],
+  "/EPD_SW": [
+   "L40.2",
+   "Q40.3",
+   "D42.2",
+   "C41.1"
+  ],
+  "/EPD_CP": [
+   "C41.2",
+   "D41.2",
+   "D40.1"
+  ],
+  "/PREVGH": [
+   "D42.1",
+   "C42.1",
+   "J40.21"
+  ],
+  "/PREVGL": [
+   "D40.2",
+   "C48.1",
+   "J40.23"
+  ],
+  "/GDR": [
+   "J40.2",
+   "Q40.1",
+   "R40.1"
+  ],
+  "/RESE": [
+   "J40.3",
+   "Q40.2",
+   "R41.1"
+  ],
+  "/VSH2": [
+   "J40.5",
+   "C43.1"
+  ],
+  "/EPD_VDD": [
+   "J40.18",
+   "C45.1"
+  ],
+  "/VSH1": [
+   "J40.20",
+   "C46.1"
+  ],
+  "/VSL": [
+   "J40.22",
+   "C47.1"
+  ],
+  "/VCOM": [
+   "J40.24",
+   "C49.1"
+  ],
+  "/EPD_BUSY": [
+   "J40.9"
+  ],
+  "/EPD_RST": [
+   "J40.10"
+  ],
+  "/EPD_DC": [
+   "J40.11"
+  ],
+  "/EPD_CS": [
+   "J40.12"
+  ],
+  "/EPD_CLK": [
+   "J40.13"
+  ],
+  "/EPD_DIN": [
+   "J40.14"
+  ]
+ },
+ "ports": {
+  "+3V3": {
+   "net": "+3V3",
+   "kind": "power_in"
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground"
+  },
+  "/EPD_DIN": {
+   "net": "/EPD_DIN",
+   "kind": "data"
+  },
+  "/EPD_CLK": {
+   "net": "/EPD_CLK",
+   "kind": "data"
+  },
+  "/EPD_CS": {
+   "net": "/EPD_CS",
+   "kind": "data"
+  },
+  "/EPD_DC": {
+   "net": "/EPD_DC",
+   "kind": "data"
+  },
+  "/EPD_RST": {
+   "net": "/EPD_RST",
+   "kind": "data"
+  },
+  "/EPD_BUSY": {
+   "net": "/EPD_BUSY",
+   "kind": "data"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   68,
+   32
+  ],
+  "place": {
+   "J40": {
+    "at_mm": [
+     0,
+     0
+    ],
+    "rotation": 90,
+    "side": "back"
+   },
+   "L40": {
+    "at_mm": [
+     6.5,
+     -7
+    ],
+    "rotation": 90,
+    "side": "back"
+   },
+   "Q40": {
+    "at_mm": [
+     6.5,
+     -3.6
+    ],
+    "rotation": 0,
+    "side": "back"
+   },
+   "R40": {
+    "at_mm": [
+     6.5,
+     -1.6
+    ],
+    "rotation": 0,
+    "side": "back"
+   },
+   "R41": {
+    "at_mm": [
+     6.5,
+     0.2
+    ],
+    "rotation": 0,
+    "side": "back"
+   },
+   "C40": {
+    "at_mm": [
+     6.5,
+     3
+    ],
+    "rotation": 90,
+    "side": "back"
+   },
+   "C44": {
+    "at_mm": [
+     6.5,
+     6.5
+    ],
+    "rotation": 0,
+    "side": "back"
+   },
+   "D42": {
+    "at_mm": [
+     10.5,
+     -8
+    ],
+    "rotation": 90,
+    "side": "back"
+   },
+   "D40": {
+    "at_mm": [
+     10.5,
+     -3.2
+    ],
+    "rotation": 90,
+    "side": "back"
+   },
+   "D41": {
+    "at_mm": [
+     10.5,
+     1.6
+    ],
+    "rotation": 90,
+    "side": "back"
+   },
+   "C41": {
+    "at_mm": [
+     10.5,
+     6.4
+    ],
+    "rotation": 90,
+    "side": "back"
+   },
+   "C42": {
+    "at_mm": [
+     14,
+     -8
+    ],
+    "rotation": 0,
+    "side": "back"
+   },
+   "C43": {
+    "at_mm": [
+     14,
+     -5.5
+    ],
+    "rotation": 0,
+    "side": "back"
+   },
+   "C45": {
+    "at_mm": [
+     14,
+     -3
+    ],
+    "rotation": 0,
+    "side": "back"
+   },
+   "C46": {
+    "at_mm": [
+     14,
+     -0.5
+    ],
+    "rotation": 0,
+    "side": "back"
+   },
+   "C47": {
+    "at_mm": [
+     14,
+     2
+    ],
+    "rotation": 0,
+    "side": "back"
+   },
+   "C48": {
+    "at_mm": [
+     14,
+     4.5
+    ],
+    "rotation": 0,
+    "side": "back"
+   },
+   "C49": {
+    "at_mm": [
+     14,
+     7
+    ],
+    "rotation": 0,
+    "side": "back"
+   }
+  },
+  "traces": [],
+  "vias": [],
+  "rules": "All on the back. BS (pin 8) to GND: \"L 4-lines serial peripheral interface\" (epd154 3.5); TSCL, TSDA, VPP and NC open as the reference circuit."
+ },
+ "open_questions": [
+  "Hirose's FH12 drawing was not readable (403): the connector's fit to the 0.30 mm tail and which side its contacts face are not checked.",
+  "The tail drawn flat into the connector; the datasheet's tail has a bending area (meant to fold behind the panel).",
+  "Inductor part not chosen (10 µH, 1 A, wire-wound); a 1210 footprint stands in.",
+  "Datasheet active area 27.00 mm; Waveshare's manual page says 27.6 mm."
+ ]
+}
