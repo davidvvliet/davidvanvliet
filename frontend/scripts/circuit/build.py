@@ -22,7 +22,7 @@ def nice(title):
     out = [w if not w.isalpha() or w in ("LDO", "LED", "SWD") else w.lower() for w in words]
     return " ".join(out)[:1].upper() + " ".join(out)[1:]
 
-ROUTE_TRIES = 4
+ROUTE_TRIES = 8
 ROUTE_MARGIN_UM = 25  # extra clearance for the router (see README: "Routing")
 
 def kpy(*args):

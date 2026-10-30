@@ -1,0 +1,128 @@
+{
+ "name": "epaper_header",
+ "title": "E-paper screen",
+ "purpose": "8-pin header for a Waveshare 1.54\" e-paper module (200 x 200, SPI) on its cable",
+ "sources": [
+  {
+   "id": "waveshare_epd154",
+   "title": "Waveshare 1.54inch e-Paper Module manual (wiki)",
+   "url": "https://www.waveshare.com/wiki/1.54inch_e-Paper_Module_Manual",
+   "licence": "link and quotes only",
+   "read": "pin table, operating voltage, header pitch, resolution, SPI mode"
+  },
+  {
+   "id": "rp2040",
+   "title": "Raspberry Pi RP2040 datasheet",
+   "url": "https://datasheets.raspberrypi.com/rp2040/rp2040-datasheet.pdf",
+   "licence": "CC BY-ND 4.0: values cited",
+   "read": "GPIO function table (SPI0 on GPIO17/18/19)"
+  },
+  {
+   "id": "kicad",
+   "title": "KiCad 10 standard libraries (symbols, footprints, 3D models)",
+   "url": "https://gitlab.com/kicad/libraries",
+   "licence": "CC BY-SA 4.0 with design exception",
+   "read": "symbol pin numbers, footprint pads, 3D models"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "J34",
+   "value": "e-Paper",
+   "symbol": "Connector_Generic:Conn_01x08",
+   "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x08_P2.54mm_Vertical",
+   "source": "waveshare_epd154 (signals, pitch); kicad",
+   "quote": "\"The pitch of the 8-pin connectors on the e-Paper display hats is 0.1 inch (2.54 mm).\"; pins VCC, GND, DIN, CLK, CS, DC, RST, BUSY (the page's pin table, in its order)"
+  }
+ ],
+ "nets": {
+  "+3V3": [
+   "J34.1"
+  ],
+  "GND": [
+   "J34.2"
+  ],
+  "/EPD_DIN": [
+   "J34.3"
+  ],
+  "/EPD_CLK": [
+   "J34.4"
+  ],
+  "/EPD_CS": [
+   "J34.5"
+  ],
+  "/EPD_DC": [
+   "J34.6"
+  ],
+  "/EPD_RST": [
+   "J34.7"
+  ],
+  "/EPD_BUSY": [
+   "J34.8"
+  ]
+ },
+ "ports": {
+  "+3V3": {
+   "net": "+3V3",
+   "kind": "power_in",
+   "note": "\"3.3V / 5V\"; the panel runs at 3.3 V (waveshare_epd154); refresh power \"26.4mW (typ.)\""
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground"
+  },
+  "/EPD_DIN": {
+   "net": "/EPD_DIN",
+   "kind": "data",
+   "note": "SPI data in: RP2040 SPI0 TX (GPIO19)"
+  },
+  "/EPD_CLK": {
+   "net": "/EPD_CLK",
+   "kind": "data",
+   "note": "SPI clock: SPI0 SCK (GPIO18); \"SPI mode 0\""
+  },
+  "/EPD_CS": {
+   "net": "/EPD_CS",
+   "kind": "gpio",
+   "note": "active-low chip select: SPI0 CSn (GPIO17)"
+  },
+  "/EPD_DC": {
+   "net": "/EPD_DC",
+   "kind": "gpio",
+   "note": "low command, high data"
+  },
+  "/EPD_RST": {
+   "net": "/EPD_RST",
+   "kind": "gpio",
+   "note": "reset"
+  },
+  "/EPD_BUSY": {
+   "net": "/EPD_BUSY",
+   "kind": "gpio",
+   "note": "busy status from the panel: an input"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   20.5,
+   2.6
+  ],
+  "place": {
+   "J34": {
+    "at_mm": [
+     0,
+     0
+    ],
+    "rotation": 90,
+    "side": "front"
+   }
+  },
+  "traces": [],
+  "vias": [],
+  "rules": "Pin order is the wiki's pin table order; the module's cable plugs on by its labels."
+ },
+ "open_questions": [
+  "The module (48 x 33 mm driver board) sits on its cable off the board; no mounting for it yet.",
+  "The header's pin order follows the wiki's table, not a stated connector pin numbering: check the cable's labels when plugging in."
+ ]
+}

@@ -1,6 +1,6 @@
 {
  "title": "Air quality monitor",
- "purpose": "Measures CO2, VOC and NOx, and dust (PM1/PM2.5/PM10) in a room and shows them on a Qwiic I2C display; USB-C powered",
+ "purpose": "Measures CO2, VOC and NOx, and dust (PM1/PM2.5/PM10) in a room and shows them on an e-paper screen (or a Qwiic I2C display); USB-C powered",
  "source": {
   "title": "air-quality recipe",
   "url": "https://github.com/davidvvliet/davidvanvliet/tree/main/frontend/scripts/circuit/boards/air-quality",
@@ -10,7 +10,7 @@
  "board": {
   "size_mm": [
    88,
-   24
+   28
   ],
   "layers": 2,
   "rules": "templates/rules.kicad_pro",
@@ -57,7 +57,7 @@
    "block": "voc_sgp41",
    "at_mm": [
     47,
-    10.5
+    12.5
    ]
   },
   "qwiic": {
@@ -71,21 +71,28 @@
    "block": "ldo_3v3",
    "at_mm": [
     44,
-    18
+    22
    ]
   },
   "pm": {
    "block": "pm_pms5003",
    "at_mm": [
     70.5,
-    19.6
+    23.6
    ]
   },
   "co2": {
    "block": "co2_scd41",
    "at_mm": [
     81.5,
-    9
+    11
+   ]
+  },
+  "epd": {
+   "block": "epaper_header",
+   "at_mm": [
+    57,
+    2.4
    ]
   }
  },
@@ -105,7 +112,8 @@
    "led.+3V3",
    "pull.+3V3",
    "voc.+3V3",
-   "qwiic.+3V3"
+   "qwiic.+3V3",
+   "epd.+3V3"
   ],
   [
    "co2./VDD_CO2",
@@ -120,7 +128,8 @@
    "voc.GND",
    "qwiic.GND",
    "pm.GND",
-   "co2.GND"
+   "co2.GND",
+   "epd.GND"
   ],
   [
    "usb./USB_D+",
@@ -159,12 +168,37 @@
   [
    "pm./PM_RESET",
    "core./GPIO7"
+  ],
+  [
+   "epd./EPD_DIN",
+   "core./GPIO19"
+  ],
+  [
+   "epd./EPD_CLK",
+   "core./GPIO18"
+  ],
+  [
+   "epd./EPD_CS",
+   "core./GPIO17"
+  ],
+  [
+   "epd./EPD_DC",
+   "core./GPIO20"
+  ],
+  [
+   "epd./EPD_RST",
+   "core./GPIO21"
+  ],
+  [
+   "epd./EPD_BUSY",
+   "core./GPIO22"
   ]
  ],
  "open_questions": [
   "PMS5003 connector part from a blog post (Molex PicoBlade 53261-0871), not a maker document.",
   "No slit beside the CO2 sensor (the harness outline is a rectangle).",
   "Display not chosen (Qwiic, any I2C address but 0x59 and 0x62).",
-  "The SGP41 footprint is drawn from its datasheet's Figure 18."
+  "The SGP41 footprint is drawn from its datasheet's Figure 18.",
+  "E-paper module on a cable from an 8-pin header; the module itself isn't mounted on the board."
  ]
 }
