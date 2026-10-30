@@ -127,14 +127,15 @@ const FADED = 0.12; // opacity of the other parts while one is focused
 const HOVER_FADED = 0.35; // a faded part under the pointer
 const smooth = (t: number) => t * t * (3 - 2 * t);
 
-type Controls = { target: THREE.Vector3; update: () => void };
+type Controls = THREE.EventDispatcher<{ start: object }> & { target: THREE.Vector3; update: () => void };
 
 // Frames the model once it loads: camera on a fixed three-quarter line, as far as its
 // bounding sphere needs, orbiting the core's centre (the body, not the middle of a long
 // boom). Explodes on `exploded`: every part, or without explore only the spec's listed ones
 // ("viewer": {"explode": [...]}); the rest stay in place.
-// A clicked part (`focus`) stays as it is and every other part fades; the camera is left
-// alone, so it moves the same with or without a focus.
+// A clicked part (`focus`) gets the camera: it flies in keeping the current viewing direction
+// and centres on the part, and every other part fades. Any drag or scroll ends the flight, and
+// from then on the camera moves freely; clearing the focus only clears the fade.
 function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = true, focusable = NONE, explodable = NO_PARTS }: {
   url: string; exploded: boolean; focus: string | null; setFocus: (f: string | null) => void; explore?: boolean;
   focusable?: Focusable[]; explodable?: string[];
@@ -169,6 +170,8 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
     });
   }, [gltf.scene, gl]);
   const homeNear = useRef(0.01);
+  const homeDist = useRef(1);
+  const flight = useRef<{ dir: THREE.Vector3 } | null>(null);
 
   useEffect(() => {
     const sphere = new THREE.Box3().setFromObject(scene).getBoundingSphere(new THREE.Sphere());
@@ -177,11 +180,23 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
     camera.position.copy(centre).addScaledVector(new THREE.Vector3(0.6, 0.45, 0.66).normalize(), dist);
     camera.near = dist / 100;
     homeNear.current = camera.near;
+    homeDist.current = dist;
     camera.far = dist * 10;
     camera.updateProjectionMatrix();
     if (controls) { controls.target.copy(centre); controls.update(); }
     else camera.lookAt(centre);
   }, [scene, camera, controls, centre]);
+
+  // Focusing a part starts a flight to it; any drag or scroll ends it.
+  useEffect(() => {
+    flight.current = focus && controls ? { dir: camera.position.clone().sub(controls.target).normalize() } : null;
+  }, [focus]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (!controls) return;
+    const stop = () => { flight.current = null; };
+    controls.addEventListener("start", stop);
+    return () => controls.removeEventListener("start", stop);
+  }, [controls]);
 
   // A focused part that isn't in this build (renamed or removed) clears the focus.
   useEffect(() => { if (focus && !boxes.has(focus)) setFocus(null); }, [focus, boxes, setFocus]);
@@ -208,6 +223,30 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
     if (Math.abs(goal - t.current) < 1e-4) { t.current = goal; } else t.current += (goal - t.current) * Math.min(1, dt * 5);
     const k = smooth(t.current);
     for (const u of units) u.node.position.copy(u.rest).addScaledVector(u.local, explore || explodable.includes(u.group) ? k : 0);
+    if (controls && flight.current && focus && boxes.has(focus)) {
+      const box = boxes.get(focus)!;
+      // Where the part is now (it may be exploding), and far enough to see all of it.
+      const off = new THREE.Vector3();
+      for (const u of units) if (u.group === focus) off.copy(u.node.position).sub(u.rest).applyMatrix3(new THREE.Matrix3().setFromMatrix4(u.node.parent!.matrixWorld));
+      const goalTarget = box.getCenter(new THREE.Vector3()).add(off);
+      const fov = THREE.MathUtils.degToRad(camera.fov) * Math.min(1, camera.aspect);
+      const dist = Math.max(box.getSize(new THREE.Vector3()).length() * 0.65, 0.05) / Math.sin(fov / 2);
+      const goalPos = goalTarget.clone().addScaledVector(flight.current.dir, dist);
+      const a = 1 - Math.exp(-dt * 5);
+      camera.position.lerp(goalPos, a);
+      controls.target.lerp(goalTarget, a);
+      controls.update();
+      if (camera.position.distanceTo(goalPos) < dist * 0.002 && controls.target.distanceTo(goalTarget) < dist * 0.002) flight.current = null;
+    }
+    // The pivot stays a little ahead of the camera, so zooming keeps going instead of slowing to
+    // a stop at it (zoom heads for the cursor and takes the pivot along).
+    if (controls && !flight.current) {
+      const floor = homeDist.current * 0.03;
+      if (camera.position.distanceTo(controls.target) < floor) {
+        controls.target.copy(camera.position).add(camera.getWorldDirection(new THREE.Vector3()).multiplyScalar(floor));
+        controls.update();
+      }
+    }
     // Close up, the near plane comes in with the camera so small parts aren't clipped.
     if (controls) {
       const near = Math.min(homeNear.current, camera.position.distanceTo(controls.target) / 100);
@@ -407,7 +446,7 @@ export function Viewer({ probe, url, breakdown, stale, compact, onReady, focus: 
         <Suspense fallback={null}>
           <Model key={url} url={url} exploded={exploded} focus={focus} setFocus={setFocus} onLabel={setLabel} onReady={onReady} explore={explore} focusable={focusable} explodable={explodable} />
         </Suspense>
-        <OrbitControls makeDefault enableZoom={!compact} />
+        <OrbitControls makeDefault enableZoom={!compact} zoomToCursor />
       </Canvas>
     </ViewerBoundary>
   );
