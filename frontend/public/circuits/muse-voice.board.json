@@ -150,26 +150,6 @@
    ]
   },
   {
-   "name": "3.3 V regulator (600 mA)",
-   "parts": [
-    {
-     "ref": "C4",
-     "value": "1uF",
-     "package": "C_0402_1005Metric"
-    },
-    {
-     "ref": "C5",
-     "value": "1uF",
-     "package": "C_0402_1005Metric"
-    },
-    {
-     "ref": "U2",
-     "value": "AP2112K-3.3",
-     "package": "SOT-23-5"
-    }
-   ]
-  },
-  {
    "name": "Microphone",
    "parts": [
     {
@@ -186,6 +166,26 @@
      "ref": "U3",
      "value": "ICS-43434",
      "package": "InvenSense_ICS-43434-6_3.5x2.65mm"
+    }
+   ]
+  },
+  {
+   "name": "3.3 V regulator (600 mA)",
+   "parts": [
+    {
+     "ref": "C4",
+     "value": "1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C5",
+     "value": "1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "U2",
+     "value": "AP2112K-3.3",
+     "package": "SOT-23-5"
     }
    ]
   },
