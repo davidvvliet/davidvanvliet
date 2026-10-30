@@ -38,7 +38,7 @@ def vega(size=240, grid=80):
             k = min(len(shades) - 1, int(d * len(shades) + ((x + y) % 2) * 0.5))
             c = tuple(round(v * min(1, a * 1.15)) for v in shades[k])         # edge pixels part-way to black
             px.putpixel((x, y), c); px.putpixel((grid - 1 - x, y), c)
-    ey = round(cy / s) - 1                            # the eyes at the star's middle
+    ey = round(cy / s) - 7                            # the eyes level with the side points
     for ex in (half - 5, half + 3):                   # equally either side of it
         for dx in (0, 1):
             for dy in (0, 1, 2):
