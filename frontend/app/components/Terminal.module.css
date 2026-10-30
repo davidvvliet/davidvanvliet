@@ -92,6 +92,10 @@
   color: #00ff00;
 }
 
+.flow {
+  min-width: 0;
+}
+
 .dim {
   color: rgba(0, 255, 0, 0.6);
 }

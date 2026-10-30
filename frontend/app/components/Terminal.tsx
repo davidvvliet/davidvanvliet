@@ -462,7 +462,9 @@ export default function Terminal({ mobile = false, onFocusChange }: { mobile?: b
                 <span className={styles.dim}>{r(line.text.split("__DIM__")[1])}</span>
               </>
             ) : (
-              r(line.text)
+              // One span, so text and clickable commands flow as one paragraph
+              // instead of each becoming a column of the flex row.
+              <span className={styles.flow}>{r(line.text)}</span>
             )}
           </div>
         )
