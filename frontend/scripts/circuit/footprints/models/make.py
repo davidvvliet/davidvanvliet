@@ -119,5 +119,25 @@ def epd154():
     prism(m, "0.86 0.86 0.83", [(13.5, a1 + 27), (-13.5, a1 + 27), (-13.5, a1), (13.5, a1)], 1.05, 1.06)  # active area
     m.write(os.path.join(HERE, "Waveshare_EPD_1.54in.wrl"), "Waveshare 1.54inch e-Paper V2 panel (datasheet 1.4, p5)")
 
+def zjy128():
+    """Zhongjingyuan ZJY128R-IG01 1.28" round TFT, drawing ZJY128R-IG01 (2019-07-10, in Elecrow's 1.28 inch round LCD
+    datasheet, p4): glass "35.2±0.15 (LCD)" round, "37.24±0.15 (LCD)" long to its flat at the FPC; backlight 35.60 x
+    38.10; "1.50±0.1" thick; "32.40 (LCD A.A)" centred, 1.60 inside the glass; FPC 11.4 wide, "12.24±0.3" past the
+    glass, 0.13 thick, 12 contacts at 0.7 pitch. Folded under the panel as the drawing's bent view ("0.50Max"), its
+    contacts on the board's pads at the origin. The neck's width (14) is measured off the drawing, scaled by the
+    35.2 glass; the glass stands 0.35 above the board on the fold (estimated)."""
+    m = Mesh()
+    edge, cy, r = 10.7, -8.94, 17.6          # model y is up: the panel's flat edge at +10.7, its centre at -8.94
+    # glass, polariser and backlight: the disc and the neck to the flat as two convex solids (VRML draws faces convex)
+    prism(m, "0.08 0.08 0.09", [(r * math.cos(2 * math.pi * i / 64), cy + r * math.sin(2 * math.pi * i / 64)) for i in range(64)],
+          0.35, 1.85, shine=0.4)
+    y0 = cy + math.sqrt(r * r - 7 * 7)
+    prism(m, "0.08 0.08 0.09", [(7, edge), (-7, edge), (-7, y0 - 1), (7, y0 - 1)], 0.35, 1.849, shine=0.4)
+    disc(m, "0.02 0.02 0.03", 0, cy, 32.4, 1.86, n=64)                    # display area
+    prism(m, "0.78 0.62 0.25", [(5.7, edge), (-5.7, edge), (-5.7, -1.0), (5.7, -1.0)], 0, 0.13, shine=0.3)  # FPC under the glass
+    prism(m, "0.78 0.62 0.25", [(5.7, edge + 0.3), (-5.7, edge + 0.3), (-5.7, edge), (5.7, edge)], 0, 1.0, shine=0.3)  # its fold
+    prism(m, "0.85 0.70 0.30", [(4.0, 1.0), (-4.0, 1.0), (-4.0, -1.0), (4.0, -1.0)], 0.13, 0.14, shine=0.6)  # contacts
+    m.write(os.path.join(HERE, "ZJY128R-IG01.wrl"), "Zhongjingyuan ZJY128R-IG01 1.28in round TFT (drawing ZJY128R-IG01, p4)")
+
 if __name__ == "__main__":
-    scd4x(); sgp41(); epd154()
+    scd4x(); sgp41(); epd154(); zjy128()

@@ -1,6 +1,6 @@
 {
  "title": "Muse voice gadget",
- "purpose": "An ESP32-S3 voice assistant for the Muse Gadgets SDK: round 1.28\" screen, I2S microphone and speaker amplifier, talk button; USB-C powered",
+ "purpose": "An ESP32-S3 voice assistant for the Muse Gadgets SDK: round 1.28\" screen on the back, I2S microphone and speaker amplifier, talk button; USB-C powered",
  "source": {
   "title": "muse-voice recipe",
   "url": "https://github.com/davidvvliet/davidvanvliet/tree/main/frontend/scripts/circuit/boards/muse-voice",
@@ -42,8 +42,8 @@
   "mic": {
    "block": "mic_ics43434",
    "at_mm": [
-    29,
-    31
+    6,
+    41
    ]
   },
   "amp": {
@@ -54,10 +54,10 @@
    ]
   },
   "lcd": {
-   "block": "lcd_round",
+   "block": "lcd_round_panel",
    "at_mm": [
-    9,
-    42.5
+    22,
+    32
    ]
   },
   "led": {
@@ -146,6 +146,7 @@
   "Our own board_*.c for the Muse SDK is still to write: screen on IO9-IO14 (DIN, CLK, CS, DC, RST, BL), I2S BCLK IO42, WS IO39, amp IO41, mic IO40.",
   "GPIO3 strapping floats; no ESD diode at the USB input.",
   "Amplifier footprint (KiCad EP1.6) not compared with Maxim's land pattern 90-0031.",
-  "Display cable wire order; speaker not chosen; USB 5 V current budget for amp + ESP32 not checked."
+  "Speaker not chosen; USB 5 V current budget for amp + ESP32 + backlight not checked.",
+  "Display: see the round display block's questions; the mic's sound hole is outside the panel."
  ]
 }
