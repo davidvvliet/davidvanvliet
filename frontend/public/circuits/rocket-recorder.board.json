@@ -265,26 +265,6 @@
    ]
   },
   {
-   "name": "Barometer",
-   "parts": [
-    {
-     "ref": "C22",
-     "value": "100nF",
-     "package": "C_0402_1005Metric"
-    },
-    {
-     "ref": "C23",
-     "value": "100nF",
-     "package": "C_0402_1005Metric"
-    },
-    {
-     "ref": "U21",
-     "value": "BMP280",
-     "package": "Bosch_LGA-8_2x2.5mm_P0.65mm_ClockwisePinNumbering"
-    }
-   ]
-  },
-  {
    "name": "IMU",
    "parts": [
     {
@@ -305,17 +285,22 @@
    ]
   },
   {
-   "name": "I2C pull-ups",
+   "name": "Barometer",
    "parts": [
     {
-     "ref": "R20",
-     "value": "2.2k",
-     "package": "R_0402_1005Metric"
+     "ref": "C22",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
     },
     {
-     "ref": "R21",
-     "value": "2.2k",
-     "package": "R_0402_1005Metric"
+     "ref": "C23",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "U21",
+     "value": "BMP280",
+     "package": "Bosch_LGA-8_2x2.5mm_P0.65mm_ClockwisePinNumbering"
     }
    ]
   },
@@ -330,6 +315,21 @@
     {
      "ref": "R8",
      "value": "470R",
+     "package": "R_0402_1005Metric"
+    }
+   ]
+  },
+  {
+   "name": "I2C pull-ups",
+   "parts": [
+    {
+     "ref": "R20",
+     "value": "2.2k",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "R21",
+     "value": "2.2k",
      "package": "R_0402_1005Metric"
     }
    ]
