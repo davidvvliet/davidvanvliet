@@ -27,7 +27,8 @@ blocks/<block>.json the building-block library (templates/block.json): usb_c_pow
                     lipo_charger, imu_bmi088, baro_bmp280, i2c_pullups, co2_scd41, voc_sgp41, pm_pms5003, qwiic
 footprints/         footprints KiCad's library doesn't have (mitayi.pretty: the Mitayi Pico's own, MIT; air.pretty: drawn
                     from datasheets, or KiCad's with our own model)
-footprints/models/  3D models for parts KiCad has none of: datasheet-sized boxes (VRML, 1 unit = 2.54 mm), referenced
+footprints/models/  3D models for parts KiCad has none of, from the makers' package drawings (make.py writes them; VRML,
+                    1 unit = 2.54 mm), referenced
                     as ${CIRCUIT_3DMODELS}/<name>.wrl
 symbols/            schematic symbols KiCad doesn't have (air.kicad_sym: SGP41)
 lib/tools.py        where each tool is

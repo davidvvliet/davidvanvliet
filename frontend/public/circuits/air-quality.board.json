@@ -265,21 +265,6 @@
    ]
   },
   {
-   "name": "LED",
-   "parts": [
-    {
-     "ref": "D3",
-     "value": "RED",
-     "package": "LED_0603_1608Metric"
-    },
-    {
-     "ref": "R8",
-     "value": "470R",
-     "package": "R_0402_1005Metric"
-    }
-   ]
-  },
-  {
    "name": "I2C pull-ups",
    "parts": [
     {
@@ -295,6 +280,21 @@
    ]
   },
   {
+   "name": "LED",
+   "parts": [
+    {
+     "ref": "D3",
+     "value": "RED",
+     "package": "LED_0603_1608Metric"
+    },
+    {
+     "ref": "R8",
+     "value": "470R",
+     "package": "R_0402_1005Metric"
+    }
+   ]
+  },
+  {
    "name": "Display connector",
    "parts": [
     {
@@ -305,22 +305,22 @@
    ]
   },
   {
-   "name": "Dust sensor",
-   "parts": [
-    {
-     "ref": "J32",
-     "value": "PMS5003",
-     "package": "Molex_PicoBlade_53261-0871_1x08-1MP_P1.25mm_Horizontal"
-    }
-   ]
-  },
-  {
    "name": "CO2 sensor",
    "parts": [
     {
      "ref": "U30",
      "value": "SCD41",
      "package": "Sensirion_SCD4x-1EP_10.1x10.1mm_P1.25mm_EP4.8x4.8mm"
+    }
+   ]
+  },
+  {
+   "name": "Dust sensor",
+   "parts": [
+    {
+     "ref": "J32",
+     "value": "PMS5003",
+     "package": "Molex_PicoBlade_53261-0871_1x08-1MP_P1.25mm_Horizontal"
     }
    ]
   }
