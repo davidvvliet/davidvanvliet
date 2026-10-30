@@ -19,13 +19,13 @@ def vega(size=240, grid=80):
     points stay smooth, its left half mirrored so both sides match."""
     s = 16
     big = grid * s
-    pts = star(0, 0, 1, 0.58)
+    pts = star(0, 0, 1, 0.46)
     top, bot = -1, max(y for _, y in pts)            # centred on its own height, not its centre
     r = big * 0.47
     cy = big / 2 - (top + bot) / 2 * r
     mask = Image.new("L", (big, big), 0)
     ImageDraw.Draw(mask).polygon([(big / 2 + x * r, cy + y * r) for x, y in pts], fill=255)
-    mask = mask.filter(ImageFilter.GaussianBlur(big * 0.03)).point(lambda v: 255 if v > 150 else 0)  # equal round tips
+    mask = mask.filter(ImageFilter.GaussianBlur(big * 0.01)).point(lambda v: 255 if v > 150 else 0)  # equal round tips
     mask = mask.resize((grid, grid), Image.BOX)       # coverage per pixel
     shades = [(232, 240, 252), (214, 226, 248), (196, 212, 242), (178, 196, 234), (158, 178, 222), (136, 156, 204)]
     px = Image.new("RGB", (grid, grid), (0, 0, 0))

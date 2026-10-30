@@ -150,26 +150,6 @@
    ]
   },
   {
-   "name": "3.3 V regulator (600 mA)",
-   "parts": [
-    {
-     "ref": "C4",
-     "value": "1uF",
-     "package": "C_0402_1005Metric"
-    },
-    {
-     "ref": "C5",
-     "value": "1uF",
-     "package": "C_0402_1005Metric"
-    },
-    {
-     "ref": "U2",
-     "value": "AP2112K-3.3",
-     "package": "SOT-23-5"
-    }
-   ]
-  },
-  {
    "name": "Microphone",
    "parts": [
     {
@@ -190,17 +170,22 @@
    ]
   },
   {
-   "name": "USB ESD protection",
+   "name": "3.3 V regulator (600 mA)",
    "parts": [
     {
-     "ref": "C10",
-     "value": "0.1uF",
+     "ref": "C4",
+     "value": "1uF",
      "package": "C_0402_1005Metric"
     },
     {
-     "ref": "U6",
-     "value": "TPD3E001DRLR",
-     "package": "SOT-553"
+     "ref": "C5",
+     "value": "1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "U2",
+     "value": "AP2112K-3.3",
+     "package": "SOT-23-5"
     }
    ]
   },
@@ -216,6 +201,21 @@
      "ref": "R11",
      "value": "470R",
      "package": "R_0402_1005Metric"
+    }
+   ]
+  },
+  {
+   "name": "USB ESD protection",
+   "parts": [
+    {
+     "ref": "C10",
+     "value": "0.1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "U6",
+     "value": "TPD3E001DRLR",
+     "package": "SOT-553"
     }
    ]
   }
