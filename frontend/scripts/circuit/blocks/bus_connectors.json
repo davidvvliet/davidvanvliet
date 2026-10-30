@@ -1,0 +1,111 @@
+{
+ "name": "bus_connectors",
+ "title": "Bus connectors",
+ "purpose": "Spacecraft bus: 5 V power on a JST XH 2-pin (3 A) and RS-485 on a JST GH 6-pin",
+ "sources": [
+  {
+   "id": "jstxh",
+   "title": "JST XH connector catalogue page (eXH.pdf)",
+   "url": "https://www.jst-mfg.com/product/pdf/eng/eXH.pdf",
+   "licence": "link and quotes only",
+   "read": "ratings and the B2B-XH-A part table"
+  },
+  {
+   "id": "jstgh",
+   "title": "JST GH connector catalogue page (eGH.pdf)",
+   "url": "https://www.jst-mfg.com/product/pdf/eng/eGH.pdf",
+   "licence": "link and quotes only",
+   "read": "ratings and the SM06B-GHS-TB part table"
+  },
+  {
+   "id": "ds009",
+   "title": "Pixhawk Connector Standard DS-009",
+   "url": "https://github.com/pixhawk/Pixhawk-Standards",
+   "licence": "link and quotes only",
+   "read": "p4 connector series, p5 serial port pinout"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "J1",
+   "value": "XH 2-pin",
+   "symbol": "Connector_Generic:Conn_01x02",
+   "footprint": "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical",
+   "source": "jstxh",
+   "quote": "\"Current rating: 3 A AC/DC（AWG #22）\", \"2.5 mm pitch\"; part table \"2 B2B-XH-A\". Pin 1 5 V, pin 2 GND (our assignment)"
+  },
+  {
+   "ref": "J2",
+   "value": "GH 6-pin",
+   "symbol": "Connector_Generic_MountingPin:Conn_01x06_MountingPin",
+   "footprint": "Connector_JST:JST_GH_SM06B-GHS-TB_1x06-1MP_P1.25mm_Horizontal",
+   "source": "jstgh; ds009, p4-5",
+   "quote": "jstgh: \"Current rating: 1.0 A AC/DC（AWG #26）\", part \"SM06B-GHS-TB\"; ds009: \"It uses the JST GH series which offers a latch lock mechanism at small size\", serial pinout 1 VCC +5V, 2 TX, 3 RX, 4 CTS, 5 RTS, 6 GND. Ours (no RS-485 pinout in DS-009): 1 unused, 2 A, 3 B, 4-5 unused, 6 GND"
+  }
+ ],
+ "nets": {
+  "/VBUS": [
+   "J1.1"
+  ],
+  "GND": [
+   "J1.2",
+   "J2.6"
+  ],
+  "/RS485_A": [
+   "J2.2"
+  ],
+  "/RS485_B": [
+   "J2.3"
+  ]
+ },
+ "ports": {
+  "/VBUS": {
+   "net": "/VBUS",
+   "kind": "power_out",
+   "note": "5 V in from the bus"
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground"
+  },
+  "/RS485_A": {
+   "net": "/RS485_A",
+   "kind": "data"
+  },
+  "/RS485_B": {
+   "net": "/RS485_B",
+   "kind": "data"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   23,
+   7
+  ],
+  "place": {
+   "J1": {
+    "at_mm": [
+     3,
+     3.0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "J2": {
+    "at_mm": [
+     17,
+     3.7
+    ],
+    "rotation": 0,
+    "side": "front"
+   }
+  },
+  "traces": [],
+  "vias": [],
+  "rules": "Both at the bottom edge: the GH's opening (the +y side of KiCad's footprint) faces out; the XH is vertical (wire from above)."
+ },
+ "open_questions": [
+  "The GH's 1.0 A per pin is why power has its own XH connector.",
+  "The GH pin assignment is ours: DS-009 defines no RS-485 port. A and B sit on DS-009's TX/RX positions, pin 1 (+5 V there) is left unconnected so a Pixhawk cable can't feed 5 V into the bus lines."
+ ]
+}

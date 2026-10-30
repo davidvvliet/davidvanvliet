@@ -1,0 +1,141 @@
+{
+ "name": "rs485_thvd1410",
+ "title": "RS-485 transceiver",
+ "purpose": "Half-duplex RS-485 link to the flight computer on the Pi's UART (THVD1410, 500 kbps)",
+ "sources": [
+  {
+   "id": "thvd",
+   "title": "TI THVD1410/THVD1450 3.3-V to 5-V RS-485 transceivers (SLLSEY3E)",
+   "url": "https://www.ti.com/lit/ds/symlink/thvd1450.pdf",
+   "licence": "TI datasheet; link and quotes only",
+   "read": "p1, p5 pin functions, p8-9 ratings, p18-22 description and termination, p28-29 supply and layout"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "U1",
+   "value": "THVD1410",
+   "symbol": "Interface_UART:THVD1450D",
+   "footprint": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
+   "source": "thvd, p5, p9, p18",
+   "quote": "D package (SOIC) pins: R 1, RE 2, DE 3, D 4, GND 5, A 6, B 7, VCC 8 (Pin Functions); \"VCC Supply voltage 3 … 5.5 V\"; \"two speed grades suitable for data transmission up to 500 kbps and 50 Mbps\" (THVD1410: 500 kbps). Symbol: KiCad's THVD1450D, the same pins"
+  },
+  {
+   "ref": "C1",
+   "value": "100nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "thvd, p28",
+   "quote": "\"each supply should be decoupled with a 100 nF ceramic capacitor located as close to the supply pins as possible\""
+  },
+  {
+   "ref": "RT1",
+   "value": "Z0 of the cable",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0603_1608Metric",
+   "source": "thvd, p22",
+   "quote": "\"each cable end is terminated with a termination resistor, RT, whose value matches the characteristic impedance, Z0\""
+  }
+ ],
+ "nets": {
+  "+3V3": [
+   "U1.8",
+   "C1.1"
+  ],
+  "GND": [
+   "U1.5",
+   "C1.2"
+  ],
+  "/UART_TX": [
+   "U1.4"
+  ],
+  "/UART_RX": [
+   "U1.1"
+  ],
+  "/RS485_DIR": [
+   "U1.2",
+   "U1.3"
+  ],
+  "/RS485_A": [
+   "U1.6",
+   "RT1.1"
+  ],
+  "/RS485_B": [
+   "U1.7",
+   "RT1.2"
+  ]
+ },
+ "ports": {
+  "+3V3": {
+   "net": "+3V3",
+   "kind": "power_in"
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground"
+  },
+  "/UART_TX": {
+   "net": "/UART_TX",
+   "kind": "data",
+   "note": "D, driver input"
+  },
+  "/UART_RX": {
+   "net": "/UART_RX",
+   "kind": "data",
+   "note": "R, receiver output"
+  },
+  "/RS485_DIR": {
+   "net": "/RS485_DIR",
+   "kind": "gpio",
+   "note": "DE and RE together: high transmits, low receives (DE \"active high\", RE \"active low\", p5)"
+  },
+  "/RS485_A": {
+   "net": "/RS485_A",
+   "kind": "data"
+  },
+  "/RS485_B": {
+   "net": "/RS485_B",
+   "kind": "data"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   9.2,
+   6.5
+  ],
+  "place": {
+   "U1": {
+    "at_mm": [
+     3.7,
+     3.7
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C1": {
+    "at_mm": [
+     6.2,
+     0.4
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "RT1": {
+    "at_mm": [
+     8.3,
+     3.7
+    ],
+    "rotation": 90,
+    "side": "front"
+   }
+  },
+  "traces": [],
+  "vias": [],
+  "rules": "thvd p29: decoupling \"100-nF to 220-nF\" close to VCC. A and B short and side by side to the connector."
+ },
+ "open_questions": [
+  "RT1's value is the cable's characteristic impedance (not chosen yet); fit it only if this end of the bus is a cable end.",
+  "No external failsafe biasing needed: \"The receiver output remains logic high under a bus-idle or bus-short conditions without the need for external failsafe biasing resistors\" (p19).",
+  "The THVD1410 is chosen over the THVD1450 for its 500 kbps speed grade; KiCad has no THVD1410 symbol, the THVD1450D's pins are the same (p5)."
+ ]
+}

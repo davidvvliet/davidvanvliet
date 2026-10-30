@@ -93,7 +93,8 @@ for inst, spec in recipe["blocks"].items():
         sch_parts.append({"ref": rename[p["ref"]], "value": p["value"], "footprint": p["footprint"], "symbol": p["symbol"],
                           "uuid": sym, "block": block_of[rename[p["ref"]]], "nets": pin_net,
                           "datasheet": f.GetField(pcbnew.FIELD_T_DATASHEET).GetText(),
-                          "pin_types": p.get("pin_types", {})})
+                          "pin_types": p.get("pin_types", {}),
+                          "in_bom": not f.IsExcludedFromBOM()})  # mounting holes and test points: as their footprints say
     for t in blk["layout"]["traces"]:
         tr = pcbnew.PCB_TRACK(board)
         tr.SetStart(pcbnew.VECTOR2I(mm(ox + t["from_mm"][0]), mm(oy + t["from_mm"][1])))
@@ -106,12 +107,22 @@ for inst, spec in recipe["blocks"].items():
         via.SetDrill(mm(v["drill_mm"])); via.SetWidth(mm(v["size_mm"]))
         via.SetNet(net(local(inst, v["net"]))); board.Add(via)
 
-# Outline: a rectangle on Edge.Cuts.
+# Outline: a rectangle on Edge.Cuts, its corners rounded by the recipe's "corner_radius_mm" (none: square).
 w, h = recipe["board"]["size_mm"]
-corners = [(0, 0), (w, 0), (w, h), (0, h)]
-for a, b in zip(corners, corners[1:] + corners[:1]):
-    s = pcbnew.PCB_SHAPE(board); s.SetShape(pcbnew.SHAPE_T_SEGMENT); s.SetLayer(pcbnew.Edge_Cuts); s.SetWidth(mm(0.05))
-    s.SetStart(pcbnew.VECTOR2I(mm(a[0]), mm(a[1]))); s.SetEnd(pcbnew.VECTOR2I(mm(b[0]), mm(b[1]))); board.Add(s)
+r = recipe["board"].get("corner_radius_mm", 0)
+k = r * (1 - 0.5 ** 0.5)  # an arc's midpoint lies this far in from its corner on both axes
+def edge(*pts):
+    s = pcbnew.PCB_SHAPE(board); s.SetLayer(pcbnew.Edge_Cuts); s.SetWidth(mm(0.05))
+    v = [pcbnew.VECTOR2I(mm(x), mm(y)) for x, y in pts]
+    if len(v) == 3: s.SetShape(pcbnew.SHAPE_T_ARC); s.SetArcGeometry(*v)
+    else: s.SetShape(pcbnew.SHAPE_T_SEGMENT); s.SetStart(v[0]); s.SetEnd(v[1])
+    board.Add(s)
+for side, arc in [(((r, 0), (w - r, 0)), ((w - r, 0), (w - k, k), (w, r))),
+                  (((w, r), (w, h - r)), ((w, h - r), (w - k, h - k), (w - r, h))),
+                  (((w - r, h), (r, h)), ((r, h), (k, h - k), (0, h - r))),
+                  (((0, h - r), (0, r)), ((0, r), (k, k), (r, 0)))]:
+    edge(*side)
+    if r: edge(*arc)
 
 pcb_file = os.path.join(out, "board.kicad_pcb")
 pcbnew.SaveBoard(pcb_file, board)

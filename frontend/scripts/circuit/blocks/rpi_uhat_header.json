@@ -1,0 +1,248 @@
+{
+ "name": "rpi_uhat_header",
+ "title": "Raspberry Pi 40-pin header (uHAT)",
+ "purpose": "Socket onto a Pi Zero's 40-pin header, and the uHAT mounting holes",
+ "sources": [
+  {
+   "id": "pinout",
+   "title": "Raspberry Pi GPIO pinout diagram (official documentation)",
+   "url": "https://www.raspberrypi.com/documentation/computers/images/GPIO-Pinout-Diagram-2.png",
+   "licence": "link only",
+   "read": "pin numbers of 3V3, 5V, GND, GPIO2/3, GPIO14/15, GPIO0/1, GPIO17/22/23/27"
+  },
+  {
+   "id": "zero2w",
+   "title": "Raspberry Pi Zero 2 W mechanical drawing and product brief",
+   "url": "https://datasheets.raspberrypi.com/rpizero2/raspberry-pi-zero-2-w-mechanical-drawing.pdf",
+   "licence": "link only",
+   "read": "drawing: holes 58 x 23 mm, header centre 29 mm from the left hole, pin 1 square pad at the left end, inner row"
+  },
+  {
+   "id": "uhatmech",
+   "title": "Raspberry Pi uHAT board mechanical drawing",
+   "url": "https://github.com/raspberrypi/hats/blob/master/uhat-board-mechanical.pdf",
+   "licence": "link only",
+   "read": "drawing: 65 x 30 mm, holes 3.5 mm from edges, 2.75 mm drill, 6.2 mm land"
+  },
+  {
+   "id": "kicadpizero",
+   "title": "KiCad footprint Module:Raspberry_Pi_Zero_Socketed_THT_FaceDown_MountingHoles",
+   "url": "https://gitlab.com/kicad/libraries/kicad-footprints",
+   "licence": "CC-BY-SA 4.0 with KiCad's library exception",
+   "read": "pad 1 at (0,0), pad 39 at (0, 48.26); holes 2.75 mm at x -1.27 / 21.73, y -4.87 / 53.13 (58 x 23 mm), the header centred between them"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "J1",
+   "value": "Pi GPIO 2x20",
+   "symbol": "Connector_Generic:Conn_02x20_Odd_Even",
+   "footprint": "Connector_PinSocket_2.54mm:PinSocket_2x20_P2.54mm_Vertical",
+   "source": "pinout; zero2w; kicadpizero",
+   "quote": "40-pin header, 2.54 mm pitch (kicadpizero: 2x20, 2.54mm pitch); pin numbers as the official pinout: 3V3 1/17, 5V 2/4, GND 6/9/14/20/25/30/34/39; socket on the board's underside, onto the Pi's header"
+  },
+  {
+   "ref": "H1",
+   "value": "M2.5",
+   "symbol": "Mechanical:MountingHole",
+   "footprint": "MountingHole:MountingHole_2.7mm_M2.5",
+   "source": "uhatmech",
+   "quote": "\"MOUNTING HOLES SHOULD BE DRILLED TO 2.75mm +/- 0.05mm\" (2.7 mm is the drawing's lower limit); \"MOUNTING HOLE LAND SHOULD BE MIN. 6.2mm\""
+  },
+  {
+   "ref": "H2",
+   "value": "M2.5",
+   "symbol": "Mechanical:MountingHole",
+   "footprint": "MountingHole:MountingHole_2.7mm_M2.5",
+   "source": "uhatmech",
+   "quote": "\"MOUNTING HOLES SHOULD BE DRILLED TO 2.75mm +/- 0.05mm\" (2.7 mm is the drawing's lower limit); \"MOUNTING HOLE LAND SHOULD BE MIN. 6.2mm\""
+  },
+  {
+   "ref": "H3",
+   "value": "M2.5",
+   "symbol": "Mechanical:MountingHole",
+   "footprint": "MountingHole:MountingHole_2.7mm_M2.5",
+   "source": "uhatmech",
+   "quote": "\"MOUNTING HOLES SHOULD BE DRILLED TO 2.75mm +/- 0.05mm\" (2.7 mm is the drawing's lower limit); \"MOUNTING HOLE LAND SHOULD BE MIN. 6.2mm\""
+  },
+  {
+   "ref": "H4",
+   "value": "M2.5",
+   "symbol": "Mechanical:MountingHole",
+   "footprint": "MountingHole:MountingHole_2.7mm_M2.5",
+   "source": "uhatmech",
+   "quote": "\"MOUNTING HOLES SHOULD BE DRILLED TO 2.75mm +/- 0.05mm\" (2.7 mm is the drawing's lower limit); \"MOUNTING HOLE LAND SHOULD BE MIN. 6.2mm\""
+  }
+ ],
+ "nets": {
+  "+5V": [
+   "J1.2",
+   "J1.4"
+  ],
+  "+3V3": [
+   "J1.1",
+   "J1.17"
+  ],
+  "GND": [
+   "J1.6",
+   "J1.9",
+   "J1.14",
+   "J1.20",
+   "J1.25",
+   "J1.30",
+   "J1.34",
+   "J1.39"
+  ],
+  "/I2C_SDA": [
+   "J1.3"
+  ],
+  "/I2C_SCL": [
+   "J1.5"
+  ],
+  "/UART_TX": [
+   "J1.8"
+  ],
+  "/UART_RX": [
+   "J1.10"
+  ],
+  "/ID_SD": [
+   "J1.27"
+  ],
+  "/ID_SC": [
+   "J1.28"
+  ],
+  "/GPIO17": [
+   "J1.11"
+  ],
+  "/GPIO27": [
+   "J1.13"
+  ],
+  "/GPIO22": [
+   "J1.15"
+  ],
+  "/GPIO23": [
+   "J1.16"
+  ]
+ },
+ "ports": {
+  "+5V": {
+   "net": "+5V",
+   "kind": "power_in",
+   "note": "pins 2 and 4; the board back-powers the Pi here (hatguide: \"supplying 5V through the GPIO header pins 2,4 and GND\")"
+  },
+  "+3V3": {
+   "net": "+3V3",
+   "kind": "power_out",
+   "note": "the Pi's 3.3 V, pins 1 and 17; never a source into it (hatguide: \"Under no circumstances should a power source be connected to the GPIO header 3.3V pins\")"
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground"
+  },
+  "/I2C_SDA": {
+   "net": "/I2C_SDA",
+   "kind": "data",
+   "note": "GPIO2, pin 3; the Pi has ~2 kΩ pull-ups (hatplus p4)"
+  },
+  "/I2C_SCL": {
+   "net": "/I2C_SCL",
+   "kind": "data",
+   "note": "GPIO3, pin 5"
+  },
+  "/UART_TX": {
+   "net": "/UART_TX",
+   "kind": "data",
+   "note": "GPIO14 TXD, pin 8"
+  },
+  "/UART_RX": {
+   "net": "/UART_RX",
+   "kind": "data",
+   "note": "GPIO15 RXD, pin 10"
+  },
+  "/ID_SD": {
+   "net": "/ID_SD",
+   "kind": "data",
+   "note": "GPIO0, pin 27: only the ID EEPROM (hatplus p5)"
+  },
+  "/ID_SC": {
+   "net": "/ID_SC",
+   "kind": "data",
+   "note": "GPIO1, pin 28"
+  },
+  "/GPIO17": {
+   "net": "/GPIO17",
+   "kind": "gpio",
+   "note": "pin 11"
+  },
+  "/GPIO27": {
+   "net": "/GPIO27",
+   "kind": "gpio",
+   "note": "pin 13"
+  },
+  "/GPIO22": {
+   "net": "/GPIO22",
+   "kind": "gpio",
+   "note": "pin 15"
+  },
+  "/GPIO23": {
+   "net": "/GPIO23",
+   "kind": "gpio",
+   "note": "pin 16"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   65,
+   30
+  ],
+  "place": {
+   "J1": {
+    "at_mm": [
+     8.37,
+     4.77
+    ],
+    "rotation": 270,
+    "side": "back"
+   },
+   "H1": {
+    "at_mm": [
+     3.5,
+     3.5
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "H2": {
+    "at_mm": [
+     61.5,
+     3.5
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "H3": {
+    "at_mm": [
+     3.5,
+     26.5
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "H4": {
+    "at_mm": [
+     61.5,
+     26.5
+    ],
+    "rotation": 0,
+    "side": "front"
+   }
+  },
+  "traces": [],
+  "vias": [],
+  "rules": "uhatmech: board 65 x 30 mm, 3 mm corner radius, holes 3.5 mm from the edges (58 x 23 mm); zero2w: header centred 29 mm from the left hole (x 32.5), its rows either side of the holes' line (y 3.5), pin 1 at the left end on the inner row. J1 is placed so pin 1 lands at (8.37, 4.77): 32.5 - 24.13 (half of pin 1 to pin 39, 48.26 mm, kicadpizero)."
+ },
+ "open_questions": [
+  "The pin 1 position and orientation after the back-side flip must be checked on the generated board (pad 1 at x 8.37, y 4.77; pad 2 at y 2.23).",
+  "uhatmech wants the header 30.5 mm board height with an SMT header, 30 mm otherwise; this is a through-hole socket: 30 mm."
+ ]
+}

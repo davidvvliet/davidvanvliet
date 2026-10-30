@@ -1,0 +1,85 @@
+{
+ "name": "led_gpio",
+ "title": "Status LED (GPIO)",
+ "purpose": "Status LED switched by a Pi GPIO pin (high = on)",
+ "sources": [
+  {
+   "id": "led",
+   "title": "the harness's led block (Mitayi-Pico-D1, CIRCUITSTATE, MIT)",
+   "url": "https://github.com/CIRCUITSTATE/Mitayi-Pico-RP2040",
+   "licence": "MIT",
+   "read": "LED and resistor values"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "D1",
+   "value": "RED",
+   "symbol": "Device:LED",
+   "footprint": "LED_SMD:LED_0603_1608Metric",
+   "source": "led",
+   "quote": "the led block's LED (Mitayi D3)"
+  },
+  {
+   "ref": "R1",
+   "value": "470R",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "led",
+   "quote": "the led block's 470 Ω (Mitayi R8)"
+  }
+ ],
+ "nets": {
+  "/LED": [
+   "D1.2"
+  ],
+  "Net-(D1-K)": [
+   "D1.1",
+   "R1.2"
+  ],
+  "GND": [
+   "R1.1"
+  ]
+ },
+ "ports": {
+  "/LED": {
+   "net": "/LED",
+   "kind": "gpio",
+   "note": "GPIO drives the anode"
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   5.2,
+   1
+  ],
+  "place": {
+   "D1": {
+    "at_mm": [
+     1.225,
+     0.475
+    ],
+    "rotation": 180,
+    "side": "front"
+   },
+   "R1": {
+    "at_mm": [
+     4.405,
+     0.505
+    ],
+    "rotation": 180,
+    "side": "front"
+   }
+  },
+  "traces": [],
+  "vias": [],
+  "rules": ""
+ },
+ "open_questions": [
+  "The Pi GPIO's drive current limit is not read yet; 470 Ω from 3.3 V keeps the LED current a few mA (forward voltage unread, as in the led block)."
+ ]
+}

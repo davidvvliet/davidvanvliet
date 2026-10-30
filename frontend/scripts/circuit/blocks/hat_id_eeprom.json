@@ -1,0 +1,190 @@
+{
+ "name": "hat_id_eeprom",
+ "title": "HAT ID EEPROM",
+ "purpose": "24LC32A on the Pi's ID pins, as the HAT+ spec asks (address 0x50, write-protected by default)",
+ "sources": [
+  {
+   "id": "hatplus",
+   "title": "Raspberry Pi HAT+ Specification",
+   "url": "https://datasheets.raspberrypi.com/hat/hat-plus-specification.pdf",
+   "licence": "Raspberry Pi Ltd documentation; link and quotes only",
+   "read": "p4 (GPIO2/3 pull-ups), p5 (ID pins), p6-7 (ID EEPROM), p12-13 (power, mechanical)"
+  },
+  {
+   "id": "hatguide",
+   "title": "raspberrypi/hats: designguide.md and README.md",
+   "url": "https://github.com/raspberrypi/hats",
+   "licence": "Raspberry Pi documentation (repository marked deprecated); link and quotes only",
+   "read": "back-powering, ZVD, EEPROM address"
+  },
+  {
+   "id": "m24lc32a",
+   "title": "Microchip 24AA32A/24LC32A 32K I2C Serial EEPROM (DS21713M)",
+   "url": "https://ww1.microchip.com/downloads/en/DeviceDoc/21713M.pdf",
+   "licence": "Microchip datasheet; link and quotes only",
+   "read": "p1 features and pinout, section 2.4 WP, package codes"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "U1",
+   "value": "24LC32A",
+   "symbol": "Memory_EEPROM:24LC32",
+   "footprint": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
+   "source": "m24lc32a, p1; hatplus, p7",
+   "quote": "\"32K I2C Serial EEPROM\", \"24LC32A 2.5-5.5\" V; SOIC pins A0 1, A1 2, A2 3, VSS 4, SDA 5, SCL 6, WP 7, VCC 8 (\"VSS 4 5 SDA\"); \"SN = Plastic SOIC (3.90 mm body), 8-lead\". hatplus p7: \"Use a 24Cxx 3.3V I2C EEPROM\", \"Use 16-bit addressable EEPROM\", \"Use EEPROM with a write protect (WP) pin that protects the entire device memory\"; m24lc32a 2.4: WP \"If tied to VCC, write operations are inhibited but read operations are not affected\""
+  },
+  {
+   "ref": "C1",
+   "value": "100nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "hatplus (EEPROM example circuit)",
+   "quote": "the spec's example circuit decouples the EEPROM's 3V3 with 100n"
+  },
+  {
+   "ref": "R1",
+   "value": "3.9k",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "hatplus, p12",
+   "quote": "\"a suitable ID EEPROM attached to the ID_* pins, using 3.9KΩ pull-ups to 3.3V\""
+  },
+  {
+   "ref": "R2",
+   "value": "3.9k",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "hatplus, p12",
+   "quote": "\"using 3.9KΩ pull-ups to 3.3V\""
+  },
+  {
+   "ref": "R3",
+   "value": "1k",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "hatplus, p7",
+   "quote": "\"connect the EEPROM write protect pin to a test point on the board pulled-up to 3.3V with a 1KΩ resistor\""
+  },
+  {
+   "ref": "TP1",
+   "value": "WP",
+   "symbol": "Connector:TestPoint",
+   "footprint": "TestPoint:TestPoint_Pad_D1.0mm",
+   "source": "hatplus, p7",
+   "quote": "\"connect the EEPROM write protect pin to a test point\" (ground it to program the EEPROM)"
+  }
+ ],
+ "nets": {
+  "+3V3": [
+   "U1.8",
+   "C1.1",
+   "R1.1",
+   "R2.1",
+   "R3.1"
+  ],
+  "GND": [
+   "U1.1",
+   "U1.2",
+   "U1.3",
+   "U1.4",
+   "C1.2"
+  ],
+  "/ID_SD": [
+   "U1.5",
+   "R1.2"
+  ],
+  "/ID_SC": [
+   "U1.6",
+   "R2.2"
+  ],
+  "/ID_WP": [
+   "U1.7",
+   "R3.2",
+   "TP1.1"
+  ]
+ },
+ "ports": {
+  "+3V3": {
+   "net": "+3V3",
+   "kind": "power_in"
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground"
+  },
+  "/ID_SD": {
+   "net": "/ID_SD",
+   "kind": "data",
+   "note": "GPIO0 (ID_SD)"
+  },
+  "/ID_SC": {
+   "net": "/ID_SC",
+   "kind": "data",
+   "note": "GPIO1 (ID_SC)"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   11,
+   7
+  ],
+  "place": {
+   "U1": {
+    "at_mm": [
+     3.7,
+     4.0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C1": {
+    "at_mm": [
+     6.2,
+     0.5
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "R1": {
+    "at_mm": [
+     8.4,
+     2.0
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "R2": {
+    "at_mm": [
+     9.5,
+     2.0
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "R3": {
+    "at_mm": [
+     8.4,
+     5.2
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "TP1": {
+    "at_mm": [
+     9.9,
+     5.4
+    ],
+    "rotation": 0,
+    "side": "front"
+   }
+  },
+  "traces": [],
+  "vias": [],
+  "rules": "hatguide: \"Address pins … should be set to make sure the EEPROM I2C address is 0x50. This usually means tying them all to zero.\" C1 next to VCC."
+ },
+ "open_questions": [
+  "The spec recommends onsemi's CAT24C32 (\"This device has an internal pull-down, hence the stiff (1KΩ) pull-up\"); its datasheet was blocked. The 24LC32A is used instead: WP whole-array and 16-bit addressing are read in its datasheet; \"no clock stretching\" is not stated there either way.",
+  "An ID EEPROM is recommended, not required, for a Zero-size (uHAT) board (hatguide README: \"we strongly encourage this\")."
+ ]
+}

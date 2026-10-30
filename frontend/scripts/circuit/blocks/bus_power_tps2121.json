@@ -1,0 +1,276 @@
+{
+ "name": "bus_power_tps2121",
+ "title": "Bus power into the Pi",
+ "purpose": "5 V from the spacecraft bus to the Pi's 5 V pins through a TPS2121 (reverse current blocking, current limit), as the HAT guide's back-power diode",
+ "sources": [
+  {
+   "id": "tps2121",
+   "title": "TI TPS2120/TPS2121 priority power mux (SLVSEA3F)",
+   "url": "https://www.ti.com/lit/ds/symlink/tps2121.pdf",
+   "licence": "TI datasheet; link and quotes only",
+   "read": "p1, p4-5 pin functions, electrical characteristics (ILM), 9.3.2 current limit, 10.2 design example (CSS), 11 power supply, 12 layout"
+  },
+  {
+   "id": "hatguide",
+   "title": "raspberrypi/hats: designguide.md and README.md",
+   "url": "https://github.com/raspberrypi/hats",
+   "licence": "Raspberry Pi documentation (repository marked deprecated); link and quotes only",
+   "read": "back-powering, ZVD, EEPROM address"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "U1",
+   "value": "TPS2121",
+   "symbol": "startracker:TPS2121",
+   "footprint": "startracker:Texas_VQFN-HR-12_2x2.5mm_P0.5mm",
+   "source": "tps2121, p1, p4-5",
+   "quote": "\"TPS2121 VQFN-HR (12) 56 mΩ 4.5 A\"; pins OUT 1, 8; IN2 2; CP2 3; OV2 4; OV1 5; PR1 6; IN1 7; ST 9; ILIM 10; SS 11; GND 12; \"FAST REVERSE CURRENT BLOCKING (RCB)\". hatguide: \"Implement a duplicate power safety diode before the HAT 5V net\"; \"the Raspberry Pi 3B+, 4B, Zero and ZeroW **do not** include an input ZVD\"; footprint: KiCad's Texas_VQFN-HR-12_2x2.5mm_P0.5mm with our 3D model (KiCad has none), from TI's RUX0012A outline",
+   "pin_types": {
+    "9": "passive"
+   },
+   "pin_types_why": "tps2121 p5: ST \"Status output indicating which channel is selected. Connect to GND if not required.\"; 9.3: \"If this feature is not required, the ST pin can be connected to GND.\" The electrical table lists an ST pull-up resistance (RST), so grounding it is the datasheet's own use, not an output fighting ground."
+  },
+  {
+   "ref": "R1",
+   "value": "30.1k",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "tps2121, eq. 2 and ILM table",
+   "quote": "\"ILM = 65.2 / RILM^0.861\" (RILM in kΩ, 18-100 kΩ): 30.1 kΩ gives 3.5 A; table: \"RILM = 29.8kΩ … 3 3.5 4 A\". Above the guide's \"supply 5V at 2.5A\", within the XH connector's 3 A"
+  },
+  {
+   "ref": "C1",
+   "value": "100nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "tps2121, 10.2",
+   "quote": "\"a CSS capacitance of 100 nF will provide a slew rate of 780V/S (typical)\", limiting inrush \"below 100 mA in a typical application\""
+  },
+  {
+   "ref": "C2",
+   "value": "10uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0805_2012Metric",
+   "source": "tps2121, 11",
+   "quote": "\"Bypass capacitors on these pins should be placed as close to the device as possible. Low ESR ceramic capacitors with X5R or X7R dielectric\"; \"where there are long cables … a large capacitance can be used near the input\". Value estimated: the datasheet gives none"
+  },
+  {
+   "ref": "C3",
+   "value": "10uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0805_2012Metric",
+   "source": "tps2121, 11",
+   "quote": "\"To avoid output voltage drop, the capacitance on OUT can be increased\". Value estimated: the datasheet gives none"
+  }
+ ],
+ "nets": {
+  "/VBUS": [
+   "U1.7",
+   "U1.2",
+   "C2.1"
+  ],
+  "+5V": [
+   "U1.1",
+   "U1.8",
+   "C3.1"
+  ],
+  "GND": [
+   "U1.12",
+   "U1.6",
+   "U1.3",
+   "U1.5",
+   "U1.4",
+   "U1.9",
+   "C1.2",
+   "C2.2",
+   "C3.2"
+  ],
+  "/PWR_ILIM": [
+   "U1.10",
+   "R1.1"
+  ],
+  "/PWR_SS": [
+   "U1.11",
+   "C1.1"
+  ]
+ },
+ "ports": {
+  "/VBUS": {
+   "net": "/VBUS",
+   "kind": "power_in",
+   "note": "5 V from the bus connector"
+  },
+  "+5V": {
+   "net": "+5V",
+   "kind": "power_out",
+   "note": "to the Pi's 5 V pins"
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   8,
+   7.5
+  ],
+  "place": {
+   "U1": {
+    "at_mm": [
+     4,
+     3.5
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C2": {
+    "at_mm": [
+     1.5,
+     6.3
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C3": {
+    "at_mm": [
+     6.5,
+     6.3
+    ],
+    "rotation": 180,
+    "side": "front"
+   },
+   "R1": {
+    "at_mm": [
+     3.0,
+     0.6
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C1": {
+    "at_mm": [
+     5.0,
+     0.6
+    ],
+    "rotation": 0,
+    "side": "front"
+   }
+  },
+  "traces": [
+   {
+    "from_mm": [
+     3.325,
+     3.85
+    ],
+    "to_mm": [
+     4.675,
+     3.85
+    ],
+    "width_mm": 0.4,
+    "layer": "F.Cu",
+    "net": "/VBUS"
+   },
+   {
+    "from_mm": [
+     3.325,
+     3.85
+    ],
+    "to_mm": [
+     2.1,
+     3.85
+    ],
+    "width_mm": 0.4,
+    "layer": "F.Cu",
+    "net": "/VBUS"
+   },
+   {
+    "from_mm": [
+     2.1,
+     3.85
+    ],
+    "to_mm": [
+     0.55,
+     3.85
+    ],
+    "width_mm": 1.0,
+    "layer": "F.Cu",
+    "net": "/VBUS"
+   },
+   {
+    "from_mm": [
+     0.55,
+     3.85
+    ],
+    "to_mm": [
+     0.55,
+     6.3
+    ],
+    "width_mm": 1.0,
+    "layer": "F.Cu",
+    "net": "/VBUS"
+   },
+   {
+    "from_mm": [
+     3.325,
+     3.15
+    ],
+    "to_mm": [
+     4.675,
+     3.15
+    ],
+    "width_mm": 0.4,
+    "layer": "F.Cu",
+    "net": "+5V"
+   },
+   {
+    "from_mm": [
+     4.675,
+     3.15
+    ],
+    "to_mm": [
+     5.9,
+     3.15
+    ],
+    "width_mm": 0.4,
+    "layer": "F.Cu",
+    "net": "+5V"
+   },
+   {
+    "from_mm": [
+     5.9,
+     3.15
+    ],
+    "to_mm": [
+     7.45,
+     3.15
+    ],
+    "width_mm": 1.0,
+    "layer": "F.Cu",
+    "net": "+5V"
+   },
+   {
+    "from_mm": [
+     7.45,
+     3.15
+    ],
+    "to_mm": [
+     7.45,
+     6.3
+    ],
+    "width_mm": 1.0,
+    "layer": "F.Cu",
+    "net": "+5V"
+   }
+  ],
+  "vias": [],
+  "rules": "tps2121 12.1: \"Use short wide traces for input and output planes. For high current applications place vias under input and output pins\". PR1, CP2, OV1, OV2 and ST to GND: \"Connect to GND if not required\" (p4-5). IN1 and IN2 pads joined under the chip, OUT pads likewise, 0.4 mm (the pads are 0.4 mm tall, 0.3 mm apart); 1.0 mm once clear of the pads, to C2 (VBUS) and C3 (+5V)."
+ },
+ "open_questions": [
+  "R1 sets the limit by the datasheet's equation (30.1 kΩ is not in its table; 29.8 kΩ is).",
+  "IN2 is tied to IN1 (one supply on both channels) so no input floats; the datasheet's single-supply use (\"If only one input voltage is valid … then that input will power the output\") doesn't say what to do with the unused input. Check with TI's documents before ordering.",
+  "C2 and C3 values are estimates; the datasheet asks for low-ESR X5R/X7R but gives no value.",
+  "No TVS or fuse on the bus input: the HAT guide's diagram shows a polyfuse on the Pi side only; bus protection is a spacecraft-level choice still open."
+ ]
+}

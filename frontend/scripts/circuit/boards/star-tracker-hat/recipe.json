@@ -1,0 +1,151 @@
+{
+ "title": "Star tracker HAT",
+ "purpose": "Raspberry Pi Zero 2 W add-on (uHAT) that makes a Pi and its Global Shutter Camera a star tracker: power from the spacecraft bus, RS-485 link to the flight computer, BMI088 IMU, HAT ID EEPROM",
+ "source": {
+  "title": "star-tracker-hat recipe",
+  "url": "https://github.com/davidvvliet/davidvanvliet/tree/main/frontend/scripts/circuit/boards/star-tracker-hat",
+  "author": "the circuit harness: blocks from Raspberry Pi, Microchip, TI, JST, Bosch documents; LED block from Mitayi-Pico (CIRCUITSTATE, MIT)",
+  "licence": "MIT blocks; new blocks quote their datasheets"
+ },
+ "board": {
+  "size_mm": [
+   65,
+   30
+  ],
+  "corner_radius_mm": 3,
+  "layers": 2,
+  "rules": "boards/star-tracker-hat/rules.kicad_pro",
+  "ground_fill": "GND",
+  "mask": "Black"
+ },
+ "blocks": {
+  "pi": {
+   "block": "rpi_uhat_header",
+   "at_mm": [
+    0,
+    0
+   ]
+  },
+  "power": {
+   "block": "bus_power_tps2121",
+   "at_mm": [
+    9,
+    9
+   ]
+  },
+  "bus": {
+   "block": "bus_connectors",
+   "at_mm": [
+    8,
+    23
+   ]
+  },
+  "rs485": {
+   "block": "rs485_thvd1410",
+   "at_mm": [
+    33,
+    20.5
+   ]
+  },
+  "imu": {
+   "block": "imu_bmi088",
+   "at_mm": [
+    25,
+    12
+   ]
+  },
+  "id": {
+   "block": "hat_id_eeprom",
+   "at_mm": [
+    38,
+    8.5
+   ]
+  },
+  "led": {
+   "block": "led_gpio",
+   "at_mm": [
+    53,
+    12
+   ]
+  }
+ },
+ "connect": [
+  [
+   "bus./VBUS",
+   "power./VBUS"
+  ],
+  [
+   "power.+5V",
+   "pi.+5V"
+  ],
+  [
+   "pi.+3V3",
+   "id.+3V3",
+   "rs485.+3V3",
+   "imu.+3V3"
+  ],
+  [
+   "pi.GND",
+   "power.GND",
+   "bus.GND",
+   "rs485.GND",
+   "imu.GND",
+   "id.GND",
+   "led.GND"
+  ],
+  [
+   "pi./I2C_SDA",
+   "imu./I2C_SDA"
+  ],
+  [
+   "pi./I2C_SCL",
+   "imu./I2C_SCL"
+  ],
+  [
+   "pi./ID_SD",
+   "id./ID_SD"
+  ],
+  [
+   "pi./ID_SC",
+   "id./ID_SC"
+  ],
+  [
+   "pi./UART_TX",
+   "rs485./UART_TX"
+  ],
+  [
+   "pi./UART_RX",
+   "rs485./UART_RX"
+  ],
+  [
+   "pi./GPIO17",
+   "rs485./RS485_DIR"
+  ],
+  [
+   "pi./GPIO27",
+   "led./LED"
+  ],
+  [
+   "pi./GPIO22",
+   "imu./IMU_INT_ACC"
+  ],
+  [
+   "pi./GPIO23",
+   "imu./IMU_INT_GYR"
+  ],
+  [
+   "bus./RS485_A",
+   "rs485./RS485_A"
+  ],
+  [
+   "bus./RS485_B",
+   "rs485./RS485_B"
+  ]
+ ],
+ "sources": [],
+ "open_questions": [
+  "POWER net class (VBUS, +5V): 1.0 mm traces and 0.8/0.4 mm vias are estimates; the trace width for the 3.5 A limit is not checked against a current-capacity source.",
+  "TPS2121 IN2 tied to IN1; C2/C3 values estimated; RS-485 termination value open; no TVS or fuse on the bus input (see the blocks).",
+  "Only the 40-pin socket is on the back; everything else is on top, so nothing sits over the Pi's own parts."
+ ]
+}

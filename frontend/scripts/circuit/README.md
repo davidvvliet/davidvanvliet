@@ -24,13 +24,14 @@ boards/<board>/     one board: board.json plus either
                       imported KiCad files (someone else's finished design), or
                       recipe.json (our own, from blocks; see "Own boards")
 blocks/<block>.json the building-block library (templates/block.json): usb_c_power, ldo_3v3, rp2040_core, led,
-                    lipo_charger, imu_bmi088, baro_bmp280, i2c_pullups, co2_scd41, voc_sgp41, pm_pms5003, qwiic
+                    lipo_charger, imu_bmi088, baro_bmp280, i2c_pullups, co2_scd41, voc_sgp41, pm_pms5003, qwiic,
+                    rpi_uhat_header, hat_id_eeprom, rs485_thvd1410, bus_power_tps2121, bus_connectors, led_gpio
 footprints/         footprints KiCad's library doesn't have (mitayi.pretty: the Mitayi Pico's own, MIT; air.pretty: drawn
-                    from datasheets, or KiCad's with our own model)
+                    from datasheets, or KiCad's with our own model; startracker.pretty: KiCad's TPS2121 package with our model)
 footprints/models/  3D models for parts KiCad has none of, from the makers' package drawings (make.py writes them; VRML,
                     1 unit = 2.54 mm), referenced
                     as ${CIRCUIT_3DMODELS}/<name>.wrl
-symbols/            schematic symbols KiCad doesn't have (air.kicad_sym: SGP41)
+symbols/            schematic symbols KiCad doesn't have (air.kicad_sym: SGP41; startracker.kicad_sym: TPS2121)
 lib/tools.py        where each tool is
 lib/checks.py       KiCad's design rule and electrical checks, as dashboard check rows
 lib/sections.py     an imported schematic's titled boxes, as the board's blocks
@@ -68,7 +69,8 @@ every box get no block.
 
 ## Own boards
 `boards/<board>/recipe.json` (templates/recipe.json): `title`, `purpose`, `source` (as board.json),
-`board` (size, `rules`: the project file with clearances and widths, `ground_fill`: the net poured on
+`board` (size, `corner_radius_mm`: rounded corners (none: square), `rules`: the project file with clearances and widths
+(a board's own beside its recipe when it needs net classes the template lacks, as star-tracker-hat's POWER class), `ground_fill`: the net poured on
 both sides, `mask` and `silk`: the solder mask and printing colours as KiCad colour names or
 `#RRGGBB[AA]`, `finish`: the pad finish; without `mask`, KiCad's default green; `view`: "back" shows the web model back up, for a board whose screen is on its back; `screens`: [{block, color, image, rotate, glow}] shows an image on the faces of that block in its display area's colour, as the model exports it (linear), drawn by `screens/make.py`), `blocks` (instance name -> block and position) and `connect` (groups of `instance.port`
 joined into one net, named after the first). A build generates the board into `out/<board>/kicad/`

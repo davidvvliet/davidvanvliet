@@ -24,9 +24,9 @@ def _font(size=1.27, hide=False, justify=None):
 def _prop(name, value, x, y, hide=False):
     return ["property", Q(name), Q(value), ["at", x, y, 0], _font(hide=hide)]
 
-def _symbol(lib_id, ref, value, footprint, x, y, sym_uuid, root, pins, on_board=True, datasheet=""):
+def _symbol(lib_id, ref, value, footprint, x, y, sym_uuid, root, pins, on_board=True, datasheet="", in_bom=True):
     return ["symbol", ["lib_id", Q(lib_id)], ["at", x, y, 0], ["unit", 1],
-            ["exclude_from_sim", "no"], ["in_bom", "yes" if on_board else "no"], ["on_board", "yes" if on_board else "no"],
+            ["exclude_from_sim", "no"], ["in_bom", "yes" if on_board and in_bom else "no"], ["on_board", "yes" if on_board else "no"],
             ["dnp", "no"], ["uuid", Q(sym_uuid)],
             _prop("Reference", ref, x, y - 2.54, hide=not on_board), _prop("Value", value, x, y + 2.54),
             _prop("Footprint", footprint, x, y, hide=True), _prop("Datasheet", datasheet, x, y, hide=True),
@@ -88,7 +88,8 @@ def write(path, board, parts, title=""):
             X, Y = snap(bx + sx), snap(by + sy)
             s = lib[p["symbol"]]
             pins = symbols.pins(s); types = _pin_types(s)
-            items.append(_symbol(p["symbol"], p["ref"], p["value"], p["footprint"], X, Y, p["uuid"], root, list(pins), datasheet=p.get("datasheet", "")))
+            items.append(_symbol(p["symbol"], p["ref"], p["value"], p["footprint"], X, Y, p["uuid"], root, list(pins), datasheet=p.get("datasheet", ""),
+                                 in_bom=p.get("in_bom", True)))
             for num, (px, py, a) in pins.items():
                 at = [round(X + px, 4), round(Y - py, 4)]
                 n = p["nets"].get(num)

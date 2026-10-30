@@ -139,5 +139,23 @@ def zjy128():
     prism(m, "0.85 0.70 0.30", [(4.0, 1.0), (-4.0, 1.0), (-4.0, -1.0), (4.0, -1.0)], 0.13, 0.14, shine=0.6)  # contacts
     m.write(os.path.join(HERE, "ZJY128R-IG01.wrl"), "Zhongjingyuan ZJY128R-IG01 1.28in round TFT (drawing ZJY128R-IG01, p4)")
 
+def tps2121():
+    """TI TPS2120/TPS2121 datasheet SLVSEA3F, package outline RUX0012A (VQFN-HR), p. "PACKAGE OUTLINE": body
+    "2.1"/"1.9" by "2.6"/"2.4" (2.0 x 2.5 drawn), "1 MAX" tall (drawn at the maximum: no nominal given); the
+    four power terminals "4X 0.95"/"0.75" long and "4X 0.45"/"0.25" wide (0.85 x 0.35 drawn) on the short
+    sides, 0.7 apart ("2X 0.7"); the eight small ones "8X 0.5"/"0.3" long and "8X 0.25"/"0.15" wide (0.4 x 0.2)
+    at 0.5 pitch ("6X 0.5") on the long sides. Terminals drawn 0.1 thick ("(0.1) TYP", read as their thickness:
+    estimated). Mould colour not sourced. Pin 1 (top left, -x +y) is the "PIN 1 INDEX AREA"."""
+    m = Mesh()
+    prism(m, "0.10 0.10 0.10", rounded(2.0, 2.5, 0.02, n=1), 0, 1.0)
+    for sx in (-1, 1):
+        for y in (-0.35, 0.35):
+            prism(m, "0.75 0.72 0.65", rounded(0.85, 0.35, 0.01, n=1, cx=sx * (1.0 - 0.425 + 0.01), cy=y), 0, 0.1, shine=0.5)
+    for sy in (-1, 1):
+        for x in (-0.75, -0.25, 0.25, 0.75):
+            prism(m, "0.75 0.72 0.65", rounded(0.2, 0.4, 0.01, n=1, cx=x, cy=sy * (1.25 - 0.2 + 0.01)), 0, 0.1, shine=0.5)
+    disc(m, "0.6 0.6 0.6", -0.6, 0.85, 0.3, 1.0 + 0.005)
+    m.write(os.path.join(HERE, "TI_VQFN-HR-12_RUX.wrl"), "TI TPS2121 VQFN-HR-12 (RUX0012A, datasheet SLVSEA3F)")
+
 if __name__ == "__main__":
-    scd4x(); sgp41(); epd154(); zjy128()
+    scd4x(); sgp41(); epd154(); zjy128(); tps2121()
