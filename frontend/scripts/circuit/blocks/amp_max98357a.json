@@ -1,0 +1,193 @@
+{
+ "name": "amp_max98357a",
+ "title": "Speaker amplifier",
+ "purpose": "MAX98357A I2S class-D amplifier, mono (left+right)/2, into a speaker on a JST PH plug",
+ "sources": [
+  {
+   "id": "max98357a",
+   "title": "Maxim MAX98357A/B datasheet Rev 7",
+   "url": "https://cdn-shop.adafruit.com/product-files/3006/MAX98357A-MAX98357B.pdf",
+   "licence": "© Maxim (Analog Devices): link and quotes only",
+   "read": "pins, gain, SD_MODE resistors, typical application"
+  },
+  {
+   "id": "jstph",
+   "title": "JST PH connector catalogue",
+   "url": "https://www.jst-mfg.com/product/pdf/eng/ePH.pdf",
+   "licence": "© JST: link and quotes only",
+   "read": "2.0 mm pitch"
+  },
+  {
+   "id": "kicad",
+   "title": "KiCad 10 standard libraries (symbols, footprints, 3D models)",
+   "url": "https://gitlab.com/kicad/libraries",
+   "licence": "CC BY-SA 4.0 with design exception",
+   "read": "symbol pin numbers, footprint pads, 3D models"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "U4",
+   "value": "MAX98357A",
+   "symbol": "Audio:MAX98357A",
+   "footprint": "Package_DFN_QFN:TQFN-16-1EP_3x3mm_P0.5mm_EP1.6x1.6mm",
+   "source": "max98357a, pin table; kicad",
+   "quote": "TQFN: 1 DIN, 2 GAIN_SLOT, 3/11/15 GND, 4 SD_MODE, 7/8 VDD, 9 OUTP, 10 OUTN, 14 LRCLK, 16 BCLK; \"Connect the exposed page to a solid ground plane\""
+  },
+  {
+   "ref": "C7",
+   "value": "10uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0603_1608Metric",
+   "source": "max98357a, typical application",
+   "quote": "10µF and 0.1µF on VDD"
+  },
+  {
+   "ref": "C8",
+   "value": "0.1uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "max98357a, typical application",
+   "quote": "10µF and 0.1µF on VDD"
+  },
+  {
+   "ref": "R5",
+   "value": "634k",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "max98357a, SD_MODE table",
+   "quote": "VDDIO 3.3 V: RSMALL 210.2 kΩ, RLARGE 634 kΩ; \"Pullup through RLARGE ... (Left/2 + right/2)\""
+  },
+  {
+   "ref": "J3",
+   "value": "Speaker",
+   "symbol": "Connector_Generic:Conn_01x02",
+   "footprint": "Connector_JST:JST_PH_S2B-PH-K_1x02_P2.00mm_Horizontal",
+   "source": "jstph; kicad",
+   "quote": "PH 2.0 mm, side entry"
+  }
+ ],
+ "nets": {
+  "/VSYS": [
+   "U4.7",
+   "U4.8",
+   "C7.1",
+   "C8.1"
+  ],
+  "GND": [
+   "U4.3",
+   "U4.11",
+   "U4.15",
+   "U4.17",
+   "C7.2",
+   "C8.2"
+  ],
+  "+3V3": [
+   "R5.1"
+  ],
+  "/SD_MODE": [
+   "R5.2",
+   "U4.4"
+  ],
+  "/SPK+": [
+   "U4.9",
+   "J3.1"
+  ],
+  "/SPK-": [
+   "U4.10",
+   "J3.2"
+  ],
+  "/I2S_DOUT": [
+   "U4.1"
+  ],
+  "/I2S_WS": [
+   "U4.14"
+  ],
+  "/I2S_BCLK": [
+   "U4.16"
+  ]
+ },
+ "ports": {
+  "/VSYS": {
+   "net": "/VSYS",
+   "kind": "power_in",
+   "note": "VDD 2.5-5.5 V"
+  },
+  "+3V3": {
+   "net": "+3V3",
+   "kind": "power_in"
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground"
+  },
+  "/I2S_DOUT": {
+   "net": "/I2S_DOUT",
+   "kind": "data"
+  },
+  "/I2S_WS": {
+   "net": "/I2S_WS",
+   "kind": "data"
+  },
+  "/I2S_BCLK": {
+   "net": "/I2S_BCLK",
+   "kind": "data"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   10,
+   10
+  ],
+  "place": {
+   "U4": {
+    "at_mm": [
+     0,
+     0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C7": {
+    "at_mm": [
+     -3.2,
+     -1.2
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "C8": {
+    "at_mm": [
+     -3.2,
+     1.2
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "R5": {
+    "at_mm": [
+     3.0,
+     -1.5
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "J3": {
+    "at_mm": [
+     -1,
+     3.5
+    ],
+    "rotation": 0,
+    "side": "front"
+   }
+  },
+  "traces": [],
+  "vias": [],
+  "rules": "GAIN_SLOT unconnected: 9 dB (max98357a). Exposed pad to the ground fill."
+ },
+ "open_questions": [
+  "Maxim's package is T1633+4 (land pattern 90-0031); KiCad's EP1.6 footprint is used and not yet compared with it.",
+  "No output ferrites or 220 pF filter (Adafruit's breakout has them, optional).",
+  "Speaker and its current from the USB 5 V not chosen."
+ ]
+}

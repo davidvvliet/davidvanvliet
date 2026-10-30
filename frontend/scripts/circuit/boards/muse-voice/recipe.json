@@ -1,0 +1,151 @@
+{
+ "title": "Muse voice gadget",
+ "purpose": "An ESP32-S3 voice assistant for the Muse Gadgets SDK: round 1.28\" screen, I2S microphone and speaker amplifier, talk button; USB-C powered",
+ "source": {
+  "title": "muse-voice recipe",
+  "url": "https://github.com/davidvvliet/davidvanvliet/tree/main/frontend/scripts/circuit/boards/muse-voice",
+  "author": "the circuit harness: Mitayi-Pico USB-C and LED blocks (CIRCUITSTATE, MIT), new blocks from Espressif, Diodes, TDK, Maxim and Waveshare documents; pins after the Muse Gadgets SDK's Guition and Waveshare board files",
+  "licence": "MIT blocks; new blocks quote their datasheets"
+ },
+ "board": {
+  "size_mm": [
+   44,
+   46
+  ],
+  "layers": 2,
+  "rules": "templates/rules.kicad_pro",
+  "ground_fill": "GND",
+  "mask": "Black"
+ },
+ "blocks": {
+  "core": {
+   "block": "esp32s3_core",
+   "at_mm": [
+    21,
+    6.75
+   ]
+  },
+  "usb": {
+   "block": "usb_c_power",
+   "at_mm": [
+    0.63,
+    24
+   ]
+  },
+  "ldo": {
+   "block": "ldo_ap2112",
+   "at_mm": [
+    11,
+    23.5
+   ]
+  },
+  "mic": {
+   "block": "mic_ics43434",
+   "at_mm": [
+    29,
+    31
+   ]
+  },
+  "amp": {
+   "block": "amp_max98357a",
+   "at_mm": [
+    38,
+    28
+   ]
+  },
+  "lcd": {
+   "block": "lcd_round",
+   "at_mm": [
+    9,
+    42.5
+   ]
+  },
+  "led": {
+   "block": "led",
+   "at_mm": [
+    27,
+    44
+   ]
+  }
+ },
+ "connect": [
+  [
+   "usb./VSYS",
+   "ldo./VSYS",
+   "amp./VSYS"
+  ],
+  [
+   "ldo.+3V3",
+   "core.+3V3",
+   "mic.+3V3",
+   "amp.+3V3",
+   "lcd.+3V3",
+   "led.+3V3"
+  ],
+  [
+   "usb.GND",
+   "ldo.GND",
+   "core.GND",
+   "mic.GND",
+   "amp.GND",
+   "lcd.GND",
+   "led.GND"
+  ],
+  [
+   "usb./USB_D+",
+   "core./USB_D+"
+  ],
+  [
+   "usb./USB_D-",
+   "core./USB_D-"
+  ],
+  [
+   "core./IO42",
+   "mic./I2S_BCLK",
+   "amp./I2S_BCLK"
+  ],
+  [
+   "core./IO39",
+   "mic./I2S_WS",
+   "amp./I2S_WS"
+  ],
+  [
+   "core./IO41",
+   "amp./I2S_DOUT"
+  ],
+  [
+   "core./IO40",
+   "mic./MIC_SD"
+  ],
+  [
+   "core./IO9",
+   "lcd./LCD_DIN"
+  ],
+  [
+   "core./IO10",
+   "lcd./LCD_CLK"
+  ],
+  [
+   "core./IO11",
+   "lcd./LCD_CS"
+  ],
+  [
+   "core./IO12",
+   "lcd./LCD_DC"
+  ],
+  [
+   "core./IO13",
+   "lcd./LCD_RST"
+  ],
+  [
+   "core./IO14",
+   "lcd./LCD_BL"
+  ]
+ ],
+ "open_questions": [
+  "Our own board_*.c for the Muse SDK is still to write: screen on IO9-IO14 (DIN, CLK, CS, DC, RST, BL), I2S BCLK IO42, WS IO39, amp IO41, mic IO40.",
+  "GPIO3 strapping floats; no ESD diode at the USB input.",
+  "Amplifier footprint (KiCad EP1.6) not compared with Maxim's land pattern 90-0031.",
+  "Display cable wire order; speaker not chosen; USB 5 V current budget for amp + ESP32 not checked."
+ ]
+}

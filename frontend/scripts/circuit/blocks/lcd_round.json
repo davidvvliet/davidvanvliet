@@ -1,0 +1,120 @@
+{
+ "name": "lcd_round",
+ "title": "Round display connector",
+ "purpose": "JST PH 8-pin for the Waveshare 1.28\" round LCD (GC9A01, 240x240, SPI)",
+ "sources": [
+  {
+   "id": "waveshare",
+   "title": "Waveshare 1.28inch LCD Module wiki",
+   "url": "https://www.waveshare.com/wiki/1.28inch_LCD_Module",
+   "licence": "© Waveshare: link and quotes only",
+   "read": "pins, PH2.0 8-pin interface"
+  },
+  {
+   "id": "jstph",
+   "title": "JST PH connector catalogue",
+   "url": "https://www.jst-mfg.com/product/pdf/eng/ePH.pdf",
+   "licence": "© JST: link and quotes only",
+   "read": "2.0 mm pitch"
+  },
+  {
+   "id": "kicad",
+   "title": "KiCad 10 standard libraries (symbols, footprints, 3D models)",
+   "url": "https://gitlab.com/kicad/libraries",
+   "licence": "CC BY-SA 4.0 with design exception",
+   "read": "symbol pin numbers, footprint pads, 3D models"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "J4",
+   "value": "LCD 1.28in",
+   "symbol": "Connector_Generic:Conn_01x08",
+   "footprint": "Connector_JST:JST_PH_B8B-PH-K_1x08_P2.00mm_Vertical",
+   "source": "waveshare; kicad",
+   "quote": "\"The 1.28inch LCD uses the PH2.0 8PIN interface\"; pins VCC, GND, DIN, CLK, CS, DC, RST, BL"
+  }
+ ],
+ "nets": {
+  "+3V3": [
+   "J4.1"
+  ],
+  "GND": [
+   "J4.2"
+  ],
+  "/LCD_DIN": [
+   "J4.3"
+  ],
+  "/LCD_CLK": [
+   "J4.4"
+  ],
+  "/LCD_CS": [
+   "J4.5"
+  ],
+  "/LCD_DC": [
+   "J4.6"
+  ],
+  "/LCD_RST": [
+   "J4.7"
+  ],
+  "/LCD_BL": [
+   "J4.8"
+  ]
+ },
+ "ports": {
+  "+3V3": {
+   "net": "+3V3",
+   "kind": "power_in"
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground"
+  },
+  "/LCD_DIN": {
+   "net": "/LCD_DIN",
+   "kind": "data"
+  },
+  "/LCD_CLK": {
+   "net": "/LCD_CLK",
+   "kind": "data"
+  },
+  "/LCD_CS": {
+   "net": "/LCD_CS",
+   "kind": "data"
+  },
+  "/LCD_DC": {
+   "net": "/LCD_DC",
+   "kind": "data"
+  },
+  "/LCD_RST": {
+   "net": "/LCD_RST",
+   "kind": "data"
+  },
+  "/LCD_BL": {
+   "net": "/LCD_BL",
+   "kind": "data"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   18,
+   6
+  ],
+  "place": {
+   "J4": {
+    "at_mm": [
+     0,
+     0
+    ],
+    "rotation": 0,
+    "side": "front"
+   }
+  },
+  "traces": [],
+  "vias": [],
+  "rules": "Pin order as the module's table (waveshare)."
+ },
+ "open_questions": [
+  "Cable: the module ships with a PH2.0 cable; its wire order against this header not checked."
+ ]
+}

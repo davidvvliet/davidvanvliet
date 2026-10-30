@@ -1,0 +1,153 @@
+{
+ "name": "mic_ics43434",
+ "title": "Microphone",
+ "purpose": "ICS-43434 I2S MEMS microphone (bottom port, through the board)",
+ "sources": [
+  {
+   "id": "ics43434",
+   "title": "TDK InvenSense ICS-43434 datasheet",
+   "url": "https://invensense.tdk.com/download-pdf/ics-43434-datasheet/",
+   "licence": "© TDK: link and quotes only",
+   "read": "pins, decoupling, SD pull-down, channel select"
+  },
+  {
+   "id": "kicad",
+   "title": "KiCad 10 standard libraries (symbols, footprints, 3D models)",
+   "url": "https://gitlab.com/kicad/libraries",
+   "licence": "CC BY-SA 4.0 with design exception",
+   "read": "symbol pin numbers, footprint pads, 3D models"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "U3",
+   "value": "ICS-43434",
+   "symbol": "Sensor_Audio:ICS-43434",
+   "footprint": "Sensor_Audio:InvenSense_ICS-43434-6_3.5x2.65mm",
+   "source": "ics43434, pin table; kicad",
+   "quote": "pins 1 WS, 2 LR, 3 GND, 4 SCK, 5 VDD, 6 SD; footprint has the sound hole"
+  },
+  {
+   "ref": "C6",
+   "value": "0.1uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "ics43434, pin table",
+   "quote": "\"This pin should be decoupled to GND with a 0.1 μF capacitor.\""
+  },
+  {
+   "ref": "R4",
+   "value": "100k",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "ics43434, pin table",
+   "quote": "\"The SD trace should have a 100 kΩ pull-down resistor\""
+  }
+ ],
+ "nets": {
+  "+3V3": [
+   "U3.5",
+   "C6.1"
+  ],
+  "GND": [
+   "U3.3",
+   "U3.2",
+   "C6.2",
+   "R4.2"
+  ],
+  "/MIC_SD": [
+   "U3.6",
+   "R4.1"
+  ],
+  "/I2S_WS": [
+   "U3.1"
+  ],
+  "/I2S_BCLK": [
+   "U3.4"
+  ]
+ },
+ "ports": {
+  "+3V3": {
+   "net": "+3V3",
+   "kind": "power_in"
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground"
+  },
+  "/MIC_SD": {
+   "net": "/MIC_SD",
+   "kind": "data"
+  },
+  "/I2S_WS": {
+   "net": "/I2S_WS",
+   "kind": "data"
+  },
+  "/I2S_BCLK": {
+   "net": "/I2S_BCLK",
+   "kind": "data"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   6,
+   4
+  ],
+  "place": {
+   "U3": {
+    "at_mm": [
+     0,
+     0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C6": {
+    "at_mm": [
+     2.4,
+     0.4
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "R4": {
+    "at_mm": [
+     -2.4,
+     0.4
+    ],
+    "rotation": 90,
+    "side": "front"
+   }
+  },
+  "traces": [
+   {
+    "net": "GND",
+    "layer": "F.Cu",
+    "width_mm": 0.25,
+    "from_mm": [
+     0.6625,
+     0.71
+    ],
+    "to_mm": [
+     1.4,
+     1.5
+    ]
+   }
+  ],
+  "vias": [
+   {
+    "net": "GND",
+    "at_mm": [
+     1.4,
+     1.5
+    ],
+    "drill_mm": 0.3,
+    "size_mm": 0.6
+   }
+  ],
+  "rules": "LR to GND: left channel. Keep the hole free of mask and copper (footprint). The GND ring around the hole (pad 3) has its own trace and via to the ground fill, which can't reach it."
+ },
+ "open_questions": [
+  "Enclosure needs an opening over the board hole."
+ ]
+}

@@ -1,0 +1,321 @@
+{
+ "name": "esp32s3_core",
+ "title": "ESP32-S3 core",
+ "purpose": "ESP32-S3-WROOM-1 module (Wi-Fi, Bluetooth LE, 16 MB flash, 8 MB PSRAM) with its supply capacitors, EN delay and reset, the boot button (also the talk button) and USB",
+ "sources": [
+  {
+   "id": "wroom1",
+   "title": "Espressif ESP32-S3-WROOM-1 & WROOM-1U datasheet v1.8",
+   "url": "https://www.espressif.com/sites/default/files/documentation/esp32-s3-wroom-1_wroom-1u_datasheet_en.pdf",
+   "licence": "© Espressif: link and quotes only",
+   "read": "pin table, p41 Figure 9-1 peripheral schematic, p45 land pattern"
+  },
+  {
+   "id": "s3hw",
+   "title": "Espressif ESP32-S3 Hardware Design Guidelines",
+   "url": "https://docs.espressif.com/projects/esp-hardware-design-guidelines/en/latest/esp32s3/esp-hardware-design-guidelines-en-master-esp32s3.pdf",
+   "licence": "© Espressif: link and quotes only",
+   "read": "power, strapping pins, USB, antenna placement"
+  },
+  {
+   "id": "kicad",
+   "title": "KiCad 10 standard libraries (symbols, footprints, 3D models)",
+   "url": "https://gitlab.com/kicad/libraries",
+   "licence": "CC BY-SA 4.0 with design exception",
+   "read": "symbol pin numbers, footprint pads, 3D models"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "U1",
+   "value": "ESP32-S3-WROOM-1-N16R8",
+   "symbol": "RF_Module:ESP32-S3-WROOM-1",
+   "footprint": "RF_Module:ESP32-S3-WROOM-1",
+   "source": "wroom1, pin table; kicad",
+   "quote": "pins 1 GND, 2 3V3, 3 EN, 13 USB_D- (IO19), 14 USB_D+ (IO20), 27 IO0, 40 GND, 41 EPAD; N16R8: 16 MB flash, 8 MB octal PSRAM (IO35-37 used by the PSRAM)"
+  },
+  {
+   "ref": "C1",
+   "value": "22uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0805_2012Metric",
+   "source": "wroom1, p41 Figure 9-1",
+   "quote": "C1 22uF from VDD33 to GND"
+  },
+  {
+   "ref": "C2",
+   "value": "0.1uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "wroom1, p41 Figure 9-1",
+   "quote": "C3 0.1uF from VDD33 to GND"
+  },
+  {
+   "ref": "R1",
+   "value": "10k",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "wroom1, p41",
+   "quote": "\"The recommended setting for the RC delay circuit is usually R = 10 kΩ and C = 1 µF.\""
+  },
+  {
+   "ref": "C3",
+   "value": "1uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "wroom1, p41",
+   "quote": "\"The recommended setting for the RC delay circuit is usually R = 10 kΩ and C = 1 µF.\""
+  },
+  {
+   "ref": "SW1",
+   "value": "RESET",
+   "symbol": "Switch:SW_Push",
+   "footprint": "mitayi:CK_SW_SPST_UK-B0273-SP25Y",
+   "source": "wroom1, p41 Figure 9-1",
+   "quote": "SW1 from EN to GND (reset button)"
+  },
+  {
+   "ref": "SW2",
+   "value": "BOOT / TALK",
+   "symbol": "Switch:SW_Push",
+   "footprint": "mitayi:CK_SW_SPST_UK-B0273-SP25Y",
+   "source": "wroom1, p41 Figure 9-1 (JP4 Boot Option on IO0); Muse SDK board_guition_jc3248w535.c (BOOT is the talk button)",
+   "quote": "Download boot: GPIO0 = 0; GPIO0 has a weak internal pull-up"
+  },
+  {
+   "ref": "R2",
+   "value": "22R",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "s3hw, §1.3.13 USB",
+   "quote": "\"It is recommended to reserve series resistors (initial value can be 22/33 Ω) ... and place them close to the chip.\""
+  },
+  {
+   "ref": "R3",
+   "value": "22R",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "s3hw, §1.3.13 USB",
+   "quote": "\"It is recommended to reserve series resistors (initial value can be 22/33 Ω) ... and place them close to the chip.\""
+  }
+ ],
+ "nets": {
+  "+3V3": [
+   "U1.2",
+   "C1.1",
+   "C2.1",
+   "R1.1"
+  ],
+  "GND": [
+   "U1.1",
+   "U1.40",
+   "U1.41",
+   "C1.2",
+   "C2.2",
+   "C3.2",
+   "SW1.2",
+   "SW2.2"
+  ],
+  "/EN": [
+   "U1.3",
+   "R1.2",
+   "C3.1",
+   "SW1.1"
+  ],
+  "/BOOT": [
+   "U1.27",
+   "SW2.1"
+  ],
+  "/USB_DM_MOD": [
+   "U1.13",
+   "R2.1"
+  ],
+  "/USB_DP_MOD": [
+   "U1.14",
+   "R3.1"
+  ],
+  "/USB_D-": [
+   "R2.2"
+  ],
+  "/USB_D+": [
+   "R3.2"
+  ],
+  "/IO9": [
+   "U1.17"
+  ],
+  "/IO10": [
+   "U1.18"
+  ],
+  "/IO11": [
+   "U1.19"
+  ],
+  "/IO13": [
+   "U1.21"
+  ],
+  "/IO14": [
+   "U1.22"
+  ],
+  "/IO40": [
+   "U1.33"
+  ],
+  "/IO41": [
+   "U1.34"
+  ],
+  "/IO42": [
+   "U1.35"
+  ],
+  "/IO12": [
+   "U1.20"
+  ],
+  "/IO39": [
+   "U1.32"
+  ]
+ },
+ "ports": {
+  "+3V3": {
+   "net": "+3V3",
+   "kind": "power_in",
+   "note": "VDD33 3.0-3.6 V; supply \"no less than 500 mA\" (s3hw)"
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground"
+  },
+  "/USB_D+": {
+   "net": "/USB_D+",
+   "kind": "data"
+  },
+  "/USB_D-": {
+   "net": "/USB_D-",
+   "kind": "data"
+  },
+  "/IO9": {
+   "net": "/IO9",
+   "kind": "gpio"
+  },
+  "/IO10": {
+   "net": "/IO10",
+   "kind": "gpio"
+  },
+  "/IO11": {
+   "net": "/IO11",
+   "kind": "gpio"
+  },
+  "/IO13": {
+   "net": "/IO13",
+   "kind": "gpio"
+  },
+  "/IO14": {
+   "net": "/IO14",
+   "kind": "gpio"
+  },
+  "/IO40": {
+   "net": "/IO40",
+   "kind": "gpio"
+  },
+  "/IO41": {
+   "net": "/IO41",
+   "kind": "gpio"
+  },
+  "/IO42": {
+   "net": "/IO42",
+   "kind": "gpio"
+  },
+  "/IO12": {
+   "net": "/IO12",
+   "kind": "gpio"
+  },
+  "/IO39": {
+   "net": "/IO39",
+   "kind": "gpio"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   28,
+   22
+  ],
+  "place": {
+   "U1": {
+    "at_mm": [
+     0,
+     0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C2": {
+    "at_mm": [
+     -10.8,
+     -4.3
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "R1": {
+    "at_mm": [
+     -10.8,
+     -2.6
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C3": {
+    "at_mm": [
+     -10.8,
+     -1.4
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C1": {
+    "at_mm": [
+     -12.9,
+     -3.0
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "R2": {
+    "at_mm": [
+     -10.8,
+     9.98
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "R3": {
+    "at_mm": [
+     -10.8,
+     11.25
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "SW1": {
+    "at_mm": [
+     19,
+     31.25
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "SW2": {
+    "at_mm": [
+     19,
+     36.25
+    ],
+    "rotation": 0,
+    "side": "front"
+   }
+  },
+  "traces": [],
+  "vias": [],
+  "rules": "Antenna area (module y < -6.75) off the board edge: \"antenna outside the base board\" (s3hw). Supply caps and USB resistors at the module's pins."
+ },
+ "open_questions": [
+  "GPIO3 is a strapping pin left floating (JTAG source select; only read if eFuses say so).",
+  "No ESD diode at the power entrance, which s3hw suggests.",
+  "s3hw recommends a pull-up on GPIO0 but gives no value; the internal weak pull-up is used."
+ ]
+}

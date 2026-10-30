@@ -1,0 +1,113 @@
+{
+ "name": "ldo_ap2112",
+ "title": "3.3 V regulator (600 mA)",
+ "purpose": "AP2112K-3.3 LDO: VSYS in, 3.3 V out, enough for the ESP32-S3's 500 mA",
+ "sources": [
+  {
+   "id": "ap2112",
+   "title": "Diodes AP2112 datasheet",
+   "url": "https://www.diodes.com/assets/Datasheets/AP2112.pdf",
+   "licence": "© Diodes: link and quotes only",
+   "read": "pins, capacitors, enable levels"
+  },
+  {
+   "id": "kicad",
+   "title": "KiCad 10 standard libraries (symbols, footprints, 3D models)",
+   "url": "https://gitlab.com/kicad/libraries",
+   "licence": "CC BY-SA 4.0 with design exception",
+   "read": "symbol pin numbers, footprint pads, 3D models"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "U2",
+   "value": "AP2112K-3.3",
+   "symbol": "Regulator_Linear:AP2112K-3.3",
+   "footprint": "Package_TO_SOT_SMD:SOT-23-5",
+   "source": "ap2112, pin table; kicad",
+   "quote": "SOT25: 1 VIN, 2 GND, 3 EN, 4 NC, 5 VOUT; \"guaranteed 600mA (min.)\""
+  },
+  {
+   "ref": "C4",
+   "value": "1uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "ap2112, p1",
+   "quote": "\"Stable with 1.0µF Flexible Cap: Ceramic, Tantalum\" (CIN = 1.0µF ceramic in the tables)"
+  },
+  {
+   "ref": "C5",
+   "value": "1uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "ap2112, p1",
+   "quote": "\"Stable with 1.0µF Flexible Cap: Ceramic, Tantalum\" (COUT = 1.0µF ceramic in the tables)"
+  }
+ ],
+ "nets": {
+  "/VSYS": [
+   "U2.1",
+   "U2.3",
+   "C4.1"
+  ],
+  "+3V3": [
+   "U2.5",
+   "C5.1"
+  ],
+  "GND": [
+   "U2.2",
+   "C4.2",
+   "C5.2"
+  ]
+ },
+ "ports": {
+  "/VSYS": {
+   "net": "/VSYS",
+   "kind": "power_in"
+  },
+  "+3V3": {
+   "net": "+3V3",
+   "kind": "power_out"
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   7,
+   4
+  ],
+  "place": {
+   "U2": {
+    "at_mm": [
+     0,
+     0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C4": {
+    "at_mm": [
+     -2.9,
+     0
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "C5": {
+    "at_mm": [
+     2.9,
+     0
+    ],
+    "rotation": 90,
+    "side": "front"
+   }
+  },
+  "traces": [],
+  "vias": [],
+  "rules": "EN tied to VIN: \"Enable logic high, regulator on 1.5 — 6.0\" V (ap2112)."
+ },
+ "open_questions": []
+}

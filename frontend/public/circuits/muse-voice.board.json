@@ -1,0 +1,183 @@
+{
+ "board": "muse-voice",
+ "title": "Muse voice gadget",
+ "purpose": "An ESP32-S3 voice assistant for the Muse Gadgets SDK: round 1.28\" screen, I2S microphone and speaker amplifier, talk button; USB-C powered",
+ "source": {
+  "title": "muse-voice recipe",
+  "url": "https://github.com/davidvvliet/davidvanvliet/tree/main/frontend/scripts/circuit/boards/muse-voice",
+  "author": "the circuit harness: Mitayi-Pico USB-C and LED blocks (CIRCUITSTATE, MIT), new blocks from Espressif, Diodes, TDK, Maxim and Waveshare documents; pins after the Muse Gadgets SDK's Guition and Waveshare board files",
+  "licence": "MIT blocks; new blocks quote their datasheets"
+ },
+ "blocks": [
+  {
+   "name": "ESP32-S3 core",
+   "parts": [
+    {
+     "ref": "C1",
+     "value": "22uF",
+     "package": "C_0805_2012Metric"
+    },
+    {
+     "ref": "C2",
+     "value": "0.1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C3",
+     "value": "1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "R1",
+     "value": "10k",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "R2",
+     "value": "22R",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "R3",
+     "value": "22R",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "SW1",
+     "value": "RESET",
+     "package": "CK_SW_SPST_UK-B0273-SP25Y"
+    },
+    {
+     "ref": "SW2",
+     "value": "BOOT / TALK",
+     "package": "CK_SW_SPST_UK-B0273-SP25Y"
+    },
+    {
+     "ref": "U1",
+     "value": "ESP32-S3-WROOM-1-N16R8",
+     "package": "ESP32-S3-WROOM-1"
+    }
+   ]
+  },
+  {
+   "name": "Speaker amplifier",
+   "parts": [
+    {
+     "ref": "C7",
+     "value": "10uF",
+     "package": "C_0603_1608Metric"
+    },
+    {
+     "ref": "C8",
+     "value": "0.1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "J3",
+     "value": "Speaker",
+     "package": "JST_PH_S2B-PH-K_1x02_P2.00mm_Horizontal"
+    },
+    {
+     "ref": "R7",
+     "value": "634k",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "U4",
+     "value": "MAX98357A",
+     "package": "TQFN-16-1EP_3x3mm_P0.5mm_EP1.6x1.6mm"
+    }
+   ]
+  },
+  {
+   "name": "USB-C power",
+   "parts": [
+    {
+     "ref": "D1",
+     "value": "BS5817WS",
+     "package": "D_SOD-323_HandSoldering"
+    },
+    {
+     "ref": "J2",
+     "value": "USB-C-2.0",
+     "package": "USB_C_Receptacle_HRO_TYPE-C-31-M-12"
+    },
+    {
+     "ref": "R4",
+     "value": "5.1K",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "R5",
+     "value": "5.1K",
+     "package": "R_0402_1005Metric"
+    }
+   ]
+  },
+  {
+   "name": "Microphone",
+   "parts": [
+    {
+     "ref": "C6",
+     "value": "0.1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "R6",
+     "value": "100k",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "U3",
+     "value": "ICS-43434",
+     "package": "InvenSense_ICS-43434-6_3.5x2.65mm"
+    }
+   ]
+  },
+  {
+   "name": "3.3 V regulator (600 mA)",
+   "parts": [
+    {
+     "ref": "C4",
+     "value": "1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C5",
+     "value": "1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "U2",
+     "value": "AP2112K-3.3",
+     "package": "SOT-23-5"
+    }
+   ]
+  },
+  {
+   "name": "LED",
+   "parts": [
+    {
+     "ref": "D3",
+     "value": "RED",
+     "package": "LED_0603_1608Metric"
+    },
+    {
+     "ref": "R8",
+     "value": "470R",
+     "package": "R_0402_1005Metric"
+    }
+   ]
+  },
+  {
+   "name": "Round display connector",
+   "parts": [
+    {
+     "ref": "J4",
+     "value": "LCD 1.28in",
+     "package": "JST_PH_B8B-PH-K_1x08_P2.00mm_Vertical"
+    }
+   ]
+  }
+ ]
+}
