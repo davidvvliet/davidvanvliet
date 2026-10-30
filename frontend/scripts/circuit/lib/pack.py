@@ -106,6 +106,7 @@ for s in screens:
     tex = nt.nodes.new("ShaderNodeTexImage"); tex.image = img; tex.interpolation = "Closest"
     nt.links.new(tex.outputs["Color"], b.inputs["Base Color"])
     b.inputs["Roughness"].default_value = s.get("roughness", 0.5); b.inputs["Metallic"].default_value = 0
+    b.inputs["Specular IOR Level"].default_value = s.get("sheen", 0.5)  # low: the viewer's overhead light greys a dark screen
     if s.get("glow"):
         nt.links.new(tex.outputs["Color"], b.inputs["Emission Color"]); b.inputs["Emission Strength"].default_value = s["glow"]
     me.materials.append(m); k = len(me.materials) - 1

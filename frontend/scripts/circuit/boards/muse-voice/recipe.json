@@ -28,8 +28,9 @@
     "tolerance": 0.001,
     "image": "screen.png",
     "rotate": 180,
-    "roughness": 0.3,
-    "glow": 1.0
+    "roughness": 0.6,
+    "glow": 0.6,
+    "sheen": 0.05
    }
   ]
  },
