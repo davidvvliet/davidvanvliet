@@ -1,7 +1,7 @@
 {
  "board": "muse-voice",
  "title": "Muse voice gadget",
- "purpose": "An ESP32-S3 voice assistant for the Muse Gadgets SDK: round 1.28\" screen, I2S microphone and speaker amplifier, talk button; USB-C powered",
+ "purpose": "An ESP32-S3 voice assistant for the Muse Gadgets SDK: round 1.28\" screen on the back, I2S microphone and speaker amplifier, talk button; USB-C powered",
  "source": {
   "title": "muse-voice recipe",
   "url": "https://github.com/davidvvliet/davidvanvliet/tree/main/frontend/scripts/circuit/boards/muse-voice",
@@ -56,6 +56,41 @@
      "ref": "U1",
      "value": "ESP32-S3-WROOM-1-N16R8",
      "package": "ESP32-S3-WROOM-1"
+    }
+   ]
+  },
+  {
+   "name": "Round display",
+   "parts": [
+    {
+     "ref": "C9",
+     "value": "0.1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "J5",
+     "value": "ZJY128R-IG01",
+     "package": "ZJY128R-IG01_FPC_Solder"
+    },
+    {
+     "ref": "Q2",
+     "value": "S8050 (J3Y)",
+     "package": "SOT-23"
+    },
+    {
+     "ref": "R8",
+     "value": "10R",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "R9",
+     "value": "1k",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "R10",
+     "value": "10k",
+     "package": "R_0402_1005Metric"
     }
    ]
   },
@@ -163,19 +198,9 @@
      "package": "LED_0603_1608Metric"
     },
     {
-     "ref": "R8",
+     "ref": "R11",
      "value": "470R",
      "package": "R_0402_1005Metric"
-    }
-   ]
-  },
-  {
-   "name": "Round display connector",
-   "parts": [
-    {
-     "ref": "J4",
-     "value": "LCD 1.28in",
-     "package": "JST_PH_B8B-PH-K_1x08_P2.00mm_Vertical"
     }
    ]
   }
