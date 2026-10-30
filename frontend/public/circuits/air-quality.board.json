@@ -1,7 +1,7 @@
 {
  "board": "air-quality",
  "title": "Air quality monitor",
- "purpose": "Measures CO2, VOC and NOx, and dust (PM1/PM2.5/PM10) in a room and shows them on an e-paper screen (or a Qwiic I2C display); USB-C powered",
+ "purpose": "Measures CO2, VOC and NOx, and dust (PM1/PM2.5/PM10) in a room and shows them on a 1.54\" e-paper panel on the back (or a Qwiic I2C display); USB-C powered",
  "source": {
   "title": "air-quality recipe",
   "url": "https://github.com/davidvvliet/davidvanvliet/tree/main/frontend/scripts/circuit/boards/air-quality",
@@ -150,6 +150,101 @@
    ]
   },
   {
+   "name": "E-paper display",
+   "parts": [
+    {
+     "ref": "C40",
+     "value": "4.7uF/50V",
+     "package": "C_1206_3216Metric"
+    },
+    {
+     "ref": "C41",
+     "value": "4.7uF/50V",
+     "package": "C_1206_3216Metric"
+    },
+    {
+     "ref": "C42",
+     "value": "1uF/50V",
+     "package": "C_0603_1608Metric"
+    },
+    {
+     "ref": "C43",
+     "value": "1uF/50V",
+     "package": "C_0603_1608Metric"
+    },
+    {
+     "ref": "C44",
+     "value": "1uF/50V",
+     "package": "C_0603_1608Metric"
+    },
+    {
+     "ref": "C45",
+     "value": "1uF/50V",
+     "package": "C_0603_1608Metric"
+    },
+    {
+     "ref": "C46",
+     "value": "1uF/50V",
+     "package": "C_0603_1608Metric"
+    },
+    {
+     "ref": "C47",
+     "value": "1uF/50V",
+     "package": "C_0603_1608Metric"
+    },
+    {
+     "ref": "C48",
+     "value": "1uF/50V",
+     "package": "C_0603_1608Metric"
+    },
+    {
+     "ref": "C49",
+     "value": "1uF/50V",
+     "package": "C_0603_1608Metric"
+    },
+    {
+     "ref": "D40",
+     "value": "MBR0530",
+     "package": "D_SOD-123"
+    },
+    {
+     "ref": "D41",
+     "value": "MBR0530",
+     "package": "D_SOD-123"
+    },
+    {
+     "ref": "D42",
+     "value": "MBR0530",
+     "package": "D_SOD-123"
+    },
+    {
+     "ref": "J40",
+     "value": "1.54in e-Paper",
+     "package": "Hirose_FH12-24S-0.5SH_Waveshare_EPD_1.54in"
+    },
+    {
+     "ref": "L40",
+     "value": "10uH 1A",
+     "package": "L_1210_3225Metric"
+    },
+    {
+     "ref": "Q40",
+     "value": "Si1308EDL",
+     "package": "SOT-323_SC-70"
+    },
+    {
+     "ref": "R40",
+     "value": "10k",
+     "package": "R_0603_1608Metric"
+    },
+    {
+     "ref": "R41",
+     "value": "3R",
+     "package": "R_0603_1608Metric"
+    }
+   ]
+  },
+  {
    "name": "3.3 V regulator",
    "parts": [
     {
@@ -265,21 +360,6 @@
    ]
   },
   {
-   "name": "LED",
-   "parts": [
-    {
-     "ref": "D3",
-     "value": "RED",
-     "package": "LED_0603_1608Metric"
-    },
-    {
-     "ref": "R8",
-     "value": "470R",
-     "package": "R_0402_1005Metric"
-    }
-   ]
-  },
-  {
    "name": "I2C pull-ups",
    "parts": [
     {
@@ -295,6 +375,21 @@
    ]
   },
   {
+   "name": "LED",
+   "parts": [
+    {
+     "ref": "D3",
+     "value": "RED",
+     "package": "LED_0603_1608Metric"
+    },
+    {
+     "ref": "R8",
+     "value": "470R",
+     "package": "R_0402_1005Metric"
+    }
+   ]
+  },
+  {
    "name": "Display connector",
    "parts": [
     {
@@ -305,32 +400,22 @@
    ]
   },
   {
-   "name": "CO2 sensor",
-   "parts": [
-    {
-     "ref": "U30",
-     "value": "SCD41",
-     "package": "Sensirion_SCD4x-1EP_10.1x10.1mm_P1.25mm_EP4.8x4.8mm"
-    }
-   ]
-  },
-  {
-   "name": "E-paper screen",
-   "parts": [
-    {
-     "ref": "J34",
-     "value": "e-Paper",
-     "package": "PinHeader_1x08_P2.54mm_Vertical"
-    }
-   ]
-  },
-  {
    "name": "Dust sensor",
    "parts": [
     {
      "ref": "J32",
      "value": "PMS5003",
      "package": "Molex_PicoBlade_53261-0871_1x08-1MP_P1.25mm_Horizontal"
+    }
+   ]
+  },
+  {
+   "name": "CO2 sensor",
+   "parts": [
+    {
+     "ref": "U30",
+     "value": "SCD41",
+     "package": "Sensirion_SCD4x-1EP_10.1x10.1mm_P1.25mm_EP4.8x4.8mm"
     }
    ]
   }
