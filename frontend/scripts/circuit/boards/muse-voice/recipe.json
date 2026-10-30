@@ -16,7 +16,22 @@
   "rules": "templates/rules.kicad_pro",
   "ground_fill": "GND",
   "mask": "Black",
-  "view": "back"
+  "view": "back",
+  "screens": [
+   {
+    "block": "Round display",
+    "color": [
+     0.0016,
+     0.0016,
+     0.0023
+    ],
+    "tolerance": 0.001,
+    "image": "screen.png",
+    "rotate": 180,
+    "roughness": 0.3,
+    "glow": 1.0
+   }
+  ]
  },
  "blocks": {
   "core": {

@@ -16,7 +16,21 @@
   "rules": "templates/rules.kicad_pro",
   "ground_fill": "GND",
   "mask": "Black",
-  "view": "back"
+  "view": "back",
+  "screens": [
+   {
+    "block": "E-paper display",
+    "color": [
+     0.7106,
+     0.7106,
+     0.6559
+    ],
+    "tolerance": 0.005,
+    "image": "screen.png",
+    "rotate": 0,
+    "roughness": 0.9
+   }
+  ]
  },
  "blocks": {
   "usb": {

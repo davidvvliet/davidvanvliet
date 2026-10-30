@@ -65,7 +65,7 @@ def main(board, publish=False):
     started = time.time()
     src = os.path.join(HERE, "boards", board)
     work = os.path.join(HERE, "out", board, "kicad")  # the generated board, kept for opening in KiCad
-    note, view = None, "top"
+    note, view, screens = None, "top", []
     if os.path.exists(os.path.join(src, "recipe.json")):
         recipe = json.load(open(os.path.join(src, "recipe.json")))
         shutil.rmtree(work, ignore_errors=True); os.makedirs(work)
@@ -73,6 +73,7 @@ def main(board, publish=False):
         for ext in ("kicad_pcb", "kicad_pro"): os.rename(os.path.join(work, f"board.{ext}"), os.path.join(work, f"unrouted.{ext}"))
         note = route(work, recipe["board"].get("ground_fill"))
         view = recipe["board"].get("view", "top")
+        screens = [dict(s, image=os.path.join(src, s["image"])) for s in recipe["board"].get("screens", [])]
         meta = {"title": recipe["title"], "purpose": recipe["purpose"], "source": recipe["source"], "pcb": "kicad/board.kicad_pcb", "sch": "kicad/board.kicad_sch"}
         pcb_path, sch_path = os.path.join(work, "board.kicad_pcb"), os.path.join(work, "board.kicad_sch")
         blocks = json.load(open(os.path.join(work, "blocks.json")))
@@ -105,9 +106,10 @@ def main(board, publish=False):
         if r.returncode or not os.path.exists(raw):
             sys.exit(r.stdout + r.stderr)
         tags = os.path.join(tmp, "blocks.json"); json.dump(blocks, open(tags, "w"))
+        shots = os.path.join(tmp, "screens.json"); json.dump(screens, open(shots, "w"))
         out = os.path.join(HERE, "out", board, f"{board}.glb")
         os.makedirs(os.path.dirname(out), exist_ok=True)
-        r = subprocess.run([tools.tool("blender"), "-b", "--factory-startup", "--python", os.path.join(HERE, "lib", "pack.py"), "--", raw, tags, out, view],
+        r = subprocess.run([tools.tool("blender"), "-b", "--factory-startup", "--python", os.path.join(HERE, "lib", "pack.py"), "--", raw, tags, out, view, shots],
                            capture_output=True, text=True)
         stats = [l for l in r.stdout.splitlines() if l.startswith("PACK")]
         if r.returncode or not stats:

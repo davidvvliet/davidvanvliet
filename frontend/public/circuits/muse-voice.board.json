@@ -150,26 +150,6 @@
    ]
   },
   {
-   "name": "Microphone",
-   "parts": [
-    {
-     "ref": "C6",
-     "value": "0.1uF",
-     "package": "C_0402_1005Metric"
-    },
-    {
-     "ref": "R6",
-     "value": "100k",
-     "package": "R_0402_1005Metric"
-    },
-    {
-     "ref": "U3",
-     "value": "ICS-43434",
-     "package": "InvenSense_ICS-43434-6_3.5x2.65mm"
-    }
-   ]
-  },
-  {
    "name": "3.3 V regulator (600 mA)",
    "parts": [
     {
@@ -190,17 +170,22 @@
    ]
   },
   {
-   "name": "LED",
+   "name": "Microphone",
    "parts": [
     {
-     "ref": "D3",
-     "value": "RED",
-     "package": "LED_0603_1608Metric"
+     "ref": "C6",
+     "value": "0.1uF",
+     "package": "C_0402_1005Metric"
     },
     {
-     "ref": "R11",
-     "value": "470R",
+     "ref": "R6",
+     "value": "100k",
      "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "U3",
+     "value": "ICS-43434",
+     "package": "InvenSense_ICS-43434-6_3.5x2.65mm"
     }
    ]
   },
@@ -216,6 +201,21 @@
      "ref": "U6",
      "value": "TPD3E001DRLR",
      "package": "SOT-553"
+    }
+   ]
+  },
+  {
+   "name": "LED",
+   "parts": [
+    {
+     "ref": "D3",
+     "value": "RED",
+     "package": "LED_0603_1608Metric"
+    },
+    {
+     "ref": "R11",
+     "value": "470R",
+     "package": "R_0402_1005Metric"
     }
    ]
   }

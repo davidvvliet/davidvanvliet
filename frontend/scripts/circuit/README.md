@@ -70,7 +70,7 @@ every box get no block.
 `boards/<board>/recipe.json` (templates/recipe.json): `title`, `purpose`, `source` (as board.json),
 `board` (size, `rules`: the project file with clearances and widths, `ground_fill`: the net poured on
 both sides, `mask` and `silk`: the solder mask and printing colours as KiCad colour names or
-`#RRGGBB[AA]`, `finish`: the pad finish; without `mask`, KiCad's default green; `view`: "back" shows the web model back up, for a board whose screen is on its back), `blocks` (instance name -> block and position) and `connect` (groups of `instance.port`
+`#RRGGBB[AA]`, `finish`: the pad finish; without `mask`, KiCad's default green; `view`: "back" shows the web model back up, for a board whose screen is on its back; `screens`: [{block, color, image, rotate, glow}] shows an image on the faces of that block in its display area's colour, as the model exports it (linear), drawn by `screens/make.py`), `blocks` (instance name -> block and position) and `connect` (groups of `instance.port`
 joined into one net, named after the first). A build generates the board into `out/<board>/kicad/`
 (open `board.kicad_pcb` or `board.kicad_sch` there in KiCad to look at it), routes it and checks it.
 The schematic (`lib/schematic.py`) is drawn from the same parts: one titled box per block, every pin

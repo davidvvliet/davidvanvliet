@@ -1,5 +1,5 @@
 # Blender side of build.py: KiCad's GLB in, the web model out.
-#   Blender -b --python pack.py -- raw.glb blocks.json out.glb [top|back]
+#   Blender -b --python pack.py -- raw.glb blocks.json out.glb [top|back] [screens.json]
 # Every part goes under an empty named after its block (glTF extras "assembly", the board "core"),
 # which the /models viewer uses to focus and explode. KiCad writes each track and pad as its own
 # piece; merging each block into one mesh per material keeps the page fast.
@@ -8,6 +8,7 @@ from mathutils import Vector
 
 raw, tags, out, *rest = sys.argv[sys.argv.index("--") + 1:]
 view = rest[0] if rest else "top"
+screens = json.load(open(rest[1])) if len(rest) > 1 else []
 blocks = json.load(open(tags))
 bpy.ops.wm.read_factory_settings(use_empty=True)
 bpy.ops.import_scene.gltf(filepath=raw)
@@ -86,6 +87,40 @@ board = joined["Board"]
 pts = [board.matrix_world @ Vector(c) for c in board.bound_box]
 mid = sum(pts, Vector()) / 8
 for o in joined.values(): o.location -= Vector((mid.x, mid.y, min(p.z for p in pts)))
+
+# Screens on (recipe "screens"): the faces of a block in the display area's colour (its model's, as KiCad exports it:
+# linear) show an image, mapped flat across them, turned by "rotate" degrees; "glow" lights it (a backlit LCD).
+bpy.context.view_layer.update()
+for s in screens:
+    o = joined.get(s["block"])
+    if o is None: sys.exit(f"screen: no block {s['block']!r}")
+    me = o.data
+    hit = {i for i, sl in enumerate(o.material_slots) if sl.material and sl.material.use_nodes and
+           all(abs(a - b) <= s.get("tolerance", 0.01) for a, b in
+               zip(sl.material.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value[:3], s["color"]))}
+    polys = [p for p in me.polygons if p.material_index in hit]
+    if not polys: sys.exit(f"screen: no faces of colour {s['color']} in {s['block']!r}")
+    img = bpy.data.images.load(s["image"]); img.pack()
+    m = bpy.data.materials.new(f"screen {s['block']}"); m.use_nodes = True
+    nt = m.node_tree; b = nt.nodes["Principled BSDF"]
+    tex = nt.nodes.new("ShaderNodeTexImage"); tex.image = img; tex.interpolation = "Closest"
+    nt.links.new(tex.outputs["Color"], b.inputs["Base Color"])
+    b.inputs["Roughness"].default_value = s.get("roughness", 0.5); b.inputs["Metallic"].default_value = 0
+    if s.get("glow"):
+        nt.links.new(tex.outputs["Color"], b.inputs["Emission Color"]); b.inputs["Emission Strength"].default_value = s["glow"]
+    me.materials.append(m); k = len(me.materials) - 1
+    uv = me.uv_layers.get("UVMap") or me.uv_layers.new(name="UVMap")
+    mw = o.matrix_world
+    pts = [mw @ me.vertices[v].co for p in polys for v in p.vertices]
+    x0, x1 = min(q.x for q in pts), max(q.x for q in pts); y0, y1 = min(q.y for q in pts), max(q.y for q in pts)
+    turn = round(s.get("rotate", 0) / 90) % 4
+    for p in polys:
+        p.material_index = k
+        for li in p.loop_indices:
+            q = mw @ me.vertices[me.loops[li].vertex_index].co
+            u, v = (q.x - x0) / (x1 - x0), (q.y - y0) / (y1 - y0)
+            for _ in range(turn): u, v = v, 1 - u
+            uv.data[li].uv = (u, v)
 
 for block, o in joined.items():
     e = bpy.data.objects.new(f"block {block}", None); bpy.context.scene.collection.objects.link(e)
