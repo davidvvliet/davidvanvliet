@@ -1,0 +1,109 @@
+{
+ "name": "usb_esd",
+ "title": "USB ESD protection",
+ "purpose": "TPD3E001 ESD diode array on the USB connector's D+, D- and VBUS (its VCC rail), as Espressif suggests at the power entrance",
+ "sources": [
+  {
+   "id": "tpd3e001",
+   "title": "TI TPD3E001 datasheet (SLLS683F)",
+   "url": "https://www.ti.com/lit/ds/symlink/tpd3e001.pdf",
+   "licence": "© TI: link and quotes only",
+   "read": "5 pins (DRL), 8.2 USB application, layout guidelines"
+  },
+  {
+   "id": "s3hw",
+   "title": "Espressif ESP32-S3 Hardware Design Guidelines",
+   "url": "https://docs.espressif.com/projects/esp-hardware-design-guidelines/en/latest/esp32s3/esp-hardware-design-guidelines-en-master-esp32s3.pdf",
+   "licence": "© Espressif: link and quotes only",
+   "read": "power entrance"
+  },
+  {
+   "id": "kicad",
+   "title": "KiCad 10 standard libraries (symbols, footprints, 3D models)",
+   "url": "https://gitlab.com/kicad/libraries",
+   "licence": "CC BY-SA 4.0 with design exception",
+   "read": "symbol pins, footprint, 3D model"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "U6",
+   "value": "TPD3E001DRLR",
+   "symbol": "Power_Protection:TPD3E001DRLR",
+   "footprint": "Package_TO_SOT_SMD:SOT-553",
+   "source": "tpd3e001, 5 Pin Configuration (DRL)",
+   "quote": "DRL 5-pin SOT: 1 IO1, 2 IO2, 3 GND, 4 IO3, 5 VCC; \"a single TPD3E001 is used to protect all the pins of a USB2.0 micro-AB connector ... (VBUS, D+, D-, ID)\""
+  },
+  {
+   "ref": "C10",
+   "value": "0.1uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "tpd3e001, 8.2.2",
+   "quote": "\"Place a 0.1-μF capacitor very close to the VCC pin.\""
+  }
+ ],
+ "nets": {
+  "VBUS": [
+   "U6.5",
+   "C10.1"
+  ],
+  "GND": [
+   "U6.3",
+   "C10.2"
+  ],
+  "/USB_D+": [
+   "U6.1"
+  ],
+  "/USB_D-": [
+   "U6.2"
+  ]
+ },
+ "ports": {
+  "VBUS": {
+   "net": "VBUS",
+   "kind": "power_in",
+   "note": "\"Signal voltage range on VCC 0 V to 5.25 V\" (tpd3e001 Table 1)"
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground"
+  },
+  "/USB_D+": {
+   "net": "/USB_D+",
+   "kind": "data"
+  },
+  "/USB_D-": {
+   "net": "/USB_D-",
+   "kind": "data"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   3,
+   3
+  ],
+  "place": {
+   "U6": {
+    "at_mm": [
+     0,
+     0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C10": {
+    "at_mm": [
+     0,
+     1.6
+    ],
+    "rotation": 0,
+    "side": "front"
+   }
+  },
+  "traces": [],
+  "vias": [],
+  "rules": "\"Place the TPD3E001 solution close to the connectors\" (tpd3e001 8.2.2). IO3 unused (TI's example leaves its ID channel \"GND or Floating\")."
+ },
+ "open_questions": []
+}

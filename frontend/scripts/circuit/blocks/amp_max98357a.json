@@ -23,6 +23,13 @@
    "url": "https://gitlab.com/kicad/libraries",
    "licence": "CC BY-SA 4.0 with design exception",
    "read": "symbol pin numbers, footprint pads, 3D models"
+  },
+  {
+   "id": "adafruit3006",
+   "title": "Adafruit I2S 3W Class D Amplifier Breakout - MAX98357A (product 3006), board files",
+   "url": "https://github.com/adafruit/Adafruit-MAX98357-I2S-Class-D-Mono-Amp-PCB",
+   "licence": "CC BY-SA 3.0 (Adafruit's open hardware licence for the board files)",
+   "read": "QFN16_3MM package: pads and exposed pad"
   }
  ],
  "parts": [
@@ -30,9 +37,9 @@
    "ref": "U4",
    "value": "MAX98357A",
    "symbol": "Audio:MAX98357A",
-   "footprint": "Package_DFN_QFN:TQFN-16-1EP_3x3mm_P0.5mm_EP1.6x1.6mm",
-   "source": "max98357a, pin table; kicad",
-   "quote": "TQFN: 1 DIN, 2 GAIN_SLOT, 3/11/15 GND, 4 SD_MODE, 7/8 VDD, 9 OUTP, 10 OUTN, 14 LRCLK, 16 BCLK; \"Connect the exposed page to a solid ground plane\""
+   "footprint": "muse:MAX98357A_TQFN-16-1EP_3x3mm_P0.5mm_EP1.5x1.5mm_Adafruit",
+   "source": "max98357a, pin table; adafruit3006 (pads)",
+   "quote": "TQFN: 1 DIN, 2 GAIN_SLOT, 3/11/15 GND, 4 SD_MODE, 7/8 VDD, 9 OUTP, 10 OUTN, 14 LRCLK, 16 BCLK; \"Connect the exposed page to a solid ground plane\"; pads as Adafruit's QFN16_3MM: 0.8 x 0.28 at 1.5 mm, \"THERMAL\" 1.5 x 1.5"
   },
   {
    "ref": "C7",
@@ -186,8 +193,8 @@
   "rules": "GAIN_SLOT unconnected: 9 dB (max98357a). Exposed pad to the ground fill."
  },
  "open_questions": [
-  "Maxim's package is T1633+4 (land pattern 90-0031); KiCad's EP1.6 footprint is used and not yet compared with it.",
   "No output ferrites or 220 pF filter (Adafruit's breakout has them, optional).",
-  "Speaker and its current from the USB 5 V not chosen."
+  "Speaker and its current from the USB 5 V not chosen.",
+  "Maxim's land pattern 90-0031 couldn't be downloaded (analog.com refused the connection); the pads follow Adafruit's built breakout instead."
  ]
 }

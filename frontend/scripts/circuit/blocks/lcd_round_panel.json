@@ -221,12 +221,11 @@
   },
   "traces": [],
   "vias": [],
-  "rules": "Panel and its pads on the back; the flex is folded under the panel as the drawing's bent view. BL high (or open, R8 to 3V3) turns the backlight on."
+  "rules": "Panel and its pads on the back; the flex is folded under the panel as the drawing's bent view. BL high (or open, R8 to 3V3) turns the backlight on. Pads as the flex's contacts (0.35 x 2.00 at 0.7, zjy128 p4); alignment holes 10.00 apart, 2.00 beyond the contacts. Folded under, the contacts face the board with pin 1 on the right seen from the screen, as the drawing's front view."
  },
  "open_questions": [
-  "The maker recommends a constant-current backlight driver (\"It is recommended to use IC (AW9364)\", zjy128 p7); this follows Waveshare's module: 3.3 V through 10 Ω and a transistor (backlight 40 mA typ, VLED 2.9-3.1 V).",
-  "VDD is 3.3 V, the panel's maximum (2.8 V typical), as on Waveshare's module.",
-  "Solder pads drawn from the flex's contacts (0.35 x 2.0, the 2.0 read uncertainly off the drawing); the alignment holes' position along the flex is estimated.",
-  "The ESP32's antenna overhangs the board edge beside the panel; the panel's effect on it not checked."
+  "Backlight without the maker's recommended constant-current driver (\"It is recommended to use IC (AW9364)\", zjy128 p7), as on Waveshare's module: at most (3.35 - 2.9) V / 10 Ω = 45 mA (AP2112's +1.5%, the LED's lowest VLED, the transistor's drop taken as 0), under the 60 mA maximum; with VLED 3.1 V it can be as low as about 25 mA, so brightness varies between panels.",
+  "VDD runs from the 3.3 V rail: the panel's maximum is 3.3 V (2.8 typ, 4.6 absolute), the AP2112 is ±1.5% (up to 3.35 V); Waveshare's module does the same. A 2.8 V regulator for the panel would remove it.",
+  "Antenna: the module's antenna overhangs the board edge as Espressif recommends; the panel's backlight frame is on the back about 5 mm from the antenna's edge, not under it. Espressif asks for at least 15 mm clearance from the housing and a range test of the finished product."
  ]
 }

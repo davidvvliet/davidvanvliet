@@ -66,6 +66,13 @@
     27,
     44
    ]
+  },
+  "esd": {
+   "block": "usb_esd",
+   "at_mm": [
+    11.5,
+    31
+   ]
   }
  },
  "connect": [
@@ -89,15 +96,18 @@
    "mic.GND",
    "amp.GND",
    "lcd.GND",
-   "led.GND"
+   "led.GND",
+   "esd.GND"
   ],
   [
    "usb./USB_D+",
-   "core./USB_D+"
+   "core./USB_D+",
+   "esd./USB_D+"
   ],
   [
    "usb./USB_D-",
-   "core./USB_D-"
+   "core./USB_D-",
+   "esd./USB_D-"
   ],
   [
    "core./IO42",
@@ -140,13 +150,15 @@
   [
    "core./IO14",
    "lcd./LCD_BL"
+  ],
+  [
+   "usb.VBUS",
+   "esd.VBUS"
   ]
  ],
  "open_questions": [
   "Our own board_*.c for the Muse SDK is still to write: screen on IO9-IO14 (DIN, CLK, CS, DC, RST, BL), I2S BCLK IO42, WS IO39, amp IO41, mic IO40.",
-  "GPIO3 strapping floats; no ESD diode at the USB input.",
-  "Amplifier footprint (KiCad EP1.6) not compared with Maxim's land pattern 90-0031.",
-  "Speaker not chosen; USB 5 V current budget for amp + ESP32 + backlight not checked.",
+  "Power from USB at 5 V, peaks: ESP32 Wi-Fi TX 355 mA (wroom1 Table 6-4, through the linear regulator), amp about 240 mA at 1 W into 8 \u03a9 (92% efficient, max98357a), backlight up to 45 mA, panel 10.5 mA: about 650 mA, over a USB 2.0 port's 500 mA but within a Type-C charger's 1.5 or 3 A. The input diode is rated 1.0 A. Speaker not chosen; an 8 \u03a9 1 W speaker keeps within this.",
   "Display: see the round display block's questions; the mic's sound hole is outside the panel."
  ]
 }

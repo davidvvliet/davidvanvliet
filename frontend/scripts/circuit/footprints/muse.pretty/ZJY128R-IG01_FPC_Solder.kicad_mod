@@ -2,7 +2,7 @@
 	(version 20241229)
 	(generator "circuit_harness")
 	(layer "F.Cu")
-	(descr "Zhongjingyuan ZJY128R-IG01 1.28in round TFT (GC9A01), its 12-contact FPC soldered to the board (0.7 mm pitch, contacts 0.35 wide, 2 x 1.0 mm alignment holes 10.00 apart) and folded under the panel; drawn from the maker's mechanical drawing (circuit harness)")
+	(descr "Zhongjingyuan ZJY128R-IG01 1.28in round TFT (GC9A01), its 12-contact FPC soldered to the board (0.7 mm pitch, contacts 0.35 wide, 2 x 1.0 mm alignment holes 10.00 apart, 2.00 beyond the contacts) and folded under the panel; drawn from the maker's mechanical drawing (circuit harness)")
 	(tags "round TFT GC9A01 FPC hot-bar")
 	(attr smd)
 	(property "Reference" "REF**"
@@ -149,14 +149,14 @@
 		(uuid "a45cf072-0909-4872-b77f-0b744752ba93")
 	)
 	(pad "" np_thru_hole circle
-		(at -5 0)
+		(at -5 -3)
 		(size 1 1)
 		(drill 1)
 		(layers "*.Cu" "*.Mask")
 		(uuid "b192c83a-770c-49e0-a8f6-20a8a7094a15")
 	)
 	(pad "" np_thru_hole circle
-		(at 5 0)
+		(at 5 -3)
 		(size 1 1)
 		(drill 1)
 		(layers "*.Cu" "*.Mask")
