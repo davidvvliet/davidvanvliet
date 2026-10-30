@@ -133,9 +133,8 @@ type Controls = { target: THREE.Vector3; update: () => void };
 // bounding sphere needs, orbiting the core's centre (the body, not the middle of a long
 // boom). Explodes on `exploded`: every part, or without explore only the spec's listed ones
 // ("viewer": {"explode": [...]}); the rest stay in place.
-// A clicked part (`focus`) gets the camera: it flies in keeping the current viewing
-// direction, orbits that part, follows it through explode/assemble, and flies back home
-// when the focus clears.
+// A clicked part (`focus`) stays as it is and every other part fades; the camera is left
+// alone, so it moves the same with or without a focus.
 function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = true, focusable = NONE, explodable = NO_PARTS }: {
   url: string; exploded: boolean; focus: string | null; setFocus: (f: string | null) => void; explore?: boolean;
   focusable?: Focusable[]; explodable?: string[];
@@ -145,7 +144,7 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
   // A copy per mount (geometry is shared): explode, fades and Suspense hiding change the
   // objects, and useGLTF's cached scene is reused by the next mount and the /models grid.
   const scene = useMemo(() => gltf.scene.clone(true), [gltf.scene]);
-  const { parts, units, offsets, boxes, centre } = useParts(scene);
+  const { parts, units, boxes, centre } = useParts(scene);
   const readyRef = useRef(onReady);
   readyRef.current = onReady;
   useEffect(() => { readyRef.current?.(); }, [scene]);
@@ -153,8 +152,6 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
   const hinges = useHinges(scene);
   // Without explore, only the spec's listed parts ("viewer": {"focus": [...]}) can be focused.
   const canFocus = (g: string) => explore || focusable.some((f) => f.part === g);
-  // Each part's explode offset: zero for a part that stays put.
-  const offsetOf = (g: string) => (explore || explodable.includes(g) ? offsets.get(g) : undefined) ?? ZERO;
   const t = useRef(0);
   const camera = useThree((s) => s.camera) as THREE.PerspectiveCamera;
   const controls = useThree((s) => s.controls) as unknown as Controls | null;
@@ -171,8 +168,7 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
       }
     });
   }, [gltf.scene, gl]);
-  const home = useRef<{ pos: THREE.Vector3; target: THREE.Vector3; near: number } | null>(null);
-  const flight = useRef({ flying: false, dir: new THREE.Vector3(), last: new THREE.Vector3() });
+  const homeNear = useRef(0.01);
 
   useEffect(() => {
     const sphere = new THREE.Box3().setFromObject(scene).getBoundingSphere(new THREE.Sphere());
@@ -180,9 +176,9 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
     const dist = (sphere.radius * 1.15) / Math.sin(fov / 2);
     camera.position.copy(centre).addScaledVector(new THREE.Vector3(0.6, 0.45, 0.66).normalize(), dist);
     camera.near = dist / 100;
+    homeNear.current = camera.near;
     camera.far = dist * 10;
     camera.updateProjectionMatrix();
-    home.current = { pos: camera.position.clone(), target: centre.clone(), near: camera.near };
     if (controls) { controls.target.copy(centre); controls.update(); }
     else camera.lookAt(centre);
   }, [scene, camera, controls, centre]);
@@ -191,17 +187,6 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
   useEffect(() => { if (focus && !boxes.has(focus)) setFocus(null); }, [focus, boxes, setFocus]);
 
   useEffect(() => {
-    const f = flight.current;
-    f.flying = true;
-    if (controls) f.dir.copy(camera.position).sub(controls.target).normalize();
-    if (focus && boxes.has(focus)) {
-      const box = boxes.get(focus)!;
-      f.last.copy(box.getCenter(new THREE.Vector3())).addScaledVector(offsetOf(focus), smooth(t.current));
-      const fov = THREE.MathUtils.degToRad(camera.fov) * Math.min(1, camera.aspect);
-      const dist = Math.max(box.getSize(new THREE.Vector3()).length() * 0.65, 0.05) / Math.sin(fov / 2);
-      camera.near = Math.min(home.current?.near ?? dist / 100, dist / 100);
-    } else if (home.current) camera.near = home.current.near;
-    camera.updateProjectionMatrix();
     // Fade every other part; restore when the focus clears.
     for (const p of parts) for (const m of p.meshes) {
       for (const mat of (Array.isArray(m.material) ? m.material : [m.material]) as THREE.MeshStandardMaterial[]) {
@@ -216,46 +201,17 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
         mat.needsUpdate = true;
       }
     }
-  }, [focus, boxes, offsets, parts, camera, controls]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [focus, parts]);
 
   useFrame((_, dt) => {
     const goal = exploded ? 1 : 0;
     if (Math.abs(goal - t.current) < 1e-4) { t.current = goal; } else t.current += (goal - t.current) * Math.min(1, dt * 5);
     const k = smooth(t.current);
     for (const u of units) u.node.position.copy(u.rest).addScaledVector(u.local, explore || explodable.includes(u.group) ? k : 0);
-    if (!controls || !home.current) return;
-    const f = flight.current;
-    let goalTarget: THREE.Vector3, goalPos: THREE.Vector3;
-    if (focus && boxes.has(focus)) {
-      const box = boxes.get(focus)!;
-      goalTarget = box.getCenter(new THREE.Vector3()).addScaledVector(offsetOf(focus), k);
-      if (!f.flying) {
-        // Settled: follow the part as it moves, keeping whatever view the user orbited to.
-        const delta = goalTarget.clone().sub(f.last);
-        camera.position.add(delta);
-        controls.target.add(delta);
-        f.last.copy(goalTarget);
-        controls.update();
-        return;
-      }
-      const fov = THREE.MathUtils.degToRad(camera.fov) * Math.min(1, camera.aspect);
-      const dist = Math.max(box.getSize(new THREE.Vector3()).length() * 0.65, 0.05) / Math.sin(fov / 2);
-      goalPos = goalTarget.clone().addScaledVector(f.dir, dist);
-      f.last.copy(goalTarget);
-    } else {
-      if (!f.flying) return;
-      goalTarget = home.current.target;
-      goalPos = home.current.pos;
-    }
-    const a = 1 - Math.exp(-dt * 5);
-    camera.position.lerp(goalPos, a);
-    controls.target.lerp(goalTarget, a);
-    controls.update();
-    const scale = goalPos.distanceTo(goalTarget);
-    if (camera.position.distanceTo(goalPos) < scale * 0.002 && controls.target.distanceTo(goalTarget) < scale * 0.002) {
-      camera.position.copy(goalPos);
-      controls.target.copy(goalTarget);
-      f.flying = false;
+    // Close up, the near plane comes in with the camera so small parts aren't clipped.
+    if (controls) {
+      const near = Math.min(homeNear.current, camera.position.distanceTo(controls.target) / 100);
+      if (Math.abs(near - camera.near) > near * 0.05) { camera.near = near; camera.updateProjectionMatrix(); }
     }
   });
 
@@ -319,7 +275,6 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
 export type Focusable = { part: string; label: string };
 const NONE: Focusable[] = [];
 const NO_PARTS: string[] = [];
-const ZERO = new THREE.Vector3();
 
 // Hinged parts: joints the build exported with a "joint_move_to" (the spec's joints). A click
 // on a part under one turns every joint in its group to that angle, or back to rest. The axis
