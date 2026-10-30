@@ -25,7 +25,7 @@ const dots = [
 ];
 type Dot = (typeof dots)[number];
 
-// `panel`: a non-explore view (resume, a post) for the top cell; null shows the solar system.
+// `panel`: a non-explore view (a post, a photo) for the top cell; null shows the solar system.
 export default function MobilePage({ panel, photos }: { panel: React.ReactNode; photos: Photo[] }) {
   // Labels on touch: no hover, so a tapped dot, a tapped star, and the focused body.
   const [tappedDot, setTappedDot] = useState<Dot | null>(null);

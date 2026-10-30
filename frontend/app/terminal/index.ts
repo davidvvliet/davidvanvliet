@@ -3,7 +3,6 @@ import "./commands/clear";
 import "./commands/response";
 import "./commands/writing";
 import "./commands/socials";
-import "./commands/resume";
 import "./commands/explore";
 import "./commands/credits";
 import "./commands/focus";

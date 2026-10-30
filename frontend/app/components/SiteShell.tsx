@@ -24,7 +24,7 @@ const SolarSystem = dynamic(() => import('./SolarSystem').then(mod => mod.SolarS
 });
 
 // The home grid. The URL decides the left panel: "/" is the solar system,
-// any other route (resume, a post) is that page, with a way back to explore.
+// any other route (a post, a photo) is that page, with a way back to explore.
 export default function SiteShell({ children, photos }: { children: React.ReactNode; photos: Photo[] }) {
   const isMobile = useIsMobile();
   const pathname = usePathname();
