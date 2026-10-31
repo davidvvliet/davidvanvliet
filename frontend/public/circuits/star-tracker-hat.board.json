@@ -1,0 +1,153 @@
+{
+ "board": "star-tracker-hat",
+ "title": "Star tracker HAT",
+ "purpose": "Raspberry Pi Zero 2 W add-on (uHAT) that makes a Pi and its Global Shutter Camera a star tracker: power from the spacecraft bus, RS-485 link to the flight computer, BMI088 IMU, HAT ID EEPROM",
+ "source": {
+  "title": "star-tracker-hat recipe",
+  "url": "https://github.com/davidvvliet/davidvanvliet/tree/main/frontend/scripts/circuit/boards/star-tracker-hat",
+  "author": "the circuit harness: blocks from Raspberry Pi, Microchip, TI, JST, Bosch documents; LED block from Mitayi-Pico (CIRCUITSTATE, MIT)",
+  "licence": "MIT blocks; new blocks quote their datasheets"
+ },
+ "blocks": [
+  {
+   "name": "HAT ID EEPROM",
+   "parts": [
+    {
+     "ref": "C5",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "R2",
+     "value": "3.9k",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "R3",
+     "value": "3.9k",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "R4",
+     "value": "1k",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "U3",
+     "value": "24LC32A",
+     "package": "SOIC-8_3.9x4.9mm_P1.27mm"
+    }
+   ]
+  },
+  {
+   "name": "Bus power into the Pi",
+   "parts": [
+    {
+     "ref": "C1",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C2",
+     "value": "10uF",
+     "package": "C_0805_2012Metric"
+    },
+    {
+     "ref": "C3",
+     "value": "10uF",
+     "package": "C_0805_2012Metric"
+    },
+    {
+     "ref": "R1",
+     "value": "30.1k",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "U1",
+     "value": "TPS2121",
+     "package": "Texas_VQFN-HR-12_2x2.5mm_P0.5mm"
+    }
+   ]
+  },
+  {
+   "name": "IMU",
+   "parts": [
+    {
+     "ref": "C20",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C21",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "U20",
+     "value": "BMI088",
+     "package": "Bosch_LGA-16_4.5x3mm_P0.5mm_LayoutBorder7x1y_ClockwisePinNumbering"
+    }
+   ]
+  },
+  {
+   "name": "RS-485 transceiver",
+   "parts": [
+    {
+     "ref": "C4",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "RT1",
+     "value": "Z0 of the cable",
+     "package": "R_0603_1608Metric"
+    },
+    {
+     "ref": "U2",
+     "value": "THVD1410",
+     "package": "SOIC-8_3.9x4.9mm_P1.27mm"
+    }
+   ]
+  },
+  {
+   "name": "Bus connectors",
+   "parts": [
+    {
+     "ref": "J2",
+     "value": "XH 2-pin",
+     "package": "JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical"
+    },
+    {
+     "ref": "J3",
+     "value": "GH 6-pin",
+     "package": "JST_GH_SM06B-GHS-TB_1x06-1MP_P1.25mm_Horizontal"
+    }
+   ]
+  },
+  {
+   "name": "Status LED (GPIO)",
+   "parts": [
+    {
+     "ref": "D1",
+     "value": "RED",
+     "package": "LED_0603_1608Metric"
+    },
+    {
+     "ref": "R5",
+     "value": "470R",
+     "package": "R_0402_1005Metric"
+    }
+   ]
+  },
+  {
+   "name": "Raspberry Pi 40-pin header (uHAT)",
+   "parts": [
+    {
+     "ref": "J1",
+     "value": "Pi GPIO 2x20",
+     "package": "PinSocket_2x20_P2.54mm_Vertical"
+    }
+   ]
+  }
+ ]
+}
