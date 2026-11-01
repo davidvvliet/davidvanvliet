@@ -27,6 +27,9 @@ interface PageState {
   setBeforeMission: (before: { rate: number } | null) => void;
   /** Clear the mission and return to today, at the rate from before it. */
   endMission: () => void;
+  /** The `footprint` view: the farthest craft's full paths, drawn at once. Cleared by `launch` and `reset`. */
+  footprintShown: boolean;
+  setFootprintShown: (on: boolean) => void;
   /** Free-running mission videos still playing in the terminal; a finished mission ends only after them. */
   missionVideos: number;
   addMissionVideo: (delta: number) => void;
@@ -103,6 +106,8 @@ export const usePageStore = create<PageState>()(
       s.setBeforeMission(null);
     }
   },
+  footprintShown: false,
+  setFootprintShown: (on) => set({ footprintShown: on }),
   missionVideos: 0,
   addMissionVideo: (delta) => set((state) => ({ missionVideos: Math.max(0, state.missionVideos + delta) })),
   trackRequest: null,

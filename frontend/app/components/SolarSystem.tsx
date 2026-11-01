@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { usePageStore } from '../store/pageStore';
 import { PLANETS, MOONS, STARS, SPECTRAL_COLORS, APOLLO_SITES } from './solarSystemData';
+import { FOOTPRINT } from '../missions/footprint';
 import { MISSIONS, MissionEvent } from '../missions';
 import { marsPositionJ2000AU } from './marsEphemeris';
 import { moonPositionJ2000Km } from './lunar';
@@ -65,7 +66,7 @@ const SCALES: Record<ScaleMode, { orbitScale: number; sunRadius: number; moonOrb
     sunRadius: EARTH_RADIUS * 109.2,
     moonOrbitRadius: EARTH_RADIUS * (384400 / 6371), // 384,400 km, on the same km scale as orbitScale
     starSphereRadius: 8e6,                          // beyond the max zoom-out (~3.7M at Pluto), inside the far plane
-    farPlane: 3e7,
+    farPlane: 2e8,                                  // room for `footprint`, zoomed out past Voyager 1 (~5M)
     sunGlowScale: 4.5,                              // glow sprite size as a multiple of the Sun's diameter
   },
   compact: {
@@ -297,6 +298,8 @@ export function SolarSystem({
   const trackRequest = usePageStore((s) => s.trackRequest);
   const handledTrackSeqRef = useRef(0);
   const trackRef = useRef<((id: string | null) => void) | null>(null);
+  const footprintShown = usePageStore((s) => s.footprintShown);
+  const footprintRef = useRef<((on: boolean) => void) | null>(null);
   const apolloVisible = usePageStore((s) => s.apolloVisible);
   const raycasterRef = useRef<THREE.Raycaster>(new THREE.Raycaster());
   const mouseRef = useRef<THREE.Vector2>(new THREE.Vector2());
@@ -829,6 +832,7 @@ export function SolarSystem({
     const textureLoader = new THREE.TextureLoader();
     const textures: THREE.Texture[] = [];
     let outermostOrbit = earthOrbitRadius; // basis for the max zoom-out
+    let footprintExtent = 0; // farthest `footprint` point from the Sun, while shown: widens the max zoom-out
     const tiltedByPlanet = new Map<string, THREE.Group>(); // moons orbit in their planet's equatorial plane
     const spinMeshByName = new Map<string, THREE.Mesh>();  // each planet's spinning mesh, for site directions
     const siteGroups: { mission: string; group: THREE.Group }[] = []; // surface dots shown while a mission runs
@@ -1271,6 +1275,20 @@ export function SolarSystem({
     let mission: Mission | null = null;
     const toScene = (x: number, y: number, z: number, out: THREE.Vector3) => out.set(x * orbitScale, z * orbitScale, -y * orbitScale);
     const frameFor = (center: SegmentCenter) => (center === 'Earth' ? earthSystem : center === 'Moon' ? moonFrame : scene);
+    // A trajectory as a line in its centre's frame, drawn in full. `spare` adds a slot for a moving tip.
+    const makePath = (center: SegmentCenter, points: number[][], color: number, spare = false) => {
+      const group = new THREE.Group();
+      frameFor(center).add(group);
+      const v = new THREE.Vector3();
+      const positions = new Float32Array((points.length + (spare ? 1 : 0)) * 3);
+      points.forEach((p, i) => { toScene(p[1], p[2], p[3], v); positions.set([v.x, v.y, v.z], i * 3); });
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      geometry.setDrawRange(0, points.length);
+      const line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.95 }));
+      group.add(line);
+      return { group, line, positions };
+    };
     const clearMission = () => {
       if (!mission) return;
       for (const seg of mission.segments) {
@@ -1297,19 +1315,10 @@ export function SolarSystem({
       if (!res.ok) return;
       const data = await res.json();
       const raw: { center: SegmentCenter; points: number[][]; static?: boolean }[] = data.segments ?? [{ center: spec.center, points: data.points }];
-      const v = new THREE.Vector3();
       const segments: Segment[] = raw.map((r) => {
-        const group = new THREE.Group();
-        frameFor(r.center).add(group);
-        const positions = new Float32Array((r.points.length + 1) * 3); // +1: a slot for the interpolated tip
-        r.points.forEach((p, i) => { toScene(p[1], p[2], p[3], v); positions.set([v.x, v.y, v.z], i * 3); });
-        const geometry = new THREE.BufferGeometry();
-        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        geometry.setDrawRange(0, 0);
-        // Static segments (a target's own path) in yellow, the craft in blue.
-        const line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: r.static ? 0xffdd44 : 0x66ccff, transparent: true, opacity: 0.95 }));
-        group.add(line);
-        if (r.static) geometry.setDrawRange(0, r.points.length);
+        // Static segments (a target's own path) in yellow and drawn in full, the craft in blue.
+        const { group, line, positions } = makePath(r.center, r.points, r.static ? 0xffdd44 : 0x66ccff, true);
+        line.geometry.setDrawRange(0, r.static ? r.points.length : 0);
         return { center: r.center, points: r.points, line, positions, pristine: positions.slice(), lastTipIndex: -1, group, isStatic: !!r.static };
       });
       const markerRadius = EARTH_RADIUS * 0.02; // tiny; the pixel floor keeps it visible as a dot
@@ -1382,6 +1391,59 @@ export function SolarSystem({
     };
     let activeEvent: MissionEvent | null = null;
     trackRef.current = (id) => { loadMission(id); };
+
+    // `footprint`: the farthest craft's whole paths at once, each with a dot where its data ends
+    // (about now). Nothing moves: no clock jump, no growing tip. The camera eases out once to fit them.
+    let footprint: { group: THREE.Group; line: THREE.Line; marker: THREE.Mesh; body: Body }[] = [];
+    let footprintLoad = 0; // a newer request (or `off`) drops an older fetch still in flight
+    const clearFootprint = () => {
+      footprintLoad++;
+      for (const f of footprint) {
+        f.group.parent?.remove(f.group);
+        f.line.geometry.dispose();
+        (f.line.material as THREE.Material).dispose();
+        f.marker.geometry.dispose();
+        (f.marker.material as THREE.Material).dispose();
+        const i = bodies.indexOf(f.body);
+        if (i >= 0) bodies.splice(i, 1);
+        if (focus === f.body) { focus = sunBody; transition = null; }
+      }
+      footprint = [];
+      footprintExtent = 0;
+    };
+    const loadFootprint = async () => {
+      clearFootprint();
+      const load = footprintLoad;
+      const files = await Promise.all(FOOTPRINT.map(async ({ id, color }) => {
+        const spec = MISSIONS.find((m) => m.id === id);
+        const res = spec && await fetch(spec.file);
+        return spec && res && res.ok ? { spec, color, data: await res.json() } : null;
+      }));
+      if (load !== footprintLoad) return;
+      const v = new THREE.Vector3();
+      for (const f of files) {
+        if (!f) continue;
+        const raw: { center: SegmentCenter; points: number[][]; static?: boolean }[] = f.data.segments ?? [{ center: f.spec.center, points: f.data.points }];
+        const points = raw.filter((r) => !r.static).flatMap((r) => r.points);
+        const { group, line } = makePath(f.spec.center, points, f.color);
+        const markerRadius = EARTH_RADIUS * 0.02; // tiny; the pixel floor keeps it visible as a dot
+        const marker = new THREE.Mesh(new THREE.SphereGeometry(markerRadius, 8, 8), new THREE.MeshBasicMaterial({ color: f.color }));
+        const last = points[points.length - 1];
+        toScene(last[1], last[2], last[3], marker.position);
+        group.add(marker);
+        const body: Body = { name: f.spec.name, object: marker, visual: marker, radius: markerRadius, parent: sunBody, systemRadius: 0, scale: 1 };
+        bodies.push(body);
+        footprint.push({ group, line, marker, body });
+        for (const p of points) footprintExtent = Math.max(footprintExtent, toScene(p[1], p[2], p[3], v).length());
+      }
+      // Fly to the Sun, then ease out to fit every path, looking down 35° onto the ecliptic.
+      setFocus(sunBody, { zoomTo: true });
+      const from = camera.position.clone().sub(controls.target).normalize();
+      const azimuth = Math.atan2(-from.z, from.x);
+      const el = THREE.MathUtils.degToRad(35);
+      pendingAim = { to: new THREE.Vector3(Math.cos(el) * Math.cos(azimuth), Math.sin(el), -Math.cos(el) * Math.sin(azimuth)), distTo: fitDistance(footprintExtent) };
+    };
+    footprintRef.current = (on) => { if (on) loadFootprint(); else clearFootprint(); };
     // Restores the sample slot a segment's tip last overwrote.
     const restoreTip = (seg: Segment) => {
       if (seg.lastTipIndex >= 0 && seg.lastTipIndex < seg.points.length) {
@@ -1439,6 +1501,7 @@ export function SolarSystem({
       handledTrackSeqRef.current = pendingTrack.seq;
       loadMission(pendingTrack.id);
     }
+    if (usePageStore.getState().footprintShown) loadFootprint(); // e.g. the scene was rebuilt for true scale
 
 
     // Animation loop
@@ -1604,7 +1667,7 @@ export function SolarSystem({
       // out to the full system view while staying centered. Only a click (or
       // Escape) moves the frame.
       // (Limits are relaxed mid-transition so the eased distance isn't clamped.)
-      const systemMax = Math.max(MAX_CAMERA_DISTANCE, fitDistance(outermostOrbit + sunBody.radius) * 1.5);
+      const systemMax = Math.max(MAX_CAMERA_DISTANCE, fitDistance(Math.max(outermostOrbit, footprintExtent) + sunBody.radius) * 1.5);
       controls.minDistance = transition ? 0.1 : minDistanceFor(focus);
       controls.maxDistance = transition ? systemMax * 10 : systemMax;
       controls.update();
@@ -1850,6 +1913,8 @@ export function SolarSystem({
       sunGlowMaterialRef.current = null;
       planetDisposables.forEach(({ geometry, material }) => { geometry.dispose(); material.dispose(); });
       clearMission();
+      clearFootprint();
+      footprintRef.current = null;
       if (transcriptPlaying) usePageStore.getState().setTranscriptPlaying(false);
       trackRef.current = null;
       starSprites.forEach(({ sprite }) => sprite.material.dispose());
@@ -1881,6 +1946,14 @@ export function SolarSystem({
     handledTrackSeqRef.current = trackRequest.seq;
     trackRef.current(trackRequest.id);
   }, [trackRequest]);
+
+  // Show or clear the footprint (terminal `footprint` command). A scene still being built picks it up in init.
+  const footprintSeenRef = useRef(false);
+  useEffect(() => {
+    if (footprintShown === footprintSeenRef.current) return;
+    footprintSeenRef.current = footprintShown;
+    footprintRef.current?.(footprintShown);
+  }, [footprintShown]);
 
   // Jump the clock (terminal `date` command).
   useEffect(() => {

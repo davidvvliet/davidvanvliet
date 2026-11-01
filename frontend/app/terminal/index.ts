@@ -15,6 +15,7 @@ import "./commands/core";
 // import "./commands/apollo"; // temporarily off
 import "./commands/date";
 import "./commands/launch";
+import "./commands/footprint";
 import "./commands/radarcorp";
 import "./commands/books";
 import "./commands/films";

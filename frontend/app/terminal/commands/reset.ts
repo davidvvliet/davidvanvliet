@@ -20,6 +20,7 @@ const reset: Command = {
       }, 300);
       return ["Resetting everything..."];
     }
+    usePageStore.getState().setFootprintShown(false);
     usePageStore.getState().endMission(); // a running mission ends first, back to its starting date
     usePageStore.getState().resetSettings();
     try { localStorage.removeItem('explore-view'); } catch { /* storage unavailable */ }
