@@ -337,7 +337,7 @@ def ota_internals(f):
         parts.strut("secondary_baffle_mount", (0, 0, z(sb["sta"][1]) - 0.02), (0, 0, zs - 0.004), radius=0.05,
                     material="graphite_epoxy")
 
-def instruments(f):
+def instruments(f, sm):
     """The instruments behind the primary mirror (spec facts.instruments), all in internal.glb:
     the focal plane deck on its four bipods to the main ring, four axial instruments aft of it,
     and the radial modules (WFC3 and three Fine Guidance Sensors) just forward of it."""
@@ -366,17 +366,44 @@ def instruments(f):
                 c2, s2 = _az(a + da)
                 parts.strut(f"focal_plane_bipod_{k + 1}{'ab'[j]}", (math.copysign(corner, c), math.copysign(corner, s_), d1),
                             (c2 * r_ring, s2 * r_ring, z_ring), radius=0.025, material="titanium")
-    # Axial instruments: 86.6 x 35.6 x 35.6 in boxes, one per quadrant.
+    # Axial instruments: 86.6 x 35.6 x 35.6 in, one per quadrant: black panelled boxes with the
+    # long outer edge cut away (COS, KSC-08pd2320), a yellow EVA handle on the outer side, and on
+    # ACS a side of bright radiator strips between black ribs (KSC-01pp1760).
     L, w, _ = (v * IN for v in I["axial_size_in"])
     a0, a1 = (z(v) for v in I["axial_sta"])
+    ch = I["axial_chamfer"]
+    panel = unit_face(sm, "si_black", "si_panel")
+    cxy = e - w / 2
     for name, quad in I["axial_positions"].items():
         sx = 1 if quad[0] == "+" else -1
         sy = 1 if quad[3] == "+" else -1
-        cxy = e - w / 2
+        # outline_plate's u axis is sy * x here (up = sy * y): mirror u when the quadrant's signs differ
+        out = [(0, 0), (1, 0), (1, 1 - ch), (1 - ch, 1), (0, 1)]
+        if sx != sy:
+            out = [(1 - u, v) for u, v in out]
         with parts.assembly(name.lower(), internal=True):
-            parts.box(name.lower(), (w, w, L), location=(sx * cxy, sy * cxy, (a0 + a1) / 2), material="si_enclosure")
-    # Radial modules: pentagonal boxes (Figure 4-15), V1-thin, tip towards the axis.
-    outline = [(0.4, 0.0), (0.6, 0.0), (1.0, 0.5), (1.0, 1.0), (0.0, 1.0), (0.0, 0.5)]
+            body = parts.outline_plate(name.lower(), out, w, w, L, location=(sx * cxy, sy * cxy, a0),
+                                       direction=(0, 0, 1), up=(0, sy, 0), material=panel)
+            tiling.box_uv(body, 0.25)
+            # EVA handle on the outer +-V3 face, near the aft end
+            yh = sy * e
+            zh = a0 + 0.35
+            parts.tube(f"{name.lower()}_handle", [(sx * (cxy - 0.12), yh, zh), (sx * (cxy - 0.12), yh + sy * 0.06, zh),
+                                                  (sx * (cxy + 0.05), yh + sy * 0.06, zh), (sx * (cxy + 0.05), yh, zh)],
+                       radius=0.012, segments=8, material="si_handle")
+            if name == "ACS":
+                xr = sx * e
+                for k in range(6):
+                    yk = sy * (cxy - w / 2 + 0.03 + k * (w * (1 - ch) - 0.06) / 6 + 0.045)
+                    parts.box(f"acs_radiator_strip_{k + 1}", (0.004, 0.07, L - 0.2),
+                              location=(xr + sx * 0.002, yk, (a0 + a1) / 2), material="acs_radiator")
+    # Radial modules (Figure 4-15; KSC-08pd2348 for the FGS, KSC-08pd2454 for WFC3): rectangular
+    # slabs, thin along V1, whose inner end narrows to a V towards the axis (the pickoff looks into
+    # the beam there). On KSC-08pd2348 the sides run straight for about 70% of the length. The
+    # FGSs are black blanket with gold tape on their edges: the slab's sides are the tape, its
+    # faces a blanket inset from the edge. WFC3 is black blanket.
+    outline = [(0.4, 0.0), (0.6, 0.0), (1.0, 0.3), (1.0, 1.0), (0.0, 1.0), (0.0, 0.3)]
+    inset = [(0.5 + (u - 0.5) * 0.86, 0.5 + (v - 0.5) * 0.9) for u, v in outline]
     r_tip, z0 = I["radial_tip_r_in"] * IN, z(I["radial_sta0"])
     rs, fg = I["radial_si_in"], I["fgs_m"]
     for name, a in I["radial_bays"].items():
@@ -386,35 +413,70 @@ def instruments(f):
             t, wt, h = fg["v1"], fg["tangential"], fg["radial"]
         label = name if name == "wfc3" else "fine_guidance_sensor_" + name[-1]
         c, s_ = _az(a)
+        loc = (c * (r_tip + h / 2), s_ * (r_tip + h / 2), z0)
         with parts.assembly(label, internal=True):
-            parts.outline_plate(label, outline, wt, h, t, location=(c * (r_tip + h / 2), s_ * (r_tip + h / 2), z0),
-                                direction=(0, 0, 1), up=(c, s_, 0), material="si_enclosure")
+            parts.outline_plate(label, outline, wt, h, t, location=loc, direction=(0, 0, 1), up=(c, s_, 0),
+                                material="wfc3_blanket" if name == "wfc3" else "fgs_gold_tape")
+            if name == "wfc3":
+                continue
+            for j, zz in enumerate((z0 - 0.004, z0 + t)):
+                parts.outline_plate(f"{label}_blanket_{'ab'[j]}", inset, wt, h, 0.004, location=(loc[0], loc[1], zz),
+                                    direction=(0, 0, 1), up=(c, s_, 0), material="fgs_blanket")
 
-def equipment_bays(f, R_es, z0, z1):
+def unit_face(sm, key="bay_unit_black", name="bay_unit_face"):
+    """Tiling texture for black panelled boxes (bay units, the axial instruments; nasa_images_orus):
+    the `key` material's colour with rows of screw heads and white stencilled labels; 0.25 m per
+    tile. Pattern estimated."""
+    import numpy as np
+    px, rep = 256, 0.25
+    U, V = np.meshgrid((np.arange(px) + 0.5) / px * rep, (np.arange(px) + 0.5) / px * rep)
+    rgb = np.broadcast_to(tiling.srgb(sm[key]["hex"]), (px, px, 3)).copy()
+    screw = np.zeros((px, px), bool)
+    for v0 in (0.012, 0.125):
+        screw |= np.hypot((U % 0.03) - 0.015, V - v0) < 0.0022
+    screw |= np.hypot(U - 0.012, (V % 0.03) - 0.015) < 0.0022
+    rgb[screw] = tiling.srgb(sm["connector_metal"]["hex"]) * 0.8
+    ring = np.zeros((px, px), bool)
+    for cu, cv in ((0.07, 0.07), (0.13, 0.07), (0.19, 0.07), (0.07, 0.19)):
+        r = np.hypot(U - cu, V - cv)
+        ring |= (r > 0.0085) & (r < 0.0105)
+    rgb[ring] = tiling.srgb(sm["harness_white"]["hex"])
+    img = tiling.image("hubble", name, rgb.astype(np.float32), "sRGB")
+    return materials.image(name, img, metallic=sm[key]["metallic"], roughness=sm[key]["roughness"])
+
+def equipment_bays(f, sm, R_es, z0, z1):
     """What is inside the equipment section's bays (spec facts.equipment_bays), in internal.glb:
-    the boxes with a published size, on the inside of their bay's door, and the four reaction
-    wheels in Bays 6 and 9."""
+    the boxes with a published size, on the inside of their bay's door, the four reaction wheels
+    in Bays 6 and 9, the foil lining and the wire harnesses. Finishes from nasa_images_orus."""
     E = f["equipment_bays"]
     U = {k: [v * IN for v in s] for k, s in E["units_in"].items()}
     r_door = R_es * math.cos(math.radians(15))          # inside face of the bay doors
+    r_bar = f["ota"]["es_inner_barrel_in"] / 2 * IN
     L = z1 - z0
+    face = unit_face(sm)
+    fb, fn = tiling.crinkled_foil("hubble", "bay_foil", sm["bay_foil"]["hex"], facet=0.03, tilt_deg=12)
+    foil = materials.image("bay_foil_crinkled", fb, normal=fn, metallic=sm["bay_foil"]["metallic"],
+                           roughness=sm["bay_foil"]["roughness"])
+    names = {"1": "data_management", "2": "power", "3": "power", "4": "power", "5": "communications",
+             "6": "reaction_wheels", "7": "mechanism_control", "8": "pointing_control", "9": "reaction_wheels",
+             "10": "instrument_control"}
+
+    def size(u):                                        # (across, along V1, deep)
+        if u in ("battery_module", "pcu"):
+            lz, wt, hr = U[u]
+        elif u == "pdu":
+            wt, hr, lz = U[u]
+        elif u == "oscillator":
+            wt, lz, hr = U[u][0], U[u][1], U[u][0]
+        else:
+            wt, lz, hr = U[u]
+        return wt, lz, hr
+
     for bay, units in E["bays"].items():
         a = f["bay_azimuths"][bay]
         c, s_ = _az(a)
         tx, ty = -s_, c
-        names = {"1": "data_management", "2": "power", "3": "power", "4": "power", "5": "communications",
-                 "6": "reaction_wheels", "7": "mechanism_control", "8": "pointing_control", "9": "reaction_wheels",
-                 "10": "instrument_control"}
-        def size(u):                                    # (across, along V1, deep)
-            if u in ("battery_module", "pcu"):
-                lz, wt, hr = U[u]
-            elif u == "pdu":
-                wt, hr, lz = U[u]
-            elif u == "oscillator":
-                wt, lz, hr = U[u][0], U[u][1], U[u][0]
-            else:
-                wt, lz, hr = U[u]
-            return wt, lz, hr
+        P = lambda r, t, z: (c * r + tx * t, s_ * r + ty * t, z)       # bay frame: radius, across, V1
         # Spread along V1 with equal gaps; Bay 4's PCU runs the bay's length beside the four PDUs
         # in a 2 x 2 block. Wheels take half the bay each.
         place = []
@@ -434,6 +496,26 @@ def equipment_bays(f, R_es, z0, z1):
                 place.append((u, 0.0, zz + size(u)[1] / 2))
                 zz += size(u)[1] + gap
         with parts.assembly(f"bay_{bay}_{names[bay]}", internal=True):
+            # Foil lining: the barrel side and the two walls (each 5 mm inside its bay).
+            wb = 2 * r_bar * math.tan(math.radians(15))
+            liners = [parts.box(f"bay_{bay}_lining_back", (0.004, wb, L), location=P(r_bar + 0.002, 0, (z0 + z1) / 2),
+                                roll_deg=a, material=foil)]
+            for j in (-1, 1):
+                aw = a + j * 15
+                cw, sw = _az(aw)
+                rm = (r_bar + r_door) / 2
+                off = -j * 0.007
+                liners.append(parts.box(f"bay_{bay}_lining_side_{'ab'[j > 0]}", (r_door - r_bar, 0.004, L),
+                                        location=(cw * rm + tx * off, sw * rm + ty * off, (z0 + z1) / 2),
+                                        roll_deg=aw, material=foil))
+            for o in liners:
+                tiling.box_uv(o, 0.6)
+            # Harnesses along V1 on the barrel side: orange wire bundles and one white bundle.
+            for k, (t, rad, mat) in enumerate(((-wb / 2 + 0.06, 0.018, "harness_orange"), (-wb / 2 + 0.11, 0.014, "harness_orange"),
+                                              (wb / 2 - 0.07, 0.022, "harness_white"), (wb / 2 - 0.12, 0.016, "harness_orange"))):
+                r = r_bar + 0.004 + rad
+                parts.tube(f"bay_{bay}_harness_{k + 1}", [P(r, t, z0 + 0.02), P(r, t, z1 - 0.02)], radius=rad, segments=8,
+                           material=mat)
             for i, (u, t, zc) in enumerate(place):
                 tag = f"bay_{bay}_{u}_{i + 1}"
                 if u == "rwa":
@@ -441,29 +523,40 @@ def equipment_bays(f, R_es, z0, z1):
                     rf, rh, dp = W["flange_d"] / 2 * IN, W["housing_d"] / 2 * IN, W["depth"] * IN
                     tilt = math.radians(E["rwa_tilt_deg"] * (1 if i == 0 else -1))
                     ax = (-c * math.cos(tilt), -s_ * math.cos(tilt), math.sin(tilt))   # dome faces inward
-                    rc = (r_door + f["ota"]["es_inner_barrel_in"] / 2 * IN) / 2
+                    rc = (r_door + r_bar) / 2
                     base = (c * rc - ax[0] * dp / 2, s_ * rc - ax[1] * dp / 2, zc - ax[2] * dp / 2)
                     parts.lathe(tag, [(0, 0), (rf, 0), (rf, 0.01), (rh, 0.01), (rh, 0.1), (rh * 0.75, dp * 0.75),
                                       (rh * 0.35, dp), (0, dp)], location=base, direction=ax, segments=32,
-                                closed=True, material="electronics_box")
+                                closed=True, material="rwa_black")
                     parts.strut(f"{tag}_mount", base, (c * r_door, s_ * r_door, base[2]), radius=0.04,
-                                material="electronics_box")
+                                material="connector_metal")
                     continue
                 wt, lz, hr = size(u)
                 rc = r_door - hr / 2
-                x, y = c * rc + tx * t, s_ * rc + ty * t
                 if u == "oscillator":
-                    parts.cylinder(tag, wt / 2, lz, location=(x, y, zc), segments=12, material="electronics_box")
+                    tiling.box_uv(parts.cylinder(tag, wt / 2, lz, location=P(rc, t, zc), segments=12, material=face), 0.25)
                     continue
-                parts.box(tag, (hr, wt, lz), location=(x, y, zc), roll_deg=a, material="electronics_box")
-                if u == "battery_module":               # two handles on its inner face
-                    for j in (-1, 1):
-                        hz = zc + j * lz / 4
-                        p0 = (c * (rc - hr / 2), s_ * (rc - hr / 2))
-                        parts.tube(f"{tag}_handle_{'ab'[j > 0]}",
-                                   [(p0[0] - tx * 0.2, p0[1] - ty * 0.2, hz), (p0[0] - tx * 0.2 - c * 0.08, p0[1] - ty * 0.2 - s_ * 0.08, hz),
-                                    (p0[0] + tx * 0.2 - c * 0.08, p0[1] + ty * 0.2 - s_ * 0.08, hz), (p0[0] + tx * 0.2, p0[1] + ty * 0.2, hz)],
-                                   radius=0.012, material="handrail_paint")
+                box = parts.box(tag, (hr, wt, lz), location=P(rc, t, zc), roll_deg=a, material=face)
+                tiling.box_uv(box, 0.25)
+                ri = rc - hr / 2                        # the unit's inner face
+                # Two handles across the inner face (yellow on the battery modules, cream on the rest).
+                hm = "handrail_paint" if u == "battery_module" else "unit_handle"
+                long_z = lz >= wt
+                hl = min(0.3, 0.6 * (wt if long_z else lz))
+                for j in (-1, 1):
+                    if long_z:
+                        h0, h1, hz = (t - hl / 2, t + hl / 2), None, zc + j * lz / 4
+                        pts = [P(ri, h0[0], hz), P(ri - 0.05, h0[0], hz), P(ri - 0.05, h0[1], hz), P(ri, h0[1], hz)]
+                    else:
+                        ht = t + j * wt / 4
+                        pts = [P(ri, ht, zc - hl / 2), P(ri - 0.05, ht, zc - hl / 2), P(ri - 0.05, ht, zc + hl / 2), P(ri, ht, zc + hl / 2)]
+                    parts.tube(f"{tag}_handle_{'ab'[j > 0]}", pts, radius=0.011, segments=8, material=hm)
+                # A row of round connectors along the inner face's aft edge.
+                n = max(2, min(16, int(wt / 0.05)))
+                for k in range(n):
+                    tk = t - wt / 2 + wt * (k + 0.5) / n
+                    parts.cylinder(f"{tag}_connector_{k + 1}", 0.012, 0.04, location=P(ri - 0.02, tk, zc - lz / 2 + 0.03),
+                                   direction=(-c, -s_, 0), segments=8, material="connector_metal")
 
 def build(spec):
     d = {k: v["value"] for k, v in spec["dimensions"].items()}
@@ -667,8 +760,8 @@ def build(spec):
     aft_features(f, r_aft)
     fittings(f, r_ls, r_fs, R_es, z_ls1)
     ota_internals(f)
-    instruments(f)
-    equipment_bays(f, R_es, z_es0, z_es1)
+    instruments(f, sm)
+    equipment_bays(f, sm, R_es, z_es0, z_es1)
 
     # Handrails (layout estimated, spec facts.handrail_layout): lengthwise rails on the forward
     # tube and the aft shroud, clear of the array and antenna lines.
