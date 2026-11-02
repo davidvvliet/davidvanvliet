@@ -83,9 +83,9 @@
   }
  },
  "huygens": {
-  "approved": "2026-11-02 16:10",
+  "approved": "2026-11-02 16:20",
   "inputs": {
-   "specs/huygens.json": "c69094f1c796013d",
+   "specs/huygens.json": "0ab0a28a16aa9aa0",
    "probes/huygens.py": "c4aeb3e3f3a43e2a",
    "build.py": "363cabc8976febf0",
    "blender.json": "7bbc071b6e396ec4",
@@ -98,7 +98,7 @@
    "lib/materials.py": "7f1ec57b22c0d1b5",
    "lib/parts.py": "8c1e4b2e2f77cf08",
    "lib/parts_aero.py": "3f33c19b46511f0f",
-   "lib/parts_core.py": "4d75cd6b40e4f7f9",
+   "lib/parts_core.py": "48ad273b8397cbd8",
    "lib/parts_shapes.py": "afd2a71c76b0502b",
    "lib/parts_skin.py": "a9832566d73151b3",
    "lib/rig.py": "87431e5e6051f10e",
