@@ -158,6 +158,10 @@ and the camera flies to the inside parts, each of which can be clicked to focus.
 budget (`budget.internal_triangles`, `budget.internal_glb_bytes`), and no part may be parented across
 the two files. Every other check (attached, sources, materials) covers them as usual.
 
+Inside parts that can be seen from outside through an opening (Hubble's mirrors, baffles and spider
+down its open tube) use `inside=True` instead: they stay in `<probe>.glb`, so the outside view is
+right on its own, and the viewer keeps them solid and clickable while the inside is shown.
+
 ## Materials
 
 A part asks for a material by name (`material="dark_metal"`). The names come from the shared

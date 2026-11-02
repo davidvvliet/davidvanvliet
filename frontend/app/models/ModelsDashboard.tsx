@@ -72,6 +72,7 @@ function useParts(scene: THREE.Object3D) {
     const boxes = new Map<string, THREE.Box3>();
     let core: string | null = null;
     const within = new Map<string, string>(); // assembly -> its nested set (a probe's shield, module, cover)
+    const inside = new Set<string>(); // inside parts seen through an opening (parts.assembly(inside=True))
     scene.traverse((o) => {
       if (o.userData.core && typeof o.userData.assembly === "string") core = o.userData.assembly;
       if (typeof o.userData.within === "string" && typeof o.userData.assembly === "string") within.set(o.userData.assembly, o.userData.within);
@@ -80,6 +81,7 @@ function useParts(scene: THREE.Object3D) {
       // Parts share materials ("black" etc.): give each mesh its own so a highlight stays on one part.
       m.material = Array.isArray(m.material) ? m.material.map((x) => x.clone()) : m.material.clone();
       const g = groupOf(m, scene);
+      if (tagged(m)?.userData.inside) inside.add(g);
       const p = parts.get(g) ?? { group: g, meshes: [] };
       p.meshes.push(m);
       parts.set(g, p);
@@ -151,7 +153,7 @@ function useParts(scene: THREE.Object3D) {
       }
     };
     visit(scene, zero);
-    return { parts: [...parts.values()], units, offsets, boxes, centre };
+    return { parts: [...parts.values()], units, offsets, boxes, centre, inside };
   }, [scene]);
 }
 
@@ -169,7 +171,8 @@ type Controls = THREE.EventDispatcher<{ start: object }> & { target: THREE.Vecto
 // A clicked part (`focus`) gets the camera: it flies in keeping the current viewing direction
 // and centres on the part, and every other part fades. Any drag or scroll ends the flight, and
 // from then on the camera moves freely; clearing the focus only clears the fade.
-// `ghost`: every part faded and none clickable (the outside while the inside is shown).
+// `ghost`: the outside while the inside is shown: every part faded and unclickable except the
+// inside parts seen through an opening (`inside` in the glTF extras), which stay solid.
 // `inner`: a model's inside parts (internal.glb): no framing of its own on load, the camera
 // flies to them instead.
 function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = true, focusable = NONE, explodable = NO_PARTS, ghost = false, inner = false }: {
@@ -181,14 +184,14 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
   // A copy per mount (geometry is shared): explode, fades and Suspense hiding change the
   // objects, and useGLTF's cached scene is reused by the next mount and the /models grid.
   const scene = useMemo(() => gltf.scene.clone(true), [gltf.scene]);
-  const { parts, units, boxes, centre } = useParts(scene);
+  const { parts, units, boxes, centre, inside: seen } = useParts(scene);
   const readyRef = useRef(onReady);
   readyRef.current = onReady;
   useEffect(() => { readyRef.current?.(); }, [scene]);
   const [hover, setHover] = useState<string | null>(null);
   const hinges = useHinges(scene);
   // Without explore, only the spec's listed parts ("viewer": {"focus": [...]}) can be focused.
-  const canFocus = (g: string) => explore || focusable.some((f) => f.part === g);
+  const canFocus = (g: string) => ghost ? seen.has(g) : explore || focusable.some((f) => f.part === g);
   const t = useRef(0);
   const camera = useThree((s) => s.camera) as THREE.PerspectiveCamera;
   const controls = useThree((s) => s.controls) as unknown as Controls | null;
@@ -240,7 +243,8 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
   }, [controls]);
 
   // A focused part that isn't in this build (renamed or removed) clears the focus.
-  useEffect(() => { if (focus && !boxes.has(focus)) setFocus(null); }, [focus, boxes, setFocus]);
+  // (Not while the inside is shown: the outside and inside files share one focus.)
+  useEffect(() => { if (focus && !boxes.has(focus) && !ghost && !inner) setFocus(null); }, [focus, boxes, setFocus, ghost, inner]);
 
   useEffect(() => {
     // Fade every other part; restore when the focus clears.
@@ -250,14 +254,14 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
           mat.userData.restOpacity = mat.opacity;
           mat.userData.restTransparent = mat.transparent;
         }
-        const fade = ghost || (!!focus && p.group !== focus);
+        const fade = (ghost && !seen.has(p.group)) || (!!focus && p.group !== focus);
         mat.transparent = fade || mat.userData.restTransparent;
         mat.opacity = fade ? FADED : mat.userData.restOpacity;
         mat.depthWrite = !fade;
         mat.needsUpdate = true;
       }
     }
-  }, [focus, parts, ghost]);
+  }, [focus, parts, ghost, seen]);
 
   useFrame((_, dt) => {
     const goal = exploded ? 1 : 0;
@@ -318,6 +322,7 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
   // that reaches the focused part picks it even through faded parts in front of it.
   const pick = (e: ThreeEvent<PointerEvent | MouseEvent>) => {
     const groups = e.intersections.map((i) => groupOf(i.object, scene));
+    if (ghost) return groups.find((g) => seen.has(g)) ?? null;
     if (!explore) {
       // Only the listed parts: the one in front, or, while one is focused (the rest
       // see-through), any listed part along the ray.
@@ -326,6 +331,8 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
     return focus && groups.includes(focus) ? focus : groups[0] ?? groupOf(e.object, scene);
   };
   const onMove = (e: ThreeEvent<PointerEvent>) => {
+    // Seen through the faded outside, the inside file's parts behind it get the event.
+    if (ghost) { const g = pick(e); setHover(g); if (g) { e.stopPropagation(); gl.domElement.style.cursor = "pointer"; } return; }
     e.stopPropagation();
     const h = hingeGroup(e.intersections[0]?.object ?? e.object, scene);
     const g = h ?? pick(e);
@@ -334,6 +341,7 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
   };
   const onClick = (e: ThreeEvent<MouseEvent>) => {
     if (e.delta > 4) return; // the end of an orbit drag, not a click
+    if (ghost) { const g = pick(e); if (g) { e.stopPropagation(); setFocus(g === focus ? null : g); } return; }
     e.stopPropagation();
     // A part on a hinge with somewhere to go (its joint's move_to) moves instead of focusing.
     const h = hingeGroup(e.intersections[0]?.object ?? e.object, scene);
@@ -349,14 +357,12 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
     const name = focusable.find((f) => f.part === label)?.label ?? label;
     onLabel(label && box ? { name: name!, size: box.getSize(new THREE.Vector3()) } : null);
   }, [label, boxes, onLabel, focusable]);
-  if (ghost) return <primitive object={scene} />; // no handlers: clicks go through to the inside
   return <primitive object={scene} onPointerMove={onMove} onClick={onClick}
     onPointerOut={() => { setHover(null); gl.domElement.style.cursor = ""; }} />;
 }
 
 export type Focusable = { part: string; label: string };
 const NONE: Focusable[] = [];
-const noLabel = () => {};
 const NO_PARTS: string[] = [];
 
 // Hinged parts: joints the build exported with a "joint_move_to" (the spec's joints). A click
@@ -460,6 +466,8 @@ export function Viewer({ probe, url, breakdown, stale, compact, onReady, focus: 
   // Another model starts from its overview; a rebuild of the same one keeps the focus.
   useEffect(() => setFocus(null), [probe]); // eslint-disable-line react-hooks/exhaustive-deps
   const [label, setLabel] = useState<{ name: string; size: THREE.Vector3 } | null>(null);
+  const [innerLabel, setInnerLabel] = useState<{ name: string; size: THREE.Vector3 } | null>(null);
+  const shownLabel = inside ? innerLabel ?? label : label;
   const down = useRef<{ x: number; y: number } | null>(null);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") { setFocus(null); setInnerFocus(null); } };
@@ -482,8 +490,8 @@ export function Viewer({ probe, url, breakdown, stale, compact, onReady, focus: 
           </button>
         )}
       </div>
-      {label && (
-        <PartLabel name={label.name} size={label.size} row={breakdown?.families[label.name]}
+      {shownLabel && (
+        <PartLabel name={shownLabel.name} size={shownLabel.size} row={breakdown?.families[shownLabel.name]}
           hasBreakdown={!!breakdown} stale={stale} />
       )}
       <Canvas camera={{ fov: 35, position: [6, 4, 8] }} dpr={[1, 2]}
@@ -496,12 +504,12 @@ export function Viewer({ probe, url, breakdown, stale, compact, onReady, focus: 
         <color attach="background" args={["#090909"]} />
         <StudioLights />
         <Suspense fallback={null}>
-          <Model key={url} url={url} exploded={exploded} focus={inside ? null : focus} setFocus={setFocus} onLabel={inside ? noLabel : setLabel}
+          <Model key={url} url={url} exploded={exploded} focus={inside ? innerFocus : focus} setFocus={inside ? setInnerFocus : setFocus} onLabel={setLabel}
             onReady={onReady} explore={explore} focusable={focusable} explodable={explodable} ghost={inside} />
         </Suspense>
         <Suspense fallback={null}>
           {inside && internalUrl && (
-            <Model key={internalUrl} url={internalUrl} exploded={false} focus={innerFocus} setFocus={setInnerFocus} onLabel={setLabel} inner />
+            <Model key={internalUrl} url={internalUrl} exploded={false} focus={innerFocus} setFocus={setInnerFocus} onLabel={setInnerLabel} inner />
           )}
         </Suspense>
         <OrbitControls makeDefault enableZoom={!compact} zoomToCursor />
