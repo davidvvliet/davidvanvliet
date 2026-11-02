@@ -323,6 +323,9 @@ Write what you measure into the spec's `from_reference_model` with how it was me
    once committed and deployed it is served at `/models/<probe>.glb`. The /models page shows the
    spec's `"logos"` in the card's corner: who built the real vehicle first (`nasa`, `spacex`), then
    partners (`jpl`, `naa`, `rocketdyne`); the images are listed in `app/models/PublishedModels.tsx`.
+   Each card turns about the centre of the model's outline; a spec's `"viewer": {"pivot": "bus"}`
+   turns it about that part instead (a craft whose long booms would pull the centre off its body),
+   and the thumbnail (`thumbnail.py`, run by approve) uses the same pivot.
 3. Not built yet: the scene loading it. A mission's craft is drawn as a small blue sphere
    (`marker` in `app/components/SolarSystem.tsx`, where the mission is set up). The plan is
    to load the `.glb` with three's glTF loader and show it in place of the sphere when the

@@ -1,5 +1,5 @@
 # Renders a published model's thumbnail for the /models grid:
-#   blender --background --factory-startup --python thumbnail.py -- <in.glb> <out.webp>
+#   blender --background --factory-startup --python thumbnail.py -- <in.glb> <out.webp> [pivot]
 # The card shows it until the live model has loaded, then swaps to the model spinning from the
 # same view, so the camera and lights here copy the site's grid card (app/models/PublishedModels.tsx).
 import math, sys
@@ -14,7 +14,9 @@ VIEW = Vector((0.6, -0.66, 0.45)).normalized()
 # The site's directional lights (three.js position -> Blender axes, intensity).
 LIGHTS = (((5, -6, 7), 3.0), ((-6, 3, -1), 0.6))
 
-src, out = sys.argv[sys.argv.index("--") + 1:][:2]
+argv = sys.argv[sys.argv.index("--") + 1:]
+src, out = argv[:2]
+pivot = argv[2] if len(argv) > 2 else None   # the spec's viewer.pivot: a part to turn about
 bpy.ops.wm.read_factory_settings(use_empty=True)
 bpy.ops.import_scene.gltf(filepath=src)
 meshes = [o for o in bpy.context.scene.objects if o.type == "MESH"]
@@ -25,6 +27,13 @@ for o in meshes:
         p = o.matrix_world @ Vector(c)
         lo = Vector(map(min, lo, p)); hi = Vector(map(max, hi, p))
 centre, radius = (lo + hi) / 2, (hi - lo).length / 2
+if pivot:
+    # Turn about that part's centre (a craft's body, not its long booms), far enough out that
+    # every vertex stays in view, as the card does.
+    obj = bpy.data.objects[pivot]
+    pts = [obj.matrix_world @ Vector(c) for c in obj.bound_box]
+    centre = sum(pts, Vector()) / len(pts)
+    radius = max((o.matrix_world @ v.co - centre).length for o in meshes for v in o.data.vertices)
 
 scene = bpy.context.scene
 scene.render.engine = "BLENDER_EEVEE"

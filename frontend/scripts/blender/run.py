@@ -225,7 +225,8 @@ def cmd_approve(args):
         check_version()
         proc = subprocess.run([BLENDER, "--background", "--factory-startup", "--python-exit-code", "1",
                                "--python", os.path.join(HERE, "thumbnail.py"), "--",
-                               os.path.join(PUBLIC_MODELS, f"{probe}.glb"), os.path.join(PUBLIC_MODELS, f"{probe}.webp")],
+                               os.path.join(PUBLIC_MODELS, f"{probe}.glb"), os.path.join(PUBLIC_MODELS, f"{probe}.webp"),
+                               *([(spec.get("viewer") or {})["pivot"]] if (spec.get("viewer") or {}).get("pivot") else [])],
                               capture_output=True, text=True)
         if "THUMB_OK" not in proc.stdout:
             die(proc.stdout[-4000:] + proc.stderr[-4000:])
