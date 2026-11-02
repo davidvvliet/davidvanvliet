@@ -1,0 +1,1059 @@
+{
+ "title": "Huygens",
+ "logos": [
+  "esa"
+ ],
+ "note": "ESA's Huygens Titan probe as launched (1997): the entry assembly (front shield, back cover) closed around the descent module. Frame: z up = the probe's +Xp (from the front shield toward the orbiter), origin at the separation plane on the axis, where the fore dome meets the central ring; x = +Yp, y = +Zp (huygens_um Figs 2.2-13 to 2.2-15 axes). Built as its own model and placed on Cassini through the spec's includes.",
+ "sources": [
+  {
+   "id": "huygens_um",
+   "title": "Huygens User Manual Description, Aerospatiale, HUY.AS/c.100.OP.0201 issue 04 (1997), ESA PSA copy",
+   "url": "https://archives.esac.esa.int/psa/ftp/CASSINI-HUYGENS/HUYGENS_HK/HP-SSA-HK-2-3-V1.0/DOCUMENT/USERMANUEL/HUYGENS-USER-MANUAL.PDF",
+   "read": "2026-11-02",
+   "licence": "not stated: quoted, not kept"
+  },
+  {
+   "id": "jones1997",
+   "title": "Jones & Giovagnoli, The Huygens Probe System Design, ESA SP-1177 (1997), ESA PSA copy",
+   "url": "https://archives.esac.esa.int/psa/ftp/CASSINI-HUYGENS/HUYGENS_HK/HP-SSA-HK-2-3-V1.0/DOCUMENT/PUBLICATIONS/JONES1997.PDF",
+   "read": "2026-11-02",
+   "licence": "not stated: quoted, not kept"
+  },
+  {
+   "id": "aedb",
+   "title": "Huygens Entry Module Aerodynamic Database, EADS, HUY.EADS.MIS.RE.0002 (2004), ESA PSA copy",
+   "url": "https://archives.esac.esa.int/psa/ftp/CASSINI-HUYGENS/HUYGENS_HK/HP-SSA-HK-2-3-V1.0/DOCUMENT/AEDB/EADS-ST_HUYGENS_AEDB.PDF",
+   "read": "2026-11-02",
+   "licence": "not stated: quoted, not kept"
+  },
+  {
+   "id": "takashima",
+   "title": "Takashima et al., Prediction of the Aerothermodynamic Environment of the Huygens Probe (NASA Langley, NTRS 20050182949)",
+   "url": "https://ntrs.nasa.gov/api/citations/20050182949/downloads/20050182949.pdf",
+   "read": "2026-11-02",
+   "licence": "'This material is declared a work of the U. S. Government and is not subject to copyright protection in the United States'",
+   "saved": "refs/huygens/sources/takashima.txt"
+  },
+  {
+   "id": "post_flight",
+   "title": "Huygens Mission Post Flight Engineering (Alcatel Space Industries, HUY.ASPI.MIS.RE, 2006), ESA PSA copy",
+   "url": "https://archives.esac.esa.int/psa/ftp/CASSINI-HUYGENS/HUYGENS_HK/HP-SSA-HK-2-3-V1.0/DOCUMENT/INDUSTRY_DOCUMENTS/POST_FLIGHT_ANALYSIS_2006.PDF",
+   "read": "2026-11-02",
+   "licence": "'This document is the property of Alcatel Space Industries and shall not be reproduced': quoted, not kept"
+  },
+  {
+   "id": "esa_dm",
+   "title": "ESA, 'Huygens Descent Module' (1998/01, photo 97.05.006-002)",
+   "url": "https://www.esa.int/ESA_Multimedia/Images/1998/01/Huygens_Descent_Module",
+   "read": "2026-11-02",
+   "licence": "page: 'ESA Standard Licence'; credit 'DASA/ESA'",
+   "credit": "DASA/ESA, Huygens Descent Module (fore dome colour)"
+  },
+  {
+   "id": "esa_shield",
+   "title": "ESA, 'Huygens' reentry shield' (1998/01, photo 97.05.006-007)",
+   "url": "https://www.esa.int/ESA_Multimedia/Images/1998/01/Huygens_reentry_shield",
+   "read": "2026-11-02",
+   "licence": "page: 'ESA Standard Licence'; credit 'DASA/ESA'",
+   "credit": "DASA/ESA, Huygens' reentry shield (rear face colours)"
+  },
+  {
+   "id": "esa_internal",
+   "title": "ESA, 'Huygens internal structure' (1998/01)",
+   "url": "https://www.esa.int/ESA_Multimedia/Images/1998/01/Huygens_internal_structure",
+   "read": "2026-11-02",
+   "licence": "page: 'ESA Standard Licence'; credit 'DASA/ESA'"
+  },
+  {
+   "id": "ksc652",
+   "title": "NASA KSC-97pc652, Huygens descent module in the PHSF (1997-04-14)",
+   "url": "https://images.nasa.gov/details/KSC-97pc652",
+   "read": "2026-11-02",
+   "licence": "NASA media guidelines (nasa.gov/nasa-brand-center/images-and-media): 'generally are not subject to copyright in the United States'"
+  },
+  {
+   "id": "ksc730",
+   "title": "NASA KSC-97pc730, top side of the Huygens experiment platform (1997-04-22)",
+   "url": "https://images.nasa.gov/details/KSC-97pc730",
+   "read": "2026-11-02",
+   "licence": "NASA media guidelines: 'generally are not subject to copyright in the United States'",
+   "credit": "NASA/KSC, KSC-97pc730 (unit colour)"
+  },
+  {
+   "id": "ksc732",
+   "title": "NASA KSC-97pc732, bottom side of the Huygens experiment platform (1997-04-22)",
+   "url": "https://images.nasa.gov/details/KSC-97pc732",
+   "read": "2026-11-02",
+   "licence": "NASA media guidelines: 'generally are not subject to copyright in the United States'",
+   "credit": "NASA/KSC, KSC-97pc732 (platform and PCDU colours)"
+  },
+  {
+   "id": "pia04603",
+   "title": "NASA/JPL PIA04603, Cassini Spacecraft in a JPL Assembly Room (1997)",
+   "url": "https://science.nasa.gov/photojournal/cassini-spacecraft-in-a-jpl-assembly-room/",
+   "read": "2026-11-01",
+   "licence": "public domain (NASA/JPL); page credit: 'Credits: NASA/JPL'",
+   "credit": "NASA/JPL, PIA04603 (blanket colour)"
+  },
+  {
+   "id": "esa_platform_top",
+   "title": "ESA, 'Huygens experiment platform' (1998/01, photo 97.05.006-008)",
+   "url": "https://www.esa.int/ESA_Multimedia/Images/1998/01/Huygens_experiment_platform",
+   "read": "2026-11-02",
+   "licence": "page: 'ESA Standard Licence'; credit 'DASA/ESA'"
+  },
+  {
+   "id": "esa_platform_bottom",
+   "title": "ESA, 'Huygens main experiment platform' (1998/01, photo 97.05.006-001)",
+   "url": "https://www.esa.int/ESA_Multimedia/Images/1998/01/Huygens_main_experiment_platform",
+   "read": "2026-11-02",
+   "licence": "page: 'ESA Standard Licence'; credit 'DASA/ESA'"
+  }
+ ],
+ "reference_model": {
+  "url": "",
+  "note": "no official 3D model of Huygens found; built from the User Manual drawings"
+ },
+ "dimensions": {
+  "shield_diameter": {
+   "value": 2.7,
+   "object": "front_shield",
+   "measure": "diameter",
+   "source": "jones1997",
+   "quote": "The 79 kg, 2.7 m diameter, 60° half-angle coni-spherical Front Shield",
+   "also": [
+    {
+     "source": "aedb",
+     "quote": "Table 1 p.9: 'Maximum diameter/Reference Length 2.7 m'"
+    }
+   ]
+  },
+  "probe_depth": {
+   "value": 0.985,
+   "object": [
+    "front_shield",
+    "back_cover_upper"
+   ],
+   "measure": "z",
+   "source": "huygens_um",
+   "quote": "Fig 2.2-5 'Probe overall dimensions in launch configuration' (PDF p.52): 375 from the separation plane to the front shield nose, 610 from the plane to the back cover top"
+  },
+  "back_cover_diameter": {
+   "value": 1.79,
+   "object": "back_cover",
+   "measure": "diameter",
+   "source": "huygens_um",
+   "quote": "Fig 2.2-5: Ø1790 at the back cover's base"
+  },
+  "descent_height": {
+   "value": 0.636,
+   "object": [
+    "fore_dome",
+    "top_platform"
+   ],
+   "measure": "z",
+   "source": "huygens_um",
+   "quote": "Fig 2.2-6 'Probe overall dimensions in descent configuration' (PDF p.53): overall 636"
+  },
+  "fore_dome_depth": {
+   "value": 0.272,
+   "object": "fore_dome",
+   "measure": "z",
+   "source": "huygens_um",
+   "quote": "Fig 2.2-6: 272 from the ring to the fore dome's nose"
+  },
+  "experiment_platform_thickness": {
+   "value": 0.073,
+   "object": "experiment_platform",
+   "measure": "z",
+   "source": "huygens_um",
+   "quote": "p.20 (PDF p.63): 'the 73 mm thick aluminium honeycomb sandwich called Experiment platform'"
+  },
+  "top_platform_thickness": {
+   "value": 0.025,
+   "object": "top_platform",
+   "measure": "z",
+   "source": "huygens_um",
+   "quote": "p.20: 'the Top platform, an assembly of a 25 mm thick aluminium honeycomb sandwich'"
+  },
+  "platform_gap": {
+   "value": 0.261,
+   "measure": "distance",
+   "axis": "z",
+   "from": {
+    "object": "experiment_platform",
+    "at": "top"
+   },
+   "to": {
+    "object": "top_platform",
+    "at": "bottom"
+   },
+   "source": "huygens_um",
+   "quote": "Fig 2.2-6: 261 between the experiment platform and the top platform"
+  },
+  "ring_diameter": {
+   "value": 1.3,
+   "object": "central_ring",
+   "measure": "diameter",
+   "source": "post_flight",
+   "quote": "'The maximum diameter of the experiment platform as report on the following figure is 1300mm.'"
+  }
+ },
+ "facts": {
+  "frame": {
+   "value": "z = +Xp (front shield to back cover), x = +Yp, y = +Zp; origin on the axis at the separation plane",
+   "sources": [
+    {
+     "source": "huygens_um",
+     "quote": "Figs 2.2-5/2.2-6 (Xp along the axis), 2.2-13/2.2-15 (Z up, Y right seen from the top), 2.2-14 (Y to the left seen from below)"
+    }
+   ]
+  },
+  "stations": {
+   "value": {
+    "shield_nose": -0.375,
+    "dome_nose": -0.272,
+    "ring_bottom": 0.0,
+    "experiment_platform": [
+     0.005,
+     0.078
+    ],
+    "ring_top": 0.097,
+    "top_platform": [
+     0.339,
+     0.364
+    ],
+    "back_cover_top": 0.61
+   },
+   "sources": [
+    {
+     "source": "huygens_um",
+     "quote": "Fig 2.2-5: nose 375 and back cover 610 either side of the separation plane, 103.5 from the shield nose to the dome nose; Fig 2.2-6: 636 overall, 272 fore dome, (73), 261, (25)"
+    }
+   ],
+   "note": "272 + 73 + 261 + 25 = 631, so the experiment platform sits 5 mm above the dome's base; the ring's height (97) is estimated from Fig 2.2-6"
+  },
+  "shield": {
+   "value": "60 degree half-angle sphere-cone, nose radius 1.25 m, shoulder radius 0.0486 m, 620.5 from the nose to the rim; shell 60 mm (estimated from the hatching)",
+   "sources": [
+    {
+     "source": "aedb",
+     "quote": "Table 1 p.9: 'Nose radius 1.2501 m; Heat shield half cone angle 60°; Shoulder radius 0.0486 m'"
+    },
+    {
+     "source": "huygens_um",
+     "quote": "Fig 2.2-5: R1250, 620.5"
+    },
+    {
+     "source": "takashima",
+     "quote": "'a 2.700 m diameter, 60-deg sphere-cone configuration with an open back face. The nose radius is 1.250 m'"
+    }
+   ]
+  },
+  "shield_rear": {
+   "value": "rear face: Prosial (white) outside the back cover's footprint, the bare carbon structure inside it",
+   "sources": [
+    {
+     "source": "esa_shield",
+     "quote": "'The outer part of the rear face is coated with a 2 mm.-thick layer of thermal insulation (Prosial)... A back cover, inside which is the Descent Module itself, protects the central portion.'"
+    }
+   ]
+  },
+  "back_cover": {
+   "value": "stepped cone: Ø1790 base, 151.5 up, 45 x 45 chamfer, then Ø1249.8, Ø686.6 at 17.8° and a Ø321.7 flat top at 10°, 610 above the separation plane; two access doors, a break-out patch for the PDD on the flat top, two antenna caps on the top cone, three SEPS recesses, a bump for the DISR cover",
+   "sources": [
+    {
+     "source": "huygens_um",
+     "quote": "Fig 2.2-5 dimensions; p.14: 'Back cover is an aluminium stiffened shell protected by Prosial including the following items: two access doors, a break-out patch for the PDD located on the flat top of the shell... two shaped antennae caps on the top cone, 3 recesses for the SEPS accomodation, 1 bump located on the lower cone to accomodate the DISR cover'; Fig 2.2-9"
+    }
+   ],
+   "note": "recess, door, cap and bump sizes estimated from Fig 2.2-9 (a perspective sketch)"
+  },
+  "descent_structure": {
+   "value": "aluminium fore dome and after cone joined at the central ring; three titanium vertical columns between the platforms; one access door in the after cone",
+   "sources": [
+    {
+     "source": "huygens_um",
+     "quote": "p.20: 'two shells called \"after cone\" and \"foredome\" made in aluminium'; 'one central ring ensuring junctions of after cone and dome and supporting radar antennae, HASI booms, USM connectors and dischargers'; 'titanium vertical columns which ensure link between the two platforms'; 'one access door in after cone'"
+    },
+    {
+     "source": "jones1997",
+     "quote": "'three vertical titanium struts link the two platforms'"
+    }
+   ],
+   "note": "column positions (r 0.45 m, under the SEPS fittings) estimated"
+  },
+  "profile": {
+   "value": {
+    "after_cone": [
+     [
+      0.645,
+      0.097
+     ],
+     [
+      0.581,
+      0.35
+     ],
+     [
+      0.568,
+      0.364
+     ]
+    ],
+    "fore_dome": [
+     [
+      0.646,
+      -0.007
+     ],
+     [
+      0.638,
+      -0.038
+     ],
+     [
+      0.615,
+      -0.085
+     ],
+     [
+      0.571,
+      -0.123
+     ],
+     [
+      0.54,
+      -0.139
+     ],
+     [
+      0.47,
+      -0.17
+     ],
+     [
+      0.407,
+      -0.193
+     ],
+     [
+      0.272,
+      -0.232
+     ],
+     [
+      0.194,
+      -0.247
+     ],
+     [
+      0.132,
+      -0.255
+     ],
+     [
+      0.047,
+      -0.263
+     ],
+     [
+      0.0,
+      -0.272
+     ]
+    ],
+    "top_platform_radius": 0.568,
+    "ring": [
+     0.6,
+     0.65
+    ]
+   },
+   "source": "huygens_um, Fig 2.2-6 'Probe overall dimensions in descent configuration' (PDF p.53): lengths along Xp scaled by the 636 dimension (0.969 mm/px at 170 dpi), radii so the central ring is 1300 mm across (1.024 mm/px) (estimated)",
+   "note": "(r, z) in metres; the dome point at z -0.085 is interpolated where a vane hides the outline"
+  },
+  "spin_vanes": {
+   "value": {
+    "count": 36,
+    "z": -0.08,
+    "chord": 0.065,
+    "height": 0.066,
+    "cant_deg": 10
+   },
+   "sources": [
+    {
+     "source": "jones1997",
+     "quote": "36 spin vanes on the Fore Dome’s periphery; provide spin control during descent"
+    }
+   ],
+   "note": "z, chord, height and cant estimated from Fig 2.2-6 (the edge-on vane near the axis leans about 10 degrees)"
+  },
+  "dome_inlets": {
+   "value": {
+    "ssp": {
+     "centre_mm": [
+      -85,
+      200
+     ],
+     "radius_m": 0.105
+    },
+    "gcms": {
+     "centre_mm": [
+      -124,
+      -112
+     ],
+     "radius_m": 0.06
+    },
+    "acp": {
+     "centre_mm": [
+      50,
+      50
+     ],
+     "radius_m": 0.05
+    }
+   },
+   "sources": [
+    {
+     "source": "esa_dm",
+     "quote": "'The two smaller circular inserts near the dome's centre are the gas inlets for the Aerosol Collector Pyrolyser and Gas Chromatograph/Mass Spectrometer. Inside the largest circular aperture are the Surface Sensor Package's sensors.'"
+    }
+   ],
+   "note": "positions from Fig 2.2-14 (SSP, GCMS and ACP above them); the GCMS is 55 mm apart between Figs 2.2-13 and 2.2-14, its centre is the mean; radii estimated from the ESA photo scaled by the ring"
+  },
+  "units_top": {
+   "value": {
+    "disr_s": {
+     "centre_mm": [
+      -8,
+      560
+     ],
+     "size_mm": [
+      150,
+      150
+     ],
+     "height_m": 0.2,
+     "angle_deg": 0,
+     "material": "unit_black",
+     "source": "huygens_um, Fig 2.2-13 'Experiment platform layout (top side)' (PDF p.65), scaled so the central ring is 1300 mm across (estimated)",
+     "note": "DISR sensor head, at the ring periphery on +y; the part beyond the ring is disr_head"
+    },
+    "disr_e": {
+     "centre_mm": [
+      -3,
+      330
+     ],
+     "size_mm": [
+      220,
+      190
+     ],
+     "height_m": 0.15,
+     "angle_deg": 0.0,
+     "material": "unit_black",
+     "source": "huygens_um, Fig 2.2-13 'Experiment platform layout (top side)' (PDF p.65), scaled so the central ring is 1300 mm across (estimated)"
+    },
+    "ssp_e": {
+     "centre_mm": [
+      -293,
+      315
+     ],
+     "size_mm": [
+      130,
+      230
+     ],
+     "height_m": 0.1,
+     "angle_deg": -12,
+     "material": "unit_black",
+     "source": "huygens_um, Fig 2.2-13 'Experiment platform layout (top side)' (PDF p.65), scaled so the central ring is 1300 mm across (estimated)"
+    },
+    "tx_b": {
+     "centre_mm": [
+      247,
+      325
+     ],
+     "size_mm": [
+      250,
+      120
+     ],
+     "height_m": 0.08,
+     "angle_deg": -25,
+     "material": "platform_aluminium",
+     "source": "huygens_um, Fig 2.2-13 'Experiment platform layout (top side)' (PDF p.65), scaled so the central ring is 1300 mm across (estimated)",
+     "note": "esa_platform_top: 'the two redundant S-band transmitters (unpainted)'"
+    },
+    "casu": {
+     "centre_mm": [
+      -78,
+      115
+     ],
+     "size_mm": [
+      150,
+      75
+     ],
+     "height_m": 0.08,
+     "angle_deg": -8,
+     "material": "unit_black",
+     "source": "huygens_um, Fig 2.2-13 'Experiment platform layout (top side)' (PDF p.65), scaled so the central ring is 1300 mm across (estimated)"
+    },
+    "mtu": {
+     "centre_mm": [
+      127,
+      110
+     ],
+     "size_mm": [
+      115,
+      130
+     ],
+     "height_m": 0.1,
+     "angle_deg": 0.0,
+     "material": "unit_black",
+     "source": "huygens_um, Fig 2.2-13 'Experiment platform layout (top side)' (PDF p.65), scaled so the central ring is 1300 mm across (estimated)"
+    },
+    "cdmu_b": {
+     "centre_mm": [
+      337,
+      65
+     ],
+     "size_mm": [
+      230,
+      240
+     ],
+     "height_m": 0.16,
+     "angle_deg": -5,
+     "material": "unit_black",
+     "source": "huygens_um, Fig 2.2-13 'Experiment platform layout (top side)' (PDF p.65), scaled so the central ring is 1300 mm across (estimated)"
+    },
+    "pyro": {
+     "centre_mm": [
+      -358,
+      5
+     ],
+     "size_mm": [
+      250,
+      225
+     ],
+     "height_m": 0.12,
+     "angle_deg": 0,
+     "material": "unit_green",
+     "source": "huygens_um, Fig 2.2-13 'Experiment platform layout (top side)' (PDF p.65), scaled so the central ring is 1300 mm across (estimated)",
+     "note": "esa_platform_top: 'the Pyro unit (green)'"
+    },
+    "tuso": {
+     "centre_mm": [
+      142,
+      -135
+     ],
+     "size_mm": [
+      180,
+      110
+     ],
+     "height_m": 0.1,
+     "angle_deg": -30,
+     "material": "unit_black",
+     "source": "huygens_um, Fig 2.2-13 'Experiment platform layout (top side)' (PDF p.65), scaled so the central ring is 1300 mm across (estimated)"
+    },
+    "cdmu_a": {
+     "centre_mm": [
+      272,
+      -285
+     ],
+     "size_mm": [
+      230,
+      240
+     ],
+     "height_m": 0.16,
+     "angle_deg": -40,
+     "material": "unit_black",
+     "source": "huygens_um, Fig 2.2-13 'Experiment platform layout (top side)' (PDF p.65), scaled so the central ring is 1300 mm across (estimated)"
+    },
+    "rasu": {
+     "centre_mm": [
+      -368,
+      -245
+     ],
+     "size_mm": [
+      180,
+      110
+     ],
+     "height_m": 0.08,
+     "angle_deg": 30,
+     "material": "unit_black",
+     "source": "huygens_um, Fig 2.2-13 'Experiment platform layout (top side)' (PDF p.65), scaled so the central ring is 1300 mm across (estimated)"
+    },
+    "tx_a": {
+     "centre_mm": [
+      -198,
+      -425
+     ],
+     "size_mm": [
+      120,
+      250
+     ],
+     "height_m": 0.08,
+     "angle_deg": 20,
+     "material": "platform_aluminium",
+     "source": "huygens_um, Fig 2.2-13 'Experiment platform layout (top side)' (PDF p.65), scaled so the central ring is 1300 mm across (estimated)",
+     "note": "esa_platform_top: 'the two redundant S-band transmitters (unpainted)'"
+    },
+    "hasi_dpu": {
+     "centre_mm": [
+      -8,
+      -410
+     ],
+     "size_mm": [
+      200,
+      160
+     ],
+     "height_m": 0.1,
+     "angle_deg": 8,
+     "material": "unit_black",
+     "source": "huygens_um, Fig 2.2-13 'Experiment platform layout (top side)' (PDF p.65), scaled so the central ring is 1300 mm across (estimated)"
+    }
+   },
+   "sources": [
+    {
+     "source": "huygens_um",
+     "quote": "Fig 2.2-13 labels: DISR-S, DISR-E, SSP-E, TX-A/B, CASU, MTU, CDMU-A/B, PYRO, GCMS, TUSO, RASU, HASI-DPU"
+    },
+    {
+     "source": "esa_platform_top",
+     "quote": "'the two redundant S-band transmitters (unpainted) ... and the Pyro unit (green)'"
+    }
+   ],
+   "note": "centres and footprints estimated from huygens_um Fig 2.2-13 'Experiment platform layout (top side)' (PDF p.65), scaled so the central ring is 1300 mm across; height estimated from photos KSC-97pc730/KSC-97pc732 and ESA 'Huygens internal structure' (units fill most of the 261 mm between the platforms)"
+  },
+  "gcms": {
+   "value": {
+    "centre_mm": [
+     -124,
+     -112
+    ],
+    "radius_m": 0.115,
+    "top_height_m": 0.196
+   },
+   "sources": [
+    {
+     "source": "huygens_um",
+     "quote": "Fig 2.2-13 (GCMS circle) and Fig 2.2-6 (the rounded body above the experiment platform at the axis)"
+    }
+   ],
+   "note": "radius and height estimated from Fig 2.2-6; below the platform it runs to its dome inlet"
+  },
+  "units_bottom": {
+   "value": {
+    "ba_1": {
+     "centre_mm": [
+      -330,
+      310
+     ],
+     "size_mm": [
+      360,
+      160
+     ],
+     "height_m": 0.1,
+     "angle_deg": 35,
+     "material": "platform_aluminium",
+     "source": "huygens_um, Fig 2.2-14 'Experiment platform layout (bottom side)' (PDF p.66, a view from below: mirrored), scaled so the central ring is 1300 mm across (estimated)",
+     "note": "battery; esa_platform_bottom: 'The five batteries (silver boxes)'",
+     "material_source": "esa_platform_bottom"
+    },
+    "ba_2": {
+     "centre_mm": [
+      -240,
+      -400
+     ],
+     "size_mm": [
+      360,
+      160
+     ],
+     "height_m": 0.1,
+     "angle_deg": -30,
+     "material": "platform_aluminium",
+     "source": "huygens_um, Fig 2.2-14 'Experiment platform layout (bottom side)' (PDF p.66, a view from below: mirrored), scaled so the central ring is 1300 mm across (estimated)",
+     "note": "battery; esa_platform_bottom: 'The five batteries (silver boxes)'",
+     "material_source": "esa_platform_bottom"
+    },
+    "ba_3": {
+     "centre_mm": [
+      360,
+      265
+     ],
+     "size_mm": [
+      360,
+      160
+     ],
+     "height_m": 0.1,
+     "angle_deg": -55,
+     "material": "platform_aluminium",
+     "source": "huygens_um, Fig 2.2-14 'Experiment platform layout (bottom side)' (PDF p.66, a view from below: mirrored), scaled so the central ring is 1300 mm across (estimated)",
+     "note": "battery; esa_platform_bottom: 'The five batteries (silver boxes)'",
+     "material_source": "esa_platform_bottom"
+    },
+    "ba_4": {
+     "centre_mm": [
+      52,
+      450
+     ],
+     "size_mm": [
+      365,
+      160
+     ],
+     "height_m": 0.1,
+     "angle_deg": 0,
+     "material": "platform_aluminium",
+     "source": "huygens_um, Fig 2.2-14 'Experiment platform layout (bottom side)' (PDF p.66, a view from below: mirrored), scaled so the central ring is 1300 mm across (estimated)",
+     "note": "battery; esa_platform_bottom: 'The five batteries (silver boxes)'",
+     "material_source": "esa_platform_bottom"
+    },
+    "ba_5": {
+     "centre_mm": [
+      -455,
+      -65
+     ],
+     "size_mm": [
+      170,
+      370
+     ],
+     "height_m": 0.1,
+     "angle_deg": 0,
+     "material": "platform_aluminium",
+     "source": "huygens_um, Fig 2.2-14 'Experiment platform layout (bottom side)' (PDF p.66, a view from below: mirrored), scaled so the central ring is 1300 mm across (estimated)",
+     "note": "battery; esa_platform_bottom: 'The five batteries (silver boxes)'",
+     "material_source": "esa_platform_bottom"
+    },
+    "rau_a": {
+     "centre_mm": [
+      -5,
+      315
+     ],
+     "size_mm": [
+      150,
+      75
+     ],
+     "height_m": 0.06,
+     "angle_deg": 0,
+     "material": "unit_black",
+     "source": "huygens_um, Fig 2.2-14 'Experiment platform layout (bottom side)' (PDF p.66, a view from below: mirrored), scaled so the central ring is 1300 mm across (estimated)"
+    },
+    "rau_b": {
+     "centre_mm": [
+      -320,
+      -15
+     ],
+     "size_mm": [
+      95,
+      150
+     ],
+     "height_m": 0.06,
+     "angle_deg": -5,
+     "material": "unit_black",
+     "source": "huygens_um, Fig 2.2-14 'Experiment platform layout (bottom side)' (PDF p.66, a view from below: mirrored), scaled so the central ring is 1300 mm across (estimated)"
+    },
+    "pcdu": {
+     "centre_mm": [
+      210,
+      -190
+     ],
+     "size_mm": [
+      560,
+      300
+     ],
+     "height_m": 0.1,
+     "angle_deg": 40,
+     "material": "unit_green",
+     "source": "huygens_um, Fig 2.2-14 'Experiment platform layout (bottom side)' (PDF p.66, a view from below: mirrored), scaled so the central ring is 1300 mm across (estimated)"
+    },
+    "acp": {
+     "centre_mm": [
+      110,
+      150
+     ],
+     "size_mm": [
+      210,
+      170
+     ],
+     "height_m": 0.0,
+     "angle_deg": 32,
+     "material": "unit_black",
+     "source": "huygens_um, Fig 2.2-14 'Experiment platform layout (bottom side)' (PDF p.66, a view from below: mirrored), scaled so the central ring is 1300 mm across (estimated)",
+     "note": "runs down to its inlet in the fore dome (height from the dome)"
+    }
+   },
+   "sources": [
+    {
+     "source": "huygens_um",
+     "quote": "Fig 2.2-14 labels: BA-1..5, RAU-A/B, ACP, SSP, GCMS, PCDU"
+    },
+    {
+     "source": "jones1997",
+     "quote": "mass table: ACP 6.18, SSP 4.87, GCMS 17.20"
+    },
+    {
+     "source": "esa_platform_bottom",
+     "quote": "'The five batteries (silver boxes) ... along with the large power conditioning and distribution unit'"
+    }
+   ],
+   "note": "centres and footprints estimated from huygens_um Fig 2.2-14 'Experiment platform layout (bottom side)' (PDF p.66, a view from below: mirrored), scaled so the central ring is 1300 mm across; height estimated from photos KSC-97pc730/KSC-97pc732 and ESA 'Huygens internal structure' (units fill most of the 261 mm between the platforms)"
+  },
+  "ssp": {
+   "value": {
+    "centre_mm": [
+     -85,
+     200
+    ],
+    "radius_m": 0.105
+   },
+   "sources": [
+    {
+     "source": "huygens_um",
+     "quote": "Fig 2.2-14 (SSP circle)"
+    }
+   ],
+   "note": "runs from the platform down to its dome aperture"
+  },
+  "units_top_platform": {
+   "value": {
+    "parachute_container": {
+     "centre_mm": [
+      171,
+      -99
+     ],
+     "size_mm": [
+      400,
+      232
+     ],
+     "height_m": 0.155,
+     "angle_deg": 56.5,
+     "material": "webbing_white",
+     "source": "huygens_um, Fig 2.2-15 'Top platform accommodation' (PDF p.67), scaled so the platform is 1136 mm across (Fig 2.2-6) (estimated)",
+     "note": "height estimated from huygens_um Fig 2.2-5 (the box on the top platform, 2.2 mm/px)"
+    }
+   },
+   "sources": [
+    {
+     "source": "huygens_um",
+     "quote": "Fig 2.2-15 labels: PARACHUTE CONTAINER, PDD, PJM-1/2/3, DIAMOND, CD-ROM"
+    },
+    {
+     "source": "jones1997",
+     "quote": "'The main and stabiliser 'chutes are housed in a single canister on the DM's top platform'"
+    }
+   ]
+  },
+  "top_platform_items": {
+   "value": {
+    "pdd": {
+     "centre_mm": [
+      -10,
+      -2
+     ],
+     "radius_m": 0.075,
+     "height_m": 0.2
+    },
+    "antennas": [
+     {
+      "centre_mm": [
+       -230,
+       -110
+      ]
+     },
+     {
+      "centre_mm": [
+       130,
+       270
+      ]
+     }
+    ],
+    "antenna_radius_m": 0.045,
+    "antenna_height_m": 0.19,
+    "pjm": [
+     {
+      "centre_mm": [
+       5,
+       -505
+      ],
+      "angle_deg": 0
+     },
+     {
+      "centre_mm": [
+       440,
+       270
+      ],
+      "angle_deg": 60
+     },
+     {
+      "centre_mm": [
+       -460,
+       280
+      ],
+      "angle_deg": -60
+     }
+    ],
+    "cd_rom": {
+     "centre_mm": [
+      250,
+      -385
+     ],
+     "radius_m": 0.06
+    },
+    "diamond": {
+     "centre_mm": [
+      465,
+      -40
+     ],
+     "radius_m": 0.04
+    },
+    "harness": [
+     [
+      -370,
+      210
+     ],
+     [
+      -60,
+      -195
+     ]
+    ]
+   },
+   "sources": [
+    {
+     "source": "huygens_um",
+     "quote": "Fig 2.2-15"
+    },
+    {
+     "source": "esa_internal",
+     "quote": "'On the top platform is the rectangular parachute container, the cylindrical parachute deployment mortar and the two S-band data relay antennas (in the cylindrical protective covers).'"
+    },
+    {
+     "source": "ksc652",
+     "quote": "'The cylinders on the top of the probe contain antennas; the small square box has a parachute.'"
+    }
+   ],
+   "note": "PDD, PJM, CD-ROM, DIAMOND and harness positions estimated from huygens_um Fig 2.2-15 'Top platform accommodation' (PDF p.67), scaled so the platform is 1136 mm across (Fig 2.2-6); the antennas (not drawn in Fig 2.2-15) placed from KSC-97pc652, under the back cover's two antenna caps; heights estimated from KSC-97pc652 and kept under the back cover"
+  },
+  "ring_items": {
+   "value": {
+    "radar_antennas": {
+     "angles_deg": [
+      51,
+      129,
+      -51,
+      -129
+     ],
+     "r": 0.72,
+     "side": 0.16,
+     "tilt_deg": 30
+    },
+    "hasi_booms": [
+     {
+      "hinge_mm": [
+       -662,
+       5
+      ],
+      "tip_mm": [
+       -638,
+       -425
+      ]
+     },
+     {
+      "hinge_mm": [
+       652,
+       5
+      ],
+      "tip_mm": [
+       662,
+       -425
+      ]
+     }
+    ],
+    "hasi_stud": {
+     "angle_deg": -88,
+     "r": [
+      0.65,
+      0.78
+     ]
+    },
+    "seps_fittings_deg": [
+     -90,
+     30,
+     150
+    ],
+    "dischargers_deg": [
+     60,
+     118,
+     -76,
+     -109
+    ],
+    "disr_head": {
+     "angle_deg": 90,
+     "size_mm": [
+      100,
+      80
+     ],
+     "height_m": 0.12
+    }
+   },
+   "sources": [
+    {
+     "source": "huygens_um",
+     "quote": "Figs 2.2-13/2.2-14: TX-A, TX-B, RX-A, RX-B antenna grids, HASI BOOM 1/2, HASI STUD, SEPS-1/2/3; p.20 'central ring ... supporting radar antennae, HASI booms, USM connectors and dischargers'"
+    },
+    {
+     "source": "esa_internal",
+     "quote": "'one of the two down-looking antennas of the radar altimeter'"
+    }
+   ],
+   "note": "positions estimated from huygens_um Fig 2.2-13 'Experiment platform layout (top side)' (PDF p.65), scaled so the central ring is 1300 mm across and Fig 2.2-14; the antennas' tilt and the booms' stowed line estimated"
+  }
+ },
+ "materials": {
+  "blanket_amber": {
+   "hex": "#b89a3e",
+   "metallic": 1.0,
+   "roughness": 0.3,
+   "source": "pia04603 (https://images-assets.nasa.gov/image/PIA04603/PIA04603~orig.jpg): Cassini's gold blanket (Cassini's spec samples it); Huygens' outer blanket is the same kind in KSC-97PC1360, which has a strong cleanroom cast"
+  },
+  "fore_dome_gold": {
+   "hex": "#c4b595",
+   "metallic": 1.0,
+   "roughness": 0.35,
+   "source": "esa_dm (Huygens_Descent_Module.jpg, 768x512), 12x12 px patches at (300,200), (420,170), (290,330), (450,250) averaged; the print's white border reads #e5e5d3"
+  },
+  "unit_black": {
+   "hex": "#111724",
+   "metallic": 0.0,
+   "roughness": 0.55,
+   "source": "ksc730 (KSC-97pc730~orig.jpg), boxes on the experiment platform at (900,700), (960,940), (1200,1040), (800,820) averaged"
+  },
+  "unit_green": {
+   "hex": "#2b413f",
+   "metallic": 0.0,
+   "roughness": 0.6,
+   "source": "ksc732 (KSC-97pc732~orig.jpg), the PCDU at (1300,1000), (1200,1120), (1400,900); the white handling frame reads #dbd2db"
+  },
+  "platform_aluminium": {
+   "hex": "#afa09f",
+   "metallic": 1.0,
+   "roughness": 0.4,
+   "source": "ksc732, the bare underside of the experiment platform at (1400,600), (900,520) averaged"
+  },
+  "prosial_white": {
+   "hex": "#cfbbbe",
+   "metallic": 0.0,
+   "roughness": 0.8,
+   "source": "esa_shield (Huygens_reentry_shield.jpg), the Prosial coat at (180,230), (600,330), (450,420), (250,330); the frame reads #e4e3ea"
+  },
+  "carbon_dark": {
+   "hex": "#1b2030",
+   "metallic": 0.0,
+   "roughness": 0.6,
+   "source": "esa_shield, the shield's carbon structure inside the Prosial ring at (470,230) (#011e3a) lifted toward the unit black: estimated"
+  },
+  "webbing_white": {
+   "hex": "#cfbbbe",
+   "metallic": 0.0,
+   "roughness": 0.9,
+   "source": "esa_shield, the Prosial white (estimated): the parachute container's white wrap in KSC-97pc652 has a strong cleanroom cast"
+  },
+  "mli_silver": {
+   "hex": "#c9c9c9",
+   "metallic": 1.0,
+   "roughness": 0.3,
+   "source": "ksc652, the after cone's blanket reads silver once the cleanroom cast is taken out (white board #91592b, blanket #82583b, a near-neutral ratio); value estimated"
+  }
+ },
+ "open_questions": [
+  "The vertical columns' positions are not drawn in the plan views: placed at r 0.45 m under the SEPS fittings.",
+  "Unit heights are estimated from photos; no document gives them.",
+  "The two S-band antennas are not in Fig 2.2-15: placed from KSC-97pc652.",
+  "Figs 2.2-13 and 2.2-14 place the GCMS 55 mm apart; the mean is used."
+ ],
+ "budget": {
+  "triangles": 40000,
+  "glb_bytes": 1500000
+ }
+}

@@ -16,6 +16,13 @@
     "Photos: NASA (STS-125 crew)",
     "NASA 3D Resources, Hubble Space Telescope (A) (layout reference)"
   ],
+  "huygens": [
+    "DASA/ESA, Huygens Descent Module (fore dome colour)",
+    "DASA/ESA, Huygens' reentry shield (rear face colours)",
+    "NASA/KSC, KSC-97pc730 (unit colour)",
+    "NASA/KSC, KSC-97pc732 (platform and PCDU colours)",
+    "NASA/JPL, PIA04603 (blanket colour)"
+  ],
   "perseverance": [
     "Material colours sampled from NASA/JPL-Caltech photo PIA24045",
     "Material colours sampled from NASA/JPL-Caltech photo PIA23499",

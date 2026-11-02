@@ -5,7 +5,7 @@
 # spec's `dimensions`; positions and sizes no document gives come from `from_reference_model`
 # (measured on model A), every z stretched so the stack is the documented 6.8 m.
 import math
-from lib import materials, parts, tiling
+from lib import includes, materials, parts, tiling
 
 def _along(start, direction, s):
     return tuple(start[i] + direction[i] * s for i in range(3))
@@ -110,61 +110,13 @@ def build(spec):
             parts.mesh_file(f"rcs_{i + 1}", f"refs/cassini/meshes/rcs_{i + 1}.json", material="foil_silver")
             parts.mesh_file(f"rcs_arm_{i + 1}", f"refs/cassini/meshes/rcs_arm_{i + 1}.json", material="blanket_amber")
 
-    # Huygens on +x (spacecraft -X), in its launch configuration (huygens_um Fig 2.2-5), as three
-    # assemblies so Explode takes it apart: front shield facing out, descent module inside,
-    # back cover toward the orbiter. Profiles are (r, h) in metres, h up the probe's +Xp axis
-    # from the separation plane, which runs toward the orbiter (our -x).
+    # Huygens on +x (spacecraft -X): its own model (specs/huygens.json, probes/huygens.py), its
+    # separation plane 375 mm above its nose (huygens_nose_x, from NASA's assembly model) and
+    # its +Xp toward the orbiter (our -x). Roll about its axis not checked against photos.
     hy = ref["huygens"]
-    Rh = d["huygens_diameter"] / 2
-    sep = ref["huygens_nose_x"] - 0.375          # nose 375 mm below the separation plane
-    hc = (sep, hy["centre"][1], Z(hy["centre"][2]))
-    out = (-1, 0, 0)                             # +Xp in our frame
+    sep = ref["huygens_nose_x"] - 0.375
+    includes.place(spec, "huygens", location=(sep, hy["centre"][1], Z(hy["centre"][2])), direction=(-1, 0, 0))
 
-    def sphere_cone(nose_h, nose_r, r_end, n=8):
-        # 60 deg half-angle sphere-cone (facts.huygens_shield): the cap meets the cone at 30 deg.
-        c = nose_h + nose_r
-        pts = [(nose_r * math.sin(math.radians(30 * i / n)), c - nose_r * math.cos(math.radians(30 * i / n)))
-               for i in range(n + 1)]
-        r0, h0 = pts[-1]
-        return pts + [(r_end, h0 + (r_end - r0) / math.tan(math.radians(60)))]
-
-    # Front shield: R1250 nose, 620.5 mm from the nose to the rim (Fig 2.2-5); the shell
-    # thickness (60 mm) is estimated from the drawing's hatching.
-    t = 0.06
-    rim_h = 0.6205 - 0.375
-    outer = sphere_cone(-0.375, 1.25, Rh - 0.0486)
-    inner = sphere_cone(-0.375 + t, 1.25 - t, Rh - 0.0486 - t)
-    with parts.assembly("huygens_shield", within="huygens"):
-        parts.lathe("huygens_shield", outer + [(Rh, outer[-1][1] + 0.0486), (Rh, rim_h), (Rh - 0.01, rim_h)]
-                    + list(reversed(inner)), location=hc, direction=out, segments=64, material="blanket_amber")
-
-    # Descent module (Fig 2.2-6): fore dome 272 deep, experiment platform ring (73 thick, 1.3 m
-    # across, huygens_platform_diameter), after cone to the top platform, 636 overall. Dome and
-    # after-cone radii and its place in the shell (dome 257 mm below the plane, Fig 2.2-5) are estimated.
-    dm0, dome_r = -0.257, 0.62
-    dome = [(dome_r * math.sqrt(1 - (1 - i / 8) ** 2), dm0 + 0.272 * i / 8) for i in range(9)]
-    with parts.assembly("huygens_descent", within="huygens"):
-        parts.lathe("huygens_descent", dome + [(0.64, dm0 + 0.345), (0.56, dm0 + 0.636), (0, dm0 + 0.636)],
-                    location=hc, direction=out, segments=48, material="foil_silver")
-        parts.lathe("huygens_ring", [(0.60, dm0 + 0.272), (0.65, dm0 + 0.272), (0.65, dm0 + 0.345),
-                                     (0.60, dm0 + 0.345)], closed=True, location=hc, direction=out,
-                    segments=48, material="foil_silver")
-        # 36 spin vanes on the fore dome's periphery (facts.huygens_descent); size and cant estimated.
-        for i in range(36):
-            a = 2 * math.pi * i / 36
-            u = (0.0, math.cos(a), math.sin(a))
-            r, h = 0.61, dm0 + 0.20
-            parts.box(f"huygens_vane_{i + 1}", (0.006, 0.08, 0.07),
-                      location=(hc[0] - h, hc[1] + r * u[1], hc[2] + r * u[2]), direction=u, roll_deg=20,
-                      material="foil_silver")
-
-    # Back cover (Fig 2.2-5, facts.huygens_back_cover): 20 mm shell, estimated.
-    cover = [(0.895, 0.0), (0.895, 0.1515), (0.85, 0.1965), (0.6249, 0.488), (0.3433, 0.578),
-             (0.1609, 0.61), (0.0, 0.61)]
-    with parts.assembly("huygens_back_cover", within="huygens"):
-        parts.lathe("huygens_back_cover", cover + [(0.0, 0.59)] + [(max(r - 0.02, 0), h - 0.02 if h > 0 else h)
-                                                                    for r, h in reversed(cover[:-1])],
-                    location=hc, direction=out, segments=48, material="blanket_amber")
     # LGA2 below Huygens, pointing -X (our +x) (facts.lga2): 6.4 cm across and 33.5 cm long
     # (documents), on the axis and with its tip where NASA's assembly model has it (ref lga2);
     # its mount plate and stub support copied from that model.

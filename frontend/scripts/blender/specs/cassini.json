@@ -48,13 +48,6 @@
       "licence": "not stated ('carried out at the Jet Propulsion Laboratory, California Institute of Technology, under a contract with the National Aeronautics and Space Administration'): quoted, not kept"
     },
     {
-      "id": "jones1997",
-      "title": "Jones & Giovagnoli, The Huygens Probe System Design, ESA (PSA copy)",
-      "url": "https://archives.esac.esa.int/psa/ftp/CASSINI-HUYGENS/HUYGENS_HK/HP-SSA-HK-2-3-V1.0/DOCUMENT/PUBLICATIONS/JONES1997.PDF",
-      "read": "2026-11-01",
-      "licence": "not stated: quoted, not kept"
-    },
-    {
       "id": "nasa_3d_cassini",
       "title": "NASA 3D Resources: Cassini-Huygens (A)",
       "url": "https://github.com/nasa/NASA-3D-Resources/tree/master/3D%20Models/Cassini-Huygens%20(A)",
@@ -93,28 +86,6 @@
       "url": "https://www.osti.gov/servlets/purl/1033366/",
       "read": "2026-11-02",
       "licence": "'For permission to copy or republish, contact the International Astronautical Federation': quoted, not kept"
-    },
-    {
-      "id": "huygens_um",
-      "title": "Huygens User Manual Description, Aerospatiale, HUY.AS/c.100.OP.0201 issue 04 rev B (1997), ESA PSA copy",
-      "url": "https://archives.esac.esa.int/psa/ftp/CASSINI-HUYGENS/HUYGENS_HK/HP-SSA-HK-2-3-V1.0/DOCUMENT/USERMANUEL/HUYGENS-USER-MANUAL.PDF",
-      "read": "2026-11-02",
-      "licence": "not stated: quoted, not kept"
-    },
-    {
-      "id": "aedb",
-      "title": "Huygens Entry Module Aerodynamic Database, EADS, HUY.EADS.MIS.RE.0002 (2004), ESA PSA copy",
-      "url": "https://archives.esac.esa.int/psa/ftp/CASSINI-HUYGENS/HUYGENS_HK/HP-SSA-HK-2-3-V1.0/DOCUMENT/AEDB/EADS-ST_HUYGENS_AEDB.PDF",
-      "read": "2026-11-02",
-      "licence": "not stated: quoted, not kept"
-    },
-    {
-      "id": "takashima",
-      "title": "Takashima et al., Prediction of the Aerothermodynamic Environment of the Huygens Probe (NASA Langley, NTRS 20050182949)",
-      "url": "https://ntrs.nasa.gov/api/citations/20050182949/downloads/20050182949.pdf",
-      "read": "2026-11-02",
-      "licence": "'This material is declared a work of the U. S. Government and is not subject to copyright protection in the United States'",
-      "saved": "refs/cassini/sources/takashima.txt"
     },
     {
       "id": "descanso8",
@@ -186,14 +157,6 @@
       "quote": "The RPWS electric antenna system is a triad of 10-meter conducting monopoles",
       "also": "launch_kit p.63: 'unrolled to its 10-meter (about 33-foot) length'; NASA model 9.84-9.92 m. gurnett2004: 'each 10 m long'."
     },
-    "huygens_diameter": {
-      "value": 2.7,
-      "object": "huygens_shield",
-      "measure": "diameter",
-      "source": "jones1997",
-      "quote": "The 79 kg, 2.7 m diameter, 60° half-angle coni-spherical Front Shield",
-      "also": "launch_kit p.52: 'A front shield, 2.7 meters (8.8 feet) in diameter'; descanso p.1: 'Titan probe (2.7 m diameter)'. NASA model 2.615 m."
-    },
     "lga2_length": {
       "value": 0.335,
       "object": "lga2",
@@ -218,31 +181,6 @@
       "quote": "Overall diameter of the converter with fins is 42.2 cm",
       "also": "feis p.2-13: '42 cm (16.5 in.) in diameter'",
       "note": "rtg_1 lies along y, so its x extent is the span across two opposite fins"
-    },
-    "huygens_depth": {
-      "value": 0.985,
-      "object": [
-        "huygens_shield",
-        "huygens_back_cover"
-      ],
-      "measure": "x",
-      "source": "huygens_um",
-      "quote": "Fig 2.2-5 'Probe overall dimensions in launch configuration' (PDF p.52): 375 from the separation plane to the front shield nose, 610 from the plane to the back cover top",
-      "note": "the sum of the two drawing dimensions"
-    },
-    "huygens_descent_height": {
-      "value": 0.636,
-      "object": "huygens_descent",
-      "measure": "x",
-      "source": "huygens_um",
-      "quote": "Fig 2.2-6 'Probe overall dimensions in descent configuration' (PDF p.53): overall 636, fore dome 272, experiment platform (73), top platform (25), 261 between them"
-    },
-    "huygens_platform_diameter": {
-      "value": 1.3,
-      "object": "huygens_ring",
-      "measure": "diameter",
-      "source": "huygens_um",
-      "quote": "'the 73 mm thick aluminium honeycomb sandwich called Experiment platform' (p.20); Alcatel post-flight analysis HUY.ASPI.MIS.RE.0002 p.26 (copyright, quoted only): 'The maximum diameter of the experiment platform as report on the following figure is 1300mm'"
     },
     "hga_depth": {
       "value": 0.7605,
@@ -407,23 +345,6 @@
         }
       ]
     },
-    "huygens_shield": {
-      "value": "60 degree half-angle sphere-cone, nose radius 1.25 m, shoulder radius 0.0486 m",
-      "sources": [
-        {
-          "source": "jones1997",
-          "quote": "60° half-angle coni-spherical Front Shield"
-        },
-        {
-          "source": "aedb",
-          "quote": "Table 1 p.9: 'Maximum diameter/Reference Length 2.7 m; Nose radius 1.2501 m; Heat shield half cone angle 60°; Shoulder radius 0.0486 m'"
-        },
-        {
-          "source": "takashima",
-          "quote": "'a 2.700 m diameter, 60-deg sphere-cone configuration with an open back face. The nose radius is 1.250 m'"
-        }
-      ]
-    },
     "blankets": {
       "value": "shiny amber or matte black multilayer blankets over most of the spacecraft",
       "sources": [
@@ -436,30 +357,6 @@
           "quote": "The translucent Kapton has a yellow color, and when backed by a shiny aluminum layer, results in an amber appearance."
         }
       ]
-    },
-    "huygens_back_cover": {
-      "value": "stepped cone: Ø1790 base, 151.5 up, 45 x 45 chamfer, then Ø1249.8, Ø686.6 at 17.8° and a Ø321.7 flat top at 10°, 610 above the separation plane; aluminium shell under Prosial",
-      "sources": [
-        {
-          "source": "huygens_um",
-          "quote": "Fig 2.2-5 dimensions; p.14: the back cover is 'an aluminium stiffened shell protected by Prosial'"
-        }
-      ],
-      "note": "the height of the Ø1249.8 step is not labelled: placed from the 17.8° and 10° angles"
-    },
-    "huygens_descent": {
-      "value": "aluminium fore dome and after cone joined at the central ring, experiment platform at the ring, top platform on the after cone; 36 spin vanes on the fore dome",
-      "sources": [
-        {
-          "source": "huygens_um",
-          "quote": "p.20: 'two shells called \"after cone\" and \"foredome\" made in aluminium'; 'one central ring ensuring junctions of after cone and dome'"
-        },
-        {
-          "source": "jones1997",
-          "quote": "36 spin vanes on the Fore Dome’s periphery"
-        }
-      ],
-      "note": "after cone and fore dome radii, vane size and the descent module's place inside the shell estimated from Figs 2.2-5/2.2-6"
     },
     "hga_optics": {
       "value": "symmetric Cassegrain, F 1315 mm, D 4000 mm, subreflector 571.2 mm (d + Δd); tripod of six CFRP struts to a Kevlar deck carrying the subreflector, S-band feed and LGA1",
@@ -763,7 +660,7 @@
   "open_questions": [
     "Sizes no document gives (RTGs, engines, tanks, modules, pallets): from the NASA model, labelled as such.",
     "Bus bay panels (cream in NASA's model) and RTG grey: no evenly lit photo found; shared white_paint and dark_metal for now.",
-    "Huygens: the back cover's upper half sits inside the propulsion module's blanket (the NASA model's blanket is a smooth hull there, the real one is not). Descent module finish unsourced (shared foil_silver). The probe support equipment (spin-eject ring, three struts) has no documented size and is left out."
+    "Huygens: the back cover's upper half sits inside the propulsion module's blanket (the NASA model's blanket is a smooth hull there, the real one is not). Huygens itself is its own model (specs/huygens.json). The probe support equipment (spin-eject ring, three struts) has no documented size and is left out."
   ],
   "budget": {
     "triangles": 100000,
@@ -772,5 +669,8 @@
   "decisions": [
     "Boom length 11 m (David, 2026-11-01).",
     "Height 6.8 m (David, 2026-11-01): the NASA model's stack is stretched to fit."
+  ],
+  "includes": [
+    "huygens"
   ]
 }
