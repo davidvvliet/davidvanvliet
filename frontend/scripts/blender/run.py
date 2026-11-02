@@ -15,6 +15,9 @@
 #   run.py pieces <model> x0 y0 z0 x1 y1 z1 [--min M] [--max M] [--struts] [--dump]
 #                                   list a reference model's loose pieces in a region
 #                                   (tools/pieces.py): sizes, strut end points, vertices
+#   run.py cut <model> <out.json> x0 y0 z0 x1 y1 z1 [--matrix m00,...,m23] [--min M] [--max M]
+#              [--rmin R] [--rmax R] [--decimate R]   copy a reference model's whole pieces in a region into a mesh
+#                               file for parts.mesh_file (tools/cut.py), in the probe's frame
 #   run.py idview <model> <out.png> x0 y0 z0 x1 y1 z1 tx ty tz dx dy dz
 #                                   render the pieces in a region one colour each, with a legend
 #   run.py compare <probe> <reference> <out.png> tx,ty,tz,dx,dy,dz ...
@@ -331,7 +334,7 @@ def _tool(script, args, ok=None):
                            "--python", os.path.join(HERE, "tools", script), "--", *args],
                           capture_output=True, text=True)
     lines = [l for l in proc.stdout.splitlines()
-             if re.match(r"(PIECE|STRUT|COUNT|ID|IDVIEW_OK|COMPARE_OK|\S+ +v *\d+ )", l)]
+             if re.match(r"(PIECE|STRUT|COUNT|ID|IDVIEW_OK|COMPARE_OK|CUT_OK|\S+ +v *\d+ )", l)]
     if proc.returncode or (ok and not any(l.startswith(ok) for l in lines)):
         die(proc.stdout[-4000:] + proc.stderr[-4000:])
     print("\n".join(lines))
@@ -346,6 +349,11 @@ def cmd_pieces(args):
     if len(args) < 7:
         die("usage: run.py pieces <model> x0 y0 z0 x1 y1 z1 [--min M] [--max M] [--struts] [--dump]")
     _tool("pieces.py", [_model_arg(args[0]), *args[1:]], ok="COUNT")
+
+def cmd_cut(args):
+    if len(args) < 8:
+        die("usage: run.py cut <model> <out.json> x0 y0 z0 x1 y1 z1 [--matrix m00,...,m23] [--min M] [--max M] [--rmin R] [--rmax R] [--decimate R]")
+    _tool("cut.py", [_model_arg(args[0]), os.path.abspath(args[1]), *args[2:]], ok="CUT_OK")
 
 def cmd_idview(args):
     if len(args) != 14:
@@ -539,7 +547,7 @@ def cmd_watch(args):
         time.sleep(0.5)
 
 COMMANDS = {"blender": cmd_blender, "build": cmd_build, "all": cmd_all, "approve": cmd_approve,
-            "new": cmd_new, "ref": cmd_ref, "explode": cmd_explode, "bake": cmd_bake, "pieces": cmd_pieces, "idview": cmd_idview,
+            "new": cmd_new, "ref": cmd_ref, "explode": cmd_explode, "bake": cmd_bake, "pieces": cmd_pieces, "cut": cmd_cut, "idview": cmd_idview,
             "compare": cmd_compare, "photo": cmd_photo, "dev": cmd_dev, "send": cmd_send, "status": cmd_status, "watch": cmd_watch}
 
 if __name__ == "__main__":

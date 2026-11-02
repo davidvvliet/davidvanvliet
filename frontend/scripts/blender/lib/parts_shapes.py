@@ -1,11 +1,13 @@
 # Shared parts: basic shapes (cylinders, boxes, dishes, booms, plates, lathes, wheels, tubes).
 # Imported through lib/parts.py.
-import contextlib, math
+import contextlib, json, math, os
 import bmesh, bpy
 from mathutils import Matrix, Vector
 
 from . import materials
 from .parts_core import _object, frame, joint, sides
+
+_HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def _cyl(bm, radius, length, segments, matrix=Matrix(), cap=True):
     # create_cone centres the cylinder on its origin: shift it to sit on z = 0.
@@ -40,6 +42,25 @@ def boxes(name, items, material="foil_gold", parent=None):
     for size, centre in items:
         _box(bm, size, Matrix.Translation(Vector(centre)))
     return _object(name, bm, material, Matrix(), parent)
+
+def mesh_file(name, path, material="white_paint", parent=None, smooth=False):
+    """A part copied from a reference model: the mesh file `run.py cut` wrote (path relative to
+    scripts/blender, e.g. refs/<probe>/meshes/feed.json), already in the probe's frame. For
+    hardware whose shape no document gives; credit the reference model in the spec."""
+    rec = json.load(open(os.path.join(_HERE, path)))
+    bm = bmesh.new()
+    vs = [bm.verts.new(v) for v in rec["vertices"]]
+    for f in rec["faces"]:
+        try:
+            bm.faces.new([vs[i] for i in f])
+        except ValueError:
+            pass
+    obj = _object(name, bm, material, Matrix(), parent, smooth=True)
+    # Smooth with sharp edges above 30 deg (flat CAD faces stay flat, the export shares their
+    # vertices), or fully smooth with `smooth`.
+    if not smooth:
+        obj.data.set_sharp_from_angle(angle=math.radians(30))
+    return obj
 
 def box(name, size, location=(0, 0, 0), direction=(0, 0, 1), roll_deg=0.0,
         material="foil_gold", parent=None):
