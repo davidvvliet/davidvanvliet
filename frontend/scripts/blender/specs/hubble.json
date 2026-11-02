@@ -718,17 +718,112 @@
     ]
    },
    "source": "sm4_photos s125e012031: the open door is round on its free end and square on the hinge side, with 16 tape strips running across the hinge, a white beam along the hinge edge, two gold handholds near the side edges and a white block on the free edge; lmsc1985 doc p.3-3 names the 'Hinge-Line Beam'; drawing 4171929 sh.1 puts the 'APERTURE DOOR LATCH(1)' opposite the hinge. Beam, latch and handhold sizes and places estimated from the photo"
+  },
+  "bay_azimuths": {
+   "value": {
+    "5": 15,
+    "6": 45,
+    "7": 75,
+    "8": 105,
+    "9": 135,
+    "10": 165,
+    "trunnion_mv2": 195,
+    "1": 225,
+    "2": 255,
+    "3": 285,
+    "4": 315,
+    "trunnion_pv2": 345
+   },
+   "source": "lmsc1985, Figure 3-8 (PDF p.49), 'LOOKING FORWARD' with +V2 on the left: bays 7 and 8 either side of +V3, 5 and 10 next to the V2 axes, 1-4 on -V3, unnumbered trunnion bays between; az measured from +V2 toward +V3",
+   "quote": "Figure 3-8 Equipment Section Component Locations"
+  },
+  "nobl_covers": {
+   "value": {
+    "bays": [
+     1,
+     5,
+     6,
+     8,
+     9,
+     10
+    ],
+    "coverage": 0.9,
+    "bay1_fraction": 0.57
+   },
+   "sources": [
+    {
+     "source": "sm4guide",
+     "quote": "During SM3A and SM3B, astronauts installed NOBLs on Bays 6, 9 and 10."
+    },
+    {
+     "source": "sm4guide",
+     "quote": "New Outer Blanket Layer (NOBL) ... Onto Bays 5 and 8"
+    },
+    {
+     "source": "sm3aguide",
+     "quote": "install Bay 1 NOBL"
+    },
+    {
+     "source": "ousley",
+     "quote": "Coverage of 90% for non-radiator surfaces of each electronics bay door ... The NOBL's had cutouts to give door radiators a direct view to space ... a NOBL cover over 57% of the door"
+    }
+   ],
+   "note": "a steel sheet on a picture frame over each door; bay 8's stops short of its radiator; bay 1's covers the aft 57% (which part: estimate). Bays 6 and 9 have curved doors, modelled flat like the others"
+  },
+  "sun_sensors": {
+   "value": {
+    "az_deg": [
+     168,
+     174
+    ],
+    "size_in": [
+     2,
+     2,
+     1.5
+    ]
+   },
+   "sources": [
+    {
+     "source": "lmsc1985",
+     "quote": "Two are installed on the front end of the Light Shield Assembly and two on the Aft Shroud Assembly ... The CSS is approximately 2x2x1.5 in."
+    },
+    {
+     "source": "lmsc1985, drawing 4171929 sh.2",
+     "quote": "SUN SENSOR (2) FWD (2) AFT"
+    }
+   ],
+   "note": "the drawing's leader points at about 171 deg for both pairs; each pair set 6 deg apart (estimate); the aft pair on the aft bulkhead's rim (lmsc1985: 'two Coarse Sun Sensors <CSS> are also mounted to the AB'). Figure 3-33 sketches the aft pair nearer +V2: unresolved"
+  },
+  "trunnions": {
+   "value": {
+    "tip_in": 95,
+    "v3_in": -13,
+    "aft_sta": 240.0,
+    "fwd_sta": 358.0,
+    "fwd_side": "+V2",
+    "pin_d": 0.07
+   },
+   "sources": [
+    {
+     "source": "lmsc1985",
+     "quote": "The trunnions at Station 240.0 will carry fore and aft <V1 axis> as well as vertical <V3 axis> loads."
+    },
+    {
+     "source": "lmsc1985",
+     "quote": "At Station 358.0, an external AL forged ring is used to support the forward trunnion."
+    },
+    {
+     "source": "lmsc1985, drawing 4171929 sh.2",
+     "quote": "pins on +-V2 reaching 95 in from the axis, 13 in toward -V3 (scaled, 3.64 px/in on the 2000 px copy)"
+    }
+   ],
+   "note": "Figure 2-3: Y_orb = +V2, so the pins point at the payload bay's longerons. Forward trunnion on +V2 with its gold tube frame, pin diameter about 7 cm: sm4_photos s125e011763 (image left is +V2; nothing at that station on -V2)"
   }
  },
  "open_questions": [
   "SA3: where the wing's 7.1 m starts (mast vs panels), mast length, and whether SA3 uses the original pivot at STA 320. Fit from photos.",
   "Handrail cross-section and standoff height: not found; measure from photos against known sizes.",
-  "NOBL sizes and which bays carry one after SM4 (sources disagree on 3A/3B bays; SM4 plan: Bays 8 and 5).",
-  "Colours (MLI silver, aft shroud FOSR, yellow handrails, solar cells, NOBLs): to sample from the SM4 photos.",
-  "Low-gain antennas, magnetometers, sun sensors, grapple fixture, trunnions: positions from the drawing, sizes from photos.",
-  "Wrinkled foil: no document describes wrinkles (they say 'cracked', 'curled'); the look comes from the SM4 photos.",
-  "HGA boom length: the drawing labels the dish at 232.30 in from the axis, but scaling the drawing by the door gives about 185 in, and s125e012031 (unfitted) suggests about 4.5 m; kept the label.",
-  "Sun sensors (2 fwd, 2 aft): drawing 4171929 sh.2 points at about 171 deg but gives no stations; not modelled."
+  "HGA boom length: the drawing labels the dish at 232.30 in from the axis, but scaling the drawing by the door gives about 185 in, and s125e012031 (unfitted) suggests about 4.5 m; kept the label."
  ],
  "materials": {
   "mli_foil": {
@@ -838,6 +933,12 @@
    "metallic": 0.0,
    "roughness": 0.7,
    "source": "sm4_photos, s125e011763: 75th percentile of the ESA mark's dark paint"
+  },
+  "nobl_steel": {
+   "hex": "#656764",
+   "metallic": 1.0,
+   "roughness": 0.2,
+   "source": "sm4_photos, s125e011763: 75th percentile of a NOBL cover on the +V2 side (its vent plugs visible); ousley: 'stainless steel coated with vapor deposited silver'"
   }
  },
  "budget": {

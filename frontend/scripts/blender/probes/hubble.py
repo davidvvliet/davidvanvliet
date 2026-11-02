@@ -19,7 +19,7 @@ def bpy_obj(name):
 def sta(s):
     return (s - 100.0) * IN
 
-def equipment_doors(R, z0, z1):
+def equipment_doors(R, z0, z1, nobl=None):
     """Twelve flat bay doors on the equipment section's flats (centred 15 + 30k deg from +V2),
     each built facing +x and turned into place. Door gaps, thickness and the radiator louvres
     (size and place) are estimated from sm4_photos s125e011763."""
@@ -46,6 +46,22 @@ def equipment_doors(R, z0, z1):
                      ((0.03, ww, 0.02), (x + 0.02, 0, zc))]
             slats = [((0.045, 0.012, wz), (x + 0.025, -ww / 2 + ww * (i + 0.5) / 11, zc)) for i in range(11)]
             objs.append(parts.boxes(f"bay_door_{k + 1}_louvres", frame + slats, material="bay_doors"))
+        if nobl and a in nobl["az"]:
+            # NOBL: steel sheet on a picture frame over the door (spec facts.nobl_covers).
+            k_ = math.sqrt(nobl["coverage"])
+            nw, z_lo, z_hi = w * k_, zm - h * k_ / 2, zm + h * k_ / 2
+            if louvre:                                  # stops short of the radiator
+                z_hi = z1 - 0.06 - 0.6 - 0.06
+            if a == nobl["bay1_az"]:                    # the aft part of the door only
+                z_hi = z_lo + h * nobl["bay1_fraction"] / k_
+            nh, nz, x = z_hi - z_lo, (z_lo + z_hi) / 2, r_flat + 0.03
+            fr = 0.025
+            objs.append(parts.boxes(f"bay_door_{k + 1}_nobl", [((0.003, nw, nh), (x + 0.0015, 0, nz))],
+                                    material="nobl_steel"))
+            objs.append(parts.boxes(f"bay_door_{k + 1}_nobl_frame", [
+                ((0.008, nw, fr), (x + 0.004, 0, z_lo + fr / 2)), ((0.008, nw, fr), (x + 0.004, 0, z_hi - fr / 2)),
+                ((0.008, fr, nh), (x + 0.004, nw / 2 - fr / 2, nz)), ((0.008, fr, nh), (x + 0.004, -nw / 2 + fr / 2, nz))],
+                material="nobl_steel"))
         for obj in objs:
             obj.matrix_world = Matrix.Rotation(math.radians(a), 4, "Z") @ obj.matrix_world
 
@@ -176,6 +192,35 @@ def fittings(f, r_ls, r_fs, R_es, z_ls1):
                 rr = math.hypot(e.x, e.y)
                 foot = Vector((e.x / rr * (r_fs - 0.03), e.y / rr * (r_fs - 0.03), e.z))
                 parts.strut(f"magnetic_torquer_{k + 1}_mount_{i + 1}", foot, e, radius=0.025, material="foil_silver")
+        # Trunnions: pins along +-V2 toward the payload bay's longerons, two aft on the equipment
+        # section, one forward on +V2 held out by gold tubes (spec facts.trunnions).
+        Tr = f["trunnions"]
+        tip, yv = Tr["tip_in"] * IN, Tr["v3_in"] * IN
+        for sg, tag in ((1, "pv2"), (-1, "mv2")):
+            r0 = R_es * math.cos(math.radians(15)) - 0.02
+            parts.strut(f"trunnion_aft_{tag}", (sg * r0, yv, sta(Tr["aft_sta"])), (sg * tip, yv, sta(Tr["aft_sta"])),
+                        radius=Tr["pin_d"] / 2, segments=16, material="foil_silver")
+        zf = sta(Tr["fwd_sta"])
+        root = Vector((tip - 0.3, yv, zf))
+        parts.strut("trunnion_fwd", tuple(root), (tip, yv, zf), radius=Tr["pin_d"] / 2, segments=16, material="foil_silver")
+        parts.box("trunnion_fwd_fitting", (0.12, 0.14, 0.14), location=tuple(root), material="beam_gold")
+        for i, (dz, da) in enumerate(((0.45, 0), (-0.45, 0), (0, 25))):
+            a_ = math.atan2(yv, r_fs) + math.radians(da)
+            foot = Vector(((r_fs - 0.03) * math.cos(a_), (r_fs - 0.03) * math.sin(a_), zf + dz))
+            parts.strut(f"trunnion_fwd_tube_{i + 1}", tuple(foot), tuple(root), radius=0.03, material="beam_gold")
+        # Coarse sun sensors (2 x 2 x 1.5 in): a pair on the light shield's front end and a pair on
+        # the aft bulkhead's rim (spec facts.sun_sensors), each on a small bracket.
+        C = f["sun_sensors"]
+        cs = [v * IN for v in C["size_in"]]
+        for k, a in enumerate(C["az_deg"]):
+            c, s_ = _az(a)
+            parts.box(f"sun_sensor_fwd_bracket_{k + 1}", (0.08, 0.04, 0.03), location=(c * (r_ls + 0.02), s_ * (r_ls + 0.02), z_ls1 - 0.08),
+                      roll_deg=a, material="foil_silver")
+            parts.box(f"sun_sensor_fwd_{k + 1}", (cs[0], cs[1], cs[2]), location=(c * (r_ls + 0.05), s_ * (r_ls + 0.05), z_ls1 - 0.065 + cs[2] / 2),
+                      roll_deg=a, material="black")
+            ra = R_es - 0.12
+            parts.box(f"sun_sensor_aft_{k + 1}", (cs[0], cs[1], cs[2]), location=(c * ra, s_ * ra, -cs[2] / 2),
+                      roll_deg=a, material="black")
         P = f["scuff_plates"]
         for zi, (z, R) in enumerate(((P["forward_z"], r_ls), (P["aft_z"], R_es))):
             for a in P["az_deg"]:
@@ -238,7 +283,10 @@ def build(spec):
         R_es = d["equipment_section_diameter"] / 2
         parts.prism("equipment_section", sides=12, radius=R_es, height=z_es1 - z_es0,
                     location=(0, 0, z_es0), roll_deg=15, material="dark_metal")
-        equipment_doors(R_es, z_es0, z_es1)
+        nb = f["nobl_covers"]
+        equipment_doors(R_es, z_es0, z_es1, nobl={"az": [f["bay_azimuths"][str(b)] for b in nb["bays"]],
+                                                  "coverage": nb["coverage"], "bay1_az": f["bay_azimuths"]["1"],
+                                                  "bay1_fraction": nb["bay1_fraction"]})
         blanket("forward_shell", r_fs, z_es1, z_fs1, 11)
         # Light shield: blanket outside, a rim at the front, flat black inside.
         ls = blanket("light_shield", r_ls, z_fs1, z_ls1, 12)
