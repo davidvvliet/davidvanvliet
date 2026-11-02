@@ -159,6 +159,7 @@ function useParts(scene: THREE.Object3D) {
 
 const HIGHLIGHT = new THREE.Color("#1d4f66");
 const FADED = 0.12; // opacity of the other parts while one is focused
+const GHOSTED = 0.04; // opacity of the outside while the inside is shown
 const HOVER_FADED = 0.35; // a faded part under the pointer
 const smooth = (t: number) => t * t * (3 - 2 * t);
 
@@ -254,9 +255,10 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
           mat.userData.restOpacity = mat.opacity;
           mat.userData.restTransparent = mat.transparent;
         }
-        const fade = (ghost && !seen.has(p.group)) || (!!focus && p.group !== focus);
+        const ghosted = ghost && !seen.has(p.group);
+        const fade = ghosted || (!!focus && p.group !== focus);
         mat.transparent = fade || mat.userData.restTransparent;
-        mat.opacity = fade ? FADED : mat.userData.restOpacity;
+        mat.opacity = ghosted ? GHOSTED : fade ? FADED : mat.userData.restOpacity;
         mat.depthWrite = !fade;
         mat.needsUpdate = true;
       }
@@ -305,7 +307,7 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
       for (const mat of (Array.isArray(m.material) ? m.material : [m.material]) as THREE.MeshStandardMaterial[]) {
         // A hovered faded part shows a little more of itself, so it reads as clickable.
         if (focus && p.group !== focus && mat.userData.restOpacity !== undefined)
-          mat.opacity = p.group === hover ? HOVER_FADED : FADED;
+          mat.opacity = ghost && !seen.has(p.group) ? GHOSTED : p.group === hover ? HOVER_FADED : FADED;
         if (!mat.emissive) continue;
         if (!mat.userData.rest) mat.userData.rest = mat.emissive.clone();
         mat.emissive.copy((explore || canFocus(p.group)) && p.group === hover ? HIGHLIGHT : mat.userData.rest);
@@ -478,7 +480,8 @@ export function Viewer({ probe, url, breakdown, stale, compact, onReady, focus: 
     <ViewerBoundary resetKey={url}>
       <div className={styles.tools}>
         {/* Without explore, only the spec's listed parts move; its focusable parts are clicked on the model. */}
-        {!inside && (explore || explodable.length > 0) && (
+        {/* A model with an inside (internal.glb) shows that instead of exploding. */}
+        {!internalUrl && (explore || explodable.length > 0) && (
           <button className={`${styles.explode} ${exploded ? styles.active : ""}`} onClick={() => setExploded((x) => !x)}>
             {exploded ? "Assemble" : "Explode"}
           </button>
