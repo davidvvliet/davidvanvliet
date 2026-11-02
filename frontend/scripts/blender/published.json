@@ -1,8 +1,8 @@
 {
  "cassini": {
-  "approved": "2026-11-02 14:36",
+  "approved": "2026-11-02 14:55",
   "inputs": {
-   "specs/cassini.json": "60c6c88792921b8f",
+   "specs/cassini.json": "6b4fbd08b047f930",
    "probes/cassini.py": "bfa0f0055da862cd",
    "build.py": "546ad99cac961e9b",
    "blender.json": "7bbc071b6e396ec4",
