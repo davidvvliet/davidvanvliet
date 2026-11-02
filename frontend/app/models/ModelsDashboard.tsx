@@ -51,6 +51,11 @@ const tagged = (o: THREE.Object3D) => {
   for (let x: THREE.Object3D | null = o; x; x = x.parent) if (typeof x.userData.assembly === "string") return x;
   return null;
 };
+function within(o: THREE.Object3D | null, scene: THREE.Object3D) {
+  for (; o; o = o.parent) if (o === scene) return true;
+  return false;
+}
+
 function groupOf(o: THREE.Object3D, scene: THREE.Object3D) {
   const t = tagged(o);
   if (t) return t.userData.assembly as string;
@@ -332,7 +337,8 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
   // The part under the pointer. While one is focused, the others are see-through, so a ray
   // that reaches the focused part picks it even through faded parts in front of it.
   const pick = (e: ThreeEvent<PointerEvent | MouseEvent>) => {
-    const groups = e.intersections.map((i) => groupOf(i.object, scene));
+    // Only this model's own parts: with the inside shown, the ray also crosses the faded outside.
+    const groups = e.intersections.filter((i) => within(i.object, scene)).map((i) => groupOf(i.object, scene));
     if (ghost) return groups.find((g) => seen.has(g)) ?? null;
     if (!explore) {
       // Only the listed parts: the one in front, or, while one is focused (the rest
