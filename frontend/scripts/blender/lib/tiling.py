@@ -119,6 +119,21 @@ def plane_uv(obj, across, repeat_w, repeat_h):
         p = mw @ me.vertices[loop.vertex_index].co
         uv.data[li].uv = ((p.x * across[0] + p.y * across[1]) / repeat_w, p.z / repeat_h)
 
+def box_uv(obj, repeat):
+    """UVs for any shape (a copied mesh, a box): each face is projected onto the world plane it
+    faces most, `repeat` metres per tile. Seams fall where faces turn by about 90 degrees, where
+    a blanket's fold would be anyway."""
+    me, mw = obj.data, obj.matrix_world
+    n3 = mw.to_3x3()
+    uv = me.uv_layers.new(name="UVMap")
+    for poly in me.polygons:
+        n = n3 @ poly.normal
+        k = max(range(3), key=lambda i: abs(n[i]))
+        a, b = [i for i in range(3) if i != k]
+        for li in poly.loop_indices:
+            q = mw @ me.vertices[me.loops[li].vertex_index].co
+            uv.data[li].uv = (q[a] / repeat, q[b] / repeat)
+
 def tube_wall(probe, name, tube_hex, per_tile, split=0.5, px_per_tube=32, h=512, groove=0.5,
               soot=None, rays=None):
     """Colour and normal map of a tube-wall nozzle (tubes along v, side by side across u):
