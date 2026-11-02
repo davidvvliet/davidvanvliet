@@ -236,6 +236,10 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
   useEffect(() => {
     flight.current = focus && controls ? { dir: camera.position.clone().sub(controls.target).normalize() } : null;
   }, [focus]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Explode and Assemble move a focused part: the camera follows it there.
+  useEffect(() => {
+    if (focus && controls) flight.current = { dir: camera.position.clone().sub(controls.target).normalize() };
+  }, [exploded]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!controls) return;
     const stop = () => { flight.current = null; };
@@ -284,7 +288,8 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
       camera.position.lerp(goalPos, a);
       controls.target.lerp(goalTarget, a);
       controls.update();
-      if (camera.position.distanceTo(goalPos) < dist * 0.002 && controls.target.distanceTo(goalTarget) < dist * 0.002) flight.current = null;
+      // Done once there and the part has stopped moving.
+      if (t.current === goal && camera.position.distanceTo(goalPos) < dist * 0.002 && controls.target.distanceTo(goalTarget) < dist * 0.002) flight.current = null;
     }
     // The pivot stays a little ahead of the camera, so zooming keeps going instead of slowing to
     // a stop at it (zoom heads for the cursor and takes the pivot along).
