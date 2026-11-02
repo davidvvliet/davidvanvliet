@@ -1,0 +1,1022 @@
+{
+ "title": "Hubble Space Telescope",
+ "logos": [
+  "nasa"
+ ],
+ "note": "Hubble as it is now, after Servicing Mission 4 (May 2009): SA3 rigid arrays, Soft Capture Mechanism on the aft bulkhead, NOBL covers on the bay doors. Body stations and appendage positions from Lockheed's 1985 handbook drawings (structure unchanged since launch). Frame in facts.frame: z = V1 (aft bulkhead at 0), x = V2, y = V3.",
+ "sources": [
+  {
+   "id": "lmsc1985",
+   "title": "Lockheed Missiles & Space Co., Space Telescope Systems Description Handbook, LMSC/D974197B, 31 May 1985 (incl. drawing 4171929 'ST Inboard/Outboard Profile', sheets 1-2, PDF pp.270, 272)",
+   "url": "https://ntrs.nasa.gov/api/citations/20160013581/downloads/20160013581.pdf",
+   "read": "2026-11-02",
+   "licence": "NASA NTRS public document; no licence statement read: quoted, not kept"
+  },
+  {
+   "id": "sm4guide",
+   "title": "Hubble Space Telescope Servicing Mission 4 Media Reference Guide (Lockheed Martin for NASA, 2009)",
+   "url": "http://www.nasa.gov/pdf/327688main_09_SM4_Media_Guide_rev1.pdf",
+   "read": "2026-11-02",
+   "licence": "prepared for NASA; no licence statement read: quoted, not kept"
+  },
+  {
+   "id": "sm3aguide",
+   "title": "HST Servicing Mission 3A Media Guide, Ch. 5 'Hubble Space Telescope Systems' (Lockheed Martin, K9322-05M, 1999)",
+   "url": "https://lhea.gsfc.nasa.gov/archive/sm3a/downloads/sm3a_media_guide/HST-systems.pdf",
+   "read": "2026-11-02",
+   "licence": "prepared for NASA; no licence statement read: quoted, not kept"
+  },
+  {
+   "id": "sm3bguide",
+   "title": "HST Servicing Mission 3B Media Reference Guide (Lockheed Martin for NASA, 2002)",
+   "url": "https://universe.gsfc.nasa.gov/archive/sm3b/art/pdf/media-guide/media_composite.pdf",
+   "read": "2026-11-02",
+   "licence": "prepared for NASA; no licence statement read: quoted, not kept"
+  },
+  {
+   "id": "pk125",
+   "title": "NASA STS-125 Press Kit, May 2009",
+   "url": "https://www.nasa.gov/wp-content/uploads/2023/05/331922main-sts125-presskit-050609.pdf",
+   "read": "2026-11-02",
+   "licence": "NASA press kit; no licence statement read: quoted, not kept"
+  },
+  {
+   "id": "ousley",
+   "title": "Ousley, Skladany, Dell, 'Hubble Space Telescope Thermal Blanket Repair Design and Implementation' (draft, NTRS 20000075210)",
+   "url": "https://ntrs.nasa.gov/api/citations/20000075210/downloads/20000075210.pdf",
+   "read": "2026-11-02",
+   "licence": "conference paper on NTRS: quoted, not kept"
+  },
+  {
+   "id": "hansen",
+   "title": "P. A. Hansen, 'The Hubble Space Telescope Servicing Mission 3A Contamination Control Program' (NTRS 20000082020)",
+   "url": "https://ntrs.nasa.gov/api/citations/20000082020/downloads/20000082020.pdf",
+   "read": "2026-11-02",
+   "licence": "conference paper on NTRS: quoted, not kept"
+  },
+  {
+   "id": "sa3thermal",
+   "title": "Thermal Performance of the HST Solar Array-3 during the Disturbance Verification Test (NTRS 20010070991)",
+   "url": "https://ntrs.nasa.gov/api/citations/20010070991/downloads/20010070991.pdf",
+   "read": "2026-11-02",
+   "licence": "NTRS paper: quoted, not kept"
+  },
+  {
+   "id": "nasm_sdtv",
+   "title": "Smithsonian NASM, Structural Dynamic Test Vehicle, Hubble Space Telescope (A19870193000)",
+   "url": "https://airandspace.si.edu/collection-objects/structural-dynamic-test-vehicle-hubble-space-telescope/nasm_A19870193000",
+   "read": "2026-11-02",
+   "licence": "Smithsonian catalogue record: quoted, not kept"
+  },
+  {
+   "id": "sm4_photos",
+   "title": "NASA, STS-125 / SM4 gallery, Flight Day 9 release photos (s125e011763, s125e011766, s125e011805, s125e011835, s125e012031)",
+   "url": "https://asd.gsfc.nasa.gov/archive/sm4/multimedia/gallery7.html",
+   "read": "2026-11-02",
+   "licence": "NASA photos, public domain",
+   "credit": "Photos: NASA (STS-125 crew)"
+  },
+  {
+   "id": "nasa_3d_hst_a",
+   "title": "NASA 3D Resources, Hubble Space Telescope (A)",
+   "url": "https://github.com/nasa/NASA-3D-Resources/tree/master/3D%20Models/Hubble%20Space%20Telescope%20(A)",
+   "read": "2026-11-02",
+   "licence": "NASA 3D Resources (public domain NASA content)",
+   "credit": "NASA 3D Resources, Hubble Space Telescope (A) (layout reference)"
+  },
+  {
+   "id": "nasa_3d_hst_b",
+   "title": "NASA 3D Resources, Hubble Space Telescope (B)",
+   "url": "https://github.com/nasa/NASA-3D-Resources/tree/master/3D%20Models/Hubble%20Space%20Telescope%20(B)",
+   "read": "2026-11-02",
+   "licence": "NASA 3D Resources (public domain NASA content)"
+  }
+ ],
+ "reference_model": {
+  "url": "https://github.com/nasa/NASA-3D-Resources/tree/master/3D%20Models/Hubble%20Space%20Telescope%20(A)",
+  "source": "nasa_3d_hst_a",
+  "note": "(A): 1 mesh, textured, rigid arrays, arbitrary units (~500 long): layout only after scaling. (B) (nasa_3d_hst_b): 819k tris, 57k loose pieces, no materials, ~6.3 m with the aft skin missing and inconsistent scale; used only for small-part shapes if at all."
+ },
+ "dimensions": {
+  "body_length": {
+   "value": 12.9159,
+   "object": [
+    "aft_shroud",
+    "equipment_section",
+    "forward_shell",
+    "light_shield"
+   ],
+   "measure": "z",
+   "source": "lmsc1985, drawing 4171929 sh.1: STA 100.00 (aft) to STA 608.5 (light shield front)",
+   "quote": "STA 100.00 ... STA 608.5",
+   "also": [
+    {
+     "source": "lmsc1985, doc p.2-1",
+     "quote": "it will be 13 . 1 m (43.5 ft) long"
+    },
+    {
+     "source": "nasm_sdtv",
+     "quote": "Overall: 14 ft. × 42 ft. 4 in."
+    }
+   ],
+   "conflict": [
+    {
+     "source": "sm4guide",
+     "quote": "Length 43.5 ft (15.9 m)"
+    }
+   ],
+   "note": "43.5 ft is 13.26 m; the guides' 15.9 m doesn't match their own feet figure."
+  },
+  "light_shield_length": {
+   "value": 3.8913,
+   "object": "light_shield",
+   "measure": "z",
+   "source": "lmsc1985, drawing 4171929 sh.1",
+   "quote": "LIGHT SHIELD (LS) (153.20 IN) ... STA 608.5 ... STA 455.30",
+   "conflict": [
+    {
+     "source": "lmsc1985, doc p.3-4",
+     "quote": "The SSM LS assembly <Figure 3-5> is 157.5 in. long"
+    }
+   ]
+  },
+  "light_shield_diameter": {
+   "value": 3.048,
+   "object": "light_shield",
+   "measure": "diameter",
+   "tolerance": 0.04,
+   "source": "lmsc1985, doc p.3-4",
+   "quote": "has an internal diameter of 120 in.",
+   "note": "internal; the outer skin with blanket is slightly larger",
+   "also": [
+    {
+     "source": "sm4guide",
+     "quote": "10 ft (3.1 m) Light Shield and Forward Shell"
+    }
+   ]
+  },
+  "forward_shell_length": {
+   "value": 3.9637,
+   "object": "forward_shell",
+   "measure": "z",
+   "source": "lmsc1985, drawing 4171929 sh.1",
+   "quote": "FORWARD SHELL (FS) (156.05 IN) ... STA 455.30 ... STA 299.25"
+  },
+  "forward_shell_diameter": {
+   "value": 3.0785,
+   "object": "forward_shell",
+   "measure": "diameter",
+   "source": "lmsc1985, doc p.3-5",
+   "quote": "The 121.2 in. diameter. 156-in. long FS"
+  },
+  "equipment_section_length": {
+   "value": 1.5557,
+   "object": "equipment_section",
+   "measure": "z",
+   "source": "lmsc1985, doc p.3-6 and drawing 4171929 sh.1",
+   "quote": "is 61.25 in. long ... STA 299.25 ... STA 238.00"
+  },
+  "equipment_section_diameter": {
+   "value": 4.2672,
+   "object": "equipment_section",
+   "measure": "diameter",
+   "source": "lmsc1985, doc p.3-6",
+   "quote": "The SSM ES <Figure 3-7) has as outside diameter of 168.0 in. and an internal barrel section diameter of 120 . 6 in."
+  },
+  "aft_shroud_length": {
+   "value": 3.5052,
+   "object": "aft_shroud",
+   "measure": "z",
+   "source": "lmsc1985, doc p.3-8 and drawing 4171929 sh.1",
+   "quote": "with a length of 138.0 in."
+  },
+  "aft_shroud_diameter": {
+   "value": 4.2672,
+   "object": "aft_shroud",
+   "measure": "diameter",
+   "source": "lmsc1985, doc p.3-8",
+   "quote": "inside diameter Cat the inside of the outer skin) of 168.0 in.",
+   "also": [
+    {
+     "source": "sm3aguide, p.5-6",
+     "quote": "It is 11.5-ft (3.5 m) long and 14-ft (4.3 m) in diameter."
+    }
+   ]
+  },
+  "aperture_door_diameter": {
+   "value": 3.015,
+   "object": "aperture_door",
+   "measure": "x",
+   "source": "lmsc1985, drawing 4171929 sh.2",
+   "quote": "APERTURE DOOR (118.7 IN)",
+   "also": [
+    {
+     "source": "lmsc1985, doc p.3-3",
+     "quote": "approximately 120 in. in diameter"
+    }
+   ],
+   "note": "measured across, along V2 (the hinge line): the door is square on its hinge side"
+  },
+  "solar_wing_length": {
+   "value": 7.1,
+   "object": "solar_array_pv2",
+   "measure": "z",
+   "source": "sm4guide, p.5-25 table",
+   "quote": "SA3 Rigid Array ... 24.75 ft x 8.0 ft (7.1 m x 2.6 m) ... 640 lb per wing",
+   "note": "whether 7.1 m includes the mast is not stated"
+  },
+  "solar_wing_width": {
+   "value": 2.6,
+   "object": "solar_array_pv2",
+   "measure": "x",
+   "source": "sm4guide, p.5-25 table",
+   "quote": "24.75 ft x 8.0 ft (7.1 m x 2.6 m)"
+  },
+  "soft_capture_diameter": {
+   "value": 1.8288,
+   "object": [
+    "soft_capture_ring",
+    "soft_capture_jaw_1",
+    "soft_capture_jaw_2",
+    "soft_capture_jaw_3"
+   ],
+   "measure": "diameter",
+   "tolerance": 0.05,
+   "source": "pk125, p.46",
+   "quote": "The SCM is about 72 inches in diameter and 24 inches high"
+  },
+  "soft_capture_height": {
+   "value": 0.6096,
+   "object": [
+    "soft_capture_ring",
+    "soft_capture_jaw_1",
+    "soft_capture_jaw_2",
+    "soft_capture_jaw_3"
+   ],
+   "measure": "z",
+   "tolerance": 0.08,
+   "source": "pk125, p.46",
+   "quote": "The SCM is about 72 inches in diameter and 24 inches high"
+  },
+  "ota_es_length": {
+   "value": 0.9735,
+   "object": [
+    "ota_es_left",
+    "ota_es_right"
+   ],
+   "measure": "z",
+   "source": "lmsc1985, drawing 4171929 sh.1",
+   "quote": "STA 337.75 ... STA 299.425"
+  }
+ },
+ "facts": {
+  "frame": {
+   "value": "Station (STA, inches) runs along V1; model z = (STA - 100) x 0.0254 m, aft bulkhead at z = 0, aperture at +z. x = +V2 (solar arrays on +-V2), y = +V3 (HGAs on +-V3, aperture-door hinge on +V3).",
+   "sources": [
+    {
+     "source": "sm4guide, p.5-2",
+     "quote": "The primary axis, V1, runs through the center of the Telescope. The other two axes parallel the SA masts (V2) and the High Gain Antenna (HGA) masts (V3)."
+    },
+    {
+     "source": "lmsc1985, drawing 4171929 sh.1",
+     "quote": "STA 100.00"
+    }
+   ]
+  },
+  "aperture_door_front_edge_z": {
+   "value": 12.9746,
+   "source": "lmsc1985, drawing 4171929 sh.1",
+   "quote": "STA 610.81 AD FRONT EDGE"
+  },
+  "aperture_door_hinge_side": {
+   "value": "+V3",
+   "source": "lmsc1985, Fig. 3-20 (PDF p.61) and drawing 4171929 sh.2",
+   "quote": "APERTURE DOOR HINGE"
+  },
+  "aperture_door_open_deg": {
+   "value": 105,
+   "sources": [
+    {
+     "source": "lmsc1985, doc p.3-3",
+     "quote": "Maximum travel full open/closed is 105.25 deg (±.25 deg>"
+    },
+    {
+     "source": "sm3aguide, p.5-2",
+     "quote": "The door opens a maximum of 105 degrees from the closed position."
+    }
+   ]
+  },
+  "aperture_door_thickness": {
+   "value": 0.0377,
+   "source": "lmsc1985, doc p.3-3, derived: core + two facesheets",
+   "quote": "6061-T6 AL facesheets, (0.012 in. thick) ... 5052 AL Honeycomb core, (1.46 in. thick)"
+  },
+  "hga_hinge": {
+   "value": {
+    "z": 5.9182,
+    "radial": 1.8364,
+    "sides": "+V3 and -V3"
+   },
+   "sources": [
+    {
+     "source": "lmsc1985, drawing 4171929 sh.1",
+     "quote": "HGA HINGE 333.00 +X 72.30 ±Z"
+    },
+    {
+     "source": "lmsc1985, doc p.3-16",
+     "quote": "Each HGA is stowed against the Forward Shell <FS> structure <one each at +V3 and -V3 ax~s)"
+    }
+   ]
+  },
+  "hga_dish_diameter": {
+   "value": 1.17,
+   "source": "lmsc1985, drawing 4171929 sh.2: estimated, dish circle 170 px against the 118.7 in aperture door's 440 px (and the 168 in aft circle, 610 px); s125e012031 agrees: both dishes about 1.16 to 1.2 m against the 4.27 m aft bulkhead (138 px/m on the 2000 px copy)",
+   "note": "no document gives it; check with a fitted photo"
+  },
+  "hga_gimbal_deg": {
+   "value": 110,
+   "source": "lmsc1985, section 3.1.7.4",
+   "quote": "The gimbal range is ± 110 deg with mechanical stops at ± 112 deg"
+  },
+  "solar_array_pivot_z": {
+   "value": 5.588,
+   "source": "lmsc1985, drawing 4171929 sh.1",
+   "quote": "S/A PIVOT (2) STA 320.000",
+   "note": "for the original arrays; SA3 is assumed to use the same pivot (open question)"
+  },
+  "solar_array_panels": {
+   "value": "4 panels per wing; GaAs cells on a Kapton face sheet over aluminium honeycomb; anti-sun side white Tedlar; graphite mast with gold-anodised handles through an MLI blanket",
+   "sources": [
+    {
+     "source": "sm3bguide, p.5-22",
+     "quote": "four panels were mounted onto each"
+    },
+    {
+     "source": "sa3thermal",
+     "quote": "The anti-sun sides of the panels are white Tedlar to serve as radiators to space."
+    },
+    {
+     "source": "sa3thermal",
+     "quote": "The Mast is a M55J graphite-composite cylinder with two gold-anodized handles protruding through a MLI blanket."
+    }
+   ]
+  },
+  "grapple_fixture_z": {
+   "value": 6.5532,
+   "source": "lmsc1985, drawing 4171929 sh.2",
+   "quote": "GRAPPLE FIXTURE(1) AT STA 358.00"
+  },
+  "magnetic_torquers": {
+   "value": {
+    "count": 4,
+    "z": 7.4498,
+    "az_deg": [
+     33,
+     147,
+     231,
+     303
+    ],
+    "r": 1.65,
+    "across_m": 1.27,
+    "along_m": 1.47,
+    "d": 0.075
+   },
+   "source": "lmsc1985, drawing 4171929 sh.1",
+   "quote": "MAGNETIC TORQUER (4) STA 393.30",
+   "layout_source": "lmsc1985, drawing 4171929 sh.2 (forward end view, 6.19 px/in on the 3400 px scan): four bars lying across the body, centres 65 in out at about 33, 147, 231, 303 deg, spanning about 50 in; lmsc1985, drawing 4171929 sh.1 (side view, 6.02 px/in on the 3400 px scan): slanted, about 58 in along V1, aft end toward the nearer V3 side. Bar diameter about 3 in (scaled). lmsc1985 p.3-5 says '90 deg apart'; the drawing's bars are not evenly spaced, the drawing wins here"
+  },
+  "scuff_plates": {
+   "value": {
+    "forward_z": 11.049,
+    "aft_z": 3.556,
+    "standoff_m": 0.762,
+    "az_deg": [
+     0,
+     180
+    ],
+    "plate_d": 0.6
+   },
+   "sources": [
+    {
+     "source": "lmsc1985, drawing 4171929 sh.2",
+     "quote": "SCUFF PLATE(4) TWO SHOWN-STA 535 TWO AT STA 240"
+    },
+    {
+     "source": "sm3aguide, p.5-3",
+     "quote": "scuff plates, large protective metal plates on struts that extend approximately 30 in. from the surface"
+    }
+   ],
+   "layout_source": "sm4_photos s125e011763 (from +V3): gold strut frames at both edges, so on +-V2; s125e012031: round gold plates about 0.6 m across (138 px/m against the aft bulkhead)"
+  },
+  "equipment_bays": {
+   "value": "10 equipment bays plus 2 trunnion bays; bay doors flat honeycomb except curved covers on Bays 6 and 9 (reaction wheels)",
+   "source": "sm3aguide, p.5-4/5-6",
+   "quote": "This section contains 10 bays for equipment and two bays to support aft trunnion pins and scuff plates."
+  },
+  "handrails": {
+   "value": {
+    "total_length_m": 68.58,
+    "colour": "yellow"
+   },
+   "sources": [
+    {
+     "source": "sm3aguide, p.5-35",
+     "quote": "the crew uses 225 ft of handrails encircling the spacecraft. For visibility, the rails are painted yellow."
+    },
+    {
+     "source": "hansen",
+     "quote": "There was a dramatic peeling of the paint on one handrail"
+    }
+   ]
+  },
+  "thermal_blankets": {
+   "value": "MLI on light shield and forward shell, outer layer 127 um aluminised Teflon FEP over 15 embossed aluminised Kapton layers; silvered FOSR tape on aft shroud and aft bulkhead; aluminium FOSR on the door's sun side, door inside and light shield inside flat black",
+   "sources": [
+    {
+     "source": "sm4guide, p.5-14",
+     "quote": "The insulation blankets are 15 layers of aluminized Kapton, with an outer layer of aluminized Teflon flexible optical solar reflector (FOSR). Aluminized or silvered flexible reflector tape covers most of the remaining exterior."
+    },
+    {
+     "source": "sm3aguide, p.5-16",
+     "quote": "Silvered FOSR tape on the aft shroud and aft bulkhead exteriors"
+    },
+    {
+     "source": "hansen, s.2.1",
+     "quote": "the 17-layer MLI blanket's outer layer (space-exposed) is 127 µm (0.005\") Teflon FEP"
+    },
+    {
+     "source": "ousley",
+     "quote": "many areas of the aluminized Teflon outer blanket layer had significant cracks"
+    }
+   ]
+  },
+  "nobl": {
+   "value": "stainless-steel foil covers on picture frames over equipment bay doors; SM4 added Bays 8 and 5 (pre-flight plan)",
+   "sources": [
+    {
+     "source": "pk125, p.55",
+     "quote": "The covers are made of specially coated stainless steel foil which is trimmed to fit each particular equipment bay door"
+    },
+    {
+     "source": "ousley, p.2",
+     "quote": "The NOBL material selected was 0.1mm stainless steel coated with vapor deposited silver"
+    }
+   ]
+  },
+  "optics": {
+   "value": {
+    "primary_m": 2.4,
+    "secondary_m": 0.3,
+    "metering_truss_length_m": 4.8,
+    "metering_truss_diameter_m": 2.7
+   },
+   "sources": [
+    {
+     "source": "sm4guide, Ch.5",
+     "quote": "The concave primary mirror—94.5 inches (2.4 meters) in diameter"
+    },
+    {
+     "source": "sm3aguide, p.5-23",
+     "quote": "The truss, 16 ft (4.8 m) long and 9 ft (2.7 m) in diameter"
+    }
+   ]
+  },
+  "foil_look": {
+   "value": "The light shield and forward shell blankets are visibly wrinkled and crinkled silver; the aft shroud is flatter, bluish silver tape panels; yellow handrails; NASA 'worm' logo on the light shield.",
+   "source": "sm4_photos, s125e011763 (full size 2850x4288)"
+  },
+  "nasa_model_b": {
+   "value": "819k triangles in 57k loose pieces, no materials, 6.35 m overall in its file; aft skin missing",
+   "source": "nasa_3d_hst_b, measured with model:ref and a Blender radius profile on 2026-11-02"
+  },
+  "solar_array_orientation": {
+   "value": "each SA3 wing's 7.1 m runs along V1 (across the mast), 2.6 m along V2: the wing's height/width in the photo is about 430/160 px, ratio 2.7 (7.1/2.6 = 2.73)",
+   "source": "sm4_photos, s125e011763, measured on the 1400 px copy"
+  },
+  "hga_dish_centre_radial": {
+   "value": 5.9004,
+   "source": "lmsc1985, drawing 4171929 sh.2",
+   "quote": "232.30 +Z",
+   "note": "scaling the drawing by the door gives ~185 in instead; to check with a fitted photo"
+  },
+  "handrail_layout": {
+   "value": "estimated: six lengthwise rails on the light shield and forward shell (30, 60, 120, 150, 240, 300 deg from +V2) and six on the aft shroud, about 67 m in all",
+   "source": "sm3aguide, p.5-35 (total 225 ft = 68.6 m); layout estimated from sm4_photos s125e012031"
+  },
+  "ota_equipment_section": {
+   "value": {
+    "sta": [
+     299.425,
+     337.75
+    ],
+    "sweep_deg": 150,
+    "bays": 9,
+    "side": "+V3",
+    "outer_radius": 2.05,
+    "middle_radius": 1.72
+   },
+   "sources": [
+    {
+     "source": "lmsc1985, s.4.5",
+     "quote": "The OTA ES (Figure 4-26) has a 150-deg toroidal structural assembly containing nine bays forward of STA 299."
+    },
+    {
+     "source": "lmsc1985, drawing 4171929 sh.1",
+     "quote": "OTA EQUIPMENT SECTION STA 337.75 ... STA 299.425"
+    },
+    {
+     "source": "sm4guide, Ch.5",
+     "quote": "Additional bays are provided on the +V3 side of the spacecraft to house OTA electronics"
+    },
+    {
+     "source": "sm4_photos, s125e011763: outer radius from its width against the equipment section's (840 vs 905 px), middle bay depth estimated"
+    }
+   ]
+  },
+  "equipment_doors": {
+   "value": "flat doors on the 12 flats, a seam on +V3; louvred radiators on the two doors either side of +V3, in the forward part of the door",
+   "source": "sm4_photos, s125e011763 (taken from +V3: the near HGA points at the camera); radiator size estimated"
+  },
+  "solar_array_layout": {
+   "value": "4 panels per wing: split at the mast (middle of the 7.1 m) and once along V1 (middle of the 2.6 m); white and orange lines between cell strings; back frame foil-wrapped with crossbars and two diagonal braces beside the mast",
+   "source": "sm4_photos, s125e012031 (cell side) and s125e011763 (backs)"
+  },
+  "aft_shroud_features": {
+   "value": {
+    "door": {
+     "az": [
+      56,
+      124
+     ],
+     "z": [
+      0.27,
+      2.65
+     ],
+     "note": "double door, two leaves split at +V3, yellow handrail down the split"
+    },
+    "ovals": [
+     {
+      "az": 68,
+      "z": 1.67,
+      "w": 0.72,
+      "h": 1.1
+     },
+     {
+      "az": 112,
+      "z": 1.67,
+      "w": 0.72,
+      "h": 1.1
+     }
+    ],
+    "port": {
+     "az": 90,
+     "z": 2.43,
+     "d": 0.54
+    },
+    "white_band": {
+     "az": [
+      57,
+      123
+     ],
+     "z": [
+      2.7,
+      3.505
+     ]
+    },
+    "radiator": {
+     "az": [
+      144,
+      160
+     ],
+     "z": [
+      0.1,
+      3.4
+     ]
+    },
+    "black_strip": {
+     "az": [
+      134,
+      144
+     ],
+     "z": [
+      0.1,
+      3.4
+     ]
+    }
+   },
+   "source": "sm4_photos, s125e011763 (taken from +V3), measured on the full-size photo: angles from offsets across the 4.27 m shroud (224 px/m), heights down from the equipment section"
+  },
+  "aft_bulkhead_features": {
+   "value": {
+    "beams_az": [
+     202,
+     81.5,
+     314
+    ],
+    "vents": [
+     {
+      "az": 101,
+      "r": 1.19
+     },
+     {
+      "az": 61,
+      "r": 1.19
+     },
+     {
+      "az": 245,
+      "r": 1.86
+     },
+     {
+      "az": 274,
+      "r": 1.85
+     }
+    ],
+    "vent_d": 0.5,
+    "lga": {
+     "az": 25,
+     "r": 1.93,
+     "length": 0.35,
+     "d": 0.25
+    },
+    "scm_ring": {
+     "r_out": 0.6,
+     "r_in": 0.48,
+     "thickness": 0.05
+    }
+   },
+   "source": "sm4_photos, s125e011805 (from aft), measured against the 4.27 m bulkhead (218 px/m); orientation from the visible HGA (-V3) and the aft LGA, whose side s125e011763 shows (between +V3 and +V2)",
+   "conflict": "lmsc1985 drawing 4171929 puts the forward LGA between -V3 and +V2 and sm3aguide sets the LGAs '180 degrees apart', which would put the aft LGA between +V3 and -V2: the photos' reading wins here, to be checked"
+  },
+  "logo": {
+   "value": {
+    "az_deg": 91.8,
+    "below_front_edge_m": 1.21,
+    "width_m": 2.4,
+    "height_m": 0.73
+   },
+   "source": "sm4_photos, s125e011763 (from +V3): light shield edges at columns 1260 and 1788 (171 px/m on its 1.544 m radius), columns unrolled onto the cylinder; worm letters span columns 1359 to 1652 (1.82 m of arc), ESA mark 1657 to 1706; logo centre row 782 against the near front edge at row 575 (not corrected for the camera's tilt: estimate). Decal canvas covers columns 1345 to 1715, rows 720 to 845",
+   "artwork": "NASA worm and old ESA logo from Wikimedia Commons (NASA_Worm_logo.svg, ESA_logo.svg, in refs/hubble/logo); the worm keeps its own proportions, sized to the photo's width; the ESA ring and its 'esa' are placed separately, ring above text, as on the telescope"
+  },
+  "magnetometers": {
+   "value": {
+    "az_deg": [
+     47,
+     133
+    ],
+    "r": 1.6,
+    "sta": 594,
+    "size": [
+     0.16,
+     0.12,
+     0.1
+    ]
+   },
+   "source": "lmsc1985, drawing 4171929 sh.2 (forward end view, 6.19 px/in on the 3400 px scan): the two boxes at 47 and 133 deg, 63 in from the axis; station lmsc1985, drawing 4171929 sh.1 (side view, 6.02 px/in on the 3400 px scan) leader at about STA 594; size estimated",
+   "quote": "MAGNETOMETER(2) NS AND FS"
+  },
+  "lga_forward": {
+   "value": {
+    "az_deg": 318,
+    "r": 1.67,
+    "sta": 605
+   },
+   "source": "lmsc1985, drawing 4171929 sh.2 (forward end view, 6.19 px/in on the 3400 px scan): horn at 318 deg, 66 in out; lmsc1985, drawing 4171929 sh.1 (side view, 6.02 px/in on the 3400 px scan): at the light shield's front, pointing forward (station estimated); same size as the aft LGA (assumed)",
+   "quote": "LOW GAIN ANTENNA(1) FWD"
+  },
+  "grapple_fixtures": {
+   "value": {
+    "v2_in": 46.0,
+    "v3_in": -62.0,
+    "base_in": 19,
+    "pin_in": 15
+   },
+   "source": "lmsc1985, drawing 4171929 sh.2 (forward end view, 6.19 px/in on the 3400 px scan): at 46.00 +Y (V2), its base 62 in toward -V3, base about 19 in wide and pin about 15 in (scaled). A second fixture by 180 deg symmetry: sm3aguide says two, next to the HGA drives, and s125e011763 shows the arm grappled on the +V3 side toward -V2",
+   "quote": "GRAPPLE FIXTURE(1) AT STA 358.00 ... 46.00 +Y",
+   "quote2": "The outer skin has two grapple fixtures next to the HGA drives"
+  },
+  "aperture_door_shape": {
+   "value": {
+    "strips": 16,
+    "hinge_beam": [
+     0.12,
+     0.08
+    ],
+    "latch": [
+     0.22,
+     0.14,
+     0.1
+    ],
+    "handholds": [
+     [
+      0.9,
+      0.7
+     ],
+     [
+      -0.9,
+      0.15
+     ]
+    ]
+   },
+   "source": "sm4_photos s125e012031: the open door is round on its free end and square on the hinge side, with 16 tape strips running across the hinge, a white beam along the hinge edge, two gold handholds near the side edges and a white block on the free edge; lmsc1985 doc p.3-3 names the 'Hinge-Line Beam'; drawing 4171929 sh.1 puts the 'APERTURE DOOR LATCH(1)' opposite the hinge. Beam, latch and handhold sizes and places estimated from the photo"
+  }
+ },
+ "open_questions": [
+  "SA3: where the wing's 7.1 m starts (mast vs panels), mast length, and whether SA3 uses the original pivot at STA 320. Fit from photos.",
+  "Handrail cross-section and standoff height: not found; measure from photos against known sizes.",
+  "NOBL sizes and which bays carry one after SM4 (sources disagree on 3A/3B bays; SM4 plan: Bays 8 and 5).",
+  "Colours (MLI silver, aft shroud FOSR, yellow handrails, solar cells, NOBLs): to sample from the SM4 photos.",
+  "Low-gain antennas, magnetometers, sun sensors, grapple fixture, trunnions: positions from the drawing, sizes from photos.",
+  "Wrinkled foil: no document describes wrinkles (they say 'cracked', 'curled'); the look comes from the SM4 photos.",
+  "HGA boom length: the drawing labels the dish at 232.30 in from the axis, but scaling the drawing by the door gives about 185 in, and s125e012031 (unfitted) suggests about 4.5 m; kept the label.",
+  "Sun sensors (2 fwd, 2 aft): drawing 4171929 sh.2 points at about 171 deg but gives no stations; not modelled."
+ ],
+ "materials": {
+  "mli_foil": {
+   "hex": "#ebe9e6",
+   "metallic": 1.0,
+   "roughness": 0.3,
+   "source": "sm4_photos, s125e012031 (4288 px), 90th percentile of the light-shield blanket (the lit facets; darker pixels are reflections of space)"
+  },
+  "aft_fosr": {
+   "hex": "#818281",
+   "metallic": 1.0,
+   "roughness": 0.2,
+   "source": "sm4_photos, s125e012031 (4288 px), 90th percentile of the aft shroud's silvered tape"
+  },
+  "bay_doors": {
+   "hex": "#b5bdbf",
+   "metallic": 1.0,
+   "roughness": 0.3,
+   "source": "sm4_photos, s125e012031 (4288 px), 75th percentile of the equipment-section doors"
+  },
+  "door_fosr": {
+   "hex": "#f3f2ec",
+   "metallic": 0.3,
+   "roughness": 0.4,
+   "source": "sm4_photos, s125e012031 (4288 px), median of the aperture door's outer face"
+  },
+  "handrail_paint": {
+   "hex": "#a07346",
+   "metallic": 0.0,
+   "roughness": 0.5,
+   "source": "sm4_photos, s125e012031 (4288 px), 75th percentile of saturated yellow-orange pixels on the aft shroud and light shield (the documented yellow paint as it looks after 19 years)",
+   "also": [
+    {
+     "source": "sm3aguide, p.5-35",
+     "quote": "For visibility, the rails are painted yellow."
+    }
+   ]
+  },
+  "solar_cells": {
+   "hex": "#292523",
+   "metallic": 0.3,
+   "roughness": 0.25,
+   "source": "sm4_photos, s125e012031: median of the cell side of the lower wing"
+  },
+  "panel_back": {
+   "hex": "#dce2e5",
+   "metallic": 0.0,
+   "roughness": 0.6,
+   "source": "sm4_photos, s125e011763: median of a lit panel back (white Tedlar per sa3thermal)",
+   "also": [
+    {
+     "source": "sa3thermal",
+     "quote": "The anti-sun sides of the panels are white Tedlar to serve as radiators to space."
+    }
+   ]
+  },
+  "bulkhead_tape": {
+   "hex": "#d6c2a2",
+   "metallic": 1.0,
+   "roughness": 0.3,
+   "source": "sm4_photos, s125e011805: 75th percentile of the aft bulkhead's silvered tape"
+  },
+  "scm_grey": {
+   "hex": "#918972",
+   "metallic": 0.6,
+   "roughness": 0.4,
+   "source": "sm4_photos, s125e011805: 75th percentile of the soft-capture ring"
+  },
+  "beam_gold": {
+   "hex": "#a48240",
+   "metallic": 0.8,
+   "roughness": 0.4,
+   "source": "sm4_photos, s125e011805: median of a radial beam"
+  },
+  "vent_cover": {
+   "hex": "#a8a88b",
+   "metallic": 0.6,
+   "roughness": 0.5,
+   "source": "sm4_photos, s125e011805: 75th percentile of a vent cover"
+  },
+  "lga_white": {
+   "hex": "#f4f4f2",
+   "metallic": 0.0,
+   "roughness": 0.6,
+   "source": "sm4_photos, s125e011805: the aft LGA's radome saturates (white); set just below"
+  },
+  "aft_white_panel": {
+   "hex": "#857e77",
+   "metallic": 0.1,
+   "roughness": 0.6,
+   "source": "sm4_photos, s125e011763: 75th percentile of the white band at the shroud's forward end (in shade)"
+  },
+  "black_tape": {
+   "hex": "#1a1917",
+   "metallic": 0.0,
+   "roughness": 0.7,
+   "source": "sm4_photos, s125e011763: 75th percentile of the black strip beside the shroud radiator"
+  },
+  "logo_red": {
+   "hex": "#614542",
+   "metallic": 0.0,
+   "roughness": 0.7,
+   "source": "sm4_photos, s125e011763: 75th percentile of the worm logo's paint (pixels redder than the foil, 10,138 samples)"
+  },
+  "logo_dark": {
+   "hex": "#414141",
+   "metallic": 0.0,
+   "roughness": 0.7,
+   "source": "sm4_photos, s125e011763: 75th percentile of the ESA mark's dark paint"
+  }
+ },
+ "budget": {
+  "triangles": 80000,
+  "glb_bytes": 4000000
+ },
+ "closeups": [
+  {
+   "name": "foil",
+   "target": [
+    1.1,
+    -1.1,
+    10.5
+   ],
+   "look": [
+    -0.7,
+    0.7,
+    -0.15
+   ],
+   "radius": 0.9,
+   "note": "crinkled foil trial patch and a handrail on the light shield"
+  },
+  {
+   "name": "equipment_section",
+   "target": [
+    0,
+    2.0,
+    4.9
+   ],
+   "look": [
+    0,
+    -1,
+    -0.15
+   ],
+   "radius": 2.6,
+   "note": "from +V3, as s125e011763"
+  },
+  {
+   "name": "door_hinge",
+   "target": [
+    0,
+    1.6,
+    13.0
+   ],
+   "look": [
+    -1,
+    -0.2,
+    -0.3
+   ],
+   "radius": 1.2
+  },
+  {
+   "name": "hga_hinge",
+   "target": [
+    0,
+    2.0,
+    5.9
+   ],
+   "look": [
+    -1,
+    0.3,
+    -0.3
+   ],
+   "radius": 1.0
+  },
+  {
+   "name": "array_root",
+   "target": [
+    2.0,
+    0,
+    5.6
+   ],
+   "look": [
+    -0.3,
+    -1,
+    -0.3
+   ],
+   "radius": 1.2
+  },
+  {
+   "name": "aft",
+   "target": [
+    0,
+    0,
+    0
+   ],
+   "look": [
+    0.5,
+    0.5,
+    1
+   ],
+   "radius": 2.6
+  },
+  {
+   "name": "handrail_foot",
+   "target": [
+    1.07,
+    1.85,
+    0.2
+   ],
+   "look": [
+    -0.6,
+    -0.6,
+    -0.5
+   ],
+   "radius": 0.3
+  },
+  {
+   "name": "wing_back",
+   "target": [
+    3.6,
+    0.03,
+    6.3
+   ],
+   "look": [
+    -0.3,
+    -1,
+    -0.4
+   ],
+   "radius": 1.3,
+   "note": "back of the +V2 wing, as s125e011763"
+  }
+ ],
+ "joints": {
+  "solar_drive_pv2": {
+   "angle": 0,
+   "min": -180,
+   "max": 180,
+   "source": "sm3aguide, p.5-28 (pose free: the drive turns each wing about V2 to face the Sun); 0 = cells facing -V3, as the backs face +V3 in sm4_photos s125e011763",
+   "quote": "A SA drive at the base of each mast rotates the deployed array toward the Sun"
+  },
+  "solar_drive_mv2": {
+   "angle": 0,
+   "min": -180,
+   "max": 180,
+   "source": "sm3aguide, p.5-28 (pose free: the drive turns each wing about V2 to face the Sun); 0 = cells facing -V3, as the backs face +V3 in sm4_photos s125e011763",
+   "quote": "A SA drive at the base of each mast rotates the deployed array toward the Sun"
+  },
+  "hga_gimbal_pv3_a": {
+   "angle": 0,
+   "min": -110,
+   "max": 110,
+   "source": "lmsc1985, section 3.1.7.4 (pose free; 0 = dish facing straight out along V3)",
+   "quote": "The gimbal range is ± 110 deg with mechanical stops at ± 112 deg"
+  },
+  "hga_gimbal_pv3_b": {
+   "angle": 0,
+   "min": -110,
+   "max": 110,
+   "source": "lmsc1985, section 3.1.7.4 (pose free; 0 = dish facing straight out along V3)",
+   "quote": "The gimbal range is ± 110 deg with mechanical stops at ± 112 deg"
+  },
+  "hga_gimbal_mv3_a": {
+   "angle": 0,
+   "min": -110,
+   "max": 110,
+   "source": "lmsc1985, section 3.1.7.4 (pose free; 0 = dish facing straight out along V3)",
+   "quote": "The gimbal range is ± 110 deg with mechanical stops at ± 112 deg"
+  },
+  "hga_gimbal_mv3_b": {
+   "angle": 0,
+   "min": -110,
+   "max": 110,
+   "source": "lmsc1985, section 3.1.7.4 (pose free; 0 = dish facing straight out along V3)",
+   "quote": "The gimbal range is ± 110 deg with mechanical stops at ± 112 deg"
+  }
+ },
+ "mounts": {
+  "aft_vent_1": {
+   "on": "aft_bulkhead"
+  },
+  "aft_vent_2": {
+   "on": "aft_bulkhead"
+  },
+  "aft_vent_3": {
+   "on": "aft_bulkhead"
+  },
+  "aft_vent_4": {
+   "on": "aft_bulkhead"
+  }
+ }
+}
