@@ -23,8 +23,8 @@ def place(carrier_spec, probe, location=(0, 0, 0), direction=(0, 0, 1), roll_deg
     """Build `probe` (probes/<probe>.py, its own spec) and move it so its origin is at
     `location` and its +z points along `direction`, rolled by `roll_deg` about it. Its
     finishes join the build's (the carrier's own win on a name clash). On the carrier it is one
-    part, its assembly the probe's name (`viewer.explode: ["<probe>"]` takes it off, as the X-15
-    gives up its engine); its own assemblies stay on as `sub`, so Explode also opens it up. The included script sees
+    nested set named after the probe (parts.assembly(within=...)): Explode takes it off as one,
+    then spreads its own assemblies apart, and each of them can be focused. The included script sees
     spec["included_in"] (the carrier's title), to leave to the carrier what the carrier does
     for every part (a foil pass). Returns its objects."""
     ps = dict(spec(carrier_spec, probe), included_in=carrier_spec.get("title", ""))
@@ -40,10 +40,8 @@ def place(carrier_spec, probe, location=(0, 0, 0), direction=(0, 0, 1), roll_deg
     for o in made:
         if o.parent is None or o.parent not in made:
             o.matrix_world = m @ o.matrix_world
-        if "assembly" in o and o["assembly"] != probe:
-            o["sub"] = o["assembly"]
-        o["assembly"] = probe
-        for k in ("within", "core"):
-            if k in o:
-                del o[k]
+        o["assembly"] = o.get("assembly", probe)
+        o["within"] = probe
+        if "core" in o:
+            del o["core"]
     return made

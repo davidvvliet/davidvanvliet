@@ -442,9 +442,9 @@ A probe can be a model of its own and part of another, as Huygens is of Cassini
 (`lib/includes.py`). The carrier lists it in its spec (`"includes": ["huygens"]`) and calls
 `includes.place(spec, "huygens", location, direction, roll_deg)`, which runs the included
 probe's own script with its own spec and moves what it made so its origin is at `location` and
-its +z along `direction`. On the carrier it is one part (its assembly is the probe's name), so
-`"viewer": {"explore": false, "explode": ["huygens"]}` takes it off as the X-15 gives up its
-engine; its own assemblies are for its own model. The script sees `spec["included_in"]` (the carrier's title), to leave to the carrier
+its +z along `direction`. On the carrier its assemblies are a nested set named after the probe
+(`within`), so Explode takes it off as one and then spreads its assemblies (Huygens' front
+shield, descent module and back cover), each of which can be focused. The script sees `spec["included_in"]` (the carrier's title), to leave to the carrier
 what the carrier does to every part (Cassini's foil pass). The list makes the carrier behind
 when the included probe's spec, script or refs change, and adds its credits to the carrier's.
 Its dimension checks run on its own build, not the carrier's.
