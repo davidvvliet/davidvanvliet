@@ -3,7 +3,12 @@
     "NASA 3D Resources, Cassini-Huygens model (layout reference): https://github.com/nasa/NASA-3D-Resources; NASA 3D Resources, Cassini-Huygens (A): propulsion module blanket and black panels copied into refs/cassini/meshes/",
     "NASA 3D Resources, Cassini Assembly model: shapes of the HGA deck, LGA1 and feed cluster copied into refs/cassini/meshes/",
     "NASA/JPL, PIA04603 (blanket and antenna colours)",
-    "NASA/JPL, Cassini spacecraft diagram (Final EIS Figure 2-4, source JPL 1993a), layout reference: refs/cassini/jpl-diagram.png"
+    "NASA/JPL, Cassini spacecraft diagram (Final EIS Figure 2-4, source JPL 1993a), layout reference: refs/cassini/jpl-diagram.png",
+    "DASA/ESA, Huygens Descent Module (fore dome colour)",
+    "DASA/ESA, Huygens' reentry shield (rear face colours)",
+    "NASA/KSC, KSC-97pc730 (unit colour)",
+    "NASA/KSC, KSC-97pc732 (platform and PCDU colours)",
+    "NASA/JPL, PIA04603 (blanket colour)"
   ],
   "f1": [
     "NASA/MSFC, Saturn V News Reference F-1 fact sheet (drawing and data)",
