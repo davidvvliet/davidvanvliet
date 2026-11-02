@@ -1,5 +1,6 @@
 {
   "title": "Cassini",
+  "viewer": {"pivot": "bus", "note": "the cards turn about the bus, not the centre of the booms' span"},
   "logos": [
     "nasa",
     "jpl",
