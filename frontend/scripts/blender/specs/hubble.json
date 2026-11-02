@@ -90,6 +90,13 @@
    "url": "https://github.com/nasa/NASA-3D-Resources/tree/master/3D%20Models/Hubble%20Space%20Telescope%20(B)",
    "read": "2026-11-02",
    "licence": "NASA 3D Resources (public domain NASA content)"
+  },
+  {
+   "id": "nasa_glossary",
+   "title": "NASA GSFC, Hubble glossary",
+   "url": "https://asd.gsfc.nasa.gov/archive/hubble/overview/glossary.html",
+   "read": "2026-11-02",
+   "licence": "NASA web page; no licence statement read: quoted, not kept"
   }
  ],
  "reference_model": {
@@ -902,12 +909,106 @@
     }
    ],
    "note": "stations are V1 in inches (Figure 2-3). Estimated by scaling Figure 4-2 (5.52 px/in on a 260 dpi render): mirror thickness about 12 in, truss ring stations, reaction plate taken as the span between the 231.23 and 240.00 labels, central and secondary baffle radii and the secondary baffle's ends. Main baffle radius from the drawing's 50.75 (the guide rounds to 9 ft). Truss: 8 nodes per ring, X-braced (count estimated); main baffle fins: 10 (estimated)"
+  },
+  "instruments": {
+   "value": {
+    "axial_sta": [
+     116.18,
+     202.68
+    ],
+    "axial_size_in": [
+     86.6,
+     35.6,
+     35.6
+    ],
+    "axial_outer_in": 40.0,
+    "axial_positions": {
+     "STIS": "+V2+V3",
+     "NICMOS": "+V2-V3",
+     "ACS": "-V2-V3",
+     "COS": "-V2+V3"
+    },
+    "deck_sta": [
+     202.68,
+     208.85
+    ],
+    "radial_si_in": {
+     "v1": 21,
+     "tangential": 31,
+     "radial": 43
+    },
+    "fgs_m": {
+     "v1": 0.5,
+     "tangential": 1.0,
+     "radial": 1.6
+    },
+    "radial_sta0": 209.0,
+    "radial_tip_r_in": 7.0,
+    "radial_bays": {
+     "wfc3": -90,
+     "fgs_2": 90,
+     "fgs_1": 0,
+     "fgs_3": 180
+    }
+   },
+   "sources": [
+    {
+     "source": "lmsc1985, Figure 4-16 Axial SI Mounting Arrangement (PDF p.129)",
+     "quote": "4 AXIAL INSTRUMENTS ... 86.6\" ... 35.6\" ... 35.6\" ... 700 LB"
+    },
+    {
+     "source": "lmsc1985, Figure 4-15 Radial Bay Mounting Arrangement (PDF p.129)",
+     "quote": "1 RADIAL INSTRUMENT ... 31\" ... 21\" ... 43\" ... 500 LB"
+    },
+    {
+     "source": "lmsc1985, Figure 4-2 (PDF p.117)",
+     "quote": "116.18 ... 202.68 ... 208.85 ... 40.00 ... 8 FOCAL PLANE DECK (T)"
+    },
+    {
+     "source": "lmsc1985",
+     "quote": "the mounting arrangement of the radial SI (-V3 bay) and the three FGS/OCS modules (+V3 and ±V2 bay)"
+    },
+    {
+     "source": "lmsc1985",
+     "quote": "The FGS has an additional point \"D\" which is restrained in V2 (FGS2) and V3 (FGS1 and FGS3) directions."
+    },
+    {
+     "source": "lmsc1985",
+     "quote": "The FPDA interfaces the Main Ring (MR) at eight points (by four \"bi-pod\" flexures)."
+    },
+    {
+     "source": "sm4guide",
+     "quote": "1.6 x 3.3 x 5.4 feet (0.5 x 1 x 1.6 m)"
+    },
+    {
+     "source": "nasa_glossary",
+     "quote": "Space Telescope Imaging Spectrograph -Second Generation Imager/Spectrograph located in the +V2 Aft Shroud Axial Bay"
+    },
+    {
+     "source": "nasa_glossary",
+     "quote": "Near Infrared Camera and Multi-Object Spectrometer - Second Generation Imager/Spectrograph located in the +V2 Aft Shroud Axial Bay"
+    },
+    {
+     "source": "nasa_glossary",
+     "quote": "This third generation instrument located in the -V2 Aft Shroud Axial Bay"
+    },
+    {
+     "source": "nasa_glossary",
+     "quote": "Corrective Optics Space Telescope Axial Replacement - Second Generation Corrective Optics located in the -V2 Aft Shroud Axial Bay"
+    },
+    {
+     "source": "pk125",
+     "quote": "COS will be installed in the instrument bay"
+    }
+   ],
+   "note": "Axial SIs run from the 116.18 label to the 202.68 label (86.5 in, the box's 86.6). Estimated: each axial box sits in its quadrant with its outer face at the 40.00 dimension; STIS and NICMOS are on +V2, ACS and COS (in COSTAR's bay) on -V2 (glossary); which of each pair is on +V3 is estimated; radial modules from STA 209 (just forward of the deck) with their inner tips 7 in off the axis, at the edge of the focal plane's 14 arcmin FGS field; which of +-V2 is FGS1; the pentagonal outline (Figure 4-15); radial SI axes (21 in along V1, the size of the FGS's 0.5 m). The deck is a square frame with a cross, after Figure 4-14; bipods estimated."
   }
  },
  "open_questions": [
   "SA3: where the wing's 7.1 m starts (mast vs panels), mast length, and whether SA3 uses the original pivot at STA 320. Fit from photos.",
   "Handrail cross-section and standoff height: not found; measure from photos against known sizes.",
-  "HGA boom length: the drawing labels the dish at 232.30 in from the axis, but scaling the drawing by the door gives about 185 in, and s125e012031 (unfitted) suggests about 4.5 m; kept the label."
+  "HGA boom length: the drawing labels the dish at 232.30 in from the axis, but scaling the drawing by the door gives about 185 in, and s125e012031 (unfitted) suggests about 4.5 m; kept the label.",
+  "Instruments: which of each axial pair is on +V3 (STIS/NICMOS on +V2, ACS/COS on -V2 per the NASA glossary), and which of the +-V2 radial bays is FGS1. Placed by estimate."
  ],
  "materials": {
   "mli_foil": {
@@ -1053,6 +1154,12 @@
    "metallic": 0.0,
    "roughness": 0.3,
    "source": "lmsc1985 Figure 4-5 (the mirror's glass body behind its coated face); colour estimated"
+  },
+  "si_enclosure": {
+   "hex": "#bcbcb8",
+   "metallic": 0.6,
+   "roughness": 0.4,
+   "source": "lmsc1985 Figure 4-16 (axial SI enclosure); colour estimated (aluminium enclosure, not measured from a photo)"
   }
  },
  "budget": {

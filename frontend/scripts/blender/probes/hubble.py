@@ -337,6 +337,59 @@ def ota_internals(f):
         parts.strut("secondary_baffle_mount", (0, 0, z(sb["sta"][1]) - 0.02), (0, 0, zs - 0.004), radius=0.05,
                     material="graphite_epoxy")
 
+def instruments(f):
+    """The instruments behind the primary mirror (spec facts.instruments), all in internal.glb:
+    the focal plane deck on its four bipods to the main ring, four axial instruments aft of it,
+    and the radial modules (WFC3 and three Fine Guidance Sensors) just forward of it."""
+    I = f["instruments"]
+    z = lambda st: sta(st)
+    # Focal plane deck: square frame with a cross (Figure 4-14), outer edge at the axial bays'.
+    d0, d1 = (z(v) for v in I["deck_sta"])
+    e, bw = I["axial_outer_in"] * IN, 3 * IN
+    with parts.assembly("focal_plane_structure", internal=True):
+        for k, a in enumerate((0, 90, 180, 270)):
+            c, s_ = _az(a)
+            parts.box(f"focal_plane_deck_edge_{k + 1}", (bw, 2 * e, d1 - d0),
+                      location=(c * (e - bw / 2), s_ * (e - bw / 2), (d0 + d1) / 2), roll_deg=a, material="graphite_epoxy")
+        for k, a in enumerate((0, 90)):
+            parts.box(f"focal_plane_deck_beam_{k + 1}", (2 * e - 2 * bw, bw, d1 - d0), location=(0, 0, (d0 + d1) / 2),
+                      roll_deg=a, material="graphite_epoxy")
+        # four bipods from the deck's corners to the main ring's aft face (eight points)
+        O = f["ota"]
+        r_ring = (O["main_ring"]["id_in"] + O["main_ring"]["od_in"]) / 4 * IN
+        z_ring = z(O["main_ring"]["aft_sta"])
+        corner = e - bw / 2
+        for k in range(4):
+            a = 45 + 90 * k
+            c, s_ = _az(a)
+            for j, da in enumerate((-12, 12)):
+                c2, s2 = _az(a + da)
+                parts.strut(f"focal_plane_bipod_{k + 1}{'ab'[j]}", (math.copysign(corner, c), math.copysign(corner, s_), d1),
+                            (c2 * r_ring, s2 * r_ring, z_ring), radius=0.025, material="titanium")
+    # Axial instruments: 86.6 x 35.6 x 35.6 in boxes, one per quadrant.
+    L, w, _ = (v * IN for v in I["axial_size_in"])
+    a0, a1 = (z(v) for v in I["axial_sta"])
+    for name, quad in I["axial_positions"].items():
+        sx = 1 if quad[0] == "+" else -1
+        sy = 1 if quad[3] == "+" else -1
+        cxy = e - w / 2
+        with parts.assembly(name.lower(), internal=True):
+            parts.box(name.lower(), (w, w, L), location=(sx * cxy, sy * cxy, (a0 + a1) / 2), material="si_enclosure")
+    # Radial modules: pentagonal boxes (Figure 4-15), V1-thin, tip towards the axis.
+    outline = [(0.4, 0.0), (0.6, 0.0), (1.0, 0.5), (1.0, 1.0), (0.0, 1.0), (0.0, 0.5)]
+    r_tip, z0 = I["radial_tip_r_in"] * IN, z(I["radial_sta0"])
+    rs, fg = I["radial_si_in"], I["fgs_m"]
+    for name, a in I["radial_bays"].items():
+        if name == "wfc3":
+            t, wt, h = rs["v1"] * IN, rs["tangential"] * IN, rs["radial"] * IN
+        else:
+            t, wt, h = fg["v1"], fg["tangential"], fg["radial"]
+        label = name if name == "wfc3" else "fine_guidance_sensor_" + name[-1]
+        c, s_ = _az(a)
+        with parts.assembly(label, internal=True):
+            parts.outline_plate(label, outline, wt, h, t, location=(c * (r_tip + h / 2), s_ * (r_tip + h / 2), z0),
+                                direction=(0, 0, 1), up=(c, s_, 0), material="si_enclosure")
+
 def build(spec):
     d = {k: v["value"] for k, v in spec["dimensions"].items()}
     f = {k: v["value"] for k, v in spec["facts"].items()}
@@ -538,6 +591,7 @@ def build(spec):
     aft_features(f, r_aft)
     fittings(f, r_ls, r_fs, R_es, z_ls1)
     ota_internals(f)
+    instruments(f)
 
     # Handrails (layout estimated, spec facts.handrail_layout): lengthwise rails on the forward
     # tube and the aft shroud, clear of the array and antenna lines.
