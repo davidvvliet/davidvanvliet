@@ -232,8 +232,13 @@ def cmd_approve(args):
     if not spec.get("fixture"):  # fixtures only guard lib/; they never ship
         os.makedirs(PUBLIC_MODELS, exist_ok=True)
         compress(entry["glb"], os.path.join(PUBLIC_MODELS, f"{probe}.glb"))
-        # In a subfolder too, so the grid doesn't list it as a model of its own.
-        compress(entry["glb"], os.path.join(PUBLIC_MODELS, "grid", f"{probe}.glb"), GRID)
+        # In a subfolder too, so the grid doesn't list it as a model of its own. Not for a model
+        # left off the grid ("listed": false).
+        grid = os.path.join(PUBLIC_MODELS, "grid", f"{probe}.glb")
+        if spec.get("listed") is not False:
+            compress(entry["glb"], grid, GRID)
+        elif os.path.exists(grid):
+            os.remove(grid)
         # Inside parts: public/models/internal/<probe>.glb (a subfolder, so the /models grid,
         # which lists every .glb in public/models, doesn't take it for a model of its own).
         inner = os.path.join(PUBLIC_MODELS, "internal", f"{probe}.glb")
