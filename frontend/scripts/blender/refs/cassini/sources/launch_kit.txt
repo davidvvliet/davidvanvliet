@@ -1,0 +1,2954 @@
+NATIONAL AERONAUTICS AND SPACE ADMINISTRATION
+
+
+
+
+Cassini Launch
+
+Press Kit
+October 1997
+                                                                 Contacts
+
+Douglas Isbell                              Policy/Program Management                               202/358-1753
+ Headquarters,
+ Washington, DC
+
+Donald Savage                               Cassini Nuclear Safety                                  202/358-1727
+ Headquarters,
+ Washington, DC
+
+Franklin O’Donnell          Cassini Mission                                                         818/354-5011
+ Jet Propulsion Laboratory,
+ Pasadena, CA
+
+Mary Beth Murrill           Cassini Mission                                                         818/354-6478
+ Jet Propulsion Laboratory, and Nuclear Safety
+ Pasadena, CA
+
+George Diller             Launch Operations                                                         407/867-2468
+ Kennedy Space Center, FL
+
+
+                                                             Contents
+General Release ............................................................................................................................ 3
+Media Services Information .......................................................................................................... 7
+Quick Facts ................................................................................................................................... 8
+Saturn at a Glance .......................................................................................................................... 9
+Why Saturn? ................................................................................................................................ 11
+The Saturn System ...................................................................................................................... 14
+Mission Overview ........................................................................................................................ 33
+Spacecraft ........................................................................................................................ 46
+Science Objectives ....................................................................................................................... 57
+Cassini’s Nuclear Safety .............................................................................................................. 65
+The International Team ................................................................................................................ 69
+
+
+
+
+                                                                             1
+2
+RELEASE:
+
+CASSINI TO SURVEY REALM OF SATURN AND TITAN
+
+       The planet Saturn, its icy rings, the enigmatic moon Titan, other moons and the huge
+magnetic bubble that surrounds most of them are the prime scientific targets of the international
+Cassini mission, the most ambitious planetary exploration ever mounted. Final preparation of
+Cassini is now under way for a pre-dawn launch from Cape Canaveral, FL, on October 6, 1997.
+
+       The mission also entails the first descent of a probe to a moon of another planet, sending
+the Huygens probe to the surface of Saturn’s moon Titan — by far the most distant landing ever
+attempted on another object in the solar system.
+
+        Cassini, in development since October 1989, is a cooperative endeavor of NASA, the
+European Space Agency (ESA) and the Italian Space Agency, or Agenzia Spaziale Italiana
+(ASI) . The mission will send a sophisticated robotic spacecraft equipped with 12 scientific
+experiments to orbit Saturn for a four-year period and to study the Saturnian system in detail.
+The ESA-built Huygens probe that will parachute into Titan’s thick atmosphere carries another
+six scientific instrument packages.
+
+        "Saturn, with its rings, 18 known moons and its magnetic environment, is a lot like a
+solar system in miniature form," said Dr. Wesley T. Huntress, NASA's associate administrator
+for space science. "It represents an unsurpassed laboratory where we can look for answers to
+many fundamental questions about the physics, chemistry and evolution of the planets and the
+conditions that give rise to life. Cassini and the Huygens probe represent our best efforts yet in
+our ongoing exploration of the solar system."
+
+        The launch period for Cassini's nearly seven-year journey to Saturn opens on October 6
+and closes November 15, 1997. The launch is scheduled for October 13 at 4:55 a.m. Eastern
+Daylight Time (08:55 Universal Time). The launch window runs for 140 minutes each day and
+moves earlier by about six minutes daily. A U.S. Air Force Titan IVB/Centaur launch system,
+the most powerful launch vehicle in the U.S. fleet, will loft the Cassini spacecraft onto the
+interplanetary trajectory that will deliver the spacecraft to Saturn almost seven years later, on
+July 1, 2004. Cassini's primary mission concludes in July 2008.
+
+        In the early 1980s, the international science community selected a Saturn orbiter and
+Titan probe as the next logical step in the exploration of the solar system, similar to the Galileo
+mission to Jupiter. The Cassini orbiter and Huygens probe are the result of years of collabora-
+tive planning by space scientists and engineers in the United States and Europe.
+
+        Cassini is a follow-on mission to the brief reconnaissance of Saturn performed by the
+Pioneer 11 spacecraft in 1979 and the Voyager 1 and 2 encounters of 1980 and 1981. Those
+highly successful flybys produced volumes of new information, discoveries and questions about
+Saturn, its environs and its family of rings and moons. Those encounters, along with recent key
+
+                                                     3
+findings from the Hubble Space Telescope and ground-based observatories, continue to entice
+scientists who view the Saturnian system as a one-stop treasure trove with countless clues to the
+history of planetary and solar system evolution.
+
+        The mission is named for two 17th century astronomers. Italian-French astronomer
+Jean-Dominique Cassini (born Gian Domenico Cassini in his native Italy) made several key
+discoveries about Saturn between 1671 and 1684; he established that Saturn's rings are split
+largely into two parts by a narrow gap, known since as the Cassini Division. Dutch scientist
+Christiaan (cq) Huygens discovered Titan in 1655 and was responsible for many important
+Saturn findings.
+
+         Saturn is the second largest planet in the solar system. Like the other gaseous outer
+planets — Jupiter, Uranus and Neptune — its atmosphere is made up mostly of hydrogen and
+helium. Saturn's placid-looking, butterscotch-colored face masks a windswept atmosphere
+where jet streams blow at 1,800 kilometers per hour (1,100 miles per hour) and swirling storms
+roil just beneath the cloud tops. Spacecraft passing by Saturn found a huge and complex mag-
+netic environment, called a magnetosphere, where trapped protons and electrons interact with
+each other, the planet, the rings and the surfaces of many of the moons.
+
+        The bright rings for which Saturn is best known have been found to consist of not just a
+few but hundreds of rings and ringlets, broad and thin, made up of ice and rock particles rang-
+ing in size from grains of sand to boxcars. The Voyager spacecraft observations in 1980 and
+1981 found that the particles are herded into complicated orbits by the gravitational interaction
+of small moons unseen from Earth. Continuously jostled by their different orbital speeds and
+competing gravitational tugs from nearby moons and Saturn itself, the particles bump and grind
+away at each other, spreading out into a broad, thin sheet that is less than 100 meters (about 330
+feet) thick, but almost as broad as the distance between the Earth and its Moon. So-called
+"shepherd moons" were found orbiting near the edges of some rings. Like sheepdogs working
+the edges of a flock, these moons gravitationally herd in and contain ring particles that would
+otherwise spread out into deep space.
+
+         More moons of greater variety orbit Saturn than any other planet. These natural satel-
+lites range from Titan, which is larger than either Mercury or Pluto and nearly the size of Mars,
+to bodies so puny that astronomers call them "moonlets." There are likely many more moons
+than the 18 that have been confirmed.
+
+        Although it is believed to be too cold to support life, haze-covered Titan is thought to
+hold clues to how the primitive Earth evolved into a life-bearing planet. It has an Earth-like,
+nitrogen-based atmosphere and a surface that many scientists believe probably features chilled
+lakes of ethane and methane (which may also pool in subsurface reservoirs). Scientists believe
+that the moon's surface is probably coated with the residue of a sticky brown organic rain.
+Titan's orange haze chemically resembles smog, and it is thought to be composed of naturally
+occurring, smoke-like hydrocarbon particles. Standing on Titan's surface beneath this orange
+sky, a visitor from Earth likely would find a cold, exotic world with a pungent odor reminiscent
+of a petroleum processing facility. Huygens will provide our first direct sampling of Titan's
+
+                                                4
+atmospheric chemistry and the first detailed photographs of its hidden surface.
+
+       In maneuvers called gravity-assist swingbys, Cassini will fly twice past Venus then once
+each past Earth and Jupiter on its way to Saturn. The spacecraft's speed relative to the Sun
+increases as it approaches and swings past each planet, giving Cassini the cumulative boost it
+needs to reach its ultimate destination.
+
+        On November 6, 2004, Cassini will release the disc-shaped Huygens probe toward
+Titan. After a three-week ballistic freefall toward Titan, the 2.7-meter-diameter (8.9-foot), bat-
+tery powered Huygens will enter Titan's atmosphere, deploy its parachutes and begin its scien-
+tific observations. Data gathered during Huygens' 2-1/2-hour descent through Titan's dense
+atmosphere will be radioed to the Cassini spacecraft and relayed to Earth. Instruments on the
+descent probe will measure the chemistry, temperature, pressure, density and energy balance in
+the atmosphere. As the probe breaks through the cloud deck, a camera will capture panoramic
+pictures of Titan. Titan's surface properties will be measured, and more than 500 images of the
+clouds and surface will be returned. In the final moments of descent, a spotlight will illuminate
+the surface for spectroscopic measurements of its composition.
+
+        If the probe survives landing — which should occur at a fairly low speed of about 25
+kilometers per hour (15 miles per hour) — it may return data from Titan's surface, where the
+atmospheric pressure is 1.6 times that of Earth's and the temperature is -179 C (-290 F). The
+exact conditions it will encounter are unknown; the probe could touch down on solid ground,
+rock-hard ice, or even splash down in a lake of ethane and methane. One instrument onboard
+will discern whether Huygens is bobbing in liquid, and other instruments onboard could mea-
+sure the chemical composition of that liquid.
+
+        During the course of the Cassini orbiter's mission, it will execute more than 40 targeted
+close flybys of Titan, many as close as 950 kilometers (about 590 miles) above the surface.
+This will permit high-resolution mapping of Titan's surface with the Titan imaging radar instru-
+ment, which can see through the opaque haze covering that moon to produce vivid photograph-
+like images.
+
+         The Cassini spacecraft, including the orbiter and Huygens probe, is the most complex
+interplanetary spacecraft ever built. Its sophisticated instruments are state-of-the-art and repre-
+sent the best technical efforts of the United States and 16 European nations involved in the mis-
+sion. Because of Cassini's challenging mission, long voyage and the value of its promised sci-
+entific return, each component and the system as a whole has undergone an unprecedented pro-
+gram of rigorous testing for quality and performance to assure the highest possible probability
+of mission success.
+
+        Because of the very dim sunlight at Saturn's orbit, solar arrays are not feasible.
+Electrical power is supplied to the orbiter by a set of radioisotope thermoelectric generators
+(RTGs), which convert the heat from the natural decay of plutonium-238, in the form of pluto-
+nium dioxide, to electricity for Cassini's systems. The same material is used in 117 radioisotope
+heater units (RHUs) placed on Cassini and Huygens to keep electronics systems at their operat-
+
+                                                     5
+ing temperatures. RHUs were most recently used on the Mars Pathfinder mission's Sojourner
+rover to keep the system from failing during cold Martian nights. Huygens will draw its electri-
+cal power from a set of five batteries during its entry and descent into Titan’s atmosphere.
+
+        Telecommunications with Cassini during the mission will be carried out through the
+giant dish antennas of NASA's Deep Space Network, with complexes located in California,
+Spain and Australia. Cassini’s high-gain antenna is provided by ASI. Data from the Huygens
+probe will be relayed to an ESA operations complex in Darmstadt, Germany. NASA’s Lewis
+Research Center managed development of the Centaur upper stage.
+
+       Development of the Huygens probe was managed by an ESA team located at the
+European Space Technology and Research Center (ESTEC) in Noordwijk, the Netherlands.
+The Cassini orbiter was designed, developed and assembled at NASA's Jet Propulsion
+Laboratory (JPL), located in Pasadena, CA. JPL is a division of the California Institute of
+Technology. The overall mission is managed by JPL for NASA’s Office of Space Science,
+Washington, DC.
+
+                                   [End of General Release]
+
+
+
+
+                                               6
+                     Media Services Information
+NASA Television Transmission
+
+        NASA Television is broadcast on the satellite GE-2, transponder 9C, C Band, 85
+degrees west longitude, frequency 3880.0 MHz, vertical polarization, audio monaural at 6.8
+MHz. The schedule for television transmissions for the Cassini launch will be available from
+the Jet Propulsion Laboratory, Pasadena, CA; Johnson Space Center, Houston, TX; Kennedy
+Space Center, FL, and NASA Headquarters, Washington, DC.
+
+Status Reports
+
+       Status reports on mission activities for Cassini will be issued by the Jet Propulsion
+Laboratory's Public Information Office. They may be accessed online as noted below. Daily
+audio status reports are available by calling (800) 391-6654 or (818) 354-4210.
+
+Launch Media Credentialing
+
+       Requests to cover the Cassini launch must be faxed in advance to the NASA Kennedy
+Space Center newsroom at (407) 867-2692. Requests must be on the letterhead of the news
+organization and must state the editor's assignment to cover the Cassini launch.
+
+Briefings
+
+      A pre-launch briefing on the mission and science objectives of Cassini will be held at
+Kennedy Space Center is planned at 10 a.m. EDT on October 4, 1997.
+
+Internet Information
+
+        Extensive information on Cassini, including an electronic copy of this press kit, press
+releases, fact sheets, status reports and images, is available from the Jet Propulsion Laboratory's
+World Wide Web home page at http://www.jpl.nasa.gov/ . The Cassini Program also maintains
+a home page at http://www.jpl.nasa.gov/cassini .
+
+
+
+
+                                                     7
+                                   Quick Facts
+Spacecraft
+Spacecraft dimensions: 6.7 meters (22 feet) high; 4 meters (13.1 feet) wide
+Weight: 5,712 kilograms (12,593 pounds) with fuel, Huygens probe, adapter, etc;
+       2,125 kilograms (4,685 pounds) unfueled orbiter alone
+Science instruments: camera; magnetic field studies; dust and ice grain analysis; infrared
+       energy measurement; chemical composition of Saturn, its moons and rings; neutral and
+       charged particle measurement; radar mapping; and radio wave searches
+Power: 885 watts (633 watts at end of mission) from radioisotope thermoelectric generators
+
+Huygens Probe
+Probe dimensions: 2.7 meters (8.9 feet) in diameter
+Weight: 320 kilograms (705 pounds)
+Science instruments: spectrometer to identify atmospheric makeup; aerosol collector for
+       chemical analysis; imager; sensors to measure atmospheric structure; wind speed
+       measurements; sensors to measure conditions at impact site.
+
+Launch Vehicle
+Type: Titan IVB/ Centaur
+Weight: 1 million kilograms (2.2 million pounds)
+
+Mission
+Launch: October 13, 1997 from Cape Canaveral Air Station, FL. Primary launch period runs
+        through November 15, 1997. On October 13, 140-minute window opens at 4:55 a.m.
+        EDT. Opening of window moves about 6 minutes earlier daily thereafter
+Venus flybys: April 25, 1998 at 300 km (190 mi); June 23, 1999 at 1,530 km (950 mi)
+Earth flyby: August 17, 1999 at 800 km (500 mi) or higher
+Jupiter flyby: December 30, 2000 at 10 million km (6 million mi)
+Saturn arrival date: July 1, 2004
+Huygens probe Titan entry date: November 27, 2004
+Distance traveled to reach Saturn: 3.5 billion km (2.2 billion mi)
+Saturn's average distance from Earth: 1.43 billion km (890 million mi)
+One-way light time to Saturn during orbital tour: 68 to 85 minutes
+Huygens' entry speed into Titan's atmosphere: 20,000 kph (about 12,400 mph)
+
+Program
+Partners: NASA, the European Space Agency (ESA), Italian Space Agency (Agenzia Spaziale
+        Italiana (ASI)); total of 17 countries involved
+U.S. states in which Cassini work was carried out: 33
+Number of people who have worked on some portion of Cassini/Huygens: More than 5,000
+Cost of mission: $1.422B pre-launch development; $755M mission operations; $54M
+        tracking; $422M launch vehicle; $500M ESA; $160M ASI; total about $3.3 billion
+
+
+                                              8
+                             Saturn at a Glance
+General
+q One of five planets known to the ancients; Roman god of agriculture, also linked to Kronos,
+Greek god of time; father of Jupiter, king of the gods
+q Yellowish color; at times the 5th brightest planet in night sky
+
+Physical Characteristics
+q Second largest planet in the solar system, after Jupiter
+q Equatorial diameter 120,536 kilometers (74,898 miles) at cloud tops; polar diameter 108,728
+kilometers (67,560 miles), making it the most oblate planet
+q Density 0.69 (water = 1)
+q Volume 764 times that of Earth, but only 95 times more massive
+
+Orbit
+q Sixth planet from the Sun, between Jupiter and Uranus
+q Mean distance from Sun 1.43 billion kilometers (890 million miles)
+q Brightness of sunlight at Saturn 1 percent of that at Earth
+q Revolves around Sun once every 29.42 Earth years
+q Saturn’s interior rotates once every 10 hours, 39.4 minutes
+q Poles tilted 29 degrees
+
+Environment
+q Saturn's atmosphere above the clouds is approximately 94 percent hydrogen and 6 percent
+helium
+q Winds near Saturn's equator blow toward east at 500 meters per second (1,100 miles per
+hour)
+q Temperature at Saturn's cloud tops -139 C (-218 F)
+
+Previous Exploration
+q Pioneer 11 flyby September 1, 1979
+q Voyager 1 flyby November 12, 1980
+q Voyager 2 flyby August 25, 1981
+
+Rings
+q Saturn’s main ring system would barely fit in the space between Earth and its Moon
+q B-ring often contains radial spokes of dust-sized material which are regenerated frequently
+q Cassini Division between the B-ring and A-ring is sparsely populated with ring material
+q E-ring is densest at the orbit of Enceladus and may be fed by Enceladus eruptions.
+
+
+
+
+                                                  9
+The Rings of Saturn
+Ring Distance                         Width
+D      66,970 km (41,610 mi)          7,540 km (4,690 mi)
+C      74,510 km (46,300 mi)          17,490 km (10,870 mi)
+B      92,000 km (57,170 mi)          25,580 km (15,890 mi)
+A      122,170 km (75,910 mi)         14,610 km (9,080 mi)
+F      140,180 km (87,100 mi)         50 km (30 mi)
+G      170,180 km (105,740 mi)        500 to several 1,000s km (300 to several 1,000s mi)
+E      181,000 km (112,000 mi)        302,000 km (188,000 mi)
+Distance is from Saturn’s center to closest edge of ring
+
+The Known Moons of Saturn (18)
+Moon       Diameter            Distance                   Discoverer
+Pan        20 km (10 mi)       133,583 km (83,004 mi)     1990: Showalter
+Atlas      32 km (20 mi)       137,640 km (85,530 mi)     1980: Terrile (Voyager)
+Prometheus 100 km (62 mi)      139,350 km (86,590 mi)     1980: Collins (Voyager)
+Pandora    84 km (52 mi)       141,700 km (88,050 mi)     1980: Collins (Voyager)
+Epimetheus 119 km (74 mi)      151,422 km (94,089 mi)     1966: Walker
+Janus      178 km (111 mi)     151,472 km (94,120 mi)     1966: Dolfus
+Mimas      392 km (244 mi)     185,520 km (115,280 mi)    1789: Herschel
+Enceladus  499 km (310 mi)     238,020 km (147,900 mi)    1789: Herschel
+Tethys     1,060 km (658 mi) 294,660 km (183,090 mi)      1684: Cassini
+Telesto    22 km (14 mi)       294,660 km (183,090 mi)    1980: Smith
+Calypso    20 km (12 mi)       294,660 km (183,090 mi)    1980: Smith
+Dione      1,120 km (696 mi) 377,400 km (234,500 mi)      1684: Cassini
+Helene     35 km (22 mi)       378,400 km (235,100 mi)    1980: Laques and Lecacheux
+Rhea       1,528 km (949 mi) 527,040 km (327,490 mi)      1672: Cassini
+Titan      5,150 km (3,200 mi) 1,221,850 km (759,220 mi) 1655: Huygens
+Hyperion   283 km (176 mi)     1,481,100 km (920,300 mi) 1848: Bond
+Iapetus    1,436 km (892 mi) 3,561,300 km (2,212,900 mi) 1671: Cassini
+Phoebe     220 km (140 mi)     12,952,000 km (8,048,000 mi) 1898: Pickering
+
+Pan "PAN"                                   Telesto "tel-LESS-toe"
+Atlas "AT-luss"                             Calypso "kuh-LIP-soh"
+Prometheus "pro-MEE-thee-uss"               Dione "DIE-oh-nee"
+Pandora "pan-DOR-uh"                        Helene "huh-LEE-nee"
+Epimetheus "epp-ee-MEE-thee-uss"            Rhea "REE-uh"
+Janus "JANE-uss"                            Titan "TIE-tun"
+Mimas "MY-muss"                             Hyperion "high-PEER-ee-on"
+Enceladus "en-SELL-uh-duss"                 Iapetus "eye-APP-eh-tuss"
+Tethys "TEE-thiss"                          Phoebe "FEE-bee"
+
+
+
+
+                                              10
+                                   Why Saturn?
+       Saturn offers a rich scientific environment to explore. The planet and the ring system
+serve as a physical model for the disc of gas and dust that surrounded the early Sun and from
+which the planets formed. The success of searches for other planetary systems elsewhere in our
+galaxy partly depends upon how well we understand the early stages of formation of planets.
+
+        Detailed knowledge of the history and processes now occurring on Saturn's elaborately
+different moons will provide valuable data for studying how each of the solar system’s planets
+evolved to their present states. Represented among Saturn's collection of moons is a huge vari-
+ety of chemical, geologic and atmospheric processes. Physics and chemistry are the same
+everywhere, and the knowledge gained about Saturn's magnetosphere or Titan's atmosphere will
+have applications here on Earth.
+
+       Chief among Cassini’s goals within Saturn's system, however, is the unmasking of Titan.
+
+         After decades of speculation and experiment in the modern age, scientists still seek fun-
+damental clues to the question of how life began on Earth. Most experts suspect that life arose
+by chance combinations of complex carbon compounds in a primeval soup. But all studies of
+life's origin are hampered by ignorance about the chemical circumstances on the young Earth.
+
+        In our solar system, only Earth and Titan have atmospheres rich in nitrogen. Earth's sib-
+lings in the inner solar system, Venus and Mars, possess carbon-dioxide atmospheres, while
+Jupiter and Saturn resemble the Sun in their high content of hydrogen and helium.
+Hydrocarbons like the methane present on Titan may have been abundant on the young Earth.
+
+        The importance of Titan in this connection is that it may preserve, in deep-freeze, many
+of the chemical compounds that preceded life on Earth. Some scientists believe we will find
+that Titan shares more in common with the early Earth than Earth itself does today.
+
+       The results from Cassini's instruments and the Huygens probe, along with the results of
+our continuing explorations of Mars, Europa and the variety of life-bearing environments on
+Earth, will significantly enhance scientific efforts to solve the mystery of our origins.
+
+Cassini and Planetary Exploration
+
+         The Cassini-Huygens mission is an enterprise that, from the initial vision to the comple-
+tion of the mission, will span nearly 30 years. The formal beginning was in 1982, when a joint
+working group was formed by the Space Science Committee of the European Science
+Foundation and the Space Science Board of the National Academy of Science in the United
+States. The charter of the group was to study possible modes of cooperation between the U.S.
+and Europe in the field of planetary science. Their precept was that the mission would be bene-
+ficial for the scientific, technological and industrial sectors of their countries. As a result of
+their involvement in the studies, European scientists proposed a Saturn orbiter and Titan probe
+
+                                                    11
+mission to the European Space Agency (ESA), suggesting a collaboration with NASA.
+
+        In 1983, the U.S. Solar System Exploration Committee recommended that NASA
+include a Titan probe and radar mapper in its core program and also consider a Saturn orbiter.
+In 1984-85, a joint NASA/ESA assessment of a Saturn orbiter-Titan probe mission was com-
+pleted. In 1986, ESA's Science Program Committee approved Cassini for initial Phase A study,
+with a conditional start in 1987.
+
+          In 1987-88, NASA carried out further work on designing and developing the standard-
+ized Mariner Mark II spacecraft and a set of outer planets missions that would be accomplished
+with the new spacecraft line. The program was an early effort to reduce the costs of planetary
+exploration by producing multiple spacecraft for different missions but made with the basic
+spacecraft components off the same assembly line. Cassini and the Comet Rendezvous/Asteroid
+Flyby (CRAF) were the first two missions chosen for further study. At the same time in Europe,
+a Titan probe Phase A study was carried out by ESA in collaboration with a European industrial
+consortium led by Marconi Space Systems. The Titan probe was renamed Huygens by ESA as
+its first medium-sized mission of its Horizon 2000 space science program.
+
+        In 1989, funding for CRAF and Cassini was approved by the U.S. Congress. NASA and
+ESA simultaneously released announcements of opportunity for scientists to propose scientific
+investigations for the missions. In 1992, a funding cap was placed on the Mariner Mark II pro-
+gram, effectively ending the new spacecraft line and, at the same time, canceling the CRAF
+mission. Cassini was restructured to cut the cost of the mission and to simplify the spacecraft
+and its operation.
+
+        The design of Cassini is the result of extensive tradeoff studies which considered cost,
+mass, reliability, durability, suitability and availability of hardware. To forestall the possibility
+of mechanical failures, moving parts were eliminated from the spacecraft wherever the func-
+tions could be performed satisfactorily without them. Thus, early designs that included moving
+science instrument platforms or turntables were discarded in favor of instruments fixed to the
+spacecraft body, whose pointing requires rotation of the entire spacecraft. Tape recorders were
+replaced with solid-state recorders. Mechanical gyroscopes were replaced with hemispherical
+resonator gyroscopes. An articulated probe relay antenna was discarded in favor of using the
+high-gain antenna to capture the radio signal of the Huygens probe. A deployable high-gain
+antenna of the type used for Galileo was considered and abandoned.
+
+        Project engineers, both those who designed and built the hardware and those who oper-
+ate the spacecraft, relied heavily on extensive past experience to provide a spacecraft design
+more sophisticated, reliable and capable than any other spacecraft ever built for exploration of
+the planets. Because of that care in design, the Cassini spacecraft is easier to operate and will
+return more scientific data about its targets than has been possible in any previous planetary
+mission.
+
+        The research and development that Cassini has funded has provided key technologies
+that have enabled many of NASA's new "faster, better, cheaper" missions. All of NASA's new
+
+                                                 12
+Discovery class missions such as Mars Pathfinder so far have used innovative technology
+derived from Cassini, and spacecraft being developed for NASA's New Millennium rely heavily
+upon fundamental new technologies brought forth by Cassini.
+
+         It is the ability to perform synergistic science that sets Cassini apart from other mis-
+sions. The very complex interactions that are in play in systems such as those found at Jupiter
+and Saturn can best be addressed by instrument platforms such as Galileo and Cassini. Many
+phenomena to be studied are often sensitive to a large number of parameters; a measurement
+might have to take into account simultaneous dependencies on location, time, directions to the
+Sun and planet, the orbital configurations of certain moons, magnetic longitude and latitude and
+solar wind conditions. To deal with such complexity, the right types of instruments must be on
+the spacecraft to make all the necessary and relevant measurements, and all the measurements
+must be made essentially at the same time. Identical conditions very seldom recur. A succession
+or even a fleet of less well equipped spacecraft could not obtain the same result. The need for a
+broadly based, diverse collection of instruments is the reason why the Cassini-Huygens space-
+craft is so large.
+
+       The Cassini and Huygens missions, featuring the intertwined work of NASA, ESA and
+ASI, have become models for future international space science cooperation.
+
+
+
+
+                                                   13
+                              The Saturn System
+        Saturn is easily visible to the naked eye, and was known to ancient peoples around the
+world. It was not until the invention of the telescope, however, that Saturn's characteristic rings
+began to come into focus.
+
+Historical Observations
+
+        The Italian astronomer Galileo was the first to look at Saturn through a telescope in
+1609-10. Viewed through Galileo's crude instrument, Saturn was a puzzling sight. Unable to
+make out the rings, Galileo thought he saw two sizable companions close to the planet. Having
+recently discovered the major moons of Jupiter, he supposed that Saturn could have large
+moons, too. "... [T]o my very great amazement, Saturn was seen to me to be not a single star,
+but three together, which almost touch each other," he wrote at the time.
+
+       Galileo was even more astonished when, two years later, he again looked at Saturn
+through his telescope only to find that the companion bodies had apparently disappeared. "I do
+not know what to say in a case so surprising, so unlooked for and so novel," he wrote in 1612.
+The rings were simply "invisible" because he was now viewing them edge-on. Two years later,
+they again reappeared, larger than ever. He concluded that what he saw were some sort of
+"arms" that grew and disappeared for unknown reasons. He died never knowing that he had
+been the first to observe Saturn's rings.
+
+         Nearly half a century later, the Dutch scientist Christiaan Huygens solved the puzzle that
+vexed Galileo. Thanks to better optics, Huygens was able to pronounce in 1659 that the com-
+panions or arms decorating Saturn were not appendages, but rather the planet "is surrounded by
+a thin, flat ring, which nowhere touches the body." His theory was received with some opposi-
+tion, but was confirmed by the observations of Robert Hooke and Italian-French astronomer
+Jean Dominique Cassini.
+
+        While observing Saturn, Huygens also discovered the moon Titan. A few years later,
+Cassini added several other key Saturn discoveries. Using new telescopes, Cassini discovered
+Saturn's four other major moons — Iapetus, Rhea, Tethys and Dione.
+
+        In 1675, Cassini discovered that Saturn's rings are split largely into two parts by a nar-
+row gap — known since as the "Cassini Division." In the 19th century, J. E. Keeler, pursuing
+theoretical studies developed by James Clerk Maxwell, showed that the ring system was not a
+uniform sheet but made up of small particles that orbited Saturn.
+
+        The first detection of Saturn's magnetic field came with the flyby of Saturn by NASA's
+Pioneer 11 spacecraft in 1979. Then, in 1980 and 1981, the NASA Voyager 1 and Voyager 2
+spacecraft flew through Saturn's system to reveal storms and subtle latitudinal banding in the
+planet's atmosphere, several more small moons and a breathtaking collection of thousands of
+ringlets. The Voyagers found ring particles ranging in size from nearly invisible dust to icebergs
+
+                                                14
+the size of a house. The spacing and width of the ringlets were discovered to be orchestrated at
+least in part by gravitational tugs from a retinue of orbiting moons and moonlets, some near
+ring edges but most far beyond the outermost main rings. Voyager instruments confirmed a
+finding from ground-based instruments that the rings contain water ice, which may cover rocky
+particles.
+
+        Saturn has been a frequent target of the Hubble Space Telescope, which has produced
+stunning views of long-lived hurricane-like storms in Saturn's atmosphere. The world's major
+telescopes, including Hubble, were recently trained on Saturn to observe the phenomenon
+known to astronomers as a Saturn ring plane crossing. The rings were seen edge-on from
+Earth's perspective on May 22 and August 10, 1995, and on February 11, 1996. Ring plane
+crossings provide astronomers with unique views of Saturn's system.
+
+         These observations showed that the ring plane was not absolutely flat; the tilt of the F-
+ring distorts the appearance of the rings, causing one side to appear brighter than the other dur-
+ing ring plane crossings. Searches for new moons turned up several suspects, but most are now
+believed to be bright “knots” in the F-ring. Of particular interest were these ring arcs, natural
+"satellites" in the F-ring that appeared cloud-like and spread over a small area, instead of sharp
+pinpoints. The origin of these clumps of material in the F-ring is not well understood.
+
+        The faint, outermost E-ring is also easier to detect when viewed edge-on due to the
+greater amount of material in the line-of-sight. Thus, observations made over the course of the
+ring plane crossing provided new information on the thickness of the rings. New information
+gathered on the location and density of material in the rings was used by designers to plan the
+most advantageous and safest course for Cassini's flight through the E-ring upon arrival at
+Saturn in 2004.
+
+        The Hubble Space Telescope is an important tool for studying Saturn, its rings, moons
+and magnetosphere in support of the Cassini mission. Hubble observations of Saturn's atmos-
+phere were made after storms were discovered by ground-based observers. First in 1990 and
+again in 1994, apparent upwellings of ammonia clouds appeared and then were spread around
+the planet by prevailing winds.
+
+        Hubble observations of Titan indicate that color differences in Titan's hemispheres seen
+during the Voyager flybys in 1980 and 1981 have since reversed themselves. Some Hubble
+observations have studied chemical processes in Titan’s atmosphere. Images made in the
+infrared have looked through Titan's clouds and allowed some mapping of its surface. Hubble
+has also contributed new information about the processes in Saturn's magnetosphere through
+ultraviolet measurements of Saturn's auroras.
+
+       Scientists using Hubble expect to study the planet and the ring system as it opens up to
+our view during the course of Cassini's cruise to the planet. Hubble investigations will place
+Cassini results in the context of the decades-long studies of the planet and help direct Cassini
+instruments for studies of Saturn's system during its orbital tour.
+
+
+                                                    15
+Saturn's Place in the Solar System
+
+         Studies of star formation indicate that our solar system formed within a giant collection
+of gases and dust, drawn together by gravitational attraction and condensed over many millions
+of years into many stars. The giant gas cloud condensed into rotating pools of higher density in
+a process called gravitational collapse. These rotating pools of material condensed more rapidly
+until their temperatures and densities were great enough to form stars. Surrounding each new
+star, the leftover material flattened into a disc rotating approximately in the plane of the star's
+equator. This material can eventually form planets — and this is apparently what occurred in
+our solar system.
+
+         The composition of the planets is largely controlled by their temperatures, which in turn
+is determined by their distances from the Sun. Compounds with high melting points were the
+first to condense, followed by silicates. These formed the rocky cores of all the planets.
+
+        While hydrogen is the predominant element in the universe and in our solar system,
+other gases are present, including water, carbon dioxide and methane. As ices, these predomi-
+nate in the cooler outer solar system. Gases also collected as envelopes around the planets and
+moons. (Where conditions are right, large quantities of water in its liquid state can form, as
+exhibited by Earth's oceans, Mars' flood plains and a possible ocean beneath the surface of
+Europa, a moon of Jupiter.)
+
+        The large outer planets contain much of the primordial cloud's gases not trapped by the
+Sun. Hydrogen is the most abundant material in the Sun and in all the large gaseous planets —
+Jupiter, Saturn, Uranus and Neptune. Each of these giant planets has many moons. These
+moons form systems of natural satellites, creating the equivalent of miniature solar systems
+around the gas giants formed by processes similar to those responsible for the system around
+the Sun.
+
+        Saturn is similar to Jupiter in size, shape, rotational characteristics and moons, but
+Saturn is less than one-third the mass of Jupiter and is almost twice as far from the Sun. Saturn
+radiates more heat than it receives from the Sun. This is true of Jupiter as well, but Jupiter's size
+and cooling rate suggest that it is still warm from the primordial heat generated from condensa-
+tion during its formation. Slightly smaller Saturn, however, has had time to cool — so some
+mechanism, such as helium migrating to the planet's core, is needed to explain its continuing
+radiation of heat.
+
+        Voyager measurements found that the ratio of helium to molecular hydrogen in Saturn is
+0.06, compared to Jupiter's value of 0.13 (which is closer to the solar abundance and that of the
+primordial solar nebula). Helium depletion in Saturn's upper atmosphere is believed to result
+from helium raining down to the lower altitudes; this supports the concept of helium migration
+as the heat source in Saturn. Cassini’s measurements of Saturn's energy, radiation and helium
+abundance will help explain the residual warmth.
+
+       Saturn's visible features are dominated by atmospheric clouds. They are not as distinct
+
+                                                 16
+as Jupiter's clouds, primarily because of a haze layer covering the planet that is a result of cool-
+er temperatures due to the weaker incoming sunlight. This reduced solar radiation, and corre-
+spondingly greater influence from escaping internal heat, lead to greater wind velocities on
+Saturn. Both Saturn's and Jupiter's weather are thus driven by heat from below.
+
+The Planet Saturn
+
+        Saturn is the sixth planet from the Sun. Compared with Earth, Saturn is 9.5 times farther
+away from the Sun. From Saturn, the Sun is about 1/10th the size of the Sun we see from Earth.
+Sunlight spreads as it travels through space; an area on Earth receives 90 times more sunlight
+than an equivalent area on Saturn. Because of this fact, the same light-driven chemical process-
+es in Saturn's atmosphere take 90 times longer than they would at Earth. The farther away from
+the Sun, the slower a planet travels in its orbit, and the longer it takes to complete its orbit
+about the Sun. Saturn's year is equal to 29.46 Earth years.
+
+       Saturn's orbit is not circular but slightly elliptical in shape; as a result, Saturn's distance
+from the Sun changes as it orbits the Sun. This elliptical orbit causes a small change in the
+amount of sunlight that reaches the surface of this gaseous planet at different times in the
+Saturn year, and may affect the planet's upper atmospheric composition over that period.
+
+       Saturn's period of rotation around its axis depends on how it is measured. The cloud
+tops show a rotation period of 10 hours, 15 minutes at the equator, but the period is 23 minutes
+longer at higher latitudes. A radio signal that has been associated with Saturn's magnetic field
+shows a period of 10 hours, 39.4 minutes.
+
+        This high rotation rate creates a strong centrifugal force that causes an equatorial bulge
+and a flattening of Saturn's poles. As a result, Saturn's cloud tops at the equator are about
+60,330 kilometers (37,490 miles) from the center, while the cloud tops at the poles are only
+about 54,000 kilometers (33,550 miles) from the center. Saturn’s volume is 764 times the vol-
+ume of Earth.
+
+        Saturn has the lowest density of all the planets because of its vast, distended, hydrogen-
+rich outer layer. Like the other giant planets, Saturn contains a liquid core of heavy elements
+including iron and rock of about the same volume as Earth, but having three or more times the
+mass of Earth. This increased density is due to compression resulting from the pressure of the
+liquid and atmospheric layers above the core, and is caused by gravitational compression of the
+planet.
+
+         The core of molten rocky material is believed to be covered with a thick layer of metal-
+lic liquid hydrogen and, beyond that, a layer of molecular liquid hydrogen. The great overall
+mass of Saturn produces a very strong gravitational field, and at levels just above the core the
+hydrogen is compressed to a state that is liquid metallic, which conducts electricity. (On Earth,
+liquid hydrogen is usually made by cooling the hydrogen gas to very cold temperatures, but on
+Saturn, liquid hydrogen is very hot and is formed under several million times the atmospheric
+pressure found at Earth's surface.) This conductive liquid metallic hydrogen layer, which is also
+
+                                                      17
+spinning with the rest of the planet, is believed to be the source of Saturn's magnetic field.
+Turbulence or convective motion in this layer of Saturn's interior may create Saturn's magnetic
+field .
+
+        One unusual characteristic of Saturn's magnetic field is that its axis is the same as that
+of the planet’s rotation. This is different from that of five other notable magnetic fields: those of
+Mercury, Earth, Jupiter, Uranus and Neptune. Current theory suggests that when the axes of
+rotation and magnetic field are aligned, the magnetic field cannot be maintained. Scientists do
+not understand the alignment of Saturn's strong magnetic field with its rotation axis, which does
+not fit with theories of how planets' magnetic fields are generated.
+
+        On Earth, there is a definite separation between the land, the oceans and the atmosphere.
+Saturn, on the other hand, has only layers of hydrogen that transform gradually from a liquid
+state deep inside into a gaseous state in the atmosphere, without a well-defined boundary. This
+is an unusual condition that results from the very high pressures and temperatures found on
+Saturn. Because the pressure of the atmosphere is so great, the atmosphere is compressed so
+much where the separation would be expected to occur that it actually has a density equal to
+that of the liquid. This condition is referred to as "supercritical." It can happen to any liquid and
+gas if compressed to a point above critical pressure. Saturn thus lacks a distinct surface; when
+making measurements, scientists use as a reference point the altitude where the pressure is 1 bar
+(or one Earth atmosphere). This pressure level is near Saturn’s cloud tops.
+
+        The major component of Saturn's atmosphere is hydrogen gas. If the planet were com-
+posed solely of hydrogen, there would not be much of interest to study. However, the composi-
+tion of Saturn's atmosphere includes 6 percent helium gas by volume; in addition, 1/10,000th of
+1 percent is composed of other trace elements. Using spectroscopic analysis, scientists find that
+these atmospheric elements can interact to form ammonia, phosphine, methane, ethane, acety-
+lene, methylacetylene and propane. Even a small amount is enough to freeze or liquefy and
+make clouds of ice or rain possessing a variety of colors and forms.
+
+        With the first pictures of Saturn taken by the Voyager spacecraft in 1980, the clouds and
+the winds were seen to be almost as complex as those that Voyager found on Jupiter just the
+year before. Scientists have made an effort to label the belts and zones seen in Saturn's cloud
+patterns. The banding results from convective flows in the atmosphere driven by temperature —
+very much the same process that occurs in Earth's atmosphere, but on a grander scale and with
+a different heat source.
+
+        Saturn has different rotation rates in its atmosphere at different latitudes. Differences of
+1,500 kilometers per hour (more than 900 miles per hour) were seen between the equator and
+nearer the poles, with higher speeds at the equator. This is five times greater than the wind
+velocities found on Jupiter.
+
+        Saturn's cloud tops reveal the effects of temperature, winds and weather many kilome-
+ters below. Hot gases rise. As they rise, they cool and can form clouds. As these gases cool,
+they begin to sink: this convective motion is the source of the billowy clouds seen in the cloud
+
+                                                 18
+layer. Cyclonic storms observed in the cloud tops of Saturn are much like the smaller versions
+we see in weather satellite images of Earth's atmosphere.
+
+        Temperature variations in Saturn's atmosphere are the driving force for the winds and
+thus cloud motion. The lower atmosphere is hotter than the upper atmosphere, causing gases to
+move vertically, and the equator is warmer than the poles because it receives more direct sun-
+light. Temperature variations, combined with the planet's rapid rotation rate, are responsible for
+the fast horizontal motion of winds in the atmosphere.
+
+Titan
+
+        Titan presents an environment which appears to be unique in the solar system, with a
+thick organic hazy atmosphere containing organic (or carbon-based) compounds, an organic
+ocean or lakes and a rich soil filled with frozen molecules similar to what scientists believe led
+to the origin of life on Earth. In the three centuries since the discovery of Titan we have come
+to see it as a world strangely similar to our own, yet located almost 1-1/2 billion kilometers
+(900 million miles) from the Sun. With a thick, nitrogen-rich atmosphere, possible seas and a
+tar-like permafrost, Titan is thought to harbor organic compounds that may be important in the
+chain of chemistry that led to life on Earth.
+
+        Titan has been described as having an environment similar to that of Earth before bio-
+logical activity forever altered the composition of Earth's atmosphere. The major difference on
+Titan, however, is the absence of liquid water and Titan’s very low temperature. Thus there is
+no opportunity for aqueous chemistry at Earth-like temperatures — considered crucial for the
+origin of life as we know it. Scientists say the surface temperatures on Titan are thought to be
+cold enough to preclude any biological activity whatsoever at Titan.
+
+        As on Earth, the dominant atmospheric constituent in Titan's atmosphere is nitrogen.
+Methane represents about 6 percent of the atmospheric composition. Titan's surface pressure is
+1.6 bars — more than 50 percent greater than that on Earth, despite Titan's smaller size. The
+surface temperature was found by Voyager to be -179 C (-290 F), indicating that there is little
+greenhouse warming.
+
+        The opacity of Titan's atmosphere is caused by naturally produced photochemical smog.
+Voyager's infrared spectrometer detected many minor constituents produced primarily by photo-
+chemistry of methane, which produces hydrocarbons such as ethane, acetylene and propane.
+Methane also interacts with nitrogen atoms, forming "nitriles" such as hydrogen cyanide. With
+Titan's smoggy sky and distance from the Sun, a person standing on Titan's surface in the day-
+time would experience a level of daylight equivalent to about 1/1,000th the daylight at Earth's
+surface.
+
+        What is the source of molecular nitrogen , the primary constituent of Titan's atmosphere
+as we see it today? Was the molecular nitrogen accumulated as Titan formed, or was is it the
+byproduct of ammonia that formed with Titan? Did it come from comets? This important ques-
+tion can be investigated by looking for argon in Titan's atmosphere. Both argon and nitrogen
+
+                                                    19
+condense at similar temperatures. If molecular nitrogen from the solar nebula — the cloud of
+gas that formed the Sun — was the source of nitrogen on Titan, then the ratio of argon to nitro-
+gen in the solar nebula should be preserved on Titan. Such a finding would mean that we have
+truly found a sample of the "original" planetary atmosphere.
+
+        Some of the hydrocarbons found at Titan spend time as the aerosol haze in the atmos-
+phere that obscures the surface. Many small molecules of compounds such as hydrogen cyanide
+and acetylene combine to form larger chains in a process called polymerization, resulting in
+additional aerosols. Eventually they drift to Titan's surface. Theoretically the aerosols should
+accumulate on the surface and, over the life of the solar system, produce a global ocean of
+ethane, acetylene, propane and other constituents with an average depth of up to 1 kilometer
+(about two-thirds of a mile). A large amount of liquid methane mixed with ethane could theo-
+retically provide an ongoing source of methane in the atmosphere, similar to the way oceans on
+Earth supply water to the atmosphere. Radar and near-infrared data from ground-based studies
+show, however, that there is no global liquid ocean on Titan, although there could be lakes and
+seas. Titan appears to have winds.
+
+         The surface of Titan was not visible to Voyager at the wavelengths available to
+Voyager's cameras. What knowledge exists about the appearance of the surface of Titan comes
+from Earth-based radar measurements and more recent images acquired with the Hubble Space
+Telescope at wavelengths longer than those of Voyager’s cameras. Hubble images from 1994
+and later reveal brightness variations suggesting that Titan has a large continent-sized region on
+its surface that is distinctly brighter than the rest of the surface at both visible and near-infrared
+wavelengths. Preliminary studies suggest that a simple plateau or elevation change of Titan's
+surface cannot explain the image features; the brightness differences must be partly due to a dif-
+ferent composition and/or roughness of material. Like other moons in the outer solar system,
+Titan is expected to have a predominantly water ice crust. Water at the temperatures found in
+the outer solar system is as solid and strong as rock. There are weak spectral features that sug-
+gest ice on Titan's surface, but some dark substance is also present. Scientists conclude that
+something on the surface is masking the water ice.
+
+        Titan's size alone suggests that it may have a surface similar to Jupiter's moon
+Ganymede — somewhat modified by ice tectonics, but substantially cratered and old. If Titan's
+tectonic activity is no more extensive than that of Ganymede, circular crater basins may provide
+storage for lakes of liquid hydrocarbons. Impacting meteorites would create a layer of broken,
+porous surface materials, called regolith, which may extend to a depth of 1 to 3 kilometers
+(about 1 to 2 miles) This regolith could provide subsurface storage for liquid hydrocarbons as
+well. In contrast to Ganymede, Titan may have incorporated as much as 15 percent ammonia as
+it formed in the colder region of Saturn's orbit. As Titan's water-ice surface froze, ammonia-
+water liquid would have been forced below the surface. This liquid will be buoyant relative to
+the surface water-ice crust, however; ammonia-water magma thus may have forced its way
+along cracks to the surface, forming exotic surface features. Density measurements suggest that
+Titan is made up of roughly half rocky silicate material and half water ice. Methane and ammo-
+nia could have been mixed with the water ice during Titan's formation. The formation of Titan
+by accretion was at temperatures warm enough for Titan to differentiate; rocky material sank to
+
+                                                 20
+                                                                                                                 525
+
+               0.001
+
+                                                                                                                     425
+                                                                                  Blue Light
+                        00.1
+
+
+                                                                                                                 325
+
+
+
+
+                                                                                                                           Altitude (kilometers)
+                         0.1
+                                             Ultraviolet Light
+
+
+
+
+ Pressure (millibars)
+                                        High-Molecular-Weight Haze
+                                                                                                                 225
+                          1
+
+                                                     Ethane Haze Layer
+                                        Shallow
+                         10         Ethane-Methane                                                                   125
+                                         Sea               Temperature Profile          Red Light
+
+                                                          Stratosphere
+                        100                                                                                          50
+                                                 Troposphere
+
+                                                     Infrared Light                   Methane-Nitrogen
+                                                                                           Cloud
+                        1000
+                                                                                                                     0
+
+
+                               60           80          100        120        140              160       180   200
+                                                                 Temperature (Kelvin)
+
+                                                              Model of Titan’s atmosphere
+
+form a dense core, covered by a mantle of water, ammonia and methane ices.
+
+       The mixture of ammonia with water could ensure that Titan's interior is still partially
+unsolidified, as the ammonia would effectively act like antifreeze. Radioactive decay in the
+rocky material in the core could heat the core and mantle, making it possible that a liquid layer
+could exist today in Titan's mantle.
+
+        Methane could be trapped in Titan's water ice crust, which could provide a possible long
+term source for the methane in Titan's atmosphere if it were freed by ongoing volcanic process-
+es. Due to Titan's thick natural smog, Voyager was prevented from viewing the surface; the
+images showed a featureless orange face. Spectroscopic observations by Voyager's infrared
+spectrometer revealed traces of ethane, propane, acetylene and other organic molecules in addi-
+tion to methane. These hydrocarbons are produced by the combination of solar ultraviolet light
+and electrons from Saturn's rapidly rotating magnetosphere striking Titan's atmosphere.
+Hydrocarbons produced in the atmosphere eventually condense out and rain down on the sur-
+face, thus there may exist lakes of ethane and methane, perhaps enclosed in the round bowls of
+impact craters. Titan's hidden surface may have exotic features such as mountains sculpted by
+
+                                                                                 21
+                                            Saturn’s rings
+
+hydrocarbon rain, and perhaps rivers, lakes and "waterfalls" of exotic liquids. Water and ammo-
+nia magma from Titan's interior may occasionally erupt, spreading across the surface.
+
+         Titan's orbit takes it both inside and outside the magnetosphere of Saturn. When Titan is
+outside the magnetosphere and exposed to the solar wind, its interaction may be similar to that
+of other bodies in the solar system such as Mars, Venus or comets (these bodies have substan-
+tial interaction with the solar wind, and, like Titan, have atmospheres but no strong internal
+
+                                                22
+magnetic fields).
+
+        The interaction of Titan with the magnetosphere provides a way for both the magnetos-
+pheric plasma to enter Titan's atmosphere and for atmospheric particles to escape Titan.
+Voyager results suggested that this interaction produces a torus of neutral particles encircling
+Saturn, making Titan a potentially important source of plasma to Saturn's magnetosphere. The
+characteristics of this torus are yet to be explored, and will be studied by the Cassini orbiter.
+The interaction of ice particles and dust from Saturn's rings will play a special role as the dust
+moves out towards Titan's torus and becomes charged by collisions. When the dust is charged it
+behaves partially like a neutral particle orbiting Titan according to Kepler's laws (gravity dri-
+ven), and partially like a charged particle moving with Saturn's magnetosphere. The interaction
+of dust with Saturn's magnetosphere will provide scientists with a detailed look at how dust and
+plasma interact.
+
+         Electrical storms and lightning may exist in Titan's skies. Cassini will search for visible
+lightning and listen for "whistler" emissions that can be detected when lightning discharges a
+broad band of electromagnetic emission, part of which can propagate along Saturn's magnetic
+field lines. These emissions have a decreasing tone with time (because the high frequencies
+arrive before the low frequencies). Lightning whistlers have been detected in both Earth's and
+Jupiter's magnetosphere. They can be detected by radio and plasma-wave instruments from
+large distances and also can be used to estimate the frequency of lightning.
+
+        Titan may have its own internally generated magnetic field. Recent results from the
+Galileo spacecraft at Jupiter indicate the possibility of an internally generated magnetic field
+associated with the moon Ganymede. For Titan there are two possibilities: A magnetic field
+could be induced from the interaction of Titan's substantial atmosphere with the flow of Saturn's
+magnetosphere (like Venus's interaction with the solar wind); or a magnetic field could be gen-
+erated internally from dynamo action in a metallic molten core (like Earth's). (Under the
+dynamo theory, a magnetic field is created by the circling motion of electrically charged materi-
+al in the core.) In addition to being important to understanding the Titan interaction with
+Saturn's magnetosphere, a Titan magnetic field, if generated internally, would help scientists
+define the natural satellite's interior structure.
+
+The Rings
+
+        From a distance, the rings of Saturn look like majestically symmetrical hoops surround-
+ing the planet. Up close, however, from the views provided by the Voyager spacecraft, the rings
+turn out to be a still splendid but somewhat unruly population of ice and rock particles jostling
+against each other or being pushed and pulled into uneven orbits by bigger particles and by
+Saturn's many moons.
+
+        The mass of all the ring particles measured together would comprise a moon about the
+size of Mimas, one of Saturn's medium-small moons. The rings may, in fact, be at least partly
+composed of the remnants of such a moon or moons, torn up by gravitational forces.
+
+
+                                                     23
+         Their precise origin is a mystery. It is not known if rings formed around Saturn out of
+the initial solar system nebula, or after one or more moons were torn apart by Saturn's gravity.
+If the rings were the result of the numerous comets captured and destroyed by Saturn's gravity,
+why are Saturn's bright rings so different in nature from the dark rings of neighboring planets?
+Over the lifetime of the rings, they must have been bombarded continually by comets and mete-
+ors — and therefore they should have accumulated a great amount of carbonaceous and silicate
+debris — yet water ice is the only material positively identified in spectra of the rings.
+
+        The effects of torque and gravitational drag — along with the loss of momentum
+through collisions — should have produced a system only one-tenth to one-hundredth the age
+of the solar system itself. If this hypothesis is correct, then we cannot now be observing a ring
+system around Saturn that formed when the solar system formed.
+
+        In fact, Saturn's rings — as well as the rings of all the other large planets — may have
+formed and dissipated many times since the beginning of the solar system. An extraordinarily
+complex structure is seen across the entire span of Saturn's ring system. The broad B-ring, for
+instance, often contains numerous "spokes" — radial, rotating features that may be caused by a
+combination of magnetic and electrostatic forces. The individual rings themselves defy defini-
+tion; the count in high-resolution images suggests anywhere from 500 to 1,000 separate rings.
+Named in order of discovery, the labels that scientists have assigned to the major rings do not
+indicate their relative positions. From the planet outward, they are known as the D-, C-, B-, A-,
+F-, G- and E-rings.
+
+       The possibility of numerous, small natural satellites within Saturn's ring system was a
+puzzle the Voyager mission had hoped to solve. Voyager's best-resolution studies of the ring
+system were aimed at revealing any bodies larger than about 10 kilometers (about 6 miles) in
+diameter; but only three were found and none were located within the main ring complex.
+
+        The Voyager high-resolution studies did, however, detect signs of small moonlets not
+actually resolved in the images. When a small, dense body passes near a section of low-density
+ring material, its gravitational pull distorts the ring and creates what are known as "edge
+waves."
+
+        Cassini will be able to perform a number of the experiments that Voyager used to detect
+other gravitational effects on Saturn's ring material. One experiment involves "watching" as a
+beam of light (or, in one case, radio waves) passes through the ring, then observing the effects
+of the ring material on the beam. As the beam passes through the ring material, it may be atten-
+uated or even extinguished. This "occultation" experiment provides an extremely high-resolu-
+tion study of a single path across the rings — with resolutions up to about 100 meters (about
+330 feet), Cassini will obtain far more detailed information on ring structures than the Voyager
+instruments.
+
+       Voyager's instruments did detect many minute ring structures and found that the F-ring
+was far more complex than images had suggested. The data set, furthermore, showed that the
+B-ring was quite opaque in regions, and the Cassini "division" was not at all empty. It also pro-
+
+                                                24
+vided a direct measurement of the maximum thickness of the ring system in several locations,
+finding it to be much less than 100 meters (about 330 feet) thick there.
+
+        Many narrow ringlets were found with slightly eccentric, non-circular shapes and orbits.
+These eccentric ringlets generally lie in gaps in the mass of nearly circular rings that make up
+the majority of Saturn's ring system. Voyager also found very few truly empty "gaps" in the
+ring system. Moonlets inside the rings do appear to clear lanes within the ring plane, giving the
+rings their grooved appearance.
+
+        Voyager cameras found shepherd moons that tend to contain ring particles that would
+otherwise spread. Also seen were density waves that move though portions of the ring plane
+like a crowd starting a "wave" in a stadium. This phenomenon is due to the effects of one or
+more moons or moonlets gravitationally tugging on ring particles.
+
+        Gravitational interactions with moons seem to create most of the structure visible in the
+rings, but some structural detail exists even where there is no gravitational interaction with a
+moon. Some poorly understood fluid physics may be responsible for some unexplained struc-
+ture in the rings. Other ring features may be explained by moonlets or large particles in the
+rings that have gone undetected.
+
+         Voyager images showed dark, radial structures on the rings. These so-called "spokes"
+were seen as they formed and rotated about the planet. Spokes seemed to appear rapidly — as a
+section of ring rotated out of the darkness near the dawn terminator — and then dissipate gradu-
+ally, rotating around toward the dusk terminator of the ring. A spoke's formation time seemed to
+be very short; in some imaging studies they were seen to grow more than 6,000 kilometers
+(about 3,700 miles) in distance in just 5 minutes.
+
+       The spokes in Saturn's rings have an unexplained link with the planet's magnetic field,
+
+and are likely just one visible manifestation of many interactions the rings have with Saturn's
+electromagnetic fields.
+
+        Ground-based infrared studies of the spectra of the A- and B-rings show that they are
+composed largely, perhaps even exclusively, of water ice. The spectral characteristics of the
+rings are also very similar to those of several of Saturn's inner moons.
+
+        Studies of the main rings show that the ring system is not completely uniform in its
+makeup, and that some sorting of materials within the A- and B-rings exists. Why such a non-
+uniform composition exists is unknown. The E-ring is somewhat bluish in color — and thus
+different in makeup from the main rings. It is believed that the moon Enceladus is the source of
+E-ring material.
+
+        Since ring particles larger than about 1 millimeter represent a considerable hazard to the
+Cassini spacecraft, the mission plan will include efforts to avoid dense particle areas of Saturn's
+ring plane. The spacecraft will be oriented to provide maximum protection for itself and its sen-
+
+                                                    25
+sitive instrumentation packages. Even with such protective measures, passage through the ring
+plane out beyond the main rings will allow Cassini's instruments to make important measure-
+ments of the particles making up the less dense regions of the Cassini ring plane. These studies
+could provide considerable insight into the composition and environment of the ring system and
+Saturn's icy natural satellites.
+
+
+The Icy Moons
+
+        The moons of Saturn are diverse — ranging from the planet-like Titan to tiny, irregular
+objects only tens of kilometers (or miles) in diameter. These bodies are all (except perhaps
+Phoebe) believed to hold not only water ice, but also other components such as methane,
+ammonia and carbon dioxide. Saturn has at least 18 moons; there are likely other small, undis-
+covered natural satellites in the planet's system.
+
+        Many of the smallest moons were discovered during the Voyager spacecraft flybys. The
+18th moon, Pan, was found nearly 10 years after the flybys during close analysis of Voyager
+images; it is embedded in the Encke Gap within Saturn's A-ring. Saturn's ring plane crossings
+— when the obscuring light from Saturn's bright rings dims as the rings move to an edge-on
+orientation from Earth's perspective — represent the ideal time for discovering new moons.
+Images obtained by the Hubble Space Telescope during the ring plane crossings in 1995 and
+1996, however, did not reveal any unambiguous discoveries of new moons.
+
+         Before the advent of spacecraft exploration, scientists expected the moons of the outer
+planets to be geologically dead. They assumed that heat sources were not sufficient to have
+melted the moons' mantles enough to provide a source of liquid, or even semi-liquid, ice or ice
+silicate slurries. The Voyager and Galileo spacecraft have radically altered this view by reveal-
+ing a wide range of geological processes on the moons of the outer planets. For example,
+Saturn's moon Enceladus may be currently active. Several of Saturn's medium-sized moons are
+large enough to have undergone internal melting with subsequent differentiation and resurfac-
+ing.
+
+        Many moons in the outer solar system show the effects of tidal interactions with their
+parent planets, and sometimes with other moons. This gravitational pushing and pulling can
+heat a moon’s interior, causing tectonic, volcanic or geyser-like phenomena. Another factor is
+the presence of non-ice components, such as ammonia hydrate or methanol, which lower the
+melting point of near-surface materials. Partial melts of water ice and various other components
+— each with their own melting point and viscosity — provide material for a wide range of geo-
+logical activity.
+
+        Because the surfaces of so many moons of the outer planets exhibit evidence of geologi-
+cal activity, planetary scientists have begun to think in terms of unified geological processes
+occurring on the planets and their moons. For example, partial melts of water ice with other
+materials could produce flows of liquid or partially molten slurries similar to lava flows on
+Earth that result from the partial melting of silicate rock mixtures. The ridged and grooved ter-
+
+                                               26
+                                                                                       Iapetus
+
+
+
+
+                Tethys
+   Mimas                                               Rhea             Hyperion
+                            Dione
+        Enceladus
+                                                                                   Phoebe
+
+
+
+                                             Titan
+
+
+                                      Saturn’s major moons
+
+rains on moons such as Saturn's Enceladus and Tethys may have resulted from tectonic activi-
+ties found to occur throughout the solar system. The explosive volcanic eruptions possibly
+occurring on Enceladus may be similar to those occurring on Earth.
+
+        Several of Saturn's moons underwent periods of melting and active geology within a bil-
+lion years of their formation and then became quiescent. For nearly a billion years after their
+formation, the moons all underwent intense bombardment and cratering. The bombardment
+tapered off to a slower rate, but still continues. By counting the number of craters on a moon's
+surface, and making certain assumptions about the amount and frequency of impacting material,
+geologists are able to estimate when a specific portion of a moon's surface was formed.
+
+        Meteorites bombarding icy bodies change the surfaces by excavating and exposing fresh
+material. Impacts can also cause some surface or subsurface materials to turn to vapor, and the
+subsequent escape of those vaporized materials can create a slag deposit enriched in opaque,
+dark materials. Both the moons of Jupiter and the medium-sized moons of Saturn tend to be
+brighter on the hemispheres leading in the direction of orbital motion (each moon's so-called
+"leading" side, as opposed to its "trailing" side); this effect is thought to be due to the roughing-
+up and coating that the leading side receives from meteor bombardment.
+
+        Saturn’s six largest moons after Titan are smaller than Titan and Jupiter's giant Galilean
+moons, but they are still sizable and represent a unique class of icy satellite. Tethys, Rhea,
+Iapetus, Mimas and Enceladus are thought to be largely water ice, possibly mixed with ammo-
+nia or other volatiles. They have smaller amounts of rocky silicates than the Galilean moons.
+
+
+                                                     27
+         q Saturn's innermost, medium-sized moon, Mimas, is covered with craters, including
+one named Herschel that covers a third of the moon's diameter. There is a suggestion of grooves
+in its surface that may be features caused by the impact that created Herschel. The craters on
+Mimas tend to be high-rimmed, bowl-shaped pits. Crater count of Mimas suggest that it has
+undergone several episodes of resurfacing.
+
+        q The next moon outward from Saturn is Enceladus, an object that was known from
+telescope measurements to reflect nearly 100 percent of the visible light it receives. This leads
+scientists to believe Enceladus’ surface is probably pure water ice. Voyager 2 images reveal a
+surface that had been subjected in the recent geological past to extensive resurfacing. Grooved
+formations similar to those on the Galilean moon Ganymede are prominent.
+
+       The lack of impact craters on part of Enceladus leads scientists to conclude the age of its
+surface is less than a billion years. Some form of ice volcanism may be currently occurring on
+Enceladus. One possible source of heating is tidal interactions, perhaps with the moon Dione.
+
+        Enceladus is possibly responsible for the formation of Saturn’s E-ring. This ring is a ten-
+uous collection of icy particles that extends from inside the orbit of Enceladus to beyond the
+orbit of Dione, but is much much thicker than Saturn’s other rings. The maximum thickness
+position of the ring coincides with the orbital position of Enceladus. If some form of volcanism
+is occurring on the surface, it could provide a source of particles for the ring.
+
+        q Tethys is covered with impact craters, including Odysseus, an enormous impact
+structure more than 400 kilometers (250 miles) in diameter, or more than one-third of the
+moon’s diameter of 1,060 kilometers (658 miles). The craters tend to be flatter than those on
+Mimas or Earth's Moon, probably because they have been smoothed out over the eons under
+Tethys' stronger gravitational field. Evidence for episodes of resurfacing is seen in regions that
+have fewer craters and higher reflectivity. In addition, there is a huge trench formation, the
+Ithaca Chasma, which may be a degraded form of the grooves found on Enceladus.
+
+        q Dione is about the same size as Tethys but more dense, and shows a wide variety of
+surface features. Next to Enceladus among Saturn’s moons, it has the most extensive evidence
+for internal activity. It has enough rocky material in its makeup to produce heat from natural
+radioactivity, which could be the cause of its internal activity. Most of the surface is heavily
+cratered, but gradations in crater density indicate that several periods of resurfacing occurred
+during the first billion years of Dione's existence. The leading side of the moon is about 25 per-
+cent brighter than the other, due possibly to more intensive bombardment by micrometeorites
+on the darker hemisphere. Wispy streaks, which are about 50 percent brighter than the sur-
+rounding areas, are believed to be the result of internal activity and subsequent flows of erupt-
+ing material.
+
+      q Rhea appears to be superficially very similar to Dione. Bright, wispy streaks cover
+one hemisphere. No resurfacing events seem to have occurred in its early history, however.
+Some regions lack large craters, while other regions have a preponderance of such impacts. The
+
+                                                28
+larger craters may be due to a population of larger debris that was more prevalent during an ear-
+lier era of collisions.
+
+        q When the astronomer Cassini discovered Iapetus in 1672, he noticed almost immedi-
+ately that at one point in its orbit around Saturn it was very bright, but on the opposite side of
+the orbit, the moon nearly disappeared. He correctly deduced that the trailing hemisphere is
+composed of highly reflective material, while the leading hemisphere is strikingly darker. (This
+sets Iapetus apart from Saturn’s other moons and the moons of Jupiter, which tend to be
+brighter on their leading hemispheres.) Voyager images show that the bright side, which reflects
+nearly 50 percent of the light it receives, is fairly typical of a heavily cratered icy satellite. The
+other side, which is the face that Iapetus puts forth as it moves forward in its orbit, is coated
+with a much darker, redder material that has a reflectivity of only about 3 to 4 percent.
+
+        Scientists still do not agree on whether the dark material originated from an outside
+source or was created from Iapetus' own interior. One scenario for the outside deposit of materi-
+al would involve dark particles being ejected from the little moon Phoebe and drifting inward to
+coat Iapetus. The major problem with this model is that the dark material on Iapetus is redder
+than Phoebe, although the material could have undergone chemical changes after its expulsion
+from Phoebe that made it redder. One observation lending credence to an internal origin is the
+concentration of material on crater floors, which implies that something is filling in the craters.
+In one model proposed by scientists, methane could erupt from the interior and then become
+darkened by ultraviolet radiation.
+
+         Iapetus is odd in other respects. It is the only large Saturn moon in a highly inclined
+orbit, one that takes it far above and below the plane in which the rings and most of the moons
+orbit. It is less dense than objects of similar brightness, which implies that it has a higher frac-
+tion of ice or possibly methane or ammonia in its interior.
+
+Small Moons
+
+        The Saturn system has a number of unique, small moons. Two types of objects have
+been found only in Saturn's system: the co-orbital moons and the Lagrangians. A third type of
+object, shepherding moons, have been found only at Saturn and Uranus. All three groups of
+moons are irregularly shaped and probably consist primarily of ice.
+
+        Three shepherds — Atlas, Pandora and Prometheus — are believed to play a key role in
+defining the edges of Saturn's A- and F-rings. The orbit of Atlas lies several hundred kilometers
+(or miles) from the outer edge of the A-ring. Pandora and Prometheus, which orbit on either
+side of the F-ring, constrain the width of this narrow ring and may cause its kinky appearance.
+
+        The co-orbital moons Janus and Epimetheus, discovered in 1966 and 1978, respectively,
+exist in an unusual dynamic situation. They move in almost identical orbits. Every four years,
+the inner moon (which orbits slightly faster than the outer one) overtakes its companion. Instead
+of colliding, the moons exchange orbits. The four-year cycle then begins again. Perhaps these
+two moons were once part of a larger body that disintegrated after a major collision.
+
+                                                      29
+                                       Magnetosheath
+  Bow Shock                                               Magnetopause
+
+
+
+
+                     Cusp
+
+                                                                                Neutral Sheet
+                                    Trapping Region
+
+                                                                             Lobes
+
+
+
+
+                                    Saturn’s magnetosphere
+
+
+        The three other small moons of Saturn — Calypso, Helene and Telesto — orbit in the
+Lagrangian points of larger moons, one associated with Dione and two with Tethys. The
+Lagrangian points are locations within an object's orbit in which a less massive body can move
+in an identical, stable orbit. The points lie about 60 degrees in front of and behind the larger
+body. (Although no other known moons in the solar system are Lagrangians, the Trojan aster-
+oids orbit in two of the Lagrangian points of Jupiter. Mars also has an asteroid at one
+Lagrangian point.)
+
+        Telescope observations showed that the surface of Hyperion, which lies between the
+orbits of Iapetus and Titan, is covered with ice. Because Hyperion is not very reflective, its ice
+must be mixed with a significant amount of darker, rocky material. The color of Hyperion is
+similar to that of the dark side of Iapetus and D-type asteroids: all three bodies may be rich in
+primitive material rich in organic compounds. Although Hyperion is only slightly smaller than
+Mimas, it has a highly irregular shape which, along with a battered appearance, suggests that it
+has been subjected to intense bombardment and fragmentation. There is also evidence that
+Hyperion is in a chaotic rotation — probably the result of tidal forces during close passages of
+nearby Titan.
+
+        Saturn's outermost moon, Phoebe, a dark object with a surface composition probably
+similar to that of C-type asteroids, is in a wrong-way orbit compared to the other moons (this is
+called a "retrograde" orbit). The orbit is also highly inclined, taking Phoebe high above and
+below the plane on which the rings and most of the moons orbit. These peculiar orbital charac-
+
+
+                                                30
+teristics alone suggest that Phoebe may be a captured asteroid. Voyager images show a mottled
+appearance. Although it is smaller than Hyperion, Phoebe has a nearly spherical shape.
+
+        Pan, the 18th known moon of Saturn, was discovered in 1990 in Voyager 2 images that
+were taken in 1981. This small object is embedded within the A-ring and helps to clear the par-
+ticles out of the Encke division.
+
+The Magnetosphere
+
+        Saturn, its moons and rings sit inside an enormous bubble in the solar wind created by
+the planet's strong magnetic field. This "sphere of influence" of Saturn's magnetic field —
+called a magnetosphere — resembles a similar, but smaller, magnetic bubble surrounding Earth.
+The same kind of structure envelopes Jupiter and several other bodies in the solar system. A
+supersonic "solar wind" of electrically charged particles blows outward from the Sun within our
+star's own magnetosphere. The pressure of this solar wind against a planet's magnetosphere
+compresses the sunward side of the sphere and blows past the planet, giving the magnetosphere
+a drawn-out shape like that of a comet.
+
+        Inside Saturn's vast magnetospheric bubble is a mixture of particles including electrons,
+various species of ions and neutral atoms and molecules, several populations of very energetic
+charged particles (like those in Earth's Van Allen Belts) and charged dust grains. The charged
+particles and dust grains all interact with both the steady and the fluctuating electric and mag-
+netic fields present throughout the magnetosphere.
+
+        The primary sources of particles in Saturn's magnetosphere are thought to be the moons
+Dione and Tethys, which are bombarded by the more energetic particles. But the solar wind,
+ionosphere, rings, Saturn's atmosphere, Titan's atmosphere and the other icy moons are sources
+as well.
+
+        The mysterious "spokes" in the rings of Saturn are probably caused by electrodynamic
+interactions between the tiny charged dust particles in the rings and the magnetosphere. Aurora,
+which exist on Saturn as well as Earth, are produced when trapped charged particles spiral
+down along magnetic field lines leading to the planet and collide with gases in the atmosphere.
+Scientists generally agree that the internal magnetic fields of the giant planets arise from an
+electrical field generated somewhere inside the planets' liquid interiors. Saturn's interior is prob-
+ably quite exotic because of the great pressures caused by its large size. There may be a molten
+rocky core, but wrapped around this core scientists would expect to find layers of uncommon
+materials such as liquid metallic hydrogen and perhaps liquid helium.
+
+        Making measurements close to the planet over a wide range of latitudes and longitudes,
+Cassini will measure the details of the gravitational and magnetic field and tell us more about
+Saturn's interior. The spacecraft's magnetometer will measure the strength and direction of the
+magnetic field throughout the magnetosphere — close to the planet where the field is nearly
+dipolar, and further from the planet where electrical currents create a non-dipolar field. The
+magnetometer will measure the planet's magnetic field with sufficient accuracy to determine if
+
+                                                     31
+it is indeed symmetrical. If so, the basic tenets of the dynamo theory invented to explain plane-
+tary magnetic fields may need to be reexamined.
+
+       Among all the planets with magnetic fields, there are two main sources of energy dri-
+ving magnetospheric processes: the planet's rotation and the solar wind. In turn there are two
+types of large-scale plasma flow within the magnetosphere — co-rotation and convection. The
+nature of the large-scale circulation of particles in the magnetosphere depends on which source
+is dominant. At Earth, the energy is derived primarily from the solar wind; at Jupiter it is
+derived from the planet's rapid rotation rate. Saturn's magnetosphere is especially interesting
+because it is somewhere in between; both energy sources should play an important role.
+
+        The rotation of Saturn's magnetic field with the planet creates a large electric field that
+extends into the magnetosphere. The combination of this electric field and Saturn's magnetic
+field create electromagnetic forces that cause charged plasma particles to "co-rotate" (rotate
+together with Saturn and its internal magnetic field) as far out as Rhea's orbit.
+
+        The other large-scale flow of charged particles, convection, is caused by the solar wind
+pulling the lines of the magnetic field toward the tail of the magnetosphere. This leads to a plas-
+ma flow from dayside to nightside on open field lines, as well as a return flow from nightside to
+dayside on closed field lines (particularly near the equatorial plane).
+
+        Saturn has an ionosphere, a thin layer of partially ionized gas at the top of the sunlit
+atmosphere. Collisions between particles in the atmosphere and the ionosphere create a friction-
+al drag that causes the ionosphere to rotate together with Saturn and its atmosphere.
+
+
+
+
+                                                 32
+                               Mission Overview
+       The Cassini mission will span 11 years, including 6-1/2 years of interplanetary cruise
+and four years in orbit at Saturn. Along the way the spacecraft will fly by several planets, mak-
+ing use of their gravitational energy to speed its flight toward Saturn.
+
+Launch
+
+       Launch periods. Given the relative positions of the planets and the trajectory Cassini
+must fly, the primary launch period opens on October 6, 1997, and continues through
+November 15. Launch is scheduled for October 13, 1997.
+
+        The best conditions exist from October 6 through November 4; launching between those
+dates would result in Cassini arriving at Saturn in July 2004. The period from November 5 to
+15 is considered a contingency period; Cassini's launch is still feasible but less desirable, as
+more spacecraft propellant would be needed to refine its flight path and the arrival at Saturn
+would be delayed by many months. A launch from November 5 through 9 would place the
+spacecraft at Saturn in December 2004; launching from November 10 through 13, Cassini
+would arrive at Saturn in July 2005. Launching on November 14 or 15 would deliver the space-
+craft to Saturn in December 2005.
+
+        Secondary and backup trajectories exist in the unplanned event that Cassini is not
+launched during the primary launch period. Both require the spacecraft to fly a Venus-Earth-
+Earth gravity assist (VEEGA) trajectory instead of the Venus-Venus-Earth-Jupiter (VVEJGA)
+trajectory required for the primary launch period.
+
+       The secondary launch period is a 45-day period between November 28, 1997, and
+January 11, 1998. The spacecraft's arrival at Saturn would be October 13, 2006, after a flight of
+8.8 years. The significant difference between this mission and the primary one is a longer inter-
+planetary cruise and poorer illumination of Saturn's rings due to their changing angle relative to
+the Sun and Earth.
+
+        There is also a backup launch period from March 19 through April 5, 1999, requiring a
+flight of 9.8 years to Saturn with an arrival date of December 22, 2008. This mission entails a
+much longer flight time to Saturn. Studies of Saturn's rings would be significantly degraded due
+to the angle of the rings. Due to the long flight time, electrical power output from the radioiso-
+tope thermoelectric generators would be degraded. This would result in fewer instruments being
+allowed to operate at a given time, or in lower power states, or with less engineering support for
+a suite of instruments.
+
+       Daily window. The launch window on October 13 opens at 4:55 a.m. Eastern Daylight
+Time and extends for 140 minutes. After that date, the opening time of the launch window
+moves earlier by about six minutes daily. The length of the window on subsequent days remains
+at 140 minutes per day.
+
+                                                    33
+                            Cassini
+                            within
+                        Payload Fairing
+
+
+
+
+                             Centaur
+
+
+
+
+                                               fuel
+                                                                      55.90 meters (183 feet)
+
+
+
+
+                          Solid
+                          Rocket
+                          Motors
+
+
+
+                                               fuel
+
+
+
+
+                             Cassini’s Titan IVB launch vehicle
+
+
+Launch Vehicle
+
+    The Titan IVB launch vehicle consists of two upgraded solid rocket motors (known as
+SRMUs); a two-stage liquid-propellant core; a liquid-fuel upper stage; and a payload fairing.
+
+        The three-segment SRMUs are 3.2 meters (10.5 feet) in diameter and 34.2 meters (112.4
+feet) long. Each motor contains 312,458 kilograms (688,853 pounds) of hydroxyl terminated
+polybutadiene (HTPB) propellant and provides a maximum thrust of 7.56 million newtons (1.7
+million pounds) at sea level. Flight control is achieved by directing the thrust through a gim-
+
+
+                                              34
+                                                                                         Stage 2        Centaur Separation
+                                                                                  Ignition/Separation      Alt = 668k ft     Centaur Engine    Spacecraft
+                                                           Jettison Payload           Alt = 533k ft        T= 0:09:13*       Firings 1 and 2   Separation
+                                                                 Fairing              T= 0:05:21*
+                                                             Alt = 363k ft
+                                                             T= 0:03:31*
+                                           Solid Rocket
+                                            Separation
+                                           Alt = 216k ft
+                                           T= 0:02:22*
+                Stage 1 Ignition
+                  Alt = 189k ft
+                  T= 0:02:12*
+
+
+                                                                   * Actual time determined by Titan/Centaur guidance software
+
+
+
+35
+         Roll to 93 deg
+         Flight Azimuth
+           T=0:00:10
+
+
+
+
+     Solid Rocket Motor Ignition/Liftoff
+                                                                 Launch events
+baled nozzle controlled by hydraulic actuators. Six staging rockets on each SRMU ensure posi-
+tive separation from the core following SRMU burnout.
+
+        The first stage of the 3.04-meter-diameter (10-foot) core is powered by a twin assembly
+LR87-AJ-11 engine, while the second stage is powered by a single assembly LR91-AJ-11
+engine. Both stages use storable hypergolic propellants (propellants that ignite when they come
+in contact with each other). The fuel is aerozine 50, a 50-50 mixture of hydrazine and unsym-
+metrical dimethyl hydrazine. During combustion, the fuel is mixed with nitrogen tetroxide as an
+oxidizer.
+
+         Vehicle flight control and navigation for the Titan are provided by the guidance control
+unit, which includes a flight control subsystem and an inertial measurement subsystem. The
+first stage separates from the second stage when the second-stage engine ignites. Separation of
+the second stage and the Centaur upper stage is achieved when four retrorockets fire and a
+structural adapter is severed by pyrotechnics called "SuperZip."
+
+       The payload fairing is 5.9 meters (16.7 feet) in diameter, 20 meters (66 feet) long and
+has an aluminum structure.
+
+       Centaur upper stage. The Centaur upper stage, managed by NASA’s Lewis Research
+Center and produced by Lockheed Martin Astronautics, is 8.9 meters (29.45 feet ) long and 4
+meters (14 feet) in diameter. It provides 147,000 newtons (33,000 pounds) of engine thrust
+using cryogenic liquid oxygen and liquid hydrogen.
+
+Launch Events
+
+       Variations in launch date have minimal impact on the launch sequence of events through
+and including the first firing of the Centaur upper stage. A launch slip would shift the entire
+sequence equally. But the sequence of events following the first Centaur firing — including the
+coast period in parking orbit and the Centaur’s second firing — would depend on the launch
+slip.
+
+       Launch begins with the ignition of the solid rocket motors, which burn for 2 minutes, 22
+seconds to an altitude of approximately 66,000 meters (216,500 feet). The first stage of the liq-
+uid-fueled Titan ignites at 2 minutes, 12 seconds into flight at an altitude of about 58,000
+meters (189,000 feet).
+
+        At an altitude of approximately 110,600 meters (363,000 feet) and 3 minutes, 31 sec-
+onds into flight, the payload fairing that surrounds the spacecraft is jettisoned. Ignition of the
+Titan's second stage occurs at 5 minutes, 21 seconds into flight at an altitude of approximately
+162,500 meters (533,000 feet). At approximately 9 minutes, 13 seconds into flight at an altitude
+of about 203,600 meters (668,000 feet), the Centaur upper stage and the Cassini spacecraft sep-
+arate from the Titan. (The exact time of separation — and the actual start times, burn durations
+and separation of the Centaur from Cassini — are determined by Titan/Centaur guidance soft-
+ware.)
+
+                                                36
+         At Titan-Centaur separation, flight control is transferred to the Centaur. Following sepa-
+ration, the Centaur completes a pre-burn sequence and is ignited for the first of two burns in
+what is referred to as main engine start #1. The burn ends after 131 seconds at main engine cut-
+off #1. After some settling time, the spacecraft and Centaur are injected into a parking orbit
+with a perigee (closest point to Earth) of 170 kilometers (105 miles) perigee and an apogee (far-
+thest point from Earth) of 445 kilometers (276 miles), with an orbital inclination between 28.6
+and 31.6 degrees, depending on the time of launch. This parking orbit is designed to provide an
+orbital lifetime of about 20 days in case the Centaur fails to restart its main engine successfully.
+The Centaur/spacecraft combination will coast in parking orbit until trajectory conditions are
+right for interplanetary injection. The coast time in parking orbit between the first main engine
+cutoff and the engine restart will be 8 to 32 minutes if launch takes place in the primary period,
+depending on the time and day liftoff occurs. The coast duration is about 14 minutes for an
+October 6 launch date at the opening of the daily window.
+
+        Toward the end of this coast period, the Centaur is oriented for its second burn using
+thrusters. After the Centaur engine is restarted, it will burn for approximately 7 to 8 minutes.
+Some 30 seconds after the conclusion of this second burn, the Centaur issues a command
+instructing the Cassini spacecraft to prepare for separation from the Centaur. By five minutes
+after the second Centaur engine cutoff, the Centaur orients Cassini's high-gain antenna to point
+toward the Sun and begins to roll to the separation attitude. This maneuver is completed by 6
+minutes after the second engine cutoff. Six minutes after the second engine cutoff, the Cassini
+spacecraft receives a command instructing it to fire explosive devices separating it from the
+Centaur. Final separation is completed by 6-1/2 minutes after the second Centaur engine cutoff.
+
+Post-Separation Events
+
+        After separating from the Centaur, Cassini's attitude control and articulation subsystem
+gains control over the spacecraft and ensures that the high-gain antenna is pointed toward the
+Sun to keep the rest of the spacecraft shaded. The onboard computer then places the spacecraft
+in a "safe" state so that it could operate autonomously for up to 10 days in the event of telecom-
+munications problems. The Canberra, Australia, complex of NASA's Deep Space Network will
+be the first to acquire Cassini's signal.
+
+        The Centaur executes a collision and contamination avoidance maneuver that prevents it
+from impacting either Venus or the spacecraft. This burn occurs approximately 20 minutes after
+separation to allow the Cassini spacecraft and the Centaur to drift apart, insuring that the plume
+from the Centaur's reaction control thrusters does not impact the spacecraft. About eight min-
+utes later, the Centaur executes a "blowdown" maneuver to expel unused propellant and to fur-
+ther reduce the probability of impact with Cassini or Venus. About an hour after separation, the
+Centaur depletes the hydrazine from its reaction control subsystem. The Centaur mission ends
+approximately 87 minutes after separation. By this time, Cassini has its high-gain antenna
+pointed toward the Sun, is transmitting real-time telemetry via one of its two low-gain antennas,
+and is awaiting instructions from the ground.
+
+
+                                                    37
+                                                                    Saturn Arrival
+                                                                    1 July 2004
+
+                                                                           Jupiter Swingby
+                                                                           30 Dec 2000
+
+
+
+                            Venus Swingby                                        Deep Space
+                            23 June 1999                                         Maneuver
+                  Venus Swingby                                                  20 Jan 1999
+                                        Sun
+                  25 April 1998
+
+
+
+
+                                                       Launch
+  Earth Swingby                                        6 Oct 1997
+  17 Aug 1999
+
+
+                                    Interplanetary Trajectory
+
+        Approximately two days after launch, ground controllers will send to Cassini the
+sequence of computer commands to control the spacecraft for the following week. This
+sequence will include a trajectory correction maneuver in which Cassini fires its onboard
+thrusters to fine-tune its flight path. The next four or five command sequences sent to the space-
+craft also will control the spacecraft for about one week each.
+
+Cruise Phase
+
+        In maneuvers called gravity-assist swingbys, Cassini will fly twice around Venus and
+once each past Earth and Jupiter. The spacecraft's speed relative to the Sun increases as it
+approaches and swings past each planet, giving Cassini the cumulative boost it needs to reach
+Saturn. The gravity-assist technique has been used extensively in the planetary exploration pro-
+gram to send spacecraft from one planet to another, and to increase a spacecraft's speed. In orbit
+around their respective planets, Galileo at Jupiter and Cassini at Saturn often use gravity assists
+to navigate from one large moon to the next.
+
+        Cassini will make two gravity-assist swingbys of Venus — one on April 25, 1998, at an
+altitude of about 300 kilometers (about 185 miles), and another on June 23, 1999, at an altitude
+of 1,530 kilometers (950 miles). These will be followed by a swingby of Earth occurring
+August 17, 1999, at an altitude of 800 kilometers (500 miles) or higher. As the spacecraft heads
+outward into the solar system it will make a swingby of Jupiter on December 30, 2000, passing
+within about 9,655,000 kilometers (about 6 million miles) of the planet.
+
+       Plans call for Cassini to carry out a low-activity flight plan during which only essential
+engineering and navigation activities such as trajectory correction maneuvers will be performed.
+The science instruments are planned to be turned off except for a few maintenance activities.
+
+                                                38
+                                                                           View From Saturn North Pole
+            Earth      Sun                                                 R = 1 Saturn radius
+                                                                           SOI = Saturn orbit insertion
+                                                                           d = days
+
+
+
+
+                                                                    Probe Release
+                                                                    Nov. 6, 2004
+                                                                    (SOI +134 d)
+             Huygens Probe
+             Entry/Titan Flyby
+             Nov. 27, 2004
+39           (SOI +155 d)
+
+                                             Orbiter
+                                             Deflection
+     Orbit Insertion                         Nov. 8, 2004
+     July 1, 2004                            (SOI +136 d)                  Periapses Raise
+                                                                           Sept 12, 2004
+                                                                           (SOI + 73 d)
+
+                  Titan Orbit
+
+                                           2 Days
+
+
+                                 50 R                       100 R                         150 R
+
+                                        Saturn arrival
+These include a single post-launch checkout of all of Cassini's science instruments, as well as
+calibration of Cassini's magnetometer during its subsequent Earth flyby. Huygens probe health
+checks are scheduled to occur every six months. No science observations are planned at Venus,
+Earth or Jupiter.
+
+       Two years before Saturn arrival, science instruments on the Cassini orbiter will be
+turned on, calibrated and begin collecting data.
+
+Saturn Arrival
+
+         The most critical phase of the mission after launch is Saturn orbit insertion. When
+Cassini reaches Saturn on July 1, 2004, the spacecraft will fire its main engine for 94 minutes to
+brake its speed and allow it to be captured as a satellite of Saturn. Passing through the dusty
+outermost ring of Saturn — called the E-ring — Cassini will swing close to the planet to begin
+the first of some six dozen orbits to be completed during the rest of its four-year primary mis-
+sion.
+
+        The arrival period also provides a unique opportunity to observe Saturn's rings and the
+planet itself, as this is the closest approach the spacecraft will make to Saturn during the entire
+mission. A maneuver to lower the inclination of Cassini's orbit, called a periapsis-raise maneu-
+ver, will be performed in September 2004 to establish the geometry for the entry of the
+Huygens probe when it is released during Cassini's first Titan flyby.
+
+The Huygens Probe Mission
+
+        The Huygens probe will be carried to Saturn's system by Cassini. Bolted to Cassini and
+fed electrical power through an umbilical cable, Huygens will ride along during the seven-year
+journey largely in a "sleep" mode, awakened every six months for three-hour instrument and
+engineering checkups.
+
+        Some 22 days before it hits the top of Titan's atmosphere, Huygens will be released
+from Cassini on November 6, 2004. With its umbilical cut and bolts released, Huygens will
+spring loose from the mother ship and fly on a ballistic trajectory to Titan. The probe will spin
+at 7 rpm for stability. Onboard timers will switch on the probe systems before the probe reaches
+Titan's upper atmosphere.
+
+        Two days after the probe's release, the orbiter will perform a deflection maneuver; this
+will keep Cassini from following Huygens into Titan's atmosphere. This maneuver will also
+establish the required geometry between the probe and the orbiter for radio communications
+during the probe descent; in addition, it will also set the initial conditions for Cassini's tour of
+Saturn's moons, which starts right after the completion of the Huygens probe mission.
+
+        The Huygens probe carries two microwave S-band transmitters and two antennas, both
+of which will transmit to the Cassini orbiter during the probe's descent. One stream of telemetry
+is delayed by about six seconds with respect to the other to avoid data loss if there are brief
+
+                                                  40
+                1000
+
+
+
+
+                         500
+
+                         300
+
+
+
+
+                         192                                          Main Chute Deploys
+
+
+
+
+  Altitude, Kilometers                                                               Drogue Chute Deploys
+                         170       Instruments' Inlet   Decelerator
+                                   Port Opens           Jettisons
+
+
+
+
+                               0                                                               2.5
+                                                                 Time, Hours After Entry
+
+                                                             Huygens’ descent to Titan
+
+transmission outages.
+
+        Probe descent will take place November 27, 2004. Huygens will enter Titan's atmos-
+phere at a speed of some 20,000 kilometers per hour (about 12,400 miles per hour). It is
+designed to withstand the extreme cold of space (about -200 C (-330 F)) and the intense heat it
+will encounter during its atmospheric entry (12,000 C (more than 21,600 F)).
+
+       Huygens’ parachutes will further slow the descent so the probe can conduct an intensive
+program of scientific observations all the way down to Titan's surface. When the probe's speed
+
+                                                                           41
+has moderated to 1,400 kilometers per hour (about 870 miles per hour), the probe's after cover
+is pulled off by a pilot parachute. An 8.3-meter-diameter (27-foot) main parachute is then
+deployed to ensure a slow and stable descent. The main parachute slows the probe and allows
+the decelerator and heat shield to fall away when the parachute is released.
+
+        To limit the duration of the descent to a maximum of 2-1/2 hours, the main parachute is
+jettisoned 900 seconds after the probe has entered the top of the atmosphere. A smaller, 3-
+meter-diameter (9.8-foot) drogue chute deploys to support the probe for the remainder of the
+descent. The batteries and other resources are sized for a maximum mission duration of 153
+minutes — including at least three minutes on the surface, but possibly up to a half an hour
+there if the descent takes less time than expected.
+
+        During the first part of the probe's descent, instruments onboard Huygens probe are con-
+trolled by a timer. During the final 10 to 20 kilometers (6 to 12 miles) of descent, instruments
+will be controlled on the basis of altitude measured by the radar altimeter.
+
+        Throughout the descent, Huygens' atmospheric structure instrument will measure more
+than six physical properties of the atmosphere. The gas chromatograph and mass spectrometer
+will determine the chemical composition of the atmosphere as a function of altitude. The
+aerosol collector and pyrolyzer will capture aerosol particles — fine liquid or solid particles
+suspended in the atmosphere — heat them and send the resulting vapor to the
+chromatograph/spectrometer for analysis.
+
+        Huygens' descent imager and spectral radiometer will take pictures of cloud formations
+and Titan's surface, and also determine the visibility within Titan's atmosphere. As the surface
+looms closer, the instrument will switch on a bright lamp and measure the spectral reflectance
+of the surface. Throughout the descent, the Doppler shift of Huygens' radio signal will be mea-
+sured by the Doppler wind experiment onboard the Cassini orbiter to determine Titan's atmos-
+pheric winds, gusts and turbulence. As the probe is shifted about by winds, the frequency of its
+radio signal would change slightly in what is known as the Doppler effect — similar to how the
+pitch of a train whistle appears to rise and then fall as the train passes. Such changes in frequen-
+cy can be used to deduce the wind speed experienced by the probe.
+
+        As Huygens nears impact, its surface science package will activate a number of instru-
+ments to measure surface properties. Huygens will impact the surface at about 25 kilometers
+per hour (15 miles per hour); the chief uncertainty is whether its landing will be a thud or a
+splash. If Huygens lands in liquid, these instruments will measure the liquid's properties while
+the probe floats for a few minutes.
+
+        If Huygens lands in liquid ethane it will not be able to return data for very long, because
+the extremely low temperature of this liquid (about -180 C (-290 F)) would prevent the batteries
+from operating. In addition, if liquid ethane permeates the probe's science instrument packages,
+the radio would be badly tuned and probably not operate.
+
+       Assuming Huygens continues to send data to Cassini from Titan's surface, it will be able
+
+                                                42
+to do so for a maximum of about 30 minutes, when the probe's battery power is expected to run
+out and the Cassini orbiter disappears over the probe’s horizon.
+
+The Orbital Tour
+
+         After the end of the Huygens mission, Cassini will continue its four-year orbital tour,
+consisting of more than 70 orbits around Saturn that will be shaped by gravity-assist flybys of
+Titan, or by firings of Cassini's thrusters or main engine. The size of these orbits, their orienta-
+tion to the Saturn-Sun plane and their inclination to Saturn's equator are dictated by various sci-
+entific requirements. These include: imaging radar coverage of Titan's surface; flybys of select-
+ed icy moons, Saturn or Titan; occultations by Saturn's rings; and crossings of the ring plane.
+
+        Cassini will make at least six close targeted flybys of selected icy moons of greatest
+interest — Iaptetus, Enceladus, Dione and Rhea. Images taken with Cassini's high-resolution
+telescopic cameras during these flybys will show surface features equivalent in size to a base-
+ball diamond. At least two dozen more distant flybys (at altitudes of about 100,000 kilometers
+(about 60,000 miles)) will be made of the major moons of Saturn other than Titan. The varying
+inclination angle of Cassini's orbits also will allow studies of Saturn's polar regions in addition
+to the planet's equatorial zone.
+
+       Titan is the only Saturn moon large enough to enable significant gravity-assist changes
+in Cassini's orbits, though some of the other moons can help to accomplish more modest adjust-
+ments with their small gravitational effect on Cassini's flight path. Precise navigation and tar-
+geting of the point at which Cassini flies by Titan will be used to shape the orbital tour in the
+same way the Galileo mission has used its encounters of Jupiter's large moons to shape its
+Jovian tour.
+
+End of Prime Mission
+
+        The prime mission tour concludes on July 1, 2008, four years after Saturn arrival and 33
+days after the last Titan flyby, which occurs on May 28, 2008. The aim point of the final flyby
+is chosen to position Cassini for a Titan flyby on July 31, 2008 — providing the opportunity to
+proceed with more flybys during an extended mission, if resources allow. Nothing in the design
+of the tour precludes an extended mission.
+
+Mission Operations
+
+        Two-way communication with Cassini will be through the large dish antennas of
+NASA's worldwide Deep Space Network. The spacecraft will transmit and receive in the
+microwave X-band, using either its parabolic high-gain antenna or one of its two low-gain
+antennas. The high-gain antenna is also used for radio and radar experiments and for receiving
+signals from the Huygens probe.
+
+        Because Cassini's science instruments are fixed and the entire spacecraft must be turned
+to point them, the spacecraft will be frequently reoriented by using either gyroscope-like reac-
+
+                                                     43
+tion wheels or the spacecraft's set of small onboard thrusters. Consequently, most science obser-
+vations will be made without a real-time communications link to Earth. Data will be stored on
+Cassini's two solid-state data recorders, each with a capacity of about 2 gigabits (equivalent to
+about 200 megabytes each).
+
+        Each of Cassini's science instruments is run by a microprocessor capable of controlling
+the instrument and formatting/packetizing data. Ground controllers will run the spacecraft with
+a combination of some centralized commands to control system-level resources, and some com-
+mands issued by the individual science instruments' microprocessors. Packets of data will be
+collected from each instrument on a schedule that may vary at different times. Data packets are
+either stored on Cassini's onboard solid-state recorders or transmitted to Earth.
+
+        Mission controllers, engineering teams and science teams will monitor telemetry from
+the spacecraft and look for anomalies in real time. The flight systems operations team retrieves
+engineering data to determine the health, safety and performance of the spacecraft, and process-
+es the tracking data to determine and predict the spacecraft's trajectory. Data will normally be
+received by the Deep Space Network with one tracking pass by one antenna per day, with occa-
+sional extra coverage for special radio science experiments.
+
+        Spacecraft operations during Cassini's interplanetary cruise will be centralized at JPL.
+During the Saturn tour, a system of distributed science operations will be implemented with
+centralized spacecraft control continuing at JPL. The concept is to allow scientists to operate
+their instrument from their home institution with as much ease as possible and with the mini-
+mum interaction necessary to collect their data.
+
+Cost-Saving Approaches
+
+        Because of the need to reduce the cost of activities before launch and during Cassini's
+nearly seven-year-long cruise, the development of many operations capabilities has been
+deferred until after launch.
+
+       The following are among choices made to reduce costs and simplify mission operations:
+
+         q Limited science. To reduce costs, there is no plan to acquire science data during
+Cassini's interplanetary cruise, including its flybys of Venus, Earth and Jupiter. The only excep-
+tion is a gravitational wave experiment; this will attempt to detect gravitational waves emitted
+by supermassive objects such as quasars, active galactic nuclei or binary black holes.
+
+        q Strict modes of operation. Cassini's power system cannot supply enough electricity to
+run all science instruments simultaneously. In addition, science instruments cannot all be point-
+ed optimally at the same time because of the fact that they are fixed to the body of the space-
+craft. Mission planners therefore developed a concept of operational modes designed to reduce
+operational complexity. Under this approach, instruments will be operated in a series of stan-
+dard, well-characterized configurations, identifying the on/off state of each instrument, mini-
+mum and maximum power and peak data rates allocated for each instrument, and states of the
+
+                                                44
+engineering subsystems (radio, recorder, attitude and articulation control, and propulsion).
+
+        q Standardized, reusable sequence templates. Ninety-eight percent of Cassini's Saturn
+tour will be conducted with a small number of reusable software modules and templates that
+dictate how science instruments are controlled. The remaining two percent (seven days per
+year) may consist of unique software command sequences developed for special occasions.
+
+        q No sequence team. Mission planning and the development of command sequences
+will be led by "virtual teams" made up of representatives of the various science experiment or
+subsystem teams involved in a given procedure. This approach replaces the traditional custom
+of a "sequence team" responsible for developing the sequences of commands used to control the
+spacecraft and its instruments.
+
+       The Cassini program has remained on schedule and within budget since its inception.
+
+
+
+
+                                                   45
+                                  The Spacecraft
+        The Cassini spacecraft is a two-part structure, composed of the orbiter and the Huygens
+Titan probe. The orbiter is designed to enter orbit around Saturn; deliver Huygens to its destina-
+tion and relay the probe's data; and conduct at least four years of detailed studies of Saturn's
+system. Huygens is designed to remain primarily dormant throughout Cassini's journey, then
+spring into action when it reaches the top of Titan's atmosphere. There, Huygens will deploy its
+parachutes and conduct 2-1/2 hours of intensive measurements as it descends through Titan’s
+atmosphere, all the while transmitting its findings to the Cassini orbiter for relay back to Earth.
+
+The Cassini Orbiter
+
+       The Cassini orbiter alone weighs 2,125 kilograms (4,685 pounds). When the 320-kilo-
+gram (705-pound) Huygens probe and a launch vehicle adapter are attached, and 3,132 kilo-
+grams (6,905 pounds) of propellants are loaded, the spacecraft at launch will weight 5,712 kilo-
+grams (12,593 pounds). More than half the spacecraft's mass is propellant — much of which is
+needed for Cassini's 94-minute main engine firing that brakes it into orbit around Saturn.
+
+        The spacecraft stands 6.8 meters (22.3 feet) high and is 4 meters (13 feet) wide. The
+magnetometer instrument is mounted on a 13-meter-long (42-foot) boom that extends outward
+from the spacecraft; three other rod-like antenna booms, each measuring 10 meters (about 32
+feet), extend outward from the spacecraft in a Y-shape. Most of the spacecraft and its instru-
+ment housings are covered with multiple-layered, shiny amber-colored or matte-black blanket-
+ing material. The blankets protect Cassini against the extreme heat and cold of space, and main-
+tain the room temperature operating environment needed for computers and other electronic
+systems onboard. The blanketing includes layers of material like that used in bullet-proof vests
+to afford protection against dust-size particles called micrometeoroids that zip through inter-
+planetary space.
+
+       The spacecraft's complexity is necessitated both by its flight path to Saturn and by the
+ambitious program of scientific observations to be accomplished at Saturn. Cassini has some
+22,000 wire connections and more than 12 kilometers (7.5 miles) of cabling linking its instru-
+ments, computers and mechanical devices.
+
+        Cassini's cargo of science instruments, the Huygens probe and the enormous quantity of
+fuel the spacecraft needs to brake into orbit around Saturn make it the largest interplanetary
+spacecraft ever launched by the United States. (The former Soviet Union's Phobos 1 and 2 Mars
+craft each weighed 6,220 kilograms (13,713 pounds).) Cassini and Huygens, attached and
+fueled but without the launch vehicle adapter, weigh about 5,577 kilograms (12,295 pounds).
+More than half of that mass is liquid fuel. Cassini's fuel mass alone is more than the mass of the
+Galileo and Voyager spacecraft combined.
+
+      The main body of the orbiter is a nearly cylindrical stack consisting of a lower equip-
+ment module, a propulsion module and an upper equipment module, and is topped by the fixed
+
+                                                46
+                                              Low-Gain
+                                              Antenna
+                          High-Gain
+                                              (1 of 2)
+                          Antenna
+
+
+     Magnetometer
+     Boom
+
+
+                                                         Radar Bay
+
+
+
+
+                                                              Fields
+     Radio/Plasma
+                                                              and
+     Wave Subsystem
+                                                              Particles
+     Antenna (1 of 3)
+47                                                            Pallet
+
+         Remote
+         Sensing Pallet                                     Huygens
+                                                            Titan
+                                                            Probe
+
+
+
+
+                                                         Radioisotope
+                                                         Thermoelectric
+                                                         Generator
+                          445-newton Engine              (1 of 3)
+                          (1 of 2)
+
+
+         Cassini spacecraft
+4-meter-diameter (13-foot) high-gain antenna. Attached about halfway up the stack are a remote
+sensing pallet, which contains cameras and other remote sensing instruments, and a fields and
+particles pallet, which contains instruments that study magnetic fields and charged particles.
+The two pallets carry most of the Cassini orbiter's science instruments. In general the whole
+spacecraft must be turned to point the instruments in the proper direction, though three of the
+instruments provide their own articulation about one axis.
+
+       Several booms will be deployed early in Cassini's flight. These include three rod-like
+plasma wave antennas and an 11-meter (40-foot) spring-loaded magnetometer boom that
+extends from a canister mounted on the upper equipment module.
+
+        Software sequences — detailed instructions stored in the spacecraft’s computer — direct
+the activities of the spacecraft. A typical sequence may operate Cassini for a month without the
+need for intervention from ground controllers. Onboard computers are designed to withstand the
+radiation environment of deep space, particularly when the Sun is at peak activity. Solar flares,
+which can last up to several days, can deliver radiation 1,000 times above the usual radiation
+levels in interplanetary space. Cassini's electronics have undergone customized radiation hard-
+ening to ensure that they won't be disrupted or destroyed by such events.
+
+         Sophisticated fault protection software resides in the spacecraft's computers to continu-
+ously sample and sense the health of the onboard systems. The fault protection system automat-
+ically takes corrective action when it determines the spacecraft is at risk due to any onboard
+failure.
+
+        The orbiter receives electrical power from three radioisotope thermoelectric generators
+(RTGs). These generators produce power by converting heat into electrical energy. RTGs are
+not reactors, and the radioactive material is neither fissionable nor fusionable. Heat is provided
+by the natural radioactive decay of plutonium in a ceramic form of mostly plutonium-238;
+devices called thermocouples turn the heat into electricity to run the spacecraft. Upon arrival at
+Saturn, the three generators will provide about 675 watts of power. Plutonium dioxide is also
+used as the heat source in 82 small radioisotope heater units (RHUs) on the Cassini orbiter and
+35 on the Huygens probe; each produces about 1 watt of heat to keep nearby electronics at their
+operating temperatures. RHUs were most recently used on Mars Pathfinder's Sojourner rover to
+keep its electronics warm during Martian nights. Both RTGs and RHUs have a long and safe
+heritage of use and high reliability in NASA's planetary exploration program, including the
+Voyager and Galileo missions.
+
+       Propulsion for major changes to Cassini's trajectory is provided by one of two main
+engines. These powerful engines use monomethylhydrazine as the fuel and nitrogen tetroxide as
+the oxidizer. Sixteen smaller engines called thrusters use hydrazine to control Cassini's orienta-
+tion and to make small adjustments to the spacecraft's flight path.
+
+       Guidance and control is governed by sensors that recognize reference stars and the Sun,
+and by onboard computers that determine the spacecraft's position. Using a new type of gyro-
+scope that vibrates rather than spins, the spacecraft can perform turns, twists and propulsion fir-
+
+                                                48
+ings while retaining continuous knowledge of its own position. Unlike spacecraft such as
+Galileo, the Cassini orbiter is stabilized along all three axes and thus does not normally rotate
+during its long cruise to Saturn.
+
+        The mission's trajectory poses a challenge for controlling the spacecraft's temperature
+because in the first several years of the mission, the orbiter will be relatively close to the Sun.
+During this time, the high-gain antenna will be pointed at the Sun and used as a sunshade to
+shield the rest of the orbiter and probe. Special paints have been used on the antenna to reflect
+and radiate much of the sunlight received.
+
+        Communications with the spacecraft during its passage through the inner solar system
+will be through one of the orbiter's two low-gain antennas. In late January 2000, as Cassini
+enters the cooler climes of the asteroid belt and beyond, it will turn its high-gain antenna
+toward Earth and conduct telecommunications through it for the remainder of the mission.
+
+       As Cassini moves farther from the Sun, extreme cold becomes a concern. At Saturn's
+distance, the intensity of sunlight is approximately 1 percent that at Earth.
+
+       Heat within the spacecraft is retained by using lightweight, multiple-layered insulating
+blankets that have been tailor-made for the instrument housings and other areas of the orbiter.
+The blanket's outer layer is a three-ply membrane composed of a Kapton core with an alu-
+minized inner surface and a metallic outer surface. The translucent Kapton has a yellow color,
+and when backed by a shiny aluminum layer, results in an amber appearance. Up to 26 layers of
+material are used in the blankets, which also afford protection against dust-size micromete-
+oroids which, traveling at speed of 5 to 40 kilometers per second (about 10,000 to 90,000 miles
+per hour) could otherwise potentially penetrate portions of the spacecraft.
+
+Orbiter Subsystems
+
+       The Cassini orbiter contains 12 engineering subsystems that govern spacecraft features
+and functions including wiring, electrical power, computing, telecommunications, guidance and
+propulsion.
+
+         q The structure subsystem is the skeleton that provides mechanical support and align-
+ment for all flight equipment, including the Huygens probe. In addition, it provides an equipo-
+tential container — an electrical grounding reference — which provides a shield from radio fre-
+quency interference, and protection from space radiation and micrometeoroids. The structure
+subsystem consists of the upper equipment module, which contains the 12-bay electronics bus
+assembly, instrument pallets and the magnetometer boom; the lower equipment module; plus all
+the the brackets and structure used to attach the Huygens probe, the low-gain and high-gain
+antennas, electrical generators, main rocket engines, reaction control thrusters and other equip-
+ment. The structure subsystem also includes the adapter which supports the spacecraft on the
+Centaur upper stage during launch.
+
+
+
+                                                     49
+        q The radio frequency subsystem provides the telecommunications facilities for the
+spacecraft, and is also used as part of the radio science instrument. For communications, it pro-
+duces an X-band carrier signal at a frequency of 8.4 GHz; modulates it with data received from
+the command and data subsystem; amplifies the X-band carrier power to produce 20 watts from
+the traveling wave tube amplifiers; and delivers the signal to the antenna subsystem. (The 20
+watts is expected to degrade to about 19 watts by the time Cassini reaches Saturn.) From the
+antenna subsystem, the radio frequency subsystem takes signals transmitted from Earth at a fre-
+quency of 7.2 GHz in the microwave X-band; demodulates them; and delivers the commands
+and data to the command data subsystem for storage and/or execution.
+
+        q Regulated electrical power and various small pyrotechnic devices on the spacecraft
+are controlled by the power and pyrotechnics subsystem. Operating on command from the
+central computer system, this subsystem distributes electrical power to instruments and other
+subsystems on the spacecraft at 30 volts DC. The subsystem also regulates a shunt radiator that
+can be used to dispose of excess heat. Pyrotechnics include squib devices that will be fired to
+cut cables and other links that hold the Huygens probe onto the orbiter.
+
+         q The command and data subsystem is Cassini's nervous system — the central pro-
+cessing and delivery clearinghouse of the spacecraft for commands received from the ground
+and data sent back to Earth. All elements of the subsystem are duplicated with redundant com-
+ponents that can be used in the event of a component failure. The subsystem receives ground
+commands and data from the radio frequency subsystem, processes the information and distrib-
+utes it to other subsystems. The command and data subsystem uses one each of the two redun-
+dant solid-state recorders and flight computers, which are programmed in the Ada programming
+language. Memory capacity for each solid-state recorder is 2 gigabits.
+
+       Scientific and engineering data from science instruments destined for transmission to
+Earth are first forwarded to the command and data subsystem for processing and formatting for
+telemetry, and delivery to the radio frequency subsystem. The command and data subsystem
+contains software routines that protect the spacecraft in the event of a fault. The software also
+allows the spacecraft to autonomously respond to faults needing immediate action. Memory for
+the command and data subsystem is 512 kilo-words of random-access memory (RAM) and 8
+kilo-words of programmable read-only memory (PROM).
+
+         q The attitude and articulation control subsystem is the spacecraft's inner ear, con-
+tinuously sensing and measuring the spacecraft's orientation on its three axes and the space-
+craft's position in space relative to Earth, Sun, Saturn and other targets. It provides measure-
+ments and controls pointing for spacecraft instruments, including scans that require the space-
+craft to roll while an instrument performs an observation. The attitude and articulation control
+subsystem encompasses a number of sensors including redundant Sun sensor assemblies; stellar
+reference units, or star trackers; a Z-axis accelerometer; and two 3-axis gyro inertial reference
+units. Each unit consists of four gyros, three orthogonal to each other and the fourth skewed
+equidistant to the other three. The subsystem also contains actuators for the main rocket engine
+gimbals and for the redundant reaction wheel.
+
+
+                                               50
+        With two redundant computers programmed in Ada, the subsystem processes commands
+from the command and data subsystem and produces commands to be delivered to attitude con-
+trol actuators and/or spacecraft thrusters or main engines to control Cassini's attitude and to
+make trajectory changes. The attitude and articulation control subsystem memory has 512 kilo-
+bytes of RAM and 8 kilobytes of PROM.
+
+         q All power and data cabling, except for coaxial cabling and waveguides, make up the
+cabling subsystem. This network of cabling conducts power from the three electrical genera-
+tors to the power and pyrotechnics subsystem and to the power shunt radiator. It also conducts
+data between the command and data subsystem and the other subsystems and assemblies on the
+spacecraft. In addition, cabling allows engineers to access Cassini's electronics during space-
+craft integration and testing.
+
+        q The propulsion module subsystem controls the spacecraft's thrust and changes in its
+attitude. It works under the command of the attitude and articulation control system. Attitude
+control is provided by the reaction control subsystem, which consists of four clusters of four
+hydrazine thrusters each. These move the spacecraft to or maintain it in its desired orientation
+and are used to point the instruments at their targets. The thrusters are also used for executing
+small spacecraft maneuvers. For larger changes in the spacecraft velocity, the main rocket
+engine is used. Cassini has a primary and redundant pressure-regulated main engine. Each
+engine is capable of a thrust of approximately 445 newtons (100 pounds of force). The bipro-
+pellant main engines burn nitrogen tetroxide and monomethylhydrazine. The engines are gim-
+baled so that the thrust vector can be maintained through the shifting center of mass of the
+spacecraft. Mounted below the main engines is a retractable cover that is used during cruise to
+protect the main engines from micrometeoroids. The main engine cover can be extended and
+retracted multiple times (at least 25 times), and has a pyro-ejection mechanism to jettison the
+cover should there be a mechanical problem with the cover that interferes with main engine
+operation. During cruise the cover will remain closed when the main engines are not in use.
+
+        q The temperature control subsystem keeps temperatures of the various parts of the
+spacecraft within allowable limits through a variety of thermal control techniques, many of
+which are passive. Automatically positioned reflective louvers are located on Cassini's 12-bay
+electronics bus. Radioisotope heater units are used where constant heat is required. Multilayer
+insulation blankets cover much of the spacecraft and its equipment. Electric heaters are used in
+several locations under control of the spacecraft's main computer. Temperature sensors are
+located at many sites on the spacecraft, and their measurements are used by the command data
+subsystem to adjust the heaters. The entire spacecraft body and Huygens probe are shaded when
+necessary by the high-gain antenna.
+
+        q The mechanical devices subsystem provides a pyrotechnic separation device that
+releases the spacecraft from the launch vehicle adapter. Springs then push the spacecraft away
+from the adapter. The subsystem includes a self-deploying 10.5-meter (40-foot) coiled mast
+stored in a canister which supports the magnetometers. It also includes an articulation system
+for a backup reaction wheel assembly, a "pin puller" for the rod-like antennas of the radio plas-
+ma wave spectrometer's Langmuir probe, and louvers for venting or holding heat from the
+
+                                                   51
+radioisotope heater units.
+
+        q The electronic packaging subsystem consists of the electronics packaging for most
+of the spacecraft in the form of the 12-bay electronics bus.
+
+         q The solid-state recorder is the primary memory storage and retrieval device for the
+orbiter. The spacecraft is equipped with two recorders, each with a capacity of 2 gigabits (1.8
+gigabits at end of mission). Before completion of the Huygens descent probe's mission, only
+one recorder can be used at any time to store science data from the mission. After the Huygens
+mission, however, both recorders may be used to record and play back science data. Data such
+as spacecraft telemetry and memory loads for various subsystems may be stored in separate
+files, or partitions, on the recorder. All data recorded to and played back from the solid-state
+recorder are handled by the command data subsystem.
+
+        q The antenna subsystem provides a directional high-gain antenna that can transmit
+and receive on four different bands in the microwave spectrum — X, Ka, S and Ku. The high-
+gain antenna and low-gain antenna #1 are provided by the Italian space agency. Low-gain
+antenna #1 is located on the dish structure of the high-gain antenna. Low-gain antenna #2 is
+located on the Cassini orbiter body below the attach point for the Huygens probe. During the
+inner solar system cruise, the high-gain antenna is pointed toward the Sun to provide shade for
+the spacecraft. The two low-gain antennas allow for one or the other to transmit and receive
+signals in the microwave X-band to and from Earth when the spacecraft is Sun-pointed. The
+low-gain antennas also provide an emergency telecommunications capability while Cassini is at
+Saturn.
+
+The Huygens Probe
+
+       The Huygens probe system includes the probe itself, which enters the Titan atmosphere,
+and support equipment that remains attached to the orbiter. The probe weighs 320 kilograms
+(705 pounds) and consists of three main elements:
+
+        q A spin-eject device, which uses springs to propels the probe away from the orbiter
+with a relative velocity of 0.3 to 0.4 meter per second (about 1 foot per second) and simultane-
+ously causes the probe to spin about its axis of 7 rpm.This device is part of the support equip-
+ment.
+
+        q A front shield, 2.7 meters (8.8 feet) in diameter, covered with a special thermal pro-
+tection material called AQ60, a low-density mat of silica fibers, to protect the probe from the
+enormous heat generated during entry into Titan's atmosphere.
+
+        q An aft cover that uses thermal protection materials to ensure a slow and stable
+descent. The main parachute slows the probe and allows the decelerator to fall away when it is
+released. To limit the duration of the descent to a maximum of 2.5 hours, the main parachute is
+jettisoned at 900 seconds after atmospheric entry, and is replaced by a 3-meter-diameter (about
+10-foot) drogue chute for the remainder of the descent.
+
+                                               52
+                                                  Back
+                                                  Cover
+                                           Back Cover
+
+
+
+
+                                              After
+                                              Cone
+                                      After Cone
+
+
+                                     Top
+                              Top Platform
+                                     Platform
+
+
+
+                          Experiment
+                          Platform
+               Experiment Platform
+
+
+          Probe Fore Dome
+                 Probe
+                  Fore Dome
+
+
+Front Front
+      Shield
+      Shield
+
+
+
+
+                                           Huygens probe
+
+
+                                                53
+        Inner structure. The probe's interior consists of two aluminum honeycomb platforms
+and an aluminum shell. It is linked by fiberglass struts and pyrotechnically operated release
+mechanisms to the front shield and aft cover. The central equipment platform carries, on both
+its upper and lower surfaces, the boxes containing the electrical subsystems and the experi-
+ments. The upper platform carries the stowed parachute and the transmitter used to radio data in
+the microwave S-band to the Cassini orbiter.
+
+        Thermal control. At different phases of the mission, Huygens will be subjected to
+extremes of heat and cold requiring a variety of passive controls to maintain the required tem-
+perature conditions. When the spacecraft is nearer the Sun on the Venus and Earth legs of its
+trajectory, the probe will receive high solar heat input, but will get some protection by being
+shaded by the orbiter's high-gain antenna. Multilayered thermal blanketing, which burns off
+later during Titan atmospheric entry, will also protect the probe from solar heating.
+
+       When Cassini leaves the inner solar system, the temperature of the probe will be greatly
+reduced. After separation from the Cassini orbiter, Huygens will be at its coldest. To ensure that
+the equipment stays operational, 25 radioisotope heater units (RHUs) are placed in the system.
+Each RHU, which contains radioactive plutonium dioxide, produces about 1 watt of heat.
+
+       During entry into Titan's atmosphere, the front shield may reach temperatures above
+1,500 C (2,700 F). Layers of insulation will ensure that the equipment inside stays below 50 C
+(122 F). Once the chutes are deployed, the probe instruments will be exposed to the cold Titan
+atmosphere at a temperature of -200 C (-330 F). The internal temperature will be kept within
+operating limits by thick foam insulation filling the probe and by power dissipation in the
+experiments and subsystems.
+
+       Electrical power. While it is still attached to the Cassini orbiter, the Huygens probe will
+obtain power from the orbiter via an umbilical cable. After separation, electrical power is pro-
+vided by five lithium sulfur dioxide batteries, each with 23 cells. Much of the battery power is
+used to power the Huygens probe's timer for the 22 days of coasting to Titan.
+
+        Command and data management. Huygens' command and data management subsys-
+tem controls the timing and execution of a number of critical events. It times the coast phase,
+and switches on the probe just before entry. It controls deployment of various components dur-
+ing descent. It distributes commands to other subsystems and to the experiments. It distributes
+to the experiments information that provides a timeline of conditions that instruments can use to
+schedule operations. And it collects scientific and engineering data and forwards them to the
+orbit during the cruise to Saturn and during the Titan mission.
+
+        Probe data relay. The probe data relay subsystem provides the one-way communica-
+tions link between the Huygens probe and the Cassini orbiter, and includes equipment installed
+in each spacecraft. Elements that are part of the probe support equipment on the Cassini orbiter
+include radio frequency electronics (including an ultra-stable oscillator) and a low-noise ampli-
+fier. For backup, the Huygens probe carries two S-band transmitters, both of which transmit
+
+                                               54
+during probe descent, each with its own antenna. The telemetry in one link is delayed by about
+six seconds with respect to the other to avoid data loss if there are brief transmission outages.
+Reacquisition of the probe signal would normally occur within this interval.
+
+New Technology
+
+       A wealth of new technology was developed and qualified for spaceflight by or for the
+Cassini program. Much of this new technology has already been adopted by other space science
+programs, in some cases at a discounted cost directly attributable to Cassini. This has enabled
+the development of new classes of low-cost, high-efficiency spacecraft, such as the Discovery
+and New Millennium spacecraft.
+
+        The Cassini orbiter advances and extends the technology base of the United States and
+its partners with several innovations in engineering and information systems. Whereas previous
+planetary spacecraft used onboard tape recorders to store data, Cassini has pioneered a new
+solid-state data recorder with no moving parts. The new recorder eventually will replace tape
+recorders on all space missions. NASA's Advanced X-ray Astrophysics Facility (AXAF), for
+example, will use a solid-state recorder from the production line established for the Cassini mis-
+sion. In addition, the recorder has great potential for use in a variety of fields, from aerospace to
+the entertainment industry, and is expected to find wide applicability in consumer electronics.
+
+        Similarly, the main onboard computer that directs operations of the orbiter uses a novel
+design that draws on new families of electronic chips. Among them are very high-speed inte-
+grated circuit (VHSIC) chips developed under a U.S. government-industry research and devel-
+opment initiative. The Cassini application GVSC 1750A computer is the first civilian spacecraft
+application of this technology. The computer system also uses power new application-specific
+integrated circuit (ASIC) parts; each component replaces one hundred or more traditional chips.
+The ASIC chips allow the development of a data system for Cassini 10 times more efficient
+than earlier spacecraft designs, but at less than one-third the mass and volume. Two missions
+under NASA's Discovery program, Mars Pathfinder and the Near Earth Asteroid Rendezvous
+(NEAR), used these chips directly off the Cassini production line.
+
+        Elsewhere on the Cassini orbiter, the power system benefits from an innovative solid-
+state power switch developed for the mission. This switch eliminates rapid fluctuations called
+transients that usually occur with conventional power switches, with a significantly improved
+component lifetime. The power switch holds great promise for use in numerous Earth-based
+applications. A low mass, low power, radiation-hardened X-band radio transponder (a com-
+bined receiver and transmitter) was developed by the Cassini program. Both Mars Pathfinder
+and NEAR missions used radio transponders built on the Cassini mission's production line.
+
+        The inertial reference units to be used on Cassini represent the first space version of a
+revolutionary new gyro called the hemispherical resonator gyroscope. Gyros commonly used in
+spacecraft, aircraft and ships are large, very delicate mechanical devices whose many moving
+parts make them susceptible to failure. This new gyro, which eventually may be used on other
+spacecraft, promises greater reliability and less vulnerability to failure because it uses no mov-
+
+                                                     55
+ing parts. A slightly modified Cassini gyro was incorporated into the NEAR spacecraft.
+
+Cassini Signature Disk
+
+       In August 1997, a small digital versatile disk (DVD) was installed aboard the Cassini
+spacecraft during processing at the Kennedy Space Center. The disk contains a record of
+616,400 handwritten signatures from 81 countries around the globe. Signatures were received
+from people of all ages and backgrounds.
+
+        Mail came from individuals, families and, often, from entire schools of students.
+Signatures came from the very young, just learning to write, and from the very old, whose
+hands were no longer steady. Signatures were sent in behalf of loved ones who had died in the
+recent past. Even the signatures of Jean-Dominique Cassini and Christiaan Huygens were
+obtained from letters they wrote during the 17th century.
+
+        Sorting, counting and scanning the signatures was performed over the course of a year
+by volunteers from the Planetary Society, Pasadena, CA. The disk’s cover, designed by Charles
+Kohlhase of the Cassini project, depicts a golden eagle wing feather and various Cassini mis-
+sion elements to symbolize the signature experience. The feather was chosen to represent both
+the beauty and power of flight, as well as the quill pen that was used for nearly 14 centuries in
+writing and signing.
+
+
+
+
+                                               56
+                               Science Objectives
+       Cassini's payload represents a carefully chosen set of interrelating instruments that will
+address many major scientific questions about the Saturn system. The data they return will be
+analyzed by a team of nearly 300 scientists from the United States and Europe. The Cassini and
+Huygens mission science objectives are as follows:
+
+Saturn
+
+         q Determine the temperature field, cloud properties and composition of Saturn's atmos-
+phere.
+
+       q Measure the planet's global wind field, including waves and eddies; make long-term
+observations of cloud features to see how they grow, evolve and dissipate.
+
+         q Determine the internal structure and rotation of the deep atmosphere.
+
+        q Study daily variations and relationship between the ionosphere and the planet's mag-
+netic field.
+
+        q Determine the composition, heat flux and radiation environment present during
+Saturn's formation and evolution.
+
+         q Investigate sources and nature of Saturn's lightning.
+
+Titan
+
+       q Determine the relative amounts of different components of the atmosphere; determine
+the mostly likely scenarios for the formation and evolution of Titan and its atmosphere.
+
+        q Observe vertical and horizontal distributions of trace gases; search for complex
+organic molecules; investigate energy sources for atmospheric chemistry; determine the effects
+of sunlight on chemicals in the stratosphere; study formation and composition of aerosols (par-
+ticles suspended in the atmosphere).
+
+       q Measure winds and global temperatures; investigate cloud physics, general circula-
+tion and seasonal effects in Titan's atmosphere; search for lightning.
+
+         q Determine the physical state, topography and composition of Titan's surface; charac-
+terize its internal structure.
+
+       q Investigate Titan's upper atmosphere, its ionization and its role as a source of neutral
+and ionized material for the magnetosphere of Saturn.
+
+
+                                                    57
+Magnetosphere
+
+       q Determine the configuration of Saturn's magnetic field, which is nearly symmetrical
+with Saturn's rotational axis. Also study its relation to the modulation of Saturn kilometric radi-
+ation — a radio emission from Saturn that is believed to be linked to the way electrons in the
+solar wind interact with the magnetic field at Saturn's poles.
+
+       q Determine the current systems, composition, sources and concentrations of electrons
+and protons in the magnetosphere.
+
+       q Characterize the structure of the magnetosphere and its interactions with the solar
+wind, Saturn's moons and rings.
+
+        q Study how Titan interacts with the solar wind and with the ionized gases within
+Saturn's magnetosphere.
+
+The Rings
+
+         q Study configuration of the rings and dynamic processes responsible for ring structure.
+
+         q Map the composition and size distribution of ring material.
+
+         q Investigate the interrelation of Saturn's rings and moons, including imbedded moons.
+
+         q Determine the distribution of dust and meteoroid distribution in the vicinity of the
+rings.
+
+      q Study the interactions between the rings and Saturn's magnetosphere, ionosphere and
+atmosphere.
+
+Icy Moons
+
+         q Determine general characteristics and geological histories of Saturn's moons.
+
+       q Define the different physical processes that have created the surfaces, crusts or sub-
+surfaces of the moons.
+
+       q Investigate compositions and distributions of surface materials, particularly dark,
+organic-rich materials and condensed ices with low melting points.
+
+         q Determine the bulk compositions and internal structures of the moons.
+
+         q Investigate interactions of the moons with Saturn's magnetosphere and ring system
+
+
+                                                 58
+and possible gas injections into the magnetosphere.
+
+In addition to the science objectives at Saturn, the Cassini spacecraft will also conduct a gravi-
+ty-wave investigation through the ASI-provided high-gain antenna during its interplanetary
+cruise.
+
+Orbiter Science Instruments
+
+        The Cassini orbiter carries a total of 12 science instruments. Two pallets carry most of
+the instruments; four instruments are located on the remote sensing experiments pallet, and
+three are located on the fields and particles experiments pallet. Others are fixed at independent
+locations on the spacecraft. The experiments include:
+
+         q Imaging Science Subsystem, or Cassini's cameras, will photograph a wide variety of
+targets — Saturn, the rings, Titan and the icy moons — from a broad range of observing dis-
+tances for various scientific purposes. General science objectives include studying the atmos-
+pheres of Saturn and Titan, the rings of Saturn and their interactions with the planet's moons
+and the surface characteristics of the moons, including Titan. The instrument includes both a
+narrow-angle and a wide-angle camera. The narrow-angle camera provides high-resolution
+images of targets of interest, while the wide-angle camera provides more extended spatial cov-
+erage at lower resolution. The cameras can also obtain optical navigation frames — images of
+Saturn’s moons against a star background — which are used to keep the spacecraft on the cor-
+rect trajectory. Team leader is Dr. Carolyn C. Porco of the University of Arizona, Tucson, AZ.
+
+        q Visible and Infrared Mapping Spectrometer will map the surface spatial distribu-
+tion of the mineral and chemical features of a number of targets, including Saturn's rings, sur-
+faces of the moons, and the atmospheres of Saturn and Titan. The instrument includes a pair of
+imaging grating spectrometers that are designed to measure reflected and emitted radiation from
+atmospheres, rings and surfaces to determine their compositions, temperatures and structures. A
+spectrometer is an optical instrument that splits the light received from objects into its compo-
+nent wavelengths; each chemical has a unique spectral signature and thus can be identified. The
+instrument obtains information over 352 contiguous wavelengths from 0.35 to 5.1 micrometers;
+it measures intensities of individual wavelengths and uses the data to infer the composition and
+other properties of the object that emitted the light. The mapping spectrometer provides images
+in which every pixel contains high-resolution spectra of the corresponding spot on the target
+body. Principal investigator is Dr. Robert H. Brown of the University of Arizona, Tucson, AZ.
+
+        q Composite Infrared Spectrometer will measure infrared emissions from atmos-
+pheres, rings and surfaces. This spectrometer will create vertical profiles of temperature and gas
+composition for the atmospheres of Titan and Saturn, from deep in their tropospheres (lower
+atmospheres), to high in their stratospheres (upper atmospheres). The instrument will also gath-
+er information on the thermal properties and composition of Saturn's rings and icy moons. The
+instrument is a coordinated set of three interferometers designed to measure infrared emissions
+over wavelengths from 7 to 1000 micrometers in the mid- and far-infrared range of the electro-
+magnetic spectrum. Each interferometer uses a beam splitter to divide incoming infrared light
+
+                                                    59
+into two paths. The beam splitter reflects half of the energy toward a moving mirror and trans-
+mits half to a fixed mirror. The light is recombined at the detector. As the mirror moves, differ-
+ent wavelengths of light alternately cancel and reinforce each other at a rate that depends on
+their wavelengths. This information can be used to construct an infrared spectrum. Principal
+investigator is Virgil G. Kunde of NASA's Goddard Space Flight Center, Greenbelt, MD.
+
+        q Ultraviolet Imaging Spectrograph is a set of detectors designed to measure ultravi-
+olet light reflected by or emitted from atmospheres, rings and surfaces to determine their com-
+positions, distributions, aerosol content and temperatures. The instrument will also measure
+fluctuations of sunlight and starlight as the Sun and stars move behind the rings of Saturn and
+the atmospheres of Saturn and Titan, and will determine the atmospheric concentrations of
+hydrogen and deuterium. The instrument includes a two-channel, far- and extreme-ultraviolet
+imaging spectrograph that studies light over wavelengths from 55.8 to 190 nanometers. It also
+has a hydrogen deuterium absorption cell and a high-speed photometer. An imaging spectro-
+graph records spectral intensity information in one or more wavelengths of light and then out-
+puts digital data that can be displayed in a visual form, such as a false-color image. The hydro-
+gen-deuterium absorption cell measures the quantity of deuterium, a heavier form of hydrogen.
+The high-speed phototmeter determines the radial structure of Saturn’s rings by watching
+starlight through the rings. Principal investigator is Dr. Larry L. Esposito of the University of
+Colorado, Boulder, CO.
+
+        q Cassini Radar will investigate the surface of Saturn's largest moon, Titan. Titan's
+surface is covered by a thick, cloudy atmosphere that is hidden to normal optical view, but can
+be penetrated by radar. The instrument is based on the same imaging radar technology used in
+missions such as Magellan to Venus and the Earth-orbiting Spaceborne Imaging Radar.
+Scientists hope to determine if oceans exist on Titan and, if so, determine their distribution;
+investigate the geological features and topography of Titan's solid surface; and acquire data on
+other targets, such as Saturn's rings and icy moons, as conditions permit.
+
+        The radar will take four types of observations: imaging, altimetry, backscatter and
+radiometry. In imaging mode, the instrument will bounce pulses of microwave energy off the
+surface of Titan from different incidence angles and record the time it takes the pulses to return
+to the spacecraft. These measurements, converted to distances by dividing by the speed of light,
+will allow construction of visual images of the target surface with a resolution ranging from one
+third of a kilometer to 1.7 kilometers (about one-fifth mile to one mile).
+
+        Radar altimetry similarly involves bouncing microwave pulses off the surface of the tar-
+get body and measuring the time it takes the "echo" to return to the spacecraft. In this case,
+however, the goal will not be to create visual images but rather to obtain numerical data on the
+precise altitude of surface features. The altimeter resolution is 24 to 27 kilometers horizontally,
+90 to 150 meters vertically (about 14 to 16 miles horizontally, 297 to 495 feet vertically).
+
+        In backscatter mode, the radar bounces pulses off Titan's surface and measures the
+intensity of the energy returning. This returning energy, or backscatter, is always less than the
+original pulse, because surface features inevitably reflect the pulse in more than one direction.
+
+                                                60
+From the backscatter measurements, scientists can draw conclusions about the composition and
+roughness of the surface.
+
+       In radiometry mode, the radar will operate as a passive instrument, simply recording the
+heat energy emanating from the surface of Titan. This information can be used to determine the
+amount of moisture (such as vapors of methane) in Titan's atmosphere, a factor that has an
+impact on the precision of the other measurements taken by the instrument.
+
+        At altitudes between 22,500 and 9,000 kilometers (about 14,000 to 5,600 miles), the
+radar will switch between scatterometry and radiometry to obtain low-resolution global maps of
+Titan's surface roughness, backscatter intensity and thermal emissions. At altitudes between
+9,000 and 4,000 kilometers (about 5,600 to 2,500 miles), the instrument will switch between
+altimetry and radiometry, collecting surface altitude and thermal emission measurements.
+Below 4,000 kilometers (about 2,500 miles), the radar will switch between imaging and
+radiometry. Team leader is Dr. Charles Elachi of NASA's Jet Propulsion Laboratory, California
+Institute of Technology, Pasadena, CA.
+
+        q Radio Science will use the spacecraft's radio and the ground antennas of NASA's
+Deep Space Network to study the composition, pressures and temperatures of the atmospheres
+and ionospheres of Saturn and Titan; the radial structure of and particle size distribution in
+Saturn's rings; and the masses of objects in the Saturn system and the mass of Saturn’s ring sys-
+tem as a whole. Radio science will also be used to search for gravitational waves coming from
+beyond our solar system. Some of these experiments measure Doppler shifts (frequency shifts)
+and other changes to radio signals that occur when the spacecraft passes behind planets, moons,
+atmospheres or physical features such as planetary rings. From these measurements, scientists
+can derive information about the structures and compositions of the occulting bodies, atmos-
+pheres and the rings. Team leader is Dr. Arvydas J. Kliore of NASA's Jet Propulsion
+Laboratory, California Institute of Technology, Pasadena, CA.
+
+        q Cassini Plasma Spectrometer will measure the composition, density, flow velocity
+and temperature of ions and electrons in Saturn's magnetosphere. The instrument consists of
+three sensors: an electron spectrometer, an ion beam spectrometer and an ion mass spectrome-
+ter. A motor-driven actuator rotates the sensor package to provide 208-degree scanning in the
+azimuth of the Cassini orbiter. The electron spectrometer makes measurements of the energy of
+incoming electrons; its energy range is 0.7 to 30,000 electronvolts. The ion beam spectrometer
+determines the energy to charge ratio of an ion; its energy range is 1 electronvolt to 50 kiloelec-
+tronvolts. The ion mass spectrometer's energy range is 1 electronvolt to 50 kiloelectronvolts.
+Principal investigator is Dr. David T. Young of the Southwest Research Institute, San Antonio,
+TX.
+
+        q Ion and Neutral Mass Spectrometer will determine the composition and structure
+of positive ion and neutral particles in the upper atmosphere of Titan and the magnetosphere of
+Saturn, and will measure the positive ion and neutral environments of Saturn's icy moons and
+rings. The instrument will determine the chemical, elemental and isotopic composition of the
+gaseous and volatile components of the neutral particles and the low energy ions in Titan's
+
+                                                    61
+atmosphere and ionosphere, Saturn's magnetosphere and the ring environment. Team leader is
+Dr. J. Hunter Waite of the Southwest Research Institute, San Antonio, TX.
+
+        q Cosmic Dust Analyzer will provide direct observations of small ice or dust particles
+in the Saturn system in order to investigate their physical, chemical and dynamic properties and
+study their interactions with the rings, icy moons and magnetosphere of Saturn. The instrument
+measures the amount, velocity, charge, mass and composition of tiny dust and ice particles. It
+has two types of sensors — high-rate detectors and a dust analyzer. The two high-rate detectors,
+intended primarily for measurements in Saturn's rings, count impacts up to 10,000 per second.
+The dust analyzer determines the electric charge carried by dust particles, the flight direction
+and impact speed, mass and chemical composition, at rates up to 1 particle per second, and for
+speeds of 1-100 kilometers per second (up to about 60 miles per second). An articulation mech-
+anism allows the entire instrument to be rotated or repositioned relative to the body of the
+Cassini orbiter. Principal investigator is Dr. Eberhard Grün of the Max Planck Institute für
+Kernphysik, Heidelberg, Germany.
+
+        q Dual Technique Magnetometer will determine the magnetic fields of the planet and
+moons and study dynamic interactions between different magnetic fields in the planetary envi-
+ronment. The instrument consists of direct-sensing instruments that detect and measure the
+strength of magnetic fields in the vicinity of the spacecraft. The experiment includes both a flux
+gate magnetometer and a vector/scalar helium magnetometer. They are used to measure the
+magnitude and direction of magnetic fields. Since magnetometers are sensitive to electric cur-
+rents and ferrous components, they are generally placed on an extended boom, as far from the
+spacecraft as possible. On Cassini, the flux gate magnetometer is located midway out on the 11-
+meter (36-foot) magnetometer boom, and the vector/scalar helium magnetometer is located at
+the end of the boom. The boom itself, composed of thin, nonmetallic rods, is folded during
+launch and deployed about two years after launch. The magnetometer electronics are in a bay in
+the Cassini orbiter's spacecraft body. Principal investigator is Dr. David J. Southwood of the
+Imperial College of Science & Technology, London, England.
+
+         q Magnetospheric Imaging Mass Spectrometer is designed to measure the composi-
+tion, charge state and energy distribution of energetic ions and electrons; detect fast neutral par-
+ticles; and conduct remote imaging of Saturn's magnetosphere. It is the first instrument ever
+designed to produce an image of a planetary magnetosphere. This information will be used to
+study the overall configuration and dynamics of the magnetosphere and its interactions with the
+solar wind, Saturn's atmosphere, Titan, rings and the icy moons. The instrument will provide
+images of the ionized gases, called plasma, surrounding Saturn and determine the charge and
+composition of ions. Like the Cassini plasma spectrometer, this instrument has three sensors
+that perform various measurements: the low-energy magnetospheric measurement system, the
+charge-energy-mass spectrometer and the ion and neutral camera. The low-energy magnetos-
+pheric measurement system will measure low- and high-energy proton, ion and electron angular
+distributions (the number of particles coming from each direction). The charge-energy-mass
+spectrometer uses an electrostatic analyzer, a time-of-flight mass spectrometer and microchan-
+nel plate detectors to measure the charge and composition of ions. The third sensor, the ion and
+neutral camera, makes two different types of measurements. It will obtain three-dimensional
+
+                                                62
+distributions, velocities and the rough composition of magnetospheric and interplanetary ions.
+Principal investigator is Dr. Stamatios M. Krimigis of Johns Hopkins University, Baltimore,
+MD.
+
+         q Radio and Plasma Wave Science instrument will measure electrical and magnetic
+fields in the plasma of the interplanetary medium and Saturn's magnetosphere, as well as elec-
+tron density and temperature. Plasma is essentially a soup of free electrons and positively
+charged ions, the latter being atoms that have lost one or more electrons. Plasma makes up most
+of the universe and is created by the heating of gases by stars and other bodies in space. Plasma
+is distributed by the solar wind; it is also "contained" by magnetic fields (that is, the magnetos-
+pheres) of bodies such as Saturn and Titan. The major components of the instrument are an
+electric field sensor, a magnetic search coil assembly and a Langmuir probe. The electric field
+sensor is made up of three deployable antenna elements mounted on the upper equipment mod-
+ule of the Cassini orbiter. Each element is a collapsible beryllium-copper tube that is rolled up
+during launch and subsequently unrolled to its 10-meter (about 33-foot) length by a motor
+drive. The magnetic search coils are mounted on a small platform attached to a support for
+Cassini's high-gain antenna. The Langmuir probe, which measures electron density and temper-
+ature, is a metallic sphere 50 millimeters (about 2 inches) in diameter. The probe is attached to
+the same platform by a 1-meter (about 3-foot) deployable boom. Principal investigator is Dr.
+Donald A. Gurnett of the University of Iowa, Iowa City, IA.
+
+Huygens Probe Instruments
+
+       The Huygens descent probe contains a total of six science instruments. They are:
+
+         q Descent Imager/Spectral Radiometer uses 13 fields of view, operating at wave-
+lengths of 350 to 1700 nanometers, to obtain a variety of imaging and spectral observations.
+Infrared and visible imagers will observe Titan's surface during the latter stages of the descent.
+Using the Huygens probe's rotation, the imagers will build a mosaic of pictures around the land-
+ing site. A side-looking visible imager will view the horizon and the underside of any cloud
+deck. The spectral radiometer will measure concentrations of argon and methane in the atmos-
+phere. It also will determine if the local surface is solid or liquid, and, if solid, its topography.
+Solar aureole sensors will measure the light intensity around the Sun resulting from scattering
+by particles suspended in the atmosphere, permitting calculations of their size, number and den-
+sity. Principal investigator is Dr. Martin G. Tomasko of the University of Arizona, Tucson, AZ.
+
+        q Huygens Atmospheric Structure Instrument investigates the physical properties of
+Titan's atmosphere, including temperature, pressure and atmospheric density as a function of
+altitude, wind gusts and, in the event of a landing on a liquid surface, wave motion. Comprising
+a variety of sensors, the instrument will also measure the ion and electron conductivity of the
+atmosphere and search for electromagnetic wave activity. On Titan's surface, the instrument will
+be able to measure the conductivity of surface material. The instrument also processes the sig-
+nal from the Huygens probe's radar altimeter to obtain information on surface topography,
+roughness and electrical properties. Principal investigator is Dr. Marcello Fulchignoni of the
+Paris Observatory, Meudon, France.
+
+                                                     63
+        q Aerosol Collector and Pyrolyzer traps particles suspended in Titan's atmosphere
+using a deployable sampling device. Samples are heated in ovens to vaporize the ice particles
+and decompose the complex organic materials into their component chemicals. The products
+are then passed to the gas chromatograph/mass spectrometer for analysis. The instrument will
+obtain samples at two altitude ranges. The first sample will be taken at altitudes down to 30
+kilometers (about 19 miles) above the surface. The second sample will be obtained at an alti-
+tude of about 20 kilometers (about 12 miles). Principal investigator is Dr. Guy M. Israel of the
+Service d’Aeronomie du Centre National de la Recherche Scientifique, Verrieres-le-Buisson,
+France.
+
+        q Gas Chromatograph/Mass Spectrometer provides a quantitative analysis of Titan's
+atmosphere. Atmospheric samples are transferred into the instrument by dynamic pressure as
+the Huygens probe descends through the atmosphere. The mass spectrometer constructs a spec-
+trum of the molecular masses of the gas driven into the instrument. Just before landing, the
+instrument's inlet port is heated to vaporize material on contact with the surface. Following a
+safe landing, the instrument can determine Titan's surface composition. The mass spectrometer
+serves as the detector for the gas chromatograph, for unseparated atmospheric samples and for
+samples provided by the aerosol collector and pyrolyzer. Portions of the instrument are identical
+in design to the Cassini orbiter's ion and neutral mass spectrometer. Principal investigator is Dr.
+Hasso B. Neimann of NASA's Goddard Space Flight Center, Greenbelt, MD.
+
+        q Doppler Wind Experiment uses two ultrastable oscillators, one on the Huygens
+probe and one on the Cassini orbiter, to give Huygens' radio relay link a stable carrier frequen-
+cy. Orbiter measurements of changes in probe frequency caused by Doppler shift will provide
+information on the probe's motion. In turn, scientists will be able to derive a height profile of
+the zonal wind (the component of wind along the line of sight) and its turbulence. Principal
+investigator is Dr. Michael K. Bird of the University of Bonn, Germany.
+
+        q Surface Science Package contains a number of sensors to determine the physical
+properties and composition of Titan's surface. An acoustic sounder measures the rate of descent,
+surface roughness and the speed of sound in any liquid. During descent, measurements of the
+speed of sound will give information on atmospheric composition and temperature. An
+accelerometer records the deceleration profile at impact, indicating the hardness of the surface.
+Tilt sensors (liquid-filled tubes with electrodes) measure any pendulum motion of the Huygens
+probe during descent, indicate the Huygens probe orientation after landing and measure any
+wave motion. If the surface is liquid, other sensors measure its density, temperature, refractive
+index, thermal conductivity, heat capacity and electrical properties. A group of platinum resis-
+tance wires, through two of which a heating current can be passed, will measure temperature
+and thermal conductivity of the surface and lower atmosphere and the heat capacity of the sur-
+face material. If the probe lands in liquid, a transducer, pointed downward and operating at 15
+kilohertz, will conduct an acoustic sounding of the liquid's depth. The instrument will also pro-
+vide some crude topographic mapping of the surface as the probe descends the last few meters
+(or yards) through the atmosphere. Principal investigator is Dr. John C. Zarnecki of the
+University of Kent, England.
+
+                                                64
+                         Cassini's Nuclear Safety
+        The Cassini spacecraft derives its electrical power from radioisotope thermoelectric gen-
+erators (RTGs), lightweight, compact spacecraft power systems that are extraordinarily reliable.
+RTGs are not nuclear reactors and have no moving parts. They use neither fission nor fusion
+processes to produce energy. Instead, they provide power through the natural radioactive decay
+of plutonium (mostly Pu-238, a non-weapons-grade isotope). The heat generated by this natural
+process is changed into electricity by solid-state thermoelectric converters.
+
+         RTGs enable spacecraft to operate at significant distances from the Sun or in other areas
+where solar power systems would not be feasible. They remain unmatched for power output,
+reliability and durability by any other power source for missions to the outer solar system.
+
+        The United States has an outstanding record of safety in using RTGs on 23 missions
+over the past 30 years. While RTGs have never caused a spacecraft failure on any of these mis-
+sions, they have been onboard three missions which experienced malfunctions for other rea-
+sons. In all cases, the RTGs performed as designed.
+
+        More than three decades have been invested in the engineering, safety analysis and test-
+ing of RTGs. Safety features are incorporated into the RTG design, and extensive testing has
+demonstrated that they can withstand physical conditions more severe than those expected from
+most accidents.
+
+
+                        Aluminum                                      Plutonium Dioxide
+      Cooling           Outer Shell                                   Heat Source
+      Tubes
+
+
+
+
+           Multi-Foil
+           Insulation                          Thermocouple
+
+
+                              Radioisotope thermoelectric generator (RTG)
+
+                                                    65
+        First, the fuel is in the heat-resistant, ceramic form of plutonium dioxide, which reduces
+its chance of vaporizing in fire or reentry environments. This ceramic-form fuel is also highly
+insoluble, has a low chemical reactivity, and primarily fractures into large, non-respirable parti-
+cles and chunks. These characteristics help to mitigate the potential health effects from acci-
+dents involving the release of this fuel.
+
+        Second, the fuel in each RTG is divided among 18 small, independent modular units,
+each with its own heat shield and impact shell. This design reduces the chances of fuel release
+in an accident because all modules would not be equally impacted in an accident.
+
+        Third, multiple layers of protective materials, including iridium capsules and high-
+strength graphite blocks, are used to protect the fuel and prevent its accidental release. Iridium
+metal has a very high melting point and is strong, corrosion-resistant and chemically compatible
+with plutonium dioxide. These characteristics make iridium useful for protecting and containing
+each fuel pellet. Graphite is used because it is lightweight and highly heat-resistant.
+
+       Potential RTG accidents are sometimes mistakenly equated with accidents at nuclear
+power plants. It is completely inaccurate to associate an RTG accident with Chernobyl or any
+other past radiation accident involving nuclear fission. RTGs do not use either a fusion or fis-
+sion process, and could never explode like a nuclear bomb under any accident scenario. Neither
+could an accident involving an RTG create the kind of radiation sickness associated with
+nuclear explosions.
+
+        NASA and the Department of Energy, the producer of the RTGs, place the highest prior-
+ity on assuring the safe use of plutonium in space. Thorough and detailed safety analyses are
+conducted before launching spacecraft with RTGs, and many prudent steps are taken to reduce
+the risks involved in missions using RTGs. In addition to NASA's internal safety requirements
+and reviews, NASA missions that carry nuclear material also undergo an extensive external
+safety review involving detailed testing and analysis. Further, an independent safety evaluation
+of the Cassini mission has been performed as part of the nuclear launch safety approval process
+by an Interagency Nuclear Safety Review Panel (INSRP), which is supported by experts from
+government, industry and academia.
+
+Alternatives
+
+        Studies conducted by NASA's Jet Propulsion Laboratory (JPL) have concluded that nei-
+ther fuel cells nor spacecraft batteries demonstrate the operational life needed for planetary mis-
+sions, whose duration can exceed 10 years from launch. In addition, the large mass of batteries
+that would be needed to power a mission such as Cassini exceeds current launch vehicle lift
+capabilities.
+
+        JPL's rigorous analysis has also taken into account the advances in solar power tech-
+nologies that have occurred over the last decade. The conclusion reached by JPL researchers is
+that solar technology is still not capable of providing sufficient and reliable electrical power for
+the Cassini mission. The mass of solar arrays required would make the spacecraft too heavy for
+
+                                                 66
+available launch vehicles. Even if a sufficiently powerful launch vehicle were available for an
+all-solar Cassini, other limitations exist with current and near-term solar technologies.
+
+       The behavior of solar cells at vast distances from the Sun is not well understood and
+would add significant risk to the success of a solar-powered mission to Saturn. Saturn is located
+approximately 1.42 billion kilometers (882 million miles) from the Sun, nearly twice as far
+from the Sun as Jupiter, the next closest planet.
+
+       The size of solar arrays that would be needed, about the size of two tennis courts, would
+not only be difficult to deploy reliably, but would make turns and other critical maneuvers
+extraordinarily difficult to perform. This would severely inhibit Cassini's ability to achieve its
+science objectives.
+
+       The large arrays would seriously interfere with the fields of view of many of the science
+experiments and navigation sensors, further limiting the Cassini mission's ability to achieve the
+science objectives.
+
+       Large arrays could generate serious electromagnetic and electrostatic interference, which
+would adversely impact the operation of the science experiments and the Cassini spacecraft's
+communications equipment and computers.
+
+Cassini's Earth Swingby
+
+        By aiming a spacecraft so that it passes close to a planet or moon, it is possible to boost
+the spacecraft on to still more distant destinations with greater velocity. This gravity-assist
+maneuver has become an established method of launching massive, instrument-laden spacecraft
+to the outer planets. Cassini will make use of this technique when it swings by Venus twice,
+then the Earth and Jupiter to reach its ultimate destination of Saturn.
+
+        The Earth swingby does not represent a substantial risk to Earth's population because
+the probability of a reentry during the maneuver is extremely low, less than one in one million.
+NASA's robotic planetary spacecraft have performed numerous similar maneuvers with extraor-
+dinary precision. The redundant design of Cassini's systems and navigational capability allows
+control of the swingby altitude at Earth to within an accuracy of 3 to 5 kilometers (2 to 3 miles)
+at an altitude of 800 kilometers (500 miles) or higher.
+
+         In addition, NASA has taken specific actions to design the spacecraft and mission in
+such a way as to ensure the probability of Earth impact is less than one in one million. For
+example, until seven days before the Earth swingby, the spacecraft is on a trajectory that, with-
+out any further maneuvers, would miss the Earth by thousands of kilometers. This trajectory
+strictly limits the possibility that random external events, such as a micrometeoroid puncture of
+a spacecraft propellant tank, might lead to Earth impact.
+
+
+
+
+                                                    67
+Radiation Hazards of Plutonium-238
+
+        Plutonium-238 gives off short-range alpha particles, helium nuclei that usually travel no
+more than about three inches in air. While the fuel is contained within its iridium capsule, the
+alpha radiation does not present a hazard, and the external dose resulting from the low levels of
+gamma and neutron radiation associated with the plutonium dioxide RTG fuel generally do not
+represent a significant health hazard. External alpha radiation would be stopped by clothing, an
+outer layer of unbroken skin, or even a sheet of paper. The point at which Pu-238 can become a
+health hazard is when it is deposited into the body in tiny particle form and becomes lodged
+there.
+
+        If an individual were to inhale plutonium dioxide particles of a sufficiently small size to
+be deposited and retained in proximity to lung tissue, the alpha radiation could lead to forms of
+cancer. The ceramic form of plutonium used in RTGs, however, is made to inhibit the fuel from
+shattering into fine particles that could be readily inhaled.
+
+         The ceramic form of plutonium dioxide fuel also has low solubility in water, so it has
+little potential to migrate in groundwater or be taken up by plants. Plutonium dioxide also is
+highly insoluble in the human digestive system.
+
+       A common misconception is that a small amount of plutonium, such as one pound, if
+evenly distributed over the entire world, could induce lung cancer in every person on Earth.
+While plutonium can alter or kill living cells if deposited directly onto sensitive human tissue,
+the important point is that it must be in a form that enables environmental transport and intake
+by humans. Research has demonstrated that the mechanisms of plutonium dispersion into and
+transport through the environment, and hence into humans, are extremely difficult and ineffi-
+cient.
+
+       Even in the highly unlikely release of plutonium dioxide from Cassini's RTGs in the
+event of an accident, independently reviewed analysis shows that the radiation hazard to the
+average exposed individual would be minuscule, about 1/15,000 of the lifetime exposure a per-
+son receives from natural radiation sources.
+
+
+
+
+                                                68
+                        The International Team
+        The Cassini program is an international cooperative effort involving NASA, the
+European Space Agency (ESA) and the Italian Space Agency, Agenzia Spaziale Italiana (ASI),
+as well as several separate European academic and industrial contributors. The Cassini partner-
+ship represents an undertaking whose scope and cost would not likely be borne by any single
+nation, but it made possible through shared investment and participation. Hundreds of scientists
+and engineers from 16 European countries and 33 U.S. states make up team that developed and
+will fly and receive data from Cassini and Huygens.
+
+       In the United States, the mission is managed for NASA’s Office of Space Science by the
+Jet Propulsion Laboratory (JPL), Pasadena, CA. JPL is a division of the California Institute of
+Technology. At JPL, Richard J. Spehalski is the Cassini program manager, and Ronald F.
+Draper is the deputy program manager. Dr. Dennis L. Matson is the Cassini project scientist and
+Dr. Linda J. Spilker is the deputy project scientist. Thomas R. Gavin is spacecraft system man-
+ager, William G. Fawcett is science instruments manager, Charles E. Kohlhase is science and
+mission design manager, and Peter E. Doms is mission and science operations manager.
+
+        At NASA Headquarters, Mark Dahl is Cassini program executive and Henry C. Brinton
+is Cassini program scientist.
+
+        The major U.S. contractor is Lockheed Martin, whose contributions include the launch
+vehicle and upper stage, spacecraft propulsion module and the radioisotope thermoelectric gen-
+erators. NASA’s Lewis Research Center managed development of the Centaur upper stage.
+
+      Development of the Huygens Titan probe is managed by the European Space
+Technology and Research Center (ESTEC). ESTEC's prime contractor, Aerospatiale in
+Toulouse, France, assembled the probe with equipment supplied by many European countries.
+Huygens' batteries and two scientific instruments came from the United States. At ESA, Hamid
+Hassan is Huygens project manager, and Dr. Jean-Pierre Lebreton is project scientist.
+
+       At ASI, Enrico Flameni is the project manager for Cassini's radio antenna and other
+contributions to the spacecraft.
+
+        The U.S. Department of Energy provided Cassini’s radioisotope thermoelectric genera-
+tors. Beverly Cook is program manager for radioisotope power systems at DOE's Office of
+Space Power Systems, Germantown, MD.
+
+      The U.S. Air Force provided the Titan IV/Centaur launch vehicle. Launch operations are
+managed by the 45th Space Wing, Cape Canaveral, FL, under the command of Brig. Gen.
+Randy Starbuck.
+
+10-6-97
+
+
+
+
+                                                   69
+

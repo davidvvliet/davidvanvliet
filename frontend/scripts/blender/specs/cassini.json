@@ -1,0 +1,775 @@
+{
+  "title": "Cassini",
+  "logos": [
+    "nasa",
+    "jpl"
+  ],
+  "note": "Cassini-Huygens as launched: Huygens probe attached, magnetometer boom and the three RPWS antennas deployed. Frame = the Cassini spacecraft (AACS body) frame from the NAIF frames kernel: HGA boresight -Z, main engine exhaust +Z, Huygens on -X, remote sensing pallet on +X, magnetometer boom along +Y. The NASA reference model is the same frame turned 180 degrees about Y (its dish is at +z, Huygens at +x).",
+  "sources": [
+    {
+      "id": "pds_insthost",
+      "title": "PDS Cassini orbiter instrument host catalog (INSTHOST.CAT, COUVIS_0001)",
+      "url": "https://pds-rings.seti.org/holdings/volumes/COUVIS_0xxx/COUVIS_0001/CATALOG/INSTHOST.CAT",
+      "read": "2026-11-01",
+      "licence": "public domain (NASA PDS)",
+      "saved": "refs/cassini/sources/pds_insthost.txt"
+    },
+    {
+      "id": "naif_fk",
+      "title": "NAIF Cassini frames kernel cas_v43.tf",
+      "url": "https://naif.jpl.nasa.gov/pub/naif/CASSINI/kernels/fk/cas_v43.tf",
+      "read": "2026-11-01",
+      "licence": "public domain (NASA PDS/NAIF)",
+      "saved": "refs/cassini/sources/naif_fk.txt"
+    },
+    {
+      "id": "launch_kit",
+      "title": "Cassini Launch Press Kit, NASA/JPL, October 1997",
+      "url": "https://www.jpl.nasa.gov/news/press_kits/cassini.pdf",
+      "read": "2026-11-01",
+      "licence": "public domain (NASA/JPL)",
+      "saved": "refs/cassini/sources/launch_kit.txt"
+    },
+    {
+      "id": "arrival_kit",
+      "title": "Cassini-Huygens Saturn Arrival Press Kit, NASA/JPL, June 2004",
+      "url": "https://www.jpl.nasa.gov/news/press_kits/cassini-arrival.pdf",
+      "read": "2026-11-01",
+      "licence": "public domain (NASA/JPL)",
+      "saved": "refs/cassini/sources/arrival_kit.txt"
+    },
+    {
+      "id": "descanso",
+      "title": "Cassini Orbiter/Huygens Probe Telecommunications, DESCANSO Design and Performance Summary Series, JPL, January 2002",
+      "url": "https://descanso.jpl.nasa.gov/DPSummary/Descanso3--Cassini2.pdf",
+      "read": "2026-11-01",
+      "licence": "not stated ('carried out at the Jet Propulsion Laboratory, California Institute of Technology, under a contract with the National Aeronautics and Space Administration'): quoted, not kept"
+    },
+    {
+      "id": "jones1997",
+      "title": "Jones & Giovagnoli, The Huygens Probe System Design, ESA (PSA copy)",
+      "url": "https://archives.esac.esa.int/psa/ftp/CASSINI-HUYGENS/HUYGENS_HK/HP-SSA-HK-2-3-V1.0/DOCUMENT/PUBLICATIONS/JONES1997.PDF",
+      "read": "2026-11-01",
+      "licence": "not stated: quoted, not kept"
+    },
+    {
+      "id": "nasa_3d_cassini",
+      "title": "NASA 3D Resources: Cassini-Huygens (A)",
+      "url": "https://github.com/nasa/NASA-3D-Resources/tree/master/3D%20Models/Cassini-Huygens%20(A)",
+      "read": "2026-11-01",
+      "licence": "'These assets are free and without copyright.' (repo README)",
+      "credit": "NASA 3D Resources, Cassini-Huygens model (layout reference): https://github.com/nasa/NASA-3D-Resources; NASA 3D Resources, Cassini-Huygens (A): propulsion module blanket and black panels copied into refs/cassini/meshes/"
+    },
+    {
+      "id": "nasa_3d_cassini_asm",
+      "title": "NASA 3D Resources: Cassini Assembly",
+      "url": "https://github.com/nasa/NASA-3D-Resources/tree/master/3D%20Models/Cassini%20Assembly",
+      "read": "2026-11-01",
+      "licence": "'These assets are free and without copyright.' (repo README)",
+      "credit": "NASA 3D Resources, Cassini Assembly model: shapes of the HGA deck, LGA1 and feed cluster copied into refs/cassini/meshes/"
+    },
+    {
+      "id": "pia04603",
+      "title": "NASA/JPL PIA04603, Cassini Spacecraft in a JPL Assembly Room (1997)",
+      "url": "https://science.nasa.gov/photojournal/cassini-spacecraft-in-a-jpl-assembly-room/",
+      "read": "2026-11-01",
+      "licence": "public domain (NASA/JPL); page credit: 'Credits: NASA/JPL'",
+      "credit": "NASA/JPL, PIA04603 (blanket and antenna colours)"
+    },
+    {
+      "id": "feis",
+      "title": "Final Environmental Impact Statement for the Cassini Mission, chapter 2 (NASA, 1995)",
+      "url": "https://assets.science.nasa.gov/content/dam/science/psd/solar/2023/09/c/chap2.pdf",
+      "read": "2026-11-02",
+      "licence": "public domain (NASA)",
+      "saved": "refs/cassini/sources/feis.txt",
+      "credit": "NASA/JPL, Cassini spacecraft diagram (Final EIS Figure 2-4, source JPL 1993a), layout reference: refs/cassini/jpl-diagram.png"
+    },
+    {
+      "id": "iaf94",
+      "title": "Bennett, Hemler & Schock, Development and Use of the Galileo and Ulysses Power Sources, IAF-94-R.1.362 (OSTI 1033366)",
+      "url": "https://www.osti.gov/servlets/purl/1033366/",
+      "read": "2026-11-02",
+      "licence": "'For permission to copy or republish, contact the International Astronautical Federation': quoted, not kept"
+    },
+    {
+      "id": "huygens_um",
+      "title": "Huygens User Manual Description, Aerospatiale, HUY.AS/c.100.OP.0201 issue 04 rev B (1997), ESA PSA copy",
+      "url": "https://archives.esac.esa.int/psa/ftp/CASSINI-HUYGENS/HUYGENS_HK/HP-SSA-HK-2-3-V1.0/DOCUMENT/USERMANUEL/HUYGENS-USER-MANUAL.PDF",
+      "read": "2026-11-02",
+      "licence": "not stated: quoted, not kept"
+    },
+    {
+      "id": "aedb",
+      "title": "Huygens Entry Module Aerodynamic Database, EADS, HUY.EADS.MIS.RE.0002 (2004), ESA PSA copy",
+      "url": "https://archives.esac.esa.int/psa/ftp/CASSINI-HUYGENS/HUYGENS_HK/HP-SSA-HK-2-3-V1.0/DOCUMENT/AEDB/EADS-ST_HUYGENS_AEDB.PDF",
+      "read": "2026-11-02",
+      "licence": "not stated: quoted, not kept"
+    },
+    {
+      "id": "takashima",
+      "title": "Takashima et al., Prediction of the Aerothermodynamic Environment of the Huygens Probe (NASA Langley, NTRS 20050182949)",
+      "url": "https://ntrs.nasa.gov/api/citations/20050182949/downloads/20050182949.pdf",
+      "read": "2026-11-02",
+      "licence": "'This material is declared a work of the U. S. Government and is not subject to copyright protection in the United States'",
+      "saved": "refs/cassini/sources/takashima.txt"
+    },
+    {
+      "id": "descanso8",
+      "title": "Imbriale, Gatti & Mizzoni, The Orbiters, DESCANSO Monograph 8 ch.5 (JPL), §5.3 The Cassini High-Gain Antenna Subsystem",
+      "url": "https://descanso.jpl.nasa.gov/monograph/series8/Descanso8_05.pdf",
+      "read": "2026-11-02",
+      "licence": "not stated: quoted, not kept"
+    },
+    {
+      "id": "henry",
+      "title": "Henry, An Introduction to the Design of the Cassini Spacecraft (JPL)",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/4/4f/Design-of-the-cassini-spacecraft.pdf",
+      "read": "2026-11-02",
+      "licence": "not stated: quoted, not kept"
+    },
+    {
+      "id": "schock1990",
+      "title": "Schock, Noravian, Or & Sankarankandath, Design and Analysis of RTGs for CRAF and Cassini Missions, Fairchild Space FSC-ESD-217-90-469, 8 October 1990 (OSTI 1047828)",
+      "url": "https://www.osti.gov/biblio/1047828",
+      "read": "2026-11-02",
+      "licence": "no licence stated on the report or its OSTI page: quoted, not kept"
+    },
+    {
+      "id": "mag_ug",
+      "title": "Hanying Wei, Cassini Magnetometer Planetary Data System User's Guide (PDS PPI, COMAG_4002)",
+      "url": "https://pds-ppi.igpp.ucla.edu/archive1/COMAG_4002/DOCUMENT/USER_GUIDE/CASSINI_MAG_USER_GUIDE-131008.PDF",
+      "read": "2026-11-02",
+      "licence": "no licence stated in the document: quoted, not kept"
+    },
+    {
+      "id": "gurnett2004",
+      "title": "Gurnett et al., The Cassini Radio and Plasma Wave Investigation, Space Science Reviews 114: 395-463, 2004 (University of Iowa RPWS archive copy)",
+      "url": "https://space.physics.uiowa.edu/pds/cassini-rpws-electron_density/document/Gurnett-etal-SSR-2004-A1b.pdf",
+      "read": "2026-11-02",
+      "licence": "'2004 Kluwer Academic Publishers': quoted, not kept"
+    }
+  ],
+  "reference_model": {
+    "url": "https://github.com/nasa/NASA-3D-Resources/tree/master/3D%20Models/Cassini-Huygens%20(A)",
+    "source": "nasa_3d_cassini",
+    "note": "NASA 3D Resources 'Cassini-Huygens (A)', 1.66 MB, 25.7k triangles, metres, textured, Huygens attached, boom and antennas deployed. Against the documents: HGA 3.998 m (4 m), stack 6.53 m tip to tip (6.7 / 6.8 m, -3 to -4%), boom tip 11.07 m from the stack axis (11 m boom), Huygens shield 2.615 m (2.7 m, -3%), antennas 9.84-9.92 m (10 m). 'Cassini Assembly' (same repo, source nasa_3d_cassini_asm) is the same layout in inches (dish 157.48 in), 454k triangles, untextured: kept for measuring small parts."
+  },
+  "dimensions": {
+    "hga_diameter": {
+      "value": 4.0,
+      "object": "hga",
+      "measure": "diameter",
+      "source": "descanso",
+      "quote": "The Cassini HGA is a Cassegrain system, with a 4-m diameter parabolic primary reflector",
+      "also": "pds_insthost: 'Its maximum diameter, the diameter of the HGA, was 4 meters'; NASA model 3.998 m."
+    },
+    "height": {
+      "value": 6.8,
+      "object": [
+        "hga_deck",
+        "engines"
+      ],
+      "measure": "z",
+      "source": "pds_insthost",
+      "quote": "The spacecraft stood 6.8 meters (22.3 ft) high.",
+      "also": "launch_kit p.46 and arrival_kit p.46: '6.8 meters (22.3 feet) high'.",
+      "conflict": "launch_kit p.8 and arrival_kit p.6 Quick Facts: '6.7 meters (22 feet) high'. NASA model: 6.53 m."
+    },
+    "rpws_antenna_length": {
+      "value": 10.0,
+      "object": "rpws_1",
+      "measure": "length",
+      "source": "naif_fk",
+      "quote": "The RPWS electric antenna system is a triad of 10-meter conducting monopoles",
+      "also": "launch_kit p.63: 'unrolled to its 10-meter (about 33-foot) length'; NASA model 9.84-9.92 m. gurnett2004: 'each 10 m long'."
+    },
+    "huygens_diameter": {
+      "value": 2.7,
+      "object": "huygens_shield",
+      "measure": "diameter",
+      "source": "jones1997",
+      "quote": "The 79 kg, 2.7 m diameter, 60° half-angle coni-spherical Front Shield",
+      "also": "launch_kit p.52: 'A front shield, 2.7 meters (8.8 feet) in diameter'; descanso p.1: 'Titan probe (2.7 m diameter)'. NASA model 2.615 m."
+    },
+    "lga2_length": {
+      "value": 0.335,
+      "object": "lga2",
+      "measure": "length",
+      "source": "descanso",
+      "quote": "LGA-2 ... 6.4-cm diameter, 33.5-cm length (max)"
+    },
+    "rtg_length": {
+      "value": 1.14,
+      "object": "rtg_1",
+      "measure": "y",
+      "source": "feis",
+      "quote": "is approximately 114 cm (44.9 in.) long and 42 cm (16.5 in.) in diameter",
+      "also": "iaf94 p.2: 'the length is 114 cm' (same GPHS-RTG design, 'planned to be used on the Cassini spacecraft'); schock1990 p.1: 'Each 1.15 m-long RTG'. NASA model A: 1.089 m; NASA assembly model body: 1.124 m.",
+      "note": "rtg_1 lies along y; its mount bracket is the separate object rtg_mount_1"
+    },
+    "rtg_fin_span": {
+      "value": 0.422,
+      "object": "rtg_1",
+      "measure": "x",
+      "source": "iaf94",
+      "quote": "Overall diameter of the converter with fins is 42.2 cm",
+      "also": "feis p.2-13: '42 cm (16.5 in.) in diameter'",
+      "note": "rtg_1 lies along y, so its x extent is the span across two opposite fins"
+    },
+    "huygens_depth": {
+      "value": 0.985,
+      "object": [
+        "huygens_shield",
+        "huygens_back_cover"
+      ],
+      "measure": "x",
+      "source": "huygens_um",
+      "quote": "Fig 2.2-5 'Probe overall dimensions in launch configuration' (PDF p.52): 375 from the separation plane to the front shield nose, 610 from the plane to the back cover top",
+      "note": "the sum of the two drawing dimensions"
+    },
+    "huygens_descent_height": {
+      "value": 0.636,
+      "object": "huygens_descent",
+      "measure": "x",
+      "source": "huygens_um",
+      "quote": "Fig 2.2-6 'Probe overall dimensions in descent configuration' (PDF p.53): overall 636, fore dome 272, experiment platform (73), top platform (25), 261 between them"
+    },
+    "huygens_platform_diameter": {
+      "value": 1.3,
+      "object": "huygens_ring",
+      "measure": "diameter",
+      "source": "huygens_um",
+      "quote": "'the 73 mm thick aluminium honeycomb sandwich called Experiment platform' (p.20); Alcatel post-flight analysis HUY.ASPI.MIS.RE.0002 p.26 (copyright, quoted only): 'The maximum diameter of the experiment platform as report on the following figure is 1300mm'"
+    },
+    "hga_depth": {
+      "value": 0.7605,
+      "object": "hga",
+      "measure": "z",
+      "source": "descanso8",
+      "quote": "Fig. 5-34 'Selected Cassini HGA optics geometry' (p.264): 'F = 1315 mm', 'D = 4000 mm'; p.260: 'a 4-m maximum reflector diameter and a focal length to diameter ratio lower than 0.33'",
+      "note": "depth of a paraboloid D^2/16F = 4000^2/(16 x 1315) mm; the check measures the shell, 20 mm thick",
+      "also": "NASA assembly model (nasa_3d_cassini_asm): its dish surface fits a paraboloid of focal length 1.34 m, 0.745 m deep. NASA model A is only 0.562 m deep."
+    },
+    "mag_fgm_distance": {
+      "value": 5.814,
+      "measure": "distance",
+      "from": {
+        "object": "mag_fgm",
+        "at": "centre"
+      },
+      "to": {
+        "object": "hga",
+        "at": "centre"
+      },
+      "axis": "y",
+      "source": "mag_ug",
+      "quote": "The two FGM sensors are mounted midway along the magnetometer boom (5.814 m from the spacecraft centre)",
+      "note": "distance along y from the stack axis (the HGA's centre)"
+    },
+    "mag_vhm_distance": {
+      "value": 11.015,
+      "measure": "distance",
+      "from": {
+        "object": "mag_vhm",
+        "at": "centre"
+      },
+      "to": {
+        "object": "hga",
+        "at": "centre"
+      },
+      "axis": "y",
+      "source": "mag_ug",
+      "quote": "the V/SHM sensor is mounted at the end of the boom (11.015 m from the spacecraft centre)",
+      "note": "distance along y from the stack axis (the HGA's centre)"
+    },
+    "rpws_antenna_diameter": {
+      "value": 0.0286,
+      "object": "rpws_1",
+      "measure": "diameter",
+      "source": "gurnett2004",
+      "quote": "The antenna elements consist of conducting cylinders, each 10 m long and 2.86 cm in diameter."
+    },
+    "lga2_diameter": {
+      "value": 0.064,
+      "object": "lga2",
+      "measure": "diameter",
+      "source": "descanso",
+      "quote": "LGA-2 ... 6.4-cm diameter, 33.5-cm length (max)"
+    }
+  },
+  "facts": {
+    "frame": {
+      "value": "HGA -Z, engines +Z, Huygens -X, remote sensing pallet +X looking -Y, mag boom +Y",
+      "sources": [
+        {
+          "source": "naif_fk",
+          "quote": "The -X-axis points towards the Huygens probe. The Y-axis is mutually perpendicular to the X and Z axes, with the +Y axis oriented along the magnetometer boom."
+        },
+        {
+          "source": "pds_insthost",
+          "quote": "the HGA boresight was in the -Z direction, the main engine exhaust was in the +Z"
+        },
+        {
+          "source": "naif_fk",
+          "quote": "the remote sensing pallet on the +X side of the Cassini spacecraft"
+        }
+      ]
+    },
+    "frame_origin": {
+      "value": "centre of the joint between the 12-bay bus and the upper equipment module upper shell; +Z on the propulsion module side",
+      "sources": [
+        {
+          "source": "naif_fk",
+          "quote": "lies at the center of the field joint between the bus and the upper"
+        }
+      ]
+    },
+    "stack_order": {
+      "value": "from -Z: HGA, upper equipment module (12-bay bus), propulsion module, lower equipment module; pallets and Huygens on the sides",
+      "sources": [
+        {
+          "source": "pds_insthost",
+          "quote": "The main body of the spacecraft was formed by a stack consisting of the lower equipment module, the propulsion module, the upper equipment module, and the HGA."
+        },
+        {
+          "source": "pds_insthost",
+          "quote": "(UEM) which contained the 12-bay electronics bus assembly"
+        }
+      ]
+    },
+    "rpws_layout": {
+      "value": "two antennas in a 120 degree V either side of the boom, in a plane tilted 37 degrees up from X-Y; the third down in the Y-Z plane, 37 degrees from +Z",
+      "sources": [
+        {
+          "source": "naif_fk",
+          "quote": "Two of the elements are extended in a 120-degree \"V\" on either side of the magnetometer boom (i.e., the S/C Y-axis) and in a plane which is rotated up from the S/C X-Y plane containing the magnetometer boom by 37 degrees."
+        },
+        {
+          "source": "naif_fk",
+          "quote": "extended downward in the S/C Y-Z plane at an angle of 37 degrees from the S/C +Z axis"
+        }
+      ]
+    },
+    "rtg_count": {
+      "value": 3,
+      "sources": [
+        {
+          "source": "pds_insthost",
+          "quote": "three Radioisotope Thermoelectric Generators (RTGs)"
+        }
+      ]
+    },
+    "main_engines": {
+      "value": 2,
+      "sources": [
+        {
+          "source": "pds_insthost",
+          "quote": "the PMS had a primary and redundant pressure-regulated main rocket engine"
+        }
+      ]
+    },
+    "rcs_clusters": {
+      "value": "4 clusters of 4 thrusters, at the base next to the lower equipment module",
+      "sources": [
+        {
+          "source": "pds_insthost",
+          "quote": "four thruster clusters mounted off the PMS core structure adjacent to the LEM at the base of the spacecraft. Each of the clusters contained 4 hydrazine thrusters."
+        }
+      ]
+    },
+    "mag_sensors": {
+      "value": "flux-gate magnetometer midway along the boom, vector/scalar helium magnetometer at the tip",
+      "sources": [
+        {
+          "source": "arrival_kit",
+          "quote": "the flux gate magnetometer is located midway out on the 11-meter (36-foot) magnetometer boom, and the vector/scalar helium magnetometer is located at the end of the boom"
+        }
+      ]
+    },
+    "lga1": {
+      "value": "on top of the HGA feed",
+      "sources": [
+        {
+          "source": "descanso",
+          "quote": "(LGA1) is mounted directly atop the S-band feed."
+        }
+      ]
+    },
+    "lga2": {
+      "value": "on a boom below Huygens, pointing -X",
+      "sources": [
+        {
+          "source": "descanso",
+          "quote": "LGA2 is mounted on a boom below the Huygens Probe, pointed along the spacecraft -x-axis."
+        }
+      ]
+    },
+    "huygens_shield": {
+      "value": "60 degree half-angle sphere-cone, nose radius 1.25 m, shoulder radius 0.0486 m",
+      "sources": [
+        {
+          "source": "jones1997",
+          "quote": "60° half-angle coni-spherical Front Shield"
+        },
+        {
+          "source": "aedb",
+          "quote": "Table 1 p.9: 'Maximum diameter/Reference Length 2.7 m; Nose radius 1.2501 m; Heat shield half cone angle 60°; Shoulder radius 0.0486 m'"
+        },
+        {
+          "source": "takashima",
+          "quote": "'a 2.700 m diameter, 60-deg sphere-cone configuration with an open back face. The nose radius is 1.250 m'"
+        }
+      ]
+    },
+    "blankets": {
+      "value": "shiny amber or matte black multilayer blankets over most of the spacecraft",
+      "sources": [
+        {
+          "source": "launch_kit",
+          "quote": "Most of the spacecraft and its instrument housings are covered with multiple-layered, shiny amber-colored or matte-black blanket-"
+        },
+        {
+          "source": "launch_kit",
+          "quote": "The translucent Kapton has a yellow color, and when backed by a shiny aluminum layer, results in an amber appearance."
+        }
+      ]
+    },
+    "huygens_back_cover": {
+      "value": "stepped cone: Ø1790 base, 151.5 up, 45 x 45 chamfer, then Ø1249.8, Ø686.6 at 17.8° and a Ø321.7 flat top at 10°, 610 above the separation plane; aluminium shell under Prosial",
+      "sources": [
+        {
+          "source": "huygens_um",
+          "quote": "Fig 2.2-5 dimensions; p.14: the back cover is 'an aluminium stiffened shell protected by Prosial'"
+        }
+      ],
+      "note": "the height of the Ø1249.8 step is not labelled: placed from the 17.8° and 10° angles"
+    },
+    "huygens_descent": {
+      "value": "aluminium fore dome and after cone joined at the central ring, experiment platform at the ring, top platform on the after cone; 36 spin vanes on the fore dome",
+      "sources": [
+        {
+          "source": "huygens_um",
+          "quote": "p.20: 'two shells called \"after cone\" and \"foredome\" made in aluminium'; 'one central ring ensuring junctions of after cone and dome'"
+        },
+        {
+          "source": "jones1997",
+          "quote": "36 spin vanes on the Fore Dome’s periphery"
+        }
+      ],
+      "note": "after cone and fore dome radii, vane size and the descent module's place inside the shell estimated from Figs 2.2-5/2.2-6"
+    },
+    "hga_optics": {
+      "value": "symmetric Cassegrain, F 1315 mm, D 4000 mm, subreflector 571.2 mm (d + Δd); tripod of six CFRP struts to a Kevlar deck carrying the subreflector, S-band feed and LGA1",
+      "sources": [
+        {
+          "source": "descanso8",
+          "quote": "p.264 Fig. 5-34: 'F = 1315 mm / D = 4000 mm / ... d+Δd = 571.2 mm'; p.267: 'The tripod consists of six carbon-fiber-reinforced plastic (CFRP) struts having titanium end fittings connected to a Kevlar plate where the FSS subassembly, the S-band feed, and the LGA1 are mounted.'; 'a carbon fiber composite structure with a thin sandwich reflector and back reinforcement ribs and rings'"
+        }
+      ]
+    },
+    "bus": {
+      "value": "12 bays and a penthouse on top of bay 11; aluminium; bay 1 on spacecraft +X, numbered clockwise seen from above; louvres on the outboard shear plates of many bays",
+      "sources": [
+        {
+          "source": "henry",
+          "quote": "'The electronics bus features 12 bays and a penthouse. Each bay consists of an outboard shear plate, an inboard shear plate, and stringers connecting these plates.' 'Bay #1 is on the spacecraft +X axis ... The bay numbers increase in the clockwise direction if viewed from above.' 'The penthouse is mounted to the top of the bus bay #11.' 'Thermostatically controlled louvers are mounted on the outboard shear plates of many electronics bus bays'"
+        }
+      ]
+    },
+    "rtg_fins": {
+      "value": 8,
+      "sources": [
+        {
+          "source": "schock1990",
+          "quote": "dissipated by radiation from its housing and its eight equispaced radiator fins"
+        }
+      ]
+    },
+    "rpws_angles": {
+      "value": {
+        "Eu": [
+          107.5,
+          24.8
+        ],
+        "Ev": [
+          107.5,
+          155.2
+        ],
+        "Ew": [
+          37,
+          90
+        ]
+      },
+      "note": "[polar angle from spacecraft +Z, azimuth from +X] in degrees, physical orientation. The table's footnote prints 'tan phi = x/y'; Ew at 90 deg lies in the Y-Z plane (naif_fk), so azimuth is read from +X toward +Y. Agrees with model A's antenna axes to 0.001.",
+      "sources": [
+        {
+          "source": "gurnett2004",
+          "quote": "Eu 107.5 24.8 ... Ev 107.5 155.2 ... Ew 37 90 (Table III, Physical orientation, theta and phi in degrees)"
+        },
+        {
+          "source": "gurnett2004",
+          "quote": "The angle θ is the polar angle measured with respect to the spacecraft +z axis"
+        }
+      ]
+    },
+    "mag_boom_length": {
+      "value": "11 m reach: the helium magnetometer at the boom's end 11.015 m from the spacecraft centre (checked by mag_vhm_distance); the mast itself 9.94 m from the canister (ref mag_boom)",
+      "sources": [
+        {
+          "source": "arrival_kit",
+          "quote": "mounted on an 11-meter-long (36-foot) boom"
+        },
+        {
+          "source": "mag_ug",
+          "quote": "the sensors are located on an 11 m boom"
+        }
+      ],
+      "conflict": "launch_kit p.46: 'mounted on a 13-meter-long (42-foot) boom'; pds_insthost and launch_kit p.51: 'self-deploying 10.5 meter coiled longeron mast'.",
+      "note": "launch_kit p.48: 'an 11-meter (40-foot) spring-loaded magnetometer boom'. NASA model boom tip 11.07 m from the stack axis."
+    }
+  },
+  "from_reference_model": {
+    "note": "Not found in any document opened: RTG length and diameter and their exact mounts, main engine nozzle size, propellant tank sizes, module and bus diameters and heights, pallet sizes, HGA depth, boom thickness. Measured from NASA model A (its frame: dish +z, Huygens +x, boom +y = the spacecraft frame turned 180 deg about Y).",
+    "source": "nasa_3d_cassini",
+    "detail_model": {
+      "source": "nasa_3d_cassini_asm",
+      "note": "Same layout in inches (dish 157.48 in = 4.0 m), boom segments 190.2 in each, boom tip 427.8 in (10.87 m) from the axis: agrees with model A. Used for small-part detail."
+    },
+    "z_stretch": {
+      "value": 1.0413,
+      "note": "6.8 m (decision) / 6.53 m (model A tip to tip: LGA1 top 3.265, engine exits -3.268): every z from model A is multiplied by this"
+    },
+    "bus": {
+      "value": {
+        "z": [
+          0.45,
+          0.943
+        ],
+        "apothem": 1.067,
+        "sides": 12
+      },
+      "note": "NASA assembly model (nasa_3d_cassini_asm): bay panels 1.067 m from the axis with faces centred on 0, 30, 60 deg (louvres stand out to 1.13 m), bays z 0.50-0.97 stretched; earlier from model A (apothem 1.09)"
+    },
+    "hga_support": {
+      "value": {
+        "z": [
+          1.4472,
+          1.7584
+        ],
+        "radius": 1.0725,
+        "plate_radius": 1.025,
+        "plate_z": 1.4472,
+        "plate_thickness": 0.026
+      },
+      "note": "NASA assembly model, run.py pieces: support cylinder 2.145 m across, z 1.507 to 1.831 (stretched); bottom plate 2.05 m across, 26 mm thick"
+    },
+    "huygens": {
+      "value": {
+        "centre": [
+          1.405,
+          0.0,
+          -1.115
+        ],
+        "thickness": 0.806
+      },
+      "note": "NASA model A (metres, its frame), run.py pieces: shield piece 2.615 m across, 0.806 m along +x"
+    },
+    "mag_canister": {
+      "value": {
+        "centre": [
+          -0.015,
+          1.175,
+          0.418
+        ],
+        "size": [
+          0.833,
+          0.945,
+          1.331
+        ]
+      },
+      "note": "NASA model A (metres, its frame), run.py pieces: gold canister piece at the boom root"
+    },
+    "rpws_roots": {
+      "value": [
+        [
+          0.46,
+          1.6,
+          0.42
+        ],
+        [
+          -0.46,
+          1.6,
+          0.42
+        ],
+        [
+          0.06,
+          1.49,
+          -0.34
+        ]
+      ],
+      "note": "NASA model A (metres, its frame), run.py pieces: antenna centres minus half their length along their axes"
+    },
+    "huygens_nose_x": {
+      "value": 1.851,
+      "note": "NASA assembly model (nasa_3d_cassini_asm), run.py pieces: front shield piece 107.9 in across, 25.27 in deep (620.5 mm in huygens_um Fig 2.2-5), its nose 72.89 in from the spacecraft axis"
+    },
+    "hga": {
+      "value": {
+        "rim_z": 2.304,
+        "ribs": {
+          "azimuths_deg": [
+            30,
+            90,
+            150,
+            210,
+            270,
+            330
+          ],
+          "segments": [
+            [
+              1.058,
+              1.7324,
+              1.502,
+              1.9466,
+              0.042
+            ],
+            [
+              1.49,
+              1.9389,
+              1.9,
+              2.1867,
+              0.035
+            ]
+          ]
+        },
+        "ring": {
+          "r": [
+            1.4935,
+            1.5065
+          ],
+          "z": [
+            1.8842,
+            1.9706
+          ]
+        },
+        "tripod": {
+          "foot_azimuths_deg": [
+            0,
+            120,
+            240
+          ],
+          "foot_r": 1.147,
+          "foot_z": 1.8102,
+          "top_r": 0.332,
+          "top_z": 2.8829,
+          "radius": 0.014
+        }
+      },
+      "note": "NASA assembly model (nasa_3d_cassini_asm) in our frame (inches x 0.0254, z unstretched here), run.py pieces: dish rim 2.304 m; six radial rib struts, two segments each (end points and radii from --struts); ring pieces 3.013/2.987 m across, 0.09 m tall; three V strut pieces, feet 1.147 m out at 0/120/240 deg, deck ends 0.332 m out, 14 mm radius"
+    },
+    "meshes": {
+      "value": {
+        "hga_deck": "run.py cut <Cassini Assembly.glb> refs/cassini/meshes/hga_deck.json -0.4 -0.4 2.8 0.4 0.4 3.5 --max 1.0 --matrix M",
+        "hga_feed": "run.py cut <Cassini Assembly.glb> refs/cassini/meshes/hga_feed.json -0.3 -0.4 1.9 0.3 0.4 2.35 --max 1.0 --matrix M",
+        "matrix_M": "-0.0254,0,0,0,0,0,0.0254,0,0,0.02644902,0,0.5133609",
+        "bus_faces": "run.py cut <Cassini Assembly.glb> refs/cassini/meshes/bus_faces.json -1.5 -1.5 0.47 1.5 1.5 1.0 --rmin 1.0 --rmax 1.2 --min 0.1 --max 0.8 --matrix M",
+        "bus_upper": "run.py cut <Cassini Assembly.glb> refs/cassini/meshes/bus_upper.json -1.3 -1.3 0.95 1.3 1.3 1.5 --rmin 0.2 --rmax 1.15 --min 0.1 --max 1.0 --matrix M --decimate 0.4",
+        "prop_blanket": "run.py cut <Cassini-Huygens (A).glb> refs/cassini/meshes/prop_blanket.json -1.0 -1.0 -2.0 1.0 1.0 0.0 --min 2.4 --matrix MA",
+        "prop_black": "run.py cut <Cassini-Huygens (A).glb> refs/cassini/meshes/prop_black.json -0.6 -1.6 -1.7 0.6 1.6 -1.2 --min 1.1 --max 1.4 --matrix MA",
+        "matrix_MA": "1,0,0,0,0,1,0,0,0,0,1.0413,0 (model A is in our frame; z stretched by z_stretch)",
+        "rcs_1": "run.py cut <Cassini Assembly.glb> refs/cassini/meshes/rcs_1.json 0.95 1.3 -2.75 1.6 1.95 -2.2 --matrix M",
+        "rcs_arm_1": "run.py cut <Cassini-Huygens (A).glb> refs/cassini/meshes/rcs_arm_1.json 0.3 0.9 -2.45 1.6 1.9 -1.7 --min 0.25 --max 1.2 --matrix MA",
+        "rcs_2": "run.py cut <Cassini Assembly.glb> refs/cassini/meshes/rcs_2.json 0.95 -1.95 -2.75 1.6 -1.3 -2.2 --matrix M",
+        "rcs_arm_2": "run.py cut <Cassini-Huygens (A).glb> refs/cassini/meshes/rcs_arm_2.json 0.3 -1.9 -2.45 1.6 -0.9 -1.7 --min 0.25 --max 1.2 --matrix MA",
+        "rcs_3": "run.py cut <Cassini Assembly.glb> refs/cassini/meshes/rcs_3.json -1.6 1.3 -2.75 -0.95 1.95 -2.2 --matrix M",
+        "rcs_arm_3": "run.py cut <Cassini-Huygens (A).glb> refs/cassini/meshes/rcs_arm_3.json -1.6 0.9 -2.45 -0.3 1.9 -1.7 --min 0.25 --max 1.2 --matrix MA",
+        "rcs_4": "run.py cut <Cassini Assembly.glb> refs/cassini/meshes/rcs_4.json -1.6 -1.95 -2.75 -0.95 -1.3 -2.2 --matrix M",
+        "rcs_arm_4": "run.py cut <Cassini-Huygens (A).glb> refs/cassini/meshes/rcs_arm_4.json -1.6 -1.9 -2.45 -0.3 -0.9 -1.7 --min 0.25 --max 1.2 --matrix MA",
+        "engines": "run.py cut <Cassini Assembly.glb> refs/cassini/meshes/engines.json -0.7 -0.7 -3.6 0.7 0.7 -2.62 --min 0.08 --max 1.0 --decimate 0.35 --matrix M",
+        "lem": "run.py cut <Cassini-Huygens (A).glb> refs/cassini/meshes/lem.json -1.2 -1.2 -2.9 1.2 1.2 -2.6 --min 1.0 --matrix MA",
+        "rtg_1": "run.py cut <Cassini Assembly.glb> refs/cassini/meshes/rtg_1.json -0.55 0.85 -2.75 0.55 2.15 -2.15 --matrix M --rmin 0.92 --min 0.04 --max 1.3 --decimate 0.4",
+        "rtg_mount_1": "run.py cut <Cassini Assembly.glb> refs/cassini/meshes/rtg_mount_1.json -0.55 0.85 -2.75 0.55 2.15 -2.15 --matrix M --rmin 0.85 --rmax 0.92 --min 0.04 --max 1.3",
+        "rtg_shade_1": "run.py cut <Cassini Assembly.glb> refs/cassini/meshes/rtg_shade_1.json -0.55 0.85 -2.15 0.55 2.15 -1.75 --matrix M --min 1.0 --max 1.3",
+        "rtg_2": "run.py cut <Cassini Assembly.glb> refs/cassini/meshes/rtg_2.json -0.55 -2.15 -2.75 0.55 -0.85 -2.15 --matrix M --rmin 0.92 --min 0.04 --max 1.3 --decimate 0.4",
+        "rtg_mount_2": "run.py cut <Cassini Assembly.glb> refs/cassini/meshes/rtg_mount_2.json -0.55 -2.15 -2.75 0.55 -0.85 -2.15 --matrix M --rmin 0.85 --rmax 0.92 --min 0.04 --max 1.3",
+        "rtg_shade_2": "run.py cut <Cassini Assembly.glb> refs/cassini/meshes/rtg_shade_2.json -0.55 -2.15 -2.15 0.55 -0.85 -1.75 --matrix M --min 1.0 --max 1.3",
+        "rtg_3": "run.py cut <Cassini Assembly.glb> refs/cassini/meshes/rtg_3.json -1.95 0.15 -2.75 -0.65 1.4 -2.15 --matrix M --rmin 0.92 --min 0.04 --max 1.3 --decimate 0.4 --inside",
+        "rtg_mount_3": "run.py cut <Cassini Assembly.glb> refs/cassini/meshes/rtg_mount_3.json -1.95 0.15 -2.75 -0.65 1.4 -2.15 --matrix M --rmin 0.85 --rmax 0.92 --min 0.04 --max 1.3",
+        "rtg_shade_3": "run.py cut <Cassini Assembly.glb> refs/cassini/meshes/rtg_shade_3.json -1.95 0.15 -2.15 -0.65 1.4 -1.75 --matrix M --min 1.0 --max 1.3",
+        "rsp_blanket": "run.py cut <Cassini-Huygens (A).glb> refs/cassini/meshes/rsp_blanket.json -2.4 -1.0 -0.75 -1.1 1.1 1.3 --matrix MA --material foil_gold --min 0.3",
+        "rsp_black": "run.py cut <Cassini Assembly.glb> refs/cassini/meshes/rsp_black.json -2.4 -1.0 -0.75 -1.1 1.1 1.3 --matrix M --material black --min 0.04 --max 1.2 --decimate 0.5 --occluder refs/cassini/meshes/rsp_blanket.json",
+        "rsp_silver": "run.py cut <Cassini Assembly.glb> refs/cassini/meshes/rsp_silver.json -2.4 -1.0 -0.75 -1.1 1.1 1.3 --matrix M --material silver --min 0.02 --max 1.2 --occluder refs/cassini/meshes/rsp_blanket.json",
+        "rsp_white": "run.py cut <Cassini Assembly.glb> refs/cassini/meshes/rsp_white.json -2.4 -1.0 -0.75 -1.1 1.1 1.3 --matrix M --material white --min 0.02 --max 1.2 --occluder refs/cassini/meshes/rsp_blanket.json",
+        "rsp_gold": "run.py cut <Cassini Assembly.glb> refs/cassini/meshes/rsp_gold.json -2.4 -1.0 -0.75 -1.1 1.1 1.3 --matrix M --material gold --min 0.02 --max 1.2 --occluder refs/cassini/meshes/rsp_blanket.json",
+        "fpp_black_krinkle": "run.py cut <Cassini-Huygens (A).glb> refs/cassini/meshes/fpp_black_krinkle.json 0.2 -2.0 -0.6 1.6 -0.4 1.1 --matrix MA --material black_krinkle --rmin 1.15 --min 0.01",
+        "fpp_plastic_dark": "run.py cut <Cassini-Huygens (A).glb> refs/cassini/meshes/fpp_plastic_dark.json 0.2 -2.0 -0.6 1.6 -0.4 1.1 --matrix MA --material plastic_dark --rmin 1.15 --min 0.01",
+        "fpp_plastic_white": "run.py cut <Cassini-Huygens (A).glb> refs/cassini/meshes/fpp_plastic_white.json 0.2 -2.0 -0.6 1.6 -0.4 1.1 --matrix MA --material plastic_white --rmin 1.15 --min 0.01",
+        "fpp_aluminum": "run.py cut <Cassini-Huygens (A).glb> refs/cassini/meshes/fpp_aluminum.json 0.2 -2.0 -0.6 1.6 -0.4 1.1 --matrix MA --material aluminum --rmin 1.15 --min 0.01",
+        "mag_fgm_bracket": "run.py cut <Cassini Assembly.glb> refs/cassini/meshes/mag_fgm_bracket.json -0.4 5.6 0.9 0.4 5.78 1.6 --matrix M --max 1.0",
+        "mag_fgm": "run.py cut <Cassini Assembly.glb> refs/cassini/meshes/mag_fgm.json -0.4 5.78 0.9 0.4 5.85 1.6 --matrix M --max 1.0",
+        "mag_fgm_mount": "run.py cut <Cassini Assembly.glb> refs/cassini/meshes/mag_fgm_mount.json -0.4 5.85 0.9 0.4 6.2 1.6 --matrix M --max 1.0",
+        "mag_tip": "run.py cut <Cassini Assembly.glb> refs/cassini/meshes/mag_tip.json -0.4 10.8 0.9 0.4 10.99 1.6 --matrix M --max 1.0",
+        "mag_vhm": "run.py cut <Cassini Assembly.glb> refs/cassini/meshes/mag_vhm.json -0.4 10.99 0.9 0.4 11.3 1.6 --matrix M --max 1.0",
+        "mag_canister": "run.py cut <Cassini-Huygens (A).glb> refs/cassini/meshes/mag_canister.json -0.3 0.9 0.1 0.3 1.5 0.8 --matrix MA --material foil_gold --min 1.2",
+        "lga2_mount": "run.py cut <Cassini Assembly.glb> refs/cassini/meshes/lga2_mount.json 0.9 -0.1 -3.0 0.975 0.1 -2.88 --matrix M --material white",
+        "lga2_boom": "run.py cut <Cassini Assembly.glb> refs/cassini/meshes/lga2_boom.json 0.7 -0.1 -2.88 1.0 0.1 -2.3 --matrix M --material white"
+      },
+      "note": "Pieces copied from NASA's Cassini Assembly model (nasa_3d_cassini_asm). M takes Blender's import of the file (inches) into our frame: metres, z up with the dish on top, Huygens +x, z stretched by z_stretch, origin as model A (0.493 m up)."
+    },
+    "mag_boom": {
+      "value": {
+        "root_y": 0.9253,
+        "tip_y": 10.867,
+        "axis_z": 1.228,
+        "width": 0.2753,
+        "gap_y": [
+          5.7564,
+          6.036
+        ]
+      },
+      "note": "NASA assembly model (our frame), run.py pieces --dump: the boom is a triangular prism, corners x +-0.1376 at z 1.3167 and x 0 at z 1.0688 (apex down), in two sections y 0.9253-5.7564 and 6.036-10.867, the tip fitting from 10.867; axis_z is the triangle's circumcentre (apex + side/sqrt(3))"
+    },
+    "lga2": {
+      "value": {
+        "tip_x": 1.274,
+        "axis_z": -2.942
+      },
+      "note": "NASA assembly model (our frame), run.py cut and slices: the radome 6.4 cm across ends at x 1.274 on z -2.942; its antenna pieces run 0.295 m from x 0.979 and 0.369 m with the mount plate (documents: 33.5 cm max), so the antenna is built to the documents' size, tip where the model has it."
+    }
+  },
+  "materials": {
+    "blanket_amber": {
+      "hex": "#b89a3e",
+      "metallic": 1.0,
+      "roughness": 0.3,
+      "source": "pia04603 (https://images-assets.nasa.gov/image/PIA04603/PIA04603~orig.jpg), 16x16 px patches; the white wall reads #c2c3bd (near neutral): lit gold blanket at (620,700), (560,820), (880,640) averaged; launch_kit p.46 'shiny amber-colored'"
+    },
+    "blanket_black": {
+      "hex": "#16232c",
+      "metallic": 0.0,
+      "roughness": 0.6,
+      "source": "pia04603 (https://images-assets.nasa.gov/image/PIA04603/PIA04603~orig.jpg), 16x16 px patches; the white wall reads #c2c3bd (near neutral): black blanket at (760,960), (700,1050), (820,1000) averaged; launch_kit p.46 'matte-black'"
+    },
+    "hga_white": {
+      "hex": "#ece8e6",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "pia04603 (https://images-assets.nasa.gov/image/PIA04603/PIA04603~orig.jpg), 16x16 px patches; the white wall reads #c2c3bd (near neutral): HGA underside at (480,240), (700,300), (900,330), (600,180) averaged"
+    }
+  },
+  "open_questions": [
+    "Sizes no document gives (RTGs, engines, tanks, modules, pallets): from the NASA model, labelled as such.",
+    "Magnetometer sensor positions: only 'midway' and 'at the end' (arrival kit); the MAG instrument paper is paywalled.",
+    "Bus bay panels (cream in NASA's model) and RTG grey: no evenly lit photo found; shared white_paint and dark_metal for now.",
+    "Huygens: the back cover's upper half sits inside the propulsion module's blanket (the NASA model's blanket is a smooth hull there, the real one is not). Descent module finish unsourced (shared foil_silver). The probe support equipment (spin-eject ring, three struts) has no documented size and is left out."
+  ],
+  "budget": {
+    "triangles": 100000,
+    "glb_bytes": 4000000
+  },
+  "decisions": [
+    "Boom length 11 m (David, 2026-11-01).",
+    "Height 6.8 m (David, 2026-11-01): the NASA model's stack is stretched to fit."
+  ]
+}

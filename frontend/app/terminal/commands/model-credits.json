@@ -1,4 +1,10 @@
 {
+  "cassini": [
+    "NASA 3D Resources, Cassini-Huygens model (layout reference): https://github.com/nasa/NASA-3D-Resources; NASA 3D Resources, Cassini-Huygens (A): propulsion module blanket and black panels copied into refs/cassini/meshes/",
+    "NASA 3D Resources, Cassini Assembly model: shapes of the HGA deck, LGA1 and feed cluster copied into refs/cassini/meshes/",
+    "NASA/JPL, PIA04603 (blanket and antenna colours)",
+    "NASA/JPL, Cassini spacecraft diagram (Final EIS Figure 2-4, source JPL 1993a), layout reference: refs/cassini/jpl-diagram.png"
+  ],
   "f1": [
     "NASA/MSFC, Saturn V News Reference F-1 fact sheet (drawing and data)",
     "Rocketdyne, F-1 Engine Data manual R-3896-1 (dimensions)",

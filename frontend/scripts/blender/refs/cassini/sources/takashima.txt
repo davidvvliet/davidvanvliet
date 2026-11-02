@@ -1,0 +1,646 @@
+  38th AIAA Thermophysics Conference                                                                       AIAA 2005-4816
+  6-9 Jun 2005, Toronto, Ontario
+
+
+
+
+                 Prediction of the Aerothermodynamic Environment of the
+                                      Huygens Probe
+
+                                                 Brian R. Hollis* and Scott A. Striepe†
+                                           NASA Langley Research Center, Hampton, VA, 23681
+
+                                                          Michael J. Wright‡
+                                             NASA Ames Research Center, Moffett Field 94035
+
+                                                           Deepak Bose§
+                                              ELORET Corporation, Moffett Field, VA 94035
+
+                                                               Kenneth Sutton**
+                                            National Institute of Aerospace, Hampton, VA 23666
+
+                                                         Naruhisa Takashima††
+                                                      AMA Inc., Hampton, VA 23666
+
+
+                          An investigation of the aerothermodynamic environment of the Huygens entry probe has
+                      been conducted. A Monte Carlo simulation of the trajectory of the probe during entry into
+                      Titan’s atmosphere was performed to identify a worst-case heating rate trajectory. Flow-
+                      field and radiation transport computations were performed at points along this trajectory to
+                      obtain convective and radiative heat-transfer distributions on the probe’s heat shield. This
+                      investigation identified important physical and numerical factors, including atmospheric
+                      CH4 concentration, transition to turbulence, numerical diffusion modeling, and radiation
+                      modeling, which strongly influenced the aerothermodynamic environment.
+
+
+                                                             Nomenclature
+             Me         =   boundary-layer edge Mach number
+             M∞         =   free stream Mach number
+             p∞         =   free stream pressure
+             qconv      =   convective heat transfer rate
+             qrad       =   radiative heat transfer rate
+             Rb         =   base (maximum) radius
+             Rc         =   corner radius
+             Rn         =   nose radius
+             Reθ        =   Reynolds number based on boundary layer momentum thickness and edge conditions
+             Re∞        =   free stream Reynolds Number
+             Sc         =   Schmidt number
+             T∞         =   free stream temperature
+             U∞         =   free stream velocity
+             x          =   distance normal to symmetry axis in pitch plane
+             Γ          =   Goulard number
+
+             *
+               Aerospace Engineer, Aerothermodynamics Branch, AIAA Senior Member
+             †
+               Aerospace Engineer, Exploration Systems Engineering Branch
+             ‡
+               Senior Research Scientist, Reacting Flow Environments Branch, AIAA Senior Member
+             §
+               Senior Research Scientist, AIAA Member
+             **
+                Research Scientist, AIAA Fellow
+             ††
+                Research Scientist, AIAA Senior Member
+                                                                      1
+                                              American Institute of Aeronautics and Astronautics
+
+This material is declared a work of the U. S. Government and is not subject to copyright protection in the United States
+φ         =   three-dimensional correction factor
+κ         =   atmospheric composition constant
+θ         =   boundary-layer momentum thickness
+ρ∞        =   free stream density
+
+                                               I.   Background
+     The Cassini-Huygens project is a joint NASA-European Space Agency (ESA) mission to explore Saturn and its
+satellites, in particular the moon Titan. The NASA-built Cassini orbiter was designed to explore the Saturn system
+for at least 4 years, while the ESA-built Huygens probe was designed to land on Titan. The Cassini-Huygens
+spacecraft (Figure 1) was launched October 15, 1997 and arrived in Saturn orbit on July 01, 2004. The Huygens
+probe was released from Cassini on December 24, 2004 and successfully entered Titan’s atmosphere and landed on
+its surface on January 14, 2005.
+     The Huygens probe (Figure 2), which is the subject of this work, consists of a heat shield/aerodynamic
+decelerator and an instrumentation module that contains the mission’s scientific payload. The heat shield is a 2.700
+m diameter, 60-deg sphere-cone configuration with an open back face. The nose radius is 1.250 m and the corner
+radius is 0.025m. For the purposes of the present study, wake flow computations were not performed and thus the
+geometry was modeled only to the shoulder.
+     Prior to the release of the Huygens probe from the Cassini spacecraft, the NASA Engineering and Safety Center
+(NESC) sponsored an independent technical assessment2 of the entry, descent and landing (EDL) performance of the
+probe. This assessment included vehicle aerodynamics, parachute deployment and loads, Titan atmospheric
+properties, trajectory simulation, thermal protection system (TPS) performance, and aerothermodynamic
+environments. The aerothermodynamic environments generated to support this assessment, which included
+convective (both laminar and turbulent) and radiative heat-transfer rates, are reported herein. Additional
+information on Huygens aerothermodynamics is presented in Reference 3.
+
+
+
+
+        Figure 1. Cassini-Huygens spacecraft
+                                                             Figure 2. Huygens entry vehicle geometry
+
+
+                                         II.    Trajectory Analysis
+    Simulations and analyses of the Huygens probe entry into Titan’s atmosphere were conducted in order to
+generate trajectories on which to perform detailed flow field and radiation transport computations. The major
+components of this activity, which are detailed in subsequent sections, were atmospheric modeling, aerodynamic
+database generation, and simulation and Monte Carlo analysis of trajectories. A range of possible trajectories was
+
+                                                        2
+                                American Institute of Aeronautics and Astronautics
+generated based on dispersion of simulation parameters. The trajectory on which the maximum heat-transfer rate
+would occur was identified and computations were performed at selected points along it to determine the
+aerothermodynamic environment.
+
+A. Titan Atmospheric Composition
+    The major component of Titan’s atmosphere is N2, a small CH4 component is known to exist, and there may be
+some Ar. While other more complex compounds are also present, they exist only in trace amounts that are not
+relevant to entry vehicle analyses. At the time of this study, the exact proportions of the species were not known;
+one of the scientific goals of the Cassini-Huygens mission is to precisely determine Titan’s atmospheric
+composition.
+    Atmospheric profiles were obtained from the TitanGRAM code4, which provided altitude-density-temperature
+data and ranges of dispersions. N2 mole fractions varied from 85% to 97% depending on dispersions. CH4 and Ar
+comprised the remainder of the atmosphere, with the proportions determined by user specification of the CH4 mole
+fraction, which, according to the most up-to-date information available from Cassini measurements, was expected to
+be in the range of 1% to 5%. Version 1.0 of the Titan-GRAM atmospheric code was employed in this study, with
+updates to the code based on the available Cassini measurements of Titan’s atmosphere (from July 3, 2004 and Nov.
+15, 2004, designated as the T0 and TA atmospheric profiles).
+
+B. Huygens Aerodynamic Database
+    A high-fidelity aerodynamic database was developed to support the simulations of the Huygens probe from the
+Titan atmospheric interface to parachute deployment. Because of the similarity in the forebody shape of Huygens to
+that of the Genesis Sample Return Capsule (SRC), the Genesis aerodynamic database was used as the foundation for
+the Huygens aerodynamic database. The Genesis aerodynamic database was constructed using data from
+engineering analysis tools, high-fidelity numerical analysis solutions (i.e., CFD), ground-based wind tunnel tests,
+and free-flight ballistic range tests. The details of the Genesis aerodynamic database are described by Desai5.
+    Although the Huygens probe and Genesis capsule have similar 60-degree sphere cone forebodies, the Huygens
+probe has a larger nose radius relative to the probe diameter. The difference in the nose radius resulted in an axial
+force coefficient value that was greater than that of the Genesis capsule throughout the Mach range. At the
+hypersonic continuum limit, that difference in the coefficient was 6.8%. To account for the differences in the
+geometry between the Huygens probe and the Genesis SRC, the Genesis aerodynamic database was revised. Free-
+molecular and modified-Newtonian analyses were performed to anchor the rarefied and continuum aerodynamics,
+and for the supersonic/hypersonic flow regime, data from ballistic range free-flight tests6 of Huygens probe models
+were used to characterize the aerodynamics.
+
+C. Trajectory Simulation and Monte Carlo Analysis
+    A six degree-of-freedom (6DOF) atmospheric entry and three degree-of-freedom (3DOF) parachute descent
+trajectory of the Huygens probe was simulated in POST2 (Program to Optimize Simulated Trajectories II)7. POST2
+is a generalized point mass, discrete parameter targeting and optimization trajectory program and has the ability to
+simulate 3DOF and 6DOF trajectories for multiple vehicles in various flight regimes. POST2 also has the capability
+to include different atmosphere, aerodynamics, gravity, propulsion, parachute, and navigation system models, and
+Titan/Huygens-specific models were implemented for this study. POST2 has been used to simulate the entry
+trajectories for previous NASA missions (e.g. Mars Pathfinder8, Mars Exploration Rover9, Genesis10) as well as
+numerous system studies (e.g. aerocapture at Neptune11 and Titan12).
+    The POST2 simulation method was used in a Monte Carlo analysis of the Huygens probe entry, descent, and
+impact at Titan. The Monte Carlo technique involves the variation of key simulation parameters (e.g. initial
+orientation, aerodynamic coefficients, atmospheric parameters) to encompass the levels of uncertainty in these
+quantities. Aeroheating parameters (laminar and turbulent convective heating rates and radiative heating rates at the
+stagnation point) generated from high-fidelity computational analyses performed along the POST2-generated
+trajectories were incorporated into successive Monte Carlo simulations through simplified time-history curve-fits in
+order to refine subsequent trajectory analyses. Several thousand runs were made with random variations of
+parameters, and statistics of the resulting outputs were analyzed to identify maximum heat-rate trajectories for
+further detailed computational analyses, as described below. This process was repeated for several iterations to
+produce the final trajectory on which the aeroheating computations presented herein were performed. The worst-
+case trajectory for the integrated heat load was also identified through this Monte Carlo simulation; however, the
+difference between these max heat-rate and max heat-load trajectories was small for Huygens, and so only the
+
+                                                        3
+                                American Institute of Aeronautics and Astronautics
+maximum heat-rate trajectory will be discussed. It is expected that a trajectory reconstruction will be performed
+using mission data when it becomes available in order to determine the actual conditions that the probe encountered.
+    Aerothermodynamic computations were performed for several points along the maximum heating rate trajectory.
+The free stream conditions for these points are listed in Table 1 and plotted in Figure 3. The peak convective
+heating rate occurs at t = 189 s on this trajectory. In addition to the listed cases with the default species
+concentrations, cases were also run with the CH4 mole fraction varied by ±30% (with the N2 and Ar mole fractions
+varied accordingly to retain the same molecular weight as the baseline condition) in order to investigate the
+influence of CH4 on the aerothermodynamic environment. This influence is primarily a function of the number of C
+atoms available to form CN (which is the major contributor to radiation for flight in Titan’s atmosphere) through
+reactions in the shock region.
+
+                      Table 1. Free Stream Conditions on Maximum Heat-Rate Trajectory
+       t       h       U∞           ρ∞          p∞      T∞     M∞         Re∞        N2         CH4          Ar
+     (sec)   (km)     (m/s)       (km/s)       (Pa)     (K)              (1/m)    (mole %)    (mole %)    (mole %)
+    151.02   460.2   6166.6      6.22E-06   3.12E-01   150.8   23.93   3.71E+03    0.9706      0.0230      0.0064
+    169.02   367.9   6048.8      3.64E-05   2.12E+00   171.3   22.03   1.90E+04    0.9701      0.0230      0.0070
+    177.02   328.5   5886.3      7.20E-05   4.69E+00   175.8   21.16   3.57E+04    0.9699      0.0230      0.0071
+    185.02   291.1   5489.6      1.83E-04   1.01E+01   177.0   19.67   8.42E+04    0.9699      0.0230      0.0071
+    189.17   273.2   5126.3      2.96E-04   1.46E+01   176.6   18.38   1.27E+05    0.9699      0.0230      0.0071
+    193.02   257.8   4705.2      3.79E-04   2.02E+01   175.8   16.91   1.50E+05    0.9699      0.0230      0.0071
+    201.02   230.5   3660.4      7.43E-04   3.64E+01   173.4   13.25   2.32E+05    0.9699      0.0230      0.0071
+    209.02   209.7   2693.7      1.11E-03   5.78E+01   170.9   9.82    2.59E+05    0.9699      0.0230      0.0071
+    225.02   184.1   1337.7      2.24E-03   1.05E+02   167.1   4.93    2.64E+05    0.9699      0.0230      0.0071
+
+
+
+
+                Figure 3. Velocity and altitude vs. time along maximum heating-rate trajectory
+
+                          III.      Flow-Field and Radiation Transport Methods
+    Because there is relatively little experience on which to base estimates for the fidelity of computational tools and
+methods for Titan atmospheric entry problems (as opposed to Earth or Mars), independent analyses were performed
+using two separate tool sets: the LAURA flow-field solver with the RADEQUIL radiation transport code, and the
+DPLR flow-field solver with the NEQAIR96 radiation transport code. The current Huygens probe analysis relied
+heavily on upgrades and modifications to these tools resulting from a recent system study12,13,14,15 of aerocapture at
+Titan.
+
+
+
+                                                           4
+                                   American Institute of Aeronautics and Astronautics
+    A. LAURA and DPLR Flow Field Codes
+        Flow field computations were performed using the LAURA16,17 (Langley Aerothermodynamic Upwind
+    Relaxation Algorithm) and DPLR18 (Data Parallel Line Relaxation) codes. Both codes are structured, three-
+    dimensional, finite-volume solvers for the Navier-Stokes equations in hypersonic flow fields. In the LAURA code,
+    inviscid fluxes are computed using the Roe second-order flux-splitting19 with the Harten entropy fix20 and the Yee
+    symmetric total-variation diminishing limiter21. In DPLR, a modified Steger-Warming flux-vector splitting22 with
+    MUSCL extrapolation to third order via a “minmod” limiter23 is employed.
+         Both codes incorporate chemical non-equilibrium and vibrational non-equilibrium kinetic models. For Titan’s
+    atmosphere, forward chemical reaction rates were taken from the 21-species (Ar, C, CH, CH2, CH3, CH4, CN, C2, H,
+    HCN, H2, N, NH, N2, Ar+, C+, CN+, H+, N+, N2+, e-), 35-reaction model developed by Gökçen24 (although the
+    ionized species and ionization reactions were omitted for the Huygens trajectories), and vibrational non-equilibrium
+    is based on the Park two-temperature model25. Reverse reaction rates are determined from the definition of the
+    equilibrium constant, which is evaluated using the Gibbs free energy computed from McBride’s thermodynamic
+    curve fits26.
+
+    B. RADEQUIL AND NEQAIR96 Radiation Transport Codes
+        Radiative heating rates were determined using the RADEQUIL27 and NEQAIR9628 codes. These codes are used
+    to compute emission and absorption of radiation from excited species. The populations of the excited states of the
+    species are based on Boltzmann equilibrium distributions at the conditions determined from the LAURA or DPLR
+    flow field computations. Radiation transport is then computed along selected lines-of-sight from the shock wave to
+    the surface using the one-dimensional tangent slab assumption. With respect to this Boltzmann distribution
+    assumption, it should be noted that recent experimental results29 indicate that the CN excited state populations do
+    not follow a Boltzmann distribution at test conditions approximating Huygens entry. Thus, the radiative heating
+    predictions presented herein, which are based on the Boltzmann assumption, may be overly conservative.
+        Radiation computations in the RADEQUIL code are performed using a grouping of atomic line transitions at
+    similar frequencies and a smeared band approximation of frequency-integrated molecular rotational/vibrational
+    transitions. In the NEQAIR96 code, line-by-line computations are performed for atomic transitions and molecular
+    transitions are computed for a large number of frequency points in order to capture all spectral details.
+        Coupling between energy loss to the free stream via radiation and the flow field predictions was performed using
+    an approximate technique developed by Tauber30 to account for this radiative cooling of the flow field and the
+    accompanying reduction in radiative heating levels. In this approximation, the ratio of coupled to uncoupled
+    radiative heating rates is given by:
+
+              coup
+             qrad        1
+        (1)  uncoup
+                    =
+            qrad      1+ "#0.7
+
+       In equation (1), Γ is the Goulard number31 defined by:
+
+!                 2q uncoup
+        (2)   " = 1 rad 3
+                  2 #$U$
+
+
+      In equation (2), κ is an empirical constant that is a function of atmospheric composition. In Ref. 31, a value of
+  3.0 for this constant was reported. However, an investigation was also conducted to determine a more accurate
+                                                                                 32
+! value for Titan conditions using the coupled technique developed by Wright for the special case of the optically-
+  thin shock layer. It was found that a value of κ = 2.0 provided a better match with the optically-thin coupled
+  method, and so approximate coupling results presented herein are based on this value.
+      An additional correction factor given by equation (3) to the tangent-slab assumption to account for three-
+  dimensional effects (shock-layer curvature and decrease in radiation away from the stagnation point) was also
+  applied.
+
+        (3)   q3D = "q1D
+
+
+                                                            5
+!
+                                    American Institute of Aeronautics and Astronautics
+    The correction factor φ was based on the view factor analysis developed by Bose33 and was set to 0.75 for the
+stagnation-point on the Huygens geometry. Along the conical flank of the vehicle, a value of 0.90 was used.
+
+C. Boundary Conditions and Solution Procedure
+    For all flow field computations, a radiative-equilibrium wall temperature boundary condition with an emissivity
+of 0.90 was employed. In order to obtain conservative heating results a “super-catalytic” boundary condition
+(recombination to free-stream mass fractions) was imposed at the wall for the LAURA computations, while the
+DPLR boundary condition was full recombination of N2 and H2. Since N2 is the primary component of the
+atmosphere, the different boundary conditions have a small effect (<5%) on the computed convective heating rates.
+As the nominal angle-of-attack for the Huygens probe was 0-deg, all computations were performed in axisymmetric
+mode.
+    The flow-field species concentrations and thermodynamic properties from the computations were used as inputs
+to the radiation transport codes. Radiative transport was then computed using the one-dimensional tangent-slab
+approximation to obtain uncoupled radiative heating rates. The correction given in equation (1) for energy loss to
+the free stream was then applied to the computed radiative heating rates to obtain approximate coupled radiative
+heating rates.
+
+                                IV.    Aerothermodynamic Environments
+   The aerothermodynamic environment of the Huygens probe is discussed in this section. Radiative and
+convective heating distributions are presented for points along the maximum heat-rate trajectory. Numerical and
+physical factors that influence the heating rates are examined.
+
+A. Diffusion Modeling Effects on Convective Heating
+    An important phenomenon noted in this study was the effect of the diffusion model employed in the
+computations. Both LAURA and DPLR employ multi-component diffusion models, which are referred to as the
+approximate, corrected multi-diffusion model34 in LAURA and the self-consistent effective binary diffusion
+(SCEBD) model35 in DPLR. Both codes do, however, retain simpler models based on the approximation of binary
+diffusion with a constant Schmidt number. For environments such as flight through Earth’s atmosphere in which all
+the major species (e.g. N2, O2, N, O) have roughly similar properties, this approximation may provide reasonably
+accurate results. However, the presence of H and H2 in the flow-field (which results from CH4 dissociation), even in
+limited quantities, renders this approximation invalid. As shown in Figure 4 and Figure 5 (peak convective heating
+on the max heat-rate trajectory for LAURA and DPLR predictions), the constant Schmidt number method resulted in
+significant under-prediction of the heating levels for both laminar and turbulent flows. Note that for comparison,
+results are also shown for the exact Stefan-Maxwell model for multi-component diffusion, a close match with which
+was obtained using both multi-component diffusion models. While diffusion modeling had significant effects on
+convective heating, radiative heating predictions for these cases differed by less than 1%. The greater influence for
+convection was due to the fact that the diffusion model primarily affects flow in the boundary layer, on which
+convective heating rates depend, whereas radiative heating is due primarily to the high-temperature shock-layer
+region, which is not greatly influenced by the diffusion model.
+
+
+
+
+                                                        6
+                                American Institute of Aeronautics and Astronautics
+Figure 4. Diffusion modeling effects on convective       Figure 5. Diffusion modeling effects on convective
+    heating, LAURA solutions at t = 189 sec                   heating, DPLR solutions at t = 189 sec
+
+
+B. CH4 Concentration Effects on Radiative Heating
+     At the time during which this work was performed, the concentration of CH4 in Titan’s atmosphere was not
+known precisely. A best estimate for the CH4 mole fraction of 2.3% was employed in the analysis, and
+computations were also performed with CH4 mole fractions varied by ±30% from the default in order to determine
+its influence on the aerothermodynamic environment. Both convective and radiative heating levels were found to
+increase as the amount of CH4 in the atmosphere was increased. CH4 concentration effects on convective (laminar
+and turbulent) heating are shown in Figure 6; LAURA results are shown, DPLR results were in close agreement.
+CH4 concentration effects on radiative heating (uncoupled and approximate coupled) are shown in Figure 7 for
+LAURA-RADEQUIL computations; DPRL-NEQAIR96 computations showed the same trends but with some
+differences in magnitude of the effects. The influence of CH4 concentration on radiative heating rates was much
+greater than on convective heating because it controls the amount of CN (which is the primary radiating specie) that
+can be formed in the flow field.
+
+
+
+
+  Figure 6. CH4 concentration effects on convective          Figure 7. CH4 concentration effects on radiative
+ heating, LAURA predictions for t =189 sec on max           heating, RADEQUIL predictions for t = 189 sec on
+                heat-rate trajectory                                    max heat-rate trajectory
+
+
+
+                                                        7
+                                American Institute of Aeronautics and Astronautics
+C. Ionization effects on Heating
+    For Huygens entry conditions at Titan, flow-field temperatures were too low for significant ionization to occur.
+A single check-case computed with ionization at the peak heating point (t = 189 s) showed that the convective and
+radiative heating rates differed by less than 1% from those computed without ionization; therefore ionization was
+omitted from all other computations.
+
+D. Transition to Turbulence
+    Transition to turbulence in hypersonic flows is difficult to predict, especially for an entry vehicle such as the
+Huygens probe that has steps and gaps between its heat-shield tiles and that will experience ablation. Transition
+onset is commonly defined in terms of local surface/flow-field conditions through the parameter Reθ/Me (the ratio of
+the Reynolds number based on boundary-layer momentum thickness and edge conditions to the boundary-layer edge
+Mach number). Values of this parameter cited in the literature vary widely. In a recent transition study36 on a
+similar 70-deg sphere-cone entry vehicle configuration, Reθ/Me values between 200 and 500 were measured in
+several different experimental facilities. For the purpose of this study, a value of 150 was selected in the hope that
+this would provide a conservative transition onset criterion. As shown in Figure 8, the predicted values for Reθ/Me
+exceeded 150 along the flank of the cone by the time of peak heating. However, as will be shown subsequently,
+even though a conservative transition criterion was applied, the predicted turbulent heating levels along the cone did
+not exceed the stagnation-point level
+
+
+
+
+                            Figure 8. Reθ/Me distributions at each trajectory point
+
+
+
+E. Convective and Radiative Heating Distributions
+    Convective (both laminar and turbulent) and radiative heating distributions generated using LAURA and
+RADEQUIL along the trajectory are shown in Figure 9 and Figure 10, and distributions generated using DPLR and
+NEQAIR96 are shown in Figure 11 and Figure 12. Note that the radiative results shown in the figures are the
+uncoupled values, which were substantially higher than the approximate coupled values, as will be shown
+subsequently. The uncoupled values are shown in these figures in order to simplify comparisons between the results
+of the two radiation transport codes.
+    A comparison of laminar and turbulent convective distributions at peak heating is shown in Figure 13. Close
+agreement was obtained everywhere on the body except at the corners. The differences here were due to the fact
+that when the study began, information on the Huygens corner radius was not available, and the grid for the DPLR
+computations was generated using a larger radius than that for the LAURA computations.
+    A comparison of uncoupled radiative heating distributions at peak heating is shown in Figure 14. Much larger
+differences were noted in these radiative distributions than in the convective distributions. The reason for these
+                                                        8
+                                American Institute of Aeronautics and Astronautics
+differences has not yet been identified, however it has been noted that the NEQAIR96 code predicts more radiation
+absorption in the flow-field, leading to lower radiative heating at the surface, than does the RADEQUIL code.
+
+
+
+
+ Figure 9. Laminar and turbulent convective heating Figure 10. Uncoupled radiative heating distributions
+        distributions computed using LAURA          computed from LAURA inputs using RADEQUIL
+
+
+
+
+Figure 11. Laminar and turbulent convective heating Figure 12. Uncoupled radiative heating distributions
+        distributions computed using DPLR           computed from DPLR inputs using NEQAIR96
+
+
+
+
+   Figure 13. Comparison of LAURA and DPLR               Figure 14. Comparison of RADEQUIL and
+       convective heating rates at t = 189 sec           NEQAIR96 radiative heating rates at t = 189 sec
+
+
+
+                                                       9
+                               American Institute of Aeronautics and Astronautics
+F. Heating-Times Histories
+    Heating-time history data for two locations on the heat shield, the stagnation point and a point just ahead of the
+shoulder (x = 1.25 m), are listed in Table 2 and Table 3 and plotted in Figure 15 and Figure 16, respectively.
+Results are presented for both LAURA-RADEQUIL and DPLR-NEQAIR96 computations. The total (radiative +
+convective) heating was computed in three different ways: as the sum of the convective and uncoupled radiative
+rates; as the sum of the convective and coupled radiative rates; and as the sum of the convective rates plus the
+coupled radiative rates times the three-dimensional correction factor. In these totals, the convective rate at the
+shoulder point was taken as the turbulent value for times after 185 sec. Radiative cooling due to flow-field coupling
+was found to reduce the radiative heating rates by approximately 15% to 50% depending on the trajectory point.
+The highest predicted total heating at the stagnation point (including coupling and three-dimensional corrections to
+radiative heating) was 117 W/cm2 from the LAURA-RADEQUIL computations and 92 W/cm2 from the
+DPLR/NEQAIR96 computations. Because of the radiative contribution to the heating environment, the highest
+heating on the body was not at the stagnation point, but instead was just ahead of the shoulder, where the predicted
+levels were 120 W/cm2 and 93 W/cm2, respectively. Very close agreement was observed between the LAURA and
+DPLR convective results, however, for radiative heating, the NEQAIR96 predictions were from 40% to 60% lower
+than the RADEQUIL predictions depending on the trajectory point.
+    The time histories of the convective and radiative rates were provided to the NESC independent technical
+assessment team. Because of the short deadlines set for this assessment, the reasons for significant differences
+between the radiative heating levels generated by the two different codes were not resolved, and the final radiative
+heating levels were taken to be the average of the two sets of results. These data were curve-fitted vs. time and used
+as inputs to thermal modeling analysis of the vehicle’s TPS that was performed by ESA. The integrated heat-loads
+and material temperatures resulting from this analysis were determined by ESA and the NASA-NESC team to be
+within acceptable limits to allow for release of the Huygens probe into Titan’s atmosphere.
+
+
+                                    Table 2. Heating rates at stagnation point
+ Time (sec)      Laminar       Turbulent      Uncoupled       Coupled       Convective +   Convective +   Convective +
+                convective     convective      radiative      radiative      uncoupled       coupled      φ×(coupled
+                 (W/cm2)        (W/cm2)        (W/cm2)        (W/cm2)         radiative     radiative      radiative)
+                                                                              (W/cm2)        (W/cm2)        (W/cm2)
+                                                LAURA + RADEQUIL
+    151            12.8           NA              8.3         4.9              21.1           17.7           16.4
+    169            28.6           NA             65.3        34.2              93.9           62.8           54.3
+    177            36.0           NA             84.0        49.0              120.0          85.0           72.8
+    185            45.4           NA            118.4        76.6              163.8          122.0          102.9
+    189            46.3           NA            143.1        94.5              189.4          140.8          117.2
+    193            39.8           NA            147.2        96.3              187.4          136.1          112.0
+    201            23.4           NA             41.4        33.6              64.8           57.0           48.6
+    209             7.4           NA              0.0         0.0               7.4            7.4            7.4
+                                                 DPLR + NEQAIR96
+    151            11.8           NA              4.7         3.2              16.5           15.0            14.2
+    169            27.3           NA             38.4        23.6              65.7           50.9            45.0
+    177            35.0           NA             52.5        34.7              87.5           69.7            61.0
+    185            44.2           NA             72.3        52.5              116.5          96.7            83.5
+    189            45.5           NA             81.5        60.5              127.0          106.0           90.9
+    193            38.7           NA             72.1        54.6              110.8          93.3            80.0
+    201            21.9           NA             17.0        15.1              38.9           37.0            33.3
+    209             7.1           NA              0.5         0.5               7.6            7.6             7.5
+
+
+
+                              Table 3. Heating rates ahead of shoulder (x = 1.25 m)
+ Time (sec)      Laminar       Turbulent      Uncoupled       Coupled       Convective +   Convective +   Convective +
+                convective     convective      radiative      radiative      uncoupled       coupled      φ×(coupled
+                 (W/cm2)        (W/cm2)        (W/cm2)        (W/cm2)         radiative     radiative      radiative)
+                                                                              (W/cm2)        (W/cm2)        (W/cm2)
+                                                LAURA + RADEQUIL
+    151           7.60            NA              9.7         5.4              17.3            13.0           12.5
+    169           16.50           NA             70.0        35.8              86.5            52.3           48.7
+    177           20.40           NA            101.1        55.8              121.5           76.2           70.6
+
+                                                        10
+                                American Institute of Aeronautics and Astronautics
+  Time (sec)     Laminar       Turbulent       Uncoupled      Coupled       Convective +   Convective +   Convective +
+                convective     convective       radiative     radiative      uncoupled       coupled      φ×(coupled
+                 (W/cm2)        (W/cm2)         (W/cm2)       (W/cm2)         radiative     radiative      radiative)
+                                                                              (W/cm2)        (W/cm2)        (W/cm2)
+     185          24.70           NA              154.3        93.1             179.0         117.8          108.5
+     189          24.80           36.7            175.0        110.0            196.2         131.2          120.2
+     193          21.20           31.2            143.0        94.3             155.3         106.6           97.2
+     201          12.30           19.0            34.1         28.7             38.4           33.0           30.1
+     209          4.30             6.0             0.0          0.0              0.0            0.0            0.0
+                                                   DPLR + NEQAIR96
+     151            7.2           NA               6.1          4.0             13.3           11.2           10.8
+     169           16.2           NA              43.4         27.0             59.5           43.2           40.5
+     177           20.5           NA              61.3         40.2             81.8           60.7           56.7
+     185           25.4           NA              83.4         59.2             108.8          84.6           78.7
+     189           25.7           36.3            84.5         62.7             120.8          99.0           92.7
+     193           21.9           31.4            62.2         48.3             93.6           79.7           74.9
+     201           12.5           18.8            12.1         11.0             30.9           29.8           28.7
+     209            4.2            6.7             0.3          0.3              7.0            7.0            7.0
+
+
+
+
+Figure 15. Heating vs. time at stagnation point                           Figure 16. Heating vs. time at shoulder
+
+
+
+                                         V.   Summary and Conclusions
+    The aerothermodynamic environment of the Huygens probe was investigated as part of an independent
+assessment of the Huygens mission to Titan performed under the direction of the NASA Engineering and Safety
+Center. Convective and radiative heating rates were computed using two independent sets of flow-field and
+radiation transport codes. The flow-field codes provided the convective heating rates and the input data for the
+radiation codes, which then were used to generate uncoupled radiative heating rates. Approximate corrections for
+radiation/flow-field coupling and three-dimensional effects were then applied to the uncoupled radiative rates.
+    Close agreement was found between convective heating predictions from the two flow-field codes, LAURA and
+DPLR. Larger differences (up to 40% to 60%) were observed in the radiative heating predictions from the two
+radiation transport codes, RADEQUIL and NEQAIR96. It was theorized that these differences were due in part to
+differing amounts of radiative absorption being predicted by the two radiation transport codes, but no definite
+conclusions were reached within the course of the study.
+    Factors that influenced the predicted heating levels were examined. Both convective and radiative heating rates
+were found to be proportionately dependent on the amount of free stream CH4 assumed to be present in the
+atmosphere. It was also demonstrated that because of the disparity of molecular weights of the species present in the
+flow field, a multi-component diffusion model must be employed in order to obtain the correct convective heating
+                                                        11
+                                American Institute of Aeronautics and Astronautics
+levels for hypersonic flight in the atmosphere of Titan. Finally, a conservative estimate for transition onset time
+indicated transition would occur near peak heating; however, while transition to turbulence augmented the
+convective heating on the conical flank of the vehicle, the levels remained lower than those at the stagnation point.
+    Time-histories of the convective and radiative heating rates were generated through computations along the
+peak-heating trajectory identified through a Monte Carlo analysis of trajectory dispersions. These data were used in
+a separate thermal analysis (not discussed herein) from which it was concluded that the loads generated by the
+aerothermodynamic environment would be within the performance range of the thermal protection system.
+
+
+                                             VI.     Acknowledgements
+   Funding for this activity was provided by the NASA Engineering and Safety Center. Upgrades and
+modifications to the computational tools used in this study were funded in part by the NASA In-Space Propulsion
+program.
+
+
+                                                        References
+1
+  Jaffe, L. D., and Herrell, L. M., “Cassini/Huygens Science Instruments, Spacecraft, and Mission,” Journal of Spacecraft and
+Rockets, Vol. 34, No. 4, July-August 1997, pp. 509-521.
+2
+  NASA Engineering and Safety Center, “Assessment of the Cassini/Huygens Probe Entry, Descent and Landing (EDL) at Titan,”
+NESC-RP-05-67, May 2005.
+3
+  Wright, M. J., Hollis, B. R., Bose, D., and Walpot, L., “Post-Flight Aerothermal Analysis of Huygens Probe,” 3rd International
+Planetary Probe Workshop, Anavyssos, Greece, June-July 2005.
+4
+   Justus, C. G., Duval, A., and Johnson, D. L., “Engineering-Level Model Atmospheres for Titan and Neptune,” AIAA Paper
+2003-4803, July 2003.
+5
+  Desai, P. N. and Cheatwood, F. M., “Entry Dispersion Analysis for the Genesis Sample Return Capsule,” Journal of Spacecraft
+and Rockets, Vol. 38, No. 3, 2001, pp.345-350.
+6
+  Winchenbach, G. et al., “Huygens Probe Aerodynamics Free Flight Test Results: ARF Ballistic Spark Range,” WL-ARO-95-
+0022, March 1995.
+7
+  Striepe, S. A., Powell, R. W., Desai, P. N., Queen, E. M., Brauer, G. L., Cornick, D. E., Olson, D. W., Petersen, F. M.,
+Stevenson, R., Engel, M. C., Marsh, S. M., Gromko, A. M., “Program to Optimize Simulated Trajectories (POST II), Vol. II
+Utilization Manual.” Version 1.1.6.G, January 2004, NASA Langley Research Center, Hampton, VA.
+8
+  Spencer, D. A., Braun, R. D., “Mars Pathfinder Atmospheric Entry - Trajectory Design and Dispersion analysis,” Journal of
+Spacecraft and Rockets, Vol. 33, No. 5, Sept./Oct. 1996, pp. 670-676.
+9
+  Desai, P. N., Schoenenberger, M., and Cheatwood, F. M., “Mars Exploration Rover Six-Degree-Of-Freedom Entry Trajectory
+Analysis,” AAS Paper 03-642, August 2003.
+10
+   Desai, P. N., Lyons, D. T., “Entry, Descent, and Landing Operations Analysis for the Genesis Re-Entry Capsule,” AAS Paper
+05-121, January 2005.
+11
+   Lockwood, M. K., “Neptune Aerocapture System Analysis,” AIAA Paper 2004-4951, August 2004.
+12
+   Way, D. W., Powell, R. W., Edquist, K. T., Masciarelli, J. P., and Starr, B. P., “Aerocapture Simulation and Performance for
+the Titan Explorer Mission,” AIAA Paper 2003-4951, July 2003.
+13
+   Lockwood, M. K., “Titan Aerocapture Systems Analysis,” AIAA Paper 2003-4799, July 2003.
+14
+   Takashima, N., Hollis, B. R., Zoby, E. V., Sutton, K., Olejniczak, J., Wright, M. J., and Prabhu, D., “Preliminary
+Aerothermodynamics Analysis of Titan Aerocapture Aeroshell,” AIAA Paper 2003-4952, July 2003.
+15
+   Olejniczak, J., Wright, M. J., Prabhu, D., Takashima, N., Hollis, B. R., Zoby, E. V., and Sutton, K., “An Analysis of the
+Radiative Heating Environment for Aerocapture at Titan,” AIAA Paper 2003-4953, July 2003.
+16
+   Gnoffo, P. A., “An Upwind-Biased, Point-Implicit Algorithm for Viscous, Compressible Perfect-Gas Flows,” NASA TP-2953,
+Feb. 1990.
+17
+   Cheatwood, F. M., and Gnoffo, P. A., “User’s Manual for the Langley Aerothermodynamic Upwind Relaxation Algorithm
+(LAURA),” NASA TM 4674, April 1996.
+18
+   Wright, M.J., Candler, G.V., and Bose, D., “Data-Parallel Line Relaxation Method for the Navier-Stokes Equations,” AIAA
+Journal, Vol. 36, No. 9, 1998, pp. 1603-1609.
+19
+   Roe, P. L., “Approximate Riemann Solvers, Parameter Vectors and Difference Schemes,” Journal of Computational Physics,
+Vol. 43, No. 2, 1981, pp. 357-372.
+20
+   Harten, A., “High Resolution Schemes for Hyperbolic Conservation Laws,” Journal of Computational Physics, Vol. 49, No. 3,
+1983, pp. 357-393.
+21
+   Yee, H. C., “On Symmetric and Upwind TVD Schemes,” NASA TM 88325, 1990.
+22
+   MacCormack, R.W. and Candler, G.V., “The Solution of the Navier-Stokes Equations Using Gauss-Seidel Line Relaxation,”
+Computers and Fluids, Vol. 17, No. 1, 1989, pp. 135-150.
+23
+   Yee, H.C., “A Class of High-Resolution Explicit and Implicit Shock Capturing Methods,” NASA TM 101088, Feb. 1989.
+
+                                                           12
+                                   American Institute of Aeronautics and Astronautics
+24
+   Gökçen, T., “N2-CH4-Ar Chemical Kinetic Model for Simulations of Atmospheric Entry to Titan,” AIAA Paper 2004-2469,
+June-2004.
+25
+   Park, C., “Assessment of Two Temperature Kinetic Model for Ionizing Air,” AIAA Paper 1987-1574, June 1987.
+26
+   McBride, B. J., Zehe, M. J., and Gordon, S., “NASA Glenn Coefficients for Calculating Thermodynamic Properties of
+Individual Species,” NASA TP 2002-211556, Sept. 2002.
+27
+   Nicolet, W. E., “Advanced Methods for Calculating Radiation Transport in Ablation-Product Contaminated Boundary
+Layers,” NASA-CR-1656, Sept. 1970.
+28
+   Whiting, E. E., Yen, L., Arnold, J. O. and Paterson, J. A., “ NEQAIR96, Nonequilibrium and Equilibrium Radiative
+Transport and Spectra Program: User’s Manual,” NASA RP-1389, Dec. 1996.
+29
+   Bose, D., Wright, M. J., Bogdanoff, D. W., Raiche, G. A., and Allen, G. A., “Modeling and Experimental Validation of CN
+Radiation Behind a Strong Shock Wave,” AIAA Paper 2005-0768, Jan. 2005
+30
+   Tauber, M., and Wakefield R., “Heating Environment and Protection During Jupiter Entry,” Journal of Spacecraft and Rockets,
+Vol. 8, No. 3, 1971, pp. 630–636.
+31
+   Goulard, R., “The Coupling of Radiation and Convection in Detached Shock Layers,” Journal of Quantitative Spectroscopy
+and Radiative Heat Transfer, Vol. 1, 1961, pp. 249–257.
+32
+   Wright, M. J., Bose, D., and Olejniczak, J., “Impact of Flowfield-Radiation Coupling on Aeroheating for Titan
+Aerocapture,” Journal of Thermophysics and Heat Transfer, Vol. 19, No. 1, January-March 2005.
+33
+   Bose, D., and Wright, M. J., “View-Factor-Based Radiation Transport in a Hypersonic Shock Layer,” Journal of
+Thermophysics and Heat Transfer, Vol. 18, No. 4, 2004, pp. 553-555.
+34
+   Sutton, K. and Gnoffo, P. A., “Multi-Component Diffusion with Application to Computational Aerothermodynamics,”
+AIAA Paper 1998-2575, June 1998.
+35
+   Ramshaw, J. D., “Self-Consistent Effective Binary Diffusion in Multicomponent Gas Mixtures,” Journal of Non-
+Equilibrium Thermodynamics, Vol. 15, No. 3, 1990, pp. 295-300.
+36
+   Hollis, B. R, Liechty, D. S., Wright, M. J., Holden, M. S., Wadhams, T. P., MacLean, M., and Dyakonov, A., “Transition
+Onset and Turbulent Heating Measurements on the Mars Science Laboratory Entry Vehicle,” AIAA Paper 2005-1437, Jan.
+2005
+
+
+
+
+                                                           13
+                                   American Institute of Aeronautics and Astronautics
+
