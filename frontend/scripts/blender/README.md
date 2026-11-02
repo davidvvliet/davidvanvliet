@@ -13,6 +13,7 @@ Python; the command line needs only the system `python3`.
 - `lib/materials.py`: the shared material list (foil, paint, metal, solar cells), merged with a spec's `materials`, and `image()` (image colour + normal map, optionally cut out by the image's alpha), Principled BSDF only
 - `lib/tiling.py`: repeating surface textures and the UVs that wrap them round a body (`cyl_uv`, `plane_uv`): hex tiles, weld lines, mottle, braid, crinkled foil
 - `lib/textures.py`: textures made at build time from `refs/` data (`engraved()`: colour + normal map from a line image; `marking()`: colour + cut-out for a decal from traced masks)
+- `lib/includes.py`: a probe that is also part of another (Huygens on Cassini): `place` builds it with its own spec and moves it into place
 - `lib/engines.py`: rocket and jet engines from an engine spec (nozzle contour, chamber, powerhead, pumps, pipes; nacelle, fan, core), full or simple, and `place` for putting them on a vehicle
 - `lib/rig.py`: review rig and contact sheet (front, three-quarter / side, top; metric grid on the orthographic views)
 - `lib/checks.py`: dimension checks measured from the built geometry, `attached`, `mounted`, `ground`, `joints`, `materials`, `textures`, triangle and file-size budgets (plus `sources`, from `lib/sources.py`)
@@ -431,3 +432,15 @@ Engines are models of their own and parts other models use (`lib/engines.py`; th
   dozens (Super Heavy's 33).
 - Until an engine has a spec of its own, a vehicle can pass a sourced `engine` block from its
   own spec straight to `engines.place` (Super Heavy's `from_photos.engine`, a Raptor stand-in).
+
+## Included probes
+A probe can be a model of its own and part of another, as Huygens is of Cassini
+(`lib/includes.py`). The carrier lists it in its spec (`"includes": ["huygens"]`) and calls
+`includes.place(spec, "huygens", location, direction, roll_deg)`, which runs the included
+probe's own script with its own spec and moves what it made so its origin is at `location` and
+its +z along `direction`. Its assemblies keep their names but become one set (`within` = the
+probe), so the carrier's Explode moves it out as one and then takes it apart; its core flag is
+dropped. The script sees `spec["included_in"]` (the carrier's title), to leave to the carrier
+what the carrier does to every part (Cassini's foil pass). The list makes the carrier behind
+when the included probe's spec, script or refs change, and adds its credits to the carrier's.
+Its dimension checks run on its own build, not the carrier's.

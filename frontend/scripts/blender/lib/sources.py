@@ -80,10 +80,10 @@ def check(spec):
 
 def credits(spec):
     """Credit lines of the sources that have one, in list order, then those of the engines
-    the spec lists (lib/engines.py), each line once."""
+    and included probes the spec lists (lib/engines.py, lib/includes.py), each line once."""
     out = [s["credit"] for s in spec.get("sources", []) if s.get("credit")]
     import json
-    for e in spec.get("engines", []):
+    for e in spec.get("engines", []) + spec.get("includes", []):
         try:
             with open(os.path.join(HERE, "specs", f"{e}.json")) as f:
                 out += [c for c in credits(json.load(f)) if c not in out]
