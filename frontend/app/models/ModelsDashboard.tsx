@@ -51,6 +51,12 @@ const tagged = (o: THREE.Object3D) => {
   for (let x: THREE.Object3D | null = o; x; x = x.parent) if (typeof x.userData.assembly === "string") return x;
   return null;
 };
+// An included probe's own assembly (lib/includes.py tags it `sub`), or null.
+function subOf(o: THREE.Object3D | null): string | null {
+  for (; o; o = o.parent) if (typeof o.userData.sub === "string") return o.userData.sub;
+  return null;
+}
+
 function groupOf(o: THREE.Object3D, scene: THREE.Object3D) {
   const t = tagged(o);
   if (t) return t.userData.assembly as string;
@@ -73,6 +79,7 @@ function useParts(scene: THREE.Object3D) {
     let core: string | null = null;
     const within = new Map<string, string>(); // assembly -> its nested set (a probe's shield, module, cover)
     const inside = new Set<string>(); // inside parts seen through an opening (parts.assembly(inside=True))
+    const subBoxes = new Map<string, Map<string, THREE.Box3>>(); // an included probe's own assemblies (`sub`)
     scene.traverse((o) => {
       if (o.userData.core && typeof o.userData.assembly === "string") core = o.userData.assembly;
       if (typeof o.userData.within === "string" && typeof o.userData.assembly === "string") within.set(o.userData.assembly, o.userData.within);
@@ -87,6 +94,12 @@ function useParts(scene: THREE.Object3D) {
       parts.set(g, p);
       const box = boxes.get(g) ?? new THREE.Box3();
       boxes.set(g, box.union(new THREE.Box3().setFromObject(m)));
+      const sb = subOf(m);
+      if (sb) {
+        const bySub = subBoxes.get(g) ?? new Map<string, THREE.Box3>();
+        bySub.set(sb, (bySub.get(sb) ?? new THREE.Box3()).union(new THREE.Box3().setFromObject(m)));
+        subBoxes.set(g, bySub);
+      }
     });
     let largest = "", size = -1;
     for (const [g, b] of boxes) { const l = b.getSize(new THREE.Vector3()).length(); if (l > size) { size = l; largest = g; } }
@@ -104,6 +117,28 @@ function useParts(scene: THREE.Object3D) {
       const push = Math.min(step + Math.min(len, step * 2) * 0.8, Math.max(reach - len, step * 0.3));
       return d.normalize().multiplyScalar(push);
     };
+    // A line of boxes spread apart: along the line through the two centres farthest apart,
+    // pointing away from the core, a member's length apart plus a margin.
+    const spread = (members: Map<string, THREE.Box3>, out: THREE.Vector3) => {
+      const list = [...members.keys()];
+      const centres = list.map((g) => members.get(g)!.getCenter(new THREE.Vector3()));
+      let dir = out.clone(), far = 0;
+      for (const a of centres) for (const b of centres) {
+        const d = b.clone().sub(a);
+        if (d.length() > far) { far = d.length(); dir = d; }
+      }
+      dir = far > 1e-3 ? dir.normalize() : out;
+      if (dir.dot(out) < 0) dir.negate();
+      const along = (g: string) => members.get(g)!.getCenter(new THREE.Vector3()).dot(dir);
+      const span = (g: string) => {
+        const s = members.get(g)!.getSize(new THREE.Vector3());
+        return s.x * Math.abs(dir.x) + s.y * Math.abs(dir.y) + s.z * Math.abs(dir.z);
+      };
+      const gap = Math.max(...list.map(span)) * 1.25;
+      const res = new Map<string, THREE.Vector3>();
+      list.sort((a, b) => along(a) - along(b)).forEach((g, i) => res.set(g, dir.clone().multiplyScalar(gap * (i - (list.length - 1) / 2))));
+      return res;
+    };
     const sets = new Map<string, string[]>();
     for (const [g, box] of boxes) {
       const s = within.get(g);
@@ -118,23 +153,13 @@ function useParts(scene: THREE.Object3D) {
       for (const g of members) all.union(boxes.get(g)!);
       const base = pushOf(all);
       const out = all.getCenter(new THREE.Vector3()).sub(centre).normalize();
-      const centres = members.map((g) => boxes.get(g)!.getCenter(new THREE.Vector3()));
-      let dir = out.clone(), far = 0;
-      for (const a of centres) for (const b of centres) {
-        const d = b.clone().sub(a);
-        if (d.length() > far) { far = d.length(); dir = d; }
-      }
-      dir = far > 1e-3 ? dir.normalize() : out;
-      if (dir.dot(out) < 0) dir.negate();
-      const along = (g: string) => boxes.get(g)!.getCenter(new THREE.Vector3()).dot(dir);
-      const span = (g: string) => {
-        const s = boxes.get(g)!.getSize(new THREE.Vector3());
-        return s.x * Math.abs(dir.x) + s.y * Math.abs(dir.y) + s.z * Math.abs(dir.z);
-      };
-      const gap = Math.max(...members.map(span)) * 1.25;
-      [...members].sort((a, b) => along(a) - along(b)).forEach((g, i, list) =>
-        offsets.set(g, base.clone().addScaledVector(dir, gap * (i - (list.length - 1) / 2))));
+      for (const [g, o] of spread(new Map(members.map((g) => [g, boxes.get(g)!])), out)) offsets.set(g, base.clone().add(o));
     }
+    // An included probe (lib/includes.py) moves out as one part, and its own assemblies spread
+    // the same way, so its inside shows.
+    const subOffsets = new Map<string, Map<string, THREE.Vector3>>();
+    for (const [g, bySub] of subBoxes) if (bySub.size > 1)
+      subOffsets.set(g, spread(bySub, boxes.get(g)!.getCenter(new THREE.Vector3()).sub(centre).normalize()));
     // Units, and each unit's offset in its parent's frame, less what it inherits from an
     // ancestor unit that moves too.
     const units: Unit[] = [];
@@ -142,10 +167,11 @@ function useParts(scene: THREE.Object3D) {
     const visit = (o: THREE.Object3D, inherited: THREE.Vector3) => {
       for (const c of o.children) {
         const g = c.userData.assembly as string | undefined;
-        const outer = typeof g === "string" ? g !== (tagged(o)?.userData.assembly) : o === scene;
+        const s = c.userData.sub as string | undefined;
+        const outer = typeof g === "string" ? g !== (tagged(o)?.userData.assembly) || (!!s && s !== subOf(o)) : o === scene;
         if (!outer) { visit(c, inherited); continue; }
         const group = typeof g === "string" ? g : groupOf(c, scene);
-        const want = offsets.get(group) ?? zero;
+        const want = (offsets.get(group) ?? zero).clone().add((s && subOffsets.get(group)?.get(s)) || zero);
         const world = want.clone().sub(inherited);
         const inv = new THREE.Matrix3().setFromMatrix4(o.matrixWorld).invert();
         units.push({ node: c, rest: c.position.clone(), group, local: world.applyMatrix3(inv) });
@@ -185,7 +211,7 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
   // A copy per mount (geometry is shared): explode, fades and Suspense hiding change the
   // objects, and useGLTF's cached scene is reused by the next mount and the /models grid.
   const scene = useMemo(() => gltf.scene.clone(true), [gltf.scene]);
-  const { parts, units, boxes, centre, inside: seen } = useParts(scene);
+  const { parts, units, offsets, boxes, centre, inside: seen } = useParts(scene);
   const readyRef = useRef(onReady);
   readyRef.current = onReady;
   useEffect(() => { readyRef.current?.(); }, [scene]);
@@ -275,7 +301,7 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
       const box = flyBox;
       // Where the part is now (it may be exploding), and far enough to see all of it.
       const off = new THREE.Vector3();
-      if (!flight.current.box) for (const u of units) if (u.group === focus) off.copy(u.node.position).sub(u.rest).applyMatrix3(new THREE.Matrix3().setFromMatrix4(u.node.parent!.matrixWorld));
+      if (!flight.current.box && focus && (explore || explodable.includes(focus))) off.copy(offsets.get(focus) ?? off).multiplyScalar(k);
       const goalTarget = box.getCenter(new THREE.Vector3()).add(off);
       const fov = THREE.MathUtils.degToRad(camera.fov) * Math.min(1, camera.aspect);
       const dist = Math.max(box.getSize(new THREE.Vector3()).length() * 0.65, 0.05) / Math.sin(fov / 2);
