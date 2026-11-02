@@ -14,19 +14,24 @@ COLLECTION = "Probe"
 _ASSEMBLY = [None]
 _CORE = set()
 _WITHIN = {}
+_INTERNAL = set()
 
 @contextlib.contextmanager
-def assembly(name, core=False, within=None):
+def assembly(name, core=False, within=None, internal=False):
     """Tag every part made inside the block. `core`: the assembly explode pushes away from
     (a bus or rover body); without one, a part named "bus" is the core. `within`: the name of
     a set of nested assemblies (a probe's shield, inner module and cover) that the dashboard's
-    explode moves out as one and then spreads apart along that line."""
+    explode moves out as one and then spreads apart along that line. `internal`: an inside part
+    (a telescope's mirrors, an engine's pumps): the build exports it to its own file,
+    out/<probe>/internal.glb, which the viewer loads only when asked to show the inside."""
     prev = _ASSEMBLY[0]
     _ASSEMBLY[0] = name
     if core:
         _CORE.add(name)
     if within:
         _WITHIN[name] = within
+    if internal:
+        _INTERNAL.add(name)
     try:
         yield
     finally:
@@ -39,6 +44,8 @@ def _tag(obj):
             obj["core"] = True
         if _ASSEMBLY[0] in _WITHIN:
             obj["within"] = _WITHIN[_ASSEMBLY[0]]
+        if _ASSEMBLY[0] in _INTERNAL:
+            obj["internal"] = True
 
 def collection():
     col = bpy.data.collections.get(COLLECTION)
@@ -51,6 +58,7 @@ def clear():
     """Delete every object in the Probe collection (the rest of the scene is left alone)."""
     _CORE.clear()
     _WITHIN.clear()
+    _INTERNAL.clear()
     _ASSEMBLY[0] = None
     for obj in list(collection().objects):
         mesh = obj.data

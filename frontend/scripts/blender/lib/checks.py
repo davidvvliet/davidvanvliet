@@ -268,17 +268,24 @@ def run(spec, objs):
         results.append({"name": "joints", "ok": not j, "measured": len(spec["joints"]) - len(j), "unit": "joints",
                         "expected": len(spec["joints"]), "detail": "; ".join(j) or "every posed joint inside its limits"})
     budget = spec.get("budget", {})
-    tris = triangles(objs)
+    inner = [o for o in objs if o.get("internal")]
+    tris = triangles([o for o in objs if not o.get("internal")])
     max_tris = budget.get("triangles", 50000)
     results.append({"name": "triangles", "ok": tris <= max_tris, "measured": tris,
                     "expected": max_tris, "unit": "tris", "detail": "budget"})
+    if inner:  # the inside parts are their own file, with their own budget
+        tris = triangles(inner)
+        max_tris = budget.get("internal_triangles", 100000)
+        results.append({"name": "internal triangles", "ok": tris <= max_tris, "measured": tris,
+                        "expected": max_tris, "unit": "tris", "detail": "budget (internal.glb)"})
     return results
 
-def file_size(path, spec):
-    max_bytes = spec.get("budget", {}).get("glb_bytes", 1_500_000)
+def file_size(path, spec, internal=False):
+    budget = spec.get("budget", {})
+    max_bytes = budget.get("internal_glb_bytes", 3_000_000) if internal else budget.get("glb_bytes", 1_500_000)
     size = os.path.getsize(path)
-    return {"name": "glb size", "ok": size <= max_bytes, "measured": size, "expected": max_bytes,
-            "unit": "bytes", "detail": "budget"}
+    return {"name": "internal glb size" if internal else "glb size", "ok": size <= max_bytes, "measured": size,
+            "expected": max_bytes, "unit": "bytes", "detail": "budget (internal.glb)" if internal else "budget"}
 
 def _glb_json(path):
     with open(path, "rb") as f:

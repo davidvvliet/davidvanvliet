@@ -61,8 +61,9 @@
 .trees button { background: none; border: none; padding: 0; color: #666; font: inherit; cursor: pointer; }
 .trees .active { color: #ededed; }
 
+/* The viewer's buttons (Explode, Internal), top left. */
+.tools { position: absolute; top: 0.5rem; left: 0.75rem; z-index: 1; display: flex; gap: 0.5rem; }
 .explode {
-  position: absolute; top: 0.5rem; left: 0.75rem; z-index: 1;
   background: none; border: 1px solid #00ff00; padding: 0.2rem 0.6rem; color: #bbb; font: inherit; cursor: pointer;
 }
 .explode:hover, .explode.active { color: #ededed; }

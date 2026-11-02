@@ -10,7 +10,7 @@ import styles from "./models.module.css";
 type Check = { name: string; ok: boolean; measured: number | null; expected: number; unit: string; detail?: string; source?: string | null };
 type Build = {
   started: number; ok?: boolean; error?: string; seconds?: number; checks?: Check[];
-  sheet?: string; glb?: string; grid_m?: Record<string, number>; size_m?: number[];
+  sheet?: string; glb?: string; glb_internal?: string; grid_m?: Record<string, number>; size_m?: number[];
   history?: string[]; baseline?: { diff: number; changed: boolean } | null; approved?: number;
   closeups?: string[];
 };
@@ -169,9 +169,12 @@ type Controls = THREE.EventDispatcher<{ start: object }> & { target: THREE.Vecto
 // A clicked part (`focus`) gets the camera: it flies in keeping the current viewing direction
 // and centres on the part, and every other part fades. Any drag or scroll ends the flight, and
 // from then on the camera moves freely; clearing the focus only clears the fade.
-function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = true, focusable = NONE, explodable = NO_PARTS }: {
+// `ghost`: every part faded and none clickable (the outside while the inside is shown).
+// `inner`: a model's inside parts (internal.glb): no framing of its own on load, the camera
+// flies to them instead.
+function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = true, focusable = NONE, explodable = NO_PARTS, ghost = false, inner = false }: {
   url: string; exploded: boolean; focus: string | null; setFocus: (f: string | null) => void; explore?: boolean;
-  focusable?: Focusable[]; explodable?: string[];
+  focusable?: Focusable[]; explodable?: string[]; ghost?: boolean; inner?: boolean;
   onLabel: (label: { name: string; size: THREE.Vector3 } | null) => void; onReady?: () => void;
 }) {
   const gltf = useGLTF(url, "/draco/"); // compressed models (the /circuit boards) decode with the copy in public/draco
@@ -204,9 +207,14 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
   }, [gltf.scene, gl]);
   const homeNear = useRef(0.01);
   const homeDist = useRef(1);
-  const flight = useRef<{ dir: THREE.Vector3 } | null>(null);
+  const flight = useRef<{ dir: THREE.Vector3; box?: THREE.Box3 } | null>(null);
 
   useEffect(() => {
+    if (inner) {
+      // Fly from wherever the camera is to the whole inside, keeping the viewing direction.
+      if (controls) flight.current = { dir: camera.position.clone().sub(controls.target).normalize(), box: new THREE.Box3().setFromObject(scene) };
+      return;
+    }
     const sphere = new THREE.Box3().setFromObject(scene).getBoundingSphere(new THREE.Sphere());
     const fov = THREE.MathUtils.degToRad(camera.fov) * Math.min(1, camera.aspect);
     const dist = (sphere.radius * 1.15) / Math.sin(fov / 2);
@@ -218,7 +226,7 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
     camera.updateProjectionMatrix();
     if (controls) { controls.target.copy(centre); controls.update(); }
     else camera.lookAt(centre);
-  }, [scene, camera, controls, centre]);
+  }, [scene, camera, controls, centre, inner]);
 
   // Focusing a part starts a flight to it; any drag or scroll ends it.
   useEffect(() => {
@@ -242,25 +250,26 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
           mat.userData.restOpacity = mat.opacity;
           mat.userData.restTransparent = mat.transparent;
         }
-        const fade = !!focus && p.group !== focus;
+        const fade = ghost || (!!focus && p.group !== focus);
         mat.transparent = fade || mat.userData.restTransparent;
         mat.opacity = fade ? FADED : mat.userData.restOpacity;
         mat.depthWrite = !fade;
         mat.needsUpdate = true;
       }
     }
-  }, [focus, parts]);
+  }, [focus, parts, ghost]);
 
   useFrame((_, dt) => {
     const goal = exploded ? 1 : 0;
     if (Math.abs(goal - t.current) < 1e-4) { t.current = goal; } else t.current += (goal - t.current) * Math.min(1, dt * 5);
     const k = smooth(t.current);
     for (const u of units) u.node.position.copy(u.rest).addScaledVector(u.local, explore || explodable.includes(u.group) ? k : 0);
-    if (controls && flight.current && focus && boxes.has(focus)) {
-      const box = boxes.get(focus)!;
+    const flyBox = flight.current?.box ?? (focus ? boxes.get(focus) : undefined);
+    if (controls && flight.current && flyBox) {
+      const box = flyBox;
       // Where the part is now (it may be exploding), and far enough to see all of it.
       const off = new THREE.Vector3();
-      for (const u of units) if (u.group === focus) off.copy(u.node.position).sub(u.rest).applyMatrix3(new THREE.Matrix3().setFromMatrix4(u.node.parent!.matrixWorld));
+      if (!flight.current.box) for (const u of units) if (u.group === focus) off.copy(u.node.position).sub(u.rest).applyMatrix3(new THREE.Matrix3().setFromMatrix4(u.node.parent!.matrixWorld));
       const goalTarget = box.getCenter(new THREE.Vector3()).add(off);
       const fov = THREE.MathUtils.degToRad(camera.fov) * Math.min(1, camera.aspect);
       const dist = Math.max(box.getSize(new THREE.Vector3()).length() * 0.65, 0.05) / Math.sin(fov / 2);
@@ -340,12 +349,14 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
     const name = focusable.find((f) => f.part === label)?.label ?? label;
     onLabel(label && box ? { name: name!, size: box.getSize(new THREE.Vector3()) } : null);
   }, [label, boxes, onLabel, focusable]);
+  if (ghost) return <primitive object={scene} />; // no handlers: clicks go through to the inside
   return <primitive object={scene} onPointerMove={onMove} onClick={onClick}
     onPointerOut={() => { setHover(null); gl.domElement.style.cursor = ""; }} />;
 }
 
 export type Focusable = { part: string; label: string };
 const NONE: Focusable[] = [];
+const noLabel = () => {};
 const NO_PARTS: string[] = [];
 
 // Hinged parts: joints the build exported with a "joint_move_to" (the spec's joints). A click
@@ -433,11 +444,16 @@ class ViewerBoundary extends Component<{ children: ReactNode; resetKey: string }
 
 // `compact`: embedded in a scrolling page (the terminal): no wheel zoom, so the wheel scrolls the page.
 // `focus`/`onFocus`: the focused part, when the page around the viewer also picks it (the /circuit block list).
-export function Viewer({ probe, url, breakdown, stale, compact, onReady, focus: shown, onFocus, explore = true, focusable = NONE, explodable = NO_PARTS }: {
+// `internalUrl`: the model's inside parts (internal.glb), loaded when "Internal" is pressed.
+export function Viewer({ probe, url, breakdown, stale, compact, onReady, focus: shown, onFocus, explore = true, focusable = NONE, explodable = NO_PARTS, internalUrl }: {
   probe: string; url: string; breakdown: Breakdown | null; stale: boolean; compact?: boolean; onReady?: () => void;
   focus?: string | null; onFocus?: (f: string | null) => void; explore?: boolean; focusable?: Focusable[]; explodable?: string[];
+  internalUrl?: string;
 }) {
   const [exploded, setExploded] = useState(false);
+  const [inside, setInside] = useState(false);
+  const [innerFocus, setInnerFocus] = useState<string | null>(null);
+  useEffect(() => { setInside(false); setInnerFocus(null); }, [probe]);
   const [own, setOwn] = useState<string | null>(null);
   const focus = shown !== undefined ? shown : own;
   const setFocus = onFocus ?? setOwn;
@@ -446,23 +462,26 @@ export function Viewer({ probe, url, breakdown, stale, compact, onReady, focus: 
   const [label, setLabel] = useState<{ name: string; size: THREE.Vector3 } | null>(null);
   const down = useRef<{ x: number; y: number } | null>(null);
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setFocus(null); };
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") { setFocus(null); setInnerFocus(null); } };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
   return (
     <ViewerBoundary resetKey={url}>
-      {explore && (
-        <button className={`${styles.explode} ${exploded ? styles.active : ""}`} onClick={() => setExploded((x) => !x)}>
-          {exploded ? "Assemble" : "Explode"}
-        </button>
-      )}
-      {!explore && explodable.length > 0 && (
-        // Only the spec's listed parts move; its focusable parts are clicked on the model.
-        <button className={`${styles.explode} ${exploded ? styles.active : ""}`} onClick={() => setExploded((x) => !x)}>
-          {exploded ? "Assemble" : "Explode"}
-        </button>
-      )}
+      <div className={styles.tools}>
+        {/* Without explore, only the spec's listed parts move; its focusable parts are clicked on the model. */}
+        {!inside && (explore || explodable.length > 0) && (
+          <button className={`${styles.explode} ${exploded ? styles.active : ""}`} onClick={() => setExploded((x) => !x)}>
+            {exploded ? "Assemble" : "Explode"}
+          </button>
+        )}
+        {internalUrl && (
+          <button className={`${styles.explode} ${inside ? styles.active : ""}`}
+            onClick={() => { setFocus(null); setInnerFocus(null); setExploded(false); setInside((x) => !x); }}>
+            {inside ? "Exterior" : "Internal"}
+          </button>
+        )}
+      </div>
       {label && (
         <PartLabel name={label.name} size={label.size} row={breakdown?.families[label.name]}
           hasBreakdown={!!breakdown} stale={stale} />
@@ -472,12 +491,18 @@ export function Viewer({ probe, url, breakdown, stale, compact, onReady, focus: 
         onPointerMissed={(e) => {
           // A click on empty space unfocuses; the end of an orbit drag doesn't.
           const d = down.current;
-          if (d && Math.hypot(e.clientX - d.x, e.clientY - d.y) <= 4) setFocus(null);
+          if (d && Math.hypot(e.clientX - d.x, e.clientY - d.y) <= 4) { setFocus(null); setInnerFocus(null); }
         }}>
         <color attach="background" args={["#090909"]} />
         <StudioLights />
         <Suspense fallback={null}>
-          <Model key={url} url={url} exploded={exploded} focus={focus} setFocus={setFocus} onLabel={setLabel} onReady={onReady} explore={explore} focusable={focusable} explodable={explodable} />
+          <Model key={url} url={url} exploded={exploded} focus={inside ? null : focus} setFocus={setFocus} onLabel={inside ? noLabel : setLabel}
+            onReady={onReady} explore={explore} focusable={focusable} explodable={explodable} ghost={inside} />
+        </Suspense>
+        <Suspense fallback={null}>
+          {inside && internalUrl && (
+            <Model key={internalUrl} url={internalUrl} exploded={false} focus={innerFocus} setFocus={setInnerFocus} onLabel={setLabel} inner />
+          )}
         </Suspense>
         <OrbitControls makeDefault enableZoom={!compact} zoomToCursor />
       </Canvas>
@@ -588,6 +613,7 @@ export default function ModelsDashboard() {
     : b?.sheet ? file(wt, `out/${probe.name}/sheet.png`, b.started) : null;
   const board = probe?.kind === "circuit";
   const glbUrl = probe && b?.glb ? file(wt, board ? `circuit/${probe.name}/${b.glb}` : `out/${probe.name}/${probe.name}.glb`, b.started) : null;
+  const internalUrl = probe && !board && b?.glb_internal ? file(wt, `out/${probe.name}/internal.glb`, b.started) : undefined;
   const [focus, setFocus] = useState<string | null>(null); // a board's block, picked in its list or on the board
   useEffect(() => setFocus(null), [probe?.name]);
 
@@ -667,7 +693,7 @@ export default function ModelsDashboard() {
       </header>
       <div className={styles.grid}>
         <div className={styles.viewCell}>
-          {glbUrl ? <Viewer probe={probe!.name} url={glbUrl} breakdown={breakdown} stale={stale}
+          {glbUrl ? <Viewer probe={probe!.name} url={glbUrl} breakdown={breakdown} stale={stale} internalUrl={internalUrl}
             {...(board ? { focus, onFocus: setFocus } : {})} /> : <div className={styles.empty}>{probe ? "no export" : ""}</div>}
         </div>
         <div className={styles.side}>

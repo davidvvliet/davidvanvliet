@@ -137,23 +137,45 @@ def build(probe, export=True):
 
         if export:
             _step(status, probe, "export")
-            for o in bpy.context.view_layer.objects:
-                o.select_set(False)
-            for o in all_objs:
-                o.select_set(True)
+            # Inside parts (parts.assembly(..., internal=True)) go to their own file, which the
+            # viewer loads only when asked; neither file may hang a part off the other's.
+            inner = [o for o in all_objs if o.get("internal")]
+            outer = [o for o in all_objs if not o.get("internal")]
+            crossed = [o.name for o in all_objs if o.parent is not None and bool(o.get("internal")) != bool(o.parent.get("internal"))]
+            if crossed:
+                raise RuntimeError("internal and outside parts parented across: " + ", ".join(crossed))
+
+            def export(objs_, path):
+                for o in bpy.context.view_layer.objects:
+                    o.select_set(False)
+                for o in objs_:
+                    o.select_set(True)
+                # Extras carry each part's assembly (and joints' axes) to the dashboard.
+                bpy.ops.export_scene.gltf(filepath=path, export_format="GLB", use_selection=True,
+                                          export_apply=True, export_yup=True, export_extras=True,
+                                          export_image_quality=90)
             glb = os.path.join(out_dir, f"{probe}.glb")
-            # Extras carry each part's assembly (and joints' axes) to the dashboard.
-            bpy.ops.export_scene.gltf(filepath=glb, export_format="GLB", use_selection=True,
-                                      export_apply=True, export_yup=True, export_extras=True,
-                                      export_image_quality=90)
+            export(outer, glb)
             entry["glb"] = glb
             results.append(checks.file_size(glb, spec))
-            tex = checks.textures(objs, glb)
+            inner_glb = os.path.join(out_dir, "internal.glb")
+            if inner:
+                export(inner, inner_glb)
+                entry["glb_internal"] = inner_glb
+                results.append(checks.file_size(inner_glb, spec, internal=True))
+            elif os.path.exists(inner_glb):
+                os.remove(inner_glb)
+            # Each file is checked against its own parts.
+            files = [(parts.meshes(outer), glb)] + ([(parts.meshes(inner), inner_glb)] if inner else [])
+            texs = [checks.textures(o, g) for o, g in files if o]
+            tex = None if all(t is None for t in texs) else [p for t in texs if t for p in t]
             if tex is not None:
                 results.append({"name": "textures", "ok": not tex, "measured": "ok" if not tex else "broken",
                                 "expected": "images + UVs", "unit": "",
                                 "detail": "; ".join(tex) or "images present, UVs inside, all exported"})
-            mat = checks.materials(spec, objs, glb, material_problems)
+            mat = checks.materials(spec, files[0][0], glb, material_problems)
+            for o, g in files[1:]:
+                mat += [p for p in checks.materials({"fixture": True}, o, g) if p]
             results.append({"name": "materials", "ok": not mat, "measured": "ok" if not mat else "off",
                             "expected": "sourced, exported", "unit": "",
                             "detail": "; ".join(mat) or "spec materials sourced; colour, metal, roughness exported as built"})

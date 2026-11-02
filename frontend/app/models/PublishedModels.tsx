@@ -11,7 +11,7 @@ import ModelsDashboard, { Viewer, type Focusable } from "./ModelsDashboard";
 import styles from "./models.module.css";
 
 export type Published = {
-  probe: string; title: string; thumb: boolean; logos: string[]; explore: boolean; focus: Focusable[]; explode: string[];
+  probe: string; title: string; thumb: boolean; logos: string[]; explore: boolean; focus: Focusable[]; explode: string[]; internal: boolean;
   sources: { title: string; url: string; licence: string | null; cited: number }[];
 };
 
@@ -71,7 +71,8 @@ export default function PublishedModels({ models, circuit, dashboard }: {
         </Header>
         <div className={styles.detail}>
           <div className={styles.viewCell}>
-            <Viewer probe={probe} url={`/models/${probe}.glb`} breakdown={null} stale={false} explore={model.explore} focusable={model.focus} explodable={model.explode} />
+            <Viewer probe={probe} url={`/models/${probe}.glb`} breakdown={null} stale={false} explore={model.explore} focusable={model.focus} explodable={model.explode}
+              internalUrl={model.internal ? `/models/internal/${probe}.glb` : undefined} />
             <Logos model={model} />
           </div>
           <Sources sources={model.sources} />

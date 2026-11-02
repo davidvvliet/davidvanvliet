@@ -146,6 +146,17 @@ Specs for these probes can also use:
 `testrover` is the rover fixture: a body, rocker-bogie suspension, six wheels, a mast and a
 two-joint arm, with made-up values.
 
+## Inside parts (internal.glb)
+
+Parts inside a closed body (a telescope's mirrors and truss, later an engine's pumps) are built in
+`with parts.assembly("primary_mirror", internal=True):`. The build exports them to their own file,
+`out/<probe>/internal.glb`, and the rest to `<probe>.glb` as before; approve copies it to
+`public/models/internal/<probe>.glb` (a subfolder, so the /models grid doesn't list it). The viewer
+shows an "Internal" button when that file exists and loads it only when pressed: the outside fades
+and the camera flies to the inside parts, each of which can be clicked to focus. They have their own
+budget (`budget.internal_triangles`, `budget.internal_glb_bytes`), and no part may be parented across
+the two files. Every other check (attached, sources, materials) covers them as usual.
+
 ## Materials
 
 A part asks for a material by name (`material="dark_metal"`). The names come from the shared

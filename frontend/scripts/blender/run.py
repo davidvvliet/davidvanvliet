@@ -213,6 +213,14 @@ def cmd_approve(args):
     if not spec.get("fixture"):  # fixtures only guard lib/; they never ship
         os.makedirs(PUBLIC_MODELS, exist_ok=True)
         shutil.copy(entry["glb"], os.path.join(PUBLIC_MODELS, f"{probe}.glb"))
+        # Inside parts: public/models/internal/<probe>.glb (a subfolder, so the /models grid,
+        # which lists every .glb in public/models, doesn't take it for a model of its own).
+        inner = os.path.join(PUBLIC_MODELS, "internal", f"{probe}.glb")
+        if entry.get("glb_internal") and os.path.exists(entry["glb_internal"]):
+            os.makedirs(os.path.dirname(inner), exist_ok=True)
+            shutil.copy(entry["glb_internal"], inner)
+        elif os.path.exists(inner):
+            os.remove(inner)
         # The /models grid shows this image until the live model has loaded.
         check_version()
         proc = subprocess.run([BLENDER, "--background", "--factory-startup", "--python-exit-code", "1",
