@@ -5,7 +5,7 @@
 # spec's `dimensions`; positions and sizes no document gives come from `from_reference_model`
 # (measured on model A), every z stretched so the stack is the documented 6.8 m.
 import math
-from lib import parts
+from lib import materials, parts, tiling
 
 def _along(start, direction, s):
     return tuple(start[i] + direction[i] * s for i in range(3))
@@ -217,3 +217,28 @@ def build(spec):
         parts.strut(f"rpws_mount_{i + 1}", P(r0), P(ref["mag_canister"]["centre"]), radius=0.03, material="blanket_amber")
         parts.cylinder(f"rpws_{i + 1}", radius=d["rpws_antenna_diameter"] / 2, length=d["rpws_antenna_length"],
                        location=P(r0), direction=v, segments=6, material="dark_metal")
+
+    # Thermal blankets: every part in the gold or black blanket finish gets crinkled foil (the
+    # spec's sampled colours; crease sizes estimated by eye from pia04603, no document gives
+    # them), mapped by box projection since most blankets are copied meshes, not lathes.
+    sm = spec["materials"]
+    foils = {}
+    for name in ("blanket_amber", "blanket_black"):
+        fb, fn = tiling.crinkled_foil("cassini", f"{name}_foil", sm[name]["hex"], facet=0.06, tilt_deg=9,
+                                      wrinkle=0.25, wrinkle_deg=8, spread=0.06, stretch=1.5,
+                                      repeat=(FOIL_TILE, FOIL_TILE), px_per_m=700)
+        foils[name] = materials.image(f"{name}_crinkled", fb, normal=fn, metallic=sm[name]["metallic"],
+                                      roughness=sm[name]["roughness"])
+    for obj in list(parts.collection().objects):
+        if obj.type != "MESH" or not obj.data.materials:
+            continue
+        mats = obj.data.materials
+        hit = [i for i, m in enumerate(mats) if m and m.name in foils]
+        if not hit:
+            continue
+        for i in hit:
+            mats[i] = foils[mats[i].name]
+        tiling.box_uv(obj, FOIL_TILE)
+
+
+FOIL_TILE = 0.6  # metres per foil tile

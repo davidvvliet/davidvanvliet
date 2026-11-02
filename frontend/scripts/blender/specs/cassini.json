@@ -766,7 +766,7 @@
   ],
   "budget": {
     "triangles": 100000,
-    "glb_bytes": 4000000
+    "glb_bytes": 4500000
   },
   "decisions": [
     "Boom length 11 m (David, 2026-11-01).",
