@@ -1,6 +1,6 @@
 {
   "title": "Cassini",
-  "viewer": {"pivot": "bus", "note": "the cards turn about the bus, not the centre of the booms' span"},
+  "viewer": {"pivot": "bus", "explore": false, "focus": [{"part": "huygens", "label": "Huygens"}], "explode": ["huygens"], "note": "the cards turn about the bus, not the centre of the booms' span; Explode takes Huygens off, as the X-15's takes its engine"},
   "logos": [
     "nasa",
     "jpl",
