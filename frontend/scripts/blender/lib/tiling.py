@@ -299,3 +299,34 @@ def crinkled_foil(probe, name, base_hex, repeat=(0.6, 0.6), facet=0.04, tilt_deg
     rgb = srgb(base_hex)[None, None] * shade[..., None]
     return (image(probe, f"{name}_base", np.clip(rgb, 0, 1).astype(np.float32), "sRGB"),
             image(probe, f"{name}_normal", (nrm * 0.5 + 0.5).astype(np.float32), "Non-Color"))
+
+def panel_grid(probe, name, base_hex, cell=(0.75, 0.5), seam=0.012, darken=0.55, rivet=0.006,
+               rivet_pitch=0.04, spread=0.04, cells=(4, 4), px_per_m=400, seed=5):
+    """Colour and normal map of a skin laid in rectangular panels or tape (Hubble's aft shroud):
+    seams `seam` wide every `cell` (u, v) metres, darkened to `darken`, rivet dots `rivet` across
+    every `rivet_pitch` along each seam's sides, and each panel's brightness varied by up to
+    `spread`. The image holds `cells` panels across and up, so it repeats every cell x cells.
+    Returns (base, normal)."""
+    rep = (cell[0] * cells[0], cell[1] * cells[1])
+    w, h = int(round(rep[0] * px_per_m)), int(round(rep[1] * px_per_m))
+    U, V = np.meshgrid((np.arange(w) + 0.5) / px_per_m, (np.arange(h) + 0.5) / px_per_m)
+    du = np.abs((U + cell[0] / 2) % cell[0] - cell[0] / 2)     # distance to the nearest seam
+    dv = np.abs((V + cell[1] / 2) % cell[1] - cell[1] / 2)
+    line = np.clip(1 - (np.minimum(du, dv) - seam / 2) * px_per_m, 0, 1)
+    # rivets: a row each side of every seam
+    off = seam / 2 + rivet * 1.2
+    ru = np.hypot(np.abs(du - off), ((V % rivet_pitch) - rivet_pitch / 2))
+    rv = np.hypot(np.abs(dv - off), ((U % rivet_pitch) - rivet_pitch / 2))
+    dots = np.clip(1 - (np.minimum(ru, rv) - rivet / 2) * px_per_m, 0, 1)
+    rng = np.random.default_rng(seed)
+    shade_cells = 1 + spread * rng.uniform(-1, 1, (cells[1], cells[0]))
+    iu = np.minimum((U // cell[0]).astype(int), cells[0] - 1)
+    iv = np.minimum((V // cell[1]).astype(int), cells[1] - 1)
+    shade = shade_cells[iv, iu] * (1 - line * (1 - darken)) * (1 - dots * 0.25)
+    rgb = srgb(base_hex)[None, None] * shade[..., None]
+    hgt = -line * 0.6 + dots * 0.8
+    gy, gx = np.gradient(_blur_wrap(hgt, 1.0))
+    nrm = np.stack([-gx * 3, -gy * 3, np.ones_like(hgt)], 2)
+    nrm /= np.linalg.norm(nrm, axis=2, keepdims=True)
+    return (image(probe, f"{name}_base", np.clip(rgb, 0, 1).astype(np.float32), "sRGB"),
+            image(probe, f"{name}_normal", (nrm * 0.5 + 0.5).astype(np.float32), "Non-Color"))
