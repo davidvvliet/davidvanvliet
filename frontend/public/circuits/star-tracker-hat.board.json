@@ -70,26 +70,6 @@
    ]
   },
   {
-   "name": "IMU",
-   "parts": [
-    {
-     "ref": "C20",
-     "value": "100nF",
-     "package": "C_0402_1005Metric"
-    },
-    {
-     "ref": "C21",
-     "value": "100nF",
-     "package": "C_0402_1005Metric"
-    },
-    {
-     "ref": "U20",
-     "value": "BMI088",
-     "package": "Bosch_LGA-16_4.5x3mm_P0.5mm_LayoutBorder7x1y_ClockwisePinNumbering"
-    }
-   ]
-  },
-  {
    "name": "RS-485 transceiver",
    "parts": [
     {
@@ -110,17 +90,22 @@
    ]
   },
   {
-   "name": "Bus connectors",
+   "name": "IMU",
    "parts": [
     {
-     "ref": "J2",
-     "value": "XH 2-pin",
-     "package": "JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical"
+     "ref": "C20",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
     },
     {
-     "ref": "J3",
-     "value": "GH 6-pin",
-     "package": "JST_GH_SM06B-GHS-TB_1x06-1MP_P1.25mm_Horizontal"
+     "ref": "C21",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "U20",
+     "value": "BMI088",
+     "package": "Bosch_LGA-16_4.5x3mm_P0.5mm_LayoutBorder7x1y_ClockwisePinNumbering"
     }
    ]
   },
@@ -136,6 +121,51 @@
      "ref": "R5",
      "value": "470R",
      "package": "R_0402_1005Metric"
+    }
+   ]
+  },
+  {
+   "name": "Bus connectors",
+   "parts": [
+    {
+     "ref": "J2",
+     "value": "XH 2-pin",
+     "package": "JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical"
+    },
+    {
+     "ref": "J3",
+     "value": "GH 6-pin",
+     "package": "JST_GH_SM06B-GHS-TB_1x06-1MP_P1.25mm_Horizontal"
+    }
+   ]
+  },
+  {
+   "name": "Camera cable",
+   "parts": [
+    {
+     "ref": "W1",
+     "value": "Camera cable",
+     "package": "W1"
+    }
+   ]
+  },
+  {
+   "name": "Global Shutter Camera, 16 mm lens",
+   "parts": [
+    {
+     "ref": "CAM1",
+     "value": "Global Shutter Camera, 16 mm lens",
+     "package": "CAM1"
+    }
+   ]
+  },
+  {
+   "name": "Raspberry Pi Zero 2 W",
+   "parts": [
+    {
+     "ref": "PI1",
+     "value": "Raspberry Pi Zero 2 W",
+     "package": "PI1"
     }
    ]
   },

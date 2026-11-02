@@ -90,22 +90,43 @@ for o in joined.values(): o.location -= Vector((mid.x, mid.y, min(p.z for p in p
 
 # Screens on (recipe "screens"): the faces of a block in the display area's colour (its model's, as KiCad exports it:
 # linear) show an image, mapped flat across them, turned by "rotate" degrees; "glow" lights it (a backlit LCD).
+# "wrap": {"center_deg": a} maps it around the faces' vertical axis instead (a printed ring): the image's width
+# is the full turn, its middle at angle a (degrees from +x, counter-clockwise seen from above), its height the
+# faces' height. "filter": "linear" smooths a detailed image (default "closest", for pixel art).
+# Finishes (recipe "finishes", entries without an image): "metallic" and "roughness" for the faces of that
+# colour in that block, optionally "sheen" (reflection strength, 0.5 default) and "tint" (its colour, linear)
+# (KiCad leaves metallic and roughness out for VRML models, so they load fully metallic and fully rough);
+# an entry without "color" sets every slot of the block no earlier entry touched.
 bpy.context.view_layer.update()
+touched = {}
 for s in screens:
     o = joined.get(s["block"])
     if o is None: sys.exit(f"screen: no block {s['block']!r}")
     me = o.data
+    done = touched.setdefault(s["block"], set())
     hit = {i for i, sl in enumerate(o.material_slots) if sl.material and sl.material.use_nodes and
-           all(abs(a - b) <= s.get("tolerance", 0.01) for a, b in
-               zip(sl.material.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value[:3], s["color"]))}
+           ("color" not in s and i not in done or "color" in s and
+            all(abs(a - b) <= s.get("tolerance", 0.01) for a, b in
+                zip(sl.material.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value[:3], s["color"])))}
+    if "image" not in s:
+        if not hit: sys.exit(f"finish: no faces of colour {s.get('color')} in {s['block']!r}")
+        for i in hit:
+            m = o.material_slots[i].material.copy(); b = m.node_tree.nodes["Principled BSDF"]   # a copy: others share it
+            b.inputs["Metallic"].default_value = s.get("metallic", 0.0); b.inputs["Roughness"].default_value = s.get("roughness", 0.5)
+            if "sheen" in s: b.inputs["Specular IOR Level"].default_value = s["sheen"]   # as on screens: lower reflects less
+            if "tint" in s: b.inputs["Specular Tint"].default_value = (*s["tint"], 1)    # the reflection's colour (a coating)
+            me.materials[i] = m
+        done |= hit
+        continue
+    done |= hit
     polys = [p for p in me.polygons if p.material_index in hit]
     if not polys: sys.exit(f"screen: no faces of colour {s['color']} in {s['block']!r}")
     img = bpy.data.images.load(s["image"]); img.pack()
     m = bpy.data.materials.new(f"screen {s['block']}"); m.use_nodes = True
     nt = m.node_tree; b = nt.nodes["Principled BSDF"]
-    tex = nt.nodes.new("ShaderNodeTexImage"); tex.image = img; tex.interpolation = "Closest"
+    tex = nt.nodes.new("ShaderNodeTexImage"); tex.image = img; tex.interpolation = "Linear" if s.get("filter") == "linear" else "Closest"
     nt.links.new(tex.outputs["Color"], b.inputs["Base Color"])
-    b.inputs["Roughness"].default_value = s.get("roughness", 0.5); b.inputs["Metallic"].default_value = 0
+    b.inputs["Roughness"].default_value = s.get("roughness", 0.5); b.inputs["Metallic"].default_value = s.get("metallic", 0)
     b.inputs["Specular IOR Level"].default_value = s.get("sheen", 0.5)  # low: the viewer's overhead light greys a dark screen
     if s.get("glow"):
         nt.links.new(tex.outputs["Color"], b.inputs["Emission Color"]); b.inputs["Emission Strength"].default_value = s["glow"]
@@ -115,8 +136,24 @@ for s in screens:
     pts = [mw @ me.vertices[v].co for p in polys for v in p.vertices]
     x0, x1 = min(q.x for q in pts), max(q.x for q in pts); y0, y1 = min(q.y for q in pts), max(q.y for q in pts)
     turn = round(s.get("rotate", 0) / 90) % 4
+    wrap = s.get("wrap")
+    if wrap:
+        # The axis: the circle through the faces' corners (least squares), since a printed arc's box centre is off it.
+        n = len(pts); sx, sy = sum(q.x for q in pts) / n, sum(q.y for q in pts) / n
+        uu, vv = [q.x - sx for q in pts], [q.y - sy for q in pts]
+        suu, svv, suv = sum(a * a for a in uu), sum(b * b for b in vv), sum(a * b for a, b in zip(uu, vv))
+        su3 = sum(a * (a * a + b * b) for a, b in zip(uu, vv)); sv3 = sum(b * (a * a + b * b) for a, b in zip(uu, vv))
+        det = suu * svv - suv * suv
+        cx = sx + (su3 / 2 * svv - sv3 / 2 * suv) / det; cy = sy + (sv3 / 2 * suu - su3 / 2 * suv) / det
+        z0, z1 = min(q.z for q in pts), max(q.z for q in pts)
     for p in polys:
         p.material_index = k
+        if wrap:
+            q = [mw @ me.vertices[me.loops[li].vertex_index].co for li in p.loop_indices]
+            us = [((math.degrees(math.atan2(c.y - cy, c.x - cx)) - wrap["center_deg"]) / 360 + 0.5) % 1 for c in q]
+            if max(us) - min(us) > 0.5: us = [u + 1 if u < 0.5 else u for u in us]   # a face across the seam
+            for li, c, u in zip(p.loop_indices, q, us): uv.data[li].uv = (u, (c.z - z0) / (z1 - z0))
+            continue
         for li in p.loop_indices:
             q = mw @ me.vertices[me.loops[li].vertex_index].co
             u, v = (q.x - x0) / (x1 - x0), (q.y - y0) / (y1 - y0)

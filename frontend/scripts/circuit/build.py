@@ -74,6 +74,7 @@ def main(board, publish=False):
         note = route(work, recipe["board"].get("ground_fill"))
         view = recipe["board"].get("view", "top")
         screens = [dict(s, image=os.path.join(src, s["image"])) for s in recipe["board"].get("screens", [])]
+        screens += recipe["board"].get("finishes", [])  # pack.py: entries without an image set a finish
         meta = {"title": recipe["title"], "purpose": recipe["purpose"], "source": recipe["source"], "pcb": "kicad/board.kicad_pcb", "sch": "kicad/board.kicad_sch"}
         pcb_path, sch_path = os.path.join(work, "board.kicad_pcb"), os.path.join(work, "board.kicad_sch")
         blocks = json.load(open(os.path.join(work, "blocks.json")))

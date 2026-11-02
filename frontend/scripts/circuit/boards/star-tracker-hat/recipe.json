@@ -16,7 +16,161 @@
   "layers": 2,
   "rules": "boards/star-tracker-hat/rules.kicad_pro",
   "ground_fill": "GND",
-  "mask": "Black"
+  "mask": "Black",
+  "screens": [
+   {
+    "block": "Global Shutter Camera, 16 mm lens",
+    "color": [
+     0.00598,
+     0.0049,
+     0.0049
+    ],
+    "tolerance": 0.0004,
+    "image": "lens-focus.png",
+    "wrap": {
+     "center_deg": -90
+    },
+    "filter": "linear",
+    "roughness": 0.45
+   },
+   {
+    "block": "Global Shutter Camera, 16 mm lens",
+    "color": [
+     0.0049,
+     0.00598,
+     0.0049
+    ],
+    "tolerance": 0.0004,
+    "image": "lens-aperture.png",
+    "wrap": {
+     "center_deg": -90
+    },
+    "filter": "linear",
+    "roughness": 0.45
+   }
+  ],
+  "finishes": [
+   {
+    "block": "Global Shutter Camera, 16 mm lens",
+    "color": [
+     0.60383,
+     0.60383,
+     0.57048
+    ],
+    "tolerance": 0.002,
+    "metallic": 1.0,
+    "roughness": 0.12
+   },
+   {
+    "block": "Global Shutter Camera, 16 mm lens",
+    "color": [
+     0.34239,
+     0.34239,
+     0.31855
+    ],
+    "tolerance": 0.002,
+    "metallic": 1.0,
+    "roughness": 0.35
+   },
+   {
+    "block": "Global Shutter Camera, 16 mm lens",
+    "color": [
+     0.10654,
+     0.10654,
+     0.10048
+    ],
+    "tolerance": 0.002,
+    "metallic": 1.0,
+    "roughness": 0.35
+   },
+   {
+    "block": "Global Shutter Camera, 16 mm lens",
+    "color": [
+     0.60383,
+     0.42003,
+     0.10048
+    ],
+    "tolerance": 0.002,
+    "metallic": 1.0,
+    "roughness": 0.3
+   },
+   {
+    "block": "Global Shutter Camera, 16 mm lens",
+    "color": [
+     0.00854,
+     0.23302,
+     0.43388
+    ],
+    "tolerance": 0.002,
+    "metallic": 0.6,
+    "roughness": 0.3
+   },
+   {
+    "block": "Global Shutter Camera, 16 mm lens",
+    "color": [
+     0.00232,
+     0.0049,
+     0.00719
+    ],
+    "tolerance": 0.0004,
+    "metallic": 0.0,
+    "roughness": 0.12,
+    "sheen": 0.12,
+    "tint": [
+     0.35,
+     0.75,
+     0.45
+    ]
+   },
+   {
+    "block": "Global Shutter Camera, 16 mm lens",
+    "color": [
+     0.01341,
+     0.01739,
+     0.02721
+    ],
+    "tolerance": 0.002,
+    "metallic": 0.3,
+    "roughness": 0.15
+   },
+   {
+    "block": "Global Shutter Camera, 16 mm lens",
+    "metallic": 0.0,
+    "roughness": 0.45
+   },
+   {
+    "block": "Raspberry Pi Zero 2 W",
+    "color": [
+     0.477,
+     0.477,
+     0.50708
+    ],
+    "tolerance": 0.002,
+    "metallic": 1.0,
+    "roughness": 0.35
+   },
+   {
+    "block": "Raspberry Pi Zero 2 W",
+    "color": [
+     0.60383,
+     0.42003,
+     0.10048
+    ],
+    "tolerance": 0.002,
+    "metallic": 1.0,
+    "roughness": 0.3
+   },
+   {
+    "block": "Raspberry Pi Zero 2 W",
+    "metallic": 0.0,
+    "roughness": 0.5
+   },
+   {
+    "block": "Camera cable",
+    "metallic": 0.0,
+    "roughness": 0.6
+   }
+  ]
  },
  "blocks": {
   "pi": {
@@ -146,6 +300,78 @@
  "open_questions": [
   "POWER net class (VBUS, +5V): 1.0 mm traces and 0.8/0.4 mm vias are estimates; the trace width for the 3.5 A limit is not checked against a current-capacity source.",
   "TPS2121 IN2 tied to IN1; C2/C3 values estimated; RS-485 termination value open; no TVS or fuse on the bus input (see the blocks).",
-  "Only the 40-pin socket is on the back; everything else is on top, so nothing sits over the Pi's own parts."
+  "Only the 40-pin socket is on the back; everything else is on top, so nothing sits over the Pi's own parts.",
+  "Attachments: the Pi Zero 2 W, camera and cable are drawn from Raspberry Pi's drawings; the Pi's parts' heights, both boards' thickness and colours, the lens (retailer's 39 x 50 mm, layout from Raspberry Pi's lens guide illustration) and the C-CS adapter's size are estimates (see footprints/models/make.py).",
+  "Attachments' finishes (metallic, roughness) and the lens's rib count, hood steps, glass and screw sizes are estimates from Waveshare's product photos; the lens printing's places are measured off its side-on photo."
+ ],
+ "attachments": [
+  {
+   "ref": "PI1",
+   "name": "Raspberry Pi Zero 2 W",
+   "models": [
+    {
+     "file": "${CIRCUIT_3DMODELS}/RPi_Zero_2W.wrl",
+     "offset_mm": [
+      0,
+      0,
+      -14.24
+     ]
+    },
+    {
+     "file": "${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_2x20_P2.54mm_Vertical.wrl",
+     "offset_mm": [
+      8.37,
+      -4.77,
+      -12.64
+     ],
+     "rotate": [
+      0,
+      0,
+      -90
+     ]
+    }
+   ]
+  },
+  {
+   "ref": "CAM1",
+   "name": "Global Shutter Camera, 16 mm lens",
+   "models": [
+    {
+     "file": "${CIRCUIT_3DMODELS}/RPi_GS_Camera.wrl",
+     "offset_mm": [
+      107.6,
+      -15,
+      -14.24
+     ],
+     "rotate": [
+      0,
+      0,
+      90
+     ]
+    },
+    {
+     "file": "${CIRCUIT_3DMODELS}/Lens_16mm_C.wrl",
+     "offset_mm": [
+      107.6,
+      -15,
+      10.83
+     ]
+    }
+   ]
+  },
+  {
+   "ref": "W1",
+   "name": "Camera cable",
+   "models": [
+    {
+     "file": "${CIRCUIT_3DMODELS}/Cable_StarTracker.wrl",
+     "offset_mm": [
+      65,
+      -15,
+      -14.24
+     ]
+    }
+   ]
+  }
  ]
 }

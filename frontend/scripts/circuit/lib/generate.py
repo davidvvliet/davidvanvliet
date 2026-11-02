@@ -124,6 +124,22 @@ for side, arc in [(((r, 0), (w - r, 0)), ((w - r, 0), (w - k, k), (w, r))),
     edge(*side)
     if r: edge(*arc)
 
+# Attachments (recipe "attachments"): things that aren't on the board but belong with it in the 3D model (the computer it
+# plugs onto, a camera on a cable). Each is a footprint with no pads, only 3D models, marked board-only so it stays out
+# of the schematic, the BOM and the checks; the web model shows it as a block of its own, named by "name". Each model:
+# "file", "offset_mm" (x right, y up, z up from the board's top surface: KiCad's model frame) and "rotate" (degrees).
+for a in recipe.get("attachments", []):
+    f = pcbnew.FOOTPRINT(board)
+    f.SetFPID(pcbnew.LIB_ID("attachment", a["ref"])); f.SetReference(a["ref"]); f.SetValue(a["name"])
+    f.Reference().SetVisible(False); f.Value().SetVisible(False)
+    f.SetAttributes(pcbnew.FP_BOARD_ONLY | pcbnew.FP_EXCLUDE_FROM_BOM | pcbnew.FP_EXCLUDE_FROM_POS_FILES)
+    for spec in a["models"]:
+        mdl = pcbnew.FP_3DMODEL(); mdl.m_Filename = spec["file"]
+        mdl.m_Offset = pcbnew.VECTOR3D(*spec.get("offset_mm", [0, 0, 0])); mdl.m_Rotation = pcbnew.VECTOR3D(*spec.get("rotate", [0, 0, 0]))
+        f.Models().push_back(mdl)
+    board.Add(f); f.SetPosition(pcbnew.VECTOR2I(0, 0))
+    block_of[a["ref"]] = a["name"]
+
 pcb_file = os.path.join(out, "board.kicad_pcb")
 pcbnew.SaveBoard(pcb_file, board)
 

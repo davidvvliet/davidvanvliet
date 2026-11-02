@@ -1,0 +1,9 @@
+#VRML V2.0 utf8
+# Pi Zero camera cable (star-tracker HAT placement)
+# Written by make.py (circuit harness).
+Shape { appearance Appearance { material Material { diffuseColor 0.82 0.80 0.74 shininess 0.3 } }
+  geometry IndexedFaceSet { creaseAngle 0.5 coord Coordinate { point [ -0.66929 -2.26378 1.07480, 1.18110 -2.26378 1.07480, 1.18110 -2.26378 1.12992, -0.66929 -2.26378 1.12992, -0.66929 2.26378 1.07480, 1.18110 2.26378 1.07480, 1.18110 2.26378 1.12992, -0.66929 2.26378 1.12992 ] } coordIndex [ 0 1 2 3 -1, 7 6 5 4 -1, 0 4 5 1 -1, 1 5 6 2 -1, 2 6 7 3 -1, 3 7 4 0 -1 ] } }
+Shape { appearance Appearance { material Material { diffuseColor 0.82 0.80 0.74 shininess 0.3 } }
+  geometry IndexedFaceSet { creaseAngle 0.5 coord Coordinate { point [ 1.20362 -2.26378 1.08647, 3.56582 -2.26378 4.43293, 3.52079 -2.26378 4.46471, 1.15859 -2.26378 1.11826, 1.20362 2.26378 1.08647, 3.56582 2.26378 4.43293, 3.52079 2.26378 4.46471, 1.15859 2.26378 1.11826 ] } coordIndex [ 0 1 2 3 -1, 7 6 5 4 -1, 0 4 5 1 -1, 1 5 6 2 -1, 2 6 7 3 -1, 3 7 4 0 -1 ] } }
+Shape { appearance Appearance { material Material { diffuseColor 0.82 0.80 0.74 shininess 0.3 } }
+  geometry IndexedFaceSet { creaseAngle 0.5 coord Coordinate { point [ 3.54331 -2.26378 4.42126, 4.84252 -2.26378 4.42126, 4.84252 -2.26378 4.47638, 3.54331 -2.26378 4.47638, 3.54331 2.26378 4.42126, 4.84252 2.26378 4.42126, 4.84252 2.26378 4.47638, 3.54331 2.26378 4.47638 ] } coordIndex [ 0 1 2 3 -1, 7 6 5 4 -1, 0 4 5 1 -1, 1 5 6 2 -1, 2 6 7 3 -1, 3 7 4 0 -1 ] } }
