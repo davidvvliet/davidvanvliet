@@ -537,7 +537,7 @@ def build(spec):
         parts.lathe("light_shield_bore", [(r_ls - 0.031, z_ls1), (r_ls - 0.031, z_fs1)],
                     segments=64, material="black")
 
-    # OTA equipment section: nine bays in a 150-degree ring round the aft end of the forward shell,
+    # OTA equipment section: nine bays in a 150-degree ring round the outside of the forward shell's aft end,
     # on +V3, STA 299.425 to 337.75 (lmsc1985). Outer radius 2.05 m estimated from s125e011763; the
     # middle bay, under the +V3 antenna's hinge, sits lower (1.72 m, estimated from the same photo).
     o = f["ota_equipment_section"]
@@ -547,7 +547,8 @@ def build(spec):
         for name, r, centre, n in (("ota_es_left", o["outer_radius"], 90 - bay * 2.5, 4),
                                    ("ota_es_middle", o["middle_radius"], 90, 1),
                                    ("ota_es_right", o["outer_radius"], 90 + bay * 2.5, 4)):
-            obj = parts.lathe(name, [(0, z_o0), (r, z_o0), (r, z_o1), (0, z_o1)], segments=n,
+            # a ring on the forward shell's skin, not a solid wedge through the tube
+            obj = parts.lathe(name, [(r_fs, z_o0), (r, z_o0), (r, z_o1), (r_fs, z_o1)], segments=n, closed=True,
                               sweep_deg=bay * n, roll_deg=centre, material=foil, smooth=False)
             tiling.cyl_uv(obj, 2 * math.pi * r_fs / 5, 2 * math.pi * r_fs / 5, r)
 
