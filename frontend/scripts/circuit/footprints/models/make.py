@@ -291,6 +291,58 @@ def lens16():
     radial(m, dot, F, 35.1 / 2 + 0.02, z + 12.8)
     m.write(os.path.join(HERE, "Lens_16mm_C.wrl"), "16 mm C-mount lens (retailer size; profile from Waveshare's photo)")
 
+def baffle_design(a, half_fov, exclusion, depth, margin):
+    """A 1-stage stray-light baffle in front of the lens, to the rule in Rohrbach, "Corrected Recursive Equations for
+    Vane Aperture Sizes and Locations in One- and Two-Stage Stray Light Baffle Systems" (NASA GSFC, SPIE 2023,
+    ntrs.nasa.gov/citations/20230011280): "the inner walls of the baffle are not simultaneously visible to both
+    stray light sources and the optical entrance pupil". Built by the geometric construction, in one meridional
+    section (z from the pupil plane, radius r): vane edges on the field of view's edge plus `margin` ("a positive
+    margin ... to all the back-end baffle radii"; 0.25 mm, its "standard +0.25 / -0.00 mm tolerance"); the entrance
+    far enough out that light at the exclusion angle past its edge misses the pupil; each next vane where the pupil
+    stops seeing the wall that light (at the exclusion angle or more, past the vanes before it) reaches.
+    Returns (length, wall radius, [(z, edge radius), ...] from the entrance in), after checking the rule on 2000
+    wall points against rays from the whole pupil and every angle from the exclusion angle to 89.5°."""
+    t, T = math.tan(math.radians(half_fov)), math.tan(math.radians(exclusion))
+    h = lambda z: a + margin + z * t
+    L = 2 * (a + margin) / (T - t)
+    R = h(L) + depth
+    vanes = [L]
+    while True:
+        v = vanes[-1]
+        s_max = min([(h(v) + h(w)) / (w - v) for w in vanes[:-1]], default=math.inf)  # steepest light past this vane
+        if s_max < T: break
+        z_lit = v - (R - h(v)) / s_max                # the wall is lit from here down
+        if z_lit <= 0: break
+        vanes.append(z_lit * (2 * a + margin) / (R + a - z_lit * t))   # the pupil sees no wall below z_lit
+    def clear(p, q):
+        (y0, z0), (y1, z1) = p, q
+        return all(not (min(z0, z1) < v < max(z0, z1)) or abs(y0 + (y1 - y0) * (v - z0) / (z1 - z0)) <= h(v) + 1e-9 for v in vanes)
+    for i in range(1, 2000):
+        zw = L * i / 2000
+        seen = any(clear((-a + 2 * a * k / 50, 0), (R, zw)) for k in range(51))
+        lit = any(abs(y) <= h(L) and clear((y, L), (R, zw)) for y in
+                  (R - (L - zw) * math.tan(math.radians(exclusion + (89.5 - exclusion) * k / 59)) for k in range(60)))
+        assert not (seen and lit), f"baffle: wall at z {zw:.2f} is both seen and lit"
+    return L, R, [(v, h(v)) for v in vanes]
+
+def star_tracker_baffle():
+    """The star tracker's baffle (baffle_design), over the 16 mm lens's hood, z = 0 at its front glass. Inputs: the
+    pupil radius 12.6 (the front glass, estimated from Waveshare's photos: the lens's real entrance pupil and glass
+    sizes are not published), half field 11.09° (the sensor's diagonal half, 1456 x 1088 pixels of 3.45 µm per
+    Raspberry Pi's camera documentation, over the nominal 16 mm), Sun exclusion 30° (Rohrbach's example, and the
+    University of Colorado's star-tracker baffle project), vanes 4 deep. The vanes 1 thick with a 0.25 knife edge
+    and a 45° bevel (Rohrbach's model; the bevel's side is chosen, he sets it by Fest's formula), the tube's 1.5
+    wall and the plate on the hood (hole ø39.4) are estimates. Flat black inside (his "Flat Black Paint")."""
+    L, R, vanes = baffle_design(12.6, 11.09, 30, 4.0, 0.25)
+    print(f"baffle: length {L:.1f}, inner ø{2 * R:.1f}, vanes " + ", ".join(f"z {z:.1f} ø{2 * r:.1f}" for z, r in vanes))
+    m = Mesh(); W = 1.5
+    lathe(m, BAFFLE_BLACK, [(19.7, -2.0), (R + W, -2.0), (R + W, L), (R, L), (R, 0.0), (19.7, 0.0), (19.7, -2.0)], n=96)
+    for z, r in vanes:   # knife edge at z facing the sky, bevel on the lens side
+        lathe(m, BAFFLE_BLACK, [(R, z), (r, z), (r, z - 0.25), (r + 0.75, z - 1.0), (R, z - 1.0)], n=96)
+    m.write(os.path.join(HERE, "Baffle_StarTracker.wrl"), "Star tracker baffle (vanes per Rohrbach 2023's rule)")
+
+BAFFLE_BLACK = "0.03 0.03 0.03"
+
 def pi_zero2w():
     """Raspberry Pi Zero 2 W from its mechanical drawing: "65" x "30", holes "3.5" in from the edges, the corners
     rounded 3 (measured). Parts on top measured off the drawing (scaled by its 65 and 30; its port centres "12.4",
@@ -344,4 +396,4 @@ def star_tracker_cable():
         os.path.join(HERE, "Cable_StarTracker.wrl"), "Pi Zero camera cable (star-tracker HAT placement)")
 
 if __name__ == "__main__":
-    scd4x(); sgp41(); epd154(); zjy128(); tps2121(); gs_camera(); lens16(); pi_zero2w(); star_tracker_cable()
+    scd4x(); sgp41(); epd154(); zjy128(); tps2121(); gs_camera(); lens16(); pi_zero2w(); star_tracker_cable(); star_tracker_baffle()

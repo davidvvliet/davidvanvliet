@@ -169,6 +169,11 @@
     "block": "Camera cable",
     "metallic": 0.0,
     "roughness": 0.6
+   },
+   {
+    "block": "Baffle",
+    "metallic": 0.0,
+    "roughness": 0.9
    }
   ]
  },
@@ -369,6 +374,20 @@
       65,
       -15,
       -14.24
+     ]
+    }
+   ]
+  },
+  {
+   "ref": "BF1",
+   "name": "Baffle",
+   "models": [
+    {
+     "file": "${CIRCUIT_3DMODELS}/Baffle_StarTracker.wrl",
+     "offset_mm": [
+      107.6,
+      -15,
+      57.33
      ]
     }
    ]
