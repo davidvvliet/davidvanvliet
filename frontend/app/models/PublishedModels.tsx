@@ -11,7 +11,7 @@ import ModelsDashboard, { Viewer, type Focusable } from "./ModelsDashboard";
 import styles from "./models.module.css";
 
 export type Published = {
-  probe: string; title: string; thumb: boolean; logos: string[]; explore: boolean; focus: Focusable[]; explode: string[]; internal: boolean;
+  probe: string; title: string; thumb: boolean; logos: string[]; explore: boolean; focus: Focusable[]; explode: string[]; internal: boolean; grid: boolean;
   pivot: string | null; // the spec's viewer.pivot: the part the card turns about (a craft's body)
   sources: { title: string; url: string; licence: string | null; cited: number }[];
 };
@@ -85,7 +85,7 @@ export default function PublishedModels({ models, circuit, dashboard }: {
   }
   // The vehicles in ORGS order, then on a row of its own the way into /circuits, shown by one of its boards.
   const cards: CardItem[] = [...models].sort((a, b) => orgRank(a) - orgRank(b)).map((m) => ({
-    key: m.probe, href: `/models?probe=${m.probe}`, url: `/models/${m.probe}.glb`, title: m.title,
+    key: m.probe, href: `/models?probe=${m.probe}`, url: `/models/${m.grid ? "grid/" : ""}${m.probe}.glb`, title: m.title,
     thumb: m.thumb ? `/models/${m.probe}.webp` : undefined, corner: <Logos model={m} />, pivot: m.pivot,
   }));
   const more: CardItem[] = circuit ? [{

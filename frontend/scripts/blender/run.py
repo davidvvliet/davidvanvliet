@@ -185,8 +185,16 @@ def cmd_all(args):
 COMPRESS = ["npx", "--yes", "@gltf-transform/cli@4.1.1", "meshopt",
             "--quantize-position", "16", "--quantize-normal", "12", "--quantize-texcoord", "14"]
 
-def compress(src, dst):
-    proc = subprocess.run([*COMPRESS[:4], src, dst, *COMPRESS[4:]], capture_output=True, text=True)
+# The /models grid's copy (public/models/grid/): parts sharing a material joined into one mesh
+# (a few draw calls instead of hundreds), a quarter of the vertices where the shape allows,
+# textures at most 512 px in WebP. A card only spins it, so explode and focus aren't needed.
+GRID = ["npx", "--yes", "@gltf-transform/cli@4.1.1", "optimize", "--compress", "meshopt",
+        "--simplify-ratio", "0.25", "--simplify-error", "0.002", "--texture-size", "512",
+        "--texture-compress", "webp", "--instance", "false"]
+
+def compress(src, dst, command=COMPRESS):
+    os.makedirs(os.path.dirname(dst), exist_ok=True)
+    proc = subprocess.run([*command[:4], src, dst, *command[4:]], capture_output=True, text=True)
     if proc.returncode or not os.path.exists(dst):
         die(f"Compressing {src} failed:\n{proc.stdout[-2000:]}{proc.stderr[-2000:]}")
 
@@ -224,6 +232,8 @@ def cmd_approve(args):
     if not spec.get("fixture"):  # fixtures only guard lib/; they never ship
         os.makedirs(PUBLIC_MODELS, exist_ok=True)
         compress(entry["glb"], os.path.join(PUBLIC_MODELS, f"{probe}.glb"))
+        # In a subfolder too, so the grid doesn't list it as a model of its own.
+        compress(entry["glb"], os.path.join(PUBLIC_MODELS, "grid", f"{probe}.glb"), GRID)
         # Inside parts: public/models/internal/<probe>.glb (a subfolder, so the /models grid,
         # which lists every .glb in public/models, doesn't take it for a model of its own).
         inner = os.path.join(PUBLIC_MODELS, "internal", f"{probe}.glb")

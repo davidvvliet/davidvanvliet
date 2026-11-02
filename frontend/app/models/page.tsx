@@ -52,6 +52,7 @@ function published(): Published[] {
         probe, title: (s.title ?? probe).replace(/\s*\(.*\)\s*$/, ""), // the name only, not its note in brackets
         logos: s.logos ?? [], thumb: files.includes(`${probe}.webp`), explore: s.viewer?.explore !== false, focus: s.viewer?.focus ?? [], explode: s.viewer?.explode ?? [], pivot: s.viewer?.pivot ?? null,
         internal: fs.existsSync(path.join(dir, "internal", `${probe}.glb`)), // inside parts (run.py approve)
+        grid: fs.existsSync(path.join(dir, "grid", `${probe}.glb`)), // the lighter copy for the grid's cards (run.py approve)
         sources: (s.sources ?? []).map((x) => ({ title: x.title, url: x.url, licence: x.licence?.split(":")[0] ?? null, cited: cited.get(x.id) ?? 0 })),
       };
     });
