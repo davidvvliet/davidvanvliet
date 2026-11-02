@@ -416,9 +416,173 @@
    "layout_source": "sm4_photos s125e011763 (from +V3): gold strut frames at both edges, so on +-V2; s125e012031: round gold plates about 0.6 m across (138 px/m against the aft bulkhead)"
   },
   "equipment_bays": {
-   "value": "10 equipment bays plus 2 trunnion bays; bay doors flat honeycomb except curved covers on Bays 6 and 9 (reaction wheels)",
-   "source": "sm3aguide, p.5-4/5-6",
-   "quote": "This section contains 10 bays for equipment and two bays to support aft trunnion pins and scuff plates."
+   "value": {
+    "units_in": {
+     "advanced_computer": [
+      18.8,
+      18,
+      13
+     ],
+     "dmu": [
+      26,
+      30,
+      7
+     ],
+     "diu": [
+      15,
+      16,
+      7
+     ],
+     "recorder": [
+      12,
+      9,
+      7
+     ],
+     "battery_module": [
+      36,
+      32,
+      11
+     ],
+     "pcu": [
+      43,
+      12,
+      8
+     ],
+     "pdu": [
+      10,
+      5,
+      18
+     ],
+     "oscillator": [
+      4,
+      9
+     ]
+    },
+    "rwa_in": {
+     "housing_d": 23.5,
+     "flange_d": 25.25,
+     "depth": 10.75
+    },
+    "rwa_tilt_deg": 20,
+    "bays": {
+     "1": [
+      "advanced_computer",
+      "dmu"
+     ],
+     "2": [
+      "battery_module",
+      "oscillator",
+      "oscillator"
+     ],
+     "3": [
+      "battery_module",
+      "diu"
+     ],
+     "4": [
+      "pcu",
+      "pdu",
+      "pdu",
+      "pdu",
+      "pdu"
+     ],
+     "5": [
+      "recorder"
+     ],
+     "6": [
+      "rwa",
+      "rwa"
+     ],
+     "7": [
+      "diu"
+     ],
+     "8": [
+      "recorder",
+      "recorder"
+     ],
+     "9": [
+      "rwa",
+      "rwa"
+     ],
+     "10": [
+      "diu"
+     ]
+    }
+   },
+   "sources": [
+    {
+     "source": "sm4guide",
+     "quote": "The Advanced Computer (see Fig. 5-9) measures 18.8 x 18 x 13 inches (0.48 x 0.46 x 0.33 m) and weighs 70.5 pounds (32 kg). It is located in Bay 1 of the SSM Equipment Section."
+    },
+    {
+     "source": "sm4guide",
+     "quote": "attached to the door of Equipment Section Bay 1 (see Fig. 5-10). The unit weighs 83 pounds (37.7 kg) and measures 26 x 30 x 7 inches (60 x 70 x 17 cm)."
+    },
+    {
+     "source": "sm4guide",
+     "quote": "the other units are in Bays 3, 7 and 10 of the SSM Equipment Section."
+    },
+    {
+     "source": "sm4guide",
+     "quote": "Each DIU measures 15 x 16 x 7 inches (38 x 41 x 18 cm)"
+    },
+    {
+     "source": "sm4guide",
+     "quote": "These recorders are located in Equipment Section Bays 5 and 8."
+    },
+    {
+     "source": "sm4guide",
+     "quote": "Each recorder measures 12 x 9 x 7 inches (30 x 23 x 18 cm)"
+    },
+    {
+     "source": "sm4guide",
+     "quote": "The oscillator and a backup are mounted in Bay 2 of the SSM Equipment Section."
+    },
+    {
+     "source": "sm4guide",
+     "quote": "that measures 4 inches (10 cm) in diameter and 9 inches (23 cm) long"
+    },
+    {
+     "source": "pk125",
+     "quote": "weighs 460 pounds and measures 36 inches long, 32 inches wide, and 11 inches high"
+    },
+    {
+     "source": "sm4guide",
+     "quote": "The batteries reside in SSM Equipment Section Bays 2 and 3."
+    },
+    {
+     "source": "sm4guide",
+     "quote": "Each module is equipped with two large yellow handles"
+    },
+    {
+     "source": "sm4guide",
+     "quote": "Located in Bay 4 of the Equipment Section, the PCU provides the main power bus to the four PDUs."
+    },
+    {
+     "source": "sm4guide",
+     "quote": "43 x 12 x 8 inches (109 x 30 x 20 cm)."
+    },
+    {
+     "source": "sm4guide",
+     "quote": "Four PDUs, located on the inside of the door to Bay 4"
+    },
+    {
+     "source": "sm4guide",
+     "quote": "Each PDU measures 10 x 5 x 18 inches (25 x 12.5 x 45 cm)"
+    },
+    {
+     "source": "sm4guide",
+     "quote": "Wheel assemblies are paired, two each in Bays 6 and 9 of the SSM Equipment Section."
+    },
+    {
+     "source": "lmsc1985, Figure 3-36 (PDF p.87)",
+     "quote": "10.75 MAX ... 25.250 ... 23.50 DIA"
+    },
+    {
+     "source": "lmsc1985",
+     "quote": "Each RWA (Figure 3-37) spin axis is oriented at 45 deg to the V2-V3 axes and 20 deg above the V2-V3 plane"
+    }
+   ],
+   "note": "Units with no published size are left out (transponders, MCU, PSEA, RGA, SI C&DH, CCCs). Estimated: where each unit sits in its bay (all on the inside of the door, spread along V1), the 1-2 split of the three recorders between Bays 5 and 8 (Figure 3-8 shows a tape recorder in each), which way each wheel's axis tips (one wheel 20 deg forward of radial, the other 20 deg aft), the wheels' housing profile between the drawing's flange, housing and depth, the strut that stands for each wheel's truss, the handles' size."
   },
   "handrails": {
    "value": {
@@ -1160,6 +1324,12 @@
    "metallic": 0.6,
    "roughness": 0.4,
    "source": "lmsc1985 Figure 4-16 (axial SI enclosure); colour estimated (aluminium enclosure, not measured from a photo)"
+  },
+  "electronics_box": {
+   "hex": "#a9aaa6",
+   "metallic": 0.6,
+   "roughness": 0.45,
+   "source": "sm4guide Fig. 5-10 (DMU enclosure 'Dip-Brazed Aluminum'); colour estimated (bare aluminium, not measured from a photo)"
   }
  },
  "budget": {

@@ -57,17 +57,17 @@
   }
  },
  "hubble": {
-  "approved": "2026-11-02 16:39",
+  "approved": "2026-11-02 16:49",
   "inputs": {
-   "specs/hubble.json": "20dcaf411e825979",
-   "probes/hubble.py": "92875525977ebb67",
+   "specs/hubble.json": "5f62a6f51e4c00b4",
+   "probes/hubble.py": "e4b8ec6cb3d1a82d",
    "build.py": "363cabc8976febf0",
    "blender.json": "7bbc071b6e396ec4",
    "lib/__init__.py": "e3b0c44298fc1c14",
    "lib/bake.py": "74d319683d9c87d6",
    "lib/checks.py": "40732c1593685d87",
    "lib/engines.py": "988f55e7d78bbca8",
-   "lib/includes.py": "16035cec144759b2",
+   "lib/includes.py": "1ac417da5ce8750a",
    "lib/livery.py": "fe683f8f6dfc9308",
    "lib/materials.py": "7f1ec57b22c0d1b5",
    "lib/parts.py": "8c1e4b2e2f77cf08",

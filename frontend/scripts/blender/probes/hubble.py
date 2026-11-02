@@ -390,6 +390,81 @@ def instruments(f):
             parts.outline_plate(label, outline, wt, h, t, location=(c * (r_tip + h / 2), s_ * (r_tip + h / 2), z0),
                                 direction=(0, 0, 1), up=(c, s_, 0), material="si_enclosure")
 
+def equipment_bays(f, R_es, z0, z1):
+    """What is inside the equipment section's bays (spec facts.equipment_bays), in internal.glb:
+    the boxes with a published size, on the inside of their bay's door, and the four reaction
+    wheels in Bays 6 and 9."""
+    E = f["equipment_bays"]
+    U = {k: [v * IN for v in s] for k, s in E["units_in"].items()}
+    r_door = R_es * math.cos(math.radians(15))          # inside face of the bay doors
+    L = z1 - z0
+    for bay, units in E["bays"].items():
+        a = f["bay_azimuths"][bay]
+        c, s_ = _az(a)
+        tx, ty = -s_, c
+        names = {"1": "data_management", "2": "power", "3": "power", "4": "power", "5": "communications",
+                 "6": "reaction_wheels", "7": "mechanism_control", "8": "pointing_control", "9": "reaction_wheels",
+                 "10": "instrument_control"}
+        def size(u):                                    # (across, along V1, deep)
+            if u in ("battery_module", "pcu"):
+                lz, wt, hr = U[u]
+            elif u == "pdu":
+                wt, hr, lz = U[u]
+            elif u == "oscillator":
+                wt, lz, hr = U[u][0], U[u][1], U[u][0]
+            else:
+                wt, lz, hr = U[u]
+            return wt, lz, hr
+        # Spread along V1 with equal gaps; Bay 4's PCU runs the bay's length beside the four PDUs
+        # in a 2 x 2 block. Wheels take half the bay each.
+        place = []
+        if bay == "4":
+            wp = size("pcu")[0]
+            place.append(("pcu", -0.25, z0 + L / 2))
+            wd, lzd, _ = size("pdu")
+            for i in range(4):
+                place.append(("pdu", -0.25 + wp / 2 + 0.05 + wd / 2 + (i % 2) * (wd + 0.04),
+                              z0 + L / 2 + (i // 2 - 0.5) * (lzd + 0.06)))
+        elif units[0] == "rwa":
+            place = [("rwa", 0.0, z0 + L * (i + 0.5) / 2) for i in range(2)]
+        else:
+            gap = (L - sum(size(u)[1] for u in units)) / (len(units) + 1)
+            zz = z0 + gap
+            for u in units:
+                place.append((u, 0.0, zz + size(u)[1] / 2))
+                zz += size(u)[1] + gap
+        with parts.assembly(f"bay_{bay}_{names[bay]}", internal=True):
+            for i, (u, t, zc) in enumerate(place):
+                tag = f"bay_{bay}_{u}_{i + 1}"
+                if u == "rwa":
+                    W = E["rwa_in"]
+                    rf, rh, dp = W["flange_d"] / 2 * IN, W["housing_d"] / 2 * IN, W["depth"] * IN
+                    tilt = math.radians(E["rwa_tilt_deg"] * (1 if i == 0 else -1))
+                    ax = (-c * math.cos(tilt), -s_ * math.cos(tilt), math.sin(tilt))   # dome faces inward
+                    rc = (r_door + f["ota"]["es_inner_barrel_in"] / 2 * IN) / 2
+                    base = (c * rc - ax[0] * dp / 2, s_ * rc - ax[1] * dp / 2, zc - ax[2] * dp / 2)
+                    parts.lathe(tag, [(0, 0), (rf, 0), (rf, 0.01), (rh, 0.01), (rh, 0.1), (rh * 0.75, dp * 0.75),
+                                      (rh * 0.35, dp), (0, dp)], location=base, direction=ax, segments=32,
+                                closed=True, material="electronics_box")
+                    parts.strut(f"{tag}_mount", base, (c * r_door, s_ * r_door, base[2]), radius=0.04,
+                                material="electronics_box")
+                    continue
+                wt, lz, hr = size(u)
+                rc = r_door - hr / 2
+                x, y = c * rc + tx * t, s_ * rc + ty * t
+                if u == "oscillator":
+                    parts.cylinder(tag, wt / 2, lz, location=(x, y, zc), segments=12, material="electronics_box")
+                    continue
+                parts.box(tag, (hr, wt, lz), location=(x, y, zc), roll_deg=a, material="electronics_box")
+                if u == "battery_module":               # two handles on its inner face
+                    for j in (-1, 1):
+                        hz = zc + j * lz / 4
+                        p0 = (c * (rc - hr / 2), s_ * (rc - hr / 2))
+                        parts.tube(f"{tag}_handle_{'ab'[j > 0]}",
+                                   [(p0[0] - tx * 0.2, p0[1] - ty * 0.2, hz), (p0[0] - tx * 0.2 - c * 0.08, p0[1] - ty * 0.2 - s_ * 0.08, hz),
+                                    (p0[0] + tx * 0.2 - c * 0.08, p0[1] + ty * 0.2 - s_ * 0.08, hz), (p0[0] + tx * 0.2, p0[1] + ty * 0.2, hz)],
+                                   radius=0.012, material="handrail_paint")
+
 def build(spec):
     d = {k: v["value"] for k, v in spec["dimensions"].items()}
     f = {k: v["value"] for k, v in spec["facts"].items()}
@@ -592,6 +667,7 @@ def build(spec):
     fittings(f, r_ls, r_fs, R_es, z_ls1)
     ota_internals(f)
     instruments(f)
+    equipment_bays(f, R_es, z_es0, z_es1)
 
     # Handrails (layout estimated, spec facts.handrail_layout): lengthwise rails on the forward
     # tube and the aft shroud, clear of the array and antenna lines.
