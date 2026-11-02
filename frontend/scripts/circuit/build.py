@@ -34,7 +34,7 @@ def kpy(*args):
                                                                       if not re.search(r"swig/python|Fontconfig|assert", l))[-3000:])
     return lines
 
-def route(work, ground):
+def route(work, ground, planes=False):
     """Route work/board.kicad_pcb, trying again (the router varies between runs) until KiCad's design
     rule check finds no error and nothing unconnected; keeps the best try. Returns its report."""
     best = None
@@ -49,6 +49,7 @@ def route(work, ground):
         # Headless, and no Dock icon (apple.awt.UIElement): otherwise macOS gives Java focus and switches Spaces.
         r = subprocess.run([tools.tool("java"), "-Djava.awt.headless=true", "-Dapple.awt.UIElement=true", "-jar", tools.tool("freerouting"), "--gui.enabled=false",
                             "--usage_and_diagnostic_data.disable_analytics=true", "--router.autorouter.max_passes=100",
+                            *(["--router.fanout.enabled=true"] if planes else []),  # SMD pads out to the inner planes by vias
                             "-de", dsn, "-do", ses], capture_output=True, text=True)
         if not os.path.exists(ses):
             sys.exit("Freerouting failed:\n" + (r.stdout + r.stderr)[-2000:])
@@ -71,7 +72,7 @@ def main(board, publish=False):
         shutil.rmtree(work, ignore_errors=True); os.makedirs(work)
         kpy(os.path.join(HERE, "lib", "generate.py"), os.path.join(src, "recipe.json"), work)
         for ext in ("kicad_pcb", "kicad_pro"): os.rename(os.path.join(work, f"board.{ext}"), os.path.join(work, f"unrouted.{ext}"))
-        note = route(work, recipe["board"].get("ground_fill"))
+        note = route(work, recipe["board"].get("ground_fill"), bool(recipe["board"].get("planes")))
         view = recipe["board"].get("view", "top")
         screens = [dict(s, image=os.path.join(src, s["image"])) for s in recipe["board"].get("screens", [])]
         screens += recipe["board"].get("finishes", [])  # pack.py: entries without an image set a finish

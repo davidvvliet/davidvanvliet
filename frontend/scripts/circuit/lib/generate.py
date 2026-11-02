@@ -27,6 +27,11 @@ def footprint(fpid):
     sys.exit(f"footprint {fpid} not found in footprints/ or KiCad's library")
 
 board = pcbnew.BOARD()
+# Copper layers (recipe "layers": 2, 4 or 6). Inner layers listed in "planes" ({"In1.Cu": "GND"}) are whole-board
+# fills of that net, marked as power planes so the router leaves them alone and reaches them through vias
+# (ST's AN5967: signals on the outer layers, a ground and a power plane inside).
+LAYERS = recipe["board"].get("layers", 2)
+board.SetCopperLayerCount(LAYERS)
 # Rules: the recipe's project file (clearances, widths, vias), copied beside the board.
 shutil.copy(os.path.join(HARNESS, recipe["board"]["rules"]), os.path.join(out, "board.kicad_pro"))
 
@@ -124,6 +129,17 @@ for side, arc in [(((r, 0), (w - r, 0)), ((w - r, 0), (w - k, k), (w, r))),
     edge(*side)
     if r: edge(*arc)
 
+for name, plane_net in recipe["board"].get("planes", {}).items():
+    lid = board.GetLayerID(name)
+    if lid < 0 or not pcbnew.IsCopperLayer(lid) or lid in (pcbnew.F_Cu, pcbnew.B_Cu): sys.exit(f"planes: {name} is not an inner copper layer")
+    if plane_net not in nets: sys.exit(f"planes: no net {plane_net!r} on the board")
+    board.SetLayerType(lid, pcbnew.LT_POWER)
+    z = pcbnew.ZONE(board); z.SetLayer(lid); z.SetNet(nets[plane_net]); z.SetZoneName(f"plane {plane_net}")
+    z.SetPadConnection(pcbnew.ZONE_CONNECTION_FULL); z.SetMinThickness(mm(0.2)); z.SetLocalClearance(mm(0.3))
+    o = z.Outline(); o.NewOutline()
+    for x, y in ((0.3, 0.3), (w - 0.3, 0.3), (w - 0.3, h - 0.3), (0.3, h - 0.3)): o.Append(mm(x), mm(y))
+    board.Add(z)
+
 # Attachments (recipe "attachments"): things that aren't on the board but belong with it in the 3D model (the computer it
 # plugs onto, a camera on a cable). Each is a footprint with no pads, only 3D models, marked board-only so it stays out
 # of the schematic, the BOM and the checks; the web model shows it as a block of its own, named by "name". Each model:
@@ -152,13 +168,23 @@ if recipe["board"].get("mask"):
     total = float(re.search(r"\(thickness ([\d.]+)\)", text).group(1))
     mask, silk = recipe["board"]["mask"], recipe["board"].get("silk", "White")
     def layer(name, kind, *extra): return f'(layer "{name}" (type "{kind}") {" ".join(extra)})'
+    def copper_stack(total):
+        """Copper and FR4 between the masks: one core for 2 layers; for more, prepreg / core / prepreg ... with the
+        board's thickness shared evenly (the board maker sets the real stack)."""
+        names = ["F.Cu"] + [f"In{i}.Cu" for i in range(1, LAYERS - 1)] + ["B.Cu"]
+        gap = (total - 0.02 - 0.035 * LAYERS) / (LAYERS - 1)
+        out = []
+        for i, n in enumerate(names):
+            out.append(layer(n, "copper", "(thickness 0.035)"))
+            if i < LAYERS - 1:
+                kind = "core" if LAYERS == 2 or i % 2 == 1 else "prepreg"
+                out.append(layer(f"dielectric {i + 1}", kind, '(color "FR4 natural")', f"(thickness {gap:.4g})", '(material "FR4")', "(epsilon_r 4.5)", "(loss_tangent 0.02)"))
+        return out
     stackup = " ".join([
         "(stackup",
         layer("F.SilkS", "Top Silk Screen", f'(color "{silk}")'), layer("F.Paste", "Top Solder Paste"),
         layer("F.Mask", "Top Solder Mask", f'(color "{mask}")', "(thickness 0.01)"),
-        layer("F.Cu", "copper", "(thickness 0.035)"),
-        layer("dielectric 1", "core", '(color "FR4 natural")', f"(thickness {total - 0.09:g})", '(material "FR4")', "(epsilon_r 4.5)", "(loss_tangent 0.02)"),
-        layer("B.Cu", "copper", "(thickness 0.035)"),
+        *copper_stack(total),
         layer("B.Mask", "Bottom Solder Mask", f'(color "{mask}")', "(thickness 0.01)"),
         layer("B.Paste", "Bottom Solder Paste"), layer("B.SilkS", "Bottom Silk Screen", f'(color "{silk}")'),
         *([f'(copper_finish "{recipe["board"]["finish"]}")'] if recipe["board"].get("finish") else []),
