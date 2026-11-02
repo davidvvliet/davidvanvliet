@@ -16,10 +16,9 @@ _CORE = set()
 _WITHIN = {}
 _INTERNAL = set()
 _INSIDE = set()
-_SEE_THROUGH = set()
 
 @contextlib.contextmanager
-def assembly(name, core=False, within=None, internal=False, inside=False, see_through=False):
+def assembly(name, core=False, within=None, internal=False, inside=False):
     """Tag every part made inside the block. `core`: the assembly explode pushes away from
     (a bus or rover body); without one, a part named "bus" is the core. `within`: the name of
     a set of nested assemblies (a probe's shield, inner module and cover) that the dashboard's
@@ -28,8 +27,7 @@ def assembly(name, core=False, within=None, internal=False, inside=False, see_th
     out/<probe>/internal.glb, which the viewer loads only when asked to show the inside.
     `inside`: an inside part that can be seen from outside through an opening (a telescope's
     mirrors down its open tube): it stays in the main file, and the viewer treats it as part
-    of the inside (solid and clickable while the inside is shown). `see_through`: an inside
-    part that wraps others (a baffle round the mirrors): shown faint while the inside is shown."""
+    of the inside (solid and clickable while the inside is shown)."""
     prev = _ASSEMBLY[0]
     _ASSEMBLY[0] = name
     if core:
@@ -40,8 +38,6 @@ def assembly(name, core=False, within=None, internal=False, inside=False, see_th
         _INTERNAL.add(name)
     if inside:
         _INSIDE.add(name)
-    if see_through:
-        _SEE_THROUGH.add(name)
     try:
         yield
     finally:
@@ -58,8 +54,6 @@ def _tag(obj):
             obj["internal"] = True
         if _ASSEMBLY[0] in _INSIDE:
             obj["inside"] = True
-        if _ASSEMBLY[0] in _SEE_THROUGH:
-            obj["see_through"] = True
 
 def collection():
     col = bpy.data.collections.get(COLLECTION)
@@ -74,7 +68,6 @@ def clear():
     _WITHIN.clear()
     _INTERNAL.clear()
     _INSIDE.clear()
-    _SEE_THROUGH.clear()
     _ASSEMBLY[0] = None
     for obj in list(collection().objects):
         mesh = obj.data
