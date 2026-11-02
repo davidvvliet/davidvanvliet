@@ -159,3 +159,40 @@ def decal(name, host, center, direction, up, width, height, material, lift=0.002
     obj = _object(name, bm, material, Matrix(), parent, smooth=True)
     obj.vertex_groups.new(name="back").add(list(range(len(obj.data.vertices))), 1.0, "REPLACE")
     return obj
+
+def quilt(obj, radius, cell=0.35, height=0.025, taper=0.06, seed=3, tol=0.005):
+    """Puff a thermal blanket on a body of revolution about world z: vertices of `obj` on its
+    side at `radius` move outward by up to `height`, in cells about `cell` metres across (each
+    puffed by a different amount) that are pinched to the skin at their edges, where a blanket
+    is tied down, and within `taper` of the side's ends. Give the side dense vertices (a lathe
+    profile with points every few cm and as many segments) and smooth shading. Pair it with a
+    tiling crease texture (`tiling.crinkled_foil` without `pillow`) for the fine detail."""
+    import numpy as np
+    from .tiling import _cells
+    me, mw = obj.data, obj.matrix_world
+    inv = mw.inverted()
+    pts = [mw @ v.co for v in me.vertices]
+    r = np.array([math.hypot(p.x, p.y) for p in pts])
+    z = np.array([p.z for p in pts])
+    side = np.abs(r - radius) < tol
+    if not side.any():
+        raise ValueError(f"quilt {obj.name}: no vertices at radius {radius}")
+    z0, z1 = z[side].min(), z[side].max()
+    circ = 2 * math.pi * radius
+    U = np.array([(math.atan2(p.y, p.x) % (2 * math.pi)) * radius for p in pts])
+    V = z - z0
+    rng = np.random.default_rng(seed)
+    n = max(3, int(round(circ / cell)))                  # whole cells round, so it wraps
+    idx, d1, d2, n_cells = _cells(U, V, (circ, (z1 - z0) + cell * 3), circ / n, cell, rng)
+    amp = rng.uniform(0.4, 1.0, n_cells)[idx]
+    edge = np.clip((d2 - d1) / cell * 1.4, 0, 1)        # 0 at a tie line, 1 well inside a cell
+    dome = edge * edge * (3 - 2 * edge)                  # rounded: flat on top, easing to the tie
+    end = np.clip(np.minimum(z - z0, z1 - z) / taper, 0, 1)
+    puff = dome * amp * end * end * (3 - 2 * end) * height
+    for k, v in enumerate(me.vertices):
+        if side[k] and puff[k] > 0:
+            p = pts[k]
+            out = Vector((p.x, p.y, 0)).normalized()
+            v.co = inv @ (p + out * puff[k])
+    me.update()
+    return obj

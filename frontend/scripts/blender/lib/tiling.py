@@ -163,6 +163,13 @@ def _noise(h, w, size_v, size_u, seed):
     n -= n.mean()
     return n / (np.abs(n).max() + 1e-9)
 
+def _blur_wrap(a, sigma_px):
+    """Gaussian blur that wraps at the edges (keeps a repeating image seamless)."""
+    fy = np.fft.fftfreq(a.shape[0])[:, None]
+    fx = np.fft.fftfreq(a.shape[1])[None, :]
+    g = np.exp(-2 * (np.pi * sigma_px) ** 2 * (fx * fx + fy * fy))
+    return np.real(np.fft.ifft2(np.fft.fft2(a) * g))
+
 def mottle(probe, name, base_hex, spread=0.12, blob=(0.25, 0.25), streak=None, patches=None,
            repeat=(0.5, 0.5), px=256, seed=1):
     """Colour map of a mottled finish (heat tint, cast metal, weathered paint), `repeat` metres
@@ -207,5 +214,73 @@ def braid(probe, name, base_hex, carriers=6, groove=0.45, px=128):
     gy, gx = np.gradient(hgt)
     nrm = np.stack([-gx * 6, -gy * 6, np.ones_like(hgt)], 2)
     nrm /= np.linalg.norm(nrm, axis=2, keepdims=True)
+    return (image(probe, f"{name}_base", np.clip(rgb, 0, 1).astype(np.float32), "sRGB"),
+            image(probe, f"{name}_normal", (nrm * 0.5 + 0.5).astype(np.float32), "Non-Color"))
+
+def _cells(U, V, repeat, size_u, size_v, rng):
+    """Jittered-grid Voronoi that wraps at the edges: one random point in each grid cell
+    (about `size_u` x `size_v` metres), and for every pixel the index of its nearest point plus
+    the distances to the nearest and second-nearest, with u distances divided by size_u / size_v
+    (so stretched cells stay stretched). Only the 3 x 3 neighbouring cells are searched."""
+    nu = max(3, int(round(repeat[0] / size_u)))
+    nv = max(3, int(round(repeat[1] / size_v)))
+    cu, cv = repeat[0] / nu, repeat[1] / nv
+    jit = rng.uniform(0, 1, (nv, nu, 2))
+    iu = np.floor(U / cu).astype(int) % nu
+    iv = np.floor(V / cv).astype(int) % nv
+    d1 = np.full(U.shape, np.inf)
+    d2 = np.full(U.shape, np.inf)
+    idx = np.zeros(U.shape, int)
+    aspect = cu / cv
+    for dj in (-1, 0, 1):
+        for di in (-1, 0, 1):
+            ju, jv = (iu + di) % nu, (iv + dj) % nv
+            pu = (np.floor(U / cu) + di + jit[jv, ju, 0]) * cu
+            pv = (np.floor(V / cv) + dj + jit[jv, ju, 1]) * cv
+            d = np.hypot((U - pu) / aspect, V - pv)
+            near = d < d1
+            d2 = np.where(near, d1, np.minimum(d2, d))
+            d1 = np.where(near, d, d1)
+            idx = np.where(near, jv * nu + ju, idx)
+    return idx, d1, d2, nu * nv
+
+def crinkled_foil(probe, name, base_hex, repeat=(0.6, 0.6), facet=0.04, tilt_deg=14.0,
+                  wrinkle=0.12, wrinkle_deg=10.0, spread=0.10, stretch=1.0, pillow=None,
+                  pillow_deg=20.0, px_per_m=900, seed=7):
+    """Colour and normal map of crinkled foil (a thermal blanket's outer layer): flat facets
+    about `facet` metres across, each tilted at random by up to `tilt_deg` (the creases between
+    them catch the light), over broad wrinkles about `wrinkle` metres across that lean the skin
+    by up to `wrinkle_deg`. Each facet's brightness varies by up to `spread`. `stretch` > 1
+    draws the facets that many times longer along u than v (folds running one way). `pillow`:
+    the blanket puffs up in cells about that many metres across, each puffed by a different
+    amount, pinched down at their edges (where it is tied to the skin), sloping by up to
+    `pillow_deg`. Repeats seamlessly over `repeat` metres (u, v): map it with cyl_uv / plane_uv.
+    To avoid a visible repeat on a body of revolution, make one image per section: u = its
+    circumference, v = its length. Returns (base, normal)."""
+    w = int(round(repeat[0] * px_per_m))
+    h = int(round(repeat[1] * px_per_m))
+    rng = np.random.default_rng(seed)
+    U, V = np.meshgrid((np.arange(w) + 0.5) / w * repeat[0], (np.arange(h) + 0.5) / h * repeat[1])
+    cell, _, _, n_pts = _cells(U, V, repeat, facet * stretch, facet, rng)
+    t = np.tan(np.radians(tilt_deg)) * np.sqrt(rng.uniform(0, 1, n_pts))
+    a = rng.uniform(0, 2 * np.pi, n_pts)
+    sx, sy = (t * np.cos(a))[cell], (t * np.sin(a))[cell]
+    hgt = _noise(h, w, wrinkle * px_per_m, wrinkle * px_per_m, seed + 1)
+    gy, gx = np.gradient(hgt)
+    k = np.tan(np.radians(wrinkle_deg)) / (np.abs(np.stack([gx, gy])).max() + 1e-9)
+    sx, sy = sx + gx * k, sy + gy * k
+    if pillow:
+        pc, d1, d2, n_cells = _cells(U, V, repeat, pillow, pillow, rng)
+        edge = (d2 - d1) / pillow                # 0 on a cell's edge, rising inwards
+        amp = rng.uniform(0.4, 1.0, n_cells)[pc]  # some cells puff more than others
+        puff = np.sqrt(np.clip(edge * 2.0, 0, 1)) * amp
+        puff = _blur_wrap(puff, px_per_m * pillow * 0.08)
+        py, px_ = np.gradient(puff)
+        kp = np.tan(np.radians(pillow_deg)) / (np.abs(np.stack([px_, py])).max() + 1e-9)
+        sx, sy = sx + px_ * kp, sy + py * kp
+    nrm = np.stack([-sx, -sy, np.ones_like(hgt)], 2)
+    nrm /= np.linalg.norm(nrm, axis=2, keepdims=True)
+    shade = 1 + spread * rng.uniform(-1, 1, n_pts)[cell]
+    rgb = srgb(base_hex)[None, None] * shade[..., None]
     return (image(probe, f"{name}_base", np.clip(rgb, 0, 1).astype(np.float32), "sRGB"),
             image(probe, f"{name}_normal", (nrm * 0.5 + 0.5).astype(np.float32), "Non-Color"))

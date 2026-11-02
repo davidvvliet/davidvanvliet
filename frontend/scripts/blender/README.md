@@ -7,10 +7,11 @@ Python; the command line needs only the system `python3`.
 ## Layout
 - `lib/parts.py`: shared parts, in metres, used as `parts.<name>`; it gathers four files, and a new part goes in the one it belongs to:
   - `lib/parts_core.py`: the collection, assemblies, `_object` (bmesh to object), joints and poses
-  - `lib/parts_shapes.py`: dish, prism bus, box, truss/rod boom, RTG, panel, cylinder, strut, disc with UVs and hub, plate, lathe, wheel, bent tube, joint chain
+  - `lib/parts_shapes.py`: dish, prism bus, box, truss/rod boom, RTG, panel, cylinder, strut, disc with UVs and hub, plate, lathe, wheel, bent tube, joint chain, crew handrails (`handrail`, with `skin_line` / `skin_arc` for the points)
   - `lib/parts_aero.py`: fuselage sections and lofts, wings, tails and fins (`surface`, with pieces for control surfaces), grid fins
-  - `lib/parts_skin.py`: operations on a skin: `cap_hole`, `shell`, `decal`
+  - `lib/parts_skin.py`: operations on a skin: `cap_hole`, `shell`, `decal`, `quilt` (a blanket's bulges)
 - `lib/materials.py`: the shared material list (foil, paint, metal, solar cells), merged with a spec's `materials`, and `image()` (image colour + normal map, optionally cut out by the image's alpha), Principled BSDF only
+- `lib/tiling.py`: repeating surface textures and the UVs that wrap them round a body (`cyl_uv`, `plane_uv`): hex tiles, weld lines, mottle, braid, crinkled foil
 - `lib/textures.py`: textures made at build time from `refs/` data (`engraved()`: colour + normal map from a line image; `marking()`: colour + cut-out for a decal from traced masks)
 - `lib/engines.py`: rocket and jet engines from an engine spec (nozzle contour, chamber, powerhead, pumps, pipes; nacelle, fan, core), full or simple, and `place` for putting them on a vehicle
 - `lib/rig.py`: review rig and contact sheet (front, three-quarter / side, top; metric grid on the orthographic views)
@@ -63,6 +64,42 @@ worktree shown ("from x15") and, when there are several, switches between them; 
 starting in any worktree takes the page there. File URLs carry the worktree:
 `/api/models/file/<worktree folder>/out/<probe>/sheet.png`. The "live version" check is always
 the server's own checkout, which is what the site ships.
+
+## Thermal blankets (crinkled foil)
+
+A blanket-covered section (multilayer insulation: Hubble's light shield and forward shell) gets
+its look from two layers, split by size so nothing repeats visibly and the texture stays sharp:
+
+- **Bulges as geometry**: `parts.quilt(obj, radius, cell, height, seed)` puffs the side of a body of
+  revolution about world z outward in cells about `cell` m across, each by a different amount up
+  to `height`, pinched back to the skin at the cell edges (tie lines) and at the section's ends.
+  It is different everywhere (no repeat) and makes the silhouette lumpy like the real thing.
+  The side needs dense vertices: a lathe profile with a point every ~7 cm and as many segments
+  round, smooth shading. Build it ~2 cm inside the nominal skin so the bulges end near it.
+- **Creases as a tiling normal map**: `tiling.crinkled_foil(probe, name, base_hex, ...)` makes a
+  colour + normal map of flat facets tilted at random (`facet`, `tilt_deg`; `stretch` > 1 runs the
+  folds along u) over broad soft wrinkles (`wrinkle`, `wrinkle_deg`), sharp at `px_per_m` 700.
+  Map it with `tiling.cyl_uv(obj, w, h, r)`, w = 2 pi r / n so a whole number of repeats goes
+  round with no seam. (It can also make the bulges itself with `pillow=`, for flat panels that
+  can't be quilted, but a texture big enough not to repeat loses its sharpness.)
+
+```python
+fb, fn = tiling.crinkled_foil(probe, "mli_foil", spec["materials"]["mli_foil"]["hex"], facet=0.07,
+                              tilt_deg=7, wrinkle=0.3, wrinkle_deg=8, spread=0.05, stretch=2.5,
+                              repeat=(2 * math.pi * r / 5,) * 2, px_per_m=700)
+foil = materials.image("mli_foil_crinkled", fb, normal=fn, metallic=1.0, roughness=0.3)
+rt = r - 0.02
+side = parts.lathe("shell", [(rt, z0 + (z1 - z0) * k / 56) for k in range(57)],
+                   segments=int(2 * math.pi * r / 0.07), material=foil)
+parts.quilt(side, rt, cell=0.35, height=0.045, seed=1)
+tiling.cyl_uv(side, 2 * math.pi * r / 5, 2 * math.pi * r / 5, r)
+```
+
+The values above are Hubble's, tuned by eye against the STS-125 photos: no document gives
+wrinkle sizes, so a probe's own values are "estimated from <photo>". The colour is the spec's
+sampled `materials` entry. Mind dimension checks on the section's diameter: the bulges add up
+to `height` minus the inset. Gold Kapton blankets (Voyager, Cassini) work the same way with a
+gold `base_hex`.
 
 ## Assemblies, joints and poses
 

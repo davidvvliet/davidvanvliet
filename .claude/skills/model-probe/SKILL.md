@@ -130,6 +130,8 @@ More than one Claude session may be working in this harness.
   `lib/materials.py` for the rest. Don't add a probe's colour to the shared list: a shared
   entry changes every probe (run `model:all` if you must).
 - Don't invent a colour in the probe script. An unsourced finish goes in `open_questions`.
+- Thermal blankets (crinkled foil, silver or gold): `parts.quilt` for the bulges plus
+  `tiling.crinkled_foil` for the creases (README "Thermal blankets"). Handrails: `parts.handrail`.
 
 ## When the user corrects something
 Fix it at the level it belongs: a wrong number in the spec (with a better source), a

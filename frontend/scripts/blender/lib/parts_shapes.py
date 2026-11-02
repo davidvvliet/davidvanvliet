@@ -416,6 +416,51 @@ def tube(name, points, radius, segments=12, bend_radius=0.0, material="dark_meta
     _tube(bm, pts, radius, segments)
     return _object(name, bm, material, Matrix(), parent, smooth=True)
 
+def handrail(name, rails, standoff=0.06, radius=0.016, post_spacing=0.6, post_radius=None,
+             segments=8, material="dark_metal", parent=None):
+    """Crew handrails standing off a skin, as one object. `rails`: a list of rails, each a list of
+    (point on the skin, outward normal) pairs along it. Each rail runs `standoff` out from the skin
+    and bends down into a foot at both ends; posts every `post_spacing` metres hold it in between.
+    Build the points with `skin_line` (along a body of revolution) or `skin_arc` (round it)."""
+    post_radius = post_radius or radius * 0.7
+    bm = bmesh.new()
+    for rail in rails:
+        base = [Vector(p) for p, _ in rail]
+        up = [Vector(n).normalized() for _, n in rail]
+        top = [b + u * standoff for b, u in zip(base, up)]
+        path = _round_corners([base[0]] + top + [base[-1]], min(standoff * 0.6, radius * 3), 4)
+        _tube(bm, path, radius, segments)
+        run = 0.0
+        for i in range(1, len(base)):
+            seg = (base[i] - base[i - 1]).length
+            n = int((run + seg) // post_spacing) - int(run // post_spacing)
+            for k in range(1, n + 1):
+                s = ((int(run // post_spacing) + k) * post_spacing - run) / seg
+                if 0.02 < s < 0.98 or 0 < i < len(base) - 1:
+                    b = base[i - 1].lerp(base[i], s)
+                    u = up[i - 1].lerp(up[i], s).normalized()
+                    _tube(bm, [b, b + u * standoff], post_radius, 6)
+            run += seg
+    return _object(name, bm, material, Matrix(), parent, smooth=True)
+
+def skin_line(radius, angle_deg, z0, z1, steps=2):
+    """(point, normal) pairs along a body of revolution about z: at `radius`, `angle_deg` round
+    from +x, from z0 to z1 (for `handrail`)."""
+    a = math.radians(angle_deg)
+    n = Vector((math.cos(a), math.sin(a), 0))
+    return [(n * radius + Vector((0, 0, z0 + (z1 - z0) * k / steps)), n) for k in range(steps + 1)]
+
+def skin_arc(radius, z, a0_deg, a1_deg, step_deg=6.0):
+    """(point, normal) pairs round a body of revolution about z at height `z`, from `a0_deg` to
+    `a1_deg` (for `handrail`)."""
+    n = max(1, int(math.ceil(abs(a1_deg - a0_deg) / step_deg)))
+    out = []
+    for k in range(n + 1):
+        a = math.radians(a0_deg + (a1_deg - a0_deg) * k / n)
+        u = Vector((math.cos(a), math.sin(a), 0))
+        out.append((u * radius + Vector((0, 0, z)), u))
+    return out
+
 def _spline(points, steps):
     """Catmull-Rom curve through `points` (tuples of floats, any length): `steps` points per
     span, passing through every given point."""
