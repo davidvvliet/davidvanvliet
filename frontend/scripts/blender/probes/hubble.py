@@ -237,6 +237,106 @@ def fittings(f, r_ls, r_fs, R_es, z_ls1):
                     parts.strut(f"scuff_strut_{tag}_{i + 1}", foot, Vector((c * out, s_ * out, z)) + off * 0.3,
                                 radius=0.025, material="beam_gold")
 
+def ota_internals(f):
+    """The Optical Telescope Assembly inside the tube (spec facts.ota): primary mirror on the
+    main ring, the reaction plate behind them, the central and outer baffles, the metering
+    truss and the secondary mirror on its spider. What the open aperture shows (mirrors, baffles,
+    spider) stays in the main file as `inside`; the rest (truss, main ring, reaction plate) is
+    internal, in internal.glb."""
+    O = f["ota"]
+    z = lambda st: sta(st)
+    # Primary mirror: f/2.35 paraboloid face (sag r^2 / 4F), 24 in hole, glass behind.
+    R, rh, F = O["pm_d_in"] / 2 * IN, O["pm_hole_in"] / 2 * IN, O["pm_f_ratio"] * O["pm_d_in"] * IN
+    zv, t = z(O["pm_vertex_sta"]), O["pm_thick_in"] * IN
+    face = [(rh + (R - rh) * k / 16, zv + (rh + (R - rh) * k / 16) ** 2 / (4 * F)) for k in range(17)]
+    MR = O["main_ring"]
+    z_mr0 = z(MR["aft_sta"]); z_mr1 = z_mr0 + MR["depth_in"] * IN
+    r_mi, r_mo = MR["id_in"] / 2 * IN, MR["od_in"] / 2 * IN
+    with parts.assembly("primary_mirror", inside=True):
+        parts.lathe("primary_mirror_face", face, segments=96, material="mirror_coating")
+        parts.lathe("primary_mirror_body", [(rh, face[0][1] - 0.002), (rh, zv - t), (R, zv - t), (R, face[-1][1] - 0.002)],
+                    segments=96, material="mirror_glass")
+        parts.lathe("primary_mirror_back", [(R, zv - t), (rh, zv - t)], segments=96, material="mirror_glass")
+        # three axial mirror mounts (Figure 4-2 item 5) from the mirror's edge to the main ring
+        for k in range(3):
+            a = math.radians(90 + 120 * k)
+            parts.strut(f"primary_mirror_mount_{k + 1}", (math.cos(a) * (R - 0.05), math.sin(a) * (R - 0.05), zv - t / 2),
+                        (math.cos(a) * (r_mi + 0.01), math.sin(a) * (r_mi + 0.01), zv - t / 2), radius=0.04, material="titanium")
+    with parts.assembly("main_ring", internal=True):
+        parts.lathe("main_ring", [(r_mi, z_mr0), (r_mo, z_mr0), (r_mo, z_mr1), (r_mi, z_mr1)], closed=True,
+                    segments=96, material="titanium", smooth=False)
+        # axial links to the equipment section's inner barrel (Figure 4-2 item 6)
+        r_bar = O["es_inner_barrel_in"] / 2 * IN
+        for k in range(3):
+            a = math.radians(30 + 120 * k)
+            parts.box(f"main_ring_link_{k + 1}", (r_bar - r_mo + 0.04, 0.12, 0.1),
+                      location=(math.cos(a) * (r_mo + r_bar) / 2, math.sin(a) * (r_mo + r_bar) / 2, z_mr0 + 0.05),
+                      roll_deg=math.degrees(a), material="titanium")
+    with parts.assembly("reaction_plate", internal=True):
+        z0, z1 = (z(v) for v in O["reaction_plate_sta"])
+        parts.lathe("reaction_plate_hub", [(0.25, z0), (0.4, z0), (0.4, z1), (0.25, z1)], closed=True, segments=32,
+                    material="titanium", smooth=False)
+        parts.lathe("reaction_plate_rim", [(r_mi - 0.08, z0), (r_mi, z0), (r_mi, z1), (r_mi - 0.08, z1)], closed=True,
+                    segments=96, material="titanium", smooth=False)
+        for k in range(12):
+            a = 15 + 30 * k
+            c, s_ = _az(a)
+            rr = (0.4 + r_mi - 0.08) / 2
+            parts.box(f"reaction_plate_beam_{k + 1}", (r_mi - 0.08 - 0.4 + 0.02, 0.06, z1 - z0),
+                      location=(c * rr, s_ * rr, (z0 + z1) / 2), roll_deg=a, material="titanium")
+    with parts.assembly("central_baffle", inside=True):
+        cb = O["central_baffle"]
+        zb0 = z(O["reaction_plate_sta"][1])
+        parts.lathe("central_baffle", [(cb["r_in"][0] * IN, zb0), (cb["r_in"][1] * IN, zb0 + cb["length_m"])],
+                    segments=32, material="baffle_black")
+    with parts.assembly("main_baffle"):
+        mb = O["main_baffle"]
+        rb, zb0 = mb["r_in"] * IN, z_mr1
+        parts.lathe("main_baffle", [(rb, zb0), (rb, zb0 + mb["length_m"])], segments=96, material="baffle_black")
+        for k in range(10):
+            zf = zb0 + mb["length_m"] * (k + 0.5) / 10
+            parts.lathe(f"main_baffle_fin_{k + 1}", [(rb - 0.1, zf), (rb, zf), (rb, zf + 0.01), (rb - 0.1, zf + 0.01)],
+                        closed=True, segments=48, material="baffle_black", smooth=False)
+    with parts.assembly("metering_truss", internal=True):
+        rt = O["truss_r_in"] * IN
+        zr = [z(v) for v in O["truss_ring_sta"]]
+        for i, zz in enumerate(zr):
+            parts.lathe(f"metering_truss_ring_{i + 1}", [(rt - 0.06, zz - 0.03), (rt, zz - 0.03), (rt, zz + 0.03), (rt - 0.06, zz + 0.03)],
+                        closed=True, segments=96, material="graphite_epoxy", smooth=False)
+        n = 8
+        for i in range(len(zr) - 1):
+            for k in range(n):
+                a0, a1 = math.radians(360 * k / n), math.radians(360 * (k + 1) / n)
+                p = lambda a, zz: (math.cos(a) * (rt - 0.03), math.sin(a) * (rt - 0.03), zz)
+                parts.strut(f"metering_truss_strut_{i + 1}_{k + 1}a", p(a0, zr[i]), p(a1, zr[i + 1]), radius=0.025,
+                            material="graphite_epoxy")
+                parts.strut(f"metering_truss_strut_{i + 1}_{k + 1}b", p(a1, zr[i]), p(a0, zr[i + 1]), radius=0.025,
+                            material="graphite_epoxy")
+        # struts from the main ring's front face up to the first truss ring
+        for k in range(n):
+            a = math.radians(360 * k / n + 22.5)
+            parts.strut(f"metering_truss_foot_{k + 1}", (math.cos(a) * (r_mo - 0.08), math.sin(a) * (r_mo - 0.08), z_mr1),
+                        (math.cos(a) * (rt - 0.03), math.sin(a) * (rt - 0.03), zr[0]), radius=0.025, material="graphite_epoxy")
+    with parts.assembly("secondary_mirror", inside=True):
+        zs, zh = z(O["sm_vertex_sta"]), z(O["sm_housing_front_sta"])
+        rs, rhs = O["sm_d_in"] / 2 * IN, O["sm_housing_r_in"] * IN
+        parts.lathe("secondary_mirror_housing", [(0, zs + 0.03), (rhs, zs + 0.03), (rhs, zh), (0, zh)], segments=32,
+                    material="graphite_epoxy")
+        parts.lathe("secondary_mirror", [(0, zs - 0.004), (rs * 0.6, zs - 0.002), (rs, zs + 0.004), (rs, zs + 0.03), (0, zs + 0.03)],
+                    segments=48, material="mirror_coating")
+        rt = O["truss_r_in"] * IN
+        zr4 = z(O["truss_ring_sta"][-1])
+        for k, a in enumerate((0, 90, 180, 270)):
+            c, s_ = _az(a)
+            parts.box(f"secondary_mirror_spider_{k + 1}", (rt - rhs + 0.02, 0.012, 0.15),
+                      location=(c * (rt + rhs) / 2 - c * 0.02, s_ * (rt + rhs) / 2 - s_ * 0.02, (zs + zh) / 2),
+                      roll_deg=a, material="graphite_epoxy")
+        sb = O["secondary_baffle"]
+        parts.lathe("secondary_baffle", [(sb["r_in"][0] * IN, z(sb["sta"][0])), (sb["r_in"][1] * IN, z(sb["sta"][1]))],
+                    segments=32, material="baffle_black")
+        parts.strut("secondary_baffle_mount", (0, 0, z(sb["sta"][1]) - 0.02), (0, 0, zs - 0.004), radius=0.05,
+                    material="graphite_epoxy")
+
 def build(spec):
     d = {k: v["value"] for k, v in spec["dimensions"].items()}
     f = {k: v["value"] for k, v in spec["facts"].items()}
@@ -281,8 +381,10 @@ def build(spec):
         # lies on +V3: the two doors either side of it carry the louvred radiators
         # (sm4_photos s125e011763, taken from +V3).
         R_es = d["equipment_section_diameter"] / 2
-        parts.prism("equipment_section", sides=12, radius=R_es, height=z_es1 - z_es0,
-                    location=(0, 0, z_es0), roll_deg=15, material="dark_metal")
+        # A ring round the 120.6 in inner barrel (the telescope's main ring sits inside it).
+        r_bar = f["ota"]["es_inner_barrel_in"] / 2 * IN
+        parts.lathe("equipment_section", [(r_bar, z_es0), (R_es, z_es0), (R_es, z_es1), (r_bar, z_es1)],
+                    closed=True, segments=12, material="dark_metal", smooth=False)
         nb = f["nobl_covers"]
         equipment_doors(R_es, z_es0, z_es1, nobl={"az": [f["bay_azimuths"][str(b)] for b in nb["bays"]],
                                                   "coverage": nb["coverage"], "bay1_az": f["bay_azimuths"]["1"],
@@ -306,8 +408,6 @@ def build(spec):
                     material="foil_silver", smooth=False)
         parts.lathe("light_shield_bore", [(r_ls - 0.031, z_ls1), (r_ls - 0.031, z_fs1)],
                     segments=64, material="black")
-        parts.disc("light_shield_floor", radius=r_ls - 0.031, thickness=0.01,
-                   location=(0, 0, z_fs1), material="black", hole_material="black")
 
     # OTA equipment section: nine bays in a 150-degree ring round the aft end of the forward shell,
     # on +V3, STA 299.425 to 337.75 (lmsc1985). Outer radius 2.05 m estimated from s125e011763; the
@@ -437,6 +537,7 @@ def build(spec):
 
     aft_features(f, r_aft)
     fittings(f, r_ls, r_fs, R_es, z_ls1)
+    ota_internals(f)
 
     # Handrails (layout estimated, spec facts.handrail_layout): lengthwise rails on the forward
     # tube and the aft shroud, clear of the array and antenna lines.

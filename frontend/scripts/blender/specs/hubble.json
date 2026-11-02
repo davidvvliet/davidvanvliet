@@ -818,6 +818,90 @@
     }
    ],
    "note": "Figure 2-3: Y_orb = +V2, so the pins point at the payload bay's longerons. Forward trunnion on +V2 with its gold tube frame, pin diameter about 7 cm: sm4_photos s125e011763 (image left is +V2; nothing at that station on -V2)"
+  },
+  "ota": {
+   "value": {
+    "pm_vertex_sta": 257.49,
+    "sm_vertex_sta": 450.44,
+    "sm_housing_front_sta": 461.16,
+    "focal_plane_sta": 198.44,
+    "pm_d_in": 94.5,
+    "pm_hole_in": 24,
+    "pm_f_ratio": 2.35,
+    "pm_thick_in": 12,
+    "sm_d_in": 12.2,
+    "sm_housing_r_in": 14.13,
+    "main_ring": {
+     "od_in": 118,
+     "id_in": 100,
+     "depth_in": 15,
+     "aft_sta": 240.66
+    },
+    "reaction_plate_sta": [
+     231.23,
+     240.0
+    ],
+    "truss_r_in": 57.5,
+    "truss_ring_sta": [
+     258,
+     319,
+     386,
+     451
+    ],
+    "main_baffle": {
+     "r_in": 50.75,
+     "length_m": 4.8
+    },
+    "central_baffle": {
+     "length_m": 3.0,
+     "r_in": [
+      10.5,
+      7
+     ]
+    },
+    "secondary_baffle": {
+     "sta": [
+      415,
+      443
+     ],
+     "r_in": [
+      14,
+      8
+     ]
+    },
+    "es_inner_barrel_in": 120.6
+   },
+   "sources": [
+    {
+     "source": "lmsc1985, Figure 4-2 OTA Major Structural Components (PDF p.117)",
+     "quote": "PRIMARY MIRROR VERTEX 257.49 ... SECONDARY MIRROR VERTEX 450.44 ... 461.16 ... f/24 FOCAL PLANE 198.44 ... 240.66 ... 231.23 ... 240.00 ... 59.00 R ... 57.50 ... 50.75 ... 14.13"
+    },
+    {
+     "source": "lmsc1985",
+     "quote": "strikes the larger (2.4 m; 94.5 in.) primary mirror. The light is then reflected 4.9 m (16ft) to the 0.3 m (12.2 in.) secondary mirror ... The beam travels through the 60 cm (24 in.) hole in the primary mirror"
+    },
+    {
+     "source": "lmsc1985",
+     "quote": "The MR consists of a annular box beam 118 inch OD x 100 in. ID x 15-in. deep."
+    },
+    {
+     "source": "lmsc1985",
+     "quote": "The FPS interface with the telescope is at the aft face of the Main Ring Assembly (MRA) at Station 240.66."
+    },
+    {
+     "source": "lmsc1985",
+     "quote": "an internal barrel section diameter of 120.6 in."
+    },
+    {
+     "source": "sm4guide",
+     "quote": "the outer (main) baffle is an aluminum cylinder 9 feet (2.7 m) in diameter and 15.7 feet (4.8 m) long. Internal fins help it attenuate stray light. The central baffle is 10 feet (3 m) long, cone-shaped"
+    },
+    {
+     "source": "sm4guide",
+     "quote": "prime focus of f/24 ... f/2.35"
+    }
+   ],
+   "note": "stations are V1 in inches (Figure 2-3). Estimated by scaling Figure 4-2 (5.52 px/in on a 260 dpi render): mirror thickness about 12 in, truss ring stations, reaction plate taken as the span between the 231.23 and 240.00 labels, central and secondary baffle radii and the secondary baffle's ends. Main baffle radius from the drawing's 50.75 (the guide rounds to 9 ft). Truss: 8 nodes per ring, X-braced (count estimated); main baffle fins: 10 (estimated)"
   }
  },
  "open_questions": [
@@ -939,11 +1023,43 @@
    "metallic": 1.0,
    "roughness": 0.2,
    "source": "sm4_photos, s125e011763: 75th percentile of a NOBL cover on the +V2 side (its vent plugs visible); ousley: 'stainless steel coated with vapor deposited silver'"
+  },
+  "mirror_coating": {
+   "hex": "#c9ccd0",
+   "metallic": 1.0,
+   "roughness": 0.04,
+   "source": "sm4guide: the mirrors are 'coated with aluminum and magnesium fluoride'; colour of bare aluminium, estimated"
+  },
+  "titanium": {
+   "hex": "#8a8580",
+   "metallic": 1.0,
+   "roughness": 0.45,
+   "source": "lmsc1985: 'Internal fittings and outer skins are made of annealed 6AL-4V Titanium' (main ring); colour estimated"
+  },
+  "graphite_epoxy": {
+   "hex": "#2b2b2d",
+   "metallic": 0.2,
+   "roughness": 0.5,
+   "source": "sm4guide: the metering truss 'is a graphite fiber-reinforced epoxy structure'; colour estimated (dark grey composite)"
+  },
+  "baffle_black": {
+   "hex": "#121212",
+   "metallic": 0.0,
+   "roughness": 0.9,
+   "source": "sm4guide: baffles 'painted flat black to suppress stray light'"
+  },
+  "mirror_glass": {
+   "hex": "#d8dcd6",
+   "metallic": 0.0,
+   "roughness": 0.3,
+   "source": "lmsc1985 Figure 4-5 (the mirror's glass body behind its coated face); colour estimated"
   }
  },
  "budget": {
   "triangles": 80000,
-  "glb_bytes": 4000000
+  "glb_bytes": 4000000,
+  "internal_triangles": 150000,
+  "internal_glb_bytes": 3000000
  },
  "closeups": [
   {
@@ -1119,5 +1235,8 @@
   "aft_vent_4": {
    "on": "aft_bulkhead"
   }
+ },
+ "viewer": {
+  "explore": false
  }
 }
