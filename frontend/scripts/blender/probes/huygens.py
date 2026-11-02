@@ -17,12 +17,10 @@ def build(spec):
     before = set(parts.collection().all_objects)
     dome = f["profile"]["fore_dome"]
 
-    # Explode: the front shield and the back cover come off the descent module, as at Titan.
-    with parts.assembly("front_shield"):
+    with parts.assembly("entry_assembly", core=True):
         _front_shield(d, f)
-    with parts.assembly("back_cover"):
         _back_cover(f)
-    with parts.assembly("descent_module", core=True):
+    with parts.assembly("descent_module"):
         _fore_dome(f, dome)
         _experiment_platform(f, st, dome)
         _after_cone(f, st)
