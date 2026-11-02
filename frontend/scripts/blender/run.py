@@ -257,6 +257,16 @@ def cmd_approve(args):
                               capture_output=True, text=True)
         if "THUMB_OK" not in proc.stdout:
             die(proc.stdout[-4000:] + proc.stderr[-4000:])
+        # The point the card turns about (viewer.pivot), measured on the build: the grid copy
+        # joins parts, so the card can't find the part there.
+        pivot_file = os.path.join(PUBLIC_MODELS, f"{probe}.pivot.json")
+        pv = [line.split()[1:] for line in proc.stdout.splitlines() if line.startswith("PIVOT ")]
+        if pv:
+            with open(pivot_file, "w") as f:
+                json.dump({"part": spec["viewer"]["pivot"], "centre": [float(x) for x in pv[0]]}, f)
+                f.write("\n")
+        elif os.path.exists(pivot_file):
+            os.remove(pivot_file)
         # The site's credits list what shapes a published model (its sources' "credit" lines).
         sys.path.insert(0, HERE)
         from lib import sources

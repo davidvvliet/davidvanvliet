@@ -12,7 +12,7 @@ import styles from "./models.module.css";
 
 export type Published = {
   probe: string; title: string; thumb: boolean; logos: string[]; explore: boolean; focus: Focusable[]; explode: string[]; internal: boolean; grid: boolean;
-  pivot: string | null; // the spec's viewer.pivot: the part the card turns about (a craft's body)
+  pivot: [number, number, number] | null; // the point the card turns about: the spec's viewer.pivot part's centre
   sources: { title: string; url: string; licence: string | null; cited: number }[];
 };
 
@@ -175,7 +175,7 @@ export function Header({ children }: { children: React.ReactNode }) {
 }
 
 // A card in a grid: its model spinning (its thumbnail until then), a title, and a corner (logos).
-export type CardItem = { key: string; href: string; url: string; title: string; thumb?: string; corner?: React.ReactNode; pivot?: string | null };
+export type CardItem = { key: string; href: string; url: string; title: string; thumb?: string; corner?: React.ReactNode; pivot?: [number, number, number] | null };
 
 // A page of cards (/models, /circuits): the header, the intro in green, then the cards, each row of
 // `rows` starting a new line of the grid.
@@ -263,22 +263,22 @@ function Logos({ model }: { model: Published }) {
 }
 
 // The model turning about its vertical axis, framed so its bounding sphere stays in the card.
-// With a pivot (a part's name), it turns about that part's centre instead (a craft's body, not
-// its long booms), far enough out that every vertex stays in the card. The spin pauses while
+// With a pivot (a point: the spec's viewer.pivot part's centre, measured by approve on the full
+// model) it turns about that instead (a craft's body, not its long booms), far enough out that
+// every vertex stays in the card. The spin pauses while
 // the card is hovered.
 function Spinning({ url, pivot, spin, hover, onReady }: {
-  url: string; pivot: string | null; spin: boolean; hover: React.RefObject<boolean>; onReady: () => void;
+  url: string; pivot: [number, number, number] | null; spin: boolean; hover: React.RefObject<boolean>; onReady: () => void;
 }) {
   const gltf = useGLTF(url);
   const { scene, centre, radius } = useMemo(() => {
     const s = gltf.scene.clone(true); // the viewer gets its own copy of the cached scene too
     s.updateMatrixWorld(true);
-    const body = pivot ? s.getObjectByName(pivot) : undefined;
-    if (!body) {
+    if (!pivot) {
       const sphere = new THREE.Box3().setFromObject(s).getBoundingSphere(new THREE.Sphere());
       return { scene: s, centre: sphere.center, radius: sphere.radius };
     }
-    const c = new THREE.Box3().setFromObject(body).getCenter(new THREE.Vector3());
+    const c = new THREE.Vector3(...pivot);
     let r = 0;
     const v = new THREE.Vector3();
     s.traverse((o) => {
@@ -287,7 +287,7 @@ function Spinning({ url, pivot, spin, hover, onReady }: {
       for (let i = 0; i < pos.count; i++) r = Math.max(r, v.fromBufferAttribute(pos, i).applyMatrix4(o.matrixWorld).distanceTo(c));
     });
     return { scene: s, centre: c, radius: r };
-  }, [gltf.scene, pivot]);
+  }, [gltf.scene, pivot?.[0], pivot?.[1], pivot?.[2]]); // eslint-disable-line react-hooks/exhaustive-deps
   const camera = useThree((s) => s.camera) as THREE.PerspectiveCamera;
   useEffect(() => {
     const dist = (radius * FIT) / Math.sin(THREE.MathUtils.degToRad(FOV) / 2);

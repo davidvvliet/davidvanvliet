@@ -34,6 +34,9 @@ if pivot:
     pts = [obj.matrix_world @ Vector(c) for c in obj.bound_box]
     centre = sum(pts, Vector()) / len(pts)
     radius = max((o.matrix_world @ v.co - centre).length for o in meshes for v in o.data.vertices)
+    # for the card, in three.js axes (Blender x, y, z -> x, z, -y): the grid copy it spins has
+    # its parts joined, so the part can't be found by name there
+    print("PIVOT", round(centre.x, 4), round(centre.z, 4), round(-centre.y, 4))
 
 scene = bpy.context.scene
 scene.render.engine = "BLENDER_EEVEE"
