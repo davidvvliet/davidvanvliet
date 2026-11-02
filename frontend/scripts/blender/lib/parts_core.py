@@ -13,15 +13,20 @@ COLLECTION = "Probe"
 # dashboard group by it; untagged parts fall back to their name (rtg_1 -> rtg).
 _ASSEMBLY = [None]
 _CORE = set()
+_WITHIN = {}
 
 @contextlib.contextmanager
-def assembly(name, core=False):
+def assembly(name, core=False, within=None):
     """Tag every part made inside the block. `core`: the assembly explode pushes away from
-    (a bus or rover body); without one, a part named "bus" is the core."""
+    (a bus or rover body); without one, a part named "bus" is the core. `within`: the name of
+    a set of nested assemblies (a probe's shield, inner module and cover) that the dashboard's
+    explode moves out as one and then spreads apart along that line."""
     prev = _ASSEMBLY[0]
     _ASSEMBLY[0] = name
     if core:
         _CORE.add(name)
+    if within:
+        _WITHIN[name] = within
     try:
         yield
     finally:
@@ -32,6 +37,8 @@ def _tag(obj):
         obj["assembly"] = _ASSEMBLY[0]
         if _ASSEMBLY[0] in _CORE:
             obj["core"] = True
+        if _ASSEMBLY[0] in _WITHIN:
+            obj["within"] = _WITHIN[_ASSEMBLY[0]]
 
 def collection():
     col = bpy.data.collections.get(COLLECTION)
@@ -43,6 +50,7 @@ def collection():
 def clear():
     """Delete every object in the Probe collection (the rest of the scene is left alone)."""
     _CORE.clear()
+    _WITHIN.clear()
     _ASSEMBLY[0] = None
     for obj in list(collection().objects):
         mesh = obj.data

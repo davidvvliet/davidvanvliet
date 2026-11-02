@@ -71,8 +71,10 @@ function useParts(scene: THREE.Object3D) {
     const parts = new Map<string, Part>();
     const boxes = new Map<string, THREE.Box3>();
     let core: string | null = null;
+    const within = new Map<string, string>(); // assembly -> its nested set (a probe's shield, module, cover)
     scene.traverse((o) => {
       if (o.userData.core && typeof o.userData.assembly === "string") core = o.userData.assembly;
+      if (typeof o.userData.within === "string" && typeof o.userData.assembly === "string") within.set(o.userData.assembly, o.userData.within);
       const m = o as THREE.Mesh;
       if (!m.isMesh) return;
       // Parts share materials ("black" etc.): give each mesh its own so a highlight stays on one part.
@@ -92,13 +94,44 @@ function useParts(scene: THREE.Object3D) {
     const step = coreBox.getSize(new THREE.Vector3()).length() * 1.0;
     const reach = new THREE.Box3().setFromObject(scene).getBoundingSphere(new THREE.Sphere()).radius * 1.1;
     const offsets = new Map<string, THREE.Vector3>();
-    for (const [g, box] of boxes) {
+    const pushOf = (box: THREE.Box3) => {
       const d = box.getCenter(new THREE.Vector3()).sub(centre);
       const len = d.length();
-      if (g === centreGroup || len < 1e-6) { offsets.set(g, new THREE.Vector3()); continue; }
+      if (len < 1e-6) return new THREE.Vector3();
       // Keep exploded parts near the assembled model's bounds so they stay in view.
       const push = Math.min(step + Math.min(len, step * 2) * 0.8, Math.max(reach - len, step * 0.3));
-      offsets.set(g, d.normalize().multiplyScalar(push));
+      return d.normalize().multiplyScalar(push);
+    };
+    const sets = new Map<string, string[]>();
+    for (const [g, box] of boxes) {
+      const s = within.get(g);
+      if (s && g !== centreGroup) { sets.set(s, [...(sets.get(s) ?? []), g]); continue; }
+      offsets.set(g, g === centreGroup ? new THREE.Vector3() : pushOf(box));
+    }
+    // A nested set (parts.assembly(..., within=...)) moves out as one group, then its members
+    // spread along their own line (through the two centres farthest apart, pointing away from
+    // the core), a member's length apart plus a margin, so the parts inside come out.
+    for (const members of sets.values()) {
+      const all = new THREE.Box3();
+      for (const g of members) all.union(boxes.get(g)!);
+      const base = pushOf(all);
+      const out = all.getCenter(new THREE.Vector3()).sub(centre).normalize();
+      const centres = members.map((g) => boxes.get(g)!.getCenter(new THREE.Vector3()));
+      let dir = out.clone(), far = 0;
+      for (const a of centres) for (const b of centres) {
+        const d = b.clone().sub(a);
+        if (d.length() > far) { far = d.length(); dir = d; }
+      }
+      dir = far > 1e-3 ? dir.normalize() : out;
+      if (dir.dot(out) < 0) dir.negate();
+      const along = (g: string) => boxes.get(g)!.getCenter(new THREE.Vector3()).dot(dir);
+      const span = (g: string) => {
+        const s = boxes.get(g)!.getSize(new THREE.Vector3());
+        return s.x * Math.abs(dir.x) + s.y * Math.abs(dir.y) + s.z * Math.abs(dir.z);
+      };
+      const gap = Math.max(...members.map(span)) * 1.25;
+      [...members].sort((a, b) => along(a) - along(b)).forEach((g, i, list) =>
+        offsets.set(g, base.clone().addScaledVector(dir, gap * (i - (list.length - 1) / 2))));
     }
     // Units, and each unit's offset in its parent's frame, less what it inherits from an
     // ancestor unit that moves too.
