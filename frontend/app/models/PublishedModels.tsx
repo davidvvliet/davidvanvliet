@@ -34,7 +34,8 @@ const TURN_SECONDS = 20;
 // JPL's red letters too (public domain, trademarked). North American Aviation's (copyright Boeing) and
 // Rocketdyne's 1959 logo are English Wikipedia's fair-use files, recoloured light for the dark cards.
 // Thiokol's 1950-1990 script logo is Wikimedia Commons' ThiokolLogo.PNG (public domain text logo,
-// trademarked), recoloured the same way.
+// trademarked), recoloured the same way. ESA's is Wikimedia Commons' ESA_logo.svg (public domain:
+// "simple geometric shapes or text", trademarked), filled light.
 const LOGOS = {
   nasa: { name: "NASA", logo: "/logos/nasa.svg", height: 30 },
   spacex: { name: "SpaceX", logo: "/logos/spacex.svg", height: 10 },
@@ -42,6 +43,7 @@ const LOGOS = {
   naa: { name: "North American Aviation", logo: "/logos/north-american.png", height: 30 },
   rocketdyne: { name: "Rocketdyne", logo: "/logos/rocketdyne.png", height: 24 },
   thiokol: { name: "Thiokol", logo: "/logos/thiokol.png", height: 14 },
+  esa: { name: "European Space Agency", logo: "/logos/esa.svg", height: 16 },
 };
 const ORGS = ["nasa", "spacex"];
 const logosOf = (m: Published) => m.logos.filter((k): k is keyof typeof LOGOS => k in LOGOS).map((k) => LOGOS[k]);

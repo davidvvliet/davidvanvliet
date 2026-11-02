@@ -2,7 +2,8 @@
   "title": "Cassini",
   "logos": [
     "nasa",
-    "jpl"
+    "jpl",
+    "esa"
   ],
   "note": "Cassini-Huygens as launched: Huygens probe attached, magnetometer boom and the three RPWS antennas deployed. Frame = the Cassini spacecraft (AACS body) frame from the NAIF frames kernel: HGA boresight -Z, main engine exhaust +Z, Huygens on -X, remote sensing pallet on +X, magnetometer boom along +Y. The NASA reference model is the same frame turned 180 degrees about Y (its dish is at +z, Huygens at +x).",
   "sources": [
