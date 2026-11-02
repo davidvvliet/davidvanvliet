@@ -6,7 +6,7 @@
 #          [--headless] [--no-export]
 #   run.py all [--headless]         rebuild every probe; fails on a failing check or a
 #                                   sheet that changed against its approved baseline
-#   run.py approve <probe> [--force] copy the last build to public/models (with a thumbnail) and make its
+#   run.py approve <probe> [--force] copy the last build to public/models, compressed (with a thumbnail) and make its
 #                                   sheet the baseline
 #   run.py new <probe> ["Title"]    start a probe from the templates
 #   run.py ref <probe> <model>      measure a reference model: sheet + largest pieces
@@ -179,6 +179,17 @@ def cmd_all(args):
     print(f"\n{len(probes()) - len(bad)}/{len(probes())} probes pass" + (f"; check: {', '.join(bad)}" if bad else ""))
     sys.exit(1 if bad else 0)
 
+# The published copy of a build, its geometry compressed with meshopt (about 2-4x smaller; the
+# site's loader decodes it). Rounded to 16 bits per axis per mesh (at most 0.5 mm on Super Heavy's
+# 65 m hull), normals to 12 bits, texture coordinates to 14. Parts stay separate (explode, focus).
+COMPRESS = ["npx", "--yes", "@gltf-transform/cli@4.1.1", "meshopt",
+            "--quantize-position", "16", "--quantize-normal", "12", "--quantize-texcoord", "14"]
+
+def compress(src, dst):
+    proc = subprocess.run([*COMPRESS[:4], src, dst, *COMPRESS[4:]], capture_output=True, text=True)
+    if proc.returncode or not os.path.exists(dst):
+        die(f"Compressing {src} failed:\n{proc.stdout[-2000:]}{proc.stderr[-2000:]}")
+
 def cmd_approve(args):
     names = [a for a in args if not a.startswith("--")]
     if len(names) != 1:
@@ -212,20 +223,21 @@ def cmd_approve(args):
     spec = json.load(open(os.path.join(HERE, "specs", f"{probe}.json")))
     if not spec.get("fixture"):  # fixtures only guard lib/; they never ship
         os.makedirs(PUBLIC_MODELS, exist_ok=True)
-        shutil.copy(entry["glb"], os.path.join(PUBLIC_MODELS, f"{probe}.glb"))
+        compress(entry["glb"], os.path.join(PUBLIC_MODELS, f"{probe}.glb"))
         # Inside parts: public/models/internal/<probe>.glb (a subfolder, so the /models grid,
         # which lists every .glb in public/models, doesn't take it for a model of its own).
         inner = os.path.join(PUBLIC_MODELS, "internal", f"{probe}.glb")
         if entry.get("glb_internal") and os.path.exists(entry["glb_internal"]):
             os.makedirs(os.path.dirname(inner), exist_ok=True)
-            shutil.copy(entry["glb_internal"], inner)
+            compress(entry["glb_internal"], inner)
         elif os.path.exists(inner):
             os.remove(inner)
-        # The /models grid shows this image until the live model has loaded.
+        # The /models grid shows this image until the live model has loaded. Rendered from the
+        # build: Blender may not read the compressed copy.
         check_version()
         proc = subprocess.run([BLENDER, "--background", "--factory-startup", "--python-exit-code", "1",
                                "--python", os.path.join(HERE, "thumbnail.py"), "--",
-                               os.path.join(PUBLIC_MODELS, f"{probe}.glb"), os.path.join(PUBLIC_MODELS, f"{probe}.webp"),
+                               entry["glb"], os.path.join(PUBLIC_MODELS, f"{probe}.webp"),
                                *([(spec.get("viewer") or {})["pivot"]] if (spec.get("viewer") or {}).get("pivot") else [])],
                               capture_output=True, text=True)
         if "THUMB_OK" not in proc.stdout:
