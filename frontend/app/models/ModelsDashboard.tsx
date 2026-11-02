@@ -211,7 +211,7 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
   }, [gltf.scene, gl]);
   const homeNear = useRef(0.01);
   const homeDist = useRef(1);
-  const flight = useRef<{ dir: THREE.Vector3; box?: THREE.Box3 } | null>(null);
+  const flight = useRef<{ dir: THREE.Vector3; box?: THREE.Box3; home?: boolean } | null>(null);
 
   useEffect(() => {
     if (inner) {
@@ -232,9 +232,14 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
     else camera.lookAt(centre);
   }, [scene, camera, controls, centre, inner]);
 
-  // Focusing a part starts a flight to it; any drag or scroll ends it.
+  // Focusing a part starts a flight to it, and clearing the focus one back to the whole model
+  // (the framing it loaded with, from the current side); any drag or scroll ends it.
+  const focused = useRef<string | null>(null);
   useEffect(() => {
-    flight.current = focus && controls ? { dir: camera.position.clone().sub(controls.target).normalize() } : null;
+    const was = focused.current;
+    focused.current = focus;
+    if (!controls || (!focus && !was)) return;
+    flight.current = { dir: camera.position.clone().sub(controls.target).normalize(), home: !focus && !inner && !ghost }; // the inside view flies itself
   }, [focus]); // eslint-disable-line react-hooks/exhaustive-deps
   // Explode and Assemble move a focused part: the camera follows it there.
   useEffect(() => {
@@ -275,14 +280,13 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
     const k = smooth(t.current);
     for (const u of units) u.node.position.copy(u.rest).addScaledVector(u.local, explore || explodable.includes(u.group) ? k : 0);
     const flyBox = flight.current?.box ?? (focus ? boxes.get(focus) : undefined);
-    if (controls && flight.current && flyBox) {
-      const box = flyBox;
-      // Where the part is now (it may be exploding), and far enough to see all of it.
+    if (controls && flight.current && (flyBox || flight.current.home)) {
+      // Where the part is now (it may be exploding), and far enough to see all of it; or home.
       const off = new THREE.Vector3();
-      if (!flight.current.box) for (const u of units) if (u.group === focus) off.copy(u.node.position).sub(u.rest).applyMatrix3(new THREE.Matrix3().setFromMatrix4(u.node.parent!.matrixWorld));
-      const goalTarget = box.getCenter(new THREE.Vector3()).add(off);
+      if (flyBox && !flight.current.box) for (const u of units) if (u.group === focus) off.copy(u.node.position).sub(u.rest).applyMatrix3(new THREE.Matrix3().setFromMatrix4(u.node.parent!.matrixWorld));
       const fov = THREE.MathUtils.degToRad(camera.fov) * Math.min(1, camera.aspect);
-      const dist = Math.max(box.getSize(new THREE.Vector3()).length() * 0.65, 0.05) / Math.sin(fov / 2);
+      const goalTarget = flyBox ? flyBox.getCenter(new THREE.Vector3()).add(off) : centre.clone();
+      const dist = flyBox ? Math.max(flyBox.getSize(new THREE.Vector3()).length() * 0.65, 0.05) / Math.sin(fov / 2) : homeDist.current;
       const goalPos = goalTarget.clone().addScaledVector(flight.current.dir, dist);
       const a = 1 - Math.exp(-dt * 5);
       camera.position.lerp(goalPos, a);
