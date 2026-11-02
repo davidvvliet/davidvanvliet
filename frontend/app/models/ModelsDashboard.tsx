@@ -73,6 +73,7 @@ function useParts(scene: THREE.Object3D) {
     let core: string | null = null;
     const within = new Map<string, string>(); // assembly -> its nested set (a probe's shield, module, cover)
     const inside = new Set<string>(); // inside parts seen through an opening (parts.assembly(inside=True))
+    const sheer = new Set<string>(); // inside parts that wrap others (see_through=True)
     scene.traverse((o) => {
       if (o.userData.core && typeof o.userData.assembly === "string") core = o.userData.assembly;
       if (typeof o.userData.within === "string" && typeof o.userData.assembly === "string") within.set(o.userData.assembly, o.userData.within);
@@ -82,6 +83,7 @@ function useParts(scene: THREE.Object3D) {
       m.material = Array.isArray(m.material) ? m.material.map((x) => x.clone()) : m.material.clone();
       const g = groupOf(m, scene);
       if (tagged(m)?.userData.inside) inside.add(g);
+      if (tagged(m)?.userData.see_through) sheer.add(g);
       const p = parts.get(g) ?? { group: g, meshes: [] };
       p.meshes.push(m);
       parts.set(g, p);
@@ -153,13 +155,14 @@ function useParts(scene: THREE.Object3D) {
       }
     };
     visit(scene, zero);
-    return { parts: [...parts.values()], units, offsets, boxes, centre, inside };
+    return { parts: [...parts.values()], units, offsets, boxes, centre, inside, sheer };
   }, [scene]);
 }
 
 const HIGHLIGHT = new THREE.Color("#1d4f66");
 const FADED = 0.12; // opacity of the other parts while one is focused
 const GHOSTED = 0.04; // opacity of the outside while the inside is shown
+const SEE_THROUGH = 0.2; // an inside part that wraps others (a baffle), while the inside is shown
 const HOVER_FADED = 0.35; // a faded part under the pointer
 const smooth = (t: number) => t * t * (3 - 2 * t);
 
@@ -185,7 +188,7 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
   // A copy per mount (geometry is shared): explode, fades and Suspense hiding change the
   // objects, and useGLTF's cached scene is reused by the next mount and the /models grid.
   const scene = useMemo(() => gltf.scene.clone(true), [gltf.scene]);
-  const { parts, units, boxes, centre, inside: seen } = useParts(scene);
+  const { parts, units, boxes, centre, inside: seen, sheer } = useParts(scene);
   const readyRef = useRef(onReady);
   readyRef.current = onReady;
   useEffect(() => { readyRef.current?.(); }, [scene]);
@@ -256,14 +259,15 @@ function Model({ url, exploded, focus, setFocus, onLabel, onReady, explore = tru
           mat.userData.restTransparent = mat.transparent;
         }
         const ghosted = ghost && !seen.has(p.group);
-        const fade = ghosted || (!!focus && p.group !== focus);
+        const faint = ghost && sheer.has(p.group) && p.group !== focus;
+        const fade = ghosted || faint || (!!focus && p.group !== focus);
         mat.transparent = fade || mat.userData.restTransparent;
-        mat.opacity = ghosted ? GHOSTED : fade ? FADED : mat.userData.restOpacity;
+        mat.opacity = ghosted ? GHOSTED : faint ? (focus ? FADED : SEE_THROUGH) : fade ? FADED : mat.userData.restOpacity;
         mat.depthWrite = !fade;
         mat.needsUpdate = true;
       }
     }
-  }, [focus, parts, ghost, seen]);
+  }, [focus, parts, ghost, seen, sheer]);
 
   useFrame((_, dt) => {
     const goal = exploded ? 1 : 0;
