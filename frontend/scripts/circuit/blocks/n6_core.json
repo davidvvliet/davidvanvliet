@@ -611,14 +611,8 @@
   "/UART_TX": [
    "U1.M7"
   ],
-  "/IMU_INT_ACC": [
-   "U1.M10"
-  ],
   "/SWO": [
    "U1.M11"
-  ],
-  "/IMU_INT_GYR": [
-   "U1.M12"
   ],
   "/XSPI_DQS": [
    "U1.M13"
@@ -667,11 +661,17 @@
   "/SWDIO": [
    "U1.P7"
   ],
+  "/IMU_INT_GYR": [
+   "U1.P9"
+  ],
   "/CAM_EN": [
    "U1.P10"
   ],
   "/I2C_SCL": [
    "U1.P11"
+  ],
+  "/IMU_INT_ACC": [
+   "U1.P12"
   ],
   "/XSPI_NCS": [
    "U1.P13"
@@ -798,12 +798,12 @@
   "/IMU_INT_ACC": {
    "net": "/IMU_INT_ACC",
    "kind": "gpio",
-   "note": "PB12"
+   "note": "PA7 (an outer ball, so the inner XSPI and SWO balls have room to escape)"
   },
   "/IMU_INT_GYR": {
    "net": "/IMU_INT_GYR",
    "kind": "gpio",
-   "note": "PG0"
+   "note": "PG13 (an outer ball)"
   },
   "/XSPI_DQS": {
    "net": "/XSPI_DQS",

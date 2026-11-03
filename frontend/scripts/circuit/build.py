@@ -165,15 +165,17 @@ def main(board, publish=False):
               {"name": "parts without a 3D model", "ok": not missing, "measured": len(missing), "expected": 0, "unit": "parts"}]
     record(board, {"started": started, "ok": all(c["ok"] for c in rows), "seconds": round(time.time() - started, 1),
                    "glb": f"{board}.glb", "checks": rows, "published": publish})
-    if publish:  # the /circuits page lists every public/circuits/<name>.board.json
+    ok = all(c["ok"] for c in rows)
+    if publish and ok:  # the /circuits page lists every public/circuits/<name>.board.json; a failing build is never published
         dest = os.path.join(FRONTEND, "public", "circuits"); os.makedirs(dest, exist_ok=True)
         shutil.copy(out, os.path.join(dest, f"{board}.glb"))
         shutil.copy(os.path.join(HERE, "out", board, f"{board}.json"), os.path.join(dest, f"{board}.board.json"))
     for c in rows:
         print(f"  {'✓' if c['ok'] else '✗'} {c['name']}: {c['measured']} {c['unit']}" + (f"  ({c['detail']})" if c.get("detail") else ""))
     if note: print(f"  {note}")
-    print(f"{board}: {'PASS' if all(c['ok'] for c in rows) else 'FAIL'}, {mb:.2f} MB, {tris} triangles, {len(data['blocks'])} blocks"
-          + (f"; missing models: {missing}" if missing else "") + ("; published to public/circuits" if publish else ""))
+    print(f"{board}: {'PASS' if ok else 'FAIL'}, {mb:.2f} MB, {tris} triangles, {len(data['blocks'])} blocks"
+          + (f"; missing models: {missing}" if missing else "")
+          + (("; published to public/circuits" if ok else "; NOT published (it fails)") if publish else ""))
 
 def record(board, build):
     """out/status.json, which /api/models/status reads for the dashboard."""

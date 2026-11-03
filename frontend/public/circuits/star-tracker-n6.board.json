@@ -1,0 +1,503 @@
+{
+ "board": "star-tracker-n6",
+ "title": "Star tracker (STM32N6)",
+ "purpose": "Single-board star tracker: an STM32N657 (Cortex-M55 800 MHz, 4.2 MB RAM, MIPI CSI-2) reads the Raspberry Pi Global Shutter Camera directly; boots from octal flash; power from the 5 V spacecraft bus, RS-485 link to the flight computer, BMI088 IMU",
+ "source": {
+  "title": "star-tracker-n6 recipe",
+  "url": "https://github.com/davidvvliet/davidvanvliet/tree/main/frontend/scripts/circuit/boards/star-tracker-n6",
+  "author": "the circuit harness: STM32N6 blocks from ST's AN5967 and NUCLEO-N657X0-Q schematic, TI, Macronix, Abracon and Raspberry Pi documents; bus, RS-485 and IMU blocks as the star-tracker HAT",
+  "licence": "MIT blocks; new blocks quote their datasheets"
+ },
+ "blocks": [
+  {
+   "name": "STM32N657 core",
+   "parts": [
+    {
+     "ref": "C19",
+     "value": "2.2nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C22",
+     "value": "15uF",
+     "package": "C_0603_1608Metric"
+    },
+    {
+     "ref": "C23",
+     "value": "15uF",
+     "package": "C_0603_1608Metric"
+    },
+    {
+     "ref": "C24",
+     "value": "15uF",
+     "package": "C_0603_1608Metric"
+    },
+    {
+     "ref": "C25",
+     "value": "15uF",
+     "package": "C_0603_1608Metric"
+    },
+    {
+     "ref": "C26",
+     "value": "4.7uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C27",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C28",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C29",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C30",
+     "value": "1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C31",
+     "value": "1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C32",
+     "value": "10uF",
+     "package": "C_0603_1608Metric"
+    },
+    {
+     "ref": "C33",
+     "value": "10uF",
+     "package": "C_0603_1608Metric"
+    },
+    {
+     "ref": "C34",
+     "value": "1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C35",
+     "value": "1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C36",
+     "value": "1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C37",
+     "value": "1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C38",
+     "value": "1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C39",
+     "value": "1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C40",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C41",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C42",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C43",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C44",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C45",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C46",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C47",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C48",
+     "value": "1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C49",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C50",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C51",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C52",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C53",
+     "value": "10nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C54",
+     "value": "8.2pF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C55",
+     "value": "8.2pF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "D1",
+     "value": "RED",
+     "package": "LED_0603_1608Metric"
+    },
+    {
+     "ref": "L3",
+     "value": "1uH DFE201612P-1R0M",
+     "package": "L_Murata_DFE201610P"
+    },
+    {
+     "ref": "R2",
+     "value": "2R",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "R3",
+     "value": "200R 1%",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "R4",
+     "value": "470k",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "R5",
+     "value": "10k",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "R6",
+     "value": "10k",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "R7",
+     "value": "470R",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "U8",
+     "value": "STM32N657I0H3Q",
+     "package": "ST_VFBGA-178_12x12mm_Layout14x14_P0.8mm"
+    },
+    {
+     "ref": "Y1",
+     "value": "48MHz ABM8 CL 8pF",
+     "package": "Crystal_SMD_3225-4Pin_3.2x2.5mm"
+    }
+   ]
+  },
+  {
+   "name": "STM32N6 power",
+   "parts": [
+    {
+     "ref": "C5",
+     "value": "1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C6",
+     "value": "1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C7",
+     "value": "1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C8",
+     "value": "1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C9",
+     "value": "1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C10",
+     "value": "1uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C11",
+     "value": "10uF 25V",
+     "package": "C_1210_3225Metric"
+    },
+    {
+     "ref": "C12",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C13",
+     "value": "22uF",
+     "package": "C_0805_2012Metric"
+    },
+    {
+     "ref": "C14",
+     "value": "3.3nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C15",
+     "value": "10uF 25V",
+     "package": "C_1210_3225Metric"
+    },
+    {
+     "ref": "C16",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C17",
+     "value": "22uF",
+     "package": "C_0805_2012Metric"
+    },
+    {
+     "ref": "C18",
+     "value": "3.3nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "L1",
+     "value": "2.2uH XFL4020-222ME",
+     "package": "L_Coilcraft_XFL4020"
+    },
+    {
+     "ref": "L2",
+     "value": "2.2uH XFL4020-222ME",
+     "package": "L_Coilcraft_XFL4020"
+    },
+    {
+     "ref": "U3",
+     "value": "LP5907MFX-3.3",
+     "package": "SOT-23-5"
+    },
+    {
+     "ref": "U4",
+     "value": "LP5907MFX-1.8",
+     "package": "SOT-23-5"
+    },
+    {
+     "ref": "U5",
+     "value": "LP5907MFX-1.8",
+     "package": "SOT-23-5"
+    },
+    {
+     "ref": "U6",
+     "value": "TPS62131",
+     "package": "Texas_RGT0016C_VQFN-16_3x3mm_P0.5mm_EP1.68mm_ThermalVias"
+    },
+    {
+     "ref": "U7",
+     "value": "TPS62132",
+     "package": "Texas_RGT0016C_VQFN-16_3x3mm_P0.5mm_EP1.68mm_ThermalVias"
+    }
+   ]
+  },
+  {
+   "name": "Octal flash",
+   "parts": [
+    {
+     "ref": "C56",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C57",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C58",
+     "value": "4.7uF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "D2",
+     "value": "BAT60J",
+     "package": "D_SOD-323"
+    },
+    {
+     "ref": "R8",
+     "value": "10k",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "R9",
+     "value": "10k",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "U9",
+     "value": "MX25UM51245GMI00",
+     "package": "SOIC-16W_7.5x10.3mm_P1.27mm"
+    }
+   ]
+  },
+  {
+   "name": "Bus power into the Pi",
+   "parts": [
+    {
+     "ref": "C1",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C2",
+     "value": "10uF",
+     "package": "C_0805_2012Metric"
+    },
+    {
+     "ref": "C3",
+     "value": "10uF",
+     "package": "C_0805_2012Metric"
+    },
+    {
+     "ref": "R1",
+     "value": "30.1k",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "U1",
+     "value": "TPS2121",
+     "package": "Texas_VQFN-HR-12_2x2.5mm_P0.5mm"
+    }
+   ]
+  },
+  {
+   "name": "RS-485 transceiver",
+   "parts": [
+    {
+     "ref": "C4",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "RT1",
+     "value": "Z0 of the cable",
+     "package": "R_0603_1608Metric"
+    },
+    {
+     "ref": "U2",
+     "value": "THVD1410",
+     "package": "SOIC-8_3.9x4.9mm_P1.27mm"
+    }
+   ]
+  },
+  {
+   "name": "IMU",
+   "parts": [
+    {
+     "ref": "C20",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "C21",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "U20",
+     "value": "BMI088",
+     "package": "Bosch_LGA-16_4.5x3mm_P0.5mm_LayoutBorder7x1y_ClockwisePinNumbering"
+    }
+   ]
+  },
+  {
+   "name": "Bus connectors",
+   "parts": [
+    {
+     "ref": "J1",
+     "value": "XH 2-pin",
+     "package": "JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical"
+    },
+    {
+     "ref": "J2",
+     "value": "GH 6-pin",
+     "package": "JST_GH_SM06B-GHS-TB_1x06-1MP_P1.25mm_Horizontal"
+    }
+   ]
+  },
+  {
+   "name": "I2C pull-ups",
+   "parts": [
+    {
+     "ref": "R20",
+     "value": "2.2k",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "R21",
+     "value": "2.2k",
+     "package": "R_0402_1005Metric"
+    }
+   ]
+  },
+  {
+   "name": "Camera connector",
+   "parts": [
+    {
+     "ref": "J3",
+     "value": "TE 1-84952-5",
+     "package": "TE_1-84952-5_1x15-1MP_P1.0mm_Horizontal"
+    }
+   ]
+  }
+ ]
+}
