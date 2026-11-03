@@ -49,7 +49,7 @@ def route(work, ground, planes=False):
         sys.exit(f"not routed: the unrouted board already has {len(errors)} design rule errors (fix the placement or blocks first):\n  "
                  + "\n  ".join(errors[:25]) + (f"\n  ... and {len(errors) - 25} more" if len(errors) > 25 else ""))
     print("precheck: unrouted board passes the design rules", flush=True)
-    best, last = None, None
+    best, last, repeats = None, None, 0
     for i in range(ROUTE_TRIES):
         t = os.path.join(work, f"try{i}"); os.makedirs(t, exist_ok=True)
         for ext in ("kicad_pcb", "kicad_pro"): shutil.copy(os.path.join(work, f"unrouted.{ext}"), os.path.join(t, f"board.{ext}"))
@@ -78,10 +78,11 @@ def route(work, ground, planes=False):
         print(f"try {i + 1}/{ROUTE_TRIES}: {bad} problems{': ' + found if found else ''} ({time.time() - t0:.0f} s)", flush=True)
         if best is None or bad < best[0]: best = (bad, pcb, i + 1)
         if bad == 0: break
-        # The very same errors (same items, same places) twice: the router is not the cause, more tries won't
-        # change it. Only the count repeating is not enough: the router varies, the next try may route clean.
-        same = sorted(checks.drc_errors(pcb)) + [found]
-        if same == last: print("same errors as the try before: stopping", flush=True); break
+        # The very same errors (same items, same places) three tries running: the router is not the cause, more
+        # tries won't change it. Fewer is not enough: the router varies, and twice the same can be chance.
+        same = sorted(checks.drc_errors(pcb, unconnected=True)) + [found]
+        repeats = repeats + 1 if same == last else 1
+        if repeats == 3: print("same errors three tries running: stopping", flush=True); break
         last = same
     if best is None: sys.exit("not routed: no try finished")
     shutil.copy(best[1], os.path.join(work, "board.kicad_pcb"))
