@@ -1,0 +1,282 @@
+{
+ "title": "Star tracker (STM32N6)",
+ "purpose": "Single-board star tracker: an STM32N657 (Cortex-M55 800 MHz, 4.2 MB RAM, MIPI CSI-2) reads the Raspberry Pi Global Shutter Camera directly; boots from octal flash; power from the 5 V spacecraft bus, RS-485 link to the flight computer, BMI088 IMU",
+ "source": {
+  "title": "star-tracker-n6 recipe",
+  "url": "https://github.com/davidvvliet/davidvanvliet/tree/main/frontend/scripts/circuit/boards/star-tracker-n6",
+  "author": "the circuit harness: STM32N6 blocks from ST's AN5967 and NUCLEO-N657X0-Q schematic, TI, Macronix, Abracon and Raspberry Pi documents; bus, RS-485 and IMU blocks as the star-tracker HAT",
+  "licence": "MIT blocks; new blocks quote their datasheets"
+ },
+ "sources": [],
+ "board": {
+  "size_mm": [
+   70,
+   50
+  ],
+  "corner_radius_mm": 3,
+  "layers": 4,
+  "planes": {
+   "In1.Cu": "GND",
+   "In2.Cu": "+3V3"
+  },
+  "rules": "boards/star-tracker-n6/rules.kicad_pro",
+  "ground_fill": "GND",
+  "mask": "Black"
+ },
+ "blocks": {
+  "bus": {
+   "block": "bus_connectors",
+   "at_mm": [
+    1,
+    1
+   ]
+  },
+  "input": {
+   "block": "bus_power_tps2121",
+   "at_mm": [
+    26,
+    1
+   ]
+  },
+  "rs485": {
+   "block": "rs485_thvd1410",
+   "at_mm": [
+    36,
+    1.5
+   ]
+  },
+  "imu": {
+   "block": "imu_bmi088",
+   "at_mm": [
+    50,
+    4.5
+   ]
+  },
+  "power": {
+   "block": "n6_power",
+   "at_mm": [
+    1,
+    12
+   ]
+  },
+  "mcu": {
+   "block": "n6_core",
+   "at_mm": [
+    22,
+    11
+   ]
+  },
+  "flash": {
+   "block": "flash_mx25um",
+   "at_mm": [
+    53,
+    15
+   ]
+  },
+  "cam": {
+   "block": "camera_fpc15",
+   "at_mm": [
+    18,
+    42
+   ]
+  },
+  "swd": {
+   "block": "swd_tc2030",
+   "at_mm": [
+    52,
+    40
+   ]
+  },
+  "pullups": {
+   "block": "i2c_pullups",
+   "at_mm": [
+    48,
+    36
+   ]
+  }
+ },
+ "connect": [
+  [
+   "bus./VBUS",
+   "input./VBUS"
+  ],
+  [
+   "input.+5V",
+   "power.+5V"
+  ],
+  [
+   "power.+3V3",
+   "mcu.+3V3",
+   "rs485.+3V3",
+   "imu.+3V3",
+   "swd.+3V3",
+   "pullups.+3V3"
+  ],
+  [
+   "power./VDDA1V8_AON",
+   "mcu./VDDA1V8_AON"
+  ],
+  [
+   "power./VDD1V8_SMPS",
+   "mcu./VDD1V8_SMPS"
+  ],
+  [
+   "power./VDD1V8_EXT",
+   "mcu./VDD1V8_EXT",
+   "flash./VDD1V8_EXT"
+  ],
+  [
+   "mcu./PWR_ON",
+   "power./PWR_ON"
+  ],
+  [
+   "power.+3V3_CAM",
+   "cam.+3V3_CAM"
+  ],
+  [
+   "power.GND",
+   "mcu.GND",
+   "flash.GND",
+   "cam.GND",
+   "swd.GND",
+   "bus.GND",
+   "input.GND",
+   "rs485.GND",
+   "imu.GND"
+  ],
+  [
+   "mcu./CSI_D0_P",
+   "cam./CSI_D0_P"
+  ],
+  [
+   "mcu./CSI_D0_N",
+   "cam./CSI_D0_N"
+  ],
+  [
+   "mcu./CSI_D1_P",
+   "cam./CSI_D1_P"
+  ],
+  [
+   "mcu./CSI_D1_N",
+   "cam./CSI_D1_N"
+  ],
+  [
+   "mcu./CSI_CLK_P",
+   "cam./CSI_CLK_P"
+  ],
+  [
+   "mcu./CSI_CLK_N",
+   "cam./CSI_CLK_N"
+  ],
+  [
+   "mcu./CAM_EN",
+   "cam./CAM_EN"
+  ],
+  [
+   "mcu./I2C_SCL",
+   "cam./I2C_SCL",
+   "imu./I2C_SCL",
+   "pullups./I2C_SCL"
+  ],
+  [
+   "mcu./I2C_SDA",
+   "cam./I2C_SDA",
+   "imu./I2C_SDA",
+   "pullups./I2C_SDA"
+  ],
+  [
+   "mcu./IMU_INT_ACC",
+   "imu./IMU_INT_ACC"
+  ],
+  [
+   "mcu./IMU_INT_GYR",
+   "imu./IMU_INT_GYR"
+  ],
+  [
+   "mcu./UART_TX",
+   "rs485./UART_TX"
+  ],
+  [
+   "mcu./UART_RX",
+   "rs485./UART_RX"
+  ],
+  [
+   "mcu./RS485_DIR",
+   "rs485./RS485_DIR"
+  ],
+  [
+   "bus./RS485_A",
+   "rs485./RS485_A"
+  ],
+  [
+   "bus./RS485_B",
+   "rs485./RS485_B"
+  ],
+  [
+   "mcu./XSPI_DQS",
+   "flash./XSPI_DQS"
+  ],
+  [
+   "mcu./XSPI_NCS",
+   "flash./XSPI_NCS"
+  ],
+  [
+   "mcu./XSPI_CLK",
+   "flash./XSPI_CLK"
+  ],
+  [
+   "mcu./XSPI_IO0",
+   "flash./XSPI_IO0"
+  ],
+  [
+   "mcu./XSPI_IO1",
+   "flash./XSPI_IO1"
+  ],
+  [
+   "mcu./XSPI_IO2",
+   "flash./XSPI_IO2"
+  ],
+  [
+   "mcu./XSPI_IO3",
+   "flash./XSPI_IO3"
+  ],
+  [
+   "mcu./XSPI_IO4",
+   "flash./XSPI_IO4"
+  ],
+  [
+   "mcu./XSPI_IO5",
+   "flash./XSPI_IO5"
+  ],
+  [
+   "mcu./XSPI_IO6",
+   "flash./XSPI_IO6"
+  ],
+  [
+   "mcu./XSPI_IO7",
+   "flash./XSPI_IO7"
+  ],
+  [
+   "mcu./NRST",
+   "flash./NRST",
+   "swd./NRST"
+  ],
+  [
+   "mcu./SWDIO",
+   "swd./SWDIO"
+  ],
+  [
+   "mcu./SWCLK",
+   "swd./SWCLK"
+  ],
+  [
+   "mcu./SWO",
+   "swd./SWO"
+  ]
+ ],
+ "open_questions": [
+  "Bus input reused from the HAT (TPS2121) with its open review points: ILIM resistor sets about 3.5 A, over the JST XH's 3 A; OV1/OV2 tied to ground, so no over-voltage cut-off, and the LP5907s are rated to 5.5 V.",
+  "CSI pairs and the octal bus: 100 \u03a9 differential / 50 \u03a9 single-ended impedance and length matching are not enforced by the router; the 4-layer stack-up's impedances not computed.",
+  "See each new block's open questions (n6_core, n6_power, flash_mx25um, camera_fpc15)."
+ ]
+}

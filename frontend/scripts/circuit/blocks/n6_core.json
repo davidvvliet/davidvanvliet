@@ -1,0 +1,1249 @@
+{
+ "name": "n6_core",
+ "title": "STM32N657 core",
+ "purpose": "STM32N657 MCU (VFBGA178) with its supply decoupling, internal SMPS parts, 48 MHz crystal, boot and reset parts and debug LED",
+ "sources": [
+  {
+   "id": "ds",
+   "title": "STM32N657xx datasheet DS14791 Rev 11",
+   "url": "https://www.st.com/resource/en/datasheet/stm32n657a0.pdf",
+   "licence": "ST datasheet; link and quotes only",
+   "read": "Figure 10 ballout, Table 18 pin description (VFBGA178), Table 26-27 power-up, Table 50 HSE, Tables 134-135 VFBGA178, section 7 ordering"
+  },
+  {
+   "id": "an5967",
+   "title": "AN5967 Rev 6, Getting started with hardware development for STM32N6 MCUs",
+   "url": "https://www.st.com/resource/en/application_note/an5967-getting-started-with-hardware-development-for-stm32n6-mcus-stmicroelectronics.pdf",
+   "licence": "ST application note; link and quotes only",
+   "read": "3 power supplies (Table 5 notes, Figure 6, Table 6), 3.5 sequencing, 7 system pins, 10 boot, 11.2 debug LED, 12.7 unused I/Os, CSI_REXT"
+  },
+  {
+   "id": "nucleo",
+   "title": "NUCLEO-N657X0-Q (MB1940) schematic, revision C-02",
+   "url": "https://www.st.com/resource/en/schematic_pack/mb1940-n657x0q-c02-schematic.pdf",
+   "licence": "ST Open Platform License Agreement; link and quotes only",
+   "read": "sheet 3 (MCU I/Os, HSE, I2C pull-ups), sheet 4 (MCU power), sheet 5 (OctoSPI flash), sheet 9 (power), sheet 11 (camera)"
+  },
+  {
+   "id": "abm8",
+   "title": "Abracon ABM8 ceramic SMD crystal (revised 07-29-20)",
+   "url": "https://abracon.com/Resonators/abm8.pdf",
+   "licence": "Abracon datasheet; link and quotes only",
+   "read": "p1 characteristics and options, p2 outline and land pattern"
+  },
+  {
+   "id": "mitayi",
+   "title": "Mitayi-Pico-D1 R0.6 (CIRCUITSTATE)",
+   "url": "https://github.com/CIRCUITSTATE/Mitayi-Pico-RP2040",
+   "licence": "MIT",
+   "read": "the led block (D3, R8)"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "U1",
+   "value": "STM32N657I0H3Q",
+   "symbol": "startracker:STM32N657I0H3Q",
+   "footprint": "startracker:ST_VFBGA-178_12x12mm_Layout14x14_P0.8mm",
+   "source": "ds, p84 Fig 10, p250-251 Tables 134-135, section 7",
+   "quote": "\"STM32N657xx\" Cortex-M55 800 MHz, VFBGA178 12 x 12 mm (\"D 12.00 BSC\", \"e 0.80 BSC\", \"N 178\"); ordering code: \"I = 178\", \"0 = 0-1 Kbytes\" flash, \"H = VFBGA\", \"3 = Industrial temperature range, -40 to 125\u00b0C\", \"Q = Internal SMPS step-down converter\". Symbol and footprint ours (symbols/stm32n657.py): KiCad has neither."
+  },
+  {
+   "ref": "L1",
+   "value": "1uH DFE201612P-1R0M",
+   "symbol": "Device:L",
+   "footprint": "Inductor_SMD:L_Murata_DFE201610P",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "\"Internal SMPS: 1 \u00b5H \u00b120%, 1 MHz, ISat > 3000 mA DC, resistance < 0.06 \u03a9 (DFE201612P-1R0M or TFM322512ALVA1R0MTAA)\"; footprint: KiCad's Murata DFE201610P (same 2.0 x 1.6 mm body; the 1.2 mm-tall DFE201612P's own land pattern not read)"
+  },
+  {
+   "ref": "R1",
+   "value": "2R",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "\"+ 2.2 nF (MLCC, 50V, X7R, \u00b110%) + a 2 \u03a9 resistance\" (snubber from VLXSMPS to ground, AN5967 Figure 6; nucleo sheet 4: C131 2.2nF, R162 2R)"
+  },
+  {
+   "ref": "C1",
+   "value": "2.2nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "\"+ 2.2 nF (MLCC, 50V, X7R, \u00b110%)\""
+  },
+  {
+   "ref": "C2",
+   "value": "15uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0603_1608Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "\"+ 4 x 15 \u00b5F (MLCC, 6V3, X5R, \u00b120%)\" on the inductor's VDDCORE side (nucleo: 4 x 22uF, C20/C22/C24/C29)"
+  },
+  {
+   "ref": "C3",
+   "value": "15uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0603_1608Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "\"+ 4 x 15 \u00b5F (MLCC, 6V3, X5R, \u00b120%)\" on the inductor's VDDCORE side (nucleo: 4 x 22uF, C20/C22/C24/C29)"
+  },
+  {
+   "ref": "C4",
+   "value": "15uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0603_1608Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "\"+ 4 x 15 \u00b5F (MLCC, 6V3, X5R, \u00b120%)\" on the inductor's VDDCORE side (nucleo: 4 x 22uF, C20/C22/C24/C29)"
+  },
+  {
+   "ref": "C5",
+   "value": "15uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0603_1608Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "\"+ 4 x 15 \u00b5F (MLCC, 6V3, X5R, \u00b120%)\" on the inductor's VDDCORE side (nucleo: 4 x 22uF, C20/C22/C24/C29)"
+  },
+  {
+   "ref": "C6",
+   "value": "4.7uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "V08CAP: \"4.7 \u00b5F (MLCC, 6V3, X5R, \u00b120%)\" \"Internal backup regulator output pin\""
+  },
+  {
+   "ref": "C7",
+   "value": "100nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "VDDA18PMU: \"100 nF (MLCC, 10V, X5R, \u00b110%)\"; fed from VDD1V8_EXT as in AN5967 Figure 6"
+  },
+  {
+   "ref": "C8",
+   "value": "100nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "VDDSMPS: \"2 x 10 \u00b5F (MLCC, 4V, X5R, \u00b120%) + 2 x 1 \u00b5F (MLCC, 6.3V, X5R, \u00b120%) + 2 x 100 nF (MLCC, 10V, X5R, \u00b110%)\""
+  },
+  {
+   "ref": "C9",
+   "value": "100nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "VDDSMPS, as C8"
+  },
+  {
+   "ref": "C10",
+   "value": "1uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "VDDSMPS, as C8"
+  },
+  {
+   "ref": "C11",
+   "value": "1uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "VDDSMPS, as C8"
+  },
+  {
+   "ref": "C12",
+   "value": "10uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0603_1608Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "VDDSMPS, as C8"
+  },
+  {
+   "ref": "C13",
+   "value": "10uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0603_1608Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "VDDSMPS, as C8"
+  },
+  {
+   "ref": "C14",
+   "value": "1uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "VDDCORE: \"n x 1 \u00b5F (MLCC, 6.3 V, X5R, \u00b120%)\", \"n is the number of VDDCORE pins\" (5 on VFBGA178)"
+  },
+  {
+   "ref": "C15",
+   "value": "1uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "VDDCORE: \"n x 1 \u00b5F (MLCC, 6.3 V, X5R, \u00b120%)\", \"n is the number of VDDCORE pins\" (5 on VFBGA178)"
+  },
+  {
+   "ref": "C16",
+   "value": "1uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "VDDCORE: \"n x 1 \u00b5F (MLCC, 6.3 V, X5R, \u00b120%)\", \"n is the number of VDDCORE pins\" (5 on VFBGA178)"
+  },
+  {
+   "ref": "C17",
+   "value": "1uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "VDDCORE: \"n x 1 \u00b5F (MLCC, 6.3 V, X5R, \u00b120%)\", \"n is the number of VDDCORE pins\" (5 on VFBGA178)"
+  },
+  {
+   "ref": "C18",
+   "value": "1uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "VDDCORE, as C14"
+  },
+  {
+   "ref": "C19",
+   "value": "1uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "VDDCSI: \"1 \u00b5F (MLCC, 6.3V, X5R, \u00b120%)\" \"Usually connected to VDDCORE\""
+  },
+  {
+   "ref": "C20",
+   "value": "100nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "VDD: \"n x 100 nF (MLCC, 10V, X5R, \u00b110%)\" (3 VDD balls); VBAT tied to VDD: \"No decoupling cap if VBAT connected to VDD\""
+  },
+  {
+   "ref": "C21",
+   "value": "100nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "VDD: \"n x 100 nF (MLCC, 10V, X5R, \u00b110%)\" (3 VDD balls); VBAT tied to VDD: \"No decoupling cap if VBAT connected to VDD\""
+  },
+  {
+   "ref": "C22",
+   "value": "100nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "VDD: \"n x 100 nF (MLCC, 10V, X5R, \u00b110%)\" (3 VDD balls); VBAT tied to VDD: \"No decoupling cap if VBAT connected to VDD\""
+  },
+  {
+   "ref": "C23",
+   "value": "100nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "VDDIO4: \"n x 100 nF (MLCC, 10V, X5R, \u00b110%)\" (2 balls); VDDIO4 supplies \"PC[1], PC[12:6], and PH[9,2]\" (an5967 p6), at 3.3 V here"
+  },
+  {
+   "ref": "C24",
+   "value": "100nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "VDDIO4, as C23"
+  },
+  {
+   "ref": "C25",
+   "value": "100nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "VDDIO3: \"n x 100 nF\" (2 balls); VDDIO3 supplies \"13 I/Os (PN[12:0])\" (an5967 p6): the flash's XSPI port, 1.8 V as in AN5967 Figure 6 (\"VDDIO3 ... XSPI 8bits\")"
+  },
+  {
+   "ref": "C26",
+   "value": "100nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "VDDIO3, as C25"
+  },
+  {
+   "ref": "C27",
+   "value": "100nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "VDDA18AON: \"100 nF ( MLCC, 10V, X5R, \u00b110%)\""
+  },
+  {
+   "ref": "C28",
+   "value": "1uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "VREFP: \"1 \u00b5F (MLCC, 6.3V, X5R, \u00b120%) + 100 nF (MLCC, 10V, X5R, \u00b110%)\""
+  },
+  {
+   "ref": "C29",
+   "value": "100nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "VREF+, as C28"
+  },
+  {
+   "ref": "C30",
+   "value": "100nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "VDDA18ADC: \"100 nF ( MLCC, 10V, X5R, \u00b110%)\""
+  },
+  {
+   "ref": "C31",
+   "value": "100nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "VDDA18PLL: \"100 nF (MLCC, 10V, X5R, \u00b110%)\""
+  },
+  {
+   "ref": "C32",
+   "value": "100nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "an5967, p13-14 Table 6",
+   "quote": "VDDA18CSI: \"100 nF (MLCC, 10V, X5R, +/-10%)\""
+  },
+  {
+   "ref": "R2",
+   "value": "200R 1%",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "an5967, p35 13.5",
+   "quote": "\"A 200 \u03a9 1% resistor must connect CSI_REXT and VSS.\" (nucleo sheet 3: R145 200R)"
+  },
+  {
+   "ref": "C33",
+   "value": "10nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "an5967, p12 Figure 6",
+   "quote": "NRST to ground: \"10 nF\""
+  },
+  {
+   "ref": "R3",
+   "value": "470k",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "an5967, p12 Figure 6",
+   "quote": "PWR_ON to ground: \"470k\""
+  },
+  {
+   "ref": "R4",
+   "value": "10k",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "an5967, p24 Table 10",
+   "quote": "BOOT0 = 0 with BOOT1 = 0: \"Flash memory boot\"; BOOT0 held low (value as the flash's chip-select pull-up, nucleo sheet 5 R113 10K: unverified for BOOT0)"
+  },
+  {
+   "ref": "R5",
+   "value": "10k",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "an5967, p24 Table 10",
+   "quote": "BOOT1 (PA6) = 0 boots from flash; \"- 1 Development boot\" when JP1 is closed (to program a blank flash over SWD). 10k: unverified, as R4"
+  },
+  {
+   "ref": "JP1",
+   "value": "DEV BOOT",
+   "symbol": "Jumper:SolderJumper_2_Open",
+   "footprint": "Jumper:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm",
+   "source": "an5967, p24 Table 10",
+   "quote": "BOOT1 = 1: \"Development boot\""
+  },
+  {
+   "ref": "D1",
+   "value": "RED",
+   "symbol": "Device:LED",
+   "footprint": "LED_SMD:LED_0603_1608Metric",
+   "source": "an5967, p25 11.2; mitayi",
+   "quote": "\"During the boot phase, in the case of boot failure, the BOOTFAILED (PG10) pin is set to low open-drain, meaning the debug LED lights up brightly.\" \"The recommendation is to use this debug pin.\" LED from 3.3 V to PG10 (lit when PG10 pulls low); LED part as the led block"
+  },
+  {
+   "ref": "R6",
+   "value": "470R",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "mitayi",
+   "quote": "as the led block's 470 \u03a9 (Mitayi R8)"
+  },
+  {
+   "ref": "Y1",
+   "value": "48MHz ABM8 CL 8pF",
+   "symbol": "Device:Crystal_GND24",
+   "footprint": "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm",
+   "source": "abm8, p1-2; nucleo sheet 3; ds p162",
+   "quote": "ds: \"16 to 48 MHz crystal/ceramic resonator\"; nucleo: \"48MHz HSE\", X3 with C53/C54 \"8.2pF\"; abm8: \"40.000 - 54.000 (Fund) 35\" \u03a9 ESR max, \"Shunt capacitance (C0) 3.0 pF\", \"Please specify CL (min 6pF)\"; top view: crystal between pads 1 and 3, pads 2 and 4 \"GND\" (KiCad's pad order matches; KiCad pads 1.4 x 1.2 at \u00b11.1/\u00b10.85, Abracon's land pattern (1.3) x (1.05) about \u00b11.15/\u00b10.88)"
+  },
+  {
+   "ref": "C34",
+   "value": "8.2pF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "nucleo sheet 3; ds p163",
+   "quote": "nucleo C54 \"8.2pF\" on OSC_IN; ds: \"The crystal manufacturer typically specifies a load capacitance, which is the series combination of CL1 and CL2. The PCB and pin capacitance must be included (4 pF can be used as a rough estimate\" : 8.2 / 2 + 4 = 8.1 pF, so the crystal is ordered with CL 8 pF"
+  },
+  {
+   "ref": "C35",
+   "value": "8.2pF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "nucleo sheet 3",
+   "quote": "C53 \"8.2pF\" on OSC_OUT, as C34"
+  }
+ ],
+ "nets": {
+  "/VDDA1V8_AON": [
+   "U1.A1",
+   "U1.E5",
+   "C27.1"
+  ],
+  "GND": [
+   "U1.A2",
+   "U1.A4",
+   "U1.A5",
+   "U1.A14",
+   "U1.E7",
+   "U1.F10",
+   "U1.H10",
+   "U1.H11",
+   "U1.K5",
+   "U1.K10",
+   "U1.P1",
+   "U1.P14",
+   "U1.B2",
+   "U1.B5",
+   "U1.D4",
+   "U1.E2",
+   "U1.F1",
+   "U1.F2",
+   "U1.F3",
+   "U1.F4",
+   "U1.F5",
+   "U1.M4",
+   "U1.N1",
+   "C1.2",
+   "C2.2",
+   "C3.2",
+   "C4.2",
+   "C5.2",
+   "C6.2",
+   "C7.2",
+   "C8.2",
+   "C9.2",
+   "C10.2",
+   "C11.2",
+   "C12.2",
+   "C13.2",
+   "C14.2",
+   "C15.2",
+   "C16.2",
+   "C17.2",
+   "C18.2",
+   "C19.2",
+   "C20.2",
+   "C21.2",
+   "C22.2",
+   "C23.2",
+   "C24.2",
+   "C25.2",
+   "C26.2",
+   "C27.2",
+   "C28.2",
+   "C29.2",
+   "C30.2",
+   "C31.2",
+   "C32.2",
+   "R2.2",
+   "C33.2",
+   "R3.2",
+   "R4.2",
+   "R5.2",
+   "Y1.2",
+   "Y1.4",
+   "C34.2",
+   "C35.2"
+  ],
+  "/OSC_OUT": [
+   "U1.A7",
+   "Y1.3",
+   "C35.1"
+  ],
+  "/OSC_IN": [
+   "U1.B7",
+   "Y1.1",
+   "C34.1"
+  ],
+  "+3V3": [
+   "U1.C2",
+   "U1.E8",
+   "U1.E9",
+   "U1.G10",
+   "U1.G11",
+   "U1.G12",
+   "C20.1",
+   "C21.1",
+   "C22.1",
+   "C23.1",
+   "C24.1",
+   "JP1.1",
+   "R6.1"
+  ],
+  "/V08CAP": [
+   "U1.D1",
+   "C6.1"
+  ],
+  "/VDDCORE": [
+   "U1.D2",
+   "U1.K6",
+   "U1.K7",
+   "U1.K8",
+   "U1.K9",
+   "U1.L7",
+   "U1.N6",
+   "L1.1",
+   "C2.1",
+   "C3.1",
+   "C4.1",
+   "C5.1",
+   "C14.1",
+   "C15.1",
+   "C16.1",
+   "C17.1",
+   "C18.1",
+   "C19.1"
+  ],
+  "/BOOT0": [
+   "U1.D3",
+   "R4.1"
+  ],
+  "/VDD1V8_EXT": [
+   "U1.E1",
+   "U1.J10",
+   "U1.J11",
+   "U1.L4",
+   "U1.M1",
+   "U1.M3",
+   "U1.P5",
+   "C7.1",
+   "C25.1",
+   "C26.1",
+   "C28.1",
+   "C29.1",
+   "C30.1",
+   "C31.1",
+   "C32.1"
+  ],
+  "/PWR_ON": [
+   "U1.E3",
+   "R3.1"
+  ],
+  "/NRST": [
+   "U1.E4",
+   "C33.1"
+  ],
+  "/VLXSMPS": [
+   "U1.G1",
+   "U1.G2",
+   "U1.G3",
+   "U1.G4",
+   "L1.2",
+   "R1.1"
+  ],
+  "/VDD1V8_SMPS": [
+   "U1.H1",
+   "U1.H2",
+   "U1.H3",
+   "U1.H4",
+   "C8.1",
+   "C9.1",
+   "C10.1",
+   "C11.1",
+   "C12.1",
+   "C13.1"
+  ],
+  "/XSPI_IO2": [
+   "U1.J13"
+  ],
+  "/XSPI_IO4": [
+   "U1.J14"
+  ],
+  "/XSPI_CLK": [
+   "U1.K12"
+  ],
+  "/XSPI_IO3": [
+   "U1.K14"
+  ],
+  "/RS485_DIR": [
+   "U1.L6"
+  ],
+  "/BOOT1": [
+   "U1.L8",
+   "R5.1",
+   "JP1.2"
+  ],
+  "/I2C_SDA": [
+   "U1.L10"
+  ],
+  "/XSPI_IO0": [
+   "U1.L13"
+  ],
+  "/XSPI_IO5": [
+   "U1.L14"
+  ],
+  "/UART_TX": [
+   "U1.M7"
+  ],
+  "/IMU_INT_ACC": [
+   "U1.M10"
+  ],
+  "/SWO": [
+   "U1.M11"
+  ],
+  "/IMU_INT_GYR": [
+   "U1.M12"
+  ],
+  "/XSPI_DQS": [
+   "U1.M13"
+  ],
+  "/XSPI_IO6": [
+   "U1.M14"
+  ],
+  "/CSI_D1_N": [
+   "U1.N2"
+  ],
+  "/CSI_CLK_N": [
+   "U1.N3"
+  ],
+  "/CSI_D0_N": [
+   "U1.N4"
+  ],
+  "/CSI_REXT": [
+   "U1.N5",
+   "R2.1"
+  ],
+  "/UART_RX": [
+   "U1.N7"
+  ],
+  "/BOOTFAIL": [
+   "U1.N10",
+   "D1.1"
+  ],
+  "/XSPI_IO1": [
+   "U1.N13"
+  ],
+  "/XSPI_IO7": [
+   "U1.N14"
+  ],
+  "/CSI_D1_P": [
+   "U1.P2"
+  ],
+  "/CSI_CLK_P": [
+   "U1.P3"
+  ],
+  "/CSI_D0_P": [
+   "U1.P4"
+  ],
+  "/SWCLK": [
+   "U1.P6"
+  ],
+  "/SWDIO": [
+   "U1.P7"
+  ],
+  "/CAM_EN": [
+   "U1.P10"
+  ],
+  "/I2C_SCL": [
+   "U1.P11"
+  ],
+  "/XSPI_NCS": [
+   "U1.P13"
+  ],
+  "/SNUB": [
+   "R1.2",
+   "C1.1"
+  ],
+  "/LED_A": [
+   "D1.2",
+   "R6.2"
+  ]
+ },
+ "ports": {
+  "+3V3": {
+   "net": "+3V3",
+   "kind": "power_in",
+   "note": "VDD, VBAT, VDDIO4: the always-on 3.3 V"
+  },
+  "/VDDA1V8_AON": {
+   "net": "/VDDA1V8_AON",
+   "kind": "power_in",
+   "note": "always-on 1.8 V (VDDA18AON, PDR_ON)"
+  },
+  "/VDD1V8_SMPS": {
+   "net": "/VDD1V8_SMPS",
+   "kind": "power_in",
+   "note": "1.8 V 3 A from the buck PWR_ON enables (VDDSMPS)"
+  },
+  "/VDD1V8_EXT": {
+   "net": "/VDD1V8_EXT",
+   "kind": "power_in",
+   "note": "1.8 V the LDO PWR_ON enables: PMU, PLL, CSI, ADC, VREF+, VDDIO3 (and the flash)"
+  },
+  "/PWR_ON": {
+   "net": "/PWR_ON",
+   "kind": "signal_out",
+   "note": "\"This is the core supply enable output\" (an5967 p14): enables VDD1V8_SMPS and VDD1V8_EXT"
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground"
+  },
+  "/NRST": {
+   "net": "/NRST",
+   "kind": "signal",
+   "note": "reset: debug header and the flash's reset"
+  },
+  "/SWDIO": {
+   "net": "/SWDIO",
+   "kind": "data",
+   "note": "PA13 (JTMS/SWDIO)"
+  },
+  "/SWO": {
+   "net": "/SWO",
+   "kind": "data",
+   "note": "PB5 (an5967 p14: \"PB5 JTDO/TRACESWO\")"
+  },
+  "/SWCLK": {
+   "net": "/SWCLK",
+   "kind": "data",
+   "note": "PA14 (JTCK/SWCLK)"
+  },
+  "/CSI_D0_P": {
+   "net": "/CSI_D0_P",
+   "kind": "data",
+   "note": "MIPI CSI-2 to the camera"
+  },
+  "/CSI_D0_N": {
+   "net": "/CSI_D0_N",
+   "kind": "data",
+   "note": "MIPI CSI-2 to the camera"
+  },
+  "/CSI_D1_P": {
+   "net": "/CSI_D1_P",
+   "kind": "data",
+   "note": "MIPI CSI-2 to the camera"
+  },
+  "/CSI_D1_N": {
+   "net": "/CSI_D1_N",
+   "kind": "data",
+   "note": "MIPI CSI-2 to the camera"
+  },
+  "/CSI_CLK_P": {
+   "net": "/CSI_CLK_P",
+   "kind": "data",
+   "note": "MIPI CSI-2 to the camera"
+  },
+  "/CSI_CLK_N": {
+   "net": "/CSI_CLK_N",
+   "kind": "data",
+   "note": "MIPI CSI-2 to the camera"
+  },
+  "/I2C_SCL": {
+   "net": "/I2C_SCL",
+   "kind": "data",
+   "note": "PB10 I2C2_SCL (camera and IMU; the Nucleo's camera I2C)"
+  },
+  "/I2C_SDA": {
+   "net": "/I2C_SDA",
+   "kind": "data",
+   "note": "PB11 I2C2_SDA"
+  },
+  "/UART_TX": {
+   "net": "/UART_TX",
+   "kind": "data",
+   "note": "PA9 USART1_TX"
+  },
+  "/UART_RX": {
+   "net": "/UART_RX",
+   "kind": "data",
+   "note": "PA10 USART1_RX"
+  },
+  "/RS485_DIR": {
+   "net": "/RS485_DIR",
+   "kind": "gpio",
+   "note": "PA12 USART1_RTS: the USART's RS-485 driver enable (ds: \"Hardware flow control for modem and RS-485 transceiver\"; DE on the RTS pin: reference manual, not read)"
+  },
+  "/CAM_EN": {
+   "net": "/CAM_EN",
+   "kind": "gpio",
+   "note": "PA0, the camera's power enable (the Nucleo's camera PWR_EN is PA0)"
+  },
+  "/IMU_INT_ACC": {
+   "net": "/IMU_INT_ACC",
+   "kind": "gpio",
+   "note": "PB12"
+  },
+  "/IMU_INT_GYR": {
+   "net": "/IMU_INT_GYR",
+   "kind": "gpio",
+   "note": "PG0"
+  },
+  "/XSPI_DQS": {
+   "net": "/XSPI_DQS",
+   "kind": "data",
+   "note": "XSPI port 2 (PN pins) to the octal flash, as the Nucleo"
+  },
+  "/XSPI_NCS": {
+   "net": "/XSPI_NCS",
+   "kind": "data",
+   "note": "XSPI port 2 (PN pins) to the octal flash, as the Nucleo"
+  },
+  "/XSPI_CLK": {
+   "net": "/XSPI_CLK",
+   "kind": "data",
+   "note": "XSPI port 2 (PN pins) to the octal flash, as the Nucleo"
+  },
+  "/XSPI_IO0": {
+   "net": "/XSPI_IO0",
+   "kind": "data",
+   "note": "XSPI port 2 (PN pins) to the octal flash, as the Nucleo"
+  },
+  "/XSPI_IO1": {
+   "net": "/XSPI_IO1",
+   "kind": "data",
+   "note": "XSPI port 2 (PN pins) to the octal flash, as the Nucleo"
+  },
+  "/XSPI_IO2": {
+   "net": "/XSPI_IO2",
+   "kind": "data",
+   "note": "XSPI port 2 (PN pins) to the octal flash, as the Nucleo"
+  },
+  "/XSPI_IO3": {
+   "net": "/XSPI_IO3",
+   "kind": "data",
+   "note": "XSPI port 2 (PN pins) to the octal flash, as the Nucleo"
+  },
+  "/XSPI_IO4": {
+   "net": "/XSPI_IO4",
+   "kind": "data",
+   "note": "XSPI port 2 (PN pins) to the octal flash, as the Nucleo"
+  },
+  "/XSPI_IO5": {
+   "net": "/XSPI_IO5",
+   "kind": "data",
+   "note": "XSPI port 2 (PN pins) to the octal flash, as the Nucleo"
+  },
+  "/XSPI_IO6": {
+   "net": "/XSPI_IO6",
+   "kind": "data",
+   "note": "XSPI port 2 (PN pins) to the octal flash, as the Nucleo"
+  },
+  "/XSPI_IO7": {
+   "net": "/XSPI_IO7",
+   "kind": "data",
+   "note": "XSPI port 2 (PN pins) to the octal flash, as the Nucleo"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   25,
+   25
+  ],
+  "place": {
+   "U1": {
+    "at_mm": [
+     14.0,
+     14.0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "L1": {
+    "at_mm": [
+     5.2,
+     13.6
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "R1": {
+    "at_mm": [
+     5.2,
+     15.4
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C1": {
+    "at_mm": [
+     5.2,
+     16.4
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C2": {
+    "at_mm": [
+     2.2,
+     8.2
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "C3": {
+    "at_mm": [
+     2.2,
+     11.4
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "C4": {
+    "at_mm": [
+     2.2,
+     15.0
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "C5": {
+    "at_mm": [
+     2.2,
+     18.2
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "C6": {
+    "at_mm": [
+     6.4,
+     9.4
+    ],
+    "rotation": 90,
+    "side": "back"
+   },
+   "C7": {
+    "at_mm": [
+     6.4,
+     11.4
+    ],
+    "rotation": 90,
+    "side": "back"
+   },
+   "C8": {
+    "at_mm": [
+     6.4,
+     13.4
+    ],
+    "rotation": 90,
+    "side": "back"
+   },
+   "C9": {
+    "at_mm": [
+     6.4,
+     15.4
+    ],
+    "rotation": 90,
+    "side": "back"
+   },
+   "C10": {
+    "at_mm": [
+     5.2,
+     13.4
+    ],
+    "rotation": 90,
+    "side": "back"
+   },
+   "C11": {
+    "at_mm": [
+     5.2,
+     15.4
+    ],
+    "rotation": 90,
+    "side": "back"
+   },
+   "C12": {
+    "at_mm": [
+     3.6,
+     12.9
+    ],
+    "rotation": 90,
+    "side": "back"
+   },
+   "C13": {
+    "at_mm": [
+     3.6,
+     16.0
+    ],
+    "rotation": 90,
+    "side": "back"
+   },
+   "C14": {
+    "at_mm": [
+     12.1,
+     14.0
+    ],
+    "rotation": 90,
+    "side": "back"
+   },
+   "C15": {
+    "at_mm": [
+     13.1,
+     14.0
+    ],
+    "rotation": 90,
+    "side": "back"
+   },
+   "C16": {
+    "at_mm": [
+     14.1,
+     14.0
+    ],
+    "rotation": 90,
+    "side": "back"
+   },
+   "C17": {
+    "at_mm": [
+     15.1,
+     14.0
+    ],
+    "rotation": 90,
+    "side": "back"
+   },
+   "C18": {
+    "at_mm": [
+     14.0,
+     21.6
+    ],
+    "rotation": 0,
+    "side": "back"
+   },
+   "C19": {
+    "at_mm": [
+     12.0,
+     22.6
+    ],
+    "rotation": 0,
+    "side": "back"
+   },
+   "C20": {
+    "at_mm": [
+     21.6,
+     12.6
+    ],
+    "rotation": 0,
+    "side": "back"
+   },
+   "C21": {
+    "at_mm": [
+     21.6,
+     13.6
+    ],
+    "rotation": 0,
+    "side": "back"
+   },
+   "C22": {
+    "at_mm": [
+     21.6,
+     14.6
+    ],
+    "rotation": 0,
+    "side": "back"
+   },
+   "C23": {
+    "at_mm": [
+     13.6,
+     5.2
+    ],
+    "rotation": 0,
+    "side": "back"
+   },
+   "C24": {
+    "at_mm": [
+     16.0,
+     5.2
+    ],
+    "rotation": 0,
+    "side": "back"
+   },
+   "C25": {
+    "at_mm": [
+     21.6,
+     15.6
+    ],
+    "rotation": 0,
+    "side": "back"
+   },
+   "C26": {
+    "at_mm": [
+     21.6,
+     16.6
+    ],
+    "rotation": 0,
+    "side": "back"
+   },
+   "C27": {
+    "at_mm": [
+     11.2,
+     5.2
+    ],
+    "rotation": 0,
+    "side": "back"
+   },
+   "C28": {
+    "at_mm": [
+     8.0,
+     21.6
+    ],
+    "rotation": 0,
+    "side": "back"
+   },
+   "C29": {
+    "at_mm": [
+     8.0,
+     22.6
+    ],
+    "rotation": 0,
+    "side": "back"
+   },
+   "C30": {
+    "at_mm": [
+     10.0,
+     21.6
+    ],
+    "rotation": 0,
+    "side": "back"
+   },
+   "C31": {
+    "at_mm": [
+     10.0,
+     22.6
+    ],
+    "rotation": 0,
+    "side": "back"
+   },
+   "C32": {
+    "at_mm": [
+     12.0,
+     21.6
+    ],
+    "rotation": 0,
+    "side": "back"
+   },
+   "R2": {
+    "at_mm": [
+     14.0,
+     22.6
+    ],
+    "rotation": 0,
+    "side": "back"
+   },
+   "C33": {
+    "at_mm": [
+     6.0,
+     8.0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "R3": {
+    "at_mm": [
+     6.0,
+     9.0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "R4": {
+    "at_mm": [
+     6.0,
+     10.0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "R5": {
+    "at_mm": [
+     17.0,
+     21.4
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "JP1": {
+    "at_mm": [
+     19.6,
+     21.4
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "D1": {
+    "at_mm": [
+     22.4,
+     19.0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "R6": {
+    "at_mm": [
+     22.4,
+     20.4
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "Y1": {
+    "at_mm": [
+     13.6,
+     5.0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C34": {
+    "at_mm": [
+     10.6,
+     5.9
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C35": {
+    "at_mm": [
+     16.6,
+     4.1
+    ],
+    "rotation": 0,
+    "side": "front"
+   }
+  },
+  "traces": [],
+  "vias": [],
+  "rules": "an5967: \"decoupling capacitors ... on the opposite side under the BGA\" (Table 6 caps on the back, under the chip's empty centre and round its edge); \"the resonator and the load capacitors must be placed as close as possible to the oscillator pins\" (ds p162); \"A minimum of 4 layers is mandatory\". USB unused: \"DP/DM pins must be connected to VSS. ID/TXRTUNE pins must be left floating/open. UCPD_CC1/CC2 pins must be left floating/open\" and VDD33USB, VDDA18USB \"Connected to VSS if not used\" (an5967 p7-8). LSE (PC14/PC15) unused."
+ },
+ "open_questions": [
+  "VDDCORE bulk: AN5967 Table 6 says 4 x 15 uF, the Nucleo fits 4 x 22 uF; 15 uF used.",
+  "Crystal: Abracon ABM8 at 48 MHz with CL 8 pF is a custom order code (the sheet's standard CL is 18 pF); oscillator gain margin (ds: Gmcritmax 1.95 mA/V) not computed: ABM8 gives no motional resistance.",
+  "BOOT0/BOOT1 pull-down values (10k) not from a document.",
+  "USART1 DE on PA12 (RTS) follows the STM32 USART's usual DE-on-RTS mapping; the N6 reference manual was not read."
+ ]
+}

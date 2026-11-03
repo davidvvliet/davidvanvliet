@@ -66,12 +66,17 @@ for block, items in groups.items():
     # One slot per distinct material (KiCad gives each piece its own copy).
     # The exporter writes one primitive per distinct material, so equal slots merge there.
     me = o.data
+    copper = {i for i, s in enumerate(o.material_slots) if block == "Board" and s.material and s.material.use_nodes
+              and (n := s.material.node_tree.nodes.get("Principled BSDF")) and n.inputs["Metallic"].default_value > 0.5}
     for i, s in enumerate(o.material_slots):
         me.materials[i] = canonical(s.material, block == "Board")
     # Merge the pieces' shared corners, then let flat copper and mask keep only the triangles they need.
     bm = bmesh.new(); bm.from_mesh(me)
     bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=1e-7)
     if block == "Board":
+        # The copper's side walls (35 µm tall, and the via barrels inside their holes) don't show at web scale but
+        # cost much of a busy board's triangles: only its top and bottom faces stay.
+        bmesh.ops.delete(bm, geom=[f for f in bm.faces if f.material_index in copper and abs(f.normal.z) < 0.5], context="FACES")
         bmesh.ops.dissolve_limit(bm, angle_limit=math.radians(1), verts=bm.verts, edges=bm.edges, use_dissolve_boundaries=False,
                                  delimit={"MATERIAL"})
     bm.to_mesh(me); bm.free()

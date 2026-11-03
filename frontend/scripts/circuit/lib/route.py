@@ -13,9 +13,11 @@ def plane_fanout(b):
     inside a footprint's keep-out has its block's own escape trace: the via goes at that trace's far end."""
     import math
     planes = {z.GetNetname() for z in b.Zones() if b.GetLayerType(z.GetLayer()) == pcbnew.LT_POWER}
-    if not planes: return 0
+    if not planes: return 0, []
     ds = b.GetDesignSettings(); nc = ds.m_NetSettings.GetDefaultNetclass()
-    vd, vh, clr = nc.GetViaDiameter(), nc.GetViaDrill(), nc.GetClearance()
+    vd, vh = nc.GetViaDiameter(), nc.GetViaDrill()
+    base_clr = nc.GetClearance()
+    class_clr = {c.GetName(): c.GetClearance() for c in ds.m_NetSettings.GetNetclasses().values() if c.HasClearance()}
     tw = ds.m_TrackMinWidth
     keepouts = [z for z in list(b.Zones()) + [z for f in b.GetFootprints() for z in f.Zones()]
                 if z.GetIsRuleArea() and (z.GetDoNotAllowVias() or z.GetDoNotAllowTracks())]
@@ -27,48 +29,62 @@ def plane_fanout(b):
     sources = []  # (point, net item, reach, layer, outward angle: from the part's centre to the pad)
     for f in b.GetFootprints():
         for pad in f.Pads():
-            if pad.GetNetname() not in planes or pad.GetAttribute() != pcbnew.PAD_ATTRIB_SMD: continue
+            # surface pads, and connector pads (a Tag-Connect's: copper only, no part)
+            if pad.GetNetname() not in planes or pad.GetAttribute() not in (pcbnew.PAD_ATTRIB_SMD, pcbnew.PAD_ATTRIB_CONN): continue
             layer = pcbnew.F_Cu if pad.IsOnLayer(pcbnew.F_Cu) else pcbnew.B_Cu
             c = pad.GetPosition()
-            if any(z.Outline().Contains(c) for z in keepouts):
+            # inside a keep-out: all around the centre, not a centre on its edge or corner (a Tag-Connect's pads)
+            e = pcbnew.FromMM(0.05)
+            ring = [pcbnew.VECTOR2I(c.x + dx, c.y + dy) for dx, dy in ((e, 0), (-e, 0), (0, e), (0, -e))]
+            if any(all(z.Outline().Contains(q) for q in ring) for z in keepouts):
                 for t in b.GetTracks():
                     if t.GetClass() == "PCB_TRACK" and t.GetNetCode() == pad.GetNetCode():
                         for near, far in ((t.GetStart(), t.GetEnd()), (t.GetEnd(), t.GetStart())):
                             if pad.HitTest(near) and not any(z.Outline().Contains(far) for z in keepouts):
-                                sources.append((far, pad.GetNet(), t.GetWidth(), t.GetLayer(), math.atan2(far.y - f.GetPosition().y, far.x - f.GetPosition().x)))
+                                sources.append((far, pad.GetNet(), t.GetWidth(), t.GetLayer(), math.atan2(far.y - f.GetPosition().y, far.x - f.GetPosition().x),
+                                                f"{f.GetReference()}.{pad.GetNumber()}"))
                 continue
             bb = pad.GetBoundingBox()
-            sources.append((c, pad.GetNet(), math.hypot(bb.GetWidth(), bb.GetHeight()) / 2, layer, math.atan2(c.y - f.GetPosition().y, c.x - f.GetPosition().x)))
-    placed = 0
-    for c, net, reach, layer, out in sources:
+            sources.append((c, pad.GetNet(), math.hypot(bb.GetWidth(), bb.GetHeight()) / 2, layer, math.atan2(c.y - f.GetPosition().y, c.x - f.GetPosition().x),
+                            f"{f.GetReference()}.{pad.GetNumber()}"))
+    placed, failed = 0, []
+    for c, net, reach, layer, out, name in sources:
         done = False
+        # the net's own class clearance if wider than the default (a GND class at 0.15 otherwise fails the check)
+        clr = max(base_clr, class_clr.get(net.GetNetClassName(), 0))
         # directions nearest the outward one first: out of a QFN's row, or towards a BGA's edge between four balls
         for a in sorted((k * math.pi / 4 for k in range(8)), key=lambda a: -math.cos(a - out)):
-            for step in range(0, 10):
+            for step in range(0, 16):
                 d = reach * 0.5 + vd / 2 + clr * 0.5 + step * vd / 4
                 v = pcbnew.VECTOR2I(int(c.x + d * math.cos(a)), int(c.y + d * math.sin(a)))
-                # the via's square and a few squares along the trace to it, each grown by the clearance
+                # the via's square and squares every half trace width along the trace to it, each grown by the
+                # clearance (three squares let a trace slip across a neighbouring SOIC pad between them)
                 boxes = [pcbnew.BOX2I(pcbnew.VECTOR2I(v.x - vd // 2 - clr, v.y - vd // 2 - clr), pcbnew.VECTOR2I(vd + 2 * clr, vd + 2 * clr))]
-                for q in (0.35, 0.6, 0.8):
+                n = max(4, int(d / (tw / 2)))
+                for q in (k / n for k in range(1, n)):
                     p = pcbnew.VECTOR2I(int(c.x + (v.x - c.x) * q), int(c.y + (v.y - c.y) * q))
                     boxes.append(pcbnew.BOX2I(pcbnew.VECTOR2I(p.x - tw // 2 - clr, p.y - tw // 2 - clr), pcbnew.VECTOR2I(tw + 2 * clr, tw + 2 * clr)))
                 if not b.GetBoardEdgesBoundingBox().Contains(boxes[0]): continue
                 if any(n != net.GetNetname() and any(x.Intersects(sb) for x in boxes) for n, sb in shapes()): continue
+                # vias of the same net too: two vias' holes need their own spacing (hole to hole)
+                if any(t.GetClass() == "PCB_VIA" and boxes[0].Intersects(t.GetBoundingBox()) for t in b.GetTracks()): continue
                 t = pcbnew.PCB_TRACK(b); t.SetStart(c); t.SetEnd(v); t.SetWidth(tw); t.SetLayer(layer); t.SetNet(net); b.Add(t)
                 via = pcbnew.PCB_VIA(b); via.SetPosition(v); via.SetWidth(vd); via.SetDrill(vh); via.SetNet(net); b.Add(via)
                 placed += 1; done = True
                 break
             if done: break
-    return placed
+        if not done: failed.append(name)
+    return placed, failed
 
 def export(pcb, dsn):
     b = pcbnew.LoadBoard(pcb)
-    fanned = plane_fanout(b)
+    fanned, failed = plane_fanout(b)
     for z in [b.GetArea(i) for i in range(b.GetAreaCount())]:
         # a filled zone blocks the router; planes (power-type inner layers) stay: the router connects to them by vias
         if not z.GetIsRuleArea() and b.GetLayerType(z.GetLayer()) != pcbnew.LT_POWER: b.Remove(z)
     pcbnew.SaveBoard(pcb, b)
     print("EXPORT", pcbnew.ExportSpecctraDSN(b, dsn), "plane vias", fanned, flush=True)
+    if failed: print("UNFANNED", " ".join(failed), flush=True)  # plane pads with no room for a via: left unconnected
 
 def ground_fill(b, net_name):
     """A copper fill of `net_name` over the whole board, on both copper layers."""

@@ -1,0 +1,539 @@
+{
+ "name": "n6_power",
+ "title": "STM32N6 power",
+ "purpose": "the STM32N6's supplies from 5 V: always-on 3.3 V and 1.8 V, the 1.8 V rails PWR_ON switches on (3 A for the internal SMPS, 250 mA for the analog and flash), and the camera's 3.3 V",
+ "sources": [
+  {
+   "id": "an5967",
+   "title": "AN5967 Rev 6, Getting started with hardware development for STM32N6 MCUs",
+   "url": "https://www.st.com/resource/en/application_note/an5967-getting-started-with-hardware-development-for-stm32n6-mcus-stmicroelectronics.pdf",
+   "licence": "ST application note; link and quotes only",
+   "read": "p12 Figure 6 (VDD = 3.3 V, internal SMPS), 3.5 power-on and power-off sequence (p8-11)"
+  },
+  {
+   "id": "ds",
+   "title": "STM32N657xx datasheet DS14791 Rev 11",
+   "url": "https://www.st.com/resource/en/datasheet/stm32n657a0.pdf",
+   "licence": "ST datasheet; link and quotes only",
+   "read": "Table 26 (power-up/down rise and fall rates), Table 27 (POR thresholds)"
+  },
+  {
+   "id": "nucleo",
+   "title": "NUCLEO-N657X0-Q (MB1940) schematic, revision C-02",
+   "url": "https://www.st.com/resource/en/schematic_pack/mb1940-n657x0q-c02-schematic.pdf",
+   "licence": "ST Open Platform License Agreement; link and quotes only",
+   "read": "sheet 9 (power)"
+  },
+  {
+   "id": "lp5907",
+   "title": "TI LP5907 250 mA LDO (SNVS798Q)",
+   "url": "https://www.ti.com/lit/ds/symlink/lp5907.pdf",
+   "licence": "TI datasheet; link and quotes only",
+   "read": "Table 4-2 pins, 5.5 electrical characteristics (VIN, VIH, tON), 6.4 enable and minimum VIN, 7 application (capacitors)"
+  },
+  {
+   "id": "tps62130",
+   "title": "TI TPS6213x 3-17 V 3 A step-down converter (SLVSAG7F)",
+   "url": "https://www.ti.com/lit/ds/symlink/tps62130.pdf",
+   "licence": "TI datasheet; link and quotes only",
+   "read": "p3 device comparison and pin functions, p4 ratings, 8.3.2 soft start, 9.2 typical application (Table 9-1, 9-2, 9-3), 11 layout, RGT0016C outline"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "U1",
+   "value": "LP5907MFX-3.3",
+   "symbol": "Regulator_Linear:LP5907MFX-3.3",
+   "footprint": "Package_TO_SOT_SMD:SOT-23-5",
+   "source": "lp5907; an5967 p12",
+   "quote": "an5967 Figure 6: VDD from an always-on \"LDO 3.3V 200mA\"; lp5907 pins (SOT-23) \"IN 1\", \"GND 2\", \"EN 3\", \"N/C 4\", \"OUT 5\"; \"VIN Input voltage 2.2 5.5 V\"; \"Maximum output current 250 mA\"; \"tON Turn-on time ... 80 150 \u00b5s\" (EN high to 95 % of VOUT); EN low \"discharges the output pin to GND through an internal 230\u03a9 pulldown resistor\""
+  },
+  {
+   "ref": "C1",
+   "value": "1uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "lp5907, 7",
+   "quote": "\"The LP5907 is designed to perform with a single 1\u00b5F input capacitor and a single 1\u00b5F ceramic output capacitor.\""
+  },
+  {
+   "ref": "C2",
+   "value": "1uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "lp5907, 7",
+   "quote": "as the input capacitor"
+  },
+  {
+   "ref": "U2",
+   "value": "LP5907MFX-1.8",
+   "symbol": "Regulator_Linear:LP5907MFX-1.8",
+   "footprint": "Package_TO_SOT_SMD:SOT-23-5",
+   "source": "lp5907; an5967 p12",
+   "quote": "Figure 6: VDDA1V8_AON from an always-on \"LDO 1.8V 200mA\". Same part family as U1, both from 5 V and enabled together (as the Nucleo's U33/U23, EN tied to VIN): both reach their output in about the same time, so the 1.8 V stays below the 3.3 V while rising (\"VDDA18AON must not exceed VDD by more than 50 mV\") and crosses its POR threshold within tens of \u00b5s of VDD (\"can start up to 250 \u00b5s after VDD\"); lp5907 pins (SOT-23) \"IN 1\", \"GND 2\", \"EN 3\", \"N/C 4\", \"OUT 5\"; \"VIN Input voltage 2.2 5.5 V\"; \"Maximum output current 250 mA\"; \"tON Turn-on time ... 80 150 \u00b5s\" (EN high to 95 % of VOUT); EN low \"discharges the output pin to GND through an internal 230\u03a9 pulldown resistor\""
+  },
+  {
+   "ref": "C3",
+   "value": "1uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "lp5907, 7",
+   "quote": "\"The LP5907 is designed to perform with a single 1\u00b5F input capacitor and a single 1\u00b5F ceramic output capacitor.\""
+  },
+  {
+   "ref": "C4",
+   "value": "1uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "lp5907, 7",
+   "quote": "as the input capacitor"
+  },
+  {
+   "ref": "U3",
+   "value": "LP5907MFX-1.8",
+   "symbol": "Regulator_Linear:LP5907MFX-1.8",
+   "footprint": "Package_TO_SOT_SMD:SOT-23-5",
+   "source": "lp5907; an5967 p12",
+   "quote": "Figure 6: VDD1V8_EXT from an \"LDO or SMPS 1.8V 200mA\" with \"EN PWR_ON\"; PWR_ON high (3.3 V) is above the LP5907's \"VIH High input threshold 1.2 V\"; lp5907 pins (SOT-23) \"IN 1\", \"GND 2\", \"EN 3\", \"N/C 4\", \"OUT 5\"; \"VIN Input voltage 2.2 5.5 V\"; \"Maximum output current 250 mA\"; \"tON Turn-on time ... 80 150 \u00b5s\" (EN high to 95 % of VOUT); EN low \"discharges the output pin to GND through an internal 230\u03a9 pulldown resistor\""
+  },
+  {
+   "ref": "C5",
+   "value": "1uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "lp5907, 7",
+   "quote": "\"The LP5907 is designed to perform with a single 1\u00b5F input capacitor and a single 1\u00b5F ceramic output capacitor.\""
+  },
+  {
+   "ref": "C6",
+   "value": "1uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "lp5907, 7",
+   "quote": "as the input capacitor"
+  },
+  {
+   "ref": "U4",
+   "value": "TPS62131",
+   "symbol": "Regulator_Switching:TPS62131",
+   "footprint": "startracker:Texas_RGT0016C_VQFN-16_3x3mm_P0.5mm_EP1.68mm_ThermalVias",
+   "source": "tps62130, p3-4; an5967 p12",
+   "quote": "an5967 Figure 6: VDD1V8_SMPS from an \"SMPS 1.8V 3A\" with \"EN PWR_ON\" (feeds VDDSMPS); PWR_ON high (3.3 V) is above the \"0.9\" V EN threshold; tps62130 \"TPS62131 1.8 V\", \"TPS62132 3.3 V\" (p3); \"Input voltage range: 3 V to 17 V\"; pins (RGT) SW 1-3, PG 4, FB 5, AGND 6, FSW 7, DEF 8, SS/TR 9, AVIN 10, PVIN 11-12, EN 13, VOS 14, PGND 15-16, exposed pad \"Must be connected to AGND (pin 6), PGND (pin 15,16)\"; \"For fixed output voltage versions, the FB pin is pulled down internally and can be left floating. It is recommended to connect to AGND\" (9.2.2.1); FSW \"Low \u2248 2.5 MHz\", DEF \"Low = nominal\" (both to ground). KiCad footprint VQFN-16 3x3 mm, 0.5 mm pitch, 1.68 mm pad, as RGT0016C (\"12X 0.5\", pad \"1.68\")"
+  },
+  {
+   "ref": "L1",
+   "value": "2.2uH XFL4020-222ME",
+   "symbol": "Device:L",
+   "footprint": "startracker:L_Coilcraft_XFL4020",
+   "source": "tps62130, p13-15",
+   "quote": "Table 9-1: L1 \"2.2 \u00b5H, 0.165 inch x 0.165 inch XFL4020-222MEB, Coilcraft\"; Table 9-2: 2.2 \u00b5H with 22 \u00b5F \"is the standard value and recommended for most applications\"; Table 9-3 XFL4020-222ME \"3.8\" A, \"4\u00d74\u00d72.1\"; footprint KiCad's XxL4020, 3D model ours (make.py; KiCad has no XFL4020 model)"
+  },
+  {
+   "ref": "C7",
+   "value": "10uF 25V",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_1210_3225Metric",
+   "source": "tps62130, p13, p15-16",
+   "quote": "C1 \"10 \u00b5F, 25 V, Ceramic, 1210\"; \"10 \u00b5F will be sufficient and is recommended\""
+  },
+  {
+   "ref": "C8",
+   "value": "100nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "tps62130, p16",
+   "quote": "\"it is required to place a capacitance of 0.1 \u03bcF from AVIN to AGND\""
+  },
+  {
+   "ref": "C9",
+   "value": "22uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0805_2012Metric",
+   "source": "tps62130, p13, p15",
+   "quote": "C3 \"22 \u00b5F, 6.3 V, Ceramic, 0805\"; \"The recommended value for the output capacitor is 22 \u03bcF\""
+  },
+  {
+   "ref": "C10",
+   "value": "3.3nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "tps62130, p16 eq. 10",
+   "quote": "Table 9-1: C5 \"3300 pF, 25 V, Ceramic, 0603\" (SS/TR); \"A constant current source supports 2.5 \u00b5A to charge the external capacitance\" (eq. 10, CSS = tSS x 2.5 \u00b5A / 1.25 V): 3.3 nF ramps in about 1.7 ms, 0.9 ms/V, inside the ds Table 26 limit of \"1500 \u00b5s/V\""
+  },
+  {
+   "ref": "U5",
+   "value": "TPS62132",
+   "symbol": "Regulator_Switching:TPS62132",
+   "footprint": "startracker:Texas_RGT0016C_VQFN-16_3x3mm_P0.5mm_EP1.68mm_ThermalVias",
+   "source": "tps62130, p3-4; an5967 p12",
+   "quote": "the camera's 3.3 V (FPC pin 15): the Raspberry Pi Global Shutter Camera's supply current is not published (product brief, March 2023), so a 3 A converter of the same family; EN to VIN: always on; tps62130 \"TPS62131 1.8 V\", \"TPS62132 3.3 V\" (p3); \"Input voltage range: 3 V to 17 V\"; pins (RGT) SW 1-3, PG 4, FB 5, AGND 6, FSW 7, DEF 8, SS/TR 9, AVIN 10, PVIN 11-12, EN 13, VOS 14, PGND 15-16, exposed pad \"Must be connected to AGND (pin 6), PGND (pin 15,16)\"; \"For fixed output voltage versions, the FB pin is pulled down internally and can be left floating. It is recommended to connect to AGND\" (9.2.2.1); FSW \"Low \u2248 2.5 MHz\", DEF \"Low = nominal\" (both to ground). KiCad footprint VQFN-16 3x3 mm, 0.5 mm pitch, 1.68 mm pad, as RGT0016C (\"12X 0.5\", pad \"1.68\")"
+  },
+  {
+   "ref": "L2",
+   "value": "2.2uH XFL4020-222ME",
+   "symbol": "Device:L",
+   "footprint": "startracker:L_Coilcraft_XFL4020",
+   "source": "tps62130, p13-15",
+   "quote": "Table 9-1: L1 \"2.2 \u00b5H, 0.165 inch x 0.165 inch XFL4020-222MEB, Coilcraft\"; Table 9-2: 2.2 \u00b5H with 22 \u00b5F \"is the standard value and recommended for most applications\"; Table 9-3 XFL4020-222ME \"3.8\" A, \"4\u00d74\u00d72.1\"; footprint KiCad's XxL4020, 3D model ours (make.py; KiCad has no XFL4020 model)"
+  },
+  {
+   "ref": "C11",
+   "value": "10uF 25V",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_1210_3225Metric",
+   "source": "tps62130, p13, p15-16",
+   "quote": "C1 \"10 \u00b5F, 25 V, Ceramic, 1210\"; \"10 \u00b5F will be sufficient and is recommended\""
+  },
+  {
+   "ref": "C12",
+   "value": "100nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "tps62130, p16",
+   "quote": "\"it is required to place a capacitance of 0.1 \u03bcF from AVIN to AGND\""
+  },
+  {
+   "ref": "C13",
+   "value": "22uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0805_2012Metric",
+   "source": "tps62130, p13, p15",
+   "quote": "C3 \"22 \u00b5F, 6.3 V, Ceramic, 0805\"; \"The recommended value for the output capacitor is 22 \u03bcF\""
+  },
+  {
+   "ref": "C14",
+   "value": "3.3nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "tps62130, p16 eq. 10",
+   "quote": "Table 9-1: C5 \"3300 pF\" (SS/TR)"
+  }
+ ],
+ "nets": {
+  "+5V": [
+   "U1.1",
+   "U1.3",
+   "C1.1",
+   "U2.1",
+   "U2.3",
+   "C3.1",
+   "U3.1",
+   "C5.1",
+   "U4.10",
+   "U4.11",
+   "U4.12",
+   "C7.1",
+   "C8.1",
+   "U5.10",
+   "U5.11",
+   "U5.12",
+   "U5.13",
+   "C11.1",
+   "C12.1"
+  ],
+  "GND": [
+   "U1.2",
+   "C1.2",
+   "C2.2",
+   "U2.2",
+   "C3.2",
+   "C4.2",
+   "U3.2",
+   "C5.2",
+   "C6.2",
+   "U4.5",
+   "U4.6",
+   "U4.7",
+   "U4.8",
+   "U4.15",
+   "U4.16",
+   "U4.17",
+   "C7.2",
+   "C8.2",
+   "C9.2",
+   "C10.2",
+   "U5.5",
+   "U5.6",
+   "U5.7",
+   "U5.8",
+   "U5.15",
+   "U5.16",
+   "U5.17",
+   "C11.2",
+   "C12.2",
+   "C13.2",
+   "C14.2"
+  ],
+  "+3V3": [
+   "U1.5",
+   "C2.1"
+  ],
+  "/VDDA1V8_AON": [
+   "U2.5",
+   "C4.1"
+  ],
+  "/PWR_ON": [
+   "U3.3",
+   "U4.13"
+  ],
+  "/VDD1V8_EXT": [
+   "U3.5",
+   "C6.1"
+  ],
+  "/SW4": [
+   "U4.1",
+   "U4.2",
+   "U4.3",
+   "L1.1"
+  ],
+  "/SS4": [
+   "U4.9",
+   "C10.1"
+  ],
+  "/VDD1V8_SMPS": [
+   "U4.14",
+   "L1.2",
+   "C9.1"
+  ],
+  "/SW5": [
+   "U5.1",
+   "U5.2",
+   "U5.3",
+   "L2.1"
+  ],
+  "/SS5": [
+   "U5.9",
+   "C14.1"
+  ],
+  "+3V3_CAM": [
+   "U5.14",
+   "L2.2",
+   "C13.1"
+  ]
+ },
+ "ports": {
+  "+5V": {
+   "net": "+5V",
+   "kind": "power_in",
+   "note": "5 V from the bus input"
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground"
+  },
+  "+3V3": {
+   "net": "+3V3",
+   "kind": "power_out",
+   "note": "always-on 3.3 V: the MCU's VDD, and the IMU, RS-485 and pull-ups (250 mA part)"
+  },
+  "/VDDA1V8_AON": {
+   "net": "/VDDA1V8_AON",
+   "kind": "power_out"
+  },
+  "/VDD1V8_EXT": {
+   "net": "/VDD1V8_EXT",
+   "kind": "power_out",
+   "note": "switched by PWR_ON; also the flash's 1.8 V"
+  },
+  "/VDD1V8_SMPS": {
+   "net": "/VDD1V8_SMPS",
+   "kind": "power_out",
+   "note": "switched by PWR_ON, 3 A"
+  },
+  "/PWR_ON": {
+   "net": "/PWR_ON",
+   "kind": "signal_in",
+   "note": "from the MCU's PWR_ON"
+  },
+  "+3V3_CAM": {
+   "net": "+3V3_CAM",
+   "kind": "power_out",
+   "note": "camera supply"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   20,
+   16
+  ],
+  "place": {
+   "U1": {
+    "at_mm": [
+     16.5,
+     2.5
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C1": {
+    "at_mm": [
+     13.9,
+     2.5
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "C2": {
+    "at_mm": [
+     19.1,
+     2.5
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "U2": {
+    "at_mm": [
+     16.5,
+     8.0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C3": {
+    "at_mm": [
+     13.9,
+     8.0
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "C4": {
+    "at_mm": [
+     19.1,
+     8.0
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "U3": {
+    "at_mm": [
+     16.5,
+     13.5
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C5": {
+    "at_mm": [
+     13.9,
+     13.5
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "C6": {
+    "at_mm": [
+     19.1,
+     13.5
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "U4": {
+    "at_mm": [
+     4.0,
+     3.0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "L1": {
+    "at_mm": [
+     9.0,
+     3.0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C7": {
+    "at_mm": [
+     4.0,
+     6.6
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C8": {
+    "at_mm": [
+     0.6,
+     2.4
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "C9": {
+    "at_mm": [
+     12.6,
+     3.0
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "C10": {
+    "at_mm": [
+     0.6,
+     4.4
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "U5": {
+    "at_mm": [
+     4.0,
+     11.0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "L2": {
+    "at_mm": [
+     9.0,
+     11.0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C11": {
+    "at_mm": [
+     4.0,
+     14.6
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C12": {
+    "at_mm": [
+     0.6,
+     10.4
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "C13": {
+    "at_mm": [
+     12.6,
+     11.0
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "C14": {
+    "at_mm": [
+     0.6,
+     12.4
+    ],
+    "rotation": 90,
+    "side": "front"
+   }
+  },
+  "traces": [],
+  "vias": [],
+  "rules": "tps62130 11.1: \"the direct common ground connection of AGND and PGND to the exposed thermal pad and the system ground (ground plane) is mandatory\"; \"connect the VOS pin in the shortest way to VOUT at the output capacitor\"; \"The capacitor on the SS/TR pin and on AVIN as well as the FB resistors ... should be kept close to the IC\". lp5907: 1 \u00b5F at IN and OUT."
+ },
+ "open_questions": [
+  "Power-up order: ST's rule (an5967 3.5.1) is met by two LDOs of one family starting together (as the Nucleo); not measured. LP5907's minimum turn-on time is not given: ds Table 26 lists a 20 \u00b5s/V minimum ramp for VDDA18AON (80 \u00b5s typical for 1.8 V is 44 \u00b5s/V).",
+  "Power-down: both always-on LDOs fall with the 5 V; the 1.8 V must not exceed VDD by 50 mV on the way down (an5967 3.5.2): VDD carries more capacitance, so it should fall last; not checked.",
+  "LP5907's 5.5 V maximum input on a 5 V bus: the bus input block must clamp over-voltage (the HAT's TPS2121 has OV disabled).",
+  "Camera current unknown (Raspberry Pi publishes none); TPS62132 sized at 3 A."
+ ]
+}

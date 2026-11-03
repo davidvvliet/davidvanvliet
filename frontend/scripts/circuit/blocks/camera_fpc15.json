@@ -1,0 +1,151 @@
+{
+ "name": "camera_fpc15",
+ "title": "Camera connector",
+ "purpose": "15-pin 1 mm FPC socket for the Raspberry Pi Global Shutter Camera (MIPI CSI-2, I2C, power enable, 3.3 V)",
+ "sources": [
+  {
+   "id": "rpicam",
+   "title": "Raspberry Pi documentation, Camera connector pinout (15-pin)",
+   "url": "https://github.com/raspberrypi/documentation/blob/develop/documentation/asciidoc/computers/raspberry-pi/pinouts.adoc",
+   "licence": "CC BY-SA 4.0 (Raspberry Pi documentation)",
+   "read": "Camera connector pinout (15-pin) table and notes"
+  },
+  {
+   "id": "cable",
+   "title": "Raspberry Pi standard camera cable 200 mm reference drawing RP-008146-DS-1",
+   "url": "https://datasheets.raspberrypi.com/camera/standard-camera-cable-200mm-reference-drawing.pdf",
+   "licence": "Raspberry Pi document; link and quotes only",
+   "read": "pitch, width, conductor width"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "J1",
+   "value": "TE 1-84952-5",
+   "symbol": "Connector_Generic_MountingPin:Conn_01x15_MountingPin",
+   "footprint": "Connector_FFC-FPC:TE_1-84952-5_1x15-1MP_P1.0mm_Horizontal",
+   "source": "rpicam; cable",
+   "quote": "rpicam: \"The connector is compatible with Amphenol SFW15R-2STE1LF\"; pins \"1 GND\", \"2 CAM_DN0\", \"3 CAM_DP0\", \"4 GND\", \"5 CAM_DN1\", \"6 CAM_DP1\", \"7 GND\", \"8 CAM_CN\", \"9 CAM_CP\", \"10 GND\", \"11 CAM_IO0\", \"12 CAM_IO1\", \"13 SCL\", \"14 SDA\", \"15 3V3\"; \"Typically, CAM_IO0 is used as an active-high power enable\"; \"The I2C lines (SCL and SDA) are pulled up to 3.3 V on the Raspberry Pi board\". cable: \"Pins 15\", \"Pitch P 1.000 mm\", \"Width W 16.000 mm\". KiCad has no SFW15R footprint: TE 1-84952-5 (KiCad: \"15 bottom-side contacts, 1.0mm pitch, 1.0mm height\") instead"
+  }
+ ],
+ "nets": {
+  "GND": [
+   "J1.1",
+   "J1.4",
+   "J1.7",
+   "J1.10",
+   "J1.MP"
+  ],
+  "/CSI_D0_N": [
+   "J1.2"
+  ],
+  "/CSI_D0_P": [
+   "J1.3"
+  ],
+  "/CSI_D1_N": [
+   "J1.5"
+  ],
+  "/CSI_D1_P": [
+   "J1.6"
+  ],
+  "/CSI_CLK_N": [
+   "J1.8"
+  ],
+  "/CSI_CLK_P": [
+   "J1.9"
+  ],
+  "/CAM_EN": [
+   "J1.11"
+  ],
+  "/I2C_SCL": [
+   "J1.13"
+  ],
+  "/I2C_SDA": [
+   "J1.14"
+  ],
+  "+3V3_CAM": [
+   "J1.15"
+  ],
+  "/CAM_IO1": [
+   "J1.12"
+  ]
+ },
+ "ports": {
+  "GND": {
+   "net": "GND",
+   "kind": "ground"
+  },
+  "+3V3_CAM": {
+   "net": "+3V3_CAM",
+   "kind": "power_in",
+   "note": "pin 15, the camera's supply"
+  },
+  "/CSI_D0_P": {
+   "net": "/CSI_D0_P",
+   "kind": "data",
+   "note": "D-PHY; lane 1 unused by the IMX296 (one lane) but wired"
+  },
+  "/CSI_D0_N": {
+   "net": "/CSI_D0_N",
+   "kind": "data",
+   "note": "D-PHY; lane 1 unused by the IMX296 (one lane) but wired"
+  },
+  "/CSI_D1_P": {
+   "net": "/CSI_D1_P",
+   "kind": "data",
+   "note": "D-PHY; lane 1 unused by the IMX296 (one lane) but wired"
+  },
+  "/CSI_D1_N": {
+   "net": "/CSI_D1_N",
+   "kind": "data",
+   "note": "D-PHY; lane 1 unused by the IMX296 (one lane) but wired"
+  },
+  "/CSI_CLK_P": {
+   "net": "/CSI_CLK_P",
+   "kind": "data",
+   "note": "D-PHY; lane 1 unused by the IMX296 (one lane) but wired"
+  },
+  "/CSI_CLK_N": {
+   "net": "/CSI_CLK_N",
+   "kind": "data",
+   "note": "D-PHY; lane 1 unused by the IMX296 (one lane) but wired"
+  },
+  "/CAM_EN": {
+   "net": "/CAM_EN",
+   "kind": "gpio",
+   "note": "CAM_IO0, the camera's power enable (active high)"
+  },
+  "/I2C_SCL": {
+   "net": "/I2C_SCL",
+   "kind": "data"
+  },
+  "/I2C_SDA": {
+   "net": "/I2C_SDA",
+   "kind": "data"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   20,
+   7
+  ],
+  "place": {
+   "J1": {
+    "at_mm": [
+     10,
+     3.5
+    ],
+    "rotation": 0,
+    "side": "front"
+   }
+  },
+  "traces": [],
+  "vias": [],
+  "rules": "the socket on the board edge, the cable leaving the board; CSI pairs routed as differential pairs (DIFF net class)"
+ },
+ "open_questions": [
+  "Contact side: the Pi's socket (SFW15R-2STE1LF) drawing was not read; the bottom-contact TE socket assumes the cable's contacts face the board at this end.",
+  "CAM_IO1 (pin 12) left open: the GS camera's use of it is not documented.",
+  "No ESD or common-mode filters on the CSI lines (the Nucleo fits ECMF2-40A100N6 on its camera connector): the cable stays inside the tracker."
+ ]
+}

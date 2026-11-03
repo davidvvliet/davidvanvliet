@@ -24,6 +24,7 @@ def nice(title):
 
 ROUTE_TRIES = 8
 ROUTE_MARGIN_UM = 25  # extra clearance for the router (see README: "Routing")
+ROUTE_TRY_SECONDS = 300  # one router run longer than this is stopped and counted as a failed try
 
 def kpy(*args):
     """Run a lib/ script in KiCad's Python; its lines starting with an upper-case tag."""
@@ -37,7 +38,18 @@ def kpy(*args):
 def route(work, ground, planes=False):
     """Route work/board.kicad_pcb, trying again (the router varies between runs) until KiCad's design
     rule check finds no error and nothing unconnected; keeps the best try. Returns its report."""
-    best = None
+    # Before routing: the board as generated (plane vias added) must already pass the design rule check, apart
+    # from what routing adds. Overlapping parts or a short there fail every try: stop in seconds, not after them all.
+    pre = os.path.join(work, "precheck"); os.makedirs(pre, exist_ok=True)
+    for ext in ("kicad_pcb", "kicad_pro"): shutil.copy(os.path.join(work, f"unrouted.{ext}"), os.path.join(pre, f"board.{ext}"))
+    for l in kpy(os.path.join(HERE, "lib", "route.py"), "export", os.path.join(pre, "board.kicad_pcb"), os.path.join(pre, "board.dsn")):
+        if l.startswith("UNFANNED"): print("precheck: plane pads with no room for a via (they stay unconnected):", l.split(" ", 1)[1], flush=True)
+    errors = checks.drc_errors(os.path.join(pre, "board.kicad_pcb"))
+    if errors:
+        sys.exit(f"not routed: the unrouted board already has {len(errors)} design rule errors (fix the placement or blocks first):\n  "
+                 + "\n  ".join(errors[:25]) + (f"\n  ... and {len(errors) - 25} more" if len(errors) > 25 else ""))
+    print("precheck: unrouted board passes the design rules", flush=True)
+    best, last = None, None
     for i in range(ROUTE_TRIES):
         t = os.path.join(work, f"try{i}"); os.makedirs(t, exist_ok=True)
         for ext in ("kicad_pcb", "kicad_pro"): shutil.copy(os.path.join(work, f"unrouted.{ext}"), os.path.join(t, f"board.{ext}"))
@@ -47,17 +59,31 @@ def route(work, ground, planes=False):
         text = re.sub(r"\(clearance (\d+(?:\.\d+)?)\)", lambda m: f"(clearance {float(m.group(1)) + ROUTE_MARGIN_UM:g})", text)
         open(dsn, "w").write(text)
         # Headless, and no Dock icon (apple.awt.UIElement): otherwise macOS gives Java focus and switches Spaces.
-        r = subprocess.run([tools.tool("java"), "-Djava.awt.headless=true", "-Dapple.awt.UIElement=true", "-jar", tools.tool("freerouting"), "--gui.enabled=false",
-                            "--usage_and_diagnostic_data.disable_analytics=true", "--router.autorouter.max_passes=100",
-                            *(["--router.fanout.enabled=true"] if planes else []),  # SMD pads out to the inner planes by vias
-                            "-de", dsn, "-do", ses], capture_output=True, text=True)
+        t0 = time.time()
+        try:
+            r = subprocess.run([tools.tool("java"), "-Djava.awt.headless=true", "-Dapple.awt.UIElement=true", "-jar", tools.tool("freerouting"), "--gui.enabled=false",
+                                "--usage_and_diagnostic_data.disable_analytics=true", "--router.autorouter.max_passes=100",
+                                *(["--router.fanout.enabled=true"] if planes else []),  # SMD pads out to the inner planes by vias
+                                "-de", dsn, "-do", ses], capture_output=True, text=True, timeout=ROUTE_TRY_SECONDS)
+        except subprocess.TimeoutExpired:
+            print(f"try {i + 1}/{ROUTE_TRIES}: router still running after {ROUTE_TRY_SECONDS} s, stopped", flush=True)
+            if last == "timeout": sys.exit("not routed: the router timed out twice (too crowded to finish: give the parts more room)")
+            last = "timeout"; continue
         if not os.path.exists(ses):
             sys.exit("Freerouting failed:\n" + (r.stdout + r.stderr)[-2000:])
         kpy(os.path.join(HERE, "lib", "route.py"), "import", pcb, ses, ground or "")
         rows = checks.drc(pcb, parity=False)
         bad = sum(c["measured"] for c in rows if not c["ok"])
+        found = ", ".join(f"{c['name']} {c['measured']}" + (f" ({c['detail']})" if c.get("detail") else "") for c in rows if not c["ok"])
+        print(f"try {i + 1}/{ROUTE_TRIES}: {bad} problems{': ' + found if found else ''} ({time.time() - t0:.0f} s)", flush=True)
         if best is None or bad < best[0]: best = (bad, pcb, i + 1)
         if bad == 0: break
+        # The very same errors (same items, same places) twice: the router is not the cause, more tries won't
+        # change it. Only the count repeating is not enough: the router varies, the next try may route clean.
+        same = sorted(checks.drc_errors(pcb)) + [found]
+        if same == last: print("same errors as the try before: stopping", flush=True); break
+        last = same
+    if best is None: sys.exit("not routed: no try finished")
     shutil.copy(best[1], os.path.join(work, "board.kicad_pcb"))
     shutil.copy(os.path.join(work, "unrouted.kicad_pro"), os.path.join(work, "board.kicad_pro"))
     return f"routed in {best[2]} of {ROUTE_TRIES} tries" + ("" if best[0] == 0 else f", best has {best[0]} problems")

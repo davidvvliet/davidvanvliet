@@ -1,0 +1,137 @@
+{
+ "name": "swd_tc2030",
+ "title": "Debug connector",
+ "purpose": "SWD programming and debug through a Tag-Connect TC2030 cable (pads only, no part fitted)",
+ "sources": [
+  {
+   "id": "tc",
+   "title": "Tag-Connect TC2030-CTX pinout",
+   "url": "https://www.tag-connect.com/wp-content/uploads/bsk-pdf-manager/TC2030-CTX_1.pdf",
+   "licence": "Tag-Connect document; link and quotes only",
+   "read": "the 6-pin footprint pinout"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "J1",
+   "value": "TC2030",
+   "symbol": "Connector:Conn_ARM_SWD_TagConnect_TC2030",
+   "footprint": "Connector:Tag-Connect_TC2030-IDC-FP_2x03_P1.27mm_Vertical",
+   "source": "tc",
+   "quote": "\"1 VCC\", \"2 SWDIO / TMS\", \"3 nRESET\", \"4 SWCLK / TCK\", \"5 GND (also connected to GNDDetect)\", \"6 SWO / TDO\" (KiCad's symbol numbers them the same)"
+  }
+ ],
+ "nets": {
+  "+3V3": [
+   "J1.1"
+  ],
+  "/SWDIO": [
+   "J1.2"
+  ],
+  "/NRST": [
+   "J1.3"
+  ],
+  "/SWCLK": [
+   "J1.4"
+  ],
+  "GND": [
+   "J1.5"
+  ],
+  "/SWO": [
+   "J1.6"
+  ]
+ },
+ "ports": {
+  "+3V3": {
+   "net": "+3V3",
+   "kind": "power_in",
+   "note": "target voltage sense"
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground"
+  },
+  "/SWDIO": {
+   "net": "/SWDIO",
+   "kind": "data"
+  },
+  "/SWCLK": {
+   "net": "/SWCLK",
+   "kind": "data"
+  },
+  "/SWO": {
+   "net": "/SWO",
+   "kind": "data"
+  },
+  "/NRST": {
+   "net": "/NRST",
+   "kind": "signal"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   8,
+   5
+  ],
+  "place": {
+   "J1": {
+    "at_mm": [
+     4,
+     2.5
+    ],
+    "rotation": 0,
+    "side": "front"
+   }
+  },
+  "traces": [
+   {
+    "from_mm": [
+     5.27,
+     3.135
+    ],
+    "to_mm": [
+     4.72,
+     3.36
+    ],
+    "width_mm": 0.2,
+    "layer": "F.Cu",
+    "net": "GND"
+   },
+   {
+    "from_mm": [
+     2.73,
+     3.135
+    ],
+    "to_mm": [
+     2.155,
+     3.285
+    ],
+    "width_mm": 0.2,
+    "layer": "F.Cu",
+    "net": "+3V3"
+   }
+  ],
+  "vias": [
+   {
+    "at_mm": [
+     4.72,
+     3.36
+    ],
+    "size_mm": 0.4,
+    "drill_mm": 0.2,
+    "net": "GND"
+   },
+   {
+    "at_mm": [
+     2.155,
+     3.285
+    ],
+    "size_mm": 0.4,
+    "drill_mm": 0.2,
+    "net": "+3V3"
+   }
+  ],
+  "rules": "keep the footprint's leg holes and the area round it clear (the cable's clip); the footprint's keep-out (no vias between the pads) means GND (pad 5) and VCC (pad 1) reach their planes by a short trace out of it and a via, clear of the leg holes"
+ },
+ "open_questions": []
+}

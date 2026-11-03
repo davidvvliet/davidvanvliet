@@ -14,6 +14,14 @@ def _rows(name, violations, extra_errors=0):
             {"name": f"{name}: warnings", "ok": True, "measured": warnings, "expected": 0, "unit": "warnings",
              "detail": ", ".join(f"{t} ×{n}" for (s, t), n in by.most_common() if s == "warning")}]
 
+def drc_errors(pcb):
+    """The design rule check's errors on a .kicad_pcb, each as "type: item / item" (unconnected items left out)."""
+    with tempfile.TemporaryDirectory() as tmp:
+        out = os.path.join(tmp, "drc.json")
+        subprocess.run([tools.tool("kicad-cli"), "pcb", "drc", "--format", "json", "-o", out, pcb], capture_output=True, text=True)
+        d = json.load(open(out))
+    return [f"{v['type']}: " + " / ".join(i["description"] for i in v["items"]) for v in d.get("violations", []) if v["severity"] == "error"]
+
 def drc(pcb, parity=True):
     """Design rule check of a .kicad_pcb (its .kicad_pro beside it holds the rules)."""
     with tempfile.TemporaryDirectory() as tmp:

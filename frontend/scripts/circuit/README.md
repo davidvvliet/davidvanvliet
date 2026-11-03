@@ -25,13 +25,16 @@ boards/<board>/     one board: board.json plus either
                       recipe.json (our own, from blocks; see "Own boards")
 blocks/<block>.json the building-block library (templates/block.json): usb_c_power, ldo_3v3, rp2040_core, led,
                     lipo_charger, imu_bmi088, baro_bmp280, i2c_pullups, co2_scd41, voc_sgp41, pm_pms5003, qwiic,
-                    rpi_uhat_header, hat_id_eeprom, rs485_thvd1410, bus_power_tps2121, bus_connectors, led_gpio
+                    rpi_uhat_header, hat_id_eeprom, rs485_thvd1410, bus_power_tps2121, bus_connectors, led_gpio,
+                    n6_core, n6_power, flash_mx25um, camera_fpc15, swd_tc2030
 footprints/         footprints KiCad's library doesn't have (mitayi.pretty: the Mitayi Pico's own, MIT; air.pretty: drawn
-                    from datasheets, or KiCad's with our own model; startracker.pretty: KiCad's TPS2121 package with our model)
+                    from datasheets, or KiCad's with our own model; startracker.pretty: KiCad's TPS2121 package with our model,
+                    and the STM32N6's VFBGA178, written by symbols/stm32n657.py)
 footprints/models/  3D models for parts KiCad has none of, from the makers' package drawings (make.py writes them; VRML,
                     1 unit = 2.54 mm), referenced
                     as ${CIRCUIT_3DMODELS}/<name>.wrl
-symbols/            schematic symbols KiCad doesn't have (air.kicad_sym: SGP41; startracker.kicad_sym: TPS2121)
+symbols/            schematic symbols KiCad doesn't have (air.kicad_sym: SGP41; startracker.kicad_sym: TPS2121,
+                    MX25UM51245G, and the STM32N657 written by stm32n657.py from its ballout, stm32n657_vfbga178.json)
 lib/tools.py        where each tool is
 lib/checks.py       KiCad's design rule and electrical checks, as dashboard check rows
 lib/sections.py     an imported schematic's titled boxes, as the board's blocks

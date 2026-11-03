@@ -1,0 +1,271 @@
+{
+ "name": "flash_mx25um",
+ "title": "Octal flash",
+ "purpose": "512 Mb 1.8 V octal NOR flash the STM32N6 boots from (XSPI port 2)",
+ "sources": [
+  {
+   "id": "mx",
+   "title": "Macronix MX25UM51245G 1.8V 512Mb datasheet, Rev. 1.6 (P/N PM2183)",
+   "url": "https://www.macronix.com/en-us/products/NOR-Flash/Serial-NOR-Flash/Pages/spec.aspx?p=MX25UM51245G&m=Serial%20NOR%20Flash&n=PM2600",
+   "licence": "Macronix datasheet; link and quotes only",
+   "read": "p6-8 features, frequencies, pin configurations; p92 power-up notes; p101 operating conditions; p103-104 ordering; p106 SOP-16 outline"
+  },
+  {
+   "id": "nucleo",
+   "title": "NUCLEO-N657X0-Q (MB1940) schematic, revision C-02",
+   "url": "https://www.st.com/resource/en/schematic_pack/mb1940-n657x0q-c02-schematic.pdf",
+   "licence": "ST Open Platform License Agreement; link and quotes only",
+   "read": "sheet 5 OctoSPI flash"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "U1",
+   "value": "MX25UM51245GMI00",
+   "symbol": "startracker:MX25UM51245GMI00",
+   "footprint": "Package_SO:SOIC-16W_7.5x10.3mm_P1.27mm",
+   "source": "mx, p8 section 3, p101, p103-104, p106",
+   "quote": "\"MX25UM51245GMI00 133 -40\u00b0C to 85\u00b0C 16-SOP (300mil)\"; \"16-PIN SOP (300mil)\": SIO3 1, VCC 2, RESET# 3, SIO7 4, SIO5 5, GND 6, CS# 7, SO/SIO1 8, SIO2 9, GND 10, VCC 11, SIO6 12, DQS 13, SIO4 14, SI/SIO0 15, SCLK 16; \"VCC Power Supply 1.65 2.0 V\"; outline \"Package Outline for SOP 16L (300MIL)\": E1 7.52, D 10.30, E 10.30, e 1.27 (nom), matching KiCad's SOIC-16W 7.5 x 10.3 mm. The Nucleo fits the 24-ball BGA (XD, 200 MHz); the SOP needs no BGA fan-out and its 133 MHz is enough to load firmware into the MCU's RAM"
+  },
+  {
+   "ref": "C1",
+   "value": "100nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "mx, p92; nucleo sheet 5",
+   "quote": "mx: \"To stabilize the VCC level, the VCC rail decoupled by a suitable capacitor close to package pins is recommended. (generally around 0.1uF)\"; nucleo: \"100 nF/4.7\u00b5F decoupling for each pair\""
+  },
+  {
+   "ref": "C2",
+   "value": "100nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "mx; nucleo sheet 5",
+   "quote": "as C1, on the other VCC pin (11)"
+  },
+  {
+   "ref": "C3",
+   "value": "4.7uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "nucleo sheet 5",
+   "quote": "C84 \"4.7uF\" with C86 \"100nF\": \"100 nF/4.7\u00b5F decoupling for each pair\""
+  },
+  {
+   "ref": "R1",
+   "value": "10k",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "nucleo sheet 5",
+   "quote": "R113 \"10K\" from OCTOSPI_NCS to VDD_OCTO2_M (chip select held high while the MCU pin floats)"
+  },
+  {
+   "ref": "D1",
+   "value": "BAT60J",
+   "symbol": "Device:D_Schottky",
+   "footprint": "Diode_SMD:D_SOD-323",
+   "source": "nucleo sheet 5",
+   "quote": "D4 \"BAT60JFILM\" from NRST to the flash's RESET (cathode at NRST): the MCU's reset pulls the flash's reset low, and the 3.3 V NRST never drives the 1.8 V pin high"
+  },
+  {
+   "ref": "R2",
+   "value": "10k",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "mx p8 note 1; nucleo sheet 5",
+   "quote": "mx: \"The pin of RESET# will remain internal pull up function while this pin is not physically connected ... However, the internal pull up function will be disabled if the system has physical connection to RESET# pin\": so a pull-up to 1.8 V (the Nucleo's R121 \"10K\", marked DNF there)"
+  }
+ ],
+ "nets": {
+  "/XSPI_IO3": [
+   "U1.1"
+  ],
+  "/VDD1V8_EXT": [
+   "U1.2",
+   "U1.11",
+   "C1.1",
+   "C2.1",
+   "C3.1",
+   "R1.1",
+   "R2.1"
+  ],
+  "/FLASH_RST": [
+   "U1.3",
+   "D1.2",
+   "R2.2"
+  ],
+  "/XSPI_IO7": [
+   "U1.4"
+  ],
+  "/XSPI_IO5": [
+   "U1.5"
+  ],
+  "GND": [
+   "U1.6",
+   "U1.10",
+   "C1.2",
+   "C2.2",
+   "C3.2"
+  ],
+  "/XSPI_NCS": [
+   "U1.7",
+   "R1.2"
+  ],
+  "/XSPI_IO1": [
+   "U1.8"
+  ],
+  "/XSPI_IO2": [
+   "U1.9"
+  ],
+  "/XSPI_IO6": [
+   "U1.12"
+  ],
+  "/XSPI_DQS": [
+   "U1.13"
+  ],
+  "/XSPI_IO4": [
+   "U1.14"
+  ],
+  "/XSPI_IO0": [
+   "U1.15"
+  ],
+  "/XSPI_CLK": [
+   "U1.16"
+  ],
+  "/NRST": [
+   "D1.1"
+  ]
+ },
+ "ports": {
+  "/VDD1V8_EXT": {
+   "net": "/VDD1V8_EXT",
+   "kind": "power_in",
+   "note": "1.8 V (VCC 1.65-2.0 V)"
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground"
+  },
+  "/NRST": {
+   "net": "/NRST",
+   "kind": "signal",
+   "note": "the MCU's reset"
+  },
+  "/XSPI_DQS": {
+   "net": "/XSPI_DQS",
+   "kind": "data"
+  },
+  "/XSPI_NCS": {
+   "net": "/XSPI_NCS",
+   "kind": "data"
+  },
+  "/XSPI_CLK": {
+   "net": "/XSPI_CLK",
+   "kind": "data"
+  },
+  "/XSPI_IO0": {
+   "net": "/XSPI_IO0",
+   "kind": "data"
+  },
+  "/XSPI_IO1": {
+   "net": "/XSPI_IO1",
+   "kind": "data"
+  },
+  "/XSPI_IO2": {
+   "net": "/XSPI_IO2",
+   "kind": "data"
+  },
+  "/XSPI_IO3": {
+   "net": "/XSPI_IO3",
+   "kind": "data"
+  },
+  "/XSPI_IO4": {
+   "net": "/XSPI_IO4",
+   "kind": "data"
+  },
+  "/XSPI_IO5": {
+   "net": "/XSPI_IO5",
+   "kind": "data"
+  },
+  "/XSPI_IO6": {
+   "net": "/XSPI_IO6",
+   "kind": "data"
+  },
+  "/XSPI_IO7": {
+   "net": "/XSPI_IO7",
+   "kind": "data"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   13,
+   14
+  ],
+  "place": {
+   "U1": {
+    "at_mm": [
+     6.5,
+     7.0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C1": {
+    "at_mm": [
+     2.0,
+     0.6
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C2": {
+    "at_mm": [
+     11.0,
+     13.4
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C3": {
+    "at_mm": [
+     4.2,
+     0.6
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "R1": {
+    "at_mm": [
+     2.0,
+     13.4
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "D1": {
+    "at_mm": [
+     8.2,
+     13.4
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "R2": {
+    "at_mm": [
+     4.6,
+     13.4
+    ],
+    "rotation": 0,
+    "side": "front"
+   }
+  },
+  "traces": [],
+  "vias": [],
+  "rules": "nucleo sheet 5: \"OCTOSPI Impedance Constraint [Min = 45.00 Max = 55.00]\"; \"Length equalization ( include BGA package length ): DQS0 with IO0..7 (Byte0), and CLK, all in 50 mils; NCS length can be in the range of up to CLK length +/- 750 mils\". The flash next to the MCU's PN balls; decoupling at pins 2 and 11."
+ },
+ "open_questions": [
+  "Flash rated -40 to 85 \u00b0C (the MCU to 125 \u00b0C).",
+  "BAT60J package (SOD-323) from the part name's J: the diode's datasheet was not read.",
+  "Length matching and 50 \u03a9 impedance are not enforced by the router."
+ ]
+}

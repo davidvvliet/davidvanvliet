@@ -157,6 +157,43 @@ def tps2121():
     disc(m, "0.6 0.6 0.6", -0.6, 0.85, 0.3, 1.0 + 0.005)
     m.write(os.path.join(HERE, "TI_VQFN-HR-12_RUX.wrl"), "TI TPS2121 VQFN-HR-12 (RUX0012A, datasheet SLVSEA3F)")
 
+def vfbga178():
+    """ST VFBGA178 (STM32N6), DS14791 Rev 11 Table 134: body "12.00 BSC" square, "A" max "1.00" tall, ball standoff
+    "A1" min "0.21", balls "b" typ "0.43" at "e" "0.80"; the balls from symbols/stm32n657_vfbga178.json.
+    Drawn: body from 0.25 (standoff, estimate between A1 min and the ball's height) to 1.0; balls as short
+    cylinders. A1 marked by a dot at the top-left corner (Table 134 note 8). Colours not sourced."""
+    import json
+    rows = "ABCDEFGHJKLMNP"
+    balls = json.load(open(os.path.join(HERE, "..", "..", "symbols", "stm32n657_vfbga178.json")))["balls"]
+    m = Mesh()
+    prism(m, "0.10 0.10 0.10", rounded(12.0, 12.0, 0.05, n=1), 0.25, 1.0)
+    for b in balls:
+        x, y = -5.2 + (int(b[1:]) - 1) * 0.8, 5.2 - rows.index(b[0]) * 0.8
+        cyl(m, "0.80 0.80 0.80", x, y, 0.43, 0.0, 0.25, n=8, shine=0.5)
+    disc(m, "0.6 0.6 0.6", -5.0, 5.0, 0.6, 1.0 + 0.005)
+    m.write(os.path.join(HERE, "ST_VFBGA-178.wrl"), "ST VFBGA178 (STM32N6, datasheet DS14791 Rev 11)")
+
+def rgt16():
+    """TI RGT0016C VQFN-16 (TPS62130 datasheet SLVSAG7F, package outline): body "3.1"/"2.9" square (3.0 drawn),
+    "1.0"/"0.8" tall (1.0 drawn, the maximum), 16 terminals "0.30"/"0.18" wide (0.24 drawn) at "0.5" pitch, 0.4 long
+    (estimate) and 0.1 thick (estimate). Pin 1 dot top left. Colours not sourced."""
+    m = Mesh()
+    prism(m, "0.10 0.10 0.10", rounded(3.0, 3.0, 0.02, n=1), 0, 1.0)
+    for i in range(4):
+        x = -0.75 + 0.5 * i
+        for sx, sy, w, h, cx, cy in ((1, 0, 0.4, 0.24, 1.5 - 0.2 + 0.01, -x), (-1, 0, 0.4, 0.24, -(1.5 - 0.2 + 0.01), x),
+                                      (0, 1, 0.24, 0.4, x, 1.5 - 0.2 + 0.01), (0, -1, 0.24, 0.4, x, -(1.5 - 0.2 + 0.01))):
+            prism(m, "0.75 0.72 0.65", rounded(w, h, 0.01, n=1, cx=cx, cy=cy), 0, 0.1, shine=0.5)
+    disc(m, "0.6 0.6 0.6", -1.0, 1.0, 0.3, 1.0 + 0.005)
+    m.write(os.path.join(HERE, "TI_RGT0016C.wrl"), "TI VQFN-16 RGT0016C (TPS6213x)")
+
+def xfl4020():
+    """Coilcraft XFL4020 inductor: "4×4×2.1" (TPS62130 datasheet SLVSAG7F Table 9-3). Drawn as a 4 x 4 mm block
+    2.1 tall with slightly rounded corners. Colour not sourced."""
+    m = Mesh()
+    prism(m, "0.22 0.22 0.22", rounded(4.0, 4.0, 0.3, n=3), 0, 2.1)
+    m.write(os.path.join(HERE, "Coilcraft_XFL4020.wrl"), "Coilcraft XFL4020 (4 x 4 x 2.1 mm)")
+
 def cyl(m, rgb, cx, cy, d, z0, z1, n=48, shine=0.0):
     prism(m, rgb, [(cx + d / 2 * math.cos(2 * math.pi * i / n), cy + d / 2 * math.sin(2 * math.pi * i / n)) for i in range(n)], z0, z1, shine)
 
@@ -396,4 +433,4 @@ def star_tracker_cable():
         os.path.join(HERE, "Cable_StarTracker.wrl"), "Pi Zero camera cable (star-tracker HAT placement)")
 
 if __name__ == "__main__":
-    scd4x(); sgp41(); epd154(); zjy128(); tps2121(); gs_camera(); lens16(); pi_zero2w(); star_tracker_cable(); star_tracker_baffle()
+    scd4x(); sgp41(); epd154(); zjy128(); tps2121(); gs_camera(); lens16(); pi_zero2w(); star_tracker_cable(); star_tracker_baffle(); vfbga178(); rgt16(); xfl4020()
