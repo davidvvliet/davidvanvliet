@@ -78,6 +78,7 @@ def build(spec):
     propulsion(d, R, flat, xc, xb, t, x0, rt)
     power(d, R, flat, xc, xb)
     comms(d, R, flat, xc, xb, t)
+    attitude(d, R, flat, xc, xb, t)
 
 
 def _dir(a, sign, aft, cant):
@@ -227,4 +228,42 @@ def comms(d, R, flat, xc, xb, t):
     # The transponder hangs under the forward deck.
     with parts.assembly("radio", internal=True):
         parts.box("transponder", (0.1016, 0.1143, 0.1016), location=(xb - t - 0.0508, 0, 0.2), material="dark_metal")
+
+
+def attitude(d, R, flat, xc, xb, t):
+    # Faces of the hexagon (outward normals in y-z): the four slanted sides are at 30, 150, 210, 330°.
+    face = lambda deg: (0.0, math.cos(math.radians(deg)), math.sin(math.radians(deg)))
+    xm = (xc + xb) / 2
+    # Four Blue Canyon RW4 wheels in a pyramid, one inside each slanted side, axis tilted 35° to x.
+    tilt = math.radians(35)
+    with parts.assembly("reaction_wheels", internal=True):
+        for k, deg in enumerate((30, 150, 210, 330)):
+            n = face(deg)
+            sx = 1 if k % 2 == 0 else -1
+            ax = (sx * math.sin(tilt), n[1] * math.cos(tilt), n[2] * math.cos(tilt))
+            c = flat - 0.004 - (0.036 * math.cos(tilt) + 0.0875 * math.sin(tilt))
+            centre = (xm + 0.12, n[1] * c, n[2] * c)
+            base = tuple(centre[i] - ax[i] * 0.036 for i in range(3))
+            parts.lathe(f"wheel{k}", [(0.0, 0.0), (0.0875, 0.0), (0.0875, 0.072), (0.03, 0.072), (0.03, 0.08),
+                                      (0.0, 0.08)], segments=32, location=base, direction=tuple(-v for v in ax),
+                        material="dark_metal")
+
+    # Two Rocket Lab ST-16RT2 star trackers, large baffles, on the lower slanted sides.
+    with parts.assembly("star_trackers"):
+        for k, deg in enumerate((210, 330)):
+            n = face(deg)
+            p = (xb - 0.15, n[1] * flat, n[2] * flat)
+            parts.lathe(f"star_tracker{k}", [(0.0, 0.0), (0.035, 0.0), (0.035, 0.055), (0.0495, 0.065),
+                                             (0.0495, 0.12), (0.046, 0.12), (0.03, 0.07), (0.0, 0.07)],
+                        segments=24, location=p, direction=n, material="black")
+
+    # Bradford coarse sun sensors on +z and +x, the Mini fine sun sensor on +z.
+    with parts.assembly("sun_sensors"):
+        parts.box("css_top", (0.11, 0.11, 0.03), location=(xc + 0.08, 0, flat + 0.015), material="dark_metal")
+        parts.box("css_front", (0.03, 0.11, 0.11), location=(xb + 0.015, -0.18, 0.12), material="dark_metal")
+        parts.box("fss", (0.046, 0.05, 0.017), location=(xb - 0.06, 0.12, flat + 0.0085), material="dark_metal")
+
+    # The STIM300 IMU beside the transponder, under the forward deck.
+    with parts.assembly("imu", internal=True):
+        parts.box("imu", (0.022, 0.045, 0.039), location=(xb - t - 0.011, -0.15, 0.2), material="dark_metal")
 

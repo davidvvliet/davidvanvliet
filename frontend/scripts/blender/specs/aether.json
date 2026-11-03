@@ -2,7 +2,7 @@
   "title": "Altair Aether",
   "logos": [],
   "listed": false,
-  "note": "Our own design: a ~300 kg lunar communications relay, fired off a mass driver near the lunar south pole into an elliptical frozen lunar orbit, built from real flight hardware where it exists. Frame: x along the track (the direction of travel, and the craft's axis: the launch load runs down it), z up, y left. The craft's separation plane is at x = 0; the sled and the rails are behind and below it. Pass 1: structure, tank, main thruster, sled and rails. Pass 2: propulsion (eight 1 N thrusters, latch valve, fill and drain valves, lines). Pass 3: power (two solar wings, deployed; two batteries). Pass 4: comms (S-band dish to the Moon on +z, X-band array to the Earth on +x, transponder).",
+  "note": "Our own design: a ~300 kg lunar communications relay, fired off a mass driver near the lunar south pole into an elliptical frozen lunar orbit, built from real flight hardware where it exists. Frame: x along the track (the direction of travel, and the craft's axis: the launch load runs down it), z up, y left. The craft's separation plane is at x = 0; the sled and the rails are behind and below it. Pass 1: structure, tank, main thruster, sled and rails. Pass 2: propulsion (eight 1 N thrusters, latch valve, fill and drain valves, lines). Pass 3: power (two solar wings, deployed; two batteries). Pass 4: comms (S-band dish to the Moon on +z, X-band array to the Earth on +x, transponder). Pass 5: attitude (four reaction wheels, two star trackers, sun sensors, IMU).",
   "sources": [
     {
       "id": "nssdc_moon",
@@ -115,6 +115,41 @@
       "url": "https://l3harris.com/sites/default/files/2020-06/sas_ss_cxs1000.pdf",
       "read": "2026-11-03",
       "licence": "copyright L3Harris: link and quotes only"
+    },
+    {
+      "id": "bct_rw",
+      "title": "Blue Canyon Technologies, Reaction Wheels (full product line)",
+      "url": "https://www.bluecanyontech.com/wp-content/uploads/Reaction-Wheels-Full-Product-Line.pdf",
+      "read": "2026-11-03",
+      "licence": "copyright Blue Canyon Technologies: link and quotes only"
+    },
+    {
+      "id": "rl_st16rt2",
+      "title": "Rocket Lab, Star tracker ST-16RT2 Data Sheet (v4.1)",
+      "url": "https://rocketlabcorp.com/assets/Uploads/ST-16RT2-Datasheet-v4.1.pdf",
+      "read": "2026-11-03",
+      "licence": "copyright Rocket Lab: link and quotes only"
+    },
+    {
+      "id": "bradford_css",
+      "title": "Bradford Space, Coarse Sun Sensor Datasheet (2017)",
+      "url": "https://fra1.digitaloceanspaces.com/bradford/media/Coarse%20Sun%20Sensor%20Datasheet%20(2017)",
+      "read": "2026-11-03",
+      "licence": "copyright Bradford Space: link and quotes only"
+    },
+    {
+      "id": "bradford_fss",
+      "title": "Bradford Space, Mini Fine Sun Sensor Datasheet (2017)",
+      "url": "https://fra1.digitaloceanspaces.com/bradford/media/Mini%20Fine%20Sun%20Sensor%20Datasheet%20(2017)",
+      "read": "2026-11-03",
+      "licence": "copyright Bradford Space: link and quotes only"
+    },
+    {
+      "id": "stim300",
+      "title": "Safran Sensonor, STIM300 product brief",
+      "url": "https://sensonor.azurewebsites.net/media/vl4jeya3/2022-04-06-product-brief-stim300-a4_high-quality-print.pdf",
+      "read": "2026-11-03",
+      "licence": "copyright Safran Sensonor: link and quotes only"
     },
     {
       "id": "design",
@@ -234,6 +269,38 @@
       "tolerance": 0.02,
       "source": "l3h_cxs1000",
       "quote": "Outline Dimension 4.0” x 4.5” x 4.0”"
+    },
+    "star_tracker_diameter": {
+      "value": 0.099,
+      "object": "star_tracker0",
+      "measure": "diameter",
+      "tolerance": 0.02,
+      "source": "rl_st16rt2",
+      "quote": "Dimensions 99 Ø x 120 mm"
+    },
+    "star_tracker_length": {
+      "value": 0.12,
+      "object": "star_tracker0",
+      "measure": "length",
+      "tolerance": 0.02,
+      "source": "rl_st16rt2",
+      "quote": "Dimensions 99 Ø x 120 mm"
+    },
+    "wheel_diameter": {
+      "value": 0.175,
+      "object": "wheel0",
+      "measure": "diameter",
+      "tolerance": 0.02,
+      "source": "bct_rw",
+      "quote": "RW4 ... DIMENSIONS 175 x 175 x 72 mm"
+    },
+    "css_width": {
+      "value": 0.11,
+      "object": "css_top",
+      "measure": "y",
+      "tolerance": 0.02,
+      "source": "bradford_css",
+      "quote": "110 x 110 x 30 mm3"
     }
   },
   "facts": {
@@ -592,6 +659,43 @@
     "pointing_plan": {
       "value": "the dish (+z) on the Moon's south pole, the craft rolled about that line to put the X-band array (+x) on the Earth; the wings turn about y for the Sun",
       "source": "design, chosen: from aposelene over the south pole the Moon and the Earth are about 90° apart"
+    },
+    "wheel": {
+      "value": "Blue Canyon RW4: 4.0 Nms, 0.25 Nm, 3.2 kg, 175 x 175 x 72 mm",
+      "source": "bct_rw",
+      "quote": "RW4 | RW4-HT ... MAX MOMENTUM 4.0 Nms ... MAX TORQUE 0.25 Nm ... MASS 3.2 kg ... DIMENSIONS 175 x 175 x 72 mm"
+    },
+    "wheel_count": {
+      "value": 4,
+      "source": "design, chosen: a pyramid, one wheel on the inside of each slanted side, axes tilted 35° toward x; any three control all three axes"
+    },
+    "wheel_shape": {
+      "value": "modelled as a 175 mm disc, 72 mm thick",
+      "source": "design, estimate: the sheet gives the square envelope only"
+    },
+    "star_tracker": {
+      "value": "two Rocket Lab ST-16RT2 with the large baffle, 99 mm across x 120 mm, 243 g, 22° sun avoidance",
+      "source": "rl_st16rt2",
+      "quote": "LARGE BAFFLE ... Sun Avoidance 22° sun-to-boresight ... Moon Avoidance Demonstrated orbital operation with full moon in FOV ... Dimensions 99 Ø x 120 mm ... Total Mass 243g"
+    },
+    "star_tracker_place": {
+      "value": "on the two lower slanted sides, looking down and out, away from the dish's Moon and the X-band's Earth",
+      "source": "design, chosen"
+    },
+    "coarse_sun_sensor": {
+      "value": "two Bradford coarse sun sensors, 110 x 110 x 30 mm, 215 g, on +z and +x",
+      "source": "bradford_css",
+      "quote": "Baseline (no strap-on baffle) with rear cover: 215 grams ... 110 x 110 x 30 mm3"
+    },
+    "fine_sun_sensor": {
+      "value": "Bradford Mini FSS, 50 x 46 x 17 mm, 50 g, ±64° field, on +z",
+      "source": "bradford_fss",
+      "quote": "Mass 50 grams ... Dimensions: envelope including mounting feet 50 x 46 x 17 mm ... Nominal FOV 128° x 128° (i.e. ± 64° x 64°)"
+    },
+    "imu": {
+      "value": "Safran Sensonor STIM300, 39 x 45 x 22 mm, 55 g",
+      "source": "stim300",
+      "quote": "(39 mm x 45 mm x 22 mm) ... Weight 55 g"
     }
   },
   "materials": {},
@@ -601,7 +705,8 @@
     "A south-pole launch site reaches inclinations near 90° directly; the 54.9° orbit needs a site at or below about 55°S, or a plane change.",
     "Propulsion has no filter or pressure transducer yet (no sourced part found); the thruster layout is our own, not copied from a flown craft.",
     "Power: the solar wings are shown deployed; the stowed pose for the launch and the hinges come with deployment (step 9). The array's radiation dose and working temperature are estimates. The Earth's shadow (lunar eclipses, a few hours, a few times a year) isn't in the battery sizing.",
-    "Comms: no low-gain S-band antenna yet for safe mode (no maker's datasheet found); the EnduroSat array's band (8025-8400 MHz) sits below the 8450-8500 MHz lunar band; with the dish on the Moon and the array on the Earth, the wings turning only about y lose some sunlight in some seasons."
+    "Comms: no low-gain S-band antenna yet for safe mode (no maker's datasheet found); the EnduroSat array's band (8025-8400 MHz) sits below the 8450-8500 MHz lunar band; with the dish on the Moon and the array on the Earth, the wings turning only about y lose some sunlight in some seasons.",
+    "Attitude: the wheel pyramid's tilt and the sensors' places are our own; coverage of the two coarse sun sensors is not a full sphere (safe mode would also lean on the fine sensor and the trackers)."
   ],
   "budget": {
     "triangles": 50000,
