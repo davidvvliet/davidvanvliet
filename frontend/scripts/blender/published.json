@@ -57,10 +57,10 @@
   }
  },
  "finrocket": {
-  "approved": "2026-11-03 15:52",
+  "approved": "2026-11-03 16:01",
   "inputs": {
-   "specs/finrocket.json": "7c18264aca194cbb",
-   "probes/finrocket.py": "22e386b68d3057c0",
+   "specs/finrocket.json": "3b61b7379091bf95",
+   "probes/finrocket.py": "0b6a1ffbdb7afd88",
    "build.py": "363cabc8976febf0",
    "blender.json": "7bbc071b6e396ec4",
    "lib/__init__.py": "e3b0c44298fc1c14",
@@ -79,6 +79,10 @@
    "lib/sources.py": "425a2fcd692532e6",
    "lib/textures.py": "7daa18205cf41859",
    "lib/tiling.py": "b352f8627c102bf0",
+   "refs/finrocket/flag-blue.png": "708a91f6f083ae42",
+   "refs/finrocket/flag-field.png": "2c3f261194554955",
+   "refs/finrocket/flag-red.png": "394a250faf6aa309",
+   "refs/finrocket/flag-stars.png": "f33034e6b1ba628b",
    "refs/finrocket/lettering-mask.png": "85927b8766fff8c8"
   }
  },
