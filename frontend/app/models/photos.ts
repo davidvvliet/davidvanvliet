@@ -13,16 +13,6 @@ export const PHOTOS: Record<string, { licence: string; photos: Photo[] }> = {
     photos: [
       { slug: "deep-field", title: "Hubble Deep Field", url: "https://esahubble.org/images/opo9601a/",
         credit: "Robert Williams and the Hubble Deep Field Team (STScI) and NASA/ESA" },
-      { slug: "pillars-of-creation", title: "Pillars of Creation", url: "https://esahubble.org/images/opo9544a/",
-        credit: "Jeff Hester and Paul Scowen (Arizona State University), and NASA/ESA" },
-      { slug: "sombrero-galaxy", title: "Sombrero Galaxy", url: "https://esahubble.org/images/opo0328a/",
-        credit: "NASA/ESA and The Hubble Heritage Team (STScI/AURA)" },
-      { slug: "ultra-deep-field", title: "Hubble Ultra Deep Field", url: "https://esahubble.org/images/heic0406a/",
-        credit: "NASA, ESA, and S. Beckwith (STScI) and the HUDF Team" },
-      { slug: "crab-nebula", title: "Crab Nebula", url: "https://esahubble.org/images/heic0515a/",
-        credit: "NASA, ESA and Allison Loll/Jeff Hester (Arizona State University). Acknowledgement: Davide De Martin (ESA/Hubble)" },
-      { slug: "extreme-deep-field", title: "Hubble eXtreme Deep Field", url: "https://esahubble.org/images/heic1214a/",
-        credit: "NASA, ESA, G. Illingworth, D. Magee, and P. Oesch (University of California, Santa Cruz), R. Bouwens (Leiden University), and the HUDF09 Team" },
     ],
   },
 };
