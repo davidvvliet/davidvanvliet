@@ -2,8 +2,10 @@
 # specs/finrocket.json (tube, motor mount, motor and servo sizes sourced; nose and fins design values).
 # Frame: z up along the rocket, the body tube's base at z = 0. Fin i stands on the radial line at
 # 90° × i from +x (fin 0 on +x), as the flight sim on /circuits/fly numbers them.
-import math
-from lib import parts
+import math, os
+from lib import materials, parts, textures
+
+HARNESS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def build(spec):
     # Measured sizes (dimensions) and the rest (facts: inside diameters, fin shape, servo size).
@@ -12,7 +14,7 @@ def build(spec):
     lb, ln = d["body_length"], d["nose_length"]
 
     with parts.assembly("airframe", core=True):
-        parts.lathe("body_tube", [(ri, 0), (ro, 0), (ro, lb), (ri, lb)], closed=True, segments=64)
+        tube = parts.lathe("body_tube", [(ri, 0), (ro, 0), (ro, lb), (ri, lb)], closed=True, segments=64)
         # Tangent ogive: an arc of radius rho through the tip, tangent to the tube at its base.
         rho = (ro * ro + ln * ln) / (2 * ro)
         prof = [(0.0, lb), (ro, lb)]
@@ -21,6 +23,18 @@ def build(spec):
             prof.append((math.sqrt(rho * rho - x * x) + ro - rho, lb + x))
         prof.append((0.0, lb + ln))
         parts.lathe("nose", prof, segments=64, material="black")
+
+    # The payload's name up the upper body tube between fins 2 and 3, reading from the tail up.
+    paint = materials.colour(spec["materials"]["lettering"])
+    img = textures.marking("finrocket_lettering", [(os.path.join(HARNESS, "refs", "finrocket", "lettering-mask.png"), paint)],
+                           os.path.join(HARNESS, "out", "finrocket", "textures"))
+    mat = materials.image("finrocket_lettering", img, metallic=0.0, roughness=0.6, cutout=True)
+    a = 3 * math.pi / 4
+    w, h = d["lettering_length"], d["lettering_height"]
+    with parts.assembly("lettering"):
+        parts.decal("lettering", tube, center=(ro * math.cos(a), ro * math.sin(a), 0.75 * lb),
+                    direction=(-math.cos(a), -math.sin(a), 0), up=(math.sin(a), -math.cos(a), 0),
+                    width=w, height=h, material=mat)
 
     # The motor tube stands out aft of the body (mount_overhang) for the screw-on retainer, as in the
     # kit's instructions: a threaded ring epoxied over the tube and a cap whose lip holds the motor's rim.

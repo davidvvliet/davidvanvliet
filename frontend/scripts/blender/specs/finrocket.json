@@ -114,6 +114,14 @@
       "url": "https://cdn.shopify.com/s/files/1/0686/0220/0369/files/9723_BBXII_WEB_INstructions_9-23.pdf",
       "read": "2026-11-03",
       "licence": "copyright Estes: link and quotes only"
+    },
+    {
+      "id": "geist_font",
+      "title": "Geist typeface (Regular), The Geist Project Authors",
+      "url": "https://github.com/vercel/geist-font",
+      "read": "2026-11-03",
+      "licence": "SIL Open Font License 1.1: \"This Font Software is licensed under the SIL Open Font License, Version 1.1\" (the font's own licence field)",
+      "credit": "Lettering set in Geist (SIL OFL 1.1)"
     }
   ],
   "reference_model": {
@@ -360,6 +368,23 @@
       "value": "two, between fins, each even with the aft end of a body tube",
       "source": "estes_bbxii_instructions",
       "quote": "Measure the center between the fins on the bottom of tube C the bottom of tube I ... Even with the end of tube. ... Place the launch lugs ensuring that align between the middle of the fins (page 6)"
+    },
+    "lettering": {
+      "value": "ALTAIR LUNAR PAYLOAD",
+      "source": "design, chosen: the payload's name, set in Geist (geist_font), up the upper body tube between fins 2 and 3; mask refs/finrocket/lettering-mask.png drawn from the font with PIL (stroke 6 px)"
+    },
+    "lettering_length": {
+      "value": 0.4,
+      "source": "design, chosen: the mask's 3000 x 250 px sheet, letters about 20 mm tall"
+    },
+    "lettering_height": {
+      "value": 0.0333,
+      "source": "design, chosen: the mask's 3000 x 250 px sheet, letters about 20 mm tall"
+    },
+    "lettering_font": {
+      "value": "Geist Regular",
+      "source": "geist_font",
+      "quote": "This Font Software is licensed under the SIL Open Font License, Version 1.1"
     }
   },
   "flight": {
@@ -484,6 +509,12 @@
       "metallic": 0.0,
       "roughness": 0.95,
       "source": "design, estimate: no photo of the F15's nozzle found"
+    },
+    "lettering": {
+      "hex": "#111111",
+      "metallic": 0.0,
+      "roughness": 0.6,
+      "source": "design, chosen"
     }
   },
   "open_questions": [
@@ -527,6 +558,21 @@
       ],
       "radius": 0.12,
       "note": "retainer, aft launch lug, fin roots"
+    },
+    {
+      "name": "lettering",
+      "target": [
+        -0.02,
+        0.02,
+        0.686
+      ],
+      "look": [
+        0.707,
+        -0.707,
+        0
+      ],
+      "radius": 0.24,
+      "note": "ALTAIR LUNAR PAYLOAD"
     }
   ]
 }
