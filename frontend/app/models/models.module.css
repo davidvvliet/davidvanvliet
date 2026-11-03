@@ -119,6 +119,28 @@
 }
 .cardLogos img { width: auto; opacity: 0.85; }
 
+/* A vehicle's famous photos (PublishedModels' Photos): a column in the viewer's bottom left going up,
+   and the one picked shown over the viewer. */
+.photoColumn {
+  position: absolute; bottom: 0.75rem; left: 0.75rem; z-index: 1; max-height: calc(100% - 5.5rem);
+  display: flex; flex-direction: column-reverse; gap: 0.5rem; overflow-y: auto; scrollbar-width: none;
+}
+.photoColumn button { flex: none; width: 64px; height: 64px; padding: 0; border: var(--line); background: #000; cursor: pointer; }
+.photoColumn button.active, .photoColumn button:hover { border-color: #ededed; }
+.photoColumn img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.85; }
+.photoColumn button.active img, .photoColumn button:hover img { opacity: 1; }
+.photoShown {
+  position: absolute; inset: 0 0 0 calc(64px + 1.5rem); z-index: 2; margin: 0; padding: 0.75rem;
+  background: rgba(10, 10, 10, 0.92); display: flex; flex-direction: column; gap: 0.5rem; cursor: zoom-out;
+}
+.photoShown img { flex: 1; min-height: 0; width: 100%; object-fit: contain; }
+.photoShown figcaption { color: #777; line-height: 1.4; cursor: auto; }
+.photoShown figcaption a { color: #aaa; }
+@media (max-width: 768px) {
+  .photoColumn button { width: 44px; height: 44px; }
+  .photoShown { left: calc(44px + 1.5rem); }
+}
+
 /* The public /models header: links | name (centred, as the home page's navbar title) | empty. */
 .siteHeader {
   border-bottom: var(--line);
