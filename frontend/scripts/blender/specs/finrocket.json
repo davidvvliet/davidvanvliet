@@ -370,8 +370,8 @@
       "quote": "Measure the center between the fins on the bottom of tube C the bottom of tube I ... Even with the end of tube. ... Place the launch lugs ensuring that align between the middle of the fins (page 6)"
     },
     "lettering": {
-      "value": "ALTAIR LUNAR PAYLOAD",
-      "source": "design, chosen: the payload's name, set in Geist (geist_font), up the body between fins 2 and 3; mask refs/finrocket/lettering-mask.png drawn from the font with PIL (stroke 6 px)"
+      "value": "Altair LUNAR PAYLOAD",
+      "source": "design, chosen: the payload's name, set in Geist (geist_font), up the body between fins 2 and 3; mask refs/finrocket/lettering-mask.png drawn from the font with PIL (\"Altair\" at 190 px, \"LUNAR PAYLOAD\" 30% smaller at 133 px, on one baseline)"
     },
     "lettering_length": {
       "value": 0.4,
@@ -576,7 +576,7 @@
         0
       ],
       "radius": 0.24,
-      "note": "ALTAIR LUNAR PAYLOAD"
+      "note": "Altair LUNAR PAYLOAD"
     }
   ]
 }
