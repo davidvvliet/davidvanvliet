@@ -40,15 +40,25 @@ def build(spec):
             prof.append((rn * math.sin(t), lb + xc + rn * math.cos(t)))
         parts.lathe("nose", prof, segments=64, material="black")
 
-    # Roll pattern below the nose: the band split in quarters on the fin lines, two opposite ones
-    # black, so a roll shows. Painted by geometry (decal shapes): sharp edges, no image.
-    z1, z2 = lb - d["roll_band_from_top"] - d["roll_band_length"], lb - d["roll_band_from_top"]
-    for q in (0, 2):
-        a = (q + 0.5) * math.pi / 2                  # quarter centred between fin q and fin q + 1
-        with parts.assembly(f"roll_quarter{q}"):
-            parts.decal(f"roll_quarter{q}", tube, center=(ro * math.cos(a), ro * math.sin(a), (z1 + z2) / 2),
+    # Roll pattern after the Saturn V's (NASA photo of Apollo 11's rollout): thin black rings round the
+    # body at the nose joint and at the joint of the two body tubes, black panels hanging below each ring,
+    # all on the lines of fins 2 and 4 (fin1 and fin3) so they stack one above another.
+    rh, pw, lift = d["roll_ring_height"], d["roll_panel_arc_deg"], 0.0004
+    def ring(name, z_top):
+        parts.lathe(name, [(ro - 0.0002, z_top - rh), (ro + lift, z_top - rh), (ro + lift, z_top), (ro - 0.0002, z_top)],
+                    closed=True, segments=64, material="black")
+    def panels(name, z_bottom, z_top):
+        for i in (1, 3):
+            a = i * math.pi / 2
+            parts.decal(f"{name}{i}", tube, center=(ro * math.cos(a), ro * math.sin(a), (z_bottom + z_top) / 2),
                         direction=(-math.cos(a), -math.sin(a), 0), up=(0, 0, 1),
-                        width=ro * math.pi / 2, height=z2 - z1, material="black", shapes=[[0, 0, 1, 1]])
+                        width=ro * math.radians(pw), height=z_top - z_bottom, material="black", shapes=[[0, 0, 1, 1]])
+    with parts.assembly("roll_pattern"):
+        z_nose = lb - d["roll_ring_below_nose"]
+        ring("roll_ring_nose", z_nose)
+        panels("roll_panel_nose", z_nose - rh - d["roll_panel_length"], z_nose - rh)
+        ring("roll_ring_joint", lb / 2)
+        panels("roll_panel_joint", lb / 2 - rh - d["roll_panel_length"], lb / 2 - rh)
 
     # The motor tube stands out aft of the body (mount_overhang) for the screw-on retainer, as in the
     # kit's instructions: a threaded ring epoxied over the tube and a cap whose lip holds the motor's rim.
@@ -118,6 +128,14 @@ def build(spec):
             parts.decal(f"lettering{i}", tube, center=(ro * math.cos(a), ro * math.sin(a), zc),
                         direction=(-math.cos(a), -math.sin(a), 0), up=(math.sin(a), -math.cos(a), 0),
                         width=w, height=h, material=mat)
+    # Black stripes on the lines of fins 2 and 4, level with the lettering, as the Saturn V's base
+    # stripe stands between its "USA" letters.
+    with parts.assembly("roll_stripes"):
+        for i in (1, 3):
+            a = i * math.pi / 2
+            parts.decal(f"roll_stripe{i}", tube, center=(ro * math.cos(a), ro * math.sin(a), zc),
+                        direction=(-math.cos(a), -math.sin(a), 0), up=(0, 0, 1),
+                        width=ro * math.radians(d["roll_panel_arc_deg"]), height=w, material="black", shapes=[[0, 0, 1, 1]])
     for i in range(4):
         a = i * math.pi / 2
         r_hat = (math.cos(a), math.sin(a), 0.0)

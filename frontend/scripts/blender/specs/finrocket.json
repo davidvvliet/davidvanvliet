@@ -122,6 +122,14 @@
       "read": "2026-11-03",
       "licence": "SIL Open Font License 1.1: \"This Font Software is licensed under the SIL Open Font License, Version 1.1\" (the font's own licence field)",
       "credit": "Lettering set in Geist (SIL OFL 1.1)"
+    },
+    {
+      "id": "nasa_as11_rollout",
+      "title": "NASA, Apollo 11 Rollout (624109main_1969-05-20-2_full), KSC, 1969-05-20",
+      "url": "https://images.nasa.gov/details/624109main_1969-05-20-2_full",
+      "read": "2026-11-03",
+      "licence": "NASA media: \"generally are not subject to copyright in the United States\" (nasa.gov/nasa-brand-center/images-and-media)",
+      "credit": "Roll pattern after the Saturn V's, from NASA's photo of the Apollo 11 rollout"
     }
   ],
   "reference_model": {
@@ -397,17 +405,31 @@
       "value": 0.008,
       "source": "design, chosen: a rounded tip, as moulded model-rocket nose cones have"
     },
-    "roll_band_from_top": {
-      "value": 0.03,
-      "source": "design, chosen: the roll band's top below the nose joint"
-    },
-    "roll_band_length": {
-      "value": 0.1,
-      "source": "design, chosen"
-    },
     "fin_tip_band": {
       "value": 0.015,
       "source": "design, chosen: the painted outer part of each fin's span"
+    },
+    "roll_pattern": {
+      "value": "thin black rings at stage joints, black panels below each ring and a black stripe at the base, all on one side, one above another",
+      "source": "nasa_as11_rollout",
+      "quote": "Carrying the Apollo 11 Saturn V rocket and mobile launcher, the crawler inches its way along the three-and-a-half-mile journey to Launch Pad 39A.",
+      "note": "read from the photo: S-IC base stripe between the USA letters, ring and panel at the S-IC's top, ring and panel at the S-IVB's aft end"
+    },
+    "roll_ring_height": {
+      "value": 0.008,
+      "source": "design, chosen: thin, as the Saturn V's rings are against its stages"
+    },
+    "roll_ring_below_nose": {
+      "value": 0.012,
+      "source": "design, chosen"
+    },
+    "roll_panel_length": {
+      "value": 0.07,
+      "source": "design, chosen"
+    },
+    "roll_panel_arc_deg": {
+      "value": 50,
+      "source": "design, estimate: the Saturn V's panels look about an eighth of the way round in nasa_as11_rollout (about 0.45 of the visible width)"
     }
   },
   "flight": {
@@ -619,19 +641,19 @@
       "note": "the same on fin2's line"
     },
     {
-      "name": "nose and roll pattern",
+      "name": "roll pattern, fin 2 side",
       "target": [
         0,
-        0,
-        0.92
+        0.03,
+        0.6
       ],
       "look": [
-        -0.7,
-        0.7,
-        -0.1
+        0,
+        -1,
+        -0.05
       ],
-      "radius": 0.16,
-      "note": "rounded tip, black quarters"
+      "radius": 0.5,
+      "note": "rings, panels and the stripe stacked on fin1's line"
     }
   ]
 }
