@@ -1,7 +1,7 @@
 {
  "board": "rocket-recorder",
  "title": "Rocket flight recorder",
- "purpose": "Records a model rocket's flight: altitude from a barometer, acceleration and rotation from an IMU, logged to the RP2040's flash; runs from a LiPo charged over USB-C",
+ "purpose": "Flies a model rocket with four servo fins and records its flight: altitude from a barometer, acceleration and rotation from an IMU, logged to the RP2040's flash; runs from a LiPo charged over USB-C",
  "source": {
   "title": "rocket-recorder recipe",
   "url": "https://github.com/davidvvliet/davidvanvliet/tree/main/frontend/scripts/circuit/boards/rocket-recorder",
@@ -205,6 +205,56 @@
    ]
   },
   {
+   "name": "Servo outputs (4)",
+   "parts": [
+    {
+     "ref": "C30",
+     "value": "470uF 6.3V",
+     "package": "CP_Elec_8x10"
+    },
+    {
+     "ref": "J30",
+     "value": "Servo 1",
+     "package": "PinHeader_1x03_P2.54mm_Vertical"
+    },
+    {
+     "ref": "J31",
+     "value": "Servo 2",
+     "package": "PinHeader_1x03_P2.54mm_Vertical"
+    },
+    {
+     "ref": "J32",
+     "value": "Servo 3",
+     "package": "PinHeader_1x03_P2.54mm_Vertical"
+    },
+    {
+     "ref": "J33",
+     "value": "Servo 4",
+     "package": "PinHeader_1x03_P2.54mm_Vertical"
+    },
+    {
+     "ref": "R30",
+     "value": "220R",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "R31",
+     "value": "220R",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "R32",
+     "value": "220R",
+     "package": "R_0402_1005Metric"
+    },
+    {
+     "ref": "R33",
+     "value": "220R",
+     "package": "R_0402_1005Metric"
+    }
+   ]
+  },
+  {
    "name": "3.3 V regulator",
    "parts": [
     {
@@ -265,26 +315,6 @@
    ]
   },
   {
-   "name": "IMU",
-   "parts": [
-    {
-     "ref": "C20",
-     "value": "100nF",
-     "package": "C_0402_1005Metric"
-    },
-    {
-     "ref": "C21",
-     "value": "100nF",
-     "package": "C_0402_1005Metric"
-    },
-    {
-     "ref": "U20",
-     "value": "BMI088",
-     "package": "Bosch_LGA-16_4.5x3mm_P0.5mm_LayoutBorder7x1y_ClockwisePinNumbering"
-    }
-   ]
-  },
-  {
    "name": "Barometer",
    "parts": [
     {
@@ -305,17 +335,22 @@
    ]
   },
   {
-   "name": "LED",
+   "name": "IMU",
    "parts": [
     {
-     "ref": "D3",
-     "value": "RED",
-     "package": "LED_0603_1608Metric"
+     "ref": "C20",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
     },
     {
-     "ref": "R8",
-     "value": "470R",
-     "package": "R_0402_1005Metric"
+     "ref": "C21",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
+    },
+    {
+     "ref": "U20",
+     "value": "BMI088",
+     "package": "Bosch_LGA-16_4.5x3mm_P0.5mm_LayoutBorder7x1y_ClockwisePinNumbering"
     }
    ]
   },
@@ -330,6 +365,21 @@
     {
      "ref": "R21",
      "value": "2.2k",
+     "package": "R_0402_1005Metric"
+    }
+   ]
+  },
+  {
+   "name": "LED",
+   "parts": [
+    {
+     "ref": "D3",
+     "value": "RED",
+     "package": "LED_0603_1608Metric"
+    },
+    {
+     "ref": "R8",
+     "value": "470R",
      "package": "R_0402_1005Metric"
     }
    ]
