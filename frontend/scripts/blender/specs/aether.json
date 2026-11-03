@@ -2,7 +2,7 @@
   "title": "Altair Aether",
   "logos": [],
   "listed": false,
-  "note": "Our own design: a ~300 kg lunar communications relay, fired off a mass driver near the lunar south pole into an elliptical frozen lunar orbit, built from real flight hardware where it exists. Frame: x along the track (the direction of travel, and the craft's axis: the launch load runs down it), z up, y left. The craft's separation plane is at x = 0; the sled and the rails are behind and below it. Pass 1: structure, tank, main thruster, sled and rails. Pass 2: propulsion (eight 1 N thrusters, latch valve, fill and drain valves, lines).",
+  "note": "Our own design: a ~300 kg lunar communications relay, fired off a mass driver near the lunar south pole into an elliptical frozen lunar orbit, built from real flight hardware where it exists. Frame: x along the track (the direction of travel, and the craft's axis: the launch load runs down it), z up, y left. The craft's separation plane is at x = 0; the sled and the rails are behind and below it. Pass 1: structure, tank, main thruster, sled and rails. Pass 2: propulsion (eight 1 N thrusters, latch valve, fill and drain valves, lines). Pass 3: power (two solar wings, deployed; two batteries).",
   "sources": [
     {
       "id": "nssdc_moon",
@@ -75,6 +75,27 @@
       "licence": "copyright ArianeGroup: link and quotes only"
     },
     {
+      "id": "azur_3g30c",
+      "title": "AZUR SPACE, 30% Triple Junction GaAs Solar Cell, 3G30-Advanced (6x12), DB 00010893-02",
+      "url": "https://www.azurspace.com/media/uploads/file_links/file/bdb_00010893-02-00_3g30-advanced_6x12.pdf",
+      "read": "2026-11-03",
+      "licence": "copyright AZUR SPACE: link and quotes only"
+    },
+    {
+      "id": "saft_ves16",
+      "title": "Saft, VES16 space battery datasheet (Saft's sheet, as hosted by its distributor)",
+      "url": "https://sft.nt-rt.ru/images/manuals/dlya_cosmo_VES16z.pdf",
+      "read": "2026-11-03",
+      "licence": "copyright Saft: link and quotes only"
+    },
+    {
+      "id": "iau_b3",
+      "title": "Prša et al., Nominal values for selected solar and planetary quantities: IAU 2015 Resolution B3",
+      "url": "https://arxiv.org/abs/1605.09788",
+      "read": "2026-11-03",
+      "licence": "copyright the authors / AAS: link and quotes only"
+    },
+    {
       "id": "design",
       "title": "Altair Aether's own design choices and estimates",
       "url": "https://github.com/davidvvliet/davidvanvliet/tree/main/frontend/scripts/blender/specs/aether.json",
@@ -144,6 +165,30 @@
       "tolerance": 0.03,
       "source": "ariane_valves",
       "quote": "Fill & Drain Valves - 2 Failure Tolerant ... Total Length 109 ± 1 mm ... Tube Length 43 mm"
+    },
+    "battery_length": {
+      "value": 0.308,
+      "object": "battery0",
+      "measure": "x",
+      "tolerance": 0.02,
+      "source": "saft_ves16",
+      "quote": "8s4p ... Length 308 mm"
+    },
+    "battery_width": {
+      "value": 0.18,
+      "object": "battery0",
+      "measure": "y",
+      "tolerance": 0.02,
+      "source": "saft_ves16",
+      "quote": "8s4p ... Width 180 mm"
+    },
+    "cell_length": {
+      "value": 0.1245,
+      "object": "cell_ref",
+      "measure": "x",
+      "tolerance": 0.02,
+      "source": "azur_3g30c",
+      "quote": "60.7 (± 0.1) x 124.5 (± 0.1) (assembly)"
     }
   },
   "facts": {
@@ -376,6 +421,98 @@
     "tank_standoff": {
       "value": 0.04,
       "source": "design, chosen: four legs, so the outlet line passes under the tank"
+    },
+    "power_need": {
+      "value": 600,
+      "source": "nasa_lcrns_2022",
+      "quote": "Relay Satellite Reference Design Overview ... Power ~ 600 W",
+      "note": "W, end of life, in sunlight"
+    },
+    "solar_constant": {
+      "value": 1361,
+      "source": "iau_b3",
+      "quote": "1SN⊙ = 1361 W m−2"
+    },
+    "cell_size": {
+      "value": "60.7 x 124.5 mm (cell with cover glass), 72.65 cm²",
+      "source": "azur_3g30c",
+      "quote": "Outer Dimensions (mm) ... 60.7 (± 0.1) x 124.5 (± 0.1) ... 72.65 glassed area (cell area is 71.25)"
+    },
+    "cell_eff_bol": {
+      "value": 28.8,
+      "source": "azur_3g30c",
+      "quote": "ŋ (1367 W/m2) [%] 29.2 28.8 (Cell, CIC; BOL)"
+    },
+    "cell_eff_eol": {
+      "value": 25.6,
+      "source": "azur_3g30c",
+      "quote": "ŋ (1367 W/m2) ... 1E15: 26.0 25.6 (Cell, CIC)",
+      "note": "1E15 1 MeV e/cm² taken as five years' dose: an estimate, not worked out from the lunar radiation environment"
+    },
+    "cell_vmp_coeff": {
+      "value": -7.2,
+      "source": "azur_3g30c",
+      "quote": "ΔVmp /ΔT [mV/°C] ... -7.2 (CIC, 1E15)",
+      "note": "mV/°C, against Vmp 2220 mV at 28 °C"
+    },
+    "array_temp": {
+      "value": 80,
+      "source": "design, estimate: the array's working temperature in sunlight"
+    },
+    "array_losses": {
+      "value": 0.9,
+      "source": "design, estimate: wiring, diodes, mismatch and pointing"
+    },
+    "cell_power": {
+      "value": 1.89,
+      "source": "design, computed: 1361 x 72.65 cm² x 25.6 % x (1 - 7.2 x (80 - 28) / 2220) x 0.9",
+      "note": "W per cell, end of life"
+    },
+    "cell_count": {
+      "value": 350,
+      "source": "design, computed: 2 wings x 5 panels x 35 cells (7 across x 5 along); 350 x 1.89 = 663 W end of life, over power_need; 997 W new at 28 °C"
+    },
+    "panel_size": {
+      "value": "0.46 x 0.72 m, 20 mm thick",
+      "source": "design, chosen: one panel folds flat on one of the hexagon's 0.5 x 0.75 m sides for launch"
+    },
+    "panels_per_wing": {
+      "value": 5,
+      "source": "design, computed: see cell_count"
+    },
+    "wing_yoke": {
+      "value": 0.3,
+      "source": "design, chosen: the wing's inner edge from the drive, clear of the thrusters' plumes"
+    },
+    "solar_drive": {
+      "value": "one drive per wing at the ±y corners, turning the wing about y; the craft's own turn about x does the rest",
+      "source": "design, chosen; the drive's size is an estimate: no part picked yet"
+    },
+    "battery": {
+      "value": "two Saft VES16 8s4p, 512 Wh each, 308 x 180 x 90 mm, 5.8 kg",
+      "source": "saft_ves16",
+      "quote": "8s4p ... Reference energy 512 Wh ... Battery voltage range 25 - 32.8 volts ... Length 308 mm Width 180 mm Height 90 mm Weight 5,80kg"
+    },
+    "eclipse_max": {
+      "value": 2.0,
+      "source": "design, computed: the Moon's shadow (2 x 1737.4 km across) crossed at aposelene at 476 m/s takes 2.0 h, the longest shadow on this orbit; the Earth's shadow is not counted",
+      "note": "hours"
+    },
+    "eclipse_load": {
+      "value": 300,
+      "source": "design, chosen: relay running at reduced rate in shadow",
+      "note": "W; 300 W x 2 h = 600 Wh, 59 % of the two batteries' 1024 Wh, inside Saft's \"High DoD (80% in GEO\"",
+      "also": [
+        {
+          "source": "saft_ves16",
+          "quote": "High DoD (80% in GEO, 30% in LEO)"
+        }
+      ]
+    },
+    "orbit_period": {
+      "value": 10.84,
+      "source": "design, computed: 2π √(a³ / GM), a = 1737.4 + (673 + 7331) / 2 km",
+      "note": "hours; NASA's reference relay orbit is 12 h"
     }
   },
   "materials": {},
@@ -383,7 +520,8 @@
     "Launch geometry: a shot from near the south pole puts the orbit's high point over the launch site only if the shot is near-vertical (about 2.1 km/s), not the 1.68 km/s horizontal shot the 14 g was worked out for. A horizontal shot from the south puts the high point over the north. Options: a track on a steep slope, a launch site further north, or a bigger burn to turn the orbit. The craft's structure is the same either way; the tank size here covers the vertical case.",
     "Lunar Pathfinder's orbit differs between SSTL's guide (673 x 7331 km, 54.9°) and a 2022 NASA slide (500 x 7500 km, 57.8°); SSTL calls its values indicative.",
     "A south-pole launch site reaches inclinations near 90° directly; the 54.9° orbit needs a site at or below about 55°S, or a plane change.",
-    "Propulsion has no filter or pressure transducer yet (no sourced part found); the thruster layout is our own, not copied from a flown craft."
+    "Propulsion has no filter or pressure transducer yet (no sourced part found); the thruster layout is our own, not copied from a flown craft.",
+    "Power: the solar wings are shown deployed; the stowed pose for the launch and the hinges come with deployment (step 9). The array's radiation dose and working temperature are estimates. The Earth's shadow (lunar eclipses, a few hours, a few times a year) isn't in the battery sizing."
   ],
   "budget": {
     "triangles": 50000,

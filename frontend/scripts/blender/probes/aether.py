@@ -76,6 +76,7 @@ def build(spec):
         parts.box("stator", (4.0, 0.3, 0.04), location=(0.5, 0, base_z - 0.1), material="dark_metal")
 
     propulsion(d, R, flat, xc, xb, t, x0, rt)
+    power(d, R, flat, xc, xb)
 
 
 def _dir(a, sign, aft, cant):
@@ -154,4 +155,41 @@ def propulsion(d, R, flat, xc, xb, t, x0, rt):
         xp = xv + 0.012
         parts.tube("line_fill_n2h4", [(xb - 0.043, 0, -0.12), (xr - 0.03, 0, -0.40), (xp, 0, -0.40),
                                       (xp, 0.12, -0.12), (xp, 0.12, 0), (xv, 0.12, 0)], ro, bend_radius=0.01)
+
+
+def power(d, R, flat, xc, xb):
+    # Two wings, shown deployed: a drive at each +-y corner, a yoke, then five panels along y, cells
+    # (AZUR 3G30-Advanced 6x12, 60.7 x 124.5 mm) on the +z face, long side along x.
+    xm = (xc + xb) / 2
+    cw, cl, cg = 0.0607, 0.1245, 0.0015               # cell width, length, gap
+    pw, pl, pt, gap = 0.46, 0.72, 0.02, 0.02          # panel across, along x, thick; gap between panels
+    yoke = d["wing_yoke"]
+    for sign, tag in ((1, "l"), (-1, "r")):
+        with parts.assembly(f"solar_wing_{tag}"):
+            y0 = sign * R                               # the corner
+            parts.lathe(f"solar_drive_{tag}", [(0.0, 0.0), (0.05, 0.0), (0.05, 0.08), (0.0, 0.08)], segments=24,
+                        location=(xm, y0 - sign * 0.01, 0), direction=(0, sign, 0), material="dark_metal")
+            yd = y0 + sign * 0.07
+            yi = y0 + sign * yoke                       # the wing's inner edge
+            for k, dx in enumerate((-0.25, 0.25)):
+                parts.strut(f"yoke_{tag}{k}", (xm, yd, 0), (xm + dx, yi, 0), radius=0.01, material="dark_metal")
+            parts.strut(f"yoke_{tag}_bar", (xm - 0.27, yi, 0), (xm + 0.27, yi, 0), radius=0.01, material="dark_metal")
+            cells = []
+            for n in range(5):
+                yc = sign * (abs(yi) + pw / 2 + n * (pw + gap))
+                parts.box(f"panel_{tag}{n}", (pl, pw, pt), location=(xm, yc, 0), material="white_paint")
+                for i in range(5):
+                    for j in range(7):
+                        cx = xm + (i - 2) * (cl + cg)
+                        cy = yc + (j - 3) * (cw + cg)
+                        cells.append(((cl, cw, 0.002), (cx, cy, pt / 2 + 0.001)))
+            parts.boxes(f"cells_{tag}", cells, material="solar_cell")
+            if sign == 1:
+                parts.box("cell_ref", (cl, cw, 0.002), location=cells[17][1], material="solar_cell")
+
+    # Two Saft VES16 8s4p batteries on the inside of the top and bottom side panels.
+    with parts.assembly("batteries", internal=True):
+        for k, sz in enumerate((1, -1)):
+            parts.box(f"battery{k}", (0.308, 0.18, 0.09), location=(xm, 0, sz * (flat - 0.004 - 0.045)),
+                      material="dark_metal")
 
