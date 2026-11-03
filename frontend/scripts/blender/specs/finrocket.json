@@ -1,6 +1,7 @@
 {
   "title": "Fin-steered model rocket",
   "logos": [],
+  "listed": false,
   "note": "Our own design, not a kit: a BT-70-size airframe on an Estes F15 with four all-moving fins, each turned by an AGFRC C04CLS servo through a pushrod, flown by the rocket-recorder board. Tube, motor-mount and motor sizes are sourced; the nose and fin shapes are design values.",
   "viewer": {
     "explore": true
