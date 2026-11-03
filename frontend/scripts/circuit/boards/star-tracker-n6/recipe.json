@@ -318,7 +318,8 @@
   "Bus input reused from the HAT (TPS2121) with its open review points: ILIM resistor sets about 3.5 A, over the JST XH's 3 A; OV1/OV2 tied to ground, so no over-voltage cut-off, and the LP5907s are rated to 5.5 V.",
   "CSI pairs and the octal bus: 100 \u03a9 differential / 50 \u03a9 single-ended impedance and length matching are not enforced by the router; the 4-layer stack-up's impedances not computed.",
   "See each new block's open questions (n6_core, n6_power, flash_mx25um, camera_fpc15).",
-  "Camera placement in the 3D model (beside the board's camera socket, lens up, on a short cable) is a display choice, not a mechanical design."
+  "Camera placement in the 3D model (beside the board's camera socket, lens up, on a short cable) is a display choice, not a mechanical design.",
+  "Mount (base plate, standoffs, camera risers, baffle ring on four posts): our own design, sizes estimated (footprints/models/make.py tracker_bracket); the camera's two back-plate holes are \u00f82.5 on drawing RP-008195, their thread is not stated."
  ],
  "attachments": [
   {
@@ -377,6 +378,20 @@
       35.0,
       -95.0,
       69.97
+     ]
+    }
+   ]
+  },
+  {
+   "ref": "BR1",
+   "name": "Mount",
+   "models": [
+    {
+     "file": "${CIRCUIT_3DMODELS}/Bracket_StarTrackerN6.wrl",
+     "offset_mm": [
+      0,
+      0,
+      0
      ]
     }
    ]

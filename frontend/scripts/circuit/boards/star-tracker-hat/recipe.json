@@ -307,7 +307,8 @@
   "TPS2121 IN2 tied to IN1; C2/C3 values estimated; RS-485 termination value open; no TVS or fuse on the bus input (see the blocks).",
   "Only the 40-pin socket is on the back; everything else is on top, so nothing sits over the Pi's own parts.",
   "Attachments: the Pi Zero 2 W, camera and cable are drawn from Raspberry Pi's drawings; the Pi's parts' heights, both boards' thickness and colours, the lens (retailer's 39 x 50 mm, layout from Raspberry Pi's lens guide illustration) and the C-CS adapter's size are estimates (see footprints/models/make.py).",
-  "Attachments' finishes (metallic, roughness) and the lens's rib count, hood steps, glass and screw sizes are estimates from Waveshare's product photos; the lens printing's places are measured off its side-on photo."
+  "Attachments' finishes (metallic, roughness) and the lens's rib count, hood steps, glass and screw sizes are estimates from Waveshare's product photos; the lens printing's places are measured off its side-on photo.",
+  "Mount (base plate, standoffs, camera risers, baffle ring on four posts): our own design, sizes estimated (footprints/models/make.py tracker_bracket); the camera's two back-plate holes are \u00f82.5 on drawing RP-008195, their thread is not stated."
  ],
  "attachments": [
   {
@@ -398,6 +399,20 @@
    "models": [
     {
      "file": "${CIRCUIT_3DMODELS}/Standoffs_StarTrackerHAT.wrl",
+     "offset_mm": [
+      0,
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "ref": "BR1",
+   "name": "Mount",
+   "models": [
+    {
+     "file": "${CIRCUIT_3DMODELS}/Bracket_StarTrackerHAT.wrl",
      "offset_mm": [
       0,
       0,

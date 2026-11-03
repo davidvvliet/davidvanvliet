@@ -460,21 +460,6 @@
    ]
   },
   {
-   "name": "Bus connectors",
-   "parts": [
-    {
-     "ref": "J1",
-     "value": "XH 2-pin",
-     "package": "JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical"
-    },
-    {
-     "ref": "J2",
-     "value": "GH 6-pin",
-     "package": "JST_GH_SM06B-GHS-TB_1x06-1MP_P1.25mm_Horizontal"
-    }
-   ]
-  },
-  {
    "name": "I2C pull-ups",
    "parts": [
     {
@@ -486,6 +471,21 @@
      "ref": "R21",
      "value": "2.2k",
      "package": "R_0402_1005Metric"
+    }
+   ]
+  },
+  {
+   "name": "Bus connectors",
+   "parts": [
+    {
+     "ref": "J1",
+     "value": "XH 2-pin",
+     "package": "JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical"
+    },
+    {
+     "ref": "J2",
+     "value": "GH 6-pin",
+     "package": "JST_GH_SM06B-GHS-TB_1x06-1MP_P1.25mm_Horizontal"
     }
    ]
   },
@@ -511,6 +511,16 @@
      "ref": "BF1",
      "value": "Baffle",
      "package": "BF1"
+    }
+   ]
+  },
+  {
+   "name": "Mount",
+   "parts": [
+    {
+     "ref": "BR1",
+     "value": "Mount",
+     "package": "BR1"
     }
    ]
   },

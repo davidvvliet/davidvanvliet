@@ -446,7 +446,7 @@ def hat_standoffs():
     ("3.5" in from the edges of the 65 x 30 outline, both drawings). Frame: the HAT's, x right, y up from its top-left
     corner, z up from its top surface. The stack follows recipe.json's attachments: the Pi's underside 14.24 below the
     HAT's top, both boards 1.6 thick, so each standoff spans the 11.04 between them. Standoff 5 across flats, brass;
-    pan-head screws 4.5 across, 1.7 tall, steel, on the HAT's top and under the Pi: estimates (common hardware, no
+    pan-head screws 4.5 across, 1.7 tall, steel, on the HAT's top: estimates (common hardware, no
     source read)."""
     m = Mesh(); t, pi_under = 1.6, -14.24
     hexagon = lambda cx, cy: [(cx + 2.5 / math.cos(math.pi / 6) * math.cos(math.pi / 6 + i * math.pi / 3),
@@ -454,10 +454,59 @@ def hat_standoffs():
     for x in (3.5, 61.5):
         for y in (-3.5, -26.5):
             prism(m, "0.78 0.62 0.30", hexagon(x, y), pi_under + t, -t, shine=0.6)
-            for flat, dome in ((0.0, 1.7), (pi_under, pi_under - 1.7)):   # head on the HAT's top, head under the Pi
-                k = 1 if dome > flat else -1
-                lathe(m, "0.70 0.70 0.72", [(0.0, flat), (2.25, flat), (2.25, dome - k * 0.5), (1.9, dome), (0.0, dome)], n=24, cx=x, cy=y, shine=0.5)
+            # a screw head on the HAT's top; under the Pi the mount's standoffs carry on (tracker_bracket)
+            lathe(m, "0.70 0.70 0.72", [(0.0, 0.0), (2.25, 0.0), (2.25, 1.2), (1.9, 1.7), (0.0, 1.7)], n=24, cx=x, cy=y, shine=0.5)
     m.write(os.path.join(HERE, "Standoffs_StarTrackerHAT.wrl"), "M2.5 standoffs and screws (star-tracker HAT on a Pi Zero)")
 
+BRACKET_BLACK = "0.07 0.07 0.08"
+
+def tracker_bracket(name, note, holes, under, cam, cam_holes_along, baffle_z, plate, top_screws=False):
+    """A mount holding a star tracker's board, camera and baffle in one frame (the model frame of the board it is
+    attached to: x right, y up, z up from the board's top). A base plate `plate` (x0, y0, x1, y1) 3 thick, its top
+    6 below `under` (the lowest board's underside: the Pi Zero's parts reach 2.54 below it, make.pi_zero2w), with:
+    a 6-long M2.5 standoff and a screw under the plate at each board hole in `holes` (plus a screw head on the
+    board's top when `top_screws`); the camera on two 6-long risers at its back plate's two "ø2.5" holes ("7.56" in
+    from the sides of the "39.5" plate: 12.19 from the axis, along model x or y as `cam_holes_along`), its back on
+    the risers at `under`; the baffle held by a clamp ring round its tube (the baffle's 60.1 inner and 1.5 wall,
+    star_tracker_baffle) at `baffle_z`, on four ø6 posts on the diagonals 38 from the camera's axis, clear of the
+    camera's 25.96 corner radius, its ribbon tab (13.97 wide) and lock screw on the axes. Drawing RP-008195 for the
+    camera's holes; plate and ring thickness, post size, the 6 mm gaps and the finish (black anodised) are estimates:
+    the design is ours, not from a document."""
+    m = Mesh(); cx, cy = cam; top = under - 6.0; bot = top - 3.0
+    prism(m, BRACKET_BLACK, rounded(plate[2] - plate[0], plate[3] - plate[1], 4.0, cx=(plate[0] + plate[2]) / 2,
+                                    cy=(plate[1] + plate[3]) / 2), bot, top, shine=0.25)
+    def head(x, y, flat, dome):
+        k = 1 if dome > flat else -1
+        lathe(m, "0.70 0.70 0.72", [(0.0, flat), (2.25, flat), (2.25, dome - k * 0.5), (1.9, dome), (0.0, dome)], n=24, cx=x, cy=y, shine=0.5)
+    hexagon = lambda x, y: [(x + 2.5 / math.cos(math.pi / 6) * math.cos(math.pi / 6 + i * math.pi / 3),
+                             y + 2.5 / math.cos(math.pi / 6) * math.sin(math.pi / 6 + i * math.pi / 3)) for i in range(6)]
+    for x, y in holes:
+        prism(m, "0.78 0.62 0.30", hexagon(x, y), top, under, shine=0.6)
+        head(x, y, bot, bot - 1.7)
+        if top_screws: head(x, y, 0.0, 1.7)
+    for d in (-12.19, 12.19):
+        x, y = (cx + d, cy) if cam_holes_along == "x" else (cx, cy + d)
+        cyl(m, BRACKET_BLACK, x, y, 6.0, top, under, n=24, shine=0.25)
+        head(x, y, bot, bot - 1.7)
+    ring_in, ring_out, post_r = 60.1 / 2 + 1.5, 41.0, 38.0
+    lathe(m, BRACKET_BLACK, [(ring_in, baffle_z), (ring_out, baffle_z), (ring_out, baffle_z + 4.0), (ring_in, baffle_z + 4.0), (ring_in, baffle_z)], n=96, cx=cx, cy=cy, shine=0.25)
+    for a in (45, 135, 225, 315):
+        px, py = cx + post_r * math.cos(math.radians(a)), cy + post_r * math.sin(math.radians(a))
+        cyl(m, BRACKET_BLACK, px, py, 6.0, top, baffle_z, n=24, shine=0.25)
+        head(px, py, bot, bot - 1.7); head(px, py, baffle_z + 4.0, baffle_z + 5.7)
+    m.write(os.path.join(HERE, name), note)
+
+def tracker_brackets():
+    # star-tracker HAT (recipe attachments): Pi underside 14.24 below the HAT's top, camera turned 90 at (107.6, -15),
+    # baffle base at 57.33; the Pi's holes as hat_standoffs.
+    tracker_bracket("Bracket_StarTrackerHAT.wrl", "Star tracker mount (star-tracker HAT on a Pi Zero)",
+                    [(x, y) for x in (3.5, 61.5) for y in (-3.5, -26.5)], -14.24, (107.6, -15.0), "y", 57.33,
+                    (-3.0, -46.0, 152.0, 16.0))
+    # star-tracker-n6 (recipe): 80 x 53 board, holes 3.5 in from each edge, its underside 1.6 below its top; camera
+    # turned 180 at (35, -95), baffle base at 69.97.
+    tracker_bracket("Bracket_StarTrackerN6.wrl", "Star tracker mount (star-tracker-n6)",
+                    [(x, y) for x in (3.5, 76.5) for y in (-3.5, -49.5)], -1.6, (35.0, -95.0), "x", 69.97,
+                    (-3.0, -140.0, 83.0, 3.0), top_screws=True)
+
 if __name__ == "__main__":
-    scd4x(); sgp41(); epd154(); zjy128(); tps2121(); gs_camera(); lens16(); pi_zero2w(); star_tracker_cable(); star_tracker_baffle(); star_tracker_n6_cable(); hat_standoffs(); vfbga178(); rgt16(); xfl4020()
+    scd4x(); sgp41(); epd154(); zjy128(); tps2121(); gs_camera(); lens16(); pi_zero2w(); star_tracker_cable(); star_tracker_baffle(); star_tracker_n6_cable(); hat_standoffs(); tracker_brackets(); vfbga178(); rgt16(); xfl4020()
