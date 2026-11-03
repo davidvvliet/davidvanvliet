@@ -60,6 +60,23 @@ def build(spec):
         ring("roll_ring_joint", lb / 2)
         panels("roll_panel_joint", lb / 2 - rh - d["roll_panel_length"], lb / 2 - rh)
 
+    # The US flag on the lettering's sides (fins 1 and 3), just below the joint ring, as on the Saturn V.
+    fl = os.path.join(HARNESS, "refs", "finrocket")
+    col = lambda k: materials.colour(spec["materials"][k])
+    flag = textures.marking("finrocket_flag", [(os.path.join(fl, "flag-field.png"), col("flag_white")),
+                                               (os.path.join(fl, "flag-red.png"), col("flag_red")),
+                                               (os.path.join(fl, "flag-blue.png"), col("flag_blue")),
+                                               (os.path.join(fl, "flag-stars.png"), col("flag_white"))],
+                            os.path.join(HARNESS, "out", "finrocket", "textures"))
+    flag_mat = materials.image("finrocket_flag", flag, metallic=0.0, roughness=0.5)  # the flag fills its sheet
+    fh = d["flag_hoist"]
+    zf = lb / 2 - rh - d["flag_gap"] - fh / 2
+    for i in (0, 2):
+        a = i * math.pi / 2
+        with parts.assembly(f"flag{i}"):
+            parts.decal(f"flag{i}", tube, center=(ro * math.cos(a), ro * math.sin(a), zf),
+                        direction=(-math.cos(a), -math.sin(a), 0), up=(0, 0, 1), width=1.9 * fh, height=fh, material=flag_mat)
+
     # The motor tube stands out aft of the body (mount_overhang) for the screw-on retainer, as in the
     # kit's instructions: a threaded ring epoxied over the tube and a cap whose lip holds the motor's rim.
     mo, mi, ml = d["mount_od"] / 2, d["mount_id"] / 2, d["mount_length"]

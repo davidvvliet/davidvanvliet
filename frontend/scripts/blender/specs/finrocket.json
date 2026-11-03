@@ -131,6 +131,14 @@
       "read": "2026-11-03",
       "licence": "NASA media: \"generally are not subject to copyright in the United States\" (nasa.gov/nasa-brand-center/images-and-media)",
       "credit": "Roll pattern after the Saturn V's, from NASA's photo of the Apollo 11 rollout"
+    },
+    {
+      "id": "us_flag",
+      "title": "Flag of the United States (Wikimedia Commons, Flag_of_the_United_States.svg)",
+      "url": "https://commons.wikimedia.org/wiki/File:Flag_of_the_United_States.svg",
+      "read": "2026-11-03",
+      "licence": "\"This image of a flag is ineligible for copyright and therefore in the public domain\"",
+      "credit": "US flag drawn from the public-domain Commons SVG (Executive Order 10834 proportions, State Department colours)"
     }
   ],
   "reference_model": {
@@ -431,6 +439,20 @@
     "roll_panel_arc_deg": {
       "value": 50,
       "source": "design, estimate: the Saturn V's panels look about an eighth of the way round in nasa_as11_rollout (about 0.45 of the visible width)"
+    },
+    "flag": {
+      "value": "the US flag, upright, on the lines of fins 1 and 3 just below the joint ring, above the lettering, as on the Saturn V",
+      "source": "us_flag",
+      "quote": "Current RGB colors and geometric specifications follow the [State Department] Design Guide ... The geometric specifications for the Union and the star sizes and placement come from an attachment to Executive Order 10834",
+      "note": "masks refs/finrocket/flag-*.png redrawn from the SVG's geometry (7410 x 3900, stripes 300, union 2964 x 2100, stars of radius 120 on a 494 x 420 grid) at 1/5"
+    },
+    "flag_hoist": {
+      "value": 0.028,
+      "source": "design, chosen: the flag's height; its fly is 1.9 times it (us_flag's 7410 x 3900)"
+    },
+    "flag_gap": {
+      "value": 0.008,
+      "source": "design, chosen: below the joint ring"
     }
   },
   "flight": {
@@ -567,6 +589,24 @@
       "metallic": 0.0,
       "roughness": 0.5,
       "source": "design, chosen: international orange"
+    },
+    "flag_red": {
+      "hex": "#b31942",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "us_flag: the SVG's fill"
+    },
+    "flag_blue": {
+      "hex": "#0a3161",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "us_flag: the SVG's fill"
+    },
+    "flag_white": {
+      "hex": "#ffffff",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "us_flag: the SVG's fill"
     }
   },
   "open_questions": [
@@ -655,6 +695,21 @@
       ],
       "radius": 0.5,
       "note": "rings, panels and the stripe stacked on fin1's line"
+    },
+    {
+      "name": "flag above the lettering, fin 1 side",
+      "target": [
+        0.03,
+        0,
+        0.38
+      ],
+      "look": [
+        -1,
+        0,
+        0
+      ],
+      "radius": 0.09,
+      "note": "joint ring, flag, lettering"
     }
   ]
 }
