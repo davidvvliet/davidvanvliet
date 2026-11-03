@@ -387,7 +387,7 @@
       "quote": "This Font Software is licensed under the SIL Open Font License, Version 1.1"
     },
     "lettering_gap": {
-      "value": 0.008,
+      "value": 0.02,
       "source": "design, chosen: the lettering starts this far above the fin's root leading edge"
     }
   },
