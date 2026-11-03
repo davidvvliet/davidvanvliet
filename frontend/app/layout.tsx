@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     template: "%s | David van Vliet",
   },
   description:
-    "David van Vliet. Building Radar Corp, products for private and public market investors.",
+    "David van Vliet's personal website",
   keywords: [
     "David van Vliet",
     "David van Vliet founder",
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     url: "https://www.davidvvliet.com",
     title: "David van Vliet",
     description:
-      "David van Vliet, founder based in Palo Alto, California. Building Radar Corp, products for private and public market investors.",
+      "David van Vliet's personal website",
     siteName: "David van Vliet",
     images: [
       {
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "David van Vliet",
     description:
-      "David van Vliet, founder based in Palo Alto, California. Building Radar Corp.",
+      "David van Vliet's personal website",
     images: ["/og-image.png"],
   },
   icons: {
