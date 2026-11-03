@@ -1,10 +1,10 @@
 # David van Vliet
 
 ## About
-David van Vliet is a founder based in Palo Alto, California. He graduated from Rice University in Houston, Texas in 2025 with a BA in Computer Science and a Minor in Statistics, completing his degree one year early.
+David van Vliet is based in New York City. He graduated from Rice University in Houston, Texas in 2025 with a BA in Computer Science and a Minor in Statistics, completing his degree one year early.
 
-## Current Work
-David is the founder of Radar Corporation, based in San Francisco, California. The Radar Corporation builds information platforms that facilitate optimal capital flow in both public and private markets.
+## Projects
+David built Radar (https://tryradar.ai) and yAI.
 
 ## Past Experience
 - Software Engineering at Main Capital Partners (The Hague, The Netherlands) — Summer 2023 and Summer 2024

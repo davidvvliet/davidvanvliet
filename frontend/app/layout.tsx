@@ -19,9 +19,9 @@ export const metadata: Metadata = {
     "David van Vliet's personal website",
   keywords: [
     "David van Vliet",
-    "David van Vliet founder",
-    "David van Vliet Palo Alto",
-    "David van Vliet Radar Corp",
+    "David van Vliet New York",
+    "David van Vliet Radar",
+    "David van Vliet yAI",
     "davidv.nl",
     "davidvvliet.com",
   ],
@@ -29,10 +29,6 @@ export const metadata: Metadata = {
   creator: "David van Vliet",
   alternates: {
     canonical: "https://www.davidvvliet.com",
-    languages: {
-      "en-US": "https://www.davidvvliet.com",
-      "nl-NL": "https://davidv.nl",
-    },
   },
   openGraph: {
     type: "website",
@@ -84,21 +80,15 @@ const jsonLd = {
     "https://www.linkedin.com/in/davidvvliet/",
     "https://x.com/deepfieldnorth",
   ],
-  jobTitle: "Founder",
-  worksFor: {
-    "@type": "Organization",
-    name: "Radar Corp",
-    url: "https://theradarcorp.com",
-  },
   address: {
     "@type": "PostalAddress",
-    addressLocality: "Palo Alto",
-    addressRegion: "CA",
+    addressLocality: "New York",
+    addressRegion: "NY",
     addressCountry: "US",
   },
   email: "axeldvvliet@gmail.com",
   description:
-    "David van Vliet is a 21-year-old founder based in Palo Alto, California, building Radar Corp, products for private and public market investors.",
+    "David van Vliet is based in New York City. He built Radar and yAI.",
 };
 
 export default function RootLayout({
