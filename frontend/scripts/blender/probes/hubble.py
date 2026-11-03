@@ -221,11 +221,19 @@ def fittings(f, r_ls, r_fs, R_es, z_ls1):
             ra = R_es - 0.12
             parts.box(f"sun_sensor_aft_{k + 1}", (cs[0], cs[1], cs[2]), location=(c * ra, s_ * ra, -cs[2] / 2),
                       roll_deg=a, material="black")
+        # Scuff plates: the forward pair (STA 535) stands about 30 in off the light shield on struts;
+        # the aft pair (STA 240) sits on the skin around the aft trunnion pins, no struts (sh.1).
         P = f["scuff_plates"]
         for zi, (z, R) in enumerate(((P["forward_z"], r_ls), (P["aft_z"], R_es))):
             for a in P["az_deg"]:
                 c, s_ = _az(a)
                 tag = f"{'fwd' if zi == 0 else 'aft'}_{'pv2' if a == 0 else 'mv2'}"
+                if zi == 1:
+                    out = R + P["aft_standoff_m"]
+                    parts.disc(f"scuff_plate_{tag}", radius=P["plate_d"] / 2, thickness=0.02,
+                               location=(c * out, yv, z), direction=(c, s_, 0), material="beam_gold",
+                               hole_material="beam_gold")
+                    continue
                 out = R + P["standoff_m"]
                 parts.disc(f"scuff_plate_{tag}", radius=P["plate_d"] / 2, thickness=0.02,
                            location=(c * out, s_ * out, z), direction=(c, s_, 0), material="beam_gold",

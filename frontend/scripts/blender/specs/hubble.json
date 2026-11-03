@@ -405,6 +405,7 @@
     "forward_z": 11.049,
     "aft_z": 3.556,
     "standoff_m": 0.762,
+    "aft_standoff_m": 0.03,
     "az_deg": [
      0,
      180
@@ -421,7 +422,8 @@
      "quote": "scuff plates, large protective metal plates on struts that extend approximately 30 in. from the surface"
     }
    ],
-   "layout_source": "sm4_photos s125e011763 (from +V3): gold strut frames at both edges, so on +-V2; s125e012031: round gold plates about 0.6 m across (138 px/m against the aft bulkhead)"
+   "layout_source": "sm4_photos s125e011763 (from +V3): gold strut frames at both edges, so on +-V2; s125e012031: round gold plates about 0.6 m across (138 px/m against the aft bulkhead)",
+   "aft_layout_source": "lmsc1985 drawing 4171929: sh.1 (side view) labels 'AFT TRUNNION AND SCUFF PLATE (2)' and draws each aft plate at STA 240 on the skin around the aft trunnion pin, with no strut frame (only the STA 535 pair has struts); sh.2 (end view) shows the STA 535 plates at about the equipment section's radius with the STA 240 pair hidden behind them. So the 30 in standoff is the forward pair's; the aft pair sits about 3 cm off the skin, centred on the trunnion pin (estimated)"
   },
   "equipment_bays": {
    "value": {
