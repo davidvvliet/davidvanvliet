@@ -265,35 +265,17 @@ function Logos({ model }: { model: Published }) {
   );
 }
 
-// The vehicle's famous photos (photos.ts), a column in the bottom left going up. A click shows one
-// over the viewer with its credit; a click on it closes it.
+// The vehicle's famous photos (photos.ts), a column in the bottom left corner going up, edge to edge.
 function Photos({ probe }: { probe: string }) {
-  const [open, setOpen] = useState<string | null>(null);
   const set = PHOTOS[probe];
   if (!set) return null;
-  const dir = `/models/photos/${probe}`;
-  const shown = set.photos.find((p) => p.slug === open);
   return (
-    <>
-      <div className={styles.photoColumn}>
-        {set.photos.map((p) => (
-          <button key={p.slug} onClick={() => setOpen(p.slug === open ? null : p.slug)} title={p.title}
-            className={p.slug === open ? styles.active : ""}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={`${dir}/${p.slug}-thumb.jpg`} alt={p.title} loading="lazy" />
-          </button>
-        ))}
-      </div>
-      {shown && (
-        <figure className={styles.photoShown} onClick={() => setOpen(null)}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={`${dir}/${shown.slug}.jpg`} alt={shown.title} />
-          <figcaption onClick={(e) => e.stopPropagation()}>
-            {shown.title} · <a href={shown.url} target="_blank" rel="noopener noreferrer">{shown.credit}</a>, {set.licence}
-          </figcaption>
-        </figure>
-      )}
-    </>
+    <div className={styles.photoColumn}>
+      {set.photos.map((p) => (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img key={p.slug} src={`/models/photos/${probe}/${p.slug}-thumb.jpg`} alt={p.title} />
+      ))}
+    </div>
   );
 }
 
