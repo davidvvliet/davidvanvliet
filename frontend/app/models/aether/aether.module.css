@@ -1,0 +1,13 @@
+.page { position: fixed; inset: 0; background: #000; color: #e8e8e8; font-family: var(--font-geist-sans, system-ui, sans-serif); }
+.canvas { position: absolute; inset: 0; }
+.title { position: absolute; top: 16px; left: 16px; font-size: 15px; letter-spacing: 0.02em; opacity: 0.9; pointer-events: none; }
+.phase { position: absolute; top: 44px; left: 16px; max-width: min(420px, calc(100vw - 32px)); pointer-events: none; }
+.phaseName { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.6; }
+.caption { font-size: 15px; line-height: 1.4; margin-top: 4px; }
+.readout { font-family: var(--font-geist-mono, ui-monospace, monospace); font-size: 13px; margin-top: 8px; opacity: 0.85; white-space: pre; }
+.launch {
+  position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+  background: #e8e8e8; color: #000; border: 0; border-radius: 999px; padding: 10px 28px;
+  font-size: 15px; cursor: pointer;
+}
+.launch:disabled { opacity: 0.3; cursor: default; }

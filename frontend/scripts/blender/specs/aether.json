@@ -403,14 +403,13 @@
       ]
     },
     "insertion_dv": {
-      "value": 476,
-      "source": "design, computed: the speed at aposelene of the 673 x 7331 km orbit (vis-viva, moon_gm, moon_radius), all of it given there by the main burn after a near-vertical shot",
-      "note": "m/s"
+      "value": 59.5,
+      "source": "design, computed: at aposelene the shot's orbit moves at 416.8 m/s (v x R / r_a) against the target orbit's 476.3 m/s (vis-viva); the burn raises periselene from the surface to 673 km",
+      "note": "m/s, over the north pole"
     },
     "dv_budget": {
       "value": 550,
-      "source": "design, chosen: insertion_dv plus phasing, station keeping and disposal",
-      "note": "m/s"
+      "source": "design, chosen: kept; beyond the 59.5 m/s insertion it covers turning the orbit's high point to the south pole later, phasing, station keeping and disposal"
     },
     "main_isp": {
       "value": 222,
@@ -488,7 +487,7 @@
     },
     "track_accel_g": {
       "value": 14,
-      "source": "design, computed: 1.68 km/s (circular speed at the surface, from moon_gm and moon_radius) over a 10 km track, v^2 / 2L"
+      "source": "design, chosen: kept from the first sizing (1.68 km/s over 10 km); at 2.176 km/s it now needs track_length"
     },
     "rcs_count": {
       "value": 8,
@@ -837,11 +836,31 @@
     "hold_downs": {
       "value": "two hold-down posts per wing under the folded stack, released after the shot",
       "source": "design, chosen: no hold-down and release part picked yet"
+    },
+    "launch_speed": {
+      "value": 2.176,
+      "source": "design, computed: a flat shot from the surface whose high point is the orbit's aposelene (1737.4 + 7331 km): v = √(2 GM r_a / (R (R + r_a))) with moon_gm, moon_radius",
+      "note": "km/s, horizontal"
+    },
+    "track_length": {
+      "value": 17.2,
+      "source": "design, computed: v² / 2a = 2176² / (2 x 14 x 9.80665) m",
+      "note": "km; the shot lasts v / a = 15.8 s"
+    },
+    "burn_time": {
+      "value": 893,
+      "source": "design, computed: 300 kg x 59.5 m/s / 20 N",
+      "note": "s, on the 20 N engine"
+    },
+    "transfer_coast": {
+      "value": 4.9,
+      "source": "design, computed: half the shot orbit's period, π √(a³ / GM) with a = (1737.4 + 9068.4) / 2 km",
+      "note": "hours from the track's end to the burn"
     }
   },
   "materials": {},
   "open_questions": [
-    "Launch geometry: a shot from near the south pole puts the orbit's high point over the launch site only if the shot is near-vertical (about 2.1 km/s), not the 1.68 km/s horizontal shot the 14 g was worked out for. A horizontal shot from the south puts the high point over the north. Options: a track on a steep slope, a launch site further north, or a bigger burn to turn the orbit. The craft's structure is the same either way; the tank size here covers the vertical case.",
+    "Launch geometry (decided 2026-11-03: a flat shot): a flat 2.18 km/s shot from the south-pole site puts the orbit's high point over the north pole, so the craft first serves the north. Serving the south pole needs the high point turned round (argument of periselene, a large burn the 550 m/s budget only partly covers), a launch site near the north pole, or the relay accepted over the north.",
     "Lunar Pathfinder's orbit differs between SSTL's guide (673 x 7331 km, 54.9°) and a 2022 NASA slide (500 x 7500 km, 57.8°); SSTL calls its values indicative.",
     "A south-pole launch site reaches inclinations near 90° directly; the 54.9° orbit needs a site at or below about 55°S, or a plane change.",
     "Propulsion has no filter or pressure transducer yet (no sourced part found); the thruster layout is our own, not copied from a flown craft.",
