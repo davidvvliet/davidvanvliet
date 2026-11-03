@@ -415,7 +415,7 @@
       "source": "design, chosen: a rounded tip, as moulded model-rocket nose cones have"
     },
     "fin_tip_band": {
-      "value": 0.015,
+      "value": 0.008,
       "source": "design, chosen: the painted outer part of each fin's span"
     },
     "roll_pattern": {
@@ -585,10 +585,10 @@
       "source": "design, chosen"
     },
     "fin_tip": {
-      "hex": "#ff4f00",
+      "hex": "#b31942",
       "metallic": 0.0,
       "roughness": 0.5,
-      "source": "design, chosen: international orange"
+      "source": "us_flag: the flag's red, the SVG's fill"
     },
     "flag_red": {
       "hex": "#b31942",
