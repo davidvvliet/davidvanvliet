@@ -32,9 +32,5 @@ export const PHOTOS: Record<string, Photo[]> = {
       credit: "NASA, ESA, S. Beckwith (STScI), and The Hubble Heritage Team (STScI/AURA)", url: `${W}2008im_/http://imgsrc.hubblesite.org/hu/db/2005/12/images/a/formats/large_web.jpg` },
     { slug: "shoemaker-levy-9", title: "Comet Shoemaker-Levy 9 impact sites on Jupiter", release: "STScI-PRC94-33, July 21, 1994",
       credit: "H. Hammel, MIT and NASA", url: `${W}19990219081515im_/http://oposite.stsci.edu/pubinfo/comet/gif/HST_Gc.gif` },
-    { slug: "first-light", title: "Hubble's first light", release: "STScI-PRC90-04, May 20, 1990",
-      credit: "NASA", url: `${W}2007im_/http://imgsrc.hubblesite.org/hu/db/1990/04/images/a/formats/full_jpg.jpg` },
-    { slug: "m100-mirror-fix", title: "M100 before and after the mirror fix", release: "STScI-PR94-01, January 13, 1994",
-      credit: "NASA (no credit line on the release)", url: `${W}19981202094214im_/http://oposite.stsci.edu/pubinfo/gif/WFPCM100Comp2.gif` },
   ],
 };
