@@ -440,7 +440,7 @@
     "cg_from_nose": {
       "value": 0.5636,
       "source": "design, estimate",
-      "note": "forward of the Black Brant XII's aft limit in proportion (estes_bbxii: \"DO NOT fly model rocket with the center of gravity further back than 38.69 in. from the tip of the nose cone\", 0.71 of its length); this rocket's 0.62 m is 0.57 of its length Moved forward by the 5.64 cm the nose was shortened (the parts behind it are unchanged)."
+      "note": "forward of the Black Brant XII's aft limit in proportion (estes_bbxii: \"DO NOT fly model rocket with the center of gravity further back than 38.69 in. from the tip of the nose cone\", 0.71 of its length); this rocket's 0.5636 m is 0.55 of its 1.027 m (0.62 m before the nose was shortened by 5.64 cm)"
     },
     "cd": {
       "value": 0.75,
