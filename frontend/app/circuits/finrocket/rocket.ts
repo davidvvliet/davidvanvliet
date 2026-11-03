@@ -1,4 +1,4 @@
-// The flight sim's rocket, from specs/finrocket.json: sizes, masses, motor curve, and the
+// The fin rocket's numbers for its controller, from specs/finrocket.json: sizes, masses, motor curve, and the
 // centre of pressure and normal-force slopes by Barrowman's method as the OpenRocket technical
 // documentation gives it (or_techdoc: eqs 3.19, 3.28, 3.29, 3.40, 3.53, 3.55; fin CP at 25% MAC).
 import type { Gains, Rocket } from "./sim";

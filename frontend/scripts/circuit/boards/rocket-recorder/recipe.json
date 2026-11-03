@@ -1,6 +1,7 @@
 {
  "title": "Rocket flight recorder",
  "purpose": "Flies a model rocket with four servo fins and records its flight: altitude from a barometer, acceleration and rotation from an IMU, logged to the RP2040's flash; runs from a LiPo charged over USB-C",
+ "drives": "finrocket",
  "source": {
   "title": "rocket-recorder recipe",
   "url": "https://github.com/davidvvliet/davidvanvliet/tree/main/frontend/scripts/circuit/boards/rocket-recorder",

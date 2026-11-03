@@ -6,6 +6,7 @@ import * as THREE from "three";
 import { OrbitControls, useGLTF } from "@react-three/drei";
 import StudioLights from "./StudioLights";
 import styles from "./models.module.css";
+import type { Held } from "../circuits/finrocket/FinRocket";
 
 type Check = { name: string; ok: boolean; measured: number | null; expected: number; unit: string; detail?: string; source?: string | null };
 type Build = {
@@ -468,10 +469,12 @@ class ViewerBoundary extends Component<{ children: ReactNode; resetKey: string }
 // `compact`: embedded in a scrolling page (the terminal): no wheel zoom, so the wheel scrolls the page.
 // `focus`/`onFocus`: the focused part, when the page around the viewer also picks it (the /circuit block list).
 // `internalUrl`: the model's inside parts (internal.glb), loaded when "Internal" is pressed.
-export function Viewer({ probe, url, breakdown, stale, compact, onReady, focus: shown, onFocus, explore = true, focusable = NONE, explodable = NO_PARTS, internalUrl }: {
+// `held`: the model is held in the hand (a board that drives a model): dragging turns it about its
+// centre instead of orbiting, shift-drag about its long side (x), double-click sets it straight.
+export function Viewer({ probe, url, breakdown, stale, compact, onReady, focus: shown, onFocus, explore = true, focusable = NONE, explodable = NO_PARTS, internalUrl, held }: {
   probe: string; url: string; breakdown: Breakdown | null; stale: boolean; compact?: boolean; onReady?: () => void;
   focus?: string | null; onFocus?: (f: string | null) => void; explore?: boolean; focusable?: Focusable[]; explodable?: string[];
-  internalUrl?: string;
+  internalUrl?: string; held?: React.RefObject<Held>;
 }) {
   const [exploded, setExploded] = useState(false);
   const [inside, setInside] = useState(false);
@@ -482,6 +485,8 @@ export function Viewer({ probe, url, breakdown, stale, compact, onReady, focus: 
   const setFocus = onFocus ?? setOwn;
   // Another model starts from its overview; a rebuild of the same one keeps the focus.
   useEffect(() => setFocus(null), [probe]); // eslint-disable-line react-hooks/exhaustive-deps
+  // A held board is set straight when a block is focused: the flight to it aims at the block as loaded.
+  useEffect(() => { if (held && focus) straighten(held.current); }, [focus, held]);
   const [label, setLabel] = useState<{ name: string; size: THREE.Vector3 } | null>(null);
   const [innerLabel, setInnerLabel] = useState<{ name: string; size: THREE.Vector3 } | null>(null);
   const shownLabel = inside ? innerLabel ?? label : label;
@@ -522,19 +527,83 @@ export function Viewer({ probe, url, breakdown, stale, compact, onReady, focus: 
         <color attach="background" args={["#090909"]} />
         <StudioLights />
         <Suspense fallback={null}>
-          <Model key={url} url={url} exploded={exploded} focus={inside ? innerFocus : focus} setFocus={inside ? setInnerFocus : setFocus} onLabel={setLabel}
-            onReady={onReady} explore={explore} focusable={focusable} explodable={explodable} ghost={inside} />
+          <HeldGroup held={held}>
+            <Model key={url} url={url} exploded={exploded} focus={inside ? innerFocus : focus} setFocus={inside ? setInnerFocus : setFocus} onLabel={setLabel}
+              onReady={onReady} explore={explore} focusable={focusable} explodable={explodable} ghost={inside} />
+          </HeldGroup>
         </Suspense>
         <Suspense fallback={null}>
           {inside && internalUrl && (
             <Model key={internalUrl} url={internalUrl} exploded={false} focus={innerFocus} setFocus={setInnerFocus} onLabel={setInnerLabel} inner />
           )}
         </Suspense>
-        <OrbitControls makeDefault enableZoom={!compact} zoomToCursor />
+        <OrbitControls makeDefault enableZoom={!compact} enableRotate={!held} zoomToCursor />
       </Canvas>
     </ViewerBoundary>
   );
 }
+
+// The held model's turn, about the centre it had when loaded, and the drags that change it.
+function HeldGroup({ held, children }: { held?: React.RefObject<Held>; children: React.ReactNode }) {
+  const g = useRef<THREE.Group>(null);
+  const centre = useRef<THREE.Vector3 | null>(null);
+  const camera = useThree((s) => s.camera);
+  const gl = useThree((s) => s.gl);
+  useEffect(() => {
+    if (!held) return;
+    const el = gl.domElement;
+    let last: { x: number; y: number } | null = null;
+    const down = (e: PointerEvent) => { last = { x: e.clientX, y: e.clientY }; };
+    const move = (e: PointerEvent) => {
+      if (!last) return;
+      const dx = e.clientX - last.x, dy = e.clientY - last.y;
+      last = { x: e.clientX, y: e.clientY };
+      const k = 0.008; // radians per pixel
+      const h = held.current;
+      if (e.shiftKey) {
+        // About the board's own long side.
+        h.q.premultiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0).applyQuaternion(h.q), dx * k));
+      } else {
+        // About the screen's up and right: the face toward you follows the drag.
+        const up = new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld, 1);
+        const right = new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld, 0);
+        h.q.premultiply(new THREE.Quaternion().setFromAxisAngle(up, dx * k))
+          .premultiply(new THREE.Quaternion().setFromAxisAngle(right, dy * k));
+      }
+      h.q.normalize();
+    };
+    const up = () => { last = null; };
+    const straight = () => straighten(held.current);
+    el.addEventListener("pointerdown", down);
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", up);
+    el.addEventListener("dblclick", straight);
+    el.style.cursor = "grab";
+    return () => {
+      el.removeEventListener("pointerdown", down);
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+      el.removeEventListener("dblclick", straight);
+      el.style.cursor = "";
+    };
+  }, [held, gl, camera]);
+  useFrame(() => {
+    const grp = g.current;
+    if (!grp || !held) return;
+    if (!centre.current) {
+      const box = new THREE.Box3().setFromObject(grp);
+      if (box.isEmpty()) return;
+      centre.current = box.getCenter(new THREE.Vector3());
+    }
+    // Turn about the centre: move it to the origin, turn, move it back.
+    const c = centre.current;
+    grp.quaternion.copy(held.current.q);
+    grp.position.copy(c).sub(c.clone().applyQuaternion(held.current.q));
+  });
+  return <group ref={g}>{children}</group>;
+}
+
+function straighten(h: Held) { h.q.identity(); h.snap++; }
 
 function fmt(v: number | null, unit: string) {
   if (v === null) return "—";

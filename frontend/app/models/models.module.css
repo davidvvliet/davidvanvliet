@@ -179,7 +179,3 @@
 .blocks .active { color: #00ff00; }
 .parts { border-collapse: collapse; width: 100%; }
 .parts td { padding: 0.15rem 0.5rem 0.15rem 0; vertical-align: top; }
-
-/* /circuits/fly: launch and reset. */
-.flyButton { background: none; border: var(--line); color: #ededed; font: inherit; padding: 0.2rem 0.8rem; cursor: pointer; }
-.flyButton:hover { border-color: #00ff00; color: #00ff00; }

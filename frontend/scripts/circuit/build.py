@@ -103,7 +103,7 @@ def main(board, publish=False):
         view = recipe["board"].get("view", "top")
         screens = [dict(s, image=os.path.join(src, s["image"])) for s in recipe["board"].get("screens", [])]
         screens += recipe["board"].get("finishes", [])  # pack.py: entries without an image set a finish
-        meta = {"title": recipe["title"], "purpose": recipe["purpose"], "source": recipe["source"], "pcb": "kicad/board.kicad_pcb", "sch": "kicad/board.kicad_sch"}
+        meta = {"title": recipe["title"], "purpose": recipe["purpose"], "source": recipe["source"], "drives": recipe.get("drives"), "pcb": "kicad/board.kicad_pcb", "sch": "kicad/board.kicad_sch"}
         pcb_path, sch_path = os.path.join(work, "board.kicad_pcb"), os.path.join(work, "board.kicad_sch")
         blocks = json.load(open(os.path.join(work, "blocks.json")))
     else:
@@ -157,6 +157,7 @@ def main(board, publish=False):
     key = lambda p: (re.sub(r"\d", "", p["ref"]), int(re.sub(r"\D", "", p["ref"]) or 0))
     data = {"board": board, "title": meta["title"], "purpose": meta["purpose"], "source": meta["source"],
             "blocks": [{"name": n, "parts": sorted(ps, key=key)} for n, ps in sorted(parts.items(), key=lambda kv: -len(kv[1]))]}
+    if meta.get("drives"): data["drives"] = meta["drives"]  # the model this board steers, shown beside it on /circuits
     json.dump(data, open(os.path.join(HERE, "out", board, f"{board}.json"), "w"), indent=1)
     mb, tris = os.path.getsize(out) / 1e6, sum(pack["tris"].values())
     # The dashboard's check table (same shape as the Blender harness's checks).

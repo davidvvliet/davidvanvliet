@@ -71,7 +71,8 @@ licence), and `model_renames` for 3D models KiCad has since renamed. Only boards
 every box get no block.
 
 ## Own boards
-`boards/<board>/recipe.json` (templates/recipe.json): `title`, `purpose`, `source` (as board.json),
+`boards/<board>/recipe.json` (templates/recipe.json): `title`, `purpose`, `source` (as board.json), `drives`: the
+model the board steers, shown beside it on its /circuits page ("finrocket": drag the board, the rocket's fins answer),
 `board` (size, `corner_radius_mm`: rounded corners (none: square), `rules`: the project file with clearances and widths
 (a board's own beside its recipe when it needs net classes the template lacks, as star-tracker-hat's POWER class), `ground_fill`: the net poured on
 both sides, `mask` and `silk`: the solder mask and printing colours as KiCad colour names or

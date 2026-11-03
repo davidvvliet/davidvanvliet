@@ -10,6 +10,7 @@ import * as THREE from "three";
 import ModelsDashboard, { Viewer, type Focusable } from "./ModelsDashboard";
 import styles from "./models.module.css";
 import { PHOTOS } from "./photos";
+import { FinRocketReadout, FinRocketView, type FinRocketData, type Held } from "../circuits/finrocket/FinRocket";
 
 export type Published = {
   probe: string; title: string; thumb: boolean; logos: string[]; explore: boolean; focus: Focusable[]; explode: string[]; internal: boolean; grid: boolean;
@@ -22,6 +23,8 @@ export type Board = {
   board: string; title: string; purpose: string;
   source: { title: string; url: string; author: string; licence: string };
   blocks: { name: string; parts: { ref: string; value: string; package: string }[] }[];
+  drives?: string; // the model the board steers (its recipe's "drives"), shown beside it
+  finrocket?: FinRocketData; // that model's numbers, added by the /circuits page for "finrocket"
 };
 
 // The card camera; scripts/blender/thumbnail.py renders the thumbnail from the same view.
@@ -104,6 +107,7 @@ export default function PublishedModels({ models, circuit, dashboard }: {
 // A circuit board: its blocks beside it (pick one, in the list or on the board, to focus it), then its source.
 export function BoardDetail({ board }: { board: Board }) {
   const [focus, setFocus] = useState<string | null>(null);
+  const held = useRef<Held>({ q: new THREE.Quaternion(), snap: 0 });
   const block = board.blocks.find((b) => b.name === focus);
   return (
     <div className={styles.page}>
@@ -113,11 +117,16 @@ export function BoardDetail({ board }: { board: Board }) {
       </Header>
       <div className={styles.detail}>
         <div className={styles.viewCell}>
-          <Viewer probe={board.board} url={`/circuits/${board.board}.glb`} breakdown={null} stale={false} focus={focus} onFocus={setFocus} />
+          <Viewer probe={board.board} url={`/circuits/${board.board}.glb`} breakdown={null} stale={false} focus={focus} onFocus={setFocus}
+            held={board.finrocket ? held : undefined} />
         </div>
+        {board.finrocket && (
+          <div className={styles.viewCell}>
+            <FinRocketView data={board.finrocket} held={held} />
+          </div>
+        )}
         <aside className={styles.sources}>
           <div className={styles.dim}>{board.purpose}</div>
-          {board.board === "rocket-recorder" && <Link href="/circuits/fly">Wire it to its rocket's fins →</Link>}
           <ol className={styles.blocks}>
             {board.blocks.map((b) => (
               <li key={b.name}>
@@ -137,6 +146,7 @@ export function BoardDetail({ board }: { board: Board }) {
               </tbody>
             </table>
           )}
+          {board.finrocket && <FinRocketReadout data={board.finrocket} held={held} />}
           <div className={styles.dim}>
             Design: <a href={board.source.url} target="_blank" rel="noopener noreferrer">{board.source.title}</a> by {board.source.author}, {board.source.licence}.
             Parts are KiCad&apos;s 3D library models.
