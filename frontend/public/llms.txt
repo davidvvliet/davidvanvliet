@@ -4,7 +4,7 @@
 David van Vliet is based in New York City. He graduated from Rice University in Houston, Texas in 2025 with a BA in Computer Science and a Minor in Statistics, completing his degree one year early.
 
 ## Projects
-David built Radar (https://tryradar.ai) and yAI.
+David built Radar (https://tryradar.ai) and yAI (https://yaitech.com).
 
 ## Past Experience
 - Software Engineering at Main Capital Partners (The Hague, The Netherlands) — Summer 2023 and Summer 2024
