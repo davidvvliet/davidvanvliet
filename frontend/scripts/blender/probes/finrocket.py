@@ -108,8 +108,10 @@ def build(spec):
         with parts.assembly(f"servo{i}"):
             # Lying along the axis between the mount's front and the board, shaft pointing outward.
             r_c = ri - sz / 2 - 0.001
-            parts.box(f"servo{i}", (sy, sx, sz), location=R(r_c, z_servo + sx / 2),
-                      direction=r_hat, roll_deg=0.0, material="dark_metal")
+            # The fins sit on the x and y axes, so the box is sized in world axes: its height (sz)
+            # along the radial line, its width (sy) across it, its length (sx) along the rocket.
+            size = (sz, sy, sx) if i % 2 == 0 else (sy, sz, sx)
+            parts.box(f"servo{i}", size, location=R(r_c, z_servo + sx / 2), material="dark_metal")
             horn_pt = R(ri - 0.004, z_servo + 0.004)
             parts.tube(f"pushrod{i}", [horn_pt, R(ri - 0.004, z_piv), R(ri - 0.005, z_piv)], 0.0005,
                        segments=6, material="foil_silver")

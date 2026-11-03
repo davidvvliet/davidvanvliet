@@ -387,8 +387,8 @@
       "quote": "This Font Software is licensed under the SIL Open Font License, Version 1.1"
     },
     "lettering_centre": {
-      "value": 0.36,
-      "source": "design, chosen: centre height above the body's base; the lettering starts about 5 cm above the fins' leading edges"
+      "value": 0.25,
+      "source": "design, chosen: centre height of the decal above the body's base; its text starts about 14 cm up, just above the fins and level with the servos"
     }
   },
   "flight": {
@@ -568,7 +568,7 @@
       "target": [
         -0.02,
         0.02,
-        0.36
+        0.25
       ],
       "look": [
         0.707,
