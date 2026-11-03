@@ -2,7 +2,7 @@
   "title": "Altair Aether",
   "logos": [],
   "listed": false,
-  "note": "Our own design: a ~300 kg lunar communications relay, fired off a mass driver near the lunar south pole into an elliptical frozen lunar orbit, built from real flight hardware where it exists. Frame: x along the track (the direction of travel, and the craft's axis: the launch load runs down it), z up, y left. The craft's separation plane is at x = 0; the sled and the rails are behind and below it. Pass 1: structure, tank, main thruster, sled and rails. Pass 2: propulsion (eight 1 N thrusters, latch valve, fill and drain valves, lines). Pass 3: power (two solar wings, deployed; two batteries). Pass 4: comms (S-band dish to the Moon on +z, X-band array to the Earth on +x, transponder). Pass 5: attitude (four reaction wheels, two star trackers, sun sensors, IMU). Pass 6: electronics (power control unit, power cables; a reserved slot for the flight computer and valve drivers, which are designed separately). Pass 7: thermal (silvered-Teflon radiators on five sides, a blanket on the Moon-facing top, heaters).",
+  "note": "Our own design: a ~300 kg lunar communications relay, fired off a mass driver near the lunar south pole into an elliptical frozen lunar orbit, built from real flight hardware where it exists. Frame: x along the track (the direction of travel, and the craft's axis: the launch load runs down it), z up, y left. The craft's separation plane is at x = 0; the sled and the rails are behind and below it. Pass 1: structure, tank, main thruster, sled and rails. Pass 2: propulsion (eight 1 N thrusters, latch valve, fill and drain valves, lines). Pass 3: power (two solar wings, deployed; two batteries). Pass 4: comms (S-band dish to the Moon on +z, X-band array to the Earth on +x, transponder). Pass 5: attitude (four reaction wheels, two star trackers, sun sensors, IMU). Pass 6: electronics (power control unit, power cables; a reserved slot for the flight computer and valve drivers, which are designed separately). Pass 7: thermal (silvered-Teflon radiators on five sides, a blanket on the Moon-facing top, heaters). Pass 8: deployment (wings folded on hinges for the launch, hold-downs; click a wing to unfold).",
   "sources": [
     {
       "id": "nssdc_moon",
@@ -630,8 +630,8 @@
       "source": "design, computed: see cell_count"
     },
     "wing_yoke": {
-      "value": 0.3,
-      "source": "design, chosen: the wing's inner edge from the drive, clear of the thrusters' plumes"
+      "value": 0.5,
+      "source": "design, chosen: the yoke reaches the far end of the upper slanted side (0.5 m), so the folded panel stack lies along it and clears the drive at the corner"
     },
     "solar_drive": {
       "value": "one drive per wing at the ±y corners, turning the wing about y; the craft's own turn about x does the rest",
@@ -825,6 +825,18 @@
           "quote": "TMC: 31 heater outputs (1A each) across 8 HLCLs"
         }
       ]
+    },
+    "stow_gap": {
+      "value": 0.06,
+      "source": "design, chosen: the folded stack's first panel 6 cm off the side, clear of the wing drive (5 cm radius)"
+    },
+    "stow_angles": {
+      "value": "yoke 113.1°, first panel -173.1°, the rest ±180°",
+      "source": "design, computed: the upper slanted side runs at 120° (from +y, toward +z) from the corner; the yoke (0.5 m) leans 6.9° off it so its tip stands 6 cm out (asin(0.06 / 0.5)); the first panel then turns to lie parallel to the side, cells out: -60° - 113.1° = -173.1°"
+    },
+    "hold_downs": {
+      "value": "two hold-down posts per wing under the folded stack, released after the shot",
+      "source": "design, chosen: no hold-down and release part picked yet"
     }
   },
   "materials": {},
@@ -833,14 +845,112 @@
     "Lunar Pathfinder's orbit differs between SSTL's guide (673 x 7331 km, 54.9°) and a 2022 NASA slide (500 x 7500 km, 57.8°); SSTL calls its values indicative.",
     "A south-pole launch site reaches inclinations near 90° directly; the 54.9° orbit needs a site at or below about 55°S, or a plane change.",
     "Propulsion has no filter or pressure transducer yet (no sourced part found); the thruster layout is our own, not copied from a flown craft.",
-    "Power: the solar wings are shown deployed; the stowed pose for the launch and the hinges come with deployment (step 9). The array's radiation dose and working temperature are estimates. The Earth's shadow (lunar eclipses, a few hours, a few times a year) isn't in the battery sizing.",
     "Comms: no low-gain S-band antenna yet for safe mode (no maker's datasheet found); the EnduroSat array's band (8025-8400 MHz) sits below the 8450-8500 MHz lunar band; with the dish on the Moon and the array on the Earth, the wings turning only about y lose some sunlight in some seasons.",
     "Attitude: the wheel pyramid's tilt and the sensors' places are our own; coverage of the two coarse sun sensors is not a full sphere (safe mode would also lean on the fine sensor and the trackers).",
     "Electronics: the Starbuck-Mini is rated 20 kRAD and '5–7 years in LEO'; whether that covers five years in lunar orbit (no Van Allen belts to cross, since it launches from the Moon, but solar particle events) isn't checked. Its bus follows the battery (22-34 V), not a regulated 28 V. The flight computer and valve drivers come from the separate design; the power budget waits for them.",
-    "Thermal: sized by hand for the worst cold-side case (600 W, no sun); not checked against the hot case at periselene (the sunlit Moon's infrared on the radiators) or the 2 h shadow (heater power). Lines and valves need heaters too (not modelled)."
+    "Thermal: sized by hand for the worst cold-side case (600 W, no sun); not checked against the hot case at periselene (the sunlit Moon's infrared on the radiators) or the 2 h shadow (heater power). Lines and valves need heaters too (not modelled).",
+    "Deployment: the wings are shown folded for the launch (click a wing to unfold it); the hold-downs are placeholders, the dish's launch lock and the panels' hinge hardware aren't modelled, and the wing drive's size is still an estimate."
   ],
   "budget": {
     "triangles": 50000,
     "glb_bytes": 1500000
+  },
+  "joints": {
+    "yoke_l_j": {
+      "angle": 113.11,
+      "min": -180,
+      "max": 180,
+      "move_to": 0,
+      "group": "wing_l",
+      "source": "design, computed: see facts.stow_angles"
+    },
+    "panel_l0_j": {
+      "angle": -173.11,
+      "min": -180,
+      "max": 180,
+      "move_to": 0,
+      "group": "wing_l",
+      "source": "design, computed: see facts.stow_angles"
+    },
+    "panel_l1_j": {
+      "angle": 180,
+      "min": -180,
+      "max": 180,
+      "move_to": 0,
+      "group": "wing_l",
+      "source": "design, computed: a 180° fold about a hinge line beside the panels lays each panel over the last"
+    },
+    "panel_l2_j": {
+      "angle": -180,
+      "min": -180,
+      "max": 180,
+      "move_to": 0,
+      "group": "wing_l",
+      "source": "design, computed: a 180° fold about a hinge line beside the panels lays each panel over the last"
+    },
+    "panel_l3_j": {
+      "angle": 180,
+      "min": -180,
+      "max": 180,
+      "move_to": 0,
+      "group": "wing_l",
+      "source": "design, computed: a 180° fold about a hinge line beside the panels lays each panel over the last"
+    },
+    "panel_l4_j": {
+      "angle": -180,
+      "min": -180,
+      "max": 180,
+      "move_to": 0,
+      "group": "wing_l",
+      "source": "design, computed: a 180° fold about a hinge line beside the panels lays each panel over the last"
+    },
+    "yoke_r_j": {
+      "angle": -113.11,
+      "min": -180,
+      "max": 180,
+      "move_to": 0,
+      "group": "wing_r",
+      "source": "design, computed: see facts.stow_angles"
+    },
+    "panel_r0_j": {
+      "angle": 173.11,
+      "min": -180,
+      "max": 180,
+      "move_to": 0,
+      "group": "wing_r",
+      "source": "design, computed: see facts.stow_angles"
+    },
+    "panel_r1_j": {
+      "angle": -180,
+      "min": -180,
+      "max": 180,
+      "move_to": 0,
+      "group": "wing_r",
+      "source": "design, computed: a 180° fold about a hinge line beside the panels lays each panel over the last"
+    },
+    "panel_r2_j": {
+      "angle": 180,
+      "min": -180,
+      "max": 180,
+      "move_to": 0,
+      "group": "wing_r",
+      "source": "design, computed: a 180° fold about a hinge line beside the panels lays each panel over the last"
+    },
+    "panel_r3_j": {
+      "angle": -180,
+      "min": -180,
+      "max": 180,
+      "move_to": 0,
+      "group": "wing_r",
+      "source": "design, computed: a 180° fold about a hinge line beside the panels lays each panel over the last"
+    },
+    "panel_r4_j": {
+      "angle": 180,
+      "min": -180,
+      "max": 180,
+      "move_to": 0,
+      "group": "wing_r",
+      "source": "design, computed: a 180° fold about a hinge line beside the panels lays each panel over the last"
+    }
   }
 }
