@@ -18,7 +18,11 @@
     "NASA/MSFC, photo of an F-1 powerhead"
   ],
   "finrocket": [
-    "Estes F15 thrust curve: Estes_F15.eng from the OpenRocket repository (GPL), made from NAR certification data"
+    "Motor casing colour sampled from Estes' F15-6 product photo",
+    "Estes F15 thrust curve: Estes_F15.eng from the OpenRocket repository (GPL), made from NAR certification data",
+    "Retainer colour sampled from Estes' product photo",
+    "Lettering set in Geist (SIL OFL 1.1)",
+    "Roll pattern after the Saturn V's, from NASA's photo of the Apollo 11 rollout"
   ],
   "hubble": [
     "Photos: NASA (STS-125 crew)",

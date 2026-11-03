@@ -57,10 +57,10 @@
   }
  },
  "finrocket": {
-  "approved": "2026-11-02 21:15",
+  "approved": "2026-11-03 15:47",
   "inputs": {
-   "specs/finrocket.json": "8510240b7eba2c85",
-   "probes/finrocket.py": "ccbcf007ab874d07",
+   "specs/finrocket.json": "e9e6e0ffe2015ce5",
+   "probes/finrocket.py": "22e386b68d3057c0",
    "build.py": "363cabc8976febf0",
    "blender.json": "7bbc071b6e396ec4",
    "lib/__init__.py": "e3b0c44298fc1c14",
@@ -78,7 +78,8 @@
    "lib/rig.py": "87431e5e6051f10e",
    "lib/sources.py": "425a2fcd692532e6",
    "lib/textures.py": "7daa18205cf41859",
-   "lib/tiling.py": "b352f8627c102bf0"
+   "lib/tiling.py": "b352f8627c102bf0",
+   "refs/finrocket/lettering-mask.png": "85927b8766fff8c8"
   }
  },
  "hubble": {
