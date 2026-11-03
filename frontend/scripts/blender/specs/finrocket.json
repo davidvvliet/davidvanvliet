@@ -32,7 +32,8 @@
       "title": "Estes F15-6 engines, product page",
       "url": "https://estesrockets.com/products/f15-6-engines",
       "read": "2026-11-02",
-      "licence": "copyright Estes: link and quotes only"
+      "licence": "copyright Estes: link and quotes only",
+      "credit": "Motor casing colour sampled from Estes' F15-6 product photo"
     },
     {
       "id": "openrocket_f15",
@@ -91,6 +92,28 @@
       "url": "https://github.com/davidvvliet/davidvanvliet/tree/main/frontend/scripts/blender/specs/finrocket.json",
       "read": "2026-11-02",
       "licence": "this repo"
+    },
+    {
+      "id": "estes_retainer",
+      "title": "Estes Pro Series II 29 mm Motor Retainer Set (9750), product page and photo",
+      "url": "https://estesrockets.com/products/pro-series-ii-29-mm-motor-retainer-set",
+      "read": "2026-11-03",
+      "licence": "copyright Estes: link and quotes only",
+      "credit": "Retainer colour sampled from Estes' product photo"
+    },
+    {
+      "id": "estes_lug_pack",
+      "title": "Estes Launch Lug Pack, product page",
+      "url": "https://estesrockets.com/products/launch-lug-pack",
+      "read": "2026-11-03",
+      "licence": "copyright Estes: link and quotes only"
+    },
+    {
+      "id": "estes_bbxii_instructions",
+      "title": "Estes Black Brant XII (9723) instructions, PDF",
+      "url": "https://cdn.shopify.com/s/files/1/0686/0220/0369/files/9723_BBXII_WEB_INstructions_9-23.pdf",
+      "read": "2026-11-03",
+      "licence": "copyright Estes: link and quotes only"
     }
   ],
   "reference_model": {
@@ -181,12 +204,12 @@
       "tolerance": 0.02
     },
     "overall_length": {
-      "value": 1.0834,
+      "value": 1.0979,
       "object": "*",
       "measure": "z",
       "tolerance": 0.01,
       "source": "design, chosen",
-      "note": "body plus nose; the motor ends flush"
+      "note": "body plus nose, plus the motor tube and retainer cap standing out aft (mount_overhang + retainer_lip)"
     }
   },
   "facts": {
@@ -252,6 +275,91 @@
       "value": 0.0193,
       "source": "agf_c04cls",
       "quote": "Dimension 20.2*8.5*19.3 mm"
+    },
+    "retainer": {
+      "value": "29 mm screw-on retainer: a threaded ring epoxied over the motor tube's aft end and a cap that screws on over the motor's rim",
+      "source": "estes_bbxii_instructions",
+      "quote": "INSTALL ENGINE RETAINER ... Apply epoxy to the outside of tube A ... With the notched side of H facing in towards the rocket, place H over tube A (page 6); parts list: 29mm engine retainer set"
+    },
+    "retainer_material": {
+      "value": "ABS",
+      "source": "estes_retainer",
+      "quote": "molded from heat-resistant ABS plastic to withstand repeated flights. Compatible with Estes E16 and F15 motors"
+    },
+    "mount_overhang": {
+      "value": 0.012,
+      "source": "design, chosen: the motor tube stands out aft of the body for the retainer, as tube A does in the kit's instructions (page 6 drawing)"
+    },
+    "retainer_thread_od": {
+      "value": 0.0345,
+      "source": "design, estimate: sizes not published; shape from Estes' retainer photo (estes_retainer)"
+    },
+    "retainer_base_length": {
+      "value": 0.01,
+      "source": "design, estimate: sizes not published"
+    },
+    "retainer_cap_od": {
+      "value": 0.038,
+      "source": "design, estimate: sizes not published; 16 flats as in Estes' photo"
+    },
+    "retainer_cap_length": {
+      "value": 0.013,
+      "source": "design, estimate: sizes not published"
+    },
+    "retainer_lip_id": {
+      "value": 0.025,
+      "source": "design, estimate: smaller than the 29 mm motor so the lip holds its rim"
+    },
+    "retainer_lip": {
+      "value": 0.0025,
+      "source": "design, estimate"
+    },
+    "motor_wall": {
+      "value": 0.001,
+      "source": "design, estimate: casing wall thickness not published"
+    },
+    "nozzle_recess": {
+      "value": 0.003,
+      "source": "design, estimate: F15 nozzle geometry not published"
+    },
+    "nozzle_length": {
+      "value": 0.01,
+      "source": "design, estimate: F15 nozzle geometry not published"
+    },
+    "nozzle_exit_d": {
+      "value": 0.012,
+      "source": "design, estimate: F15 nozzle geometry not published"
+    },
+    "nozzle_throat_d": {
+      "value": 0.006,
+      "source": "design, estimate: F15 nozzle geometry not published"
+    },
+    "lug_wall": {
+      "value": 0.0005,
+      "source": "design, estimate"
+    },
+    "lug_id": {
+      "value": 0.0047625,
+      "source": "estes_lug_pack",
+      "quote": "3/16 x 2",
+      "note": "3/16 in; the kit's own lug (038181) is not tied to a size; the kit page gives the rod as 3/16 in. (4.78 mm)",
+      "also": [
+        {
+          "source": "estes_bbxii",
+          "quote": "Launch Rod Size 3/16 in. (4.78 mm)"
+        }
+      ]
+    },
+    "lug_length": {
+      "value": 0.0508,
+      "source": "estes_lug_pack",
+      "quote": "3/16 x 2",
+      "note": "2 in"
+    },
+    "lugs": {
+      "value": "two, between fins, each even with the aft end of a body tube",
+      "source": "estes_bbxii_instructions",
+      "quote": "Measure the center between the fins on the bottom of tube C the bottom of tube I ... Even with the end of tube. ... Place the launch lugs ensuring that align between the middle of the fins (page 6)"
     }
   },
   "flight": {
@@ -358,14 +466,67 @@
       "note": "positive turns the fin's leading edge toward +(axis × radial), as the flight sim's fin force"
     }
   },
-  "materials": {},
+  "materials": {
+    "kraft": {
+      "hex": "#84714e",
+      "metallic": 0.0,
+      "roughness": 0.85,
+      "source": "estes_f15: product photo EstesF15-6Engines.png, sampled on the casings away from the green print"
+    },
+    "retainer_grey": {
+      "hex": "#5b6262",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "estes_retainer: product photo 9750-Estes-29-mm-Motor-Retainer-Set-with-Bag.png, lit faces of the caps averaged"
+    },
+    "nozzle_clay": {
+      "hex": "#8a8378",
+      "metallic": 0.0,
+      "roughness": 0.95,
+      "source": "design, estimate: no photo of the F15's nozzle found"
+    }
+  },
   "open_questions": [
     "Battery not chosen: its mass is in the 30 g estimate.",
     "Dry mass and centre of gravity are estimates until the parts are weighed.",
-    "No dimensioned fin template exists for the Black Brant XII; fin shape is a design value."
+    "No dimensioned fin template exists for the Black Brant XII; fin shape is a design value.",
+    "F15 nozzle sizes (exit, throat, recess) and casing wall are not published: design estimates until a motor is measured.",
+    "Retainer sizes are estimates from Estes' photo; the kit's launch lug size is not stated (3/16 x 2 in from the lug pack)."
   ],
   "budget": {
     "triangles": 50000,
     "glb_bytes": 1500000
-  }
+  },
+  "closeups": [
+    {
+      "name": "tail from below",
+      "target": [
+        0,
+        0,
+        -0.014
+      ],
+      "look": [
+        -0.25,
+        0.3,
+        1.0
+      ],
+      "radius": 0.03,
+      "note": "retainer cap, motor and its nozzle"
+    },
+    {
+      "name": "tail from the side",
+      "target": [
+        0,
+        0,
+        0.03
+      ],
+      "look": [
+        -0.7,
+        0.7,
+        0.2
+      ],
+      "radius": 0.12,
+      "note": "retainer, aft launch lug, fin roots"
+    }
+  ]
 }

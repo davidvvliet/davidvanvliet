@@ -22,16 +22,47 @@ def build(spec):
         prof.append((0.0, lb + ln))
         parts.lathe("nose", prof, segments=64, material="black")
 
+    # The motor tube stands out aft of the body (mount_overhang) for the screw-on retainer, as in the
+    # kit's instructions: a threaded ring epoxied over the tube and a cap whose lip holds the motor's rim.
     mo, mi, ml = d["mount_od"] / 2, d["mount_id"] / 2, d["mount_length"]
+    za = -d["mount_overhang"]                    # aft end of the motor tube and of the motor
     with parts.assembly("motor_mount"):
-        parts.lathe("motor_mount", [(mi, 0), (mo, 0), (mo, ml), (mi, ml)], closed=True, segments=48,
+        parts.lathe("motor_mount", [(mi, za), (mo, za), (mo, za + ml), (mi, za + ml)], closed=True, segments=48,
                     material="dark_metal")
-        for name, z in (("ring_aft", 0.002), ("ring_fwd", ml - 0.005)):  # 3 mm rings: design
+        for name, z in (("ring_aft", 0.002), ("ring_fwd", za + ml - 0.005)):  # 3 mm rings: design
             parts.lathe(name, [(mo, z), (ri, z), (ri, z + 0.003), (mo, z + 0.003)], closed=True,
                         segments=48, material="dark_metal")
+    rt, lb_ = d["retainer_thread_od"] / 2, d["retainer_base_length"]
+    rc, lc, lip, rl = d["retainer_cap_od"] / 2, d["retainer_cap_length"], d["retainer_lip"], d["retainer_lip_id"] / 2
+    with parts.assembly("retainer"):
+        parts.lathe("retainer_base", [(mo, za), (rt, za), (rt, za + lb_), (mo, za + lb_)], closed=True,
+                    segments=48, material="retainer_grey")
+        # The cap: sixteen flats outside (Estes' photo), the lip across the motor's rim at its aft end.
+        parts.lathe("retainer_cap", [(rt, za - lip), (rc, za - lip), (rc, za - lip + lc), (rt, za - lip + lc)],
+                    closed=True, segments=16, smooth=False, material="retainer_grey")
+        parts.lathe("retainer_lip", [(rl, za - lip), (rt, za - lip), (rt, za), (rl, za)], closed=True,
+                    segments=48, material="retainer_grey")
+    # The motor: a paper casing, its clay nozzle set back from the aft end, a cone opening from the
+    # throat to the exit, and the propellant's face above the throat.
+    r_m, wall = d["motor_diameter"] / 2, d["motor_wall"]
+    zn = za + d["nozzle_recess"]                 # nozzle's aft face
+    ln_, re, rth = d["nozzle_length"], d["nozzle_exit_d"] / 2, d["nozzle_throat_d"] / 2
     with parts.assembly("motor"):
-        parts.cylinder("motor", d["motor_diameter"] / 2, d["motor_length"], location=(0, 0, 0),
-                       segments=32, material="white_paint")
+        parts.lathe("motor", [(r_m - wall, za), (r_m, za), (r_m, za + d["motor_length"]), (r_m - wall, za + d["motor_length"])],
+                    closed=True, segments=48, material="kraft")
+        parts.lathe("motor_nozzle", [(re, zn), (r_m - wall, zn), (r_m - wall, zn + ln_), (rth, zn + ln_), (rth, zn + 0.6 * ln_)],
+                    closed=True, segments=48, material="nozzle_clay")
+        parts.lathe("motor_grain", [(0.0, zn + ln_), (rth + 0.0005, zn + ln_), (rth + 0.0005, zn + ln_ + 0.001), (0.0, zn + ln_ + 0.001)],
+                    segments=24, material="black")
+
+    # Launch lugs: between the fins (45° from fin 0 and fin 3), each even with the aft end of a body tube.
+    lr, ll, lw = d["lug_id"] / 2, d["lug_length"], d["lug_wall"]
+    with parts.assembly("lugs"):
+        a = -math.pi / 4
+        rr = ro + lr + lw - 0.0002               # resting on the tube
+        for name, z in (("lug_aft", 0.0), ("lug_fwd", lb / 2)):
+            parts.lathe(name, [(lr, 0), (lr + lw, 0), (lr + lw, ll), (lr, ll)], closed=True, segments=16,
+                        location=(rr * math.cos(a), rr * math.sin(a), z), material="white_paint")
 
     # Fins: all-moving trapezoids, each on a radial shaft at the quarter of its mean aerodynamic
     # chord (or_techdoc: the fin's centre of pressure), so the servo holds little load.
@@ -45,7 +76,7 @@ def build(spec):
     z_piv = z_le - (xle + 0.25 * mac)
     gap = 0.001                                  # fin root clear of the tube: design
     sx, sy, sz = d["servo_length"], d["servo_width"], d["servo_height"]  # along z, across, to the shaft
-    z_servo = ml + 0.008                         # servos stand just forward of the mount: design
+    z_servo = za + ml + 0.008                    # servos stand just forward of the mount: design
     for i in range(4):
         a = i * math.pi / 2
         r_hat = (math.cos(a), math.sin(a), 0.0)
