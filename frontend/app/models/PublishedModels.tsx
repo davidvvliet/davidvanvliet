@@ -49,7 +49,7 @@ const LOGOS: Record<string, { name: string; logo: string; height: number; above?
   naa: { name: "North American Aviation", logo: "/logos/north-american.png", height: 30 },
   rocketdyne: { name: "Rocketdyne", logo: "/logos/rocketdyne.png", height: 24 },
   thiokol: { name: "Thiokol", logo: "/logos/thiokol.png", height: 14 },
-  esa: { name: "European Space Agency", logo: "/logos/esa.svg", height: 16, above: 8, after: { nasa: 3 } },
+  esa: { name: "European Space Agency", logo: "/logos/esa.svg", height: 16, above: 6, after: { nasa: 3 } },
 };
 const ORGS = ["nasa", "spacex"];
 const logosOf = (m: Published) => m.logos.filter((k): k is keyof typeof LOGOS => k in LOGOS)
