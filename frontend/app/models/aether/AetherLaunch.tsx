@@ -132,6 +132,7 @@ function Scene({ start, onDone, ui }: { start: number | null; onDone: () => void
   const done = useRef(false);
   const q = useMemo(() => new THREE.Quaternion(), []);
   const tmp = useMemo(() => new THREE.Vector3(), []);
+  const sun = useRef<THREE.DirectionalLight>(null);
 
   useEffect(() => { camera.position.set(6, 2.5, 7); controls.current?.target.set(0.6, 0, 0); controls.current?.update(); }, [camera]);
   useEffect(() => { done.current = false; }, [start]);
@@ -148,6 +149,7 @@ function Scene({ start, onDone, ui }: { start: number | null; onDone: () => void
     orbit.current.visible = orbitView;
     c.visible = !orbitView;
     plume.current.visible = t >= P_BURN && t < P_REVEAL;
+    sun.current?.position.set(5e7, local || orbitView ? 1.5e7 : -2.5e7, 3e7);
 
     // Wings: folded until activation, then unfolded hinge by hinge.
     const a = t - P_ACT;
@@ -205,13 +207,15 @@ function Scene({ start, onDone, ui }: { start: number | null; onDone: () => void
         m.opacity = 0.25 + 0.1 * Math.sin(t * 40);
         u = { phase: "Orbit insertion", caption: "At the high point the 20 N engine burns 59.5 m/s, lifting the orbit's low point from the surface to 673 km.",
           readout: `Δv     ${(DV * f).toFixed(1)} / ${DV} m/s\nburn   ${Math.round(BURN_S * f)} / ${BURN_S} s` };
+        // From above, looking down past the craft at the Moon 7,331 km below.
         const ang = 0.5 + 0.1 * (t - P_BURN);
-        cam(tmp.set(9 * Math.cos(ang), R_A + 2.5, 9 * Math.sin(ang)), new THREE.Vector3(0, R_A, 0));
+        cam(tmp.set(4 * Math.cos(ang), R_A + 10, 4 * Math.sin(ang)), new THREE.Vector3(0, R_A - 2, 0));
       } else {
         const step = a < 1.5 ? "The hold-downs release." : a < 10.3 ? "The wings unfold: the yoke, then the panels, one by one."
           : "Wings out, 663 W. The S-band dish looks down at the Moon; the X-band panel turns to the Earth.";
         u = { phase: "Activation", caption: step, readout: "orbit  673 × 7,331 km\nwings  2 × 5 panels" };
-        cam(tmp.set(9, R_A - 3.5, 10), new THREE.Vector3(0, R_A - 0.3, 0));
+        // From below, toward the cells and the dish.
+        cam(tmp.set(7, R_A - 6, 9), new THREE.Vector3(0, R_A, 0));
       }
     }
     const key = u.phase + u.caption + u.readout;
@@ -232,7 +236,7 @@ function Scene({ start, onDone, ui }: { start: number | null; onDone: () => void
   return (
     <>
       <ambientLight intensity={0.15} />
-      <directionalLight position={[5e7, 1.5e7, 3e7]} intensity={2.6} />
+      <directionalLight ref={sun} position={[5e7, 1.5e7, 3e7]} intensity={2.6} />
       <primitive object={stars} />
       <group ref={launchSet}>
         <mesh rotation={[-Math.PI / 2, 0, 0]} position={[12000, -0.66, 0]}>
