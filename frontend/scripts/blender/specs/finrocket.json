@@ -415,8 +415,8 @@
       "source": "design, chosen: a rounded tip, as moulded model-rocket nose cones have"
     },
     "fin_tip_band": {
-      "value": 0.008,
-      "source": "design, chosen: the painted outer part of each fin's span"
+      "value": 0.003,
+      "source": "design, chosen: a thin red line along each fin's tip"
     },
     "roll_pattern": {
       "value": "thin black rings at stage joints, black panels below each ring and a black stripe at the base, all on one side, one above another",
