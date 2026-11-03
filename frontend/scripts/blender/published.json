@@ -87,9 +87,9 @@
   }
  },
  "hubble": {
-  "approved": "2026-11-03 16:02",
+  "approved": "2026-11-03 17:10",
   "inputs": {
-   "specs/hubble.json": "0c8be27c822d6ad3",
+   "specs/hubble.json": "ad24db86a9902062",
    "probes/hubble.py": "ad646dc478d7e656",
    "build.py": "363cabc8976febf0",
    "blender.json": "7bbc071b6e396ec4",

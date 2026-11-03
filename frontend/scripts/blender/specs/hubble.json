@@ -1,7 +1,8 @@
 {
  "title": "Hubble Space Telescope",
  "logos": [
-  "nasa"
+  "nasa",
+  "esa"
  ],
  "note": "Hubble as it is now, after Servicing Mission 4 (May 2009): SA3 rigid arrays, Soft Capture Mechanism on the aft bulkhead, NOBL covers on the bay doors. Body stations and appendage positions from Lockheed's 1985 handbook drawings (structure unchanged since launch). Frame in facts.frame: z = V1 (aft bulkhead at 0), x = V2, y = V3.",
  "sources": [
