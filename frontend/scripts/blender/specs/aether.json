@@ -2,7 +2,7 @@
   "title": "Altair Aether",
   "logos": [],
   "listed": false,
-  "note": "Our own design: a ~300 kg lunar communications relay, fired off a mass driver near the lunar south pole into an elliptical frozen lunar orbit, built from real flight hardware where it exists. Frame: x along the track (the direction of travel, and the craft's axis: the launch load runs down it), z up, y left. The craft's separation plane is at x = 0; the sled and the rails are behind and below it. Pass 1: structure, tank, main thruster, sled and rails. Pass 2: propulsion (eight 1 N thrusters, latch valve, fill and drain valves, lines). Pass 3: power (two solar wings, deployed; two batteries). Pass 4: comms (S-band dish to the Moon on +z, X-band array to the Earth on +x, transponder). Pass 5: attitude (four reaction wheels, two star trackers, sun sensors, IMU).",
+  "note": "Our own design: a ~300 kg lunar communications relay, fired off a mass driver near the lunar south pole into an elliptical frozen lunar orbit, built from real flight hardware where it exists. Frame: x along the track (the direction of travel, and the craft's axis: the launch load runs down it), z up, y left. The craft's separation plane is at x = 0; the sled and the rails are behind and below it. Pass 1: structure, tank, main thruster, sled and rails. Pass 2: propulsion (eight 1 N thrusters, latch valve, fill and drain valves, lines). Pass 3: power (two solar wings, deployed; two batteries). Pass 4: comms (S-band dish to the Moon on +z, X-band array to the Earth on +x, transponder). Pass 5: attitude (four reaction wheels, two star trackers, sun sensors, IMU). Pass 6: electronics (power control unit, power cables; a reserved slot for the flight computer and valve drivers, which are designed separately).",
   "sources": [
     {
       "id": "nssdc_moon",
@@ -150,6 +150,13 @@
       "url": "https://sensonor.azurewebsites.net/media/vl4jeya3/2022-04-06-product-brief-stim300-a4_high-quality-print.pdf",
       "read": "2026-11-03",
       "licence": "copyright Safran Sensonor: link and quotes only"
+    },
+    {
+      "id": "aac_starbuck_mini",
+      "title": "AAC Clyde Space, STARBUCK-MINI datasheet (release 17 October 2025)",
+      "url": "https://www.aac-clyde.space/wp-content/uploads/2021/11/STARBUCK-MINI-Datasheet-1.pdf",
+      "read": "2026-11-03",
+      "licence": "copyright AAC Clyde Space: link and quotes only"
     },
     {
       "id": "design",
@@ -301,6 +308,22 @@
       "tolerance": 0.02,
       "source": "bradford_css",
       "quote": "110 x 110 x 30 mm3"
+    },
+    "pcdu_depth": {
+      "value": 0.249,
+      "object": "pcdu",
+      "measure": "y",
+      "tolerance": 0.02,
+      "source": "aac_starbuck_mini",
+      "quote": "Depth 249 mm"
+    },
+    "pcdu_height": {
+      "value": 0.147,
+      "object": "pcdu",
+      "measure": "x",
+      "tolerance": 0.02,
+      "source": "aac_starbuck_mini",
+      "quote": "Height 147 mm"
     }
   },
   "facts": {
@@ -696,6 +719,32 @@
       "value": "Safran Sensonor STIM300, 39 x 45 x 22 mm, 55 g",
       "source": "stim300",
       "quote": "(39 mm x 45 mm x 22 mm) ... Weight 55 g"
+    },
+    "pcdu": {
+      "value": "AAC Clyde Space Starbuck-Mini: 22-34 V bus (8 cell lithium), MPPT 500 W per module, 28 V LCL outputs, heater outputs, 20 kRAD",
+      "source": "aac_starbuck_mini",
+      "quote": "Primary Bus Voltage 22-34 V (8 cell lithium) ... MPPT: 500 W Solar Array power per module ... Upto 5 modules per PCDU (2.5 kW ... Radiation Tolerance (TiD) 20 kRAD (qualified >30 kRAD,Si) ... Idle Power Consumption 10W Typically ... the landers."
+    },
+    "pcdu_config": {
+      "value": "two MPPT modules (1000 W, over the array's ~1000 W new), distribution and heater modules",
+      "source": "design, chosen"
+    },
+    "pcdu_example": {
+      "value": "5-module example: 147 high x 249 deep x 142 wide mm, 3.9 kg; 15-module: 361 wide, 11.8 kg",
+      "source": "aac_starbuck_mini",
+      "quote": "Height 147 mm Depth 249 mm ... Mass 3.9 kg 11.8 kg ... Width 142 mm 361 mm ... 500 W Solar Array; 20 x 28V LCLs, 6 x 5V LCLs, 6 x 12V LCLs"
+    },
+    "pcdu_width": {
+      "value": 0.164,
+      "source": "design, estimate: the 5-module example's 142 mm plus one more module at (361 - 142) / 10 = 22 mm each, from the sheet's two examples; AAC would give the real size"
+    },
+    "avionics_slot": {
+      "value": "a mounting plate on the inside of the bottom panel, opposite the power unit, kept for the flight computer and the valve drive electronics",
+      "source": "design, chosen: those are designed in a separate effort and will be fitted later"
+    },
+    "harness": {
+      "value": "power cables from the power unit to each battery and each wing's drive, modelled as 16 mm bundles",
+      "source": "design, estimate"
     }
   },
   "materials": {},
@@ -706,7 +755,8 @@
     "Propulsion has no filter or pressure transducer yet (no sourced part found); the thruster layout is our own, not copied from a flown craft.",
     "Power: the solar wings are shown deployed; the stowed pose for the launch and the hinges come with deployment (step 9). The array's radiation dose and working temperature are estimates. The Earth's shadow (lunar eclipses, a few hours, a few times a year) isn't in the battery sizing.",
     "Comms: no low-gain S-band antenna yet for safe mode (no maker's datasheet found); the EnduroSat array's band (8025-8400 MHz) sits below the 8450-8500 MHz lunar band; with the dish on the Moon and the array on the Earth, the wings turning only about y lose some sunlight in some seasons.",
-    "Attitude: the wheel pyramid's tilt and the sensors' places are our own; coverage of the two coarse sun sensors is not a full sphere (safe mode would also lean on the fine sensor and the trackers)."
+    "Attitude: the wheel pyramid's tilt and the sensors' places are our own; coverage of the two coarse sun sensors is not a full sphere (safe mode would also lean on the fine sensor and the trackers).",
+    "Electronics: the Starbuck-Mini is rated 20 kRAD and '5–7 years in LEO'; whether that covers five years in lunar orbit (no Van Allen belts to cross, since it launches from the Moon, but solar particle events) isn't checked. Its bus follows the battery (22-34 V), not a regulated 28 V. The flight computer and valve drivers come from the separate design; the power budget waits for them."
   ],
   "budget": {
     "triangles": 50000,

@@ -79,6 +79,7 @@ def build(spec):
     power(d, R, flat, xc, xb)
     comms(d, R, flat, xc, xb, t)
     attitude(d, R, flat, xc, xb, t)
+    electronics(d, R, flat, xc, xb, t)
 
 
 def _dir(a, sign, aft, cant):
@@ -266,4 +267,28 @@ def attitude(d, R, flat, xc, xb, t):
     # The STIM300 IMU beside the transponder, under the forward deck.
     with parts.assembly("imu", internal=True):
         parts.box("imu", (0.022, 0.045, 0.039), location=(xb - t - 0.011, -0.15, 0.2), material="dark_metal")
+
+
+def electronics(d, R, flat, xc, xb, t):
+    # The AAC Clyde Space Starbuck-Mini power unit under the top panel, between the battery's end and
+    # the forward deck: 147 mm along x, 249 mm across y, its width (estimated) downward.
+    w = d["pcdu_width"]
+    zt = flat - 0.004                                # the top panel's inner face
+    x0, x1 = 0.795, 0.795 + 0.147
+    xm = (xc + xb) / 2
+    with parts.assembly("electronics", internal=True):
+        parts.box("pcdu", (0.147, 0.249, w), location=((x0 + x1) / 2, 0, zt - w / 2), material="dark_metal")
+        # Kept for the flight computer and valve drivers (designed separately): a bare plate opposite.
+        parts.box("avionics_slot_plate", (0.147, 0.249, 0.005), location=((x0 + x1) / 2, 0, -zt + 0.0025),
+                  material="foil_silver")
+        rb = 0.008
+        xh = 0.90
+        for k, sy in enumerate((1, -1)):
+            parts.tube(f"harness_wing{k}", [(xh, sy * 0.125, zt - 0.06), (xh, sy * 0.44, 0.03),
+                                            (xm + 0.02, sy * 0.44, 0.03), (xm, sy * (R - 0.02), 0.0)], rb,
+                       bend_radius=0.03, material="black")
+        parts.tube("harness_bat_top", [(x0, 0.06, zt - 0.06), (0.775, 0.06, zt - 0.045)], rb, material="black")
+        parts.tube("harness_bat_bottom", [(0.86, -0.125, zt - 0.1), (0.86, -0.42, 0.05), (0.86, -0.42, -0.05),
+                                          (0.86, -0.13, -zt + 0.1), (0.775, -0.06, -zt + 0.045)], rb,
+                   bend_radius=0.03, material="black")
 
