@@ -1,0 +1,371 @@
+{
+  "title": "Fin-steered model rocket",
+  "logos": [],
+  "note": "Our own design, not a kit: a BT-70-size airframe on an Estes F15 with four all-moving fins, each turned by an AGFRC C04CLS servo through a pushrod, flown by the rocket-recorder board. Tube, motor-mount and motor sizes are sourced; the nose and fin shapes are design values.",
+  "viewer": {
+    "explore": true
+  },
+  "sources": [
+    {
+      "id": "apogee_bt70",
+      "title": "Apogee Components, 56mm x 18\" Body Tube (Estes BT-70 size)",
+      "url": "https://www.apogeerockets.com/Building_Supplies/Body_Tubes/Low_Power_Tubes/56mm_x_18_Body_Tube_Estes_BT-70_size?cPath=306_",
+      "read": "2026-11-02",
+      "licence": "copyright Apogee Components: link and quotes only"
+    },
+    {
+      "id": "apogee_29mm",
+      "title": "Apogee Components, 29mm to 54mm tubes",
+      "url": "https://www.apogeerockets.com/Building_Supplies/Body_Tubes/29mm_to_54mm_Tubes",
+      "read": "2026-11-02",
+      "licence": "copyright Apogee Components: link and quotes only"
+    },
+    {
+      "id": "estes_bbxii",
+      "title": "Estes Pro Series II Black Brant XII (9723), product page and instructions",
+      "url": "https://estesrockets.com/products/black-brant-xii",
+      "read": "2026-11-02",
+      "licence": "copyright Estes: link and quotes only"
+    },
+    {
+      "id": "estes_f15",
+      "title": "Estes F15-6 engines, product page",
+      "url": "https://estesrockets.com/products/f15-6-engines",
+      "read": "2026-11-02",
+      "licence": "copyright Estes: link and quotes only"
+    },
+    {
+      "id": "openrocket_f15",
+      "title": "Estes_F15.eng (RASP thrust curve from NAR certification data), OpenRocket 15.03 repository",
+      "url": "https://github.com/openrocket/openrocket/blob/release-15.03/core/resources-src/datafiles/thrustcurves/thrustcurve.org/Estes_F15.eng",
+      "read": "2026-11-02",
+      "licence": "OpenRocket is GPL (README: \"licensed under the GNU GPL\"); the curve is NAR's published static test data",
+      "saved": "refs/finrocket/sources/Estes_F15.eng",
+      "credit": "Estes F15 thrust curve: Estes_F15.eng from the OpenRocket repository (GPL), made from NAR certification data"
+    },
+    {
+      "id": "agf_c04cls",
+      "title": "AGFRC C04CLS micro servo, maker product page",
+      "url": "https://agfrc.com/index.php?id=2450",
+      "read": "2026-11-02",
+      "licence": "copyright AGFRC: link and quotes only"
+    },
+    {
+      "id": "or_techdoc",
+      "title": "Niskanen, OpenRocket technical documentation, version 13.05",
+      "url": "https://dept.aem.umn.edu/~./faculty/flaten/Rocketry_Remote_Lessons_Fall_2021/OpenRocketTechnicalDocumentationVersion13_05.pdf",
+      "read": "2026-11-02",
+      "licence": "not stated in the document: link and quotes only"
+    },
+    {
+      "id": "nasa_drag",
+      "title": "NASA Glenn, Beginner's Guide to Aeronautics: shape effects on drag",
+      "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/shape-effects-on-drag/",
+      "read": "2026-11-02",
+      "licence": "public domain (US government work)"
+    },
+    {
+      "id": "nasa_atmos",
+      "title": "NASA Glenn, Earth atmosphere model (metric)",
+      "url": "https://www.grc.nasa.gov/www/k-12/airplane/atmosmet.html",
+      "read": "2026-11-02",
+      "licence": "public domain (US government work)"
+    },
+    {
+      "id": "mit_xanthus",
+      "title": "MIT Rocket Team, Xanthus Control Report II",
+      "url": "https://wikis.mit.edu/confluence/download/attachments/348694277/Xanthus_Control_Report_II.pdf?api=v2",
+      "read": "2026-11-02",
+      "licence": "not stated: link and quotes only"
+    },
+    {
+      "id": "recorder",
+      "title": "rocket-recorder board (this repo's circuit harness)",
+      "url": "https://github.com/davidvvliet/davidvanvliet/tree/main/frontend/scripts/circuit/boards/rocket-recorder",
+      "read": "2026-11-02",
+      "licence": "this repo"
+    },
+    {
+      "id": "design",
+      "title": "This rocket's own design choices and estimates (not a kit)",
+      "url": "https://github.com/davidvvliet/davidvanvliet/tree/main/frontend/scripts/blender/specs/finrocket.json",
+      "read": "2026-11-02",
+      "licence": "this repo"
+    }
+  ],
+  "reference_model": {
+    "url": "",
+    "note": "none: our own design"
+  },
+  "dimensions": {
+    "body_od": {
+      "value": 0.05631,
+      "object": "body_tube",
+      "measure": "diameter",
+      "tolerance": 0.0005,
+      "source": "apogee_bt70",
+      "quote": "Outer Diameter: 2.217\" (5.63 cm)",
+      "also": [
+        {
+          "source": "estes_bbxii",
+          "quote": "Diameter 2.22 in. (56.32 mm)"
+        }
+      ]
+    },
+    "body_length": {
+      "value": 0.9144,
+      "object": "body_tube",
+      "measure": "length",
+      "tolerance": 0.002,
+      "source": "apogee_bt70",
+      "quote": "56mm x 18\" Body Tube: two 18\" tubes joined (design: two standard lengths)"
+    },
+    "mount_od": {
+      "value": 0.03073,
+      "object": "motor_mount",
+      "measure": "diameter",
+      "tolerance": 0.0005,
+      "source": "apogee_29mm",
+      "quote": "29mm Engine Mount Tube Set (2/pk)|10253|1|1.14\"|(29mm)|1.21\"|(31mm)|7\""
+    },
+    "mount_length": {
+      "value": 0.1778,
+      "object": "motor_mount",
+      "measure": "length",
+      "tolerance": 0.002,
+      "source": "apogee_29mm",
+      "quote": "... 7\" (length)"
+    },
+    "motor_diameter": {
+      "value": 0.029,
+      "object": "motor",
+      "measure": "diameter",
+      "tolerance": 0.0005,
+      "source": "openrocket_f15",
+      "quote": "F15 29 114 0-4-6-8 .0600 .10300 E (diameter mm, length mm, delays, propellant kg, total kg)"
+    },
+    "motor_length": {
+      "value": 0.114,
+      "object": "motor",
+      "measure": "length",
+      "tolerance": 0.002,
+      "source": "openrocket_f15",
+      "quote": "F15 29 114",
+      "also": [
+        {
+          "source": "estes_f15",
+          "quote": "Length 4.5 in. (11.4 cm)"
+        }
+      ]
+    },
+    "nose_length": {
+      "value": 0.169,
+      "object": "nose",
+      "measure": "length",
+      "tolerance": 0.002,
+      "source": "design, chosen",
+      "note": "tangent ogive, 3 body diameters"
+    },
+    "fin_root_chord": {
+      "value": 0.1,
+      "source": "design, chosen",
+      "object": "fin0",
+      "measure": "z",
+      "tolerance": 0.02
+    },
+    "fin_span": {
+      "value": 0.065,
+      "source": "design, chosen",
+      "object": "fin0",
+      "measure": "x",
+      "tolerance": 0.02
+    },
+    "overall_length": {
+      "value": 1.0834,
+      "object": "*",
+      "measure": "z",
+      "tolerance": 0.01,
+      "source": "design, chosen",
+      "note": "body plus nose; the motor ends flush"
+    }
+  },
+  "facts": {
+    "fins": {
+      "value": 4,
+      "source": "estes_bbxii",
+      "quote": "Repeat these steps for all four fins (a 4-fin BT-70-size kit)"
+    },
+    "motor": {
+      "value": "Estes F15",
+      "source": "estes_bbxii",
+      "quote": "Recommended Engines E16-6, F15-6"
+    },
+    "fin_hinge": {
+      "value": "all-moving, pivot at the quarter of the mean aerodynamic chord",
+      "source": "or_techdoc",
+      "quote": "Barrowman's method assumes that the lengthwise position of the CP stays at a constant 25% of the MAC at subsonic speeds (a pivot there keeps the servo's load small: design)"
+    },
+    "flight_computer": {
+      "value": "rocket-recorder",
+      "source": "recorder",
+      "quote": "servo_headers block: four servo outputs on GPIO 8-11 (PWM 4A, 4B, 5A, 5B)"
+    },
+    "body_id": {
+      "value": 0.05537,
+      "source": "apogee_bt70",
+      "quote": "Inner Diameter: 2.180\" (5.54 cm)"
+    },
+    "mount_id": {
+      "value": 0.02896,
+      "source": "apogee_29mm",
+      "quote": "1.14\" (29mm)"
+    },
+    "fin_tip_chord": {
+      "value": 0.05,
+      "source": "design, chosen"
+    },
+    "fin_sweep": {
+      "value": 0.05,
+      "source": "design, chosen",
+      "note": "leading edge, root to tip, along the axis"
+    },
+    "fin_thickness": {
+      "value": 0.003,
+      "source": "design, chosen"
+    },
+    "fin_root_te_height": {
+      "value": 0.012,
+      "source": "design, chosen",
+      "note": "root trailing edge above the tube's base"
+    },
+    "servo_length": {
+      "value": 0.0202,
+      "source": "agf_c04cls",
+      "quote": "Dimension 20.2*8.5*19.3 mm"
+    },
+    "servo_width": {
+      "value": 0.0085,
+      "source": "agf_c04cls",
+      "quote": "Dimension 20.2*8.5*19.3 mm"
+    },
+    "servo_height": {
+      "value": 0.0193,
+      "source": "agf_c04cls",
+      "quote": "Dimension 20.2*8.5*19.3 mm"
+    }
+  },
+  "flight": {
+    "note": "what /circuits/fly simulates; masses and the centre of gravity are estimates, everything else sourced",
+    "motor_curve": {
+      "source": "openrocket_f15",
+      "file": "refs/finrocket/sources/Estes_F15.eng",
+      "also": [
+        {
+          "source": "estes_f15",
+          "quote": "Total Impulse 49.61 N-sec ... Max Thrust 25.26 Newtons (5.7 lbs) Thrust Duration 3.45 Seconds ... Weight 3.66 oz. (103.8 g) Propellant Weight 2.12 oz. (60.0 g)"
+        }
+      ]
+    },
+    "motor_mass": {
+      "value": 0.103,
+      "source": "openrocket_f15",
+      "quote": ".10300 (total kg)"
+    },
+    "propellant_mass": {
+      "value": 0.06,
+      "source": "openrocket_f15",
+      "quote": ".0600 (propellant kg)"
+    },
+    "dry_mass": {
+      "value": 0.3,
+      "source": "design, estimate",
+      "note": "the Black Brant XII's 326 g (estes_bbxii: \"Weight 11.5 oz. (326 g)\") scaled to this rocket's 1.08 m from its 1.386 m (\"Length 54.6 in. (138.62 cm)\"), plus 4 servos at 4.5 g (agf_c04cls: \"Net Weight 4.5 g\") and the board and a battery (estimated 30 g; the battery isn't chosen)"
+    },
+    "cg_from_nose": {
+      "value": 0.62,
+      "source": "design, estimate",
+      "note": "forward of the Black Brant XII's aft limit in proportion (estes_bbxii: \"DO NOT fly model rocket with the center of gravity further back than 38.69 in. from the tip of the nose cone\", 0.71 of its length); this rocket's 0.62 m is 0.57 of its length"
+    },
+    "cd": {
+      "value": 0.75,
+      "source": "nasa_drag",
+      "quote": "A typical value for the drag coefficient of a model rocket is .75, based on the cross-sectional area of the rocket."
+    },
+    "rho": {
+      "value": 1.225,
+      "source": "nasa_atmos",
+      "quote": "r = p / [.2869 * (T + 273.1)] with T = 15.04 and p = 101.29 kPa at h = 0: 1.225 kg/m³"
+    },
+    "servo_deg_per_s": {
+      "value": 666.7,
+      "source": "agf_c04cls",
+      "quote": "0.090 sec/60° @4.2V"
+    },
+    "fin_max_deg": {
+      "value": 10,
+      "source": "mit_xanthus",
+      "quote": "if emfg were greater than 10°, the saturation value, the control surfaces would be unable to stop the rocket from rolling (their control surfaces stop at 10°; used here as the fins' travel)"
+    },
+    "rail_length": {
+      "value": 1.0,
+      "source": "design, estimate",
+      "note": "a 1 m launch rod; the kit's \"Launch Rod Size 3/16 in.\" gives no length"
+    },
+    "aero": {
+      "source": "or_techdoc",
+      "quote": "nose: (3.19) CNα = 2/Aref [A(l) − A(0)], CP (3.28) X = [l A(l) − V] / [A(l) − A(0)]; one fin (3.40) (CNα)1 = 2π (s²/Aref) / (1 + sqrt(1 + (β s²/(Afin cos Γc))²)); four fins N/2 times that (3.53); body interference (3.55) KT(B) = 1 + rt/(s + rt); fin CP at 25% of the MAC; total CP by the moment sum (3.29)"
+    }
+  },
+  "joints": {
+    "fin0_j": {
+      "angle": 0,
+      "min": -10,
+      "max": 10,
+      "move_to": 10,
+      "group": "fins",
+      "source": "mit_xanthus",
+      "quote": "10°, the saturation value",
+      "note": "positive turns the fin's leading edge toward +(axis × radial), as the flight sim's fin force"
+    },
+    "fin1_j": {
+      "angle": 0,
+      "min": -10,
+      "max": 10,
+      "move_to": 10,
+      "group": "fins",
+      "source": "mit_xanthus",
+      "quote": "10°, the saturation value",
+      "note": "positive turns the fin's leading edge toward +(axis × radial), as the flight sim's fin force"
+    },
+    "fin2_j": {
+      "angle": 0,
+      "min": -10,
+      "max": 10,
+      "move_to": 10,
+      "group": "fins",
+      "source": "mit_xanthus",
+      "quote": "10°, the saturation value",
+      "note": "positive turns the fin's leading edge toward +(axis × radial), as the flight sim's fin force"
+    },
+    "fin3_j": {
+      "angle": 0,
+      "min": -10,
+      "max": 10,
+      "move_to": 10,
+      "group": "fins",
+      "source": "mit_xanthus",
+      "quote": "10°, the saturation value",
+      "note": "positive turns the fin's leading edge toward +(axis × radial), as the flight sim's fin force"
+    }
+  },
+  "materials": {},
+  "open_questions": [
+    "Battery not chosen: its mass is in the 30 g estimate.",
+    "Dry mass and centre of gravity are estimates until the parts are weighed.",
+    "No dimensioned fin template exists for the Black Brant XII; fin shape is a design value."
+  ],
+  "budget": {
+    "triangles": 50000,
+    "glb_bytes": 1500000
+  }
+}

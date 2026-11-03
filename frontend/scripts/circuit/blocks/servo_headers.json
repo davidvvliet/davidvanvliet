@@ -1,0 +1,280 @@
+{
+ "name": "servo_headers",
+ "title": "Servo outputs (4)",
+ "purpose": "Four 3-pin servo headers (signal, power, ground) for the fin servos, each signal through a series resistor, with a bulk capacitor on the servo supply",
+ "sources": [
+  {
+   "id": "adafruit_pca9685",
+   "title": "Adafruit 16-Channel PWM/Servo Driver PCB, rev C schematic",
+   "url": "https://github.com/adafruit/Adafruit-16-Channel-PWM-Servo-Driver-PCB",
+   "licence": "CC BY-SA 3.0 (license.txt: \"Attribution-ShareAlike 3.0 Unported\")",
+   "read": "Adafruit PCA9685 rev C.sch: JP1 (HEADER-3X04) pin nets, R11-R14 values, C2 (CPOL, no value)"
+  },
+  {
+   "id": "adafruit_guide",
+   "title": "Adafruit 16-Channel PWM/Servo Driver guide, Hooking it up",
+   "url": "https://learn.adafruit.com/16-channel-pwm-servo-driver/hooking-it-up",
+   "licence": "copyright Adafruit: link and quotes only",
+   "read": "the bulk capacitor paragraph"
+  },
+  {
+   "id": "nichicon_uwt",
+   "title": "Nichicon UWT chip aluminium electrolytic capacitors",
+   "url": "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-uwt.pdf",
+   "licence": "copyright Nichicon: link and quotes only",
+   "read": "specifications table, standard ratings 6.3 V row"
+  },
+  {
+   "id": "agf_c04cls",
+   "title": "AGFRC C04CLS micro servo, maker product page",
+   "url": "https://agfrc.com/index.php?id=2450",
+   "licence": "copyright AGFRC: link and quotes only",
+   "read": "Product specifications: \"Voltage 3.6V ~ 6.0V\", \"Pulse Width 900 ~ 2100 µSec\", \"Refresh Rate 1520 µS / 333Hz\", \"Wire JST(JR) 150mm / 30AWG\", \"Brown | Red | Orange\""
+  },
+  {
+   "id": "rp2040",
+   "title": "RP2040 datasheet, section 4.5 PWM",
+   "url": "https://datasheets.raspberrypi.com/rp2040/rp2040-datasheet.pdf",
+   "licence": "copyright Raspberry Pi Ltd: link and quotes only",
+   "read": "Table 515 GPIO to PWM channel; 4.5.2.4 clock divider"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "J30",
+   "value": "Servo 1",
+   "symbol": "Connector_Generic:Conn_01x03",
+   "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical",
+   "source": "adafruit_pca9685",
+   "quote": "Adafruit PCA9685 rev C.sch: JP1 pins 1/4/7/10 to the PWM outputs through R11 (220), pins 2/5/8/11 net \"5.0V\", pins 3/6/9/12 net GND"
+  },
+  {
+   "ref": "R30",
+   "value": "220R",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "adafruit_pca9685",
+   "quote": "R11-R14 \"RESISTOR_4PACK\" value=\"220\" between the PCA9685's outputs and the servo headers' signal pins"
+  },
+  {
+   "ref": "J31",
+   "value": "Servo 2",
+   "symbol": "Connector_Generic:Conn_01x03",
+   "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical",
+   "source": "adafruit_pca9685",
+   "quote": "Adafruit PCA9685 rev C.sch: JP1 pins 1/4/7/10 to the PWM outputs through R11 (220), pins 2/5/8/11 net \"5.0V\", pins 3/6/9/12 net GND"
+  },
+  {
+   "ref": "R31",
+   "value": "220R",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "adafruit_pca9685",
+   "quote": "R11-R14 \"RESISTOR_4PACK\" value=\"220\" between the PCA9685's outputs and the servo headers' signal pins"
+  },
+  {
+   "ref": "J32",
+   "value": "Servo 3",
+   "symbol": "Connector_Generic:Conn_01x03",
+   "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical",
+   "source": "adafruit_pca9685",
+   "quote": "Adafruit PCA9685 rev C.sch: JP1 pins 1/4/7/10 to the PWM outputs through R11 (220), pins 2/5/8/11 net \"5.0V\", pins 3/6/9/12 net GND"
+  },
+  {
+   "ref": "R32",
+   "value": "220R",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "adafruit_pca9685",
+   "quote": "R11-R14 \"RESISTOR_4PACK\" value=\"220\" between the PCA9685's outputs and the servo headers' signal pins"
+  },
+  {
+   "ref": "J33",
+   "value": "Servo 4",
+   "symbol": "Connector_Generic:Conn_01x03",
+   "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical",
+   "source": "adafruit_pca9685",
+   "quote": "Adafruit PCA9685 rev C.sch: JP1 pins 1/4/7/10 to the PWM outputs through R11 (220), pins 2/5/8/11 net \"5.0V\", pins 3/6/9/12 net GND"
+  },
+  {
+   "ref": "R33",
+   "value": "220R",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "adafruit_pca9685",
+   "quote": "R11-R14 \"RESISTOR_4PACK\" value=\"220\" between the PCA9685's outputs and the servo headers' signal pins"
+  },
+  {
+   "ref": "C30",
+   "value": "470uF 6.3V",
+   "symbol": "Device:C_Polarized",
+   "footprint": "Capacitor_SMD:CP_Elec_8x10",
+   "source": "adafruit_guide; nichicon_uwt",
+   "quote": "Adafruit: \"n * 100uF where n is the number of servos is a good place to start - eg 470uF or more for 5 servos\" (4 servos: 400 µF); Nichicon UWT, 6.3 V row: \"470 8×10 0.30 29.61 210 UWT0J471MNL1GS\" (µF, φD×L mm, tan δ, leakage µA, ripple mA)"
+  }
+ ],
+ "nets": {
+  "/VSYS": [
+   "J30.2",
+   "J31.2",
+   "J32.2",
+   "J33.2",
+   "C30.1"
+  ],
+  "GND": [
+   "J30.3",
+   "J31.3",
+   "J32.3",
+   "J33.3",
+   "C30.2"
+  ],
+  "/SERVO1": [
+   "R30.1"
+  ],
+  "Net-(J30-Pin_1)": [
+   "R30.2",
+   "J30.1"
+  ],
+  "/SERVO2": [
+   "R31.1"
+  ],
+  "Net-(J31-Pin_1)": [
+   "R31.2",
+   "J31.1"
+  ],
+  "/SERVO3": [
+   "R32.1"
+  ],
+  "Net-(J32-Pin_1)": [
+   "R32.2",
+   "J32.1"
+  ],
+  "/SERVO4": [
+   "R33.1"
+  ],
+  "Net-(J33-Pin_1)": [
+   "R33.2",
+   "J33.1"
+  ]
+ },
+ "ports": {
+  "/SERVO1": {
+   "net": "/SERVO1",
+   "kind": "gpio",
+   "note": "servo 1's pulse, from an RP2040 PWM output (rp2040, Table 515)"
+  },
+  "/SERVO2": {
+   "net": "/SERVO2",
+   "kind": "gpio",
+   "note": "servo 2's pulse, from an RP2040 PWM output (rp2040, Table 515)"
+  },
+  "/SERVO3": {
+   "net": "/SERVO3",
+   "kind": "gpio",
+   "note": "servo 3's pulse, from an RP2040 PWM output (rp2040, Table 515)"
+  },
+  "/SERVO4": {
+   "net": "/SERVO4",
+   "kind": "gpio",
+   "note": "servo 4's pulse, from an RP2040 PWM output (rp2040, Table 515)"
+  },
+  "/VSYS": {
+   "net": "/VSYS",
+   "kind": "power_in",
+   "note": "the servos run from the battery rail (3.6-6 V servos, agf_c04cls), not from 3.3 V; on USB it comes through the USB block's 1 A Schottky"
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   18,
+   8
+  ],
+  "place": {
+   "J30": {
+    "at_mm": [
+     0.0,
+     0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "R30": {
+    "at_mm": [
+     0.0,
+     -2.2
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "J31": {
+    "at_mm": [
+     2.54,
+     0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "R31": {
+    "at_mm": [
+     2.54,
+     -2.2
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "J32": {
+    "at_mm": [
+     5.08,
+     0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "R32": {
+    "at_mm": [
+     5.08,
+     -2.2
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "J33": {
+    "at_mm": [
+     7.62,
+     0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "R33": {
+    "at_mm": [
+     7.62,
+     -2.2
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "C30": {
+    "at_mm": [
+     13.2,
+     2.54
+    ],
+    "rotation": 0,
+    "side": "front"
+   }
+  },
+  "traces": [],
+  "vias": [],
+  "rules": "servo plugs are wider than 0.1\": Adafruit puts four side by side on 0.1\" header (\"you can only stack 4 next to each other\", README); bulk capacitor next to the headers' power and ground rows"
+ },
+ "open_questions": [
+  "Signal level: the RP2040 drives 3.3 V pulses; the C04CLS page gives no input threshold. Adafruit's board drives servos from the PCA9685 at its own supply; a 3.3 V pulse into a servo at 4.2 V is common but not confirmed for this servo.",
+  "Stall current: AGFRC gives none for the C04CLS. On battery the path is the DMG2305UX (\"-4.2\" A steady state, 25 °C); on USB the 1 A B5817WS (\"IO Average Rectified Output Current 1\") limits it: on USB, fins only for bench tests.",
+  "Frame rate: AGFRC lists \"1520 µS / 333Hz\"; whether 50 Hz frames also work is not stated. The RP2040's divider reaches ~7.5 Hz, so either is possible.",
+  "Capacitor height: 10 mm (8×10 case) stands highest on the board."
+ ]
+}

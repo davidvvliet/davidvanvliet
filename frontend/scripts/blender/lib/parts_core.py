@@ -124,6 +124,20 @@ def joint(name, location, axis=(1, 0, 0), parent=None):
     obj["rest_location"] = list(obj.matrix_basis.translation)  # pose() turns from here
     return obj
 
+def hinge(name, objs, a, b, sample, want):
+    """A joint on the hinge line a-b carrying the already built `objs` (control surfaces, doors),
+    its axis turned so a positive angle moves `sample` (a point on the part) toward `want`:
+    limits then read the way documents give them (flap down, fin trailing edge to +y)."""
+    a, b = Vector(a), Vector(b)
+    ax = (b - a).normalized()
+    if ax.cross(Vector(sample) - a).dot(Vector(want)) < 0:
+        ax = -ax
+    j = joint(name, tuple(a), axis=tuple(ax))
+    for o in objs:
+        o.parent = j
+        o.matrix_parent_inverse = j.matrix_world.inverted()
+    return j
+
 def pose(angles):
     """Turn joints by name: {"arm_shoulder": 30, ...} (degrees about each joint's axis, in
     the unposed frame). Angles are absolute: posing again replaces the earlier angle. Call

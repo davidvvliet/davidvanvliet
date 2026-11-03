@@ -1,6 +1,6 @@
 {
  "title": "Rocket flight recorder",
- "purpose": "Records a model rocket's flight: altitude from a barometer, acceleration and rotation from an IMU, logged to the RP2040's flash; runs from a LiPo charged over USB-C",
+ "purpose": "Flies a model rocket with four servo fins and records its flight: altitude from a barometer, acceleration and rotation from an IMU, logged to the RP2040's flash; runs from a LiPo charged over USB-C",
  "source": {
   "title": "rocket-recorder recipe",
   "url": "https://github.com/davidvvliet/davidvanvliet/tree/main/frontend/scripts/circuit/boards/rocket-recorder",
@@ -9,7 +9,7 @@
  },
  "board": {
   "size_mm": [
-   66,
+   86,
    21
   ],
   "layers": 2,
@@ -73,13 +73,21 @@
     56,
     13
    ]
+  },
+  "servo": {
+   "block": "servo_headers",
+   "at_mm": [
+    67.5,
+    6
+   ]
   }
  },
  "connect": [
   [
    "usb./VSYS",
    "ldo./VSYS",
-   "chg./VSYS"
+   "chg./VSYS",
+   "servo./VSYS"
   ],
   [
    "usb.VBUS",
@@ -100,7 +108,8 @@
    "led.GND",
    "imu.GND",
    "baro.GND",
-   "chg.GND"
+   "chg.GND",
+   "servo.GND"
   ],
   [
    "usb./USB_D+",
@@ -129,11 +138,27 @@
   [
    "imu./IMU_INT_GYR",
    "core./GPIO7"
+  ],
+  [
+   "servo./SERVO1",
+   "core./GPIO8"
+  ],
+  [
+   "servo./SERVO2",
+   "core./GPIO9"
+  ],
+  [
+   "servo./SERVO3",
+   "core./GPIO10"
+  ],
+  [
+   "servo./SERVO4",
+   "core./GPIO11"
   ]
  ],
  "open_questions": [
   "Battery capacity not chosen (charge current 100 mA).",
-  "\u00b124 g may be too little for fast motors.",
+  "±24 g may be too little for fast motors.",
   "No power switch: unplug the battery to turn off."
  ]
 }
