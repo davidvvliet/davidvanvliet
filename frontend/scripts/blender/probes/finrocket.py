@@ -52,7 +52,7 @@ def build(spec):
             a = i * math.pi / 2
             parts.decal(f"{name}{i}", tube, center=(ro * math.cos(a), ro * math.sin(a), (z_bottom + z_top) / 2),
                         direction=(-math.cos(a), -math.sin(a), 0), up=(0, 0, 1),
-                        width=ro * math.radians(pw), height=z_top - z_bottom, material="black", shapes=[[0, 0, 1, 1]])
+                        width=ro * math.radians(pw), height=z_top - z_bottom, material="black", shapes=[[0, 0, 1, 1]], step=0.004, lift=0.0005)
     with parts.assembly("roll_pattern"):
         z_nose = lb - d["roll_ring_below_nose"]
         ring("roll_ring_nose", z_nose)
@@ -75,7 +75,7 @@ def build(spec):
         a = i * math.pi / 2
         with parts.assembly(f"flag{i}"):
             parts.decal(f"flag{i}", tube, center=(ro * math.cos(a), ro * math.sin(a), zf),
-                        direction=(-math.cos(a), -math.sin(a), 0), up=(0, 0, 1), width=1.9 * fh, height=fh, material=flag_mat)
+                        direction=(-math.cos(a), -math.sin(a), 0), up=(0, 0, 1), width=1.9 * fh, height=fh, material=flag_mat, step=0.003, lift=0.0005)
 
     # The motor tube stands out aft of the body (mount_overhang) for the screw-on retainer, as in the
     # kit's instructions: a threaded ring epoxied over the tube and a cap whose lip holds the motor's rim.
@@ -144,7 +144,7 @@ def build(spec):
         with parts.assembly(f"lettering{i}"):
             parts.decal(f"lettering{i}", tube, center=(ro * math.cos(a), ro * math.sin(a), zc),
                         direction=(-math.cos(a), -math.sin(a), 0), up=(math.sin(a), -math.cos(a), 0),
-                        width=w, height=h, material=mat)
+                        width=w, height=h, material=mat, step=0.004, lift=0.0005)
     # Black stripes on the lines of fins 2 and 4, level with the lettering, as the Saturn V's base
     # stripe stands between its "USA" letters.
     with parts.assembly("roll_stripes"):
@@ -152,7 +152,7 @@ def build(spec):
             a = i * math.pi / 2
             parts.decal(f"roll_stripe{i}", tube, center=(ro * math.cos(a), ro * math.sin(a), zc),
                         direction=(-math.cos(a), -math.sin(a), 0), up=(0, 0, 1),
-                        width=ro * math.radians(d["roll_panel_arc_deg"]), height=w, material="black", shapes=[[0, 0, 1, 1]])
+                        width=ro * math.radians(d["roll_panel_arc_deg"]), height=w, material="black", shapes=[[0, 0, 1, 1]], step=0.004, lift=0.0005)
     for i in range(4):
         a = i * math.pi / 2
         r_hat = (math.cos(a), math.sin(a), 0.0)
