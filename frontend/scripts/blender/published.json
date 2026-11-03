@@ -57,9 +57,9 @@
   }
  },
  "finrocket": {
-  "approved": "2026-11-03 16:45",
+  "approved": "2026-11-03 17:17",
   "inputs": {
-   "specs/finrocket.json": "586f0166b810c32a",
+   "specs/finrocket.json": "a4cbd380a302fc51",
    "probes/finrocket.py": "0b6a1ffbdb7afd88",
    "build.py": "363cabc8976febf0",
    "blender.json": "7bbc071b6e396ec4",
