@@ -408,12 +408,12 @@ def pi_zero2w():
     prism(m, "0.20 0.20 0.21", oc, t, t + 2.0)                    # the octagonal part
     m.write(os.path.join(HERE, "RPi_Zero_2W.wrl"), "Raspberry Pi Zero 2 W (mechanical drawing; heights estimated)")
 
-def zero_camera_cable(path):
+def zero_camera_cable(path, w=11.5):
     """The Zero's camera cable as a flat strip along `path` [(x, z), ...] (mm, in its own frame, y across): 11.5
     wide (PCN 36: "the width has been reduced from 16 mm to 11.5 mm" for most of a 22-to-15-way cable's length;
     the Zero cable's own width is not published) and 0.14 thick (the standard cable drawing: conductor 0.027,
     insulation 0.055 a side)."""
-    m = Mesh(); w, th = 11.5, 0.14
+    m = Mesh(); th = 0.14
     for (xa, za), (xb, zb) in zip(path, path[1:]):
         dx, dz = xb - xa, zb - za; L = math.hypot(dx, dz); nx, nz = -dz / L * th / 2, dx / L * th / 2
         q = [(xa - nx, za - nz), (xb - nx, zb - nz), (xb + nx, zb + nz), (xa + nx, za + nz)]
@@ -432,5 +432,14 @@ def star_tracker_cable():
     zero_camera_cable([(-1.7, zc), (3.0, zc), (9.0, zc + 8.5), (12.3, zc + 8.5)]).write(
         os.path.join(HERE, "Cable_StarTracker.wrl"), "Pi Zero camera cable (star-tracker HAT placement)")
 
+def star_tracker_n6_cable():
+    """star-tracker-n6's camera cable: the standard 15-way cable ("Width W 16.000 mm", drawing RP-008146) from the
+    board's camera socket (J3, contacts 1.0 mm high per KiCad's TE 1-84952-5) out past the board's edge and up into
+    the camera's ribbon tab, as placed in boards/star-tracker-n6/recipe.json. Frame: x along the cable from the
+    socket's contacts, z up from the board's top surface."""
+    zc, zs = 0.5, -1.6 + 25.07 - 7.0 - 2.4
+    zero_camera_cable([(0.0, zc), (10.0, zc), (17.0, zs), (22.5, zs)], w=16.0).write(
+        os.path.join(HERE, "Cable_StarTrackerN6.wrl"), "Raspberry Pi camera cable, 16 mm (star-tracker-n6 placement)")
+
 if __name__ == "__main__":
-    scd4x(); sgp41(); epd154(); zjy128(); tps2121(); gs_camera(); lens16(); pi_zero2w(); star_tracker_cable(); star_tracker_baffle(); vfbga178(); rgt16(); xfl4020()
+    scd4x(); sgp41(); epd154(); zjy128(); tps2121(); gs_camera(); lens16(); pi_zero2w(); star_tracker_cable(); star_tracker_baffle(); star_tracker_n6_cable(); vfbga178(); rgt16(); xfl4020()

@@ -490,12 +490,42 @@
    ]
   },
   {
+   "name": "Baffle",
+   "parts": [
+    {
+     "ref": "BF1",
+     "value": "Baffle",
+     "package": "BF1"
+    }
+   ]
+  },
+  {
    "name": "Camera connector",
    "parts": [
     {
      "ref": "J3",
      "value": "TE 1-84952-5",
      "package": "TE_1-84952-5_1x15-1MP_P1.0mm_Horizontal"
+    }
+   ]
+  },
+  {
+   "name": "Global Shutter Camera, 16 mm lens",
+   "parts": [
+    {
+     "ref": "CAM1",
+     "value": "Global Shutter Camera, 16 mm lens",
+     "package": "CAM1"
+    }
+   ]
+  },
+  {
+   "name": "Camera cable",
+   "parts": [
+    {
+     "ref": "W1",
+     "value": "Camera cable",
+     "package": "W1"
     }
    ]
   }
