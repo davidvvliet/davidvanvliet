@@ -1,0 +1,271 @@
+{
+  "title": "Altair Aether",
+  "logos": [],
+  "listed": false,
+  "note": "Our own design: a ~300 kg lunar communications relay, fired off a mass driver near the lunar south pole into an elliptical frozen lunar orbit, built from real flight hardware where it exists. Frame: x along the track (the direction of travel, and the craft's axis: the launch load runs down it), z up, y left. The craft's separation plane is at x = 0; the sled and the rails are behind and below it. Pass 1: structure, tank, main thruster, sled and rails.",
+  "sources": [
+    {
+      "id": "nssdc_moon",
+      "title": "NASA NSSDCA, Moon Fact Sheet",
+      "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/moonfact.html",
+      "read": "2026-11-03",
+      "licence": "NASA: \"generally are not subject to copyright in the United States\" (nasa.gov/nasa-brand-center/images-and-media)"
+    },
+    {
+      "id": "sstl_lp_guide",
+      "title": "SSTL, Lunar Pathfinder Services Service Guide (V004, Aug 2022)",
+      "url": "https://www.sstl.co.uk/getmedia/ea388951-1330-4746-b641-72b7cd65f05a/Lunar-Pathfinder-Services-Service-Guide-V2-3.pdf",
+      "read": "2026-11-03",
+      "licence": "copyright SSTL: link and quotes only"
+    },
+    {
+      "id": "nasa_lcrns_2022",
+      "title": "NASA, Lunar Communications and Navigation (Petro, ESA meeting, 24 Feb 2022)",
+      "url": "https://ntrs.nasa.gov/api/citations/20220002724/downloads/NASA%20Lunar%20C%26N%20ESA%20Meeting%20Feb%2024%202022%20Petro.pdf",
+      "read": "2026-11-03",
+      "licence": "NASA work: \"generally are not subject to copyright in the United States\""
+    },
+    {
+      "id": "sstl_lp_mass",
+      "title": "SSTL, Lunar Pathfinder press release (2020)",
+      "url": "https://sstl.co.uk/media-hub/latest-news/2020/sstl-kicks-off-lunar-pathfinder-communications-mis",
+      "read": "2026-11-03",
+      "licence": "copyright SSTL: link and quotes only"
+    },
+    {
+      "id": "rl_mlb",
+      "title": "Rocket Lab, MkII Motorized Lightband User Manual (2000785P, Aug 2026)",
+      "url": "https://rocketlabcorp.com/assets/Uploads/PSC/2000785P-MkII-MLB-User-Manual-Aug-2026_1.pdf",
+      "read": "2026-11-03",
+      "licence": "copyright Rocket Lab: link and quotes only"
+    },
+    {
+      "id": "ng_tanks",
+      "title": "Northrop Grumman, Diaphragm tanks data sheets sorted by volume",
+      "url": "https://www.northropgrumman.com/what-we-do/space/mission-enabling-products/diaphragm-tanks-data-sheets-sorted-by-volume",
+      "read": "2026-11-03",
+      "licence": "copyright Northrop Grumman: link and quotes only"
+    },
+    {
+      "id": "ariane_20n",
+      "title": "ArianeGroup, 20N Monopropellant Hydrazine Thruster",
+      "url": "https://www.space-propulsion.com/spacecraft-propulsion/hydrazine-thrusters/20n-hydrazine-thruster.html",
+      "read": "2026-11-03",
+      "licence": "copyright ArianeGroup: link and quotes only"
+    },
+    {
+      "id": "jpl_hydrazine",
+      "title": "NASA/JPL TR 32-1227, Price & Evans, The Status of Monopropellant Hydrazine Technology",
+      "url": "https://ntrs.nasa.gov/api/citations/19680006875/downloads/19680006875.pdf",
+      "read": "2026-11-03",
+      "licence": "NASA work: \"generally are not subject to copyright in the United States\""
+    },
+    {
+      "id": "design",
+      "title": "Altair Aether's own design choices and estimates",
+      "url": "https://github.com/davidvvliet/davidvanvliet/tree/main/frontend/scripts/blender/specs/aether.json",
+      "read": "2026-11-03",
+      "licence": "this repo"
+    }
+  ],
+  "reference_model": {
+    "url": "",
+    "note": "none: our own design"
+  },
+  "dimensions": {
+    "sep_ring_diameter": {
+      "value": 0.432,
+      "object": "sep_ring_upper",
+      "measure": "diameter",
+      "tolerance": 0.02,
+      "source": "rl_mlb",
+      "quote": "Table 5-1, MLB15: A (outer stay-out diameter) 17.02 [in]; bolt circle 15.000 in, 24 fasteners"
+    },
+    "tank_diameter": {
+      "value": 0.589,
+      "object": "tank",
+      "measure": "diameter",
+      "tolerance": 0.02,
+      "source": "ng_tanks",
+      "quote": "80583-1 6,348 104.0 182.9 lb m hydrazine 83 kg hydrazine 23.13 ID (ICD for 80583) 589 ID 18.3 8.3 400 27.6 Parker Solar Probe",
+      "note": "the table gives only its inside diameter; a sphere of 104 L is 0.583 m across, so it is modelled as a 0.589 m sphere"
+    },
+    "main_thruster_length": {
+      "value": 0.195,
+      "object": "main_thruster",
+      "measure": "length",
+      "tolerance": 0.03,
+      "source": "ariane_20n",
+      "quote": "Overall length 195 mm"
+    },
+    "main_thruster_nozzle": {
+      "value": 0.033,
+      "object": "main_thruster",
+      "measure": "diameter",
+      "tolerance": 0.05,
+      "source": "ariane_20n",
+      "quote": "Nozzle end diameter 33 mm"
+    }
+  },
+  "facts": {
+    "moon_gm": {
+      "value": 4900.0,
+      "source": "nssdc_moon",
+      "quote": "GM (x 10^6 km3/s2) 0.00490",
+      "note": "km^3/s^2"
+    },
+    "moon_radius": {
+      "value": 1737.4,
+      "source": "nssdc_moon",
+      "quote": "Volumetric mean radius (km) 1737.4"
+    },
+    "orbit_periselene_alt": {
+      "value": 673,
+      "source": "sstl_lp_guide",
+      "quote": "Periselene altitude (km) 673 (\"these parameters are indicative and may be subject to change\")"
+    },
+    "orbit_aposelene_alt": {
+      "value": 7331,
+      "source": "sstl_lp_guide",
+      "quote": "Aposelene altitude (km) 7331"
+    },
+    "orbit_inclination": {
+      "value": 54.856,
+      "source": "sstl_lp_guide",
+      "quote": "Inclination (deg) 54.856"
+    },
+    "orbit_aop": {
+      "value": 86.322,
+      "source": "sstl_lp_guide",
+      "quote": "Argument of Pericenter (deg) 86.322"
+    },
+    "constellation": {
+      "value": 3,
+      "source": "nasa_lcrns_2022",
+      "quote": "With only two properly phased relays in this type of orbit, South Pole coverage could be continuous",
+      "note": "three: two for coverage and one spare"
+    },
+    "wet_mass": {
+      "value": 300,
+      "source": "design, chosen: Lunar Pathfinder's class",
+      "also": [
+        {
+          "source": "sstl_lp_mass",
+          "quote": "the 280 kg Lunar Pathfinder spacecraft"
+        },
+        {
+          "source": "nasa_lcrns_2022",
+          "quote": "Small spacecraft – as low as 150-300 kg could be adequate for the service"
+        }
+      ]
+    },
+    "envelope": {
+      "value": "1.0 m across the hexagon's corners, about 1.0 m long",
+      "source": "design, chosen: inside NASA's relay allocation",
+      "also": [
+        {
+          "source": "nasa_lcrns_2022",
+          "quote": "ESPA Grande Class Small Satellite ... Volume allocation 42\" x 46\" x 52\""
+        }
+      ]
+    },
+    "insertion_dv": {
+      "value": 476,
+      "source": "design, computed: the speed at aposelene of the 673 x 7331 km orbit (vis-viva, moon_gm, moon_radius), all of it given there by the main burn after a near-vertical shot",
+      "note": "m/s"
+    },
+    "dv_budget": {
+      "value": 550,
+      "source": "design, chosen: insertion_dv plus phasing, station keeping and disposal",
+      "note": "m/s"
+    },
+    "main_isp": {
+      "value": 222,
+      "source": "ariane_20n",
+      "quote": "Isp range vac 222 to 230 sec",
+      "note": "the low end, for a blowdown tank"
+    },
+    "propellant_mass": {
+      "value": 67,
+      "source": "design, computed: 300 kg x (1 - exp(-550 / (222 x 9.80665))) (rocket equation, standard gravity)",
+      "note": "kg"
+    },
+    "tank_capacity": {
+      "value": 83,
+      "source": "ng_tanks",
+      "quote": "83 kg hydrazine (80583-1, Parker Solar Probe)"
+    },
+    "hydrazine_density": {
+      "value": 1.0045,
+      "source": "jpl_hydrazine",
+      "quote": "Density 1.0045 g/cm' at 25°C"
+    },
+    "main_thrust": {
+      "value": 20,
+      "source": "ariane_20n",
+      "quote": "Thrust range vac 7.9 to 24.6N"
+    },
+    "sep_ring_mass": {
+      "value": 2.63,
+      "source": "rl_mlb",
+      "quote": "Table 5-1: Total 5.79 [lbm] (MLB15)"
+    },
+    "sep_ring_axial": {
+      "value": 1504,
+      "source": "rl_mlb",
+      "quote": "Maxium Line XLB (Axial) [lbf/bolt] 1,504 (\"Values listed are 80% of qualification loads\")",
+      "note": "24 bolts; 300 kg at 14 g is about 41 kN, well inside"
+    },
+    "sep_ring_bolt_circle": {
+      "value": 0.381,
+      "source": "rl_mlb",
+      "quote": "bolt circle 15.000 in"
+    },
+    "sep_ring_lower_height": {
+      "value": 0.035,
+      "source": "design, estimate: the manual's table gives no total height"
+    },
+    "sep_ring_upper_height": {
+      "value": 0.02,
+      "source": "design, estimate: the manual's table gives no total height"
+    },
+    "hex_corner_radius": {
+      "value": 0.5,
+      "source": "design, chosen"
+    },
+    "cone_length": {
+      "value": 0.25,
+      "source": "design, chosen: separation ring up to the lower deck"
+    },
+    "body_length": {
+      "value": 0.75,
+      "source": "design, chosen"
+    },
+    "deck_thickness": {
+      "value": 0.025,
+      "source": "design, chosen: honeycomb panel"
+    },
+    "sled": {
+      "value": "a pusher bulkhead bolted to the separation ring's lower half (the launch load), a base the craft's flat underside rests on (its weight in lunar gravity), four rail shoes and the linear motor's armature plate",
+      "source": "design, chosen: nothing like it flies yet"
+    },
+    "rail_gauge": {
+      "value": 0.9,
+      "source": "design, chosen"
+    },
+    "track_accel_g": {
+      "value": 14,
+      "source": "design, computed: 1.68 km/s (circular speed at the surface, from moon_gm and moon_radius) over a 10 km track, v^2 / 2L"
+    }
+  },
+  "materials": {},
+  "open_questions": [
+    "Launch geometry: a shot from near the south pole puts the orbit's high point over the launch site only if the shot is near-vertical (about 2.1 km/s), not the 1.68 km/s horizontal shot the 14 g was worked out for. A horizontal shot from the south puts the high point over the north. Options: a track on a steep slope, a launch site further north, or a bigger burn to turn the orbit. The craft's structure is the same either way; the tank size here covers the vertical case.",
+    "Lunar Pathfinder's orbit differs between SSTL's guide (673 x 7331 km, 54.9°) and a 2022 NASA slide (500 x 7500 km, 57.8°); SSTL calls its values indicative.",
+    "A south-pole launch site reaches inclinations near 90° directly; the 54.9° orbit needs a site at or below about 55°S, or a plane change."
+  ],
+  "budget": {
+    "triangles": 50000,
+    "glb_bytes": 1500000
+  }
+}
