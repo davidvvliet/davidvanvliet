@@ -429,7 +429,7 @@
     },
     {
      "ref": "RT1",
-     "value": "Z0 of the cable",
+     "value": "120R",
      "package": "R_0603_1608Metric"
     },
     {
@@ -485,6 +485,21 @@
     {
      "ref": "R21",
      "value": "2.2k",
+     "package": "R_0402_1005Metric"
+    }
+   ]
+  },
+  {
+   "name": "Status LED (GPIO)",
+   "parts": [
+    {
+     "ref": "D3",
+     "value": "RED",
+     "package": "LED_0603_1608Metric"
+    },
+    {
+     "ref": "R10",
+     "value": "470R",
      "package": "R_0402_1005Metric"
     }
    ]

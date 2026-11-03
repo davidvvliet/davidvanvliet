@@ -9,6 +9,13 @@
    "url": "https://www.ti.com/lit/ds/symlink/thvd1450.pdf",
    "licence": "TI datasheet; link and quotes only",
    "read": "p1, p5 pin functions, p8-9 ratings, p18-22 description and termination, p28-29 supply and layout"
+  },
+  {
+   "id": "sn65",
+   "title": "TI SN65HVD7x 3.3-V supply RS-485 transceivers (SLLSE11H)",
+   "url": "https://www.ti.com/lit/ds/symlink/sn65hvd72.pdf",
+   "licence": "TI datasheet; link and quotes only",
+   "read": "p18 section 10.2 cable types"
   }
  ],
  "parts": [
@@ -18,7 +25,7 @@
    "symbol": "Interface_UART:THVD1450D",
    "footprint": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
    "source": "thvd, p5, p9, p18",
-   "quote": "D package (SOIC) pins: R 1, RE 2, DE 3, D 4, GND 5, A 6, B 7, VCC 8 (Pin Functions); \"VCC Supply voltage 3 … 5.5 V\"; \"two speed grades suitable for data transmission up to 500 kbps and 50 Mbps\" (THVD1410: 500 kbps). Symbol: KiCad's THVD1450D, the same pins"
+   "quote": "D package (SOIC) pins: R 1, RE 2, DE 3, D 4, GND 5, A 6, B 7, VCC 8 (Pin Functions); \"VCC Supply voltage 3 \u2026 5.5 V\"; \"two speed grades suitable for data transmission up to 500 kbps and 50 Mbps\" (THVD1410: 500 kbps). Symbol: KiCad's THVD1450D, the same pins"
   },
   {
    "ref": "C1",
@@ -30,11 +37,11 @@
   },
   {
    "ref": "RT1",
-   "value": "Z0 of the cable",
+   "value": "120R",
    "symbol": "Device:R",
    "footprint": "Resistor_SMD:R_0603_1608Metric",
-   "source": "thvd, p22",
-   "quote": "\"each cable end is terminated with a termination resistor, RT, whose value matches the characteristic impedance, Z0\""
+   "source": "thvd, p22; sn65, p18",
+   "quote": "thvd: \"each cable end is terminated with a termination resistor, RT, whose value matches the characteristic impedance, Z0\"; sn65: \"RS-485 cable with Z0 = 120 \u03a9\" (CAT-5 cable would be \"Z0 = 100 \u03a9\")"
   }
  ],
  "nets": {
@@ -134,7 +141,7 @@
   "rules": "thvd p29: decoupling \"100-nF to 220-nF\" close to VCC. A and B short and side by side to the connector."
  },
  "open_questions": [
-  "RT1's value is the cable's characteristic impedance (not chosen yet); fit it only if this end of the bus is a cable end.",
+  "RT1 is 120 \u03a9 for RS-485 cable (100 \u03a9 if the bus uses CAT-5); fit it only if this end of the bus is a cable end.",
   "No external failsafe biasing needed: \"The receiver output remains logic high under a bus-idle or bus-short conditions without the need for external failsafe biasing resistors\" (p19).",
   "The THVD1410 is chosen over the THVD1450 for its 500 kbps speed grade; KiCad has no THVD1410 symbol, the THVD1450D's pins are the same (p5)."
  ]

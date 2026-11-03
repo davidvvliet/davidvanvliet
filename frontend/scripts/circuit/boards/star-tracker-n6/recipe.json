@@ -10,8 +10,8 @@
  "sources": [],
  "board": {
   "size_mm": [
-   70,
-   50
+   80,
+   53
   ],
   "corner_radius_mm": 3,
   "layers": 4,
@@ -27,71 +27,106 @@
   "bus": {
    "block": "bus_connectors",
    "at_mm": [
-    1,
+    8,
     1
    ]
   },
   "input": {
    "block": "bus_power_tps2121",
    "at_mm": [
-    26,
+    33,
     1
    ]
   },
   "rs485": {
    "block": "rs485_thvd1410",
    "at_mm": [
-    36,
+    43,
     1.5
    ]
   },
   "imu": {
    "block": "imu_bmi088",
    "at_mm": [
-    50,
+    57,
     4.5
    ]
   },
   "power": {
    "block": "n6_power",
    "at_mm": [
-    1,
+    8,
     12
    ]
   },
   "mcu": {
    "block": "n6_core",
    "at_mm": [
-    22,
+    29,
     11
    ]
   },
   "flash": {
    "block": "flash_mx25um",
    "at_mm": [
-    53,
+    60,
     15
    ]
   },
   "cam": {
    "block": "camera_fpc15",
    "at_mm": [
-    18,
+    25,
     42
    ]
   },
   "swd": {
    "block": "swd_tc2030",
    "at_mm": [
-    52,
+    59,
     40
    ]
   },
   "pullups": {
    "block": "i2c_pullups",
    "at_mm": [
-    48,
+    55,
     36
+   ]
+  },
+  "hole1": {
+   "block": "mounting_hole_m25",
+   "at_mm": [
+    0.4,
+    0.4
+   ]
+  },
+  "hole2": {
+   "block": "mounting_hole_m25",
+   "at_mm": [
+    73.4,
+    0.4
+   ]
+  },
+  "hole3": {
+   "block": "mounting_hole_m25",
+   "at_mm": [
+    0.4,
+    46.4
+   ]
+  },
+  "hole4": {
+   "block": "mounting_hole_m25",
+   "at_mm": [
+    73.4,
+    46.4
+   ]
+  },
+  "led": {
+   "block": "led_gpio",
+   "at_mm": [
+    38,
+    37
    ]
   }
  },
@@ -142,7 +177,8 @@
    "bus.GND",
    "input.GND",
    "rs485.GND",
-   "imu.GND"
+   "imu.GND",
+   "led.GND"
   ],
   [
    "mcu./CSI_D0_P",
@@ -272,6 +308,10 @@
   [
    "mcu./SWO",
    "swd./SWO"
+  ],
+  [
+   "mcu./LED",
+   "led./LED"
   ]
  ],
  "open_questions": [
@@ -288,7 +328,7 @@
     {
      "file": "${CIRCUIT_3DMODELS}/RPi_GS_Camera.wrl",
      "offset_mm": [
-      28.0,
+      35.0,
       -95.0,
       -1.6
      ],
@@ -301,7 +341,7 @@
     {
      "file": "${CIRCUIT_3DMODELS}/Lens_16mm_C.wrl",
      "offset_mm": [
-      28.0,
+      35.0,
       -95.0,
       23.47
      ]
@@ -315,7 +355,7 @@
     {
      "file": "${CIRCUIT_3DMODELS}/Cable_StarTrackerN6.wrl",
      "offset_mm": [
-      28.0,
+      35.0,
       -43.7,
       0
      ],
@@ -334,7 +374,7 @@
     {
      "file": "${CIRCUIT_3DMODELS}/Baffle_StarTracker.wrl",
      "offset_mm": [
-      28.0,
+      35.0,
       -95.0,
       69.97
      ]

@@ -661,6 +661,9 @@
   "/SWDIO": [
    "U1.P7"
   ],
+  "/LED": [
+   "U1.P8"
+  ],
   "/IMU_INT_GYR": [
    "U1.P9"
   ],
@@ -804,6 +807,11 @@
    "net": "/IMU_INT_GYR",
    "kind": "gpio",
    "note": "PG13 (an outer ball)"
+  },
+  "/LED": {
+   "net": "/LED",
+   "kind": "gpio",
+   "note": "PA8 (an outer ball), the status LED (high = on)"
   },
   "/XSPI_DQS": {
    "net": "/XSPI_DQS",

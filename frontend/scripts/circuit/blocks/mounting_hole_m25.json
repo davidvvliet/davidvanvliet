@@ -1,0 +1,48 @@
+{
+ "name": "mounting_hole_m25",
+ "title": "Mounting holes",
+ "purpose": "One M2.5 mounting hole (not plated), the same size as the Raspberry Pi boards' and the star-tracker HAT's",
+ "sources": [
+  {
+   "id": "uhatmech",
+   "title": "Raspberry Pi uHAT board mechanical drawing",
+   "url": "https://github.com/raspberrypi/hats/blob/master/uhat-board-mechanical.pdf",
+   "licence": "link only",
+   "read": "holes 3.5 mm from edges, 2.75 mm drill, 6.2 mm land"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "H1",
+   "value": "M2.5",
+   "symbol": "Mechanical:MountingHole",
+   "footprint": "MountingHole:MountingHole_2.7mm_M2.5",
+   "source": "uhatmech",
+   "quote": "\"MOUNTING HOLES SHOULD BE DRILLED TO 2.75mm +/- 0.05mm\" (2.7 mm is the drawing's lower limit); \"MOUNTING HOLE LAND SHOULD BE MIN. 6.2mm\". The Pi's hole size reused here; the hole positions are this board's own (3.5 mm from each edge, as the Pi's)"
+  }
+ ],
+ "nets": {},
+ "ports": {},
+ "layout": {
+  "size_mm": [
+   6.2,
+   6.2
+  ],
+  "place": {
+   "H1": {
+    "at_mm": [
+     3.1,
+     3.1
+    ],
+    "rotation": 0,
+    "side": "front"
+   }
+  },
+  "traces": [],
+  "vias": [],
+  "rules": "keep 6.2 mm round the hole clear (the screw head's land)"
+ },
+ "open_questions": [
+  "Hole positions are not matched to a housing yet (none designed)."
+ ]
+}
