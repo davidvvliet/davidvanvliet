@@ -24,7 +24,7 @@ def build(spec):
         prof.append((0.0, lb + ln))
         parts.lathe("nose", prof, segments=64, material="black")
 
-    # The payload's name up the upper body tube between fins 2 and 3, reading from the tail up.
+    # The payload's name up the body between fins 2 and 3, above the fins, reading from the tail up.
     paint = materials.colour(spec["materials"]["lettering"])
     img = textures.marking("finrocket_lettering", [(os.path.join(HARNESS, "refs", "finrocket", "lettering-mask.png"), paint)],
                            os.path.join(HARNESS, "out", "finrocket", "textures"))
@@ -32,7 +32,7 @@ def build(spec):
     a = 3 * math.pi / 4
     w, h = d["lettering_length"], d["lettering_height"]
     with parts.assembly("lettering"):
-        parts.decal("lettering", tube, center=(ro * math.cos(a), ro * math.sin(a), 0.75 * lb),
+        parts.decal("lettering", tube, center=(ro * math.cos(a), ro * math.sin(a), d["lettering_centre"]),
                     direction=(-math.cos(a), -math.sin(a), 0), up=(math.sin(a), -math.cos(a), 0),
                     width=w, height=h, material=mat)
 

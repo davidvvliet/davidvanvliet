@@ -371,7 +371,7 @@
     },
     "lettering": {
       "value": "ALTAIR LUNAR PAYLOAD",
-      "source": "design, chosen: the payload's name, set in Geist (geist_font), up the upper body tube between fins 2 and 3; mask refs/finrocket/lettering-mask.png drawn from the font with PIL (stroke 6 px)"
+      "source": "design, chosen: the payload's name, set in Geist (geist_font), up the body between fins 2 and 3; mask refs/finrocket/lettering-mask.png drawn from the font with PIL (stroke 6 px)"
     },
     "lettering_length": {
       "value": 0.4,
@@ -385,6 +385,10 @@
       "value": "Geist Regular",
       "source": "geist_font",
       "quote": "This Font Software is licensed under the SIL Open Font License, Version 1.1"
+    },
+    "lettering_centre": {
+      "value": 0.36,
+      "source": "design, chosen: centre height above the body's base; the lettering starts about 5 cm above the fins' leading edges"
     }
   },
   "flight": {
@@ -564,7 +568,7 @@
       "target": [
         -0.02,
         0.02,
-        0.686
+        0.36
       ],
       "look": [
         0.707,
