@@ -2,7 +2,7 @@
   "title": "Altair Aether",
   "logos": [],
   "listed": false,
-  "note": "Our own design: a ~300 kg lunar communications relay, fired off a mass driver near the lunar south pole into an elliptical frozen lunar orbit, built from real flight hardware where it exists. Frame: x along the track (the direction of travel, and the craft's axis: the launch load runs down it), z up, y left. The craft's separation plane is at x = 0; the sled and the rails are behind and below it. Pass 1: structure, tank, main thruster, sled and rails. Pass 2: propulsion (eight 1 N thrusters, latch valve, fill and drain valves, lines). Pass 3: power (two solar wings, deployed; two batteries). Pass 4: comms (S-band dish to the Moon on +z, X-band array to the Earth on +x, transponder). Pass 5: attitude (four reaction wheels, two star trackers, sun sensors, IMU). Pass 6: electronics (power control unit, power cables; a reserved slot for the flight computer and valve drivers, which are designed separately).",
+  "note": "Our own design: a ~300 kg lunar communications relay, fired off a mass driver near the lunar south pole into an elliptical frozen lunar orbit, built from real flight hardware where it exists. Frame: x along the track (the direction of travel, and the craft's axis: the launch load runs down it), z up, y left. The craft's separation plane is at x = 0; the sled and the rails are behind and below it. Pass 1: structure, tank, main thruster, sled and rails. Pass 2: propulsion (eight 1 N thrusters, latch valve, fill and drain valves, lines). Pass 3: power (two solar wings, deployed; two batteries). Pass 4: comms (S-band dish to the Moon on +z, X-band array to the Earth on +x, transponder). Pass 5: attitude (four reaction wheels, two star trackers, sun sensors, IMU). Pass 6: electronics (power control unit, power cables; a reserved slot for the flight computer and valve drivers, which are designed separately). Pass 7: thermal (silvered-Teflon radiators on five sides, a blanket on the Moon-facing top, heaters).",
   "sources": [
     {
       "id": "nssdc_moon",
@@ -157,6 +157,20 @@
       "url": "https://www.aac-clyde.space/wp-content/uploads/2021/11/STARBUCK-MINI-Datasheet-1.pdf",
       "read": "2026-11-03",
       "licence": "copyright AAC Clyde Space: link and quotes only"
+    },
+    {
+      "id": "nasa_agfep",
+      "title": "NASA TM X-70588, Evaluation of commercially supplied silver coated Teflon for spacecraft temperature control usage (GSFC, 1974)",
+      "url": "https://ntrs.nasa.gov/api/citations/19740009173/downloads/19740009173.pdf",
+      "read": "2026-11-03",
+      "licence": "NASA work: \"generally are not subject to copyright in the United States\""
+    },
+    {
+      "id": "dunmore_agfep",
+      "title": "Dunmore, Silver Coated Teflon Film",
+      "url": "https://www.dunmore.com/products/silver-fep-film.html",
+      "read": "2026-11-03",
+      "licence": "copyright Dunmore: link and quotes only"
     },
     {
       "id": "design",
@@ -745,6 +759,72 @@
     "harness": {
       "value": "power cables from the power unit to each battery and each wing's drive, modelled as 16 mm bundles",
       "source": "design, estimate"
+    },
+    "radiator_coating": {
+      "value": "silver-backed Teflon (second-surface mirror) tape: solar absorptance 0.085, emittance 0.76",
+      "source": "nasa_agfep",
+      "quote": "the commercial material possesses an average solar absorptance of 0.085, an emittance of 0.76 and an average α / ε equal to 0.112",
+      "also": [
+        {
+          "source": "dunmore_agfep",
+          "quote": "Typical outside surface α / ϵ values: 0.13 to 0.16 Operating Temperature: -185°C to 125°C"
+        }
+      ]
+    },
+    "stefan_boltzmann": {
+      "value": 5.670367e-08,
+      "source": "iau_b3",
+      "quote": "Stefan-Boltzmann constant σ = (5.670367 ± 0.000013) × 10−8 W m−2 K−4"
+    },
+    "heat_load": {
+      "value": 600,
+      "source": "design, estimate: all of power_need ends up as heat inside (the radio's few watts out are left as margin)",
+      "note": "W"
+    },
+    "radiator_area": {
+      "value": 1.875,
+      "source": "design, computed: the four slanted sides and the bottom, 5 x 0.5 x 0.75 m; at 0.76 x σ x (293 K)^4 = 318 W/m² they shed 597 W at 20 °C with no sunlight on them",
+      "note": "m². A side in full sun takes in 0.085 x 1361 = 116 W/m², so the radiators run warmer then"
+    },
+    "blanket": {
+      "value": "multi-layer insulation over the top (the dish's side, facing the sunlit Moon at periselene); gold outer film",
+      "source": "design, chosen; the outer film's finish is the model's foil_gold, not a picked product"
+    },
+    "hydrazine_freeze": {
+      "value": 1.5,
+      "source": "jpl_hydrazine",
+      "quote": "Melting point +34.7'F at 1 atm",
+      "note": "°C (34.7 °F); tank, lines, valves and thrusters must stay above it"
+    },
+    "latch_valve_temp": {
+      "value": "9 to 50 °C",
+      "source": "ariane_valves",
+      "quote": "Operating Temperature 9° C to 50° C for use with hydrazine"
+    },
+    "battery_temp": {
+      "value": "10 to 30 °C",
+      "source": "saft_ves16",
+      "quote": "Recommanded cycling temparatures [10°C ; 30°C] (the sheet's VES16 module section)"
+    },
+    "pcdu_temp": {
+      "value": "-30 to +60 °C",
+      "source": "aac_starbuck_mini",
+      "quote": "Operating Temperature -30°C to +60°C"
+    },
+    "rcs_heaters": {
+      "value": "each thruster has its own catalyst-bed heater",
+      "source": "ariane_1n",
+      "quote": "each thruster is equipped with an internal redundant catalyst bed heater and with thermal insulation to guarantee optimum start up"
+    },
+    "heaters": {
+      "value": "film heaters round the tank's middle and on each battery, fed from the power unit's heater outputs",
+      "source": "design, chosen",
+      "also": [
+        {
+          "source": "aac_starbuck_mini",
+          "quote": "TMC: 31 heater outputs (1A each) across 8 HLCLs"
+        }
+      ]
     }
   },
   "materials": {},
@@ -756,7 +836,8 @@
     "Power: the solar wings are shown deployed; the stowed pose for the launch and the hinges come with deployment (step 9). The array's radiation dose and working temperature are estimates. The Earth's shadow (lunar eclipses, a few hours, a few times a year) isn't in the battery sizing.",
     "Comms: no low-gain S-band antenna yet for safe mode (no maker's datasheet found); the EnduroSat array's band (8025-8400 MHz) sits below the 8450-8500 MHz lunar band; with the dish on the Moon and the array on the Earth, the wings turning only about y lose some sunlight in some seasons.",
     "Attitude: the wheel pyramid's tilt and the sensors' places are our own; coverage of the two coarse sun sensors is not a full sphere (safe mode would also lean on the fine sensor and the trackers).",
-    "Electronics: the Starbuck-Mini is rated 20 kRAD and '5–7 years in LEO'; whether that covers five years in lunar orbit (no Van Allen belts to cross, since it launches from the Moon, but solar particle events) isn't checked. Its bus follows the battery (22-34 V), not a regulated 28 V. The flight computer and valve drivers come from the separate design; the power budget waits for them."
+    "Electronics: the Starbuck-Mini is rated 20 kRAD and '5–7 years in LEO'; whether that covers five years in lunar orbit (no Van Allen belts to cross, since it launches from the Moon, but solar particle events) isn't checked. Its bus follows the battery (22-34 V), not a regulated 28 V. The flight computer and valve drivers come from the separate design; the power budget waits for them.",
+    "Thermal: sized by hand for the worst cold-side case (600 W, no sun); not checked against the hot case at periselene (the sunlit Moon's infrared on the radiators) or the 2 h shadow (heater power). Lines and valves need heaters too (not modelled)."
   ],
   "budget": {
     "triangles": 50000,

@@ -29,7 +29,7 @@ def build(spec):
         parts.lathe("deck_lower", [(0, xc), (R, xc), (R, xc + t), (0, xc + t)], material="white_paint", **hexa)
         parts.lathe("deck_upper", [(0, xb - t), (R, xb - t), (R, xb), (0, xb)], material="white_paint", **hexa)
         parts.lathe("side_panels", [(R - 0.004, xc + t), (R, xc + t), (R, xb - t), (R - 0.004, xb - t)],
-                    closed=True, material="foil_gold", **hexa)
+                    closed=True, material="foil_silver", **hexa)   # radiators (thermal)
 
     # Inside the drum, so in internal.glb: the tank on four legs, the latch valve and the lines.
     rt, hs = d["tank_diameter"] / 2, d["tank_standoff"]
@@ -80,6 +80,7 @@ def build(spec):
     comms(d, R, flat, xc, xb, t)
     attitude(d, R, flat, xc, xb, t)
     electronics(d, R, flat, xc, xb, t)
+    thermal(d, R, flat, xc, xb, t, x0, rt)
 
 
 def _dir(a, sign, aft, cant):
@@ -291,4 +292,19 @@ def electronics(d, R, flat, xc, xb, t):
         parts.tube("harness_bat_bottom", [(0.86, -0.125, zt - 0.1), (0.86, -0.42, 0.05), (0.86, -0.42, -0.05),
                                           (0.86, -0.13, -zt + 0.1), (0.775, -0.06, -zt + 0.045)], rb,
                    bend_radius=0.03, material="black")
+
+
+def thermal(d, R, flat, xc, xb, t, x0, rt):
+    # The side panels are radiators (silvered Teflon, see the structure); the top, which faces the
+    # Moon, is blanketed. Film heaters round the tank's middle and on the batteries.
+    with parts.assembly("blanket"):
+        parts.box("mli_top", (xb - xc - 2 * t, R - 0.01, 0.005), location=((xc + xb) / 2, 0, flat + 0.0025),
+                  material="foil_gold")
+    xm = (xc + xb) / 2
+    with parts.assembly("heaters", internal=True):
+        parts.lathe("tank_heater", [(rt, x0 - 0.04), (rt + 0.001, x0 - 0.04), (rt + 0.001, x0 + 0.04), (rt, x0 + 0.04)],
+                    closed=True, segments=48, direction=X, material="foil_gold")
+        for k, sz in enumerate((1, -1)):
+            zf = sz * (flat - 0.004 - 0.09 - 0.0005)
+            parts.box(f"battery_heater{k}", (0.25, 0.14, 0.001), location=(xm, 0, zf), material="foil_gold")
 
