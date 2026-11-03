@@ -24,18 +24,6 @@ def build(spec):
         prof.append((0.0, lb + ln))
         parts.lathe("nose", prof, segments=64, material="black")
 
-    # The payload's name up the body between fins 2 and 3, above the fins, reading from the tail up.
-    paint = materials.colour(spec["materials"]["lettering"])
-    img = textures.marking("finrocket_lettering", [(os.path.join(HARNESS, "refs", "finrocket", "lettering-mask.png"), paint)],
-                           os.path.join(HARNESS, "out", "finrocket", "textures"))
-    mat = materials.image("finrocket_lettering", img, metallic=0.0, roughness=0.6, cutout=True)
-    a = 3 * math.pi / 4
-    w, h = d["lettering_length"], d["lettering_height"]
-    with parts.assembly("lettering"):
-        parts.decal("lettering", tube, center=(ro * math.cos(a), ro * math.sin(a), d["lettering_centre"]),
-                    direction=(-math.cos(a), -math.sin(a), 0), up=(math.sin(a), -math.cos(a), 0),
-                    width=w, height=h, material=mat)
-
     # The motor tube stands out aft of the body (mount_overhang) for the screw-on retainer, as in the
     # kit's instructions: a threaded ring epoxied over the tube and a cap whose lip holds the motor's rim.
     mo, mi, ml = d["mount_od"] / 2, d["mount_id"] / 2, d["mount_length"]
@@ -91,6 +79,19 @@ def build(spec):
     gap = 0.001                                  # fin root clear of the tube: design
     sx, sy, sz = d["servo_length"], d["servo_width"], d["servo_height"]  # along z, across, to the shaft
     z_servo = za + ml + 0.008                    # servos stand just forward of the mount: design
+    # The payload's name on the lines of fins 1 and 3 (fin0 and fin2), reading up from just above each fin.
+    paint = materials.colour(spec["materials"]["lettering"])
+    img = textures.marking("finrocket_lettering", [(os.path.join(HARNESS, "refs", "finrocket", "lettering-mask.png"), paint)],
+                           os.path.join(HARNESS, "out", "finrocket", "textures"))
+    mat = materials.image("finrocket_lettering", img, metallic=0.0, roughness=0.6, cutout=True)
+    w, h = d["lettering_length"], d["lettering_height"]
+    zc = z_le + d["lettering_gap"] + w / 2
+    for i in (0, 2):
+        a = i * math.pi / 2
+        with parts.assembly(f"lettering{i}"):
+            parts.decal(f"lettering{i}", tube, center=(ro * math.cos(a), ro * math.sin(a), zc),
+                        direction=(-math.cos(a), -math.sin(a), 0), up=(math.sin(a), -math.cos(a), 0),
+                        width=w, height=h, material=mat)
     for i in range(4):
         a = i * math.pi / 2
         r_hat = (math.cos(a), math.sin(a), 0.0)
