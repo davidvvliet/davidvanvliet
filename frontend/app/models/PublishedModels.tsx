@@ -41,14 +41,15 @@ const TURN_SECONDS = 20;
 // Thiokol's 1950-1990 script logo is Wikimedia Commons' ThiokolLogo.PNG (public domain text logo,
 // trademarked), recoloured the same way. ESA's is Wikimedia Commons' ESA_logo.svg (public domain:
 // "simple geometric shapes or text", trademarked), filled light.
-const LOGOS = {
+// `above`: extra space over a logo, in px, when it sits under another.
+const LOGOS: Record<string, { name: string; logo: string; height: number; above?: number }> = {
   nasa: { name: "NASA", logo: "/logos/nasa.svg", height: 30 },
   spacex: { name: "SpaceX", logo: "/logos/spacex.svg", height: 10 },
   jpl: { name: "Jet Propulsion Laboratory", logo: "/logos/jpl.svg", height: 11 },
   naa: { name: "North American Aviation", logo: "/logos/north-american.png", height: 30 },
   rocketdyne: { name: "Rocketdyne", logo: "/logos/rocketdyne.png", height: 24 },
   thiokol: { name: "Thiokol", logo: "/logos/thiokol.png", height: 14 },
-  esa: { name: "European Space Agency", logo: "/logos/esa.svg", height: 16 },
+  esa: { name: "European Space Agency", logo: "/logos/esa.svg", height: 16, above: 8 },
 };
 const ORGS = ["nasa", "spacex"];
 const logosOf = (m: Published) => m.logos.filter((k): k is keyof typeof LOGOS => k in LOGOS).map((k) => LOGOS[k]);
@@ -269,7 +270,7 @@ function Logos({ model }: { model: Published }) {
     <span className={styles.cardLogos}>
       {logosOf(model).map((o) => (
         // eslint-disable-next-line @next/next/no-img-element
-        <img key={o.logo} src={o.logo} alt={o.name} title={o.name} style={{ height: o.height }} />
+        <img key={o.logo} src={o.logo} alt={o.name} title={o.name} style={{ height: o.height, marginTop: o.above }} />
       ))}
     </span>
   );
