@@ -6,7 +6,7 @@ import { usePageStore } from "../../store/pageStore";
 const footprint: Command = {
   name: "footprint",
   category: "explore",
-  description: "Show how far our farthest craft have gone",
+  description: "Show how far we've come",
   execute: (args) => {
     const store = usePageStore.getState();
     if (args[0]?.toLowerCase() === "off") {
