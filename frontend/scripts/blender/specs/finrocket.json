@@ -195,7 +195,7 @@
       "measure": "length",
       "tolerance": 0.002,
       "source": "design, chosen",
-      "note": "tangent ogive, 3 body diameters"
+      "note": "tangent ogive, 3 body diameters, its tip rounded (nose_tip_radius) at the same length"
     },
     "fin_root_chord": {
       "value": 0.1,
@@ -207,7 +207,10 @@
     "fin_span": {
       "value": 0.065,
       "source": "design, chosen",
-      "object": "fin0",
+      "object": [
+        "fin0",
+        "fin0_tip"
+      ],
       "measure": "x",
       "tolerance": 0.02
     },
@@ -389,6 +392,22 @@
     "lettering_gap": {
       "value": 0.02,
       "source": "design, chosen: the lettering starts this far above the fin's root leading edge"
+    },
+    "nose_tip_radius": {
+      "value": 0.006,
+      "source": "design, chosen: a rounded tip, as moulded model-rocket nose cones have"
+    },
+    "roll_band_from_top": {
+      "value": 0.03,
+      "source": "design, chosen: the roll band's top below the nose joint"
+    },
+    "roll_band_length": {
+      "value": 0.1,
+      "source": "design, chosen"
+    },
+    "fin_tip_band": {
+      "value": 0.015,
+      "source": "design, chosen: the painted outer part of each fin's span"
     }
   },
   "flight": {
@@ -519,6 +538,12 @@
       "metallic": 0.0,
       "roughness": 0.6,
       "source": "design, chosen"
+    },
+    "fin_tip": {
+      "hex": "#ff4f00",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "design, chosen: international orange"
     }
   },
   "open_questions": [
@@ -592,6 +617,21 @@
       ],
       "radius": 0.15,
       "note": "the same on fin2's line"
+    },
+    {
+      "name": "nose and roll pattern",
+      "target": [
+        0,
+        0,
+        0.92
+      ],
+      "look": [
+        -0.7,
+        0.7,
+        -0.1
+      ],
+      "radius": 0.16,
+      "note": "rounded tip, black quarters"
     }
   ]
 }

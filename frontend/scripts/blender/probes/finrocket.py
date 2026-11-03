@@ -15,14 +15,40 @@ def build(spec):
 
     with parts.assembly("airframe", core=True):
         tube = parts.lathe("body_tube", [(ri, 0), (ro, 0), (ro, lb), (ri, lb)], closed=True, segments=64)
-        # Tangent ogive: an arc of radius rho through the tip, tangent to the tube at its base.
-        rho = (ro * ro + ln * ln) / (2 * ro)
+        # Tangent ogive with a rounded tip: an arc of radius rho tangent to the tube at its base, and a
+        # sphere of radius rn on the axis tangent to the arc. rho is found so the nose keeps its length.
+        rn = d["nose_tip_radius"]
+        def blunt(rho):
+            xc = math.sqrt((rho - rn) ** 2 - (rho - ro) ** 2)  # sphere centre, from the base
+            return xc, xc + rn
+        lo, hi = ro, 50 * ln
+        for _ in range(80):
+            mid = (lo + hi) / 2
+            lo, hi = (mid, hi) if blunt(mid)[1] < ln else (lo, mid)
+        rho = (lo + hi) / 2
+        xc = blunt(rho)[0]
+        # Tangent point: on the line from the arc's centre (x 0, r ro - rho) through the sphere's centre.
+        k = rho / (rho - rn)
+        xt, rt_ = xc * k, (ro - rho) + (0 - (ro - rho)) * k
         prof = [(0.0, lb), (ro, lb)]
-        for k in range(1, 24):
-            x = ln * k / 24  # from the base toward the tip
+        for j in range(1, 24):
+            x = xt * j / 24
             prof.append((math.sqrt(rho * rho - x * x) + ro - rho, lb + x))
-        prof.append((0.0, lb + ln))
+        th0 = math.atan2(rt_, xt - xc)                       # tangent point's angle on the sphere
+        for j in range(0, 9):
+            t = th0 * (1 - j / 8)
+            prof.append((rn * math.sin(t), lb + xc + rn * math.cos(t)))
         parts.lathe("nose", prof, segments=64, material="black")
+
+    # Roll pattern below the nose: the band split in quarters on the fin lines, two opposite ones
+    # black, so a roll shows. Painted by geometry (decal shapes): sharp edges, no image.
+    z1, z2 = lb - d["roll_band_from_top"] - d["roll_band_length"], lb - d["roll_band_from_top"]
+    for q in (0, 2):
+        a = (q + 0.5) * math.pi / 2                  # quarter centred between fin q and fin q + 1
+        with parts.assembly(f"roll_quarter{q}"):
+            parts.decal(f"roll_quarter{q}", tube, center=(ro * math.cos(a), ro * math.sin(a), (z1 + z2) / 2),
+                        direction=(-math.cos(a), -math.sin(a), 0), up=(0, 0, 1),
+                        width=ro * math.pi / 2, height=z2 - z1, material="black", shapes=[[0, 0, 1, 1]])
 
     # The motor tube stands out aft of the body (mount_overhang) for the screw-on retainer, as in the
     # kit's instructions: a threaded ring epoxied over the tube and a cap whose lip holds the motor's rim.
@@ -98,13 +124,18 @@ def build(spec):
         t_hat = (-math.sin(a), math.cos(a), 0.0)  # z × radial
         R = lambda r, z, r_hat=r_hat: (r * r_hat[0], r * r_hat[1], z)
         with parts.assembly(f"fin{i}"):
-            fin = parts.surface(f"fin{i}", R(ro + gap, z_le), cr, R(ro + gap + s, z_le - sw), ct,
+            # The outer tip_band of the span painted: a separate surface on the same planform.
+            ys = s - d["fin_tip_band"]
+            cs, sws = cr + (ct - cr) * ys / s, sw * ys / s
+            fin = parts.surface(f"fin{i}", R(ro + gap, z_le), cr, R(ro + gap + ys, z_le - sws), cs,
                                 d["fin_thickness"] / cr, kind="lens", chord_dir=(0, 0, -1), material="black")
+            tip = parts.surface(f"fin{i}_tip", R(ro + gap + ys, z_le - sws), cs, R(ro + gap + s, z_le - sw), ct,
+                                d["fin_thickness"] / cr, kind="lens", chord_dir=(0, 0, -1), material="fin_tip")
             shaft = parts.tube(f"fin{i}_shaft", [R(ri - 0.006, z_piv), R(ro + gap + 0.004, z_piv)], 0.001,
                                segments=8, material="dark_metal")
             horn = parts.box(f"fin{i}_horn", (0.0015, 0.008, 0.003), location=R(ri - 0.005, z_piv),
                              direction=(0, 0, 1), roll_deg=math.degrees(a), material="dark_metal")
-            parts.hinge(f"fin{i}_j", [fin, shaft, horn], R(ri - 0.006, z_piv), R(ro + gap + s, z_piv),
+            parts.hinge(f"fin{i}_j", [fin, tip, shaft, horn], R(ri - 0.006, z_piv), R(ro + gap + s, z_piv),
                         sample=R(ro + gap, z_le - cr), want=tuple(-c for c in t_hat))
         with parts.assembly(f"servo{i}"):
             # Lying along the axis between the mount's front and the board, shaft pointing outward.
