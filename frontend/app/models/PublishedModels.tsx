@@ -277,11 +277,11 @@ function Logos({ model }: { model: Published }) {
 
 // The vehicle's famous photos (photos.ts), a column in the bottom left corner going up, edge to edge.
 function Photos({ probe }: { probe: string }) {
-  const set = PHOTOS[probe];
-  if (!set) return null;
+  const photos = PHOTOS[probe];
+  if (!photos) return null;
   return (
-    <div className={styles.photoColumn}>
-      {set.photos.map((p) => (
+    <div className={styles.photoColumn} style={{ "--photos": photos.length } as React.CSSProperties}>
+      {photos.map((p) => (
         // eslint-disable-next-line @next/next/no-img-element
         <img key={p.slug} src={`/models/photos/${probe}/${p.slug}-thumb.jpg`} alt={p.title} />
       ))}

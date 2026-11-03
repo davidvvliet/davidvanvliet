@@ -120,14 +120,17 @@
 .cardLogos img { width: auto; opacity: 0.85; }
 
 /* A vehicle's famous photos (PublishedModels' Photos): a column in the viewer's bottom left corner
-   going up, touching both edges and each other. */
+   going up, touching both edges and each other, each up to 96 px and smaller when they would
+   otherwise reach the viewer's tools at the top. */
+.detail > .viewCell { container-type: size; }
 .photoColumn {
-  position: absolute; bottom: 0; left: 0; z-index: 1; pointer-events: none; max-height: calc(100% - 5.5rem);
-  display: flex; flex-direction: column-reverse; overflow: hidden;
+  position: absolute; bottom: 0; left: 0; z-index: 1; pointer-events: none;
+  display: flex; flex-direction: column-reverse;
+  --size: min(96px, calc((100cqh - 5.5rem) / var(--photos)));
 }
-.photoColumn img { flex: none; width: 96px; height: 96px; object-fit: cover; display: block; }
+.photoColumn img { flex: none; width: var(--size); height: var(--size); object-fit: cover; display: block; }
 @media (max-width: 768px) {
-  .photoColumn img { width: 64px; height: 64px; }
+  .photoColumn { --size: min(64px, calc((100cqh - 5.5rem) / var(--photos))); }
 }
 
 /* The public /models header: links | name (centred, as the home page's navbar title) | empty. */
