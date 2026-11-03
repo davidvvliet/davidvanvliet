@@ -2,7 +2,7 @@
   "title": "Altair Aether",
   "logos": [],
   "listed": false,
-  "note": "Our own design: a ~300 kg lunar communications relay, fired off a mass driver near the lunar south pole into an elliptical frozen lunar orbit, built from real flight hardware where it exists. Frame: x along the track (the direction of travel, and the craft's axis: the launch load runs down it), z up, y left. The craft's separation plane is at x = 0; the sled and the rails are behind and below it. Pass 1: structure, tank, main thruster, sled and rails. Pass 2: propulsion (eight 1 N thrusters, latch valve, fill and drain valves, lines). Pass 3: power (two solar wings, deployed; two batteries).",
+  "note": "Our own design: a ~300 kg lunar communications relay, fired off a mass driver near the lunar south pole into an elliptical frozen lunar orbit, built from real flight hardware where it exists. Frame: x along the track (the direction of travel, and the craft's axis: the launch load runs down it), z up, y left. The craft's separation plane is at x = 0; the sled and the rails are behind and below it. Pass 1: structure, tank, main thruster, sled and rails. Pass 2: propulsion (eight 1 N thrusters, latch valve, fill and drain valves, lines). Pass 3: power (two solar wings, deployed; two batteries). Pass 4: comms (S-band dish to the Moon on +z, X-band array to the Earth on +x, transponder).",
   "sources": [
     {
       "id": "nssdc_moon",
@@ -94,6 +94,27 @@
       "url": "https://arxiv.org/abs/1605.09788",
       "read": "2026-11-03",
       "licence": "copyright the authors / AAS: link and quotes only"
+    },
+    {
+      "id": "sstl_sant",
+      "title": "SSTL, Lunar Pathfinder S-Band Antenna and Pointing Mechanism in test (5 Feb 2024)",
+      "url": "https://sstl.co.uk/media-hub/latest-news/2024/lunar-antenna-vid-in-test",
+      "read": "2026-11-03",
+      "licence": "copyright SSTL: link and quotes only"
+    },
+    {
+      "id": "endurosat_x4x4",
+      "title": "EnduroSat, X-Band 16 Element Patch Antenna Array, User Manual (EnduroSat's manual, as hosted by SatCatalog)",
+      "url": "https://satcatalog.s3.amazonaws.com/components/550/SatCatalog_-_EnduroSat_-_X-Band_4x4_Patch_Antenna_-_Datasheet.pdf",
+      "read": "2026-11-03",
+      "licence": "copyright EnduroSat: link and quotes only"
+    },
+    {
+      "id": "l3h_cxs1000",
+      "title": "L3Harris, CXS-1000 Small Satellite Transponder datasheet",
+      "url": "https://l3harris.com/sites/default/files/2020-06/sas_ss_cxs1000.pdf",
+      "read": "2026-11-03",
+      "licence": "copyright L3Harris: link and quotes only"
     },
     {
       "id": "design",
@@ -189,6 +210,30 @@
       "tolerance": 0.02,
       "source": "azur_3g30c",
       "quote": "60.7 (± 0.1) x 124.5 (± 0.1) (assembly)"
+    },
+    "sband_dish_diameter": {
+      "value": 0.86,
+      "object": "sband_reflector",
+      "measure": "diameter",
+      "tolerance": 0.02,
+      "source": "sstl_sant",
+      "quote": "The Antenna is a 0.86m Parabolic CFRP Reflector"
+    },
+    "xband_array_length": {
+      "value": 0.098,
+      "object": "xband_array",
+      "measure": "z",
+      "tolerance": 0.02,
+      "source": "endurosat_x4x4",
+      "quote": "Figure 2: 98.0 ±0.1 (mm)"
+    },
+    "transponder_width": {
+      "value": 0.1143,
+      "object": "transponder",
+      "measure": "y",
+      "tolerance": 0.02,
+      "source": "l3h_cxs1000",
+      "quote": "Outline Dimension 4.0” x 4.5” x 4.0”"
     }
   },
   "facts": {
@@ -513,6 +558,40 @@
       "value": 10.84,
       "source": "design, computed: 2π √(a³ / GM), a = 1737.4 + (673 + 7331) / 2 km",
       "note": "hours; NASA's reference relay orbit is 12 h"
+    },
+    "sband_dish": {
+      "value": "0.86 m parabolic CFRP reflector, backfire helix feed, S-band 2.0-2.3 GHz, >20 dB, pointed up to 25° off centre by two swashplates; 11.3 kg with the mechanism",
+      "source": "sstl_sant",
+      "quote": "The Antenna is a 0.86m Parabolic CFRP Reflector fed by a Backfire Helix, capable of transmitting and receiving in S-Band (2.0 – 2.3 GHz) with gain >20dB. The APM is a novel design which rotates two swashplates to achieve a pointing range up to 25 degrees off-centre. The flight mass of the APM 9.3kg, or 11.3kg with the Antenna installed."
+    },
+    "sband_dish_shape": {
+      "value": "f/D 0.35 (0.154 m deep), feed 60 mm across and 0.2 m long, mechanism 0.24 m across and 0.15 m tall",
+      "source": "design, estimate: SSTL gives the diameter only"
+    },
+    "sband_link": {
+      "value": "forward 2025-2110 MHz, return 2200-2290 MHz, EIRP > 20.14 dBW",
+      "source": "sstl_lp_guide",
+      "quote": "S-band Forward Link (OTM-S) 2025-2110 MHz ... S-band Return Link (OFM-S) 2200-2290 MHz ... EIRP & G/T at HPBW >20.14 dBW @ θ = 7.1°"
+    },
+    "xband_link": {
+      "value": "8450-8500 MHz to the Earth, up to 5 Mbps",
+      "source": "sstl_lp_guide",
+      "quote": "Earth X-band 7190-7235MHz Up to 30kbps 8450-8500MHz ≤ 5Mbps"
+    },
+    "xband_array": {
+      "value": "EnduroSat X-band 16-element patch array, 82.6 x 98.0 x 3.18 mm, >16 dBi, 18° beam, up to 4 W",
+      "source": "endurosat_x4x4",
+      "quote": "Gain > 16dBi ... Half Power Beam Width (HPBW): 18 degrees ... RF output power: up to 4 W; Figure 2: 82.6 ±0.1, 98.0 ±0.1, 3.18",
+      "note": "its band is 8025-8400 MHz, below Lunar Pathfinder's 8450-8500: a retuned version would be needed"
+    },
+    "transponder": {
+      "value": "L3Harris CXS-1000, 4.0 x 4.5 x 4.0 in, S-band, 10 mW to 5 W, X-/Ka-band optional",
+      "source": "l3h_cxs1000",
+      "quote": "Outline Dimension 4.0” x 4.5” x 4.0” (core configuration) ... RF Output Power 10 mW to 5 W (commandable) ... X-Band/ Ka-band Transmit/Receive (Options) ... Mass 2.5 - 3.5 lbs."
+    },
+    "pointing_plan": {
+      "value": "the dish (+z) on the Moon's south pole, the craft rolled about that line to put the X-band array (+x) on the Earth; the wings turn about y for the Sun",
+      "source": "design, chosen: from aposelene over the south pole the Moon and the Earth are about 90° apart"
     }
   },
   "materials": {},
@@ -521,7 +600,8 @@
     "Lunar Pathfinder's orbit differs between SSTL's guide (673 x 7331 km, 54.9°) and a 2022 NASA slide (500 x 7500 km, 57.8°); SSTL calls its values indicative.",
     "A south-pole launch site reaches inclinations near 90° directly; the 54.9° orbit needs a site at or below about 55°S, or a plane change.",
     "Propulsion has no filter or pressure transducer yet (no sourced part found); the thruster layout is our own, not copied from a flown craft.",
-    "Power: the solar wings are shown deployed; the stowed pose for the launch and the hinges come with deployment (step 9). The array's radiation dose and working temperature are estimates. The Earth's shadow (lunar eclipses, a few hours, a few times a year) isn't in the battery sizing."
+    "Power: the solar wings are shown deployed; the stowed pose for the launch and the hinges come with deployment (step 9). The array's radiation dose and working temperature are estimates. The Earth's shadow (lunar eclipses, a few hours, a few times a year) isn't in the battery sizing.",
+    "Comms: no low-gain S-band antenna yet for safe mode (no maker's datasheet found); the EnduroSat array's band (8025-8400 MHz) sits below the 8450-8500 MHz lunar band; with the dish on the Moon and the array on the Earth, the wings turning only about y lose some sunlight in some seasons."
   ],
   "budget": {
     "triangles": 50000,

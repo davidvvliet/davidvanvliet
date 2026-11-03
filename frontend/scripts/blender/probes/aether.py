@@ -77,6 +77,7 @@ def build(spec):
 
     propulsion(d, R, flat, xc, xb, t, x0, rt)
     power(d, R, flat, xc, xb)
+    comms(d, R, flat, xc, xb, t)
 
 
 def _dir(a, sign, aft, cant):
@@ -192,4 +193,38 @@ def power(d, R, flat, xc, xb):
         for k, sz in enumerate((1, -1)):
             parts.box(f"battery{k}", (0.308, 0.18, 0.09), location=(xm, 0, sz * (flat - 0.004 - 0.045)),
                       material="dark_metal")
+
+
+def comms(d, R, flat, xc, xb, t):
+    # S-band dish on the +z side, facing the Moon: a copy of Lunar Pathfinder's SANT. Only its
+    # diameter is published; the depth, feed and pointing mechanism are estimates (spec).
+    xm = (xc + xb) / 2
+    rd = 0.43
+    f = 0.35 * 2 * rd                                # focal length, f/D 0.35
+    h_apm = 0.15
+    z0 = flat + h_apm                                # the dish's vertex
+    with parts.assembly("sband_antenna"):
+        parts.lathe("apm_base", [(0.0, 0.0), (0.12, 0.0), (0.12, 0.06), (0.0, 0.06)], segments=32,
+                    location=(xm, 0, flat), direction=(0, 0, 1), material="dark_metal")
+        parts.lathe("apm_swashplates", [(0.0, 0.06), (0.1, 0.06), (0.1, 0.1), (0.09, 0.1), (0.09, 0.105),
+                                        (0.1, 0.105), (0.1, h_apm), (0.0, h_apm)], segments=32,
+                    location=(xm, 0, flat), direction=(0.0, math.sin(math.radians(4)), math.cos(math.radians(4))),
+                    material="foil_silver")
+        n = 16
+        dish = [(rd * k / n, (rd * k / n) ** 2 / (4 * f)) for k in range(n + 1)]
+        shell = dish + [(rd, dish[-1][1] - 0.008)] + [(r, z - 0.008) for r, z in reversed(dish[:-1])]
+        parts.lathe("sband_reflector", shell, segments=64, location=(xm, 0, z0), direction=(0, 0, 1),
+                    material="white_paint")
+        # Backfire helix: a mast from the vertex to the focus, a helix cage and a small back reflector.
+        parts.lathe("sband_feed", [(0.0, 0.0), (0.012, 0.0), (0.012, f - 0.2), (0.03, f - 0.2), (0.03, f - 0.01),
+                                   (0.06, f - 0.01), (0.06, f), (0.0, f)], segments=24,
+                    location=(xm, 0, z0), direction=(0, 0, 1), material="foil_gold")
+
+    # X-band patch array on the forward deck, facing +x (the Earth).
+    with parts.assembly("xband_antenna"):
+        parts.box("xband_array", (0.00318, 0.0826, 0.098), location=(xb + 0.00159, 0.18, 0.12), material="white_paint")
+
+    # The transponder hangs under the forward deck.
+    with parts.assembly("radio", internal=True):
+        parts.box("transponder", (0.1016, 0.1143, 0.1016), location=(xb - t - 0.0508, 0, 0.2), material="dark_metal")
 
