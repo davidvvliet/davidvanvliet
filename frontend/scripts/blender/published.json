@@ -57,9 +57,9 @@
   }
  },
  "finrocket": {
-  "approved": "2026-11-03 16:18",
+  "approved": "2026-11-03 16:45",
   "inputs": {
-   "specs/finrocket.json": "0b7c62671b465568",
+   "specs/finrocket.json": "586f0166b810c32a",
    "probes/finrocket.py": "0b6a1ffbdb7afd88",
    "build.py": "363cabc8976febf0",
    "blender.json": "7bbc071b6e396ec4",
@@ -83,7 +83,7 @@
    "refs/finrocket/flag-field.png": "2c3f261194554955",
    "refs/finrocket/flag-red.png": "394a250faf6aa309",
    "refs/finrocket/flag-stars.png": "f33034e6b1ba628b",
-   "refs/finrocket/lettering-mask.png": "cf0845e2f34fb4d1"
+   "refs/finrocket/lettering-mask.png": "e1df68035528ab09"
   }
  },
  "hubble": {

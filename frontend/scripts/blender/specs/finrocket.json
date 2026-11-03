@@ -390,16 +390,16 @@
       "quote": "Measure the center between the fins on the bottom of tube C the bottom of tube I ... Even with the end of tube. ... Place the launch lugs ensuring that align between the middle of the fins (page 6)"
     },
     "lettering": {
-      "value": "Altair ULTRALIGHT PAYLOAD",
-      "source": "design, chosen: the payload's name, set in Geist (geist_font), twice: on the lines of fins 1 and 3 (fin0 and fin2), each reading up from just above its fin; mask refs/finrocket/lettering-mask.png drawn from the font with PIL (\"Altair\" at 190 px, \"ULTRALIGHT PAYLOAD\" 40% smaller at 114 px, on one baseline)"
+      "value": "Altair ULTRALIGHT",
+      "source": "design, chosen: the payload's name, set in Geist (geist_font), twice: on the lines of fins 1 and 3 (fin0 and fin2), each reading up from just above its fin; mask refs/finrocket/lettering-mask.png drawn from the font with PIL (\"Altair\" at 190 px, \"ULTRALIGHT\" 40% smaller at 114 px, on one baseline; then \"PAYLOAD\" dropped and \"Altair\" scaled up 20% from that sheet, at the same px per metre)"
     },
     "lettering_length": {
-      "value": 0.241,
-      "source": "design, chosen: the mask's 1809 x 250 px sheet at the lettering's height"
+      "value": 0.1809,
+      "source": "design, chosen: the mask's 1358 x 281 px sheet at the lettering's height"
     },
     "lettering_height": {
-      "value": 0.0333,
-      "source": "design, chosen: letters of \"Altair\" about 20 mm tall"
+      "value": 0.0374,
+      "source": "design, chosen: letters of \"Altair\" about 24 mm tall"
     },
     "lettering_font": {
       "value": "Geist Regular",
@@ -407,7 +407,7 @@
       "quote": "This Font Software is licensed under the SIL Open Font License, Version 1.1"
     },
     "lettering_gap": {
-      "value": 0.02,
+      "value": 0.035,
       "source": "design, chosen: the lettering starts this far above the fin's root leading edge"
     },
     "nose_tip_radius": {
@@ -664,7 +664,7 @@
         0
       ],
       "radius": 0.15,
-      "note": "Altair ULTRALIGHT PAYLOAD on fin0's line"
+      "note": "Altair ULTRALIGHT on fin0's line"
     },
     {
       "name": "lettering above fin 3",
