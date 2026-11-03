@@ -126,7 +126,7 @@ function Stand({ data, held }: { data: FinRocketData; held: React.RefObject<Held
     <>
       <primitive object={scene} />
       {fins.map((f, i) => f && (
-        <Html key={i} position={f.label} center style={{ color: "#ededed", font: "11px var(--font-mono, monospace)", pointerEvents: "none" }}>
+        <Html key={i} position={f.label} center style={{ color: "#00ff00", font: "11px var(--font-mono, monospace)", pointerEvents: "none" }}>
           {i + 1}
         </Html>
       ))}
