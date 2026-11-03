@@ -41,18 +41,19 @@ const TURN_SECONDS = 20;
 // Thiokol's 1950-1990 script logo is Wikimedia Commons' ThiokolLogo.PNG (public domain text logo,
 // trademarked), recoloured the same way. ESA's is Wikimedia Commons' ESA_logo.svg (public domain:
 // "simple geometric shapes or text", trademarked), filled light.
-// `above`: extra space over a logo, in px, when it sits under another.
-const LOGOS: Record<string, { name: string; logo: string; height: number; above?: number }> = {
+// `above`: extra space over a logo, in px, when it sits under another; `after` overrides it under a given logo.
+const LOGOS: Record<string, { name: string; logo: string; height: number; above?: number; after?: Record<string, number> }> = {
   nasa: { name: "NASA", logo: "/logos/nasa.svg", height: 30 },
   spacex: { name: "SpaceX", logo: "/logos/spacex.svg", height: 10 },
   jpl: { name: "Jet Propulsion Laboratory", logo: "/logos/jpl.svg", height: 11 },
   naa: { name: "North American Aviation", logo: "/logos/north-american.png", height: 30 },
   rocketdyne: { name: "Rocketdyne", logo: "/logos/rocketdyne.png", height: 24 },
   thiokol: { name: "Thiokol", logo: "/logos/thiokol.png", height: 14 },
-  esa: { name: "European Space Agency", logo: "/logos/esa.svg", height: 16, above: 8 },
+  esa: { name: "European Space Agency", logo: "/logos/esa.svg", height: 16, above: 8, after: { nasa: 3 } },
 };
 const ORGS = ["nasa", "spacex"];
-const logosOf = (m: Published) => m.logos.filter((k): k is keyof typeof LOGOS => k in LOGOS).map((k) => LOGOS[k]);
+const logosOf = (m: Published) => m.logos.filter((k): k is keyof typeof LOGOS => k in LOGOS)
+  .map((k, i, ks) => { const o = LOGOS[k]; return { ...o, above: (i > 0 ? o.after?.[ks[i - 1]] : undefined) ?? o.above }; });
 const orgRank = (m: Published) => { const i = ORGS.indexOf(m.logos[0]); return i < 0 ? ORGS.length : i; };
 
 // /models on the live site. Without ?probe: a grid of the published models, each spinning in its
