@@ -70,26 +70,6 @@
    ]
   },
   {
-   "name": "RS-485 transceiver",
-   "parts": [
-    {
-     "ref": "C4",
-     "value": "100nF",
-     "package": "C_0402_1005Metric"
-    },
-    {
-     "ref": "RT1",
-     "value": "Z0 of the cable",
-     "package": "R_0603_1608Metric"
-    },
-    {
-     "ref": "U2",
-     "value": "THVD1410",
-     "package": "SOIC-8_3.9x4.9mm_P1.27mm"
-    }
-   ]
-  },
-  {
    "name": "IMU",
    "parts": [
     {
@@ -110,17 +90,22 @@
    ]
   },
   {
-   "name": "Status LED (GPIO)",
+   "name": "RS-485 transceiver",
    "parts": [
     {
-     "ref": "D1",
-     "value": "RED",
-     "package": "LED_0603_1608Metric"
+     "ref": "C4",
+     "value": "100nF",
+     "package": "C_0402_1005Metric"
     },
     {
-     "ref": "R5",
-     "value": "470R",
-     "package": "R_0402_1005Metric"
+     "ref": "RT1",
+     "value": "120R",
+     "package": "R_0603_1608Metric"
+    },
+    {
+     "ref": "U2",
+     "value": "THVD1410",
+     "package": "SOIC-8_3.9x4.9mm_P1.27mm"
     }
    ]
   },
@@ -140,12 +125,37 @@
    ]
   },
   {
+   "name": "Status LED (GPIO)",
+   "parts": [
+    {
+     "ref": "D1",
+     "value": "RED",
+     "package": "LED_0603_1608Metric"
+    },
+    {
+     "ref": "R5",
+     "value": "470R",
+     "package": "R_0402_1005Metric"
+    }
+   ]
+  },
+  {
    "name": "Camera cable",
    "parts": [
     {
      "ref": "W1",
      "value": "Camera cable",
      "package": "W1"
+    }
+   ]
+  },
+  {
+   "name": "Standoffs and screws",
+   "parts": [
+    {
+     "ref": "HW1",
+     "value": "Standoffs and screws",
+     "package": "HW1"
     }
    ]
   },
@@ -166,6 +176,16 @@
      "ref": "PI1",
      "value": "Raspberry Pi Zero 2 W",
      "package": "PI1"
+    }
+   ]
+  },
+  {
+   "name": "Baffle",
+   "parts": [
+    {
+     "ref": "BF1",
+     "value": "Baffle",
+     "package": "BF1"
     }
    ]
   },

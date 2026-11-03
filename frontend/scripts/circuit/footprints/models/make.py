@@ -441,5 +441,23 @@ def star_tracker_n6_cable():
     zero_camera_cable([(0.0, zc), (10.0, zc), (17.0, zs), (22.5, zs)], w=16.0).write(
         os.path.join(HERE, "Cable_StarTrackerN6.wrl"), "Raspberry Pi camera cable, 16 mm (star-tracker-n6 placement)")
 
+def hat_standoffs():
+    """The four M2.5 standoffs and screws holding the star-tracker HAT on the Pi Zero, at the holes both boards share
+    ("3.5" in from the edges of the 65 x 30 outline, both drawings). Frame: the HAT's, x right, y up from its top-left
+    corner, z up from its top surface. The stack follows recipe.json's attachments: the Pi's underside 14.24 below the
+    HAT's top, both boards 1.6 thick, so each standoff spans the 11.04 between them. Standoff 5 across flats, brass;
+    pan-head screws 4.5 across, 1.7 tall, steel, on the HAT's top and under the Pi: estimates (common hardware, no
+    source read)."""
+    m = Mesh(); t, pi_under = 1.6, -14.24
+    hexagon = lambda cx, cy: [(cx + 2.5 / math.cos(math.pi / 6) * math.cos(math.pi / 6 + i * math.pi / 3),
+                               cy + 2.5 / math.cos(math.pi / 6) * math.sin(math.pi / 6 + i * math.pi / 3)) for i in range(6)]
+    for x in (3.5, 61.5):
+        for y in (-3.5, -26.5):
+            prism(m, "0.78 0.62 0.30", hexagon(x, y), pi_under + t, -t, shine=0.6)
+            for flat, dome in ((0.0, 1.7), (pi_under, pi_under - 1.7)):   # head on the HAT's top, head under the Pi
+                k = 1 if dome > flat else -1
+                lathe(m, "0.70 0.70 0.72", [(0.0, flat), (2.25, flat), (2.25, dome - k * 0.5), (1.9, dome), (0.0, dome)], n=24, cx=x, cy=y, shine=0.5)
+    m.write(os.path.join(HERE, "Standoffs_StarTrackerHAT.wrl"), "M2.5 standoffs and screws (star-tracker HAT on a Pi Zero)")
+
 if __name__ == "__main__":
-    scd4x(); sgp41(); epd154(); zjy128(); tps2121(); gs_camera(); lens16(); pi_zero2w(); star_tracker_cable(); star_tracker_baffle(); star_tracker_n6_cable(); vfbga178(); rgt16(); xfl4020()
+    scd4x(); sgp41(); epd154(); zjy128(); tps2121(); gs_camera(); lens16(); pi_zero2w(); star_tracker_cable(); star_tracker_baffle(); star_tracker_n6_cable(); hat_standoffs(); vfbga178(); rgt16(); xfl4020()

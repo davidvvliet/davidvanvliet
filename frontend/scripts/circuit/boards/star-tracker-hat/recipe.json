@@ -391,6 +391,20 @@
      ]
     }
    ]
+  },
+  {
+   "ref": "HW1",
+   "name": "Standoffs and screws",
+   "models": [
+    {
+     "file": "${CIRCUIT_3DMODELS}/Standoffs_StarTrackerHAT.wrl",
+     "offset_mm": [
+      0,
+      0,
+      0
+     ]
+    }
+   ]
   }
  ]
 }
