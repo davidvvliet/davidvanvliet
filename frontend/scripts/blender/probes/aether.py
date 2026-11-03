@@ -31,13 +31,20 @@ def build(spec):
         parts.lathe("side_panels", [(R - 0.004, xc + t), (R, xc + t), (R, xb - t), (R - 0.004, xb - t)],
                     closed=True, material="foil_gold", **hexa)
 
-    with parts.assembly("tank"):
-        # Northrop Grumman 80583-1 (104 L, 83 kg hydrazine), standing on the lower deck.
-        rt = d["tank_diameter"] / 2
-        x0 = xc + t + rt
+    # Inside the drum, so in internal.glb: the tank on four legs, the latch valve and the lines.
+    rt, hs = d["tank_diameter"] / 2, d["tank_standoff"]
+    floor = xc + t                                   # the lower deck's inner face
+    x0 = floor + hs + rt
+    with parts.assembly("tank", internal=True):
+        # Northrop Grumman 80583-1 (104 L, 83 kg hydrazine).
         prof = [(0.0, x0 - rt)] + [(rt * math.sin(math.pi * k / 24), x0 - rt * math.cos(math.pi * k / 24))
                                     for k in range(1, 24)] + [(0.0, x0 + rt)]
         parts.lathe("tank", prof, segments=48, direction=X, material="foil_silver")
+        for k in range(4):
+            a = math.radians(45 + 90 * k)
+            y, z = 0.15 * math.cos(a), 0.15 * math.sin(a)
+            top = x0 - math.sqrt(rt * rt - 0.15 ** 2) + 0.005
+            parts.tube(f"tank_leg{k}", [(floor, y, z), (top, y, z)], 0.012, material="dark_metal")
 
     with parts.assembly("main_thruster"):
         # ArianeGroup 20 N: hung under the lower deck, firing back through the separation ring.
@@ -67,3 +74,84 @@ def build(spec):
         for k, sy in enumerate((1, -1)):
             parts.box(f"rail{k}", (4.0, 0.08, 0.12), location=(0.5, sy * gauge / 2, base_z - 0.16), material="dark_metal")
         parts.box("stator", (4.0, 0.3, 0.04), location=(0.5, 0, base_z - 0.1), material="dark_metal")
+
+    propulsion(d, R, flat, xc, xb, t, x0, rt)
+
+
+def _dir(a, sign, aft, cant):
+    """A thruster's firing direction at corner angle `a`: back (or forward) along x, tilted `cant`
+    out from the axis, half of it round the craft (`sign`) so opposite pairs give roll."""
+    rad = (0.0, math.cos(a), math.sin(a))
+    tan = (0.0, -math.sin(a), math.cos(a))
+    s, c = math.sin(cant), math.cos(cant)
+    h = math.sqrt(0.5)
+    v = (-c if aft else c, s * h * (rad[1] + sign * tan[1]), s * h * (rad[2] + sign * tan[2]))
+    return v
+
+
+def rcs_thruster(name, mount, direction):
+    """ArianeGroup 1 N (drawing cht-1-dim-a): flow-control valve 22 mm across behind a 3.3 mm flange,
+    97 mm from the fitting to the flange's face; 75 mm out to the nozzle, 30 mm across the heater's
+    thermal cover. Local z runs out along `direction` from the flange's face at `mount`."""
+    parts.lathe(name, [(0.0, -0.097), (0.006, -0.097), (0.006, -0.088), (0.011, -0.086), (0.011, -0.0033),
+                       (0.0125, -0.0033), (0.0125, 0.006), (0.0065, 0.006), (0.0065, 0.033), (0.015, 0.033),
+                       (0.015, 0.066), (0.005, 0.073), (0.0035, 0.075), (0.0, 0.075)],
+                segments=20, location=mount, direction=direction, material="dark_metal")
+    parts.lathe(name + "_flange", [(0.0, -0.0033), (0.033, -0.0033), (0.033, 0.0), (0.0, 0.0)],
+                segments=4, smooth=False, location=mount, direction=direction, roll_deg=45.0, material="foil_silver")
+
+
+def propulsion(d, R, flat, xc, xb, t, x0, rt):
+    cant = math.radians(d["rcs_cant_deg"])
+    corners = [math.radians(a) for a in (60, 120, 240, 300)]
+    rm = 0.43                                        # the thrusters' radius, inside the corners
+    ro = d["line_od"] / 2
+    inlets = {}
+    with parts.assembly("rcs"):
+        for i, a in enumerate(corners):
+            y, z = rm * math.cos(a), rm * math.sin(a)
+            for aft in (True, False):
+                sign = 1 if (i % 2 == 0) == aft else -1
+                v = _dir(a, sign, aft, cant)
+                m = (xc - 0.0033, y, z) if aft else (xb + 0.0033, y, z)
+                n = f"rcs_{'a' if aft else 'f'}{i}"
+                rcs_thruster(n, m, v)
+                inlets[n] = tuple(m[k] - v[k] * 0.097 for k in range(3))
+
+    # Fill and drain valves on the forward deck: nitrogen to the tank's top, hydrazine to its outlet.
+    fl, tube = d["fdv_length"], 0.043
+    rf = d["fdv_body_diameter"] / 2
+    with parts.assembly("fill_drain"):
+        for n, (y, z) in (("fdv_pressurant", (0.0, 0.0)), ("fdv_propellant", (0.0, -0.12))):
+            parts.lathe(n, [(0.0, -tube), (ro, -tube), (ro, 0.0), (rf, 0.0), (rf, fl - tube - 0.012),
+                            (rf * 0.7, fl - tube), (0.0, fl - tube)],
+                        segments=16, location=(xb, y, z), direction=X, material="foil_silver")
+
+    floor = xc + t
+    xv = floor + 0.025                               # the lines' height over the lower deck
+    xr = xb - t - 0.025                              # the forward ring, under the upper deck
+    rr = 0.36
+    with parts.assembly("lines", internal=True):
+        # The latch valve between the tank and everything downstream.
+        parts.lathe("latch_valve", [(0.0, 0.20), (0.025, 0.20), (0.025, 0.27), (0.0, 0.27)], segments=16,
+                    location=(xv, 0, 0), direction=(0, 1, 0), material="dark_metal")
+        parts.tube("line_outlet", [(x0 - rt, 0, 0), (xv, 0, 0), (xv, 0.2, 0)], ro, bend_radius=0.01)
+        parts.tube("line_latch", [(xv, 0.27, 0), (xv, rr, 0)], ro)
+        ring = lambda x: [(x, rr * math.cos(math.radians(k)), rr * math.sin(math.radians(k))) for k in range(0, 361, 10)]
+        parts.tube("manifold_aft", ring(xv), ro)
+        parts.tube("manifold_fwd", ring(xr), ro)
+        for k, sy in enumerate((1, -1)):
+            parts.tube(f"riser{k}", [(xv, sy * rr, 0), (xr, sy * rr, 0)], ro)
+        for n, p in inlets.items():
+            xm = xv if n.startswith("rcs_a") else xr
+            a = math.atan2(p[2], p[1])
+            parts.tube(f"line_{n}", [(xm, rr * math.cos(a), rr * math.sin(a)), (xm, p[1], p[2]), p], ro,
+                       bend_radius=0.008)
+        # The 20 N engine's feed, through the lower deck inside the cone.
+        parts.tube("line_main", [(xv, 0, rr), (xv, 0, 0.33), (xc - 0.02, 0, 0.33), (xc - 0.02, 0, 0.016)], ro,
+                   bend_radius=0.01)
+        parts.tube("line_fill_n2", [(xb - 0.043, 0, 0), (x0 + rt, 0, 0)], ro)
+        xp = xv + 0.012
+        parts.tube("line_fill_n2h4", [(xb - 0.043, 0, -0.12), (xr - 0.03, 0, -0.40), (xp, 0, -0.40),
+                                      (xp, 0.12, -0.12), (xp, 0.12, 0), (xv, 0.12, 0)], ro, bend_radius=0.01)
+

@@ -2,7 +2,7 @@
   "title": "Altair Aether",
   "logos": [],
   "listed": false,
-  "note": "Our own design: a ~300 kg lunar communications relay, fired off a mass driver near the lunar south pole into an elliptical frozen lunar orbit, built from real flight hardware where it exists. Frame: x along the track (the direction of travel, and the craft's axis: the launch load runs down it), z up, y left. The craft's separation plane is at x = 0; the sled and the rails are behind and below it. Pass 1: structure, tank, main thruster, sled and rails.",
+  "note": "Our own design: a ~300 kg lunar communications relay, fired off a mass driver near the lunar south pole into an elliptical frozen lunar orbit, built from real flight hardware where it exists. Frame: x along the track (the direction of travel, and the craft's axis: the launch load runs down it), z up, y left. The craft's separation plane is at x = 0; the sled and the rails are behind and below it. Pass 1: structure, tank, main thruster, sled and rails. Pass 2: propulsion (eight 1 N thrusters, latch valve, fill and drain valves, lines).",
   "sources": [
     {
       "id": "nssdc_moon",
@@ -61,6 +61,20 @@
       "licence": "NASA work: \"generally are not subject to copyright in the United States\""
     },
     {
+      "id": "ariane_1n",
+      "title": "ArianeGroup, 1N Monopropellant Hydrazine Thruster (with its dimension drawings cht-1-dim-a and cht-1-dim-b)",
+      "url": "https://www.space-propulsion.com/spacecraft-propulsion/hydrazine-thrusters/1n-hydrazine-thruster.html",
+      "read": "2026-11-03",
+      "licence": "copyright ArianeGroup: link and quotes only"
+    },
+    {
+      "id": "ariane_valves",
+      "title": "ArianeGroup, Orbital Propulsion Fluidic Equipment (valves brochure)",
+      "url": "https://www.space-propulsion.com/brochures/valves/space-propulsion-valves.pdf",
+      "read": "2026-11-03",
+      "licence": "copyright ArianeGroup: link and quotes only"
+    },
+    {
       "id": "design",
       "title": "Altair Aether's own design choices and estimates",
       "url": "https://github.com/davidvvliet/davidvanvliet/tree/main/frontend/scripts/blender/specs/aether.json",
@@ -105,6 +119,31 @@
       "tolerance": 0.05,
       "source": "ariane_20n",
       "quote": "Nozzle end diameter 33 mm"
+    },
+    "rcs_length": {
+      "value": 0.172,
+      "object": "rcs_a0",
+      "measure": "length",
+      "tolerance": 0.03,
+      "source": "ariane_1n",
+      "quote": "drawing cht-1-dim-a: 97 mm (fitting to the mounting flange's face), 75 mm (flange face to the nozzle)",
+      "note": "97 + 75"
+    },
+    "rcs_diameter": {
+      "value": 0.03,
+      "object": "rcs_a0",
+      "measure": "diameter",
+      "tolerance": 0.05,
+      "source": "ariane_1n",
+      "quote": "drawing cht-1-dim-a: 30 mm (thermal insulation), 22 mm (flow control valve)"
+    },
+    "fdv_length": {
+      "value": 0.109,
+      "object": "fdv_propellant",
+      "measure": "length",
+      "tolerance": 0.03,
+      "source": "ariane_valves",
+      "quote": "Fill & Drain Valves - 2 Failure Tolerant ... Total Length 109 ± 1 mm ... Tube Length 43 mm"
     }
   },
   "facts": {
@@ -256,13 +295,95 @@
     "track_accel_g": {
       "value": 14,
       "source": "design, computed: 1.68 km/s (circular speed at the surface, from moon_gm and moon_radius) over a 10 km track, v^2 / 2L"
+    },
+    "rcs_count": {
+      "value": 8,
+      "source": "design, chosen: four at the aft corners firing back, four at the forward corners firing forward, each canted out and round so pairs give roll as well as pitch, yaw and fore-aft translation"
+    },
+    "rcs_cant_deg": {
+      "value": 20,
+      "source": "design, chosen"
+    },
+    "rcs_thrust": {
+      "value": 1.0,
+      "source": "ariane_1n",
+      "quote": "Thrust, Nominal 1N Thrust Range 0.320 - 1.1N"
+    },
+    "rcs_isp": {
+      "value": 220,
+      "source": "ariane_1n",
+      "quote": "Specific Impulse, Nominal 220 s"
+    },
+    "rcs_mass": {
+      "value": 0.29,
+      "source": "ariane_1n",
+      "quote": "Mass Thruster with Valve 290 g"
+    },
+    "rcs_inlet_pressure": {
+      "value": "5.5 to 22 bar",
+      "source": "ariane_1n",
+      "quote": "Inlet Pressure Range 5.5 - 22 bar",
+      "also": [
+        {
+          "source": "ariane_20n",
+          "quote": "Supply pressure range 5.5 to 24 bar"
+        }
+      ]
+    },
+    "rcs_flange": {
+      "value": "3.3 mm thick, bolt circle 50 mm, four 4.3 mm holes",
+      "source": "ariane_1n",
+      "quote": "drawing cht-1-dim-a: 3.3 mm; cht-1-dim-b: ø 50 mm, ø 41 mm, ø 4.3 mm",
+      "note": "the flange's outline and the thruster's stem and collar are estimated from the drawing, scaled by its 75 mm"
+    },
+    "tank_meop": {
+      "value": 27.6,
+      "source": "ng_tanks",
+      "quote": "80583-1 ... 18.3 8.3 400 27.6 Parker Solar Probe (columns: Weight (lbm) Weight (kg) Operating Pressure (psig) Operating Pressure (bar))"
+    },
+    "tank_mass": {
+      "value": 8.3,
+      "source": "ng_tanks",
+      "quote": "Weight (kg) 8.3 (80583-1)"
+    },
+    "blowdown": {
+      "value": "22 bar full, 5.5 bar empty (4 : 1)",
+      "source": "design, chosen: the 1 N thruster's inlet range, inside the tank's 27.6 bar"
+    },
+    "pressurant_volume": {
+      "value": 22,
+      "source": "design, computed: Boyle, 22 x V0 = 5.5 x (V0 + 66.7 L of propellant), so V0 = 66.7 / 3 = 22 L of nitrogen; 66.7 + 22 = 89 L of the tank's 104 L",
+      "note": "litres, at loading"
+    },
+    "latch_valve": {
+      "value": "ArianeGroup low pressure latch valve, 545 g, 1/4 inch lines, 24.25 bar",
+      "source": "ariane_valves",
+      "quote": "Tubing Interface 1/4 inch ... Mass 545 g ... Max.operating pressure 24,25 bar"
+    },
+    "latch_valve_size": {
+      "value": "50 mm across, 70 mm long",
+      "source": "design, estimate: the brochure gives no dimensions"
+    },
+    "fdv_body_diameter": {
+      "value": 0.02,
+      "source": "design, estimate: the brochure gives no diameter"
+    },
+    "line_od": {
+      "value": 0.0064,
+      "source": "ariane_valves",
+      "quote": "Standard Tube Dimensions - outer diameter 6.4 ± 0.02mm"
+    },
+    "tank_standoff": {
+      "value": 0.04,
+      "source": "design, chosen: four legs, so the outlet line passes under the tank"
     }
   },
   "materials": {},
   "open_questions": [
     "Launch geometry: a shot from near the south pole puts the orbit's high point over the launch site only if the shot is near-vertical (about 2.1 km/s), not the 1.68 km/s horizontal shot the 14 g was worked out for. A horizontal shot from the south puts the high point over the north. Options: a track on a steep slope, a launch site further north, or a bigger burn to turn the orbit. The craft's structure is the same either way; the tank size here covers the vertical case.",
     "Lunar Pathfinder's orbit differs between SSTL's guide (673 x 7331 km, 54.9°) and a 2022 NASA slide (500 x 7500 km, 57.8°); SSTL calls its values indicative.",
-    "A south-pole launch site reaches inclinations near 90° directly; the 54.9° orbit needs a site at or below about 55°S, or a plane change."
+    "A south-pole launch site reaches inclinations near 90° directly; the 54.9° orbit needs a site at or below about 55°S, or a plane change.",
+    "Propulsion has no filter or pressure transducer yet (no sourced part found); the thruster layout is our own, not copied from a flown craft."
   ],
   "budget": {
     "triangles": 50000,
