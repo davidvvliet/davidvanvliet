@@ -78,7 +78,7 @@ export default function PublishedModels({ models, circuit, dashboard }: {
         </Header>
         <div className={styles.detail}>
           <div className={styles.viewCell}>
-            <Viewer probe={probe} url={`/models/${probe}.glb`} breakdown={null} stale={false} explore={model.explore} focusable={model.focus} explodable={model.explode}
+            <Viewer probe={probe} title={model.title} url={`/models/${probe}.glb`} breakdown={null} stale={false} explore={model.explore} focusable={model.focus} explodable={model.explode}
               internalUrl={model.internal ? `/models/internal/${probe}.glb` : undefined} />
             <Logos model={model} />
             <Photos probe={probe} />
