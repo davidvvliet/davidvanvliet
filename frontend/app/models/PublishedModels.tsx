@@ -115,7 +115,7 @@ export function BoardDetail({ board }: { board: Board }) {
         </div>
         <aside className={styles.sources}>
           <div className={styles.dim}>{board.purpose}</div>
-          {board.board === "rocket-recorder" && <Link href="/circuits/fly">Fly it on its rocket →</Link>}
+          {board.board === "rocket-recorder" && <Link href="/circuits/fly">Wire it to its rocket's fins →</Link>}
           <ol className={styles.blocks}>
             {board.blocks.map((b) => (
               <li key={b.name}>

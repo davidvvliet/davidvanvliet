@@ -3,81 +3,83 @@
 import Link from "next/link";
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Grid, Line, useGLTF } from "@react-three/drei";
+import { Grid, Html, OrbitControls, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 import StudioLights from "../../models/StudioLights";
 import { Header } from "../../models/PublishedModels";
 import styles from "../../models/models.module.css";
-import { start, step, type Gains, type Rocket, type State } from "./sim";
+import { command, type Gains, type Rocket } from "./sim";
 
-// The sim is z up; three.js is y up. C turns the sim's frame into three's: (x, y, z) -> (x, z, -y),
+// The controller is z up; three.js is y up. C turns its frame into three's: (x, y, z) -> (x, z, -y),
 // the same mapping as the glTF export of Blender's z-up models.
 const C = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), -Math.PI / 2);
 const Ci = C.clone().invert();
 const toThree = (q: THREE.Quaternion) => C.clone().multiply(q).multiply(Ci);
 const toSim = (q: THREE.Quaternion) => Ci.clone().multiply(q).multiply(C);
-const v3 = (p: THREE.Vector3) => new THREE.Vector3(p.x, p.z, -p.y);
 
-const DT = 1 / 240;
-type Shared = { s: State; held: THREE.Quaternion | null; launched: boolean; trail: THREE.Vector3[] };
+// The board on the bench, wired to the rocket's servos. The rocket stands still: the board's IMU
+// reads the board's own attitude and turn rate, and the servos turn the fins as the flight
+// computer would command them for a rocket in that attitude.
+type Bench = { att: THREE.Quaternion; prev: THREE.Quaternion; omega: THREE.Vector3; fins: number[] };
 
-export default function Fly({ rocket, gains, rho, cp }: { rocket: Rocket; gains: Gains; rho: number; cp: number }) {
-  const shared = useRef<Shared>({ s: start(), held: null, launched: false, trail: [] });
-  const [hud, setHud] = useState<State>(shared.current.s);
+export default function Fly({ rocket, gains, rho }: { rocket: Rocket; gains: Gains; rho: number }) {
+  const bench = useRef<Bench>({ att: new THREE.Quaternion(), prev: new THREE.Quaternion(), omega: new THREE.Vector3(), fins: [0, 0, 0, 0] });
+  const [hud, setHud] = useState({ tilt: 0, spin: 0, fins: [0, 0, 0, 0] });
   useEffect(() => {
-    const id = setInterval(() => setHud(shared.current.s), 100);
+    const id = setInterval(() => {
+      const b = bench.current;
+      const axis = new THREE.Vector3(0, 0, 1).applyQuaternion(b.att);
+      setHud({
+        tilt: THREE.MathUtils.radToDeg(Math.acos(Math.min(1, axis.z))),
+        spin: THREE.MathUtils.radToDeg(b.omega.dot(axis)),
+        fins: [...b.fins],
+      });
+    }, 100);
     return () => clearInterval(id);
   }, []);
-  const reset = () => { shared.current = { s: start(), held: null, launched: false, trail: [] }; };
-  const tilt = THREE.MathUtils.radToDeg(Math.acos(Math.min(1, new THREE.Vector3(0, 0, 1).applyQuaternion(hud.att).z)));
-  const margin = (cp - rocket.cg) / rocket.diameter;
   return (
     <div className={styles.page}>
       <Header>
         <Link href="/circuits?board=rocket-recorder" className={styles.dim}>← rocket-recorder</Link>
-        <span>Fly the rocket</span>
+        <span>Fins on the bench</span>
       </Header>
       <div className={styles.detail}>
         <div className={styles.viewCell}>
-          <Canvas camera={{ fov: 40, near: 0.05, far: 3000, position: [2.5, 1.2, 2.5] }} dpr={[1, 2]}>
+          <Canvas camera={{ fov: 35, near: 0.01, far: 50, position: [0.45, 0.4, 0.65] }} dpr={[1, 2]}>
             <Suspense fallback={null}>
-              <Flight shared={shared} rocket={rocket} gains={gains} rho={rho} />
+              <Stand bench={bench} rocket={rocket} gains={gains} rho={rho} />
               <StudioLights />
             </Suspense>
+            <OrbitControls target={[0, 0.12, 0]} enablePan={false} minDistance={0.25} maxDistance={3} />
           </Canvas>
-          <Trajectory shared={shared} hud={hud} />
         </div>
         <aside className={styles.sources}>
           <div style={{ height: 260, border: "var(--line)", position: "relative", touchAction: "none" }}>
             <Canvas camera={{ fov: 30, position: [0, 0, 0.32] }} dpr={[1, 2]}>
               <Suspense fallback={null}>
-                <Board shared={shared} />
+                <Board bench={bench} />
                 <StudioLights />
               </Suspense>
             </Canvas>
           </div>
           <div className={styles.dim}>
-            Drag the board to tilt the rocket, as a gust would; its IMU feels the tilt and the four servos turn the fins against it.
-            On the pad the fins swing fully over: there is no air to push yet.
-          </div>
-          <div style={{ display: "flex", gap: "1rem" }}>
-            <button className={styles.flyButton} onClick={() => { if (shared.current.s.phase === "apogee") reset(); shared.current.launched = true; }}>launch</button>
-            <button className={styles.flyButton} onClick={reset}>reset</button>
+            Drag the board to tilt it, shift-drag left-right to spin it about its long side, double-click to stand it
+            straight. It is wired to the rocket&apos;s four servos: its IMU feels the tilt and the fins turn as they would
+            to bring the rocket back upright. The rocket itself stays on the stand.
           </div>
           <table className={styles.parts}>
             <tbody>
-              <tr><td>phase</td><td>{hud.phase}</td></tr>
-              <tr><td>time</td><td>{hud.phase === "pad" ? "–" : `${hud.t.toFixed(1)} s`}</td></tr>
-              <tr><td>altitude</td><td>{hud.pos.z.toFixed(1)} m</td></tr>
-              <tr><td>speed</td><td>{hud.vel.length().toFixed(1)} m/s</td></tr>
-              <tr><td>tilt</td><td>{tilt.toFixed(1)}°</td></tr>
+              <tr><td>tilt</td><td>{hud.tilt.toFixed(1)}°</td></tr>
+              <tr><td>spin</td><td>{hud.spin.toFixed(0)}°/s</td></tr>
               {hud.fins.map((f, i) => <tr key={i}><td>fin {i + 1}</td><td>{f >= 0 ? "+" : ""}{f.toFixed(1)}°</td></tr>)}
             </tbody>
           </table>
           <div className={styles.dim}>
-            Estes F15 thrust curve (NAR data); BT-70 airframe; AGFRC C04CLS servos at their rated 0.09 s per 60°, fins
-            limited to ±{rocket.servo.max_deg}°. Centre of pressure by Barrowman&apos;s method, {margin.toFixed(1)} calibres behind the
-            centre of gravity. Masses and centre of gravity are estimates; the controller&apos;s gains are chosen, not tuned on hardware.
+            On the bench there is no airflow, so the controller uses the gain it would at 15 m/s: about{" "}
+            {finPerTilt(rocket, gains).toFixed(1)}° of fin per degree of tilt, and turning the board makes the fins
+            kick further while it moves, to damp the turn. A spin needs little fin: the rocket turns easily about its
+            axis. AGFRC C04CLS servos at their rated 0.09 s per 60°, fins limited to ±{rocket.servo.max_deg}°.
+            The controller&apos;s gains are chosen, not tuned on hardware.
           </div>
         </aside>
       </div>
@@ -85,53 +87,60 @@ export default function Fly({ rocket, gains, rho, cp }: { rocket: Rocket; gains:
   );
 }
 
-// The rocket in flight: steps the sim, turns the fins, follows it with the camera, draws its path.
-function Flight({ shared, rocket, gains, rho }: { shared: React.RefObject<Shared>; rocket: Rocket; gains: Gains; rho: number }) {
+// Fin degrees per degree of steady tilt at the controller's floor dynamic pressure.
+function finPerTilt(r: Rocket, g: Gains): number {
+  return g.kp / (2 * Math.abs(r.cg - r.fin.x)) / (g.q_min * r.fin.area * r.fin.cl_alpha);
+}
+
+// The rocket on its stand: reads the board, runs the controller, turns the fins at servo speed.
+function Stand({ bench, rocket, gains, rho }: { bench: React.RefObject<Bench>; rocket: Rocket; gains: Gains; rho: number }) {
   const gltf = useGLTF("/models/finrocket.glb");
-  const scene = useMemo(() => gltf.scene.clone(true), [gltf.scene]);
+  const scene = useMemo(() => { const s = gltf.scene.clone(true); s.updateMatrixWorld(true); return s; }, [gltf.scene]);
   const fins = useMemo(() => [0, 1, 2, 3].map((i) => {
     const node = scene.getObjectByName(`fin${i}_j`);
     const a = node?.userData.joint_axis as number[] | undefined;
-    return node && a ? { node, rest: node.quaternion.clone(), axis: new THREE.Vector3(a[0], a[2], -a[1]).normalize() } : null;
+    if (!node || !a) return null;
+    // Label each fin just beyond its tip, at the fin's middle height.
+    const box = new THREE.Box3().setFromObject(node);
+    const c = box.getCenter(new THREE.Vector3());
+    const out = new THREE.Vector3(c.x, 0, c.z).normalize();
+    const label = new THREE.Vector3(c.x, c.y, c.z).addScaledVector(out, Math.max(box.max.x - box.min.x, box.max.z - box.min.z) / 2 + 0.02);
+    return { node, rest: node.quaternion.clone(), axis: new THREE.Vector3(a[0], a[2], -a[1]).normalize(), label };
   }), [scene]);
-  const body = useRef<THREE.Group>(null);
-  const camera = useThree((s) => s.camera);
-  const [trail, setTrail] = useState<THREE.Vector3[]>([]);
-  const acc = useRef(0);
   const q = useMemo(() => new THREE.Quaternion(), []);
   useFrame((_, dt) => {
-    const sh = shared.current;
-    acc.current = Math.min(acc.current + dt, 0.1);
-    while (acc.current >= DT) {
-      sh.s = step(sh.s, rocket, gains, DT, rho, sh.held, sh.launched);
-      acc.current -= DT;
-    }
-    const s = sh.s;
-    const p = v3(s.pos);
-    if (s.phase !== "pad" && s.phase !== "apogee" && (!sh.trail.length || sh.trail[sh.trail.length - 1].distanceTo(p) > 0.5)) {
-      sh.trail.push(p.clone());
-      setTrail([...sh.trail]);
-    } else if (!sh.trail.length && trail.length) setTrail([]);
-    if (body.current) { body.current.position.copy(p); body.current.quaternion.copy(toThree(s.att)); }
-    fins.forEach((f, i) => f && f.node.quaternion.copy(q.setFromAxisAngle(f.axis, THREE.MathUtils.degToRad(s.fins[i])).multiply(f.rest)));
-    // Chase camera: keeps its bearing, stays a few metres off, looks at the rocket's middle.
-    const mid = p.clone().add(new THREE.Vector3(0, rocket.length / 2, 0).applyQuaternion(toThree(s.att)));
-    const off = camera.position.clone().sub(mid).setY(0).normalize().multiplyScalar(2.6);
-    camera.position.lerp(mid.clone().add(off).add(new THREE.Vector3(0, 0.6, 0)), Math.min(1, dt * 4));
-    camera.lookAt(mid);
+    const b = bench.current;
+    const h = Math.min(dt, 0.1);
+    // The gyro: the board's turn rate since the last frame, smoothed over about 50 ms.
+    const d = b.att.clone().multiply(b.prev.clone().invert());
+    if (d.w < 0) d.set(-d.x, -d.y, -d.z, -d.w);
+    const ang = 2 * Math.acos(Math.min(1, d.w));
+    const raw = new THREE.Vector3(d.x, d.y, d.z);
+    if (raw.lengthSq() > 1e-12 && h > 0) raw.setLength(ang / h); else raw.set(0, 0, 0);
+    b.omega.lerp(raw, Math.min(1, h / 0.05));
+    b.prev.copy(b.att);
+    const cmd = command(rocket, gains, b.att, b.omega, 0, rho);
+    const most = rocket.servo.deg_per_s * h;
+    b.fins = b.fins.map((x, i) => x + THREE.MathUtils.clamp(cmd[i] - x, -most, most));
+    fins.forEach((f, i) => f && f.node.quaternion.copy(q.setFromAxisAngle(f.axis, THREE.MathUtils.degToRad(b.fins[i])).multiply(f.rest)));
   });
   return (
     <>
-      <group ref={body}><primitive object={scene} /></group>
-      <Grid args={[400, 400]} cellSize={1} sectionSize={10} cellColor="#222" sectionColor="#333" fadeDistance={120} infiniteGrid />
-      {trail.length > 1 && <Line points={trail} color="#00ff00" lineWidth={1.5} />}
+      <primitive object={scene} />
+      {fins.map((f, i) => f && (
+        <Html key={i} position={f.label} center style={{ color: "#ededed", font: "11px var(--font-mono, monospace)", pointerEvents: "none" }}>
+          {i + 1}
+        </Html>
+      ))}
+      <Grid args={[4, 4]} cellSize={0.05} sectionSize={0.25} cellColor="#222" sectionColor="#333" fadeDistance={3} infiniteGrid />
     </>
   );
 }
 
-// The flight computer: the board stands along the rocket's axis, so it turns as the rocket does.
-// Dragging it holds the rocket at the board's attitude (left-right tilts sideways, up-down toward you).
-function Board({ shared }: { shared: React.RefObject<Shared> }) {
+// The flight computer, held in the hand: it stands along the rocket's axis direction, so its
+// attitude is the one the controller reads. Left-right tilts it sideways, up-down toward you,
+// shift left-right spins it about its long side; double-click stands it straight.
+function Board({ bench }: { bench: React.RefObject<Bench> }) {
   const gltf = useGLTF("/circuits/rocket-recorder.glb");
   const scene = useMemo(() => {
     const s = gltf.scene.clone(true);
@@ -152,56 +161,43 @@ function Board({ shared }: { shared: React.RefObject<Shared> }) {
     const down = (e: PointerEvent) => {
       last = { x: e.clientX, y: e.clientY };
       el.setPointerCapture(e.pointerId);
-      shared.current.held = shared.current.s.att.clone();
     };
     const move = (e: PointerEvent) => {
-      if (!last || !shared.current.held) return;
+      if (!last) return;
       const dx = e.clientX - last.x, dy = e.clientY - last.y;
       last = { x: e.clientX, y: e.clientY };
       const k = 0.008; // radians per pixel
-      const turnBy = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), -dx * k)
-        .multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), dy * k));
-      shared.current.held = toSim(turnBy.multiply(toThree(shared.current.held)));
+      const att = toThree(bench.current.att);
+      let next: THREE.Quaternion;
+      if (e.shiftKey) {
+        // About the board's own long side (its y in three's frame).
+        next = att.multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), dx * k));
+      } else {
+        next = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), -dx * k)
+          .multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), dy * k))
+          .multiply(att);
+      }
+      bench.current.att.copy(toSim(next.normalize()));
     };
-    const up = () => { last = null; shared.current.held = null; };
+    const up = () => { last = null; };
+    // Stood straight at once, not turned: the gyro reads no turn.
+    const straight = () => { bench.current.att.identity(); bench.current.prev.identity(); bench.current.omega.set(0, 0, 0); };
     el.addEventListener("pointerdown", down);
     el.addEventListener("pointermove", move);
     el.addEventListener("pointerup", up);
     el.addEventListener("pointercancel", up);
+    el.addEventListener("dblclick", straight);
     el.style.cursor = "grab";
     return () => {
       el.removeEventListener("pointerdown", down);
       el.removeEventListener("pointermove", move);
       el.removeEventListener("pointerup", up);
       el.removeEventListener("pointercancel", up);
+      el.removeEventListener("dblclick", straight);
     };
-  }, [gl, shared]);
+  }, [gl, bench]);
   useFrame(() => {
-    // Only its attitude: the rocket's travel and its turn about the vertical stay out of this view.
-    if (turn.current) turn.current.quaternion.copy(toThree(shared.current.held ?? shared.current.s.att));
+    if (turn.current) turn.current.quaternion.copy(toThree(bench.current.att));
   });
   return <group ref={turn}><primitive object={scene} /></group>;
-}
-
-// The path seen from the side: altitude against distance east (x) and north (y) from the pad.
-function Trajectory({ shared, hud }: { shared: React.RefObject<Shared>; hud: State }) {
-  const pts = shared.current.trail;
-  const top = Math.max(50, ...pts.map((p) => p.y));
-  const side = Math.max(top / 4, ...pts.map((p) => Math.max(Math.abs(p.x), Math.abs(p.z))));
-  const W = 180, H = 200;
-  const X = (h: number) => W / 2 + (h / side) * (W / 2 - 8), Y = (z: number) => H - 8 - (z / top) * (H - 16);
-  const path = (f: (p: THREE.Vector3) => number) => pts.map((p, i) => `${i ? "L" : "M"}${X(f(p)).toFixed(1)},${Y(p.y).toFixed(1)}`).join("");
-  return (
-    <svg width={W} height={H} style={{ position: "absolute", left: 12, bottom: 12, pointerEvents: "none" }} aria-label="trajectory">
-      <line x1={W / 2} y1={8} x2={W / 2} y2={H - 8} stroke="#333" />
-      <line x1={8} y1={H - 8} x2={W - 8} y2={H - 8} stroke="#333" />
-      <path d={path((p) => p.x)} fill="none" stroke="#00ff00" />
-      <path d={path((p) => -p.z)} fill="none" stroke="#f5c451" />
-      <text x={8} y={14} fill="#777" fontSize={10}>{Math.round(top)} m</text>
-      <text x={W - 8} y={H - 12} fill="#777" fontSize={10} textAnchor="end">±{Math.round(side)} m</text>
-      <text x={8} y={28} fill="#00ff00" fontSize={10}>east</text>
-      <text x={8} y={40} fill="#f5c451" fontSize={10}>north</text>
-      {hud.phase === "apogee" && <text x={W / 2} y={14} fill="#ededed" fontSize={10} textAnchor="middle">apogee {hud.pos.z.toFixed(0)} m</text>}
-    </svg>
-  );
 }
