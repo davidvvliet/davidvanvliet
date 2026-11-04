@@ -14,7 +14,7 @@
 # bursts of range requests, so they go one at a time with a pause).
 #
 # The route and the date were chosen by a search over this map (see README.md) for the first, 17.2 km
-# line (to a 673 x 7331 km orbit); the track now ends 10.8 km along it (a 200 km circular orbit). The line
+# line (to a 673 x 7331 km orbit); the track now ends 12.0 km along it (a 700 km circular orbit). The line
 # with the least earthwork whose run-out is clear, on the Earth-facing side of the pole, and the
 # hour in the next 400 days with the whole track sunlit and the Earth well above the real horizon.
 import json, os, struct, subprocess, sys, time, zlib
@@ -29,14 +29,14 @@ URL = "https://pgda.gsfc.nasa.gov/data/LOLA_5mpp/87S/ldem_87s_5mpp.tif"
 # --- the launch (the same numbers as AetherLaunch.tsx and specs/aether.json) ---
 R = 1737400.0                            # m, the LOLA reference sphere (also the page's R)
 GM = 4.9e12
-R_A = R + 200e3                          # the shot's high point: the 200 km circular orbit
+R_A = R + 700e3                          # the shot's high point: the 700 km circular orbit
 G0 = 9.80665
 ACC = 14 * G0
 V = (2 * GM * R_A / (R * (R + R_A))) ** 0.5
-L = V * V / (2 * ACC)                    # track length, 10.8 km
+L = V * V / (2 * ACC)                    # track length, 12.0 km
 START = (16040.0, 6040.0)                # m, polar stereographic: where the track begins
 HEADING = 145.0                          # deg, in the stereographic plane, counter-clockwise from +x
-JD = 2461775.5                           # 2028-01-04 24:00 UTC (00:00 on the 5th)
+JD = 2461773.125                         # 2028-01-02 15:00 UTC: the track sunlit, the Earth up and 73 % lit (spec launch_date)
 G_BEND = 1.0 * G0                        # design: the track's bends add at most 1 g
 DECK = 5.0                               # m, half-width of the flat track bed
 SIDE = 0.7                               # cut and fill slopes (35 degrees)

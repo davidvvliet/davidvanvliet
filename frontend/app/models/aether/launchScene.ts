@@ -8,13 +8,13 @@ import { Site, terrainGeometry, regolithTexture, trackGeometry, SINK } from "./g
 // Altair Aether's launch, placed into the site's solar-system scene: the Sun, the Earth, the Moon and the
 // stars are that scene's own, on the launch date. This adds the ground around the track (fixed to the
 // Moon, turning with it), the craft and its flight, the lights, and the camera's shots.
-// The numbers are the spec's (scripts/blender/specs/aether.json): a flat shot off a 10.8 km track at
-// 14 g reaches 1.725 km/s; half an orbit later, 200 km up over the north pole, the 20 N engine burns
-// 43.9 m/s to make the orbit circular at 200 km (polar, one plane of a constellation); then the wings unfold.
+// The numbers are the spec's (scripts/blender/specs/aether.json): a flat shot off a 12.0 km track at
+// 14 g reaches 1.815 km/s; half an orbit later, 700 km up over the north pole, the 20 N engine burns
+// 124.3 m/s to make the orbit circular at 700 km (polar, one plane of a constellation); then the wings unfold.
 const G0 = 9.80665;
 const GM = 4.9e12;                       // m^3/s^2 (NSSDCA)
 const R = 1737.4e3;                      // m
-const R_A = R + 200e3;                   // the shot's high point: the circular orbit's radius
+const R_A = R + 700e3;                   // the shot's high point: the circular orbit's radius
 const R_P = R_A;                         // the burn lifts the low point to it: circular
 const ACC = 14 * G0;
 const G_MOON = GM / (R * R);
@@ -22,14 +22,14 @@ const V = Math.sqrt((2 * GM * R_A) / (R * (R + R_A)));  // the flat shot's speed
 export const TRACK = (V * V) / (2 * ACC);
 const T_SHOT = V / ACC;                  // 15.8 s, shown in real time
 const SEP = 4;                           // after the track's end
-const COAST = 12;                        // 59 min, shown in 12 s
-const BURN = 8;                          // 658 s, shown in 8 s
+const COAST = 12;                        // 71 min, shown in 12 s
+const BURN = 8;                          // 1865 s, shown in 8 s
 const ROLL = 3;                          // the last seconds of the coast: the craft rolls over, dish to the Moon
 const REVEAL = 4;
 const ACT = 13;
-const DV = Math.sqrt(GM / R_A) - (V * R) / R_A;                // circular speed less the shot's at its high point, 43.9 m/s
-const BURN_S = Math.round((300 * DV) / 20);                    // 300 kg on the 20 N engine, 658 s
-const HALF_S = Math.PI * Math.sqrt(((R + R_A) / 2) ** 3 / GM);  // half the shot orbit: track's end to the high point, 59 min
+const DV = Math.sqrt(GM / R_A) - (V * R) / R_A;                // circular speed less the shot's at its high point, 124.3 m/s
+const BURN_S = Math.round((300 * DV) / 20);                    // 300 kg on the 20 N engine, 1865 s
+const HALF_S = Math.PI * Math.sqrt(((R + R_A) / 2) ** 3 / GM);  // half the shot orbit: track's end to the high point, 71 min
 const PERIOD_MIN = (2 * Math.PI * Math.sqrt(R_A ** 3 / GM)) / 60;
 
 const P_COAST = T_SHOT + SEP, P_BURN = P_COAST + COAST, P_REVEAL = P_BURN + BURN;
@@ -432,7 +432,7 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
         if (!followed) { followed = true; touched = false; setUp(camera, controls, v.by); }
         if (v.by.distanceToSquared(camera.up) > 1e-12) setUp(camera, controls, v.by);
         const alt = onTrack ? 0 : v.pos.length() - R;
-        const k = ease(alt / 150e3);                     // 0 on the ground, 1 from 150 km up
+        const k = ease(alt / 500e3);                     // 0 on the ground, 1 from 500 km up
         const look = tmp.set(2 * (1 - k), 0.8 * (1 - k), 0);
         controls.target.copy(v.cw).add(look.applyMatrix4(v.b).multiplyScalar(unitsPerM));
         if (!touched) {
