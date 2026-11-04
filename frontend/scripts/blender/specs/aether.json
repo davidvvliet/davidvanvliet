@@ -1065,11 +1065,11 @@
       "note": "the finrocket's masks refs/finrocket/flag-*.png (us_flag's 7410 x 3900 geometry)"
     },
     "craft_flag_hoist": {
-      "value": 0.12,
-      "source": "design, chosen: the flag's height; its fly is 1.9 times it (us_flag's 7410 x 3900)"
+      "value": 0.1,
+      "source": "design, chosen: the flag's height; its fly is 1.9 times it (us_flag's 7410 x 3900); its left edge on the left edge of \"Altair\""
     },
     "craft_flag_offset": {
-      "value": 0.09,
+      "value": 0.08,
       "source": "design, chosen: the flag's middle this far above the side's middle"
     },
     "run_out": {
