@@ -207,9 +207,13 @@
       "quote": "a portion of the MEMS wafer is removed by conventional dicing saw cuts to expose the CMOS wire bond pads",
       "note": "pins 6-13 bond to the pads along the -Y edge, pins 18-24 and 1 to the +Y edge, each strip in the order of its leads (estimated)"
     },
+    "cmos_photo": {
+      "value": "the CMOS die's face shown with ZeptoBars' photo of it: mpu6050-big-HD.jpg cropped to the die's edges at (80, 95) and (6625, 6512) px (2.353 x 2.361 px/\u00b5m over the 2782 x 2718 \u00b5m die, as the MEMS photo's 2.35), at 0.5 px/\u00b5m in refs/mpu6050/die/cmos.jpg. Its pattern is the MEMS layout mirrored (the Z accelerometer bottom left, the Z gyro top right), as a face-down MEMS die needs, so the photo is used unmirrored with its top at +Y. Residue from separating the dies covers most of the bond-pad strips (pads show only near the corners, about 85 \u00b5m square), so the pads stay estimated",
+      "source": "zeptobars_mpu6050, File:Mpu6050-big-HD.jpg (6699 x 6611, CC BY 3.0): \"Larger die of the Invensense MPU6050 integrated gyroscope and accelerometer\""
+    },
     "electrodes": {
-      "value": {"inset": 0.00002, "thickness": 0.000001},
-      "source": "nasiri2010, p.62-63 (electrodes under the torsion plates); zeptobars_mpu6050 mpu6050-big-HD.jpg shows the CMOS die's electrode areas as the MEMS layout mirrored, so each sits under its plate; inset and thickness estimated",
+      "value": {"thickness": 0.000001},
+      "source": "nasiri2010, p.62-63 (electrodes under the torsion plates); their layout shows in the CMOS photo (facts.cmos_photo); the 1 \u00b5m top-metal thickness (used for the photo face and the bond pads) is estimated",
       "quote": "Aluminum electrodes on the IC are located under the torsion plates forming parallel-plate electrodes"
     },
     "gyro_structures": {
@@ -290,7 +294,7 @@
     "triangles": 50000,
     "glb_bytes": 1500000,
     "internal_triangles": 100000,
-    "internal_glb_bytes": 7000000,
-    "note": "the inside carries the traced device layer (about 91k triangles, 5.9 MB) and its die photos (1.1 MB); it loads only when Internal is pressed"
+    "internal_glb_bytes": 7500000,
+    "note": "the inside carries the traced device layer (about 91k triangles, 5.9 MB) and its die photos (1.1 MB, plus 0.5 MB for the CMOS face); it loads only when Internal is pressed"
   }
 }
