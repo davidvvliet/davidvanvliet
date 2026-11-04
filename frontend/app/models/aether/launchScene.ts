@@ -383,7 +383,6 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
         }
       });
       h.ambient.intensity = 0.03;
-      h.sunLight.visible = false;   // the scene's own sunlight, with shadows, lights it
       h.showOrbits(false);   // the planets' rings would cross the sky from the ground
       renderer.shadowMap.enabled = true;
       renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -717,7 +716,6 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
       if (earthGlobe) { h.globe.remove(earthGlobe); earthGlobe.geometry.dispose(); (earthGlobe.material as THREE.Material).dispose(); earthGlobe = null; }
       h.moon.geometry = saved.geometry; h.moon.material = saved.material;
       h.ambient.intensity = saved.ambient;
-      h.sunLight.visible = true;
       h.renderer.shadowMap.enabled = saved.shadows;
       litMoon?.dispose(); sunkMoon?.dispose(); litMoon = null;
       for (const t of moonMaps) t.dispose();
