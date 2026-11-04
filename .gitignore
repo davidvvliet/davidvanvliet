@@ -45,3 +45,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 frontend/next-env.d.ts
+
+# aether terrain downloads (rebuilt by scripts/aether/terrain.py)
+frontend/scripts/aether/cache/
