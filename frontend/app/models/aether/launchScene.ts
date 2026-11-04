@@ -3,6 +3,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.js";
 import type { SceneExtension, SceneHandles } from "../../components/SolarSystem";
 import { moonSceneQuaternion, SCENE_FROM_FIXED } from "../../components/moonOrientation";
+import { groupOf, blenderSize, m2 } from "../parts";
 import { Site, terrainGeometry, regolithTexture, trackGeometry, SINK } from "./ground";
 
 // Altair Aether's launch, placed into the site's solar-system scene: the Sun, the Earth, the Moon and the
@@ -53,6 +54,8 @@ type Hinge = { node: THREE.Object3D; axis: THREE.Vector3; rest: THREE.Quaternion
 /** The orbit inset: the craft in the orbit frame (metres, x along the motion at the low point, y up
  * through the high point) and the current orbit's low-point radius. */
 export type OrbitInset = { x: number; y: number; rp: number; target: number; moon: number; ra: number };
+/** The part under the pointer, else the focused one: its name and size, as the models viewer labels it. */
+export type PartLabel = { name: string; size: string } | null;
 export type LaunchUi = { phase: string; caption: string; readout: string; orbit?: OrbitInset };
 
 const ease = (u: number) => { const c = Math.min(1, Math.max(0, u)); return c * c * (3 - 2 * c); };
@@ -114,6 +117,9 @@ export type AetherLaunch = SceneExtension & { start(): void };
 
 const Y = new THREE.Vector3(0, 1, 0);
 const ZERO = new THREE.Vector3();
+// As the models viewer (ModelsDashboard.tsx): the hover tint, and the others' opacity while a part is focused.
+const HIGHLIGHT = new THREE.Color("#1d4f66");
+const FADED = 0.12, HOVER_FADED = 0.35;
 const X_AXIS = new THREE.Vector3(1, 0, 0);
 function setUp(camera: THREE.Camera, controls: SceneHandles["controls"], up: THREE.Vector3) {
   camera.up.copy(up);
@@ -122,7 +128,7 @@ function setUp(camera: THREE.Camera, controls: SceneHandles["controls"], up: THR
   c._quatInverse.copy(c._quat).invert();
 }
 
-export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi): void; done(): void }): AetherLaunch {
+export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi): void; done(): void; part?(p: PartLabel): void }): AetherLaunch {
   const JD0 = site.meta.jd;
   let startAt: number | null = null;
   const sceneTime = () => (startAt === null ? 0 : performance.now() / 1000 - startAt);
@@ -234,13 +240,63 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
   let viewDist = 11.3;
   const pointers = new Map<number, { x: number; y: number }>();
   let pinch = 0;
+  // Parts, grouped as the models viewer groups them (the assembly each was built in). Hovering one tints it;
+  // clicking one flies the camera to it, the rest turning see-through, at any moment of the launch.
+  // Each mesh gets its own materials, so a tint or fade stays on its part.
+  const parts = new Map<string, THREE.Mesh[]>(), partSize = new Map<string, THREE.Vector3>(), partBoxes = new Map<string, THREE.Box3>();
+  let hoverPart: string | null = null, focusPart: string | null = null;
+  let focusK = 0;            // 0: the camera circles the chase point; 1: the focused part's centre
+  let framed = true;         // the fly-in to a part's framing distance is done (or the viewer zoomed)
+  let homing = false;        // flying back to the chase view after a part was let go
+  let padHoming = false;     // the same, on the pad before launch (OrbitControls)
+  const partBox = new THREE.Box3(), pb = new THREE.Box3(), pc = new THREE.Vector3(), planned = new THREE.Quaternion();
+  const padTarget = new THREE.Vector3();
+  const mats = (m: THREE.Mesh) => (Array.isArray(m.material) ? m.material : [m.material]) as THREE.MeshStandardMaterial[];
+  const restyle = () => {
+    for (const [g, ms] of parts) for (const m of ms) for (const mat of mats(m)) {
+      const u = mat.userData;
+      if (u.restOpacity === undefined) { u.restOpacity = mat.opacity; u.restTransparent = mat.transparent; u.rest = mat.emissive?.clone(); }
+      const fade = !!focusPart && g !== focusPart;
+      mat.transparent = fade || u.restTransparent;
+      mat.opacity = fade ? (g === hoverPart ? HOVER_FADED : FADED) : u.restOpacity;
+      mat.depthWrite = !fade;
+      mat.needsUpdate = true;
+      if (mat.emissive && u.rest) mat.emissive.copy(g === hoverPart ? HIGHLIGHT : u.rest);
+    }
+    const g = hoverPart ?? focusPart, size = g ? partSize.get(g) : undefined;
+    on.part?.(g && size ? { name: g.replace(/_/g, " "), size: blenderSize(size).map(m2).join(" × ") } : null);
+  };
+  const shown = (o: THREE.Object3D | null) => { for (; o; o = o.parent) if (!o.visible) return false; return true; };
+  // The part under the ray: while one is focused (the rest see-through), it wins anywhere along the ray.
+  const pick = (ray: THREE.Raycaster) => {
+    const groups = ray.intersectObjects([model, sled], true)
+      .filter((i) => typeof i.object.userData.part === "string" && shown(i.object)).map((i) => i.object.userData.part as string);
+    return focusPart && groups.includes(focusPart) ? focusPart : groups[0] ?? null;
+  };
+  const partCentre = (g: string, out: THREE.Vector3) => {
+    partBox.makeEmpty();
+    for (const m of parts.get(g) ?? []) partBox.union(pb.setFromObject(m));
+    return partBox.getCenter(out);
+  };
+  const focusOn = (g: string) => {
+    focusPart = g; framed = false; homing = padHoming = false; aimView = null;
+    if (startAt !== null) touched = true;      // keep the current direction; only the point circled moves
+    restyle();
+  };
+  const letGo = () => {
+    if (!focusPart) return;
+    focusPart = null; framed = true;
+    if (startAt !== null) homing = true; else padHoming = true;
+    restyle();
+  };
+  const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") letGo(); };
   const lookQuat = (dirLocal: THREE.Vector3, out: THREE.Quaternion) =>
     out.setFromRotationMatrix(mL.lookAt(dirLocal, ZERO, Y));   // the camera at dirLocal, looking at the centre
   // A clicked star: the camera swings round the craft until the star stands just above it, and
   // stays so until the viewer turns the view.
   let aimView: THREE.Vector3 | null = null, aimT0 = 0, loads = 0;
   const aimFrom = new THREE.Vector3(), aimQ = new THREE.Quaternion(), aimQk = new THREE.Quaternion();
-  const grab = () => { touched = true; aimView = null; };
+  const grab = () => { touched = true; aimView = null; framed = true; padHoming = false; };
   const tmp = new THREE.Vector3(), q = new THREE.Quaternion();
   const v = { pos: new THREE.Vector3(), up: new THREE.Vector3(), fwd: new THREE.Vector3(), side: new THREE.Vector3(),
     sun: new THREE.Vector3(), m: new THREE.Matrix4(), cw: new THREE.Vector3(), ew: new THREE.Vector3(),
@@ -249,7 +305,7 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
     off: new THREE.Vector3() };
 
   const flying = () => startAt !== null && !!h0;
-  const zoom = (f: number) => { viewDist = THREE.MathUtils.clamp(viewDist * f, 2, 2e8); touched = true; };
+  const zoom = (f: number) => { viewDist = THREE.MathUtils.clamp(viewDist * f, 0.05, 2e8); touched = true; framed = true; homing = false; };
   const onDown = (e: PointerEvent) => {
     if (!flying()) return;
     pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
@@ -268,7 +324,7 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
       return;
     }
     if (!dx && !dy) return;
-    touched = true; aimView = null;
+    touched = true; aimView = null; homing = false;
     // As OrbitControls: a drag across the canvas's height turns the view a full circle.
     const k = (2 * Math.PI) / h0!.renderer.domElement.clientHeight;
     view.premultiply(qd.setFromAxisAngle(Y, -dx * k));           // about "away from the Moon"
@@ -351,6 +407,19 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
         const rails = new THREE.Box3();
         for (const n of ["rail0", "rail1"]) { const o = root.getObjectByName(n); if (o) rails.union(new THREE.Box3().setFromObject(o)); }
         lift = RAIL_TOP - (rails.isEmpty() ? -0.53 : rails.max.y);
+        // Parts and their sizes, in the model's own metres (before the sled is split off).
+        parts.clear(); partSize.clear(); partBoxes.clear();
+        root.traverse((o) => {
+          const m = o as THREE.Mesh;
+          if (!m.isMesh) return;
+          const g = groupOf(m, root);
+          if (g === "track") return;               // the model's own short rails, hidden here
+          m.material = Array.isArray(m.material) ? m.material.map((x) => x.clone()) : m.material.clone();
+          m.userData.part = g;
+          parts.set(g, [...(parts.get(g) ?? []), m]);
+          partBoxes.set(g, (partBoxes.get(g) ?? new THREE.Box3()).union(new THREE.Box3().setFromObject(m)));
+        });
+        for (const [g, b] of partBoxes) partSize.set(g, b.getSize(new THREE.Vector3()));
         // Split the sled off in the model's own space (a group not yet in the scene), then hang it on the track.
         const sledParts = new THREE.Group();
         for (const n of SLED) { const o = root.getObjectByName(n); if (o) sledParts.attach(o); }
@@ -373,18 +442,19 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
       });
 
       controls.addEventListener("start", grab);
-      controls.minDistance = 2 * unitsPerM; controls.maxDistance = 2e8 * unitsPerM;
+      controls.minDistance = 0.05 * unitsPerM; controls.maxDistance = 2e8 * unitsPerM;
       const el = h.renderer.domElement;
       el.addEventListener("pointerdown", onDown); el.addEventListener("pointermove", onMove);
       window.addEventListener("pointerup", onUp); window.addEventListener("pointercancel", onUp);
       el.addEventListener("wheel", onWheel, { passive: false });
+      window.addEventListener("keydown", onKey);
     },
 
     clock() {
       return JD0 + missionSeconds(sceneTime()) / 86400;
     },
 
-    frame(h, jd) {
+    frame(h, jd, dt) {
       const { camera, controls } = h;
       const running = startAt !== null;
       // Only the textured Earth: the wireframe, outlines and dots (some added later, as they load) stay hidden.
@@ -404,6 +474,7 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
         setUp(camera, controls, tmp.setFromMatrixColumn(launchFrame.matrixWorld, 1).normalize());
         controls.target.copy(launchFrame.localToWorld(new THREE.Vector3(0, 1.5, 0)));
         camera.position.copy(launchFrame.localToWorld(new THREE.Vector3(14, 4, -7)));
+        padTarget.copy(controls.target);
       }
 
       // Wings: folded until activation, then unfolded hinge by hinge.
@@ -495,27 +566,58 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
       v.by.copy(v.up).transformDirection(frame.matrixWorld);
       v.bz.copy(v.side).transformDirection(frame.matrixWorld);
       v.b.makeBasis(v.bx, v.by, v.bz);
+      // A focused part: where its centre is now (it rides the craft, the sled or an unfolding wing), and the
+      // distance that frames it, as the models viewer frames a part.
+      const ez = 1 - Math.exp(-dt * 5);   // easing per frame for the flights to and from a part
+      let frameDist = 0;
+      if (focusPart) {
+        craft.updateWorldMatrix(true, true); sled.updateWorldMatrix(true, true);
+        partCentre(focusPart, pc);
+        const fov = THREE.MathUtils.degToRad(camera.fov) * Math.min(1, camera.aspect);
+        frameDist = Math.max((partBox.getSize(tmp).length() / unitsPerM) * 0.65, 0.15) / Math.sin(fov / 2);   // metres
+      }
+      focusK += ((focusPart ? 1 : 0) - focusK) * ez;
       if (running) {
-        if (!followed) { followed = true; touched = false; controls.enabled = false; }
+        qB.setFromRotationMatrix(v.b);
+        if (!followed) {
+          followed = true; controls.enabled = false;
+          // Launched while a part is focused: keep looking at it from where the camera is.
+          touched = !!focusPart;
+          if (focusPart) {
+            view.copy(qd.copy(qB).invert().multiply(camera.quaternion));
+            viewDist = camera.position.distanceTo(controls.target) / unitsPerM;
+          }
+        }
         camera.up.copy(v.by);
         const alt = onTrack ? 0 : v.pos.length() - R;
         const k = ease(alt / 500e3);                     // 0 on the ground, 1 from 500 km up
         const look = tmp.set(2 * (1 - k), 0.8 * (1 - k), 0);
         controls.target.copy(v.cw).add(look.applyMatrix4(v.b).multiplyScalar(unitsPerM));
-        qB.setFromRotationMatrix(v.b);
+        if (focusK > 1e-4) controls.target.lerp(pc, focusK);
+        // The planned chase view. Elevation: 11 degrees on the track; off it, tilting down quickly (25 degrees by
+        // the end of the separation, 60 from 150 km up) so the Moon stays in view as the craft speeds away.
+        const sep = onTrack ? 0 : ease((t - T_SHOT) / SEP), kt = onTrack ? 0 : ease(alt / 150e3);
+        const el = THREE.MathUtils.degToRad(11 + 14 * sep + 35 * kt), plannedDist = 11.3 + 2 * k;
+        lookQuat(offLocal.set(-Math.cos(el) * 0.81, Math.sin(el), -Math.cos(el) * 0.58), planned);
+        if (focusPart && !framed) {
+          viewDist += (frameDist - viewDist) * ez;
+          if (Math.abs(viewDist - frameDist) < frameDist * 0.01) framed = true;
+        }
         if (aimView) {
           // Swinging to a clicked star: the planned direction, eased, taken into the flight frame.
           aimQ.setFromUnitVectors(aimFrom, aimView);
           aimQk.identity().slerp(aimQ, ease((performance.now() / 1000 - aimT0) / 1.5));
           lookQuat(tmp.copy(aimFrom).applyQuaternion(aimQk).applyQuaternion(qd.copy(qB).invert()), view);
+        } else if (homing) {
+          // A part let go: back to the chase view, from wherever the viewer had turned.
+          view.slerp(planned, ez);
+          viewDist += (plannedDist - viewDist) * ez;
+          if (view.angleTo(planned) < 0.002 && Math.abs(viewDist - plannedDist) < plannedDist * 0.01 && focusK < 0.01) {
+            homing = false; touched = false;
+          }
         } else if (!touched) {
-          // Elevation of the view: 11 degrees on the track; off it, tilting down quickly (25 degrees by the
-          // end of the separation, 60 from 150 km up) so the Moon stays in view as the craft speeds away.
-          const sep = onTrack ? 0 : ease((t - T_SHOT) / SEP), kt = onTrack ? 0 : ease(alt / 150e3);
-          const el = THREE.MathUtils.degToRad(11 + 14 * sep + 35 * kt);
-          viewDist = 11.3 + 2 * k;
-          offLocal.set(-Math.cos(el) * 0.81, Math.sin(el), -Math.cos(el) * 0.58);
-          lookQuat(offLocal, view);
+          view.copy(planned);
+          viewDist = plannedDist;
         }
         camera.quaternion.copy(qB).multiply(view);
         camera.position.copy(controls.target).add(tmp.set(0, 0, viewDist * unitsPerM).applyQuaternion(camera.quaternion));
@@ -547,11 +649,40 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
       // Near plane: a little in front of whatever the camera circles, so a close-up of the craft isn't clipped.
       const dist = camera.position.distanceTo(controls.target);
       camera.near = Math.max(dist * 1e-3, 0.01 * unitsPerM);
-      if (!running) controls.update();
+      if (!running) {
+        // On the pad (OrbitControls): fly to a focused part, or back to the opening view's point.
+        if (focusPart || padHoming) {
+          const goal = focusPart ? pc : padTarget;
+          const off = tmp.copy(camera.position).sub(controls.target);
+          controls.target.lerp(goal, ez);
+          if (focusPart && !framed) {
+            off.setLength(THREE.MathUtils.lerp(off.length(), frameDist * unitsPerM, ez));
+            if (Math.abs(off.length() / unitsPerM - frameDist) < frameDist * 0.01) framed = true;
+          }
+          camera.position.copy(controls.target).add(off);
+          if (padHoming && controls.target.distanceTo(padTarget) < 0.01 * unitsPerM) padHoming = false;
+        }
+        controls.update();
+      }
 
       const key = u.phase + u.caption + u.readout + (u.orbit ? `${u.orbit.x.toFixed(0)},${u.orbit.y.toFixed(0)},${u.orbit.rp.toFixed(0)}` : "");
       if (key !== lastUi) { lastUi = key; on.ui(running ? u : { phase: "", caption: "", readout: "" }); }
     },
+
+    hover(ray) {
+      const g = pick(ray);
+      if (g !== hoverPart) { hoverPart = g; restyle(); }
+      return g !== null;
+    },
+
+    click(ray) {
+      const g = pick(ray);
+      if (!g) return false;
+      if (g === focusPart) letGo(); else focusOn(g);
+      return true;
+    },
+
+    clickEmpty() { letGo(); },
 
     aimAt(dir) {
       const h = h0;
@@ -573,6 +704,7 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
       el.removeEventListener("pointerdown", onDown); el.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerup", onUp); window.removeEventListener("pointercancel", onUp);
       el.removeEventListener("wheel", onWheel);
+      window.removeEventListener("keydown", onKey);
       h.controls.enabled = true;
       setUp(h.camera, h.controls, Y.clone());
       h.moon.remove(launchFrame); h.moonFrame.remove(orbitFrame);

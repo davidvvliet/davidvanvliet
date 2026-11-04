@@ -7,6 +7,7 @@ import { OrbitControls, useGLTF } from "@react-three/drei";
 import StudioLights from "./StudioLights";
 import styles from "./models.module.css";
 import type { Held } from "../circuits/finrocket/FinRocket";
+import { tagged, within, groupOf, blenderSize, m2 } from "./parts";
 
 type Check = { name: string; ok: boolean; measured: number | null; expected: number; unit: string; detail?: string; source?: string | null };
 type Build = {
@@ -42,27 +43,6 @@ const file = (worktree: string, rel: string, v?: number) => `/api/models/file/${
 function ago(t: number, now: number) {
   const s = Math.max(0, Math.round(now / 1000 - t));
   return s < 60 ? `${s}s ago` : s < 3600 ? `${Math.round(s / 60)}m ago` : `${Math.round(s / 3600)}h ago`;
-}
-
-// Part family, as explode.py groups them: rtg_1 and rtg_1_fins -> rtg, feed_leg_3 -> feed_leg.
-const family = (name: string) => name.replace(/_fins$/, "").replace(/_\d+$/, "");
-
-// A part's group: the assembly it was built in (glTF extras, from parts.assembly), else for
-// untagged models its top-level node's name family.
-const tagged = (o: THREE.Object3D) => {
-  for (let x: THREE.Object3D | null = o; x; x = x.parent) if (typeof x.userData.assembly === "string") return x;
-  return null;
-};
-function within(o: THREE.Object3D | null, scene: THREE.Object3D) {
-  for (; o; o = o.parent) if (o === scene) return true;
-  return false;
-}
-
-function groupOf(o: THREE.Object3D, scene: THREE.Object3D) {
-  const t = tagged(o);
-  if (t) return t.userData.assembly as string;
-  while (o.parent && o.parent !== scene) o = o.parent;
-  return family(o.name);
 }
 
 // A unit is one node that moves when exploding: an assembly's outermost node (its parent
@@ -460,10 +440,6 @@ function useHinges(scene: THREE.Object3D) {
   }), [byGroup]);
 }
 
-// Blender's axes from the glTF's (exported y-up): x, -z, y; sizes just swap y and z.
-const blenderSize = (v: THREE.Vector3) => [v.x, v.z, v.y];
-const m2 = (v: number) => (v >= 1 ? `${v.toFixed(2)} m` : v >= 0.01 ? `${Math.round(v * 100)} cm`
-  : v >= 0.001 ? `${(v * 1000).toFixed(1)} mm` : v >= 0.0001 ? `${(v * 1000).toFixed(2)} mm` : `${Math.round(v * 1e6)} µm`);
 
 function PartLabel({ name, size, row, hasBreakdown, stale }: {
   name: string; size: THREE.Vector3; row?: Breakdown["families"][string]; hasBreakdown: boolean; stale: boolean;

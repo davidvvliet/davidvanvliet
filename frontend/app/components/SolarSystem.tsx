@@ -63,6 +63,12 @@ export type SceneExtension = {
   frame(h: SceneHandles, jd: number, dt: number): void;
   /** A star was clicked: the world direction to it from the camera. */
   aimAt?(dir: THREE.Vector3): void;
+  /** The pointer's ray, on a move: true when something of the extension's is under it (stars aren't labelled then). */
+  hover?(ray: THREE.Raycaster): boolean;
+  /** The pointer's ray, on a click: true when the extension took the click (stars aren't picked then). */
+  click?(ray: THREE.Raycaster): boolean;
+  /** A click on nothing: no part of the extension's and no star. */
+  clickEmpty?(): void;
   dispose(): void;
 };
 
@@ -1205,6 +1211,14 @@ export function SolarSystem({
       const raycaster = new THREE.Raycaster();
       raycaster.setFromCamera(mouse, camera);
 
+      // Something of the extension's under the pointer (the Aether craft's parts): it labels it itself.
+      if (ext?.hover?.(raycaster)) {
+        if (hoveredStarRef.current !== null) { hoveredStarRef.current = null; onStarHover?.(null); }
+        if (hoveredBodyRef.current !== null) { hoveredBodyRef.current = null; onBodyHover?.(null); }
+        renderer.domElement.style.cursor = 'pointer';
+        return;
+      }
+
       const intersects = raycaster.intersectObjects(
         apolloGroupRef.current?.visible ? [...dotsRef.current, ...moonDotsRef.current] : dotsRef.current,
         false,
@@ -1258,7 +1272,16 @@ export function SolarSystem({
 
       // An extension keeps the camera: only stars are clicked, and it turns the view to them itself.
       if (ext) {
+        const rect = renderer.domElement.getBoundingClientRect();
+        const ray = new THREE.Raycaster();
+        ray.setFromCamera(new THREE.Vector2(((event.clientX - rect.left) / rect.width) * 2 - 1, -((event.clientY - rect.top) / rect.height) * 2 + 1), camera);
+        if (ext.click?.(ray)) {
+          pinnedStar = null;
+          if (hoveredStarRef.current !== null) { hoveredStarRef.current = null; onStarHover?.(null); }
+          return;
+        }
         const picked = pickStar(event.clientX, event.clientY);
+        if (!picked) ext.clickEmpty?.();
         if (picked) {
           ext.aimAt?.(picked.object.getWorldPosition(new THREE.Vector3()).sub(camera.position).normalize());
           // Its label stays, as a `focus` on the main page, until a drag or zoom.

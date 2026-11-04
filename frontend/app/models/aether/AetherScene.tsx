@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { Site, type TerrainMeta } from "./ground";
-import { aetherLaunch, type AetherLaunch as Launch, type LaunchUi } from "./launchScene";
+import { aetherLaunch, type AetherLaunch as Launch, type LaunchUi, type PartLabel } from "./launchScene";
 import { Orbit } from "./Orbit";
 import { usePageStore } from "../../store/pageStore";
 import { run } from "../../terminal/run";
@@ -18,6 +18,10 @@ type Star = { name: string; lightYears: number; spectral?: string; fact?: string
 export default function AetherScene({ onStarHover }: { onStarHover?: (s: Star) => void }) {
   const [launch, setLaunch] = useState<Launch | null>(null);
   const [ui, setUi] = useState<LaunchUi>({ phase: "", caption: "", readout: "" });
+  const [part, setPart] = useState<PartLabel>(null);
+  const [star, setStar] = useState<Star>(null);
+  // One label at a time: a craft part (drawn here) or a star (drawn by the page, as on the main page).
+  useEffect(() => { onStarHover?.(part ? null : star); }, [part, star, onStarHover]);
   useEffect(() => {
     let live = true;
     Promise.all([
@@ -27,6 +31,7 @@ export default function AetherScene({ onStarHover }: { onStarHover?: (s: Star) =
       if (!live) return;
       const inner = aetherLaunch(new Site(meta), bin, {
         ui: setUi,
+        part: setPart,
         done: () => usePageStore.getState().pushTerminalLines([`__GRAY__Aether is in orbit. Use "${run("launch off", "launch off")}" to go back.`]),
       });
       let seconds = 0, started = false;
@@ -42,7 +47,15 @@ export default function AetherScene({ onStarHover }: { onStarHover?: (s: Star) =
   }, []);
   return (
     <div className={styles.inScene}>
-      {launch && <SolarSystem className={styles.canvas} extension={launch} scale="true" onStarHover={onStarHover} />}
+      {launch && <SolarSystem className={styles.canvas} extension={launch} scale="true" onStarHover={setStar} />}
+      {part && (
+        <div className={styles.star}>
+          <div className={styles.starRow}>
+            <span className={styles.starName}>{part.name}</span>
+            <span className={styles.starDim}>{part.size}</span>
+          </div>
+        </div>
+      )}
       {ui.phase && (
         <div className={styles.phase}>
           <div className={styles.phaseName}>{ui.phase}</div>

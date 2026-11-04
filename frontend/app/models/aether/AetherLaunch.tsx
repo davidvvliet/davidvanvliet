@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { Site, type TerrainMeta } from "./ground";
-import { aetherLaunch, type AetherLaunch as Launch, type LaunchUi } from "./launchScene";
+import { aetherLaunch, type AetherLaunch as Launch, type LaunchUi, type PartLabel } from "./launchScene";
 import { Orbit } from "./Orbit";
 import styles from "./aether.module.css";
 
@@ -15,6 +15,7 @@ export default function AetherLaunch() {
   const [launch, setLaunch] = useState<Launch | null>(null);
   const [running, setRunning] = useState(false);
   const [ui, setUi] = useState<LaunchUi>({ phase: "", caption: "", readout: "" });
+  const [part, setPart] = useState<PartLabel>(null);
   const [star, setStar] = useState<{ name: string; lightYears: number; spectral?: string; fact?: string } | null>(null);
   useEffect(() => {
     let live = true;
@@ -22,14 +23,21 @@ export default function AetherLaunch() {
       fetch("/models/aether-launch/terrain.json").then((r) => r.json() as Promise<TerrainMeta>),
       fetch("/models/aether-launch/terrain.bin").then((r) => r.arrayBuffer()),
     ]).then(([meta, bin]) => {
-      if (live) setLaunch(aetherLaunch(new Site(meta), bin, { ui: setUi, done: () => setRunning(false) }));
+      if (live) setLaunch(aetherLaunch(new Site(meta), bin, { ui: setUi, done: () => setRunning(false), part: setPart }));
     });
     return () => { live = false; };
   }, []);
   return (
     <div className={styles.page}>
       {launch && <SolarSystem className={styles.canvas} extension={launch} scale="true" onStarHover={setStar} />}
-      {star && (
+      {part ? (
+        <div className={styles.star}>
+          <div className={styles.starRow}>
+            <span className={styles.starName}>{part.name}</span>
+            <span className={styles.starDim}>{part.size}</span>
+          </div>
+        </div>
+      ) : star && (
         <div className={styles.star}>
           <div className={styles.starRow}>
             <span className={styles.starName}>{star.name}</span>
