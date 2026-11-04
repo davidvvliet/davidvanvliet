@@ -90,6 +90,10 @@ export class Site {
   }
 }
 
+/** How far below the 1737.4 km sphere the scene's Moon is drawn here: below the lowest ground in the
+ * terrain (zmin, -4171 m), so the sphere never shows through it. The terrain's outer edge comes down to it. */
+export const SINK = -4500;
+
 /** The terrain mesh: positions in the launch frame, baked sunlight as vertex colours. */
 export function terrainGeometry(site: Site, bin: ArrayBuffer) {
   const { u, v, zmin, zstep, R, start } = site.meta;
@@ -100,7 +104,8 @@ export function terrainGeometry(site: Site, bin: ArrayBuffer) {
   for (let j = 0; j < nv; j++) for (let i = 0; i < nu; i++) {
     const k = j * nu + i;
     const x = start[0] + site.fwd[0] * u[i] + site.left[0] * v[j], y = start[1] + site.fwd[1] * u[i] + site.left[1] * v[j];
-    site.toLaunch(scale(site.unit(x, y), R + zmin + hq[k] * zstep), p);
+    const edge = i === 0 || j === 0 || i === nu - 1 || j === nv - 1;   // a skirt down to the sunk Moon sphere
+    site.toLaunch(scale(site.unit(x, y), R + (edge ? SINK : zmin + hq[k] * zstep)), p);
     pos.set([p.x, p.y, p.z], k * 3);
     const c = 0.02 + 0.98 * (lit[k] / 255);   // the shadows get only earthshine
     col.set([c, c, c], k * 3);

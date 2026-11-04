@@ -10,6 +10,7 @@ import { MISSIONS, MissionEvent } from '../missions';
 import { marsPositionJ2000AU } from './marsEphemeris';
 import { moonPositionJ2000Km } from './lunar';
 import { createSunMaterial, createSunGlowTexture } from './sunShader';
+import { moonSceneQuaternion } from './moonOrientation';
 
 interface PersonaDot {
   id: number;
@@ -36,7 +37,30 @@ interface SolarSystemProps {
   onStarHover?: (star: { name: string; lightYears: number; spectral?: string; fact?: string } | null) => void;
   onFocusChange?: (name: string | null) => void; // null when the camera is far from the focused body
   dotSizeMultiplier?: number;
+  /** Something placed into this scene by another page (the Aether launch): it gets the scene's objects,
+   * may set the clock, and moves the camera itself. */
+  extension?: SceneExtension;
+  /** A scale for this scene alone, instead of the visitor's `scale` setting. */
+  scale?: ScaleMode;
 }
+
+/** What an extension gets: the scene and its bodies. Positions are in scene units (Earth's radius is
+ * EARTH_RADIUS); `unitsPerKm` converts. The Sun is at the origin. */
+export type SceneHandles = {
+  scene: THREE.Scene; camera: THREE.PerspectiveCamera; renderer: THREE.WebGLRenderer; controls: OrbitControls;
+  sun: THREE.Mesh; earthSystem: THREE.Group; moon: THREE.Mesh; moonFrame: THREE.Group; ambient: THREE.AmbientLight;
+  unitsPerKm: number; moonRadius: number;
+  /** Orbit rings on or off for this scene (the `orbits` setting otherwise). */
+  showOrbits(on: boolean): void;
+};
+export type SceneExtension = {
+  init(h: SceneHandles): void;
+  /** The date to show, given the clock's own date and the frame's seconds. */
+  clock?(jd: number, dt: number): number;
+  /** Each frame, after the bodies are placed for the date and before drawing: the extension moves the camera. */
+  frame(h: SceneHandles, jd: number, dt: number): void;
+  dispose(): void;
+};
 
 // --- Scene layout ---
 // The scene is heliocentric: the Sun sits at the origin and everything orbits
@@ -111,7 +135,7 @@ const EARTH_ECCENTRICITY = 0.0167;
 const EARTH_PERIHELION_DEG = 102.9;    // longitude of perihelion (J2000)
 const angularSpeed = (periodDays: number) => (2 * Math.PI) / (periodDays * secondsPerDay); // rad/s
 
-const MOON_RADIUS = EARTH_RADIUS * 0.273; // True ratio: Moon diameter is 27.3% of Earth's
+const MOON_RADIUS = EARTH_RADIUS * (1737.4 / 6371); // True ratio: the Moon's mean radius, 1737.4 km (NSSDCA), to Earth's 6371 km
 const MOON_INCLINATION_DEG = 5.14;     // Real inclination of the Moon's orbit
 const MOON_TEXTURE = '/moon.jpg';      // Equirectangular map
 
@@ -280,8 +304,12 @@ export function SolarSystem({
   onBodyHover,
   onStarHover,
   onFocusChange,
-  dotSizeMultiplier = 1
+  dotSizeMultiplier = 1,
+  extension,
+  scale,
 }: SolarSystemProps) {
+  const extensionRef = useRef(extension);
+  extensionRef.current = extension;
   const mountRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
@@ -324,7 +352,8 @@ export function SolarSystem({
   const focusRequest = usePageStore((s) => s.focusRequest);
   const starsVisible = usePageStore((s) => s.starsVisible);
   const orbitsHighlighted = usePageStore((s) => s.orbitsHighlighted);
-  const scaleMode = usePageStore((s) => s.scaleMode);
+  const storeScaleMode = usePageStore((s) => s.scaleMode);
+  const scaleMode = scale ?? storeScaleMode;
   const storeSecondsPerDay = usePageStore((s) => s.secondsPerDay);
   secondsPerDay = storeSecondsPerDay; // picked up by angularSpeed() on the next frame
   const setOrbitStyleRef = useRef<((on: boolean) => void) | null>(null);
@@ -350,6 +379,7 @@ export function SolarSystem({
   // Initialize the scene only once
   useEffect(() => {
     if (!mountRef.current || initializedRef.current) return;
+    const ext = extensionRef.current;
     const { orbitScale, sunRadius: SUN_RADIUS, moonOrbitRadius: MOON_ORBIT_RADIUS, starSphereRadius: STAR_SPHERE_RADIUS, farPlane, sunGlowScale: SUN_GLOW_SCALE } = SCALES[scaleMode];
     const orbitRadiusForAU = (au: number) => orbitScale * au;
 
@@ -808,8 +838,8 @@ export function SolarSystem({
     const updateMoon = (jd: number) => {
       moonPosAt(jd, moon.position);
       moonFrame.position.copy(moon.position);
-      // Tidal lock: the map's centre (+x on the sphere) faces Earth.
-      moon.rotation.y = Math.atan2(-moon.position.z, moon.position.x) + Math.PI;
+      // The IAU rotation model: the map's lon 0 and the pole where they really point (lon 0 faces Earth on average).
+      moonSceneQuaternion(jd, moon.quaternion);
       if (Math.abs(jd - moonRingJD) > 0.25) {
         moonRingJD = jd;
         const v = new THREE.Vector3();
@@ -1156,7 +1186,7 @@ export function SolarSystem({
     };
     const onPointerUp = () => { isPointerDownRef.current = false; };
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && focus.parent) setFocus(focus.parent);
+      if (e.key === 'Escape' && focus.parent && !ext) setFocus(focus.parent);
     };
 
     const onMouseMove = (event: MouseEvent) => {
@@ -1216,7 +1246,7 @@ export function SolarSystem({
     };
 
     const onMouseClick = (event: MouseEvent) => {
-      if (!camera || !globeGroup) return;
+      if (!camera || !globeGroup || ext) return;
 
       // A click that moved the pointer is a drag; ignore it.
       const down = pointerDownPosRef.current;
@@ -1504,6 +1534,33 @@ export function SolarSystem({
     if (usePageStore.getState().footprintShown) loadFootprint(); // e.g. the scene was rebuilt for true scale
 
 
+    // Drawing, camera-relative: the scene is shifted so the camera sits at the origin and scaled to metres
+    // for the draw only. The big numbers (the Earth 150 million km from the Sun at the origin) then cancel
+    // in JavaScript's 64-bit arithmetic, and the graphics card, which works in 32 bits (about 7 digits),
+    // only sees distances from the camera: a craft a metre away stays exact, as does the Sun.
+    const M_PER_UNIT = (6371 / EARTH_RADIUS) * 1000;
+    const camAt = new THREE.Vector3();
+    const renderRelative = () => {
+      const near = camera.near, far = camera.far;
+      camAt.copy(camera.position);
+      scene.position.copy(camAt).multiplyScalar(-M_PER_UNIT);
+      scene.scale.setScalar(M_PER_UNIT);
+      camera.position.set(0, 0, 0);
+      camera.near = near * M_PER_UNIT; camera.far = far * M_PER_UNIT;
+      camera.updateProjectionMatrix();
+      renderer.render(scene, camera);
+      scene.position.set(0, 0, 0); scene.scale.setScalar(1);
+      camera.position.copy(camAt);
+      camera.near = near; camera.far = far;
+      camera.updateProjectionMatrix();
+      scene.updateMatrixWorld(true); camera.updateMatrixWorld(); // picking reads these between frames
+    };
+    const handles: SceneHandles = {
+      scene, camera, renderer, controls, sun, earthSystem, moon, moonFrame, ambient: ambientLight,
+      unitsPerKm: MOON_KM_TO_UNITS, moonRadius: MOON_RADIUS, showOrbits: setOrbitStyle,
+    };
+    if (ext) ext.init(handles);
+
     // Animation loop
     let lastTime = performance.now();
     let lastViewSaveAt = 0;
@@ -1562,10 +1619,11 @@ export function SolarSystem({
           store.endMission();
         }
       }
+      if (ext?.clock) simJD = ext.clock(simJD, delta);
       simJDRef.current = simJD;
 
       // Persist the view (focused body + camera offset) when it has settled and changed.
-      if (viewRestored && now - lastViewSaveAt > 1000 && !transition && !aim && !zoomEase && !(mission && focus === mission.body)) {
+      if (!ext && viewRestored && now - lastViewSaveAt > 1000 && !transition && !aim && !zoomEase && !(mission && focus === mission.body)) {
         lastViewSaveAt = now;
         const dir = camera.position.clone().sub(controls.target).normalize();
         const snapshot = JSON.stringify({ name: focus.name, dir: dir.toArray().map((x) => Math.round(x * 1e4) / 1e4), radii: Math.round(camera.position.distanceTo(controls.target) / focus.radius * 100) / 100 });
@@ -1586,7 +1644,7 @@ export function SolarSystem({
       if (globeRef.current) {
         const base = THREE.MathUtils.degToRad(gmstDeg(simJD) - 180); // increases with time: prograde
         // A hover or drag pauses the spin, but not while a mission is running: the clock leads then.
-        if (!mission && !(autoRotateRef.current && !hoverPausedRef.current)) {
+        if (!mission && !ext && !(autoRotateRef.current && !hoverPausedRef.current)) {
           earthSpinBank += base - lastEarthSpinBase; // hold still: bank what the clock advanced
         }
         lastEarthSpinBase = base;
@@ -1596,8 +1654,13 @@ export function SolarSystem({
       // Camera focus: the target follows the focused body (easing from the
       // previous one during a transition). The camera moves with the target so
       // the user's orbit direction and zoom are kept.
+      let dist: number;
+      if (ext) {
+        ext.frame(handles, simJD, delta);
+        dist = camera.position.distanceTo(controls.target);
+      } else {
       const offset = camera.position.clone().sub(controls.target);
-      let dist = offset.length();
+      dist = offset.length();
       worldPos(focus, focusPoint);
       if (transition) {
         transition.t = Math.min(1, transition.t + delta / transition.seconds);
@@ -1673,6 +1736,7 @@ export function SolarSystem({
       controls.update();
 
       reportFocus(dist);
+      }
 
       // A body's own orbit ring passes through its centre; hide it while the
       // camera is close to that body so it doesn't cut across the close-up.
@@ -1721,7 +1785,7 @@ export function SolarSystem({
         sunGlow.scale.setScalar(SUN_RADIUS * 2 * SUN_GLOW_SCALE * sunBody.scale);
       }
 
-      renderer.render(scene, camera);
+      renderRelative();
       if (now - lastDatePublish > 500) {
         lastDatePublish = now;
         usePageStore.getState().setSimJD(simJD);
@@ -1800,11 +1864,11 @@ export function SolarSystem({
     // Restore the view saved by a previous scene (scale switch), else the one
     // persisted from a previous visit (once per page load), else fly in to the
     // default view of the Sun.
-    let saved = savedViewRef.current;
+    let saved = ext ? null : savedViewRef.current;
     let fromStorage = saved?.flyIn ?? false;
     let restoreTransition: object | null = null; // the fly-in started below, while it is still the live transition
     let restoreTarget: { name: string; dir: THREE.Vector3; radii: number; intro?: boolean } | null = null;
-    if (!saved && !restoredStoredViewRef.current) {
+    if (!ext && !saved && !restoredStoredViewRef.current) {
       restoredStoredViewRef.current = true;
       try {
         const stored = JSON.parse(localStorage.getItem(VIEW_KEY) ?? 'null');
@@ -1873,6 +1937,7 @@ export function SolarSystem({
       if (animationIdRef.current) {
         cancelAnimationFrame(animationIdRef.current);
       }
+      ext?.dispose();
       resizeObserver?.disconnect();
       window.removeEventListener('pointerup', onPointerUp);
       window.removeEventListener('keydown', onKeyDown);
@@ -1935,7 +2000,7 @@ export function SolarSystem({
 
   // Orbit ring highlight (terminal `orbits` command).
   useEffect(() => {
-    setOrbitStyleRef.current?.(orbitsHighlighted);
+    if (!extensionRef.current) setOrbitStyleRef.current?.(orbitsHighlighted);
   }, [orbitsHighlighted]);
 
   // Trace a mission (terminal `track` command). If the scene isn't built yet
