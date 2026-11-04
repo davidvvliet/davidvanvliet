@@ -1020,7 +1020,7 @@
     },
     "sled_lettering": {
       "value": "Altair LAUNCH / WE GO TO SPACE / TO IMPROVE LIFE ON EARTH",
-      "source": "design, chosen: on the back of the pusher bulkhead, set in Geist (geist_font) like the finrocket's \"Altair ULTRALIGHT\": \"Altair\" on top and \"LAUNCH\" half its size right below it, both centred; a gap, then the motto; mask refs/aether/sled-lettering-mask.png drawn by tools/sled_lettering.py",
+      "source": "design, chosen: on the back of the pusher bulkhead, set in Geist (geist_font) like the finrocket's \"Altair ULTRALIGHT\": \"Altair\" on top and \"LAUNCH\" half its size right below it, both centred; a gap, then the motto; drawn as the finrocket's mask is (Geist with a 4 px outline at 114 px); mask refs/aether/sled-lettering-mask.png drawn by tools/sled_lettering.py",
       "also": [
         {
           "source": "geist_font",
@@ -1033,12 +1033,12 @@
       "source": "design, chosen: the text 0.85 m across the 1.0 m pusher"
     },
     "sled_lettering_height": {
-      "value": 0.562,
-      "source": "design, computed: 0.85 m x the mask's 626 / 947 px"
+      "value": 0.5354,
+      "source": "design, computed: 0.85 m x the mask's 599 / 951 px"
     },
     "craft_lettering": {
       "value": "Altair AETHER",
-      "source": "design, chosen: on the two lower slanted sides under the US flag, and twice on the front deck, along its two opposite slanted edges (the top carries the user arrays, the bottom the Earth tile, the upper sides the folded wings); set in Geist (geist_font) like the finrocket's \"Altair ULTRALIGHT\": the second word half the size, on one baseline; mask refs/aether/craft-lettering-mask.png drawn by tools/sled_lettering.py",
+      "source": "design, chosen: on the two lower slanted sides under the US flag, turned to read upright in flight (the top carries the user arrays, the bottom the Earth tile, the upper sides the folded wings); set in Geist (geist_font) like the finrocket's \"Altair ULTRALIGHT\": the second word half the size, on one baseline, drawn as the finrocket's mask is (Geist with a 4 px outline at 114 px, which thickens and rounds it); mask refs/aether/craft-lettering-mask.png drawn by tools/sled_lettering.py",
       "also": [
         {
           "source": "geist_font",
@@ -1051,8 +1051,8 @@
       "source": "design, chosen: across the clear stretch of each lower side, between the lower deck and the star tracker"
     },
     "craft_lettering_side_height": {
-      "value": 0.0835,
-      "source": "design, computed: 0.4 m x the mask's 226 / 1083 px"
+      "value": 0.0869,
+      "source": "design, computed: 0.4 m x the mask's 240 / 1105 px"
     },
     "craft_lettering_side_offset": {
       "value": -0.07,
@@ -1079,14 +1079,6 @@
     "launch_date": {
       "value": "2028-01-02 15:00 UTC",
       "source": "design, chosen: an hourly search over 400 days (from 2026-12) on the LOLA 20 m horizon: the whole track sunlit, the Earth at least 0.5° over the real horizon from the track's end, and as much of the Earth lit as possible (73 %, the Earth 4.8° up; the best, 77 %, has the Earth lower). Was 2028-01-05 00:00, with the Earth half lit"
-    },
-    "craft_lettering_front_width": {
-      "value": 0.4,
-      "source": "design, chosen: along each of the front deck's two opposite slanted edges (towards the sides at 30° and 210°)"
-    },
-    "craft_lettering_front_offset": {
-      "value": 0.27,
-      "source": "design, chosen: each lettering's middle this far from the axis, towards its edge, its top facing the edge"
     }
   },
   "materials": {
@@ -1097,10 +1089,10 @@
       "source": "design, chosen: white on the black sled"
     },
     "craft_lettering": {
-      "hex": "#111111",
+      "hex": "#f2f2f2",
       "metallic": 0.0,
       "roughness": 0.6,
-      "source": "design, chosen: black on the silvered radiator panels, where white doesn't show"
+      "source": "design, chosen: white, as on the sled; the silvered panels look dark away from the Sun"
     },
     "flag_red": {
       "hex": "#b31942",

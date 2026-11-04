@@ -32,7 +32,7 @@ def build(spec):
         parts.lathe("cone", [(rb - 0.004, hu), (rb, hu), (r_top, xc), (r_top - 0.004, xc)], closed=True,
                     segments=48, direction=X, material="dark_metal")
         parts.lathe("deck_lower", [(0, xc), (R, xc), (R, xc + t), (0, xc + t)], material="white_paint", **hexa)
-        deck = parts.lathe("deck_upper", [(0, xb - t), (R, xb - t), (R, xb), (0, xb)], material="white_paint", **hexa)
+        parts.lathe("deck_upper", [(0, xb - t), (R, xb - t), (R, xb), (0, xb)], material="white_paint", **hexa)
         panels = parts.lathe("side_panels", [(R - 0.004, xc + t), (R, xc + t), (R, xb - t), (R - 0.004, xb - t)],
                     closed=True, material="foil_silver", **hexa)   # radiators (thermal)
 
@@ -103,7 +103,7 @@ def build(spec):
     attitude(d, R, flat, xc, xb, t)
     electronics(d, R, flat, xc, xb, t)
     thermal(d, R, flat, xc, xb, t, x0, rt)
-    markings(spec, d, flat, xc, xb, t, panels, deck)
+    markings(spec, d, flat, xc, xb, t, panels)
     parts.pose({name: j["angle"] for name, j in spec["joints"].items()})
 
 
@@ -354,9 +354,9 @@ def thermal(d, R, flat, xc, xb, t, x0, rt):
 
 
 
-def markings(spec, d, flat, xc, xb, t, panels, deck):
-    # "Altair AETHER" on the two lower slanted sides, under the US flag (as on the finrocket), and twice on
-    # the front deck, along its two opposite slanted edges. The top carries the user tiles, the bottom the Earth tile.
+def markings(spec, d, flat, xc, xb, t, panels):
+    # "Altair AETHER" on the two lower slanted sides, under the US flag (as on the finrocket), turned so
+    # they read upright in flight (the craft rolls over before the burn, its top to the Moon). The top carries the user tiles, the bottom the Earth tile.
     col = lambda k: materials.colour(spec["materials"][k])
     out = os.path.join(HARNESS, "out", "aether", "textures")
     img = textures.marking("aether_craft_lettering",
@@ -376,7 +376,7 @@ def markings(spec, d, flat, xc, xb, t, panels, deck):
         for k, deg in enumerate((210, 330)):
             a = math.radians(deg)
             n = (0.0, math.cos(a), math.sin(a))
-            v = (0.0, -math.sin(a), math.cos(a)) if deg == 330 else (0.0, math.sin(a), -math.cos(a))  # up the side
+            v = (0.0, math.sin(a), -math.cos(a)) if deg == 330 else (0.0, -math.sin(a), math.cos(a))  # down the side: up in flight
             on = lambda off: (xs, n[1] * flat + v[1] * off, n[2] * flat + v[2] * off)
             inward = (0.0, -n[1], -n[2])
             parts.decal(f"craft_flag{k}", panels, center=on(d["craft_flag_offset"]), direction=inward, up=v,
@@ -384,12 +384,4 @@ def markings(spec, d, flat, xc, xb, t, panels, deck):
             parts.decal(f"craft_lettering{k}", panels, center=on(d["craft_lettering_side_offset"]), direction=inward,
                         up=v, width=d["craft_lettering_side_width"], height=d["craft_lettering_side_height"],
                         material=mat, step=0.02, lift=0.001)
-        # Twice on the front deck, along the two opposite slanted edges (towards the sides at 30° and 210°),
-        # each reading with its top towards its edge.
-        for k, deg in enumerate((30, 210)):
-            a = math.radians(deg)
-            n = (0.0, math.cos(a), math.sin(a))
-            off = d["craft_lettering_front_offset"]
-            parts.decal(f"craft_lettering_front{k}", deck, center=(xb, n[1] * off, n[2] * off), direction=(-1, 0, 0),
-                        up=n, width=d["craft_lettering_front_width"],
-                        height=d["craft_lettering_front_width"] * ratio, material=mat, step=0.02, lift=0.001)
+
