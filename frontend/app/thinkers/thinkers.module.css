@@ -1,0 +1,41 @@
+/* Each portrait is 80 characters wide; Roboto Mono's characters are 0.6 em wide,
+   so a portrait is 48 em. The font size is set so it fits without wrapping. */
+.page {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--foreground);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 32px;
+  padding: 48px 16px;
+  font-family: var(--font-roboto-mono), monospace;
+}
+
+.thinker {
+  margin: 0;
+}
+
+.art {
+  margin: 0;
+  font-family: inherit;
+  line-height: 1.2;
+  white-space: pre;
+  font-size: min(calc((100vw - 32px) / 48), 11px);
+}
+
+@media (min-width: 900px) {
+  .art {
+    font-size: min(calc((50vw - 64px) / 48), 11px);
+  }
+}
+
+.name {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
