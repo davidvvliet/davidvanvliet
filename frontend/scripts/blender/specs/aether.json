@@ -876,16 +876,20 @@
       ]
     },
     "sled_lettering_width": {
-      "value": 0.9,
-      "source": "design, chosen: 0.9 m across the 1.0 m pusher"
+      "value": 0.85,
+      "source": "design, chosen: the text 0.85 m across the 1.0 m pusher"
+    },
+    "sled_lettering_height": {
+      "value": 0.368,
+      "source": "design, computed: 0.85 m x the mask's 484 / 1118 px"
     }
   },
   "materials": {
     "sled_lettering": {
-      "hex": "#111111",
+      "hex": "#f2f2f2",
       "metallic": 0.0,
       "roughness": 0.6,
-      "source": "design, chosen: the finrocket's lettering colour; it reads on the sunlit pusher, which reflects near white"
+      "source": "design, chosen: white on the black sled"
     }
   },
   "open_questions": [

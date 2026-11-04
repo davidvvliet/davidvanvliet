@@ -55,14 +55,14 @@ def build(spec):
                                       (0.007, 0.13), (rn, L), (rn - 0.001, L), (0.006, 0.13), (0.0, 0.125)],
                     segments=24, location=(xc, 0, 0), direction=(-1, 0, 0), material="dark_metal")
 
-    # The sled: a pusher bulkhead bolted to the ring's lower half takes the launch load; the craft's
+    # The sled, painted black: a pusher bulkhead bolted to the ring's lower half takes the launch load; the craft's
     # flat underside rests on the base (its weight in lunar gravity); it runs on four shoes, driven through the armature plate beneath.
     gauge, base_z = d["rail_gauge"], -flat
     with parts.assembly("sled"):
         parts.lathe("sep_ring_lower", [(ri, -hl), (ro, -hl), (ro, 0), (ri, 0)], closed=True, segments=48,
                     direction=X, material="foil_silver")
         xp = -hl - 0.02
-        pusher = parts.box("pusher", (0.04, 2 * R, 2 * flat + 0.05), location=(xp, 0, 0.025), material="dark_metal")
+        pusher = parts.box("pusher", (0.04, 2 * R, 2 * flat + 0.05), location=(xp, 0, 0.025), material="black")
         # The lettering on the pusher's back, the face the chase camera sees (refs/aether/sled-lettering-mask.png,
         # drawn by tools/sled_lettering.py).
         paint = materials.colour(spec["materials"]["sled_lettering"])
@@ -71,13 +71,13 @@ def build(spec):
         mat = materials.image("aether_sled_lettering", img, metallic=0.0, roughness=0.6, cutout=True)
         lw = d["sled_lettering_width"]
         parts.decal("sled_lettering", pusher, center=(xp - 0.02, 0, 0.025), direction=X, up=(0, 0, 1),
-                    width=lw, height=lw * 484 / 1400, material=mat, step=0.05, lift=0.001)
+                    width=lw, height=d["sled_lettering_height"], material=mat, step=0.05, lift=0.001)
         x_end = xb
         L_base = x_end - (xp - 0.02)
         parts.box("sled_base", (L_base, gauge + 0.1, 0.05), location=((x_end + xp - 0.02) / 2, 0, base_z - 0.025),
-                  material="dark_metal")
+                  material="black")
         for k, (sx, sy) in enumerate([(0.0, 1), (0.0, -1), (x_end - 0.1, 1), (x_end - 0.1, -1)]):
-            parts.box(f"shoe{k}", (0.14, 0.1, 0.05), location=(sx, sy * gauge / 2, base_z - 0.075), material="dark_metal")
+            parts.box(f"shoe{k}", (0.14, 0.1, 0.05), location=(sx, sy * gauge / 2, base_z - 0.075), material="black")
         parts.box("armature", (L_base - 0.2, 0.3, 0.03), location=((x_end + xp - 0.02) / 2, 0, base_z - 0.065),
                   material="foil_silver")
 

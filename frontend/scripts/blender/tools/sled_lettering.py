@@ -36,7 +36,7 @@ for line in LINES:
     y += 0.35 * MOTTO
 
 l, t, r, b = img.getbbox()
-img = img.crop((0, max(0, t - PAD), W, b + PAD))
+img = img.crop((max(0, l - PAD), max(0, t - PAD), r + PAD, b + PAD))   # the text fills the sheet
 os.makedirs(os.path.dirname(OUT), exist_ok=True)
 img.save(OUT)
 print(OUT, img.size)
