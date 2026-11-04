@@ -4,10 +4,12 @@
   "viewer": { "page": "/models/aether" },
   "closeups": [
     { "name": "markings, left side", "target": [0.6, 0.38, -0.22], "look": [0, -0.866, 0.5], "radius": 0.35 },
-    { "name": "markings, right side", "target": [0.6, -0.38, -0.22], "look": [0, 0.866, 0.5], "radius": 0.35 }
+    { "name": "markings, right side", "target": [0.6, -0.38, -0.22], "look": [0, 0.866, 0.5], "radius": 0.35 },
+    { "name": "top: user tiles, aft laser", "target": [0.5, 0, 0.52], "look": [0.55, 0.45, -0.7], "radius": 0.4 },
+    { "name": "front: fore laser", "target": [1.12, 0, -0.13], "look": [-0.7, 0.5, -0.35], "radius": 0.3 }
   ],
 
-  "note": "Our own design: a ~300 kg lunar communications relay, fired off a mass driver near the lunar south pole into a 700 km circular polar orbit, one plane of a constellation, built from real flight hardware where it exists. Frame: x along the track (the direction of travel, and the craft's axis: the launch load runs down it), z up, y left. The craft's separation plane is at x = 0; the sled and the rails are behind and below it. Pass 1: structure, tank, main thruster, sled and rails. Pass 2: propulsion (eight 1 N thrusters, latch valve, fill and drain valves, lines). Pass 3: power (two solar wings, deployed; two batteries). Pass 4: comms, resized for the constellation (two K-band user tiles and an S-band antenna on the Moon-facing top, a K-band Earth tile and the X-band array on the bottom, laser terminals ahead and behind, transponder). Pass 5: attitude (four reaction wheels, two star trackers, sun sensors, IMU). Pass 6: electronics (power control unit, power cables; a reserved slot for the flight computer and valve drivers, which are designed separately). Pass 7: thermal (silvered-Teflon radiators on five sides, a blanket on the Moon-facing top, heaters). Pass 8: deployment (wings folded on hinges for the launch, hold-downs; click a wing to unfold). Pass 9: finishes (the cells drawn from AZUR's photo, with busbars, interconnects and cut corners; the radiators' tape in 5.08 cm strips; the top blanket's crinkled foil; hinge brackets between the wing panels).",
+  "note": "Our own design: a ~300 kg lunar communications relay, fired off a mass driver near the lunar south pole into a 700 km circular polar orbit, one plane of a constellation, built from real flight hardware where it exists. Frame: x along the track (the direction of travel, and the craft's axis: the launch load runs down it), z up, y left. The craft's separation plane is at x = 0; the sled and the rails are behind and below it. Pass 1: structure, tank, main thruster, sled and rails. Pass 2: propulsion (eight 1 N thrusters, latch valve, fill and drain valves, lines). Pass 3: power (two solar wings, deployed; two batteries). Pass 4: comms, resized for the constellation (two K-band user tiles and an S-band antenna on the Moon-facing top, a K-band Earth tile and the X-band array on the bottom, laser terminals ahead and behind, transponder). Pass 5: attitude (four reaction wheels, two star trackers, sun sensors, IMU). Pass 6: electronics (power control unit, power cables; a reserved slot for the flight computer and valve drivers, which are designed separately). Pass 7: thermal (silvered-Teflon radiators on five sides, a blanket on the Moon-facing top, heaters). Pass 8: deployment (wings folded on hinges for the launch, hold-downs; click a wing to unfold). Pass 9: finishes (the cells drawn from AZUR's photo, with busbars, interconnects and cut corners; the radiators' tape in 5.08 cm strips; the top blanket's crinkled foil; hinge brackets between the wing panels). Pass 10: comms faces (the Ka tiles with flange, stepped housing and radome; the laser terminals as base plate, electronics box, pedestal and two-axis head with its window; the X-band array's sixteen patches).",
   "sources": [
     {
       "id": "nssdc_moon",
@@ -428,7 +430,7 @@
     },
     "laser_height": {
       "value": 0.2,
-      "object": "laser_aft",
+      "object": ["laser_aft", "laser_aft_pedestal", "laser_aft_head", "laser_aft_window"],
       "measure": "z",
       "tolerance": 0.02,
       "source": "tesat_scot30",
@@ -692,6 +694,12 @@
     "cell_interconnect_width": {"value": 0.00809, "source": "azur_3g30c", "quote": "Interconnector Dimensions n/a 8.09 mm x 12.91 mm x 25 µm"},
     "radiator_tape_width": {"value": 0.0508, "source": "nasa_agfep", "quote": "tape dimensions were approximately 2.54 cm or 5.08 cm in width and up to 32.9 m (108') in length", "note": "m; the wider tape, laid in strips along the craft's length"},
     "blanket_finish": {"value": "crinkled foil puffed in cells about 0.25 m across (tiling.crinkled_foil), in the model's foil_gold", "source": "design, chosen: crease sizes by eye, as on the harness's other blankets; no document gives them"},
+    "ka_tile_flange": {"value": 0.008, "source": "nasa_ka_smallsat", "measure": "estimated from its page-24 drawing of the smallsat tile, scaled by the 22.9 cm length: the mounting flange's thickness"},
+    "ka_tile_step": {"value": 0.01, "source": "nasa_ka_smallsat", "measure": "estimated from its page-24 drawing of the smallsat tile, scaled by the 22.9 cm length: how far the housing steps in from the flange's edge"},
+    "ka_tile_radome_inset": {"value": 0.012, "source": "nasa_ka_smallsat", "measure": "estimated from its page-24 drawing of the smallsat tile, scaled by the 22.9 cm length: the square radome's margin inside the housing's top"},
+    "scot30_layout": {"value": {"plate": 0.012, "box": [0.13, 0.11, 0.2], "pedestal": [0.065, 0.035, 0.105], "head": [0.04, 0.05, 20]}, "source": "tesat_scot30", "measure": "estimated from its page-1 photo (a perspective view), fitted to the 280 x 230 x 200 mm envelope. plate: thickness; box: starts this far back from the front edge, height, width; pedestal: centre back from the front edge, radius, height; head: drum radius, length, lean up from level (degrees)"},
+    "xband_patch_pitch": {"value": [0.0245, 0.0206], "source": "endurosat_x4x4", "measure": "estimated from Figure 1 (a perspective photo) against the 82.6 x 98.0 mm board: four rows along the 98 mm side, four along the 82.6 mm side, evenly spread"},
+    "xband_patch_size": {"value": 0.014, "source": "endurosat_x4x4", "measure": "estimated from Figure 1 (a perspective photo) against the 82.6 x 98.0 mm board: each patch about a sixth of the board's width; the manual: \"an array of sixteen nearly-square-slanted patches\""},
     "cell_size": {
       "value": "60.7 x 124.5 mm (cell with cover glass), 72.65 cm²",
       "source": "azur_3g30c",
@@ -830,8 +838,8 @@
       "quote": "Up to 3,500 km, depending on counter terminal or OGS configuration ... Asymmetric up to Tx 2.5 Gbps and Rx 1.25 Gbps; Symmetric up to 1.25 Gbps ... Mass < 6 kg ... Size 230 x 280 x 200 mm3 ... Power Consumption < 60 W (peak) ... TRL 6 by Q2/2027 TRL 8 by Q1/2028"
     },
     "laser_shape": {
-      "value": "modelled as its 230 x 280 x 200 mm box with a 60 mm window on the end facing the link",
-      "source": "design, estimate: the datasheet gives the envelope only"
+      "value": "modelled from the datasheet photo within its 230 x 280 x 200 mm envelope: base plate, electronics box at the back, a pedestal at the front carrying the two-axis head, its 60 mm window towards the link",
+      "source": "design, estimate: the datasheet gives the envelope and one photo (scot30_layout)"
     },
     "link_range_max": {
       "value": 3419,
@@ -1092,6 +1100,8 @@
     }
   },
   "materials": {
+    "laser_glass": {"hex": "#71cfd7", "metallic": 0.3, "roughness": 0.1, "source": "tesat_scot30: the window on the page-1 photo, mean over its middle (rendered at 80 dpi)"},
+    "patch_gold": {"hex": "#edd4af", "metallic": 0.8, "roughness": 0.4, "source": "endurosat_x4x4: Figure 1, mean of the patches' pixels (rendered at 200 dpi)"},
     "solar_cell": {"hex": "#221b39", "metallic": 0.6, "roughness": 0.25, "source": "azur_3g30c: mean colour of the representative assembly's cell area on page 1 (rendered at 200 dpi); metallic and roughness the harness's solar_cell"},
     "sled_lettering": {
       "hex": "#f2f2f2",

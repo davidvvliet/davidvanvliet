@@ -256,26 +256,27 @@ def power(d, R, flat, xc, xb):
 def comms(d, R, flat, xc, xb, t):
     # Resized for the constellation (spec: user_array, suit_antenna, earth_array, laser_terminal, pointing_plan).
     # The craft flies nose along the motion (+x) with its top (+z) on the Moon.
-    window = lambda name, loc, direction: parts.lathe(name, [(0.0, 0.0), (0.03, 0.0), (0.03, 0.004), (0.0, 0.004)],
-                                                      segments=24, location=loc, direction=direction, material="black")
     # The top, facing the Moon: the laser terminal for the craft behind at the aft end, two K-band user tiles
     # (send, receive), the S-band antenna for suits.
     with parts.assembly("user_antennas"):
         for name, y in (("user_tx", 0.1175), ("user_rx", -0.1175)):
-            parts.box(name, (0.178, 0.229, 0.096), location=(0.66, y, flat + 0.048), material="white_paint")
+            ka_tile(d, name, (0.66, y, flat), 1, along_x=False)
         parts.box("suit_antenna", (0.1, 0.1, 0.012), location=(0.83, -0.12, flat + 0.006), material="white_paint")
     with parts.assembly("lasers"):
         xa = xc + t + 0.01
-        parts.box("laser_aft", (0.28, 0.23, 0.2), location=(xa + 0.14, 0, flat + 0.1), material="white_paint")
-        window("laser_aft_window", (xa, 0, flat + 0.12), (-1, 0, 0))
-        # The front deck: the terminal for the craft ahead.
-        parts.box("laser_fore", (0.28, 0.23, 0.2), location=(xb + 0.14, 0, -0.13), material="white_paint")
-        window("laser_fore_window", (xb + 0.28, 0, -0.11), (1, 0, 0))
+        scot30(d, "laser_aft", (xa, 0, flat), -1)
+        # The front deck: the terminal for the craft ahead, its electronics box against the deck.
+        scot30(d, "laser_fore", (xb + 0.28, 0, -0.23), 1)
 
     # The bottom, away from the Moon: the K-band Earth tile and the X-band array (commands, safe mode).
     with parts.assembly("earth_antennas"):
-        parts.box("earth_array", (0.229, 0.178, 0.096), location=(EARTH_X, 0, -flat - 0.048), material="white_paint")
+        ka_tile(d, "earth_array", (EARTH_X, 0, -flat), -1, along_x=True)
         parts.box("xband_array", (0.098, 0.0826, 0.00318), location=(XBAND_X, 0, -flat - 0.00159), material="white_paint")
+        # Its sixteen patches, 4 x 4.
+        pu, pv = d["xband_patch_pitch"]
+        ps = d["xband_patch_size"]
+        parts.boxes("xband_patches", [((ps, ps, 0.0004), (XBAND_X + (i - 1.5) * pu, (j - 1.5) * pv, -flat - 0.00318 - 0.0002))
+                                      for i in range(4) for j in range(4)], material="patch_gold")
 
     # The transponder hangs under the forward deck.
     with parts.assembly("radio", internal=True):
@@ -396,6 +397,45 @@ def markings(spec, d, flat, xc, xb, t, panels):
                         up=v, width=d["craft_lettering_side_width"], height=d["craft_lettering_side_height"],
                         material=mat, step=0.02, lift=0.001)
 
+
+
+def ka_tile(d, name, base, up, along_x):
+    """Boeing's smallsat Ka tile (nasa_ka_smallsat p. 24 drawing): a mounting flange the full 22.9 x 17.8 cm,
+    the housing stepped in from it, and the square radome flush in its top face. `base`: the middle of
+    its back face; `up`: +1 facing +z, -1 facing -z; the 22.9 cm side along x or y."""
+    L, W, H = 0.229, 0.178, 0.096
+    lx, ly = (L, W) if along_x else (W, L)
+    fl, step, rin = d["ka_tile_flange"], d["ka_tile_step"], d["ka_tile_radome_inset"]
+    bx, by, bz = base
+    z = lambda a, b: bz + up * (a + b) / 2           # middle of a span a..b off the back face
+    parts.boxes(name, [((lx, ly, fl), (bx, by, z(0, fl))),
+                       ((lx - 2 * step, ly - 2 * step, H - fl), (bx, by, z(fl, H)))], material="foil_silver")
+    parts.box(f"{name}_radome", (lx - 2 * step - 2 * rin, ly - 2 * step - 2 * rin, 0.003),
+              location=(bx, by, z(H - 0.0025, H + 0.0005)), material="white_paint")
+
+
+def scot30(d, name, end, s):
+    """Tesat SCOT30 (tesat_scot30 photo): a base plate, the electronics box at the back, and at the front
+    (the end facing the link, `s` = -1 or +1 along x) a pedestal carrying the two-axis head with its window.
+    `end`: the middle of the base plate's front edge, on its underside. 280 along x, 230 across, 200 tall."""
+    ex, ey, ez = end
+    sh = d["scot30_layout"]
+    X_ = lambda u: ex - s * u                         # u: distance back from the front edge
+    bp, (b0, bh, bw), (pu, pr, ph), (hr, hl, tilt) = sh["plate"], sh["box"], sh["pedestal"], sh["head"]
+    parts.boxes(name, [((0.28, 0.23, bp), (X_(0.14), ey, ez + bp / 2)),
+                       ((0.28 - b0, bw, bh), (X_((b0 + 0.28) / 2), ey, ez + bp + bh / 2))], material="foil_silver")
+    parts.lathe(f"{name}_pedestal", [(0.0, 0.0), (pr * 1.25, 0.0), (pr * 1.25, 0.018), (pr, 0.018), (pr, ph - 0.015),
+                                     (pr * 1.12, ph - 0.015), (pr * 1.12, ph), (0.0, ph)],
+                segments=32, location=(X_(pu), ey, ez + bp), direction=(0, 0, 1), material="foil_silver")
+    # The head: a drum leaning towards the link, its window on the end.
+    a = math.radians(tilt)
+    axis = (s * math.cos(a), 0.0, math.sin(a))
+    hc = (X_(pu), ey, ez + bp + ph + hr * 0.9)
+    tip = tuple(hc[i] + axis[i] * hl / 2 for i in range(3))
+    parts.lathe(f"{name}_head", [(0.0, -hl / 2), (hr, -hl / 2), (hr, hl / 2), (0.0, hl / 2)], segments=32,
+                location=hc, direction=axis, material="foil_silver")
+    parts.lathe(f"{name}_window", [(0.0, 0.0), (0.03, 0.0), (0.03, 0.002), (0.0, 0.002)], segments=32,
+                location=tip, direction=axis, material="laser_glass")
 
 
 def _face_uv(obj, along, repeat_u, repeat_v):
