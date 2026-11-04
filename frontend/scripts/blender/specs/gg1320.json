@@ -616,6 +616,36 @@
         "emission": 1.2
       },
       "source": "sam_gg1320an, powered_view1-3.jpg: the discharge glows from each anode down its channel, along the side bore to the bottom corner (mirror 1 or 3), along the bottom bore and up the two cathode channels; the bore halves next to mirror 2 stay dark. Glow radius and brightness chosen by eye; solid, so the clear block and bores draw over it"
+    },
+    "pzt_end": {
+      "value": {
+        "housing_diameter": 0.009,
+        "ceramic_diameter": 0.0062,
+        "hole_outer": 0.0034,
+        "hole_inner": 0.0019,
+        "flex_inner": 0.0033,
+        "flex_outer": 0.0049,
+        "flex_arc": 220,
+        "tab": [
+          0.0012,
+          0.0008,
+          0.0006
+        ],
+        "blob": 0.0009
+      },
+      "source": "sam_gg1320an, mirrorpzt_assembly1_closeup1.jpg (scaled by the 10 mm assembly, 530 px: 53 px/mm): the path-length assembly ends in a metal housing with a white ceramic disc (330 px), a dark ring round its centre hole (180 px; bore 100 px), an orange flex in a horseshoe round the lower part with a solder tab each side and a solder blob at the bottom; housing length estimated"
+    },
+    "temperature_sensor": {
+      "value": {
+        "type": "AD590KF",
+        "size": [
+          0.0032,
+          0.006,
+          0.001
+        ],
+        "along_face": 0.0172
+      },
+      "source": "sam_gg1320an, laser_block_with_major_parts_labeled1.jpg (\"Temperature Sensor\", pointing at (630,155) px: on anode 1's face, 17.2 mm from its centre towards mirror 2); temperature_sensor_ad590_cloesup1.jpg (\"AD590KF\" printed on a flat package, long side across the block; size estimated against the 1.5 mm channel above it)"
     }
   },
   "materials": {
@@ -780,6 +810,24 @@
       "metallic": 0.0,
       "roughness": 0.5,
       "source": "sam_gg1320an, powered_view2.jpg and powered_view3.jpg: median of the glow's unsaturated pixels (red above 235, green 70-200, blue under 120: #f96c52 and #f97041); the cores are blown out"
+    },
+    "mirror_housing": {
+      "hex": "#676964",
+      "metallic": 1.0,
+      "roughness": 0.35,
+      "source": "sam_gg1320an, mirrorpzt_assembly1_closeup1.jpg (scaled by the 10 mm assembly, 530 px: 53 px/mm): mean of the housing ring at (500,175), (330,250), (690,240), (760,330) px (it mirrors its surroundings)"
+    },
+    "flex_orange": {
+      "hex": "#923d22",
+      "metallic": 0.0,
+      "roughness": 0.4,
+      "source": "sam_gg1320an, mirrorpzt_assembly1_closeup1.jpg (scaled by the 10 mm assembly, 530 px: 53 px/mm): median of the flex's orange pixels (x 276-455, y 345-561 px)"
+    },
+    "sensor_package": {
+      "hex": "#404059",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "sam_gg1320an, temperature_sensor_ad590_cloesup1.jpg, the package at (490,250), (560,380), (500,360) px"
     }
   },
   "open_questions": [

@@ -438,10 +438,39 @@ def mirrors(f, zc, R):
                             direction=u, segments=16, material="amber_epoxy")
                 ends[key] = q + u * dt["potting_height"]
             else:
-                parts.cylinder(f"{key}_pzt", m["pzt"] / 2, m["pzt"], location=q, direction=u, segments=32,
-                               material="pzt_ceramic")
+                pzt_end(f, key, q, u, m["pzt"])
                 ends[key] = q + u * m["pzt"]
     return ends
+
+
+def pzt_end(f, key, q, u, length):
+    """A path-length control mirror's back: the housing, its white ceramic end with the centre
+    hole, and the orange flex round its lower part with two solder tabs and a blob."""
+    pe = f["pzt_end"]["value"]
+    end = q + u * length
+    parts.cylinder(f"{key}_pzt_housing", pe["housing_diameter"] / 2, length, location=q, direction=u, segments=32,
+                   material="mirror_housing")
+    parts.cylinder(f"{key}_pzt_ceramic", pe["ceramic_diameter"] / 2, 0.0002, location=end, direction=u, segments=32,
+                   material="pzt_ceramic")
+    parts.lathe(f"{key}_pzt_hole", [(pe["hole_inner"] / 2, 0.0), (pe["hole_outer"] / 2, 0.0),
+                                   (pe["hole_outer"] / 2, 0.00025), (pe["hole_inner"] / 2, 0.00025)], closed=True,
+                location=end, direction=u, segments=24, material="black", smooth=False)
+    m = parts.frame(end, u)
+    inv = m.to_3x3().inverted()
+    down = inv @ Vector((0, 0, -1))
+    a_down = math.degrees(math.atan2(down.y, down.x))  # the local angle that points down
+    flex = wall_arc(f"{key}_flex", pe["flex_inner"], pe["flex_outer"], 0.0, 0.00015,
+                    a_down - pe["flex_arc"] / 2, a_down + pe["flex_arc"] / 2, "flex_orange")
+    flex.matrix_world = m
+    tx, ty, tz = pe["tab"]
+    rr = (pe["flex_inner"] + pe["flex_outer"]) / 2
+    for s, tag in ((-1, "a"), (1, "b")):
+        local = _dir(a_down + s * 90) * rr
+        parts.box(f"{key}_tab_{tag}", (tx, ty, tz), location=m @ (local + Vector((0, 0, tz / 2))), direction=u,
+                  roll_deg=a_down + s * 90, material="aluminium")
+    blob = m @ (_dir(a_down) * rr)
+    parts.lathe(f"{key}_solder", _dome(pe["blob"], 0.0, pe["blob"] * 0.6), location=blob, direction=u, segments=12,
+                material="aluminium")
 
 
 def discharge(f, zc):
@@ -519,6 +548,13 @@ def extras(f, zc, ends, tips):
         # On the block's bottom face (sam_gg1320an's "Getter" label), length estimated.
         parts.cylinder("getter", g["diameter"] / 2, 0.003, location=(g["position"][0], -face, zc),
                        direction=(0, -1, 0), segments=24, material="foil_silver")
+    ts = f["temperature_sensor"]["value"]
+    with parts.assembly("temperature_sensor", internal=True):
+        # The AD590 on anode 1's face, towards mirror 2, its long side across the block.
+        u = _dir(FACES["anode_1"])
+        c = u * (face + ts["size"][2] / 2) + _dir(FACES["anode_1"] + 90) * ts["along_face"] + Vector((0, 0, zc))
+        parts.box("temperature_sensor", (ts["size"][2], ts["size"][0], ts["size"][1]), location=c,
+                  roll_deg=FACES["anode_1"], material="sensor_package")
     cb = f["connector_bars"]["value"]
     bars = {}
     with parts.assembly("connector_bars", internal=True):
