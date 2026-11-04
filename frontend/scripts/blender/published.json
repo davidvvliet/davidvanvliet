@@ -114,10 +114,10 @@
   }
  },
  "gg1320": {
-  "approved": "2026-11-04 14:02",
+  "approved": "2026-11-04 14:06",
   "inputs": {
-   "specs/gg1320.json": "7f8db0c8389f458f",
-   "probes/gg1320.py": "930388d3aa2fe4e1",
+   "specs/gg1320.json": "07399a56267099cb",
+   "probes/gg1320.py": "b26a30052a52e0f5",
    "build.py": "363cabc8976febf0",
    "blender.json": "7bbc071b6e396ec4",
    "lib/__init__.py": "e3b0c44298fc1c14",

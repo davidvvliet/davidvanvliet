@@ -609,6 +609,13 @@
         "height": 0.002
       },
       "source": "sam_gg1320an, with_custom_umbilical_cable1.jpg: three hex nuts on the dither hub's free end, touching; scaled by the 10 mm mirror (190 px): about 90 px across corners (estimated)"
+    },
+    "discharge_path": {
+      "value": {
+        "glow_radius": 0.0009,
+        "emission": 1.2
+      },
+      "source": "sam_gg1320an, powered_view1-3.jpg: the discharge glows from each anode down its channel, along the side bore to the bottom corner (mirror 1 or 3), along the bottom bore and up the two cathode channels; the bore halves next to mirror 2 stay dark. Glow radius and brightness chosen by eye; solid, so the clear block and bores draw over it"
     }
   },
   "materials": {
@@ -767,6 +774,12 @@
       "metallic": 0.0,
       "roughness": 0.5,
       "source": "sam_gg1320an, main_connector1.jpg (scaled by the 31.8 mm flange, 900 px: 28.3 px/mm): the insulator between the contacts at (560,330), (680,330), (330,335) px (one glare spot left out)"
+    },
+    "discharge_glow": {
+      "hex": "#f96e4a",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "sam_gg1320an, powered_view2.jpg and powered_view3.jpg: median of the glow's unsaturated pixels (red above 235, green 70-200, blue under 120: #f96c52 and #f97041); the cores are blown out"
     }
   },
   "open_questions": [

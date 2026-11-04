@@ -381,7 +381,31 @@ def laser_block(f, spec):
         for i, (p, q) in enumerate(sides):
             parts.cylinder(f"beam_{i + 1}", 0.0003, (q - p).length, location=p, direction=q - p, segments=8,
                            material=beam)
+    discharge_glow(f, spec, sides, zc, inr)
     return z0, zb, zc, R
+
+
+def discharge_glow(f, spec, sides, zc, inr):
+    """The helium-neon discharge, as when powered: anode channel, side bore down to the bottom
+    corner, the bottom bore, and the cathode channels (facts.discharge_path). Bores: 1 is
+    mirror 1 to 2 (anode 2 at its middle), 2 is mirror 2 to 3 (anode 1), 3 is mirror 3 to 1."""
+    dp = f["discharge_path"]["value"]
+    dc = f["discharge_channels"]["value"]
+    face = f["block"]["value"]["face_distance"]
+    glow = _special("discharge_glow", spec, emission=dp["emission"])
+    gr = dp["glow_radius"]
+    (m1, m2), (_, m3), _ = sides
+    runs = [("bore_1", m1, (m1 + m2) / 2), ("bore_2", m3, (m2 + m3) / 2), ("bore_3", m3, m1)]
+    for key, ang in FACES.items():
+        u = _dir(ang)
+        offs = (-dc["cathode_spacing"] / 2, dc["cathode_spacing"] / 2) if key == "cathode" else (0.0,)
+        for j, o in enumerate(offs):
+            p = u * face + _dir(ang + 90) * o + Vector((0, 0, zc))
+            runs.append((f"{key}_{j + 1}", p, p - u * (face - inr)))
+    with parts.assembly("discharge_glow", internal=True):
+        for name, p, q in runs:
+            r = gr if name.startswith("bore") else min(gr, dc["diameter"] / 2 * 0.8)
+            parts.cylinder(f"glow_{name}", r, (q - p).length, location=p, direction=q - p, segments=10, material=glow)
 
 
 def mirrors(f, zc, R):
