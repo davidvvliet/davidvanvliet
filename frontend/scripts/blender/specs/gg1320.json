@@ -1,0 +1,256 @@
+{
+  "title": "Honeywell GG1320AN ring laser gyro",
+  "logos": [],
+  "listed": false,
+  "note": "A single-axis ring laser gyro shown from the case in: the round case and its connector, two circuit boards, the mounting plate, and under it the clear glass block with the triangular laser path, three corner mirrors (two on piezo path-length actuators, one passing light to the detector), the cathode and two anodes that drive the helium-neon discharge, and the dither motor in the centre. Frame: z up along the sensing axis (perpendicular to the block), case bottom at z = 0, centred; +Y towards mirror 2 and the detector, -Y towards the cathode, as in sam_gg1320an's labelled photo of the block. Real size in metres (88 mm across). Positions in the block are measured from that photo, scaled by its scale bar; heights inside the case are estimates (open_questions).",
+  "viewer": {
+    "explore": true
+  },
+  "check_scale": 0.1,
+  "sources": [
+    {
+      "id": "honeywell_gg1320an",
+      "title": "Honeywell GG1320AN Digital Ring Laser Gyro, product sheet",
+      "url": "https://www.redimec.com.ar/contenido/productos/pdf/1425567476_1.pdf",
+      "read": "2026-11-04",
+      "licence": "copyright Honeywell: link and quotes only"
+    },
+    {
+      "id": "sam_gg1320an",
+      "title": "Samuel M. Goldwasser, Sam's Laser FAQ: Honeywell GG1320AN ring laser gyro photo album (a unit taken apart; a labelled photo of the laser block with a 50.8 mm scale bar)",
+      "url": "https://repairfaq.org/sam/laserpic/Honeywell-RLGs/GG1320AN/index.html",
+      "read": "2026-11-04",
+      "licence": "\"Copyright © 1994-2026 Samuel M. Goldwasser ... All Rights Researved\": measured from and colours sampled; nothing from it ships until David has permission"
+    }
+  ],
+  "reference_model": {
+    "url": "",
+    "source": "sam_gg1320an",
+    "note": "No 3D model of the GG1320 found; the layout is measured from sam_gg1320an's photos."
+  },
+  "dimensions": {
+    "case_diameter": {
+      "value": 0.088,
+      "object": "case_body",
+      "measure": "diameter",
+      "source": "honeywell_gg1320an, p.1",
+      "quote": "Diameter 3.45\" (8.8 cm)"
+    },
+    "case_height": {
+      "value": 0.045,
+      "object": "*",
+      "measure": "z",
+      "source": "honeywell_gg1320an, p.1",
+      "quote": "Height 1.77\" (4.5 cm)"
+    }
+  },
+  "facts": {
+    "photo_scale": {
+      "value": {
+        "px_per_mm": 9.488,
+        "centre_px": [
+          515,
+          410
+        ]
+      },
+      "source": "sam_gg1320an, laser_block_with_major_parts_labeled1.jpg: the scale bar's end ticks at x = 283 and 765 px (50.8 mm); centre = the dither motor's hub"
+    },
+    "path": {
+      "value": {
+        "corners": [
+          [
+            0.0,
+            0.029
+          ],
+          [
+            -0.0237,
+            -0.0142
+          ],
+          [
+            0.0248,
+            -0.0137
+          ]
+        ],
+        "side": 0.0497,
+        "perimeter": 0.149
+      },
+      "source": "sam_gg1320an, laser_block_with_major_parts_labeled1.jpg: corners of the drawn red beam, measured and scaled by photo_scale; modelled as an equilateral triangle of circumradius 28.7 mm"
+    },
+    "block": {
+      "value": {
+        "face_distance": 0.0195,
+        "corner_cut": 0.0287,
+        "thickness": 0.012,
+        "centre_bore": 0.018
+      },
+      "source": "sam_gg1320an, laser_block_with_major_parts_labeled1.jpg: flat faces 19.5 mm from the centre, corners cut off at the mirrors, centre bore 18 mm (the dither ring); thickness estimated from cathode_end_of_assembly_closeup1.jpg against the 13.7 mm cathode (±15%, perspective)"
+    },
+    "bores": {
+      "value": {
+        "diameter": 0.0025
+      },
+      "source": "sam_gg1320an, laser_block_with_major_parts_labeled1.jpg: bore walls about 24 px apart, seen through the block (estimated)"
+    },
+    "mirrors": {
+      "value": {
+        "diameter": 0.01,
+        "substrate": 0.004,
+        "pzt": 0.005,
+        "detector_block": [
+          0.01,
+          0.006,
+          0.005
+        ],
+        "roles": {
+          "mirror_1": "PZT, bottom left",
+          "mirror_2": "wedged substrate, top, with the detector assembly",
+          "mirror_3": "PZT, bottom right"
+        }
+      },
+      "source": "sam_gg1320an, laser_block_with_major_parts_labeled1.jpg (labels \"Mirror 1 with PZT\", \"Mirror 2 on Wedged Substrate\", \"Detector Assembly\", \"Mirror 3 with PZT\"; assemblies about 95 px = 10 mm across); lengths estimated from mirrorpzt_assembly1_closeup1.jpg"
+    },
+    "discharge": {
+      "value": {
+        "cathode_diameter": 0.0137,
+        "cathode_length": 0.0145,
+        "anode_diameter": 0.007,
+        "anode_height": 0.0037
+      },
+      "source": "sam_gg1320an, laser_block_with_major_parts_labeled1.jpg (labels \"Cathode\" on the bottom face, \"Anode 1\" and \"Anode 2\" on the two upper faces; anode 2 under a red cover)"
+    },
+    "dither": {
+      "value": {
+        "ring_diameter": 0.018,
+        "hub_diameter": 0.005,
+        "spokes": 3,
+        "frequency_hz": 567
+      },
+      "source": "sam_gg1320an, laser_block_with_major_parts_labeled1.jpg (\"Dither Motor\": ring, hub and three spokes); frequency from the unit's label in top_view_of_complete_rlg1.jpg"
+    },
+    "getter": {
+      "value": {
+        "position": [
+          0.0074,
+          -0.0142
+        ],
+        "diameter": 0.004
+      },
+      "source": "sam_gg1320an, laser_block_with_major_parts_labeled1.jpg label \"Getter\"; size estimated"
+    },
+    "connector_bars": {
+      "value": {
+        "length": 0.034,
+        "width": 0.006,
+        "height": 0.008,
+        "distance": 0.03
+      },
+      "source": "sam_gg1320an, laser_block_with_major_parts_labeled1.jpg (\"Connector BC1\", \"Connector BC2\": white bars beside the upper faces); height estimated"
+    },
+    "stack": {
+      "value": {
+        "block_bottom": 0.006,
+        "plate_bottom": 0.018,
+        "plate_thickness": 0.0015,
+        "pcb2": 0.026,
+        "pcb1": 0.035,
+        "pcb_thickness": 0.0016,
+        "wall": 0.0015
+      },
+      "source": "sam_gg1320an, estimated: the block hangs under the mounting plate from the dither hub (three screws at the plate's centre, interior_after_separating_case1.jpg), the two boards sit in the top half (pcb1_pcb2_in_situ1.jpg); heights chosen to fit the 45 mm case"
+    },
+    "connector": {
+      "value": {
+        "type": "25-pin micro-D",
+        "shell": [
+          0.025,
+          0.008,
+          0.006
+        ]
+      },
+      "source": "honeywell_gg1320an, p.1: \"RS-422, 25 pin micro \\\"D\\\"\"; place and size estimated from sam_gg1320an top_view_of_complete_rlg1.jpg"
+    },
+    "performance": {
+      "value": {
+        "pulses_per_rev": 1164352,
+        "bias_deg_per_hr": 0.0035,
+        "rate_max_deg_per_s": 900,
+        "mass_kg": 0.454
+      },
+      "source": "honeywell_gg1320an, p.1",
+      "quote": "1,164,352 ±18 pulses/rev. ... 0.0035 deg/hr (typical) ... 900 deg/ sec (maximum ) ... 1 lb. (454 grams)"
+    }
+  },
+  "materials": {
+    "case_black": {
+      "hex": "#1e212e",
+      "metallic": 0.2,
+      "roughness": 0.3,
+      "source": "sam_gg1320an, top_view_of_complete_rlg1.jpg, the case side"
+    },
+    "mid_plate_black": {
+      "hex": "#232327",
+      "metallic": 0.3,
+      "roughness": 0.5,
+      "source": "sam_gg1320an, laser_block_top_on_plate1.jpg, three spots on the plate"
+    },
+    "pcb_green": {
+      "hex": "#357d64",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "sam_gg1320an, interior_after_separating_case1.jpg, the board"
+    },
+    "cathode_steel": {
+      "hex": "#34383d",
+      "metallic": 1.0,
+      "roughness": 0.15,
+      "source": "sam_gg1320an, cathode_end_of_assembly_closeup1.jpg, the dome (polished)"
+    },
+    "anode_cover_red": {
+      "hex": "#8b3947",
+      "metallic": 0.0,
+      "roughness": 0.4,
+      "source": "sam_gg1320an, laser_block_top_on_plate1.jpg, anode 2's cover"
+    },
+    "connector_white": {
+      "hex": "#e5e1d6",
+      "metallic": 0.0,
+      "roughness": 0.6,
+      "source": "sam_gg1320an, laser_block_with_major_parts_labeled1.jpg, the connector bars"
+    },
+    "pzt_ceramic": {
+      "hex": "#b4b5ad",
+      "metallic": 0.0,
+      "roughness": 0.7,
+      "source": "sam_gg1320an, mirrorpzt_assembly1_closeup1.jpg, the PZT disc"
+    },
+    "dither_wheel": {
+      "hex": "#6b6662",
+      "metallic": 0.6,
+      "roughness": 0.5,
+      "source": "sam_gg1320an, laser_block_top_on_plate1.jpg, the dither motor"
+    },
+    "block_glass": {
+      "hex": "#dfe8ea",
+      "metallic": 0.0,
+      "roughness": 0.05,
+      "source": "sam_gg1320an: the block is water-clear in every photo; tint and opacity chosen by eye"
+    },
+    "laser_beam": {
+      "hex": "#ff2a1a",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "sam_gg1320an, laser_block_with_major_parts_labeled1.jpg: the red intracavity beam drawn on the photo (He-Ne, red); the shade is the drawing's"
+    }
+  },
+  "open_questions": [
+    "Heights inside the case (block, plate, boards) are estimates: no photo shows the stack from the side.",
+    "Block thickness (12 mm) is estimated from a close-up with perspective; the block's glass type isn't stated anywhere found.",
+    "The aluminium housing's finish has no clean spot in the photos; the shared foil_silver stands in.",
+    "Mirror and detector lengths, connector bar height and the connector's place are estimated.",
+    "The case outline and label are simplified; Sam's photos could be traced once David has permission."
+  ],
+  "budget": {
+    "triangles": 50000,
+    "glb_bytes": 1500000
+  }
+}
