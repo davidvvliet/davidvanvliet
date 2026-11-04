@@ -85,21 +85,22 @@ def die_rect(d, r):
 
 
 def cmos(d, f, z):
-    """The CMOS chip on the exposed pad: the die with ZeptoBars' photo of its face on top
-    (the electrodes under the sensors and the logic show in it; spec facts.cmos_photo), and
-    the bond pads in strips along its two Y edges."""
+    """The CMOS chip on the exposed pad: the die, ZeptoBars' photo of its face where the MEMS
+    die covers it (the electrodes and logic show in it; spec facts.cmos_photo), and the bond
+    pads in the clean strips along its two Y edges."""
     E = f["electrodes"]["value"]
     B = f["bond_wires"]["value"]
     X, Y = d["cmos_die_x"], d["cmos_die_y"]
     with parts.assembly("cmos_die", internal=True):
-        parts.box("cmos_die", (X, Y, z["cmos_top"] - z["cmos_bottom"] - E["thickness"]),
-                  location=(0, 0, (z["cmos_bottom"] + z["cmos_top"] - E["thickness"]) / 2),
-                  material="cmos_surface")
-        # The photo looks down on the face as the model does: its top is +Y, its left -X.
+        parts.box("cmos_die", (X, Y, z["cmos_top"] - z["cmos_bottom"]),
+                  location=(0, 0, (z["cmos_bottom"] + z["cmos_top"]) / 2), material="cmos_surface")
+        # The photo looks down on the face as the model does: its top is +Y, its left -X. Only
+        # the part under the MEMS die: outside it the photo shows residue from separating the
+        # dies, so the pad strips keep the die's clean surface.
         photo = bpy.data.images.load(os.path.join(HARNESS, "refs", "mpu6050", "die", "cmos.jpg"),
                                      check_existing=False)
-        parts.outline_plate("cmos_face", [(0, 0), (1, 0), (1, 1), (0, 1)], X, Y, E["thickness"],
-                            location=(0, 0, z["cmos_top"] - E["thickness"]), direction=(0, 0, 1),
+        parts.outline_plate("cmos_face", [(0, 0), (1, 0), (1, 1), (0, 1)], X, d["mems_die_y"], E["thickness"],
+                            location=(0, 0, z["cmos_top"]), direction=(0, 0, 1),
                             up=(0, 1, 0), material=materials.image("cmos_photo", photo, metallic=0.3,
                                                                    roughness=0.4))
     pads = {}
