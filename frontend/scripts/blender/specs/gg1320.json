@@ -174,12 +174,12 @@
         "block_bottom": 0.006,
         "plate_bottom": 0.018,
         "plate_thickness": 0.0015,
-        "pcb2": 0.026,
-        "pcb1": 0.035,
+        "pcb2": 0.035,
+        "pcb1": 0.026,
         "pcb_thickness": 0.0016,
         "wall": 0.0015
       },
-      "source": "sam_gg1320an, estimated: the block hangs under the mounting plate from the dither hub (three screws at the plate's centre, interior_after_separating_case1.jpg), the two boards sit in the top half (pcb1_pcb2_in_situ1.jpg); heights chosen to fit the 45 mm case"
+      "source": "sam_gg1320an, estimated: the block hangs under the mounting plate from the dither hub (three screws at the plate's centre, interior_after_separating_case1.jpg), the two boards sit in the top half (pcb1_pcb2_in_situ1.jpg; pcb1 the hexagonal board, lower, pcb2 the D-shaped one, above it); heights chosen to fit the 45 mm case"
     },
     "connector": {
       "value": {
@@ -341,216 +341,606 @@
     },
     "pcb_parts": {
       "value": {
-        "pcb2": {
-          "side": 1,
-          "outline": {
-            "radius": 0.037,
-            "flats": [
-              0,
-              60,
-              120,
-              180,
-              240,
-              300
-            ],
-            "flat": 0.0355
-          },
-          "parts": [
-            [
-              "plcc84",
+        "boards": "refs/gg1320/boards.json",
+        "faces": {
+          "pcb1": {
+            "top": [
               [
-                0.025,
-                0.025,
+                "plcc68",
+                [
+                  430,
+                  410,
+                  695,
+                  682
+                ],
                 0.0038
               ],
               [
-                -0.0036,
-                0.0108
-              ],
-              "ic_black"
-            ],
-            [
-              "qfp100",
-              [
-                0.017,
-                0.021,
+                "qfp100",
+                [
+                  220,
+                  482,
+                  366,
+                  700
+                ],
                 0.0027
               ],
               [
-                0.0206,
-                0.0079
-              ],
-              "ic_black"
-            ],
-            [
-              "header",
-              [
-                0.026,
-                0.005,
-                0.004
+                "socket",
+                [
+                  403,
+                  325,
+                  712,
+                  368
+                ],
+                0.0034
               ],
               [
-                -0.0068,
-                -0.0056
-              ],
-              "header_black"
-            ],
-            [
-              "soic_1",
-              [
-                0.004,
-                0.004,
+                "soic_1",
+                [
+                  312,
+                  342,
+                  362,
+                  395
+                ],
                 0.0015
               ],
               [
-                -0.0278,
-                0.0183
-              ],
-              "ic_black"
-            ],
-            [
-              "soic_2",
-              [
-                0.004,
-                0.003,
+                "soic_2",
+                [
+                  312,
+                  405,
+                  362,
+                  455
+                ],
                 0.0015
               ],
               [
-                0.03,
+                "soic_3",
+                [
+                  198,
+                  405,
+                  246,
+                  458
+                ],
+                0.0015
+              ],
+              [
+                "soic_4",
+                [
+                  138,
+                  515,
+                  190,
+                  578
+                ],
+                0.0015
+              ],
+              [
+                "soic_5",
+                [
+                  833,
+                  538,
+                  886,
+                  585
+                ],
+                0.0015
+              ],
+              [
+                "msop_1",
+                [
+                  757,
+                  293,
+                  792,
+                  340
+                ],
+                0.001
+              ],
+              [
+                "tantalum_1",
+                [
+                  795,
+                  656,
+                  880,
+                  690
+                ],
+                0.0025
+              ],
+              [
+                "tantalum_2",
+                [
+                  322,
+                  318,
+                  360,
+                  338
+                ],
                 0.0016
               ],
-              "ic_black"
+              [
+                "tantalum_3",
+                [
+                  590,
+                  248,
+                  630,
+                  268
+                ],
+                0.0016
+              ],
+              [
+                "tantalum_4",
+                [
+                  590,
+                  272,
+                  630,
+                  292
+                ],
+                0.0016
+              ],
+              [
+                "tantalum_5",
+                [
+                  410,
+                  100,
+                  432,
+                  138
+                ],
+                0.0016
+              ],
+              [
+                "tantalum_6",
+                [
+                  485,
+                  80,
+                  510,
+                  118
+                ],
+                0.0016
+              ],
+              [
+                "tantalum_7",
+                [
+                  560,
+                  95,
+                  585,
+                  128
+                ],
+                0.0016
+              ],
+              [
+                "tantalum_8",
+                [
+                  625,
+                  128,
+                  668,
+                  148
+                ],
+                0.0016
+              ],
+              [
+                "can_cap",
+                [
+                  725,
+                  222,
+                  792,
+                  258
+                ],
+                0.0018
+              ]
             ],
-            [
-              "soic_3",
+            "bottom": [
               [
-                0.005,
-                0.004,
-                0.0015
-              ],
-              [
-                0.0127,
-                -0.0087
-              ],
-              "ic_black"
-            ],
-            [
-              "soic_4",
-              [
-                0.004,
-                0.003,
-                0.0015
-              ],
-              [
-                0.0238,
-                -0.0071
-              ],
-              "ic_black"
-            ],
-            [
-              "soic_5",
-              [
-                0.004,
-                0.003,
-                0.0015
-              ],
-              [
-                -0.026,
-                -0.011
-              ],
-              "ic_black"
-            ]
-          ]
-        },
-        "pcb1": {
-          "side": -1,
-          "outline": {
-            "radius": 0.032,
-            "flats": [
-              270
-            ],
-            "flat": 0.024
-          },
-          "parts": [
-            [
-              "hybrid",
-              [
-                0.013,
-                0.011,
+                "strip_1",
+                {
+                  "line": [
+                    140,
+                    455,
+                    300,
+                    188
+                  ],
+                  "width": 32
+                },
                 0.003
               ],
               [
-                0.0052,
-                0.0181
+                "strip_2",
+                {
+                  "line": [
+                    890,
+                    470,
+                    725,
+                    195
+                  ],
+                  "width": 32
+                },
+                0.003
               ],
-              "hybrid_beige"
-            ],
-            [
-              "header",
               [
-                0.027,
-                0.006,
-                0.004
-              ],
-              [
-                -0.0034,
-                0.0078
-              ],
-              "header_black"
-            ],
-            [
-              "dpak",
-              [
-                0.006,
-                0.006,
+                "crystal",
+                [
+                  372,
+                  768,
+                  452,
+                  830
+                ],
                 0.002
               ],
               [
-                -0.0086,
-                0.0181
+                "an3_1",
+                [
+                  672,
+                  768,
+                  735,
+                  792
+                ],
+                0.0012
               ],
-              "ic_black"
-            ],
-            [
-              "inductor",
               [
-                0.006,
-                0.007,
+                "an3_2",
+                [
+                  755,
+                  768,
+                  815,
+                  792
+                ],
+                0.0012
+              ],
+              [
+                "resistor_1",
+                [
+                  342,
+                  655,
+                  368,
+                  722
+                ],
+                0.0015
+              ],
+              [
+                "resistor_2",
+                [
+                  379,
+                  655,
+                  405,
+                  722
+                ],
+                0.0015
+              ],
+              [
+                "resistor_3",
+                [
+                  416,
+                  655,
+                  442,
+                  722
+                ],
+                0.0015
+              ],
+              [
+                "resistor_4",
+                [
+                  453,
+                  655,
+                  479,
+                  722
+                ],
+                0.0015
+              ],
+              [
+                "resistor_5",
+                [
+                  490,
+                  655,
+                  516,
+                  722
+                ],
+                0.0015
+              ],
+              [
+                "resistor_6",
+                [
+                  527,
+                  655,
+                  553,
+                  722
+                ],
+                0.0015
+              ],
+              [
+                "resistor_7",
+                [
+                  564,
+                  655,
+                  590,
+                  722
+                ],
+                0.0015
+              ],
+              [
+                "resistor_8",
+                [
+                  601,
+                  655,
+                  627,
+                  722
+                ],
+                0.0015
+              ]
+            ]
+          },
+          "pcb2": {
+            "bottom": [
+              [
+                "hybrid",
+                [
+                  468,
+                  118,
+                  652,
+                  290
+                ],
                 0.003
               ],
               [
-                -0.0224,
-                0.0043
+                "dpak",
+                [
+                  333,
+                  142,
+                  422,
+                  255
+                ],
+                0.0023
               ],
-              "ic_black"
-            ],
-            [
-              "soic_1",
               [
-                0.005,
-                0.004,
+                "header",
+                [
+                  268,
+                  298,
+                  640,
+                  395
+                ],
+                0.004
+              ],
+              [
+                "inductor",
+                [
+                  160,
+                  357,
+                  248,
+                  442
+                ],
+                0.003
+              ],
+              [
+                "tantalum_1",
+                [
+                  222,
+                  246,
+                  320,
+                  288
+                ],
+                0.0025
+              ],
+              [
+                "tantalum_2",
+                [
+                  150,
+                  300,
+                  245,
+                  345
+                ],
+                0.0025
+              ],
+              [
+                "tantalum_3",
+                [
+                  150,
+                  455,
+                  240,
+                  500
+                ],
+                0.0025
+              ],
+              [
+                "tantalum_4",
+                [
+                  868,
+                  577,
+                  914,
+                  662
+                ],
+                0.0025
+              ],
+              [
+                "tantalum_5",
+                [
+                  160,
+                  668,
+                  205,
+                  690
+                ],
+                0.0016
+              ],
+              [
+                "ceramic_1",
+                [
+                  757,
+                  258,
+                  833,
+                  302
+                ],
+                0.0016
+              ],
+              [
+                "ceramic_2",
+                [
+                  655,
+                  312,
+                  730,
+                  340
+                ],
+                0.0016
+              ],
+              [
+                "ceramic_3",
+                [
+                  802,
+                  315,
+                  880,
+                  358
+                ],
+                0.0016
+              ],
+              [
+                "ceramic_4",
+                [
+                  815,
+                  370,
+                  890,
+                  395
+                ],
+                0.0016
+              ],
+              [
+                "ceramic_5",
+                [
+                  746,
+                  352,
+                  792,
+                  412
+                ],
+                0.0022
+              ],
+              [
+                "ceramic_6",
+                [
+                  805,
+                  505,
+                  880,
+                  550
+                ],
+                0.0016
+              ],
+              [
+                "ceramic_7",
+                [
+                  635,
+                  415,
+                  662,
+                  495
+                ],
+                0.0016
+              ],
+              [
+                "soic_1",
+                [
+                  157,
+                  540,
+                  220,
+                  605
+                ],
                 0.0015
               ],
               [
-                0.012,
-                -0.0147
-              ],
-              "ic_black"
-            ],
-            [
-              "soic_2",
-              [
-                0.005,
-                0.004,
+                "soic_2",
+                [
+                  633,
+                  628,
+                  694,
+                  700
+                ],
                 0.0015
               ],
               [
-                0.023,
-                -0.0138
+                "soic_3",
+                [
+                  706,
+                  612,
+                  768,
+                  680
+                ],
+                0.0015
               ],
-              "ic_black"
+              [
+                "soic_4",
+                [
+                  800,
+                  598,
+                  862,
+                  660
+                ],
+                0.0015
+              ]
+            ],
+            "top": [
+              [
+                "msop_1",
+                [
+                  237,
+                  240,
+                  278,
+                  295
+                ],
+                0.001
+              ],
+              [
+                "msop_2",
+                [
+                  208,
+                  445,
+                  247,
+                  492
+                ],
+                0.001
+              ],
+              [
+                "msop_3",
+                [
+                  462,
+                  525,
+                  512,
+                  575
+                ],
+                0.001
+              ],
+              [
+                "msop_4",
+                [
+                  677,
+                  620,
+                  720,
+                  670
+                ],
+                0.001
+              ],
+              [
+                "msop_5",
+                [
+                  540,
+                  690,
+                  590,
+                  735
+                ],
+                0.001
+              ],
+              [
+                "msop_6",
+                [
+                  440,
+                  668,
+                  495,
+                  715
+                ],
+                0.001
+              ],
+              [
+                "msop_7",
+                [
+                  818,
+                  555,
+                  860,
+                  610
+                ],
+                0.001
+              ]
             ]
-          ]
+          }
         },
         "flex": {
           "width": 0.018,
@@ -558,20 +948,25 @@
         },
         "leads": {
           "chips": [
-            "plcc84",
             "qfp100"
           ],
           "reach": 0.00075,
           "height": 0.0006
         }
       },
-      "source": "sam_gg1320an, pcb1_pcb2_in_situ1.jpg: the two boards side by side (pcb2 about 6.3 px/mm, pcb1 about 5.8 px/mm, scaled by their 74 mm and 64 mm widths, estimated): pcb2 with an 84-lead PLCC, a 100-lead QFP and a header; pcb1 D-shaped with a hybrid module (\"PRECISION INC\"), a header and small parts; joined by an orange flex cable. Which way each board faces, and how they turn against the block, is estimated; the two large chips' lead rows stand 0.75 mm out from their bodies (estimated)"
+      "source": "sam_gg1320an, the four board close-ups (pcb1_bottom_closeup1.jpg and pcb1_top_closeup1.jpg: the hexagonal board's two sides; pcb2_top_closeup1.jpg and pcb2_bottom_closeup1.jpg: the D-shaped board's), each resampled into the model's frame by refs/gg1320/boards-make.py and used as the board's texture; the outlines are read from the photos there. Scale: the hexagonal board 79 mm across (it fills the housing in pcb1_top_closeup1.jpg), the D-shaped one 66 mm (0.78 of the can in pcb1_pcb2_in_situ1.jpg). Which way they face: the hexagonal board's connector strips mate with the plate's bars below it, its chip side faces up to the D-shaped board, whose hybrid side faces down (the two headers meet); both flex edges towards the connector (-y). Parts listed here stand up from their sides as blocks, by their outlines in those photos (pixels) and heights estimated; the smaller parts are in the photos only"
     },
     "wires": {
       "value": {
-        "radius": 0.00035
+        "radius": 0.0003,
+        "pitch": 0.004,
+        "ties": [
+          0.7,
+          -0.7
+        ],
+        "tie": 0.0002
       },
-      "source": "sam_gg1320an, laser_block_bottom_view1.jpg: red, white and black wires from the connector bars to the anodes, mirrors and detector; routes simplified"
+      "source": "sam_gg1320an, laser_block_bottom_view1.jpg and laser_block_top_on_plate1.jpg (ruler: 1 in = 257 px): the wires run as twisted triplets (red, white, black), laid along each connector bar's inner top edge and held by two black ties round the bar near its ends, then out to the anodes, mirrors and detector; wire size, twist pitch and tie positions estimated, routes simplified"
     },
     "case_shape": {
       "value": {
@@ -877,11 +1272,11 @@
     "Heights inside the case (block, plate, boards) are estimates: no photo shows the stack from the side.",
     "Block thickness (12 mm) is estimated from a close-up with perspective; the block's glass type isn't stated anywhere found.",
     "The corner wells (wide bores at each corner) aren't labelled in any photo found: purpose unknown.",
-    "Board parts are placed from one oblique photo; which way the boards face and turn against the block is estimated.",
     "Wire routes are simplified.",
     "The top cover's window depth, the can's top height and the connector's rise above it are estimated.",
     "The mounting notches' spacing (120°), V depth and height are estimated from oblique photos.",
-    "The case outline is simplified."
+    "The case outline is simplified.",
+    "The boards' scales (79 and 66 mm across) are estimated from the can around them; part heights are estimated."
   ],
   "budget": {
     "triangles": 50000,

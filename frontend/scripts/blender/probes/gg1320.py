@@ -1,5 +1,6 @@
 # Honeywell GG1320AN ring laser gyro. Built from lib/parts in metres; every number comes from
 # specs/gg1320.json (with its source) or is marked here as estimated.
+import json
 import math
 import os
 
@@ -8,6 +9,8 @@ import bpy
 from mathutils import Matrix, Vector
 
 from lib import materials, parts
+
+HERE = os.path.dirname(os.path.abspath(__file__))
 
 # Corner and face directions of the block, in degrees from +X (sam_gg1320an's labelled photo:
 # mirror 2 at the top, mirrors 1 and 3 bottom left and right; cathode on the bottom face,
@@ -278,7 +281,7 @@ def case(d, f, spec):
         # screw, 65 mm across, darkened to the label's grey in the overall photos).
         lab = holed_plate("label", _polyline_arc(lr, a_lab, 180.0 - a_lab), [], h - cv["top_thickness"],
                           cv["top_thickness"] + 0.00005, "case_label")
-        img = bpy.data.images.load(os.path.join(os.path.dirname(__file__), "..", "refs", "gg1320", "label.jpg"))
+        img = bpy.data.images.load(os.path.join(HERE, "..", "refs", "gg1320", "label.jpg"))
         lab.data.materials[0] = materials.image("case_label_printed", img, metallic=0.0,
                                                 roughness=spec["materials"]["case_label"]["roughness"])
         uv = lab.data.uv_layers.new(name="UVMap")
@@ -298,6 +301,24 @@ def case(d, f, spec):
         parts.cylinder("bottom_screw", sr, 0.00032, location=(0, 0, 0.0003), direction=(0, 0, -1), segments=24,
                        material="connector_steel")
     connector(f, can)
+
+
+def _from_photo(view):
+    """Photo pixels to the model's x, y for one board side (refs/gg1320/boards.json)."""
+    cx, cy = view["centre_px"]
+    k = view["px_per_mm"] * 1000.0
+    s = -1.0 if view["below"] else 1.0
+    return lambda px, py: Vector((s * (px - cx) / k, -(py - cy) / k, 0.0))
+
+
+def _plan_uv(obj, half):
+    """UVs straight down from above over the square 2 * half wide on the axis (the board
+    textures' frame)."""
+    uv = obj.data.uv_layers.new(name="UVMap")
+    m = obj.matrix_world
+    for loop in obj.data.loops:
+        co = m @ obj.data.vertices[loop.vertex_index].co
+        uv.data[loop.index].uv = (0.5 + co.x / (2 * half), 0.5 + co.y / (2 * half))
 
 
 # --- Plate, housing and boards ----------------------------------------------------------
@@ -325,26 +346,55 @@ def stack(f):
         parts.lathe("housing", _ring(ro - w, ro, top, hs["top"]), closed=True, segments=96,
                     material="aluminium")
     bp = f["pcb_parts"]["value"]
-    for key in ("pcb2", "pcb1"):
-        b = bp[key]
+    info = json.load(open(os.path.join(HERE, "..", bp["boards"])))
+    H = info["half"]
+    t = st["pcb_thickness"]
+    for key in ("pcb1", "pcb2"):
         z0 = st[key]
-        t = st["pcb_thickness"]
+        views = {v["side"]: v for v in info["boards"][key]}
+        mats = {}
+        for side in ("top", "bottom"):
+            img = bpy.data.images.load(os.path.join(HERE, "..", "refs", "gg1320", f"{key}-{side}.jpg"))
+            mats[side] = materials.image(f"{key}_{side}_photo", img, metallic=0.0, roughness=0.5)
         with parts.assembly(key, internal=True):
-            o = b["outline"]
-            holed_plate(key, _clipped(o["radius"], {a: o["flat"] for a in o["flats"]}), [], z0, t, "pcb_green")
-            for name, (sx, sy, sz), (x, y), mat in b["parts"]:
-                zc = z0 + t + sz / 2 if b["side"] > 0 else z0 - sz / 2
-                parts.box(f"{key}_{name}", (sx, sy, sz), location=(x, y, zc), material=mat)
-                if name in bp["leads"]["chips"]:
-                    # The lead rows round the body (tinned, foil_silver stands in).
-                    lr, lh = bp["leads"]["reach"], bp["leads"]["height"]
-                    lz = z0 + t + lh / 2 if b["side"] > 0 else z0 - lh / 2
-                    parts.box(f"{key}_{name}_leads", (sx + 2 * lr, sy + 2 * lr, lh), location=(x, y, lz),
-                              material="foil_silver")
+            # The board, its two sides printed with their photos (refs/gg1320/boards-make.py).
+            outline = [Vector((x, y, 0.0)) for x, y in info["outlines"][key]]
+            board = holed_plate(key, outline, [], z0, t, "pcb_green")
+            board.data.materials.append(mats["top"])
+            board.data.materials.append(mats["bottom"])
+            for poly in board.data.polygons:
+                poly.material_index = 1 if poly.normal.z > 0.9 else 2 if poly.normal.z < -0.9 else 0
+            _plan_uv(board, H)
+            # The taller parts stand up as blocks, the photo on them (facts.pcb_parts).
+            for side, items in bp["faces"][key].items():
+                v = views[side]
+                to_m = _from_photo(v)
+                sgn = 1 if side == "top" else -1
+                base = z0 + t if side == "top" else z0
+                for name, where, hgt in items:
+                    zc = base + sgn * hgt / 2
+                    if isinstance(where, dict):
+                        x0, y0, x1, y1 = where["line"]
+                        a, b = to_m(x0, y0), to_m(x1, y1)
+                        c, d = (a + b) / 2, b - a
+                        w = where["width"] / v["px_per_mm"] / 1000.0
+                        obj = parts.box(f"{key}_{name}", (d.length, w, hgt), location=(c.x, c.y, zc),
+                                        roll_deg=math.degrees(math.atan2(d.y, d.x)), material=mats[side])
+                    else:
+                        a, b = to_m(where[0], where[1]), to_m(where[2], where[3])
+                        c = (a + b) / 2
+                        obj = parts.box(f"{key}_{name}", (abs(b.x - a.x), abs(b.y - a.y), hgt), location=(c.x, c.y, zc),
+                                        material=mats[side])
+                    _plan_uv(obj, H)
+                    if name in bp["leads"]["chips"]:
+                        # The lead rows round the body (tinned, foil_silver stands in).
+                        lr, lh = bp["leads"]["reach"], bp["leads"]["height"]
+                        parts.box(f"{key}_{name}_leads", (abs(b.x - a.x) + 2 * lr, abs(b.y - a.y) + 2 * lr, lh),
+                                  location=(c.x, c.y, base + sgn * lh / 2), material="foil_silver")
     fl = bp["flex"]
     with parts.assembly("flex_cable", internal=True):
-        z0 = st["pcb2"] + st["pcb_thickness"]
-        parts.box("flex_cable", (fl["width"], 0.0002, st["pcb1"] - z0), location=(0, fl["y"], (z0 + st["pcb1"]) / 2),
+        z0 = st["pcb1"] + st["pcb_thickness"]
+        parts.box("flex_cable", (fl["width"], 0.0002, st["pcb2"] - z0), location=(0, fl["y"], (z0 + st["pcb2"]) / 2),
                   material="kapton")
 
 
@@ -619,15 +669,34 @@ def extras(f, zc, ends, tips):
             bars[key] = (c, c + t, c - t)  # middle, then the ends nearer +t and -t
             parts.box(key, (cb["width"], cb["length"], cb["height"]), location=c, roll_deg=ang,
                       material="connector_white")
-    # Wires from the bars to the parts they feed: a red and a white strand each, routed
-    # simplified (facts.wires).
-    rw = f["wires"]["value"]["radius"]
+    # Wires from the bars to the parts they feed: a twisted triplet each (red, white, black),
+    # along the bar's inner top edge, tied to it with black loops, then out to their parts
+    # (facts.wires; routes simplified).
+    wv = f["wires"]["value"]
+    rw = wv["radius"]
+    trio = ("wire_red", "wire_white", "black")
     runs = [("bc1", 0, "anode_2"), ("bc1", 1, "mirror_1"), ("bc1", 2, "mirror_2"),
             ("bc2", 0, "anode_1"), ("bc2", 1, "mirror_2"), ("bc2", 2, "mirror_3"), ("bc2", 2, "cathode")]
     targets = {**ends, **tips}
     with parts.assembly("wiring", internal=True):
+        for key, ang in (("bc1", 150.0), ("bc2", 30.0)):
+            c, e1, e2 = bars[key]
+            u = _dir(ang)
+            # The bundle along the bar and the ties round both.
+            edge = -u * (cb["width"] / 2 - rw * 2) + Vector((0, 0, cb["height"] / 2 + rw * 2.2))
+            _twisted(f"{key}_bundle", [e1 + edge, e2 + edge], rw, 0.0, wv["pitch"], trio)
+            t = (e1 - e2).normalized()
+            for j, frac in enumerate(wv["ties"]):
+                p = c + t * (cb["length"] / 2 * frac)
+                # A tight loop round the bar and the bundle on it.
+                n = Vector((0, 0, 1))
+                w = t.cross(n)
+                hw, hz = cb["width"] / 2 + wv["tie"], cb["height"] / 2 + rw * 4.5
+                loop = [p + w * x + n * z for x, z in ((hw, 0), (hw, hz), (-hw, hz), (-hw, -cb["height"] / 2 - wv["tie"]),
+                                                     (hw, -cb["height"] / 2 - wv["tie"]), (hw, 0.0001))]
+                parts.tube(f"{key}_tie_{j + 1}", loop, wv["tie"], segments=6, bend_radius=0.0008, material="black")
         for i, (bar, end, target) in enumerate(runs):
-            a = bars[bar][end]
+            a = bars[bar][end] + (-_dir(150.0 if bar == "bc1" else 30.0) * (cb["width"] / 2 - rw * 2))
             b = targets[target]
             if target in ends:
                 # Join a mirror at its rim on the bar's side, not across its face.
@@ -640,11 +709,36 @@ def extras(f, zc, ends, tips):
             mid = (mid.to_2d().normalized() * max(mid.to_2d().length, 0.031)).to_3d()
             if target == "cathode":
                 mid = _dir(300) * 0.033
-            for k, (dz, mat) in enumerate(((0.0004, "wire_red"), (-0.0004, "wire_white"))):
-                lift = Vector((0, 0, zc + 0.0025 + dz))
-                pts = [a + Vector((0, 0, cb["height"] / 2 + dz + 0.0004)), mid + lift, out + lift,
-                       b + Vector((0, 0, dz))]
-                parts.tube(f"wire_{i + 1}{'ab'[k]}", pts, rw, segments=6, bend_radius=0.002, material=mat)
+            lift = Vector((0, 0, zc + 0.0025))
+            pts = [a + Vector((0, 0, cb["height"] / 2 + rw * 2.2)), mid + lift, out + lift, b]
+            _twisted(f"wire_{i + 1}", pts, rw, 0.002, wv["pitch"], trio)
+
+def _twisted(name, points, r, bend, pitch, mats):
+    """Wires twisted together along a path (as in the photos: red, white and black)."""
+    from lib.parts_shapes import _round_corners
+    path = _round_corners([Vector(p) for p in points], bend, 6)
+    dense = []
+    for a, b in zip(path, path[1:]):
+        n = max(1, int((b - a).length / 0.0004))
+        dense += [a.lerp(b, i / n) for i in range(n)]
+    dense.append(path[-1])
+    s, prev, ref = 0.0, dense[0], Vector((0, 0, 1))
+    strands = [[] for _ in mats]
+    for i, p in enumerate(dense):
+        t = (dense[min(i + 1, len(dense) - 1)] - dense[max(i - 1, 0)]).normalized()
+        s += (p - prev).length
+        prev = p
+        n = (ref - t * ref.dot(t))
+        if n.length < 1e-6:
+            n = Vector((1, 0, 0)) - t * t.x
+        n.normalize()
+        ref = n
+        b = t.cross(n)
+        for k in range(len(mats)):
+            th = 2 * math.pi * (s / pitch + k / len(mats))
+            strands[k].append(p + (n * math.cos(th) + b * math.sin(th)) * r * 1.15)
+    for k, mat in enumerate(mats):
+        parts.tube(f"{name}_{k + 1}", strands[k], r, segments=6, material=mat)
 
 
 def build(spec):

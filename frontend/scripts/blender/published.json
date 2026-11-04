@@ -114,10 +114,10 @@
   }
  },
  "gg1320": {
-  "approved": "2026-11-04 14:44",
+  "approved": "2026-11-04 16:39",
   "inputs": {
-   "specs/gg1320.json": "fca58c691b0e5264",
-   "probes/gg1320.py": "45028994bddefefc",
+   "specs/gg1320.json": "8e0a712c185e1ec0",
+   "probes/gg1320.py": "c9a55a68878f98cf",
    "build.py": "363cabc8976febf0",
    "blender.json": "7bbc071b6e396ec4",
    "lib/__init__.py": "e3b0c44298fc1c14",
@@ -136,6 +136,8 @@
    "lib/sources.py": "425a2fcd692532e6",
    "lib/textures.py": "7daa18205cf41859",
    "lib/tiling.py": "b352f8627c102bf0",
+   "refs/gg1320/boards-make.py": "20261fc6c53f8884",
+   "refs/gg1320/boards.json": "80bb5911f13afd9d",
    "refs/gg1320/label-make.py": "fe84a637fb6fde99",
    "refs/gg1320/label.jpg": "d139aeb084699e9c"
   }
