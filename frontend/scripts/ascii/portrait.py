@@ -1,15 +1,16 @@
 """Portrait photo -> plain ASCII text for a dark page (bright = dense glyph).
 
-usage: python3 -I portrait.py IMAGE FONT.ttf OUT.txt COLS CROP [MIX] [GAMMA] [LEVELS] [BLACK]
+usage: python3 -I portrait.py IMAGE FONT.ttf OUT.txt COLS CROP [MIX] [GAMMA] [LEVELS] [BLACK] [FLOOD]
   CROP  = x0,y0,x1,y1 as fractions of the image
   MIX   = local-contrast strength (0xSero/ascii-art's photo_dots.py idea), default 0.6
   GAMMA = <1 lifts darks, >1 deepens them, default 1.0
   LEVELS= how many characters in the ramp, default 14
   BLACK = percentile of the photo that becomes blank (the background), default 2
+  FLOOD = faint cells joined to the edge below this level are cleared as background, default 0 (off)
 
 The thinkers page (app/thinkers) was made with Roboto Mono (google/fonts, ofl/robotomono) and:
-  portrait.py newton.jpeg RobotoMono.ttf newton.txt 80 0.26,0.08,0.74,0.4 0.4 1.1 14 25
-  portrait.py darwin.jpeg RobotoMono.ttf darwin.txt 80 0.1,0.08,0.9,0.7 0.3 1.3 14 30
+  portrait.py newton.jpeg RobotoMono.ttf newton.txt 80 0.26,0.08,0.74,0.45 0.4 1.1 14 25 0.17
+  portrait.py darwin.jpeg RobotoMono.ttf darwin.txt 80 0.1,0.08,0.9,0.7 0.3 1.3 14 30 0.17
 """
 import sys
 import numpy as np
@@ -57,6 +58,22 @@ rows = round(cols * (im.height / im.width) * (cw / ch))
 small = Image.fromarray((a * 255).astype(np.uint8)).resize((cols, rows), Image.BOX)
 v = np.asarray(small).astype(float) / 255
 v[v < 0.07] = 0  # faint specks in the background read as noise
+
+# FLOOD: blank every faint cell (below FLOOD) joined to the picture's edge through faint cells:
+# that is the background. Faint shading inside the figure is enclosed by it and stays.
+flood = float(sys.argv[10]) if len(sys.argv) > 10 else 0
+if flood:
+    faint = v < flood
+    seen = np.zeros_like(faint)
+    stack = [(r, c) for r in range(v.shape[0]) for c in (0, v.shape[1] - 1)] + \
+            [(r, c) for c in range(v.shape[1]) for r in (0, v.shape[0] - 1)]
+    while stack:
+        r, c = stack.pop()
+        if not (0 <= r < v.shape[0] and 0 <= c < v.shape[1]) or seen[r, c] or not faint[r, c]:
+            continue
+        seen[r, c] = True
+        stack += [(r + 1, c), (r - 1, c), (r, c + 1), (r, c - 1)]
+    v[seen] = 0
 
 lines = []
 for r in v:
