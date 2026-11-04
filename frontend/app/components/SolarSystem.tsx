@@ -49,6 +49,8 @@ interface SolarSystemProps {
 export type SceneHandles = {
   scene: THREE.Scene; camera: THREE.PerspectiveCamera; renderer: THREE.WebGLRenderer; controls: OrbitControls;
   sun: THREE.Mesh; earthSystem: THREE.Group; moon: THREE.Mesh; moonFrame: THREE.Group; ambient: THREE.AmbientLight;
+  /** The Sun's light on the planets and moons (a scene with its own sunlight turns it off). */
+  sunLight: THREE.PointLight;
   /** Earth's globe: tilted and turned by sidereal time; longitude 0 on its local -x. */
   globe: THREE.Group; earthRadius: number;
   unitsPerKm: number; moonRadius: number;
@@ -370,7 +372,7 @@ export function SolarSystem({
   const starFieldRef = useRef<THREE.Group | null>(null);
   const handledFocusSeqRef = useRef<number>(0);
   const isPointerDownRef = useRef<boolean>(false);
-  const moonMaterialRef = useRef<THREE.MeshBasicMaterial | null>(null);
+  const moonMaterialRef = useRef<THREE.MeshLambertMaterial | null>(null);
   const sunMaterialRef = useRef<THREE.ShaderMaterial | null>(null);
   const sunGlowMaterialRef = useRef<THREE.SpriteMaterial | null>(null);
 
@@ -466,7 +468,7 @@ export function SolarSystem({
     const moonGeometry = new THREE.SphereGeometry(MOON_RADIUS, 32, 32);
     const moonTexture = new THREE.TextureLoader().load(MOON_TEXTURE);
     moonTexture.colorSpace = THREE.SRGBColorSpace;
-    const moonMaterial = new THREE.MeshBasicMaterial({
+    const moonMaterial = new THREE.MeshLambertMaterial({
       map: moonTexture,
       transparent: true,
       opacity: 1,
@@ -516,6 +518,11 @@ export function SolarSystem({
     sunMaterialRef.current = sunMaterial;
     const sun = new THREE.Mesh(sunGeometry, sunMaterial);
     scene.add(sun);
+    // Sunlight on the textured planets and moons: from the Sun, not fading with distance (the compact
+    // scale squeezes the distances, and real fading would leave the outer planets black). pi makes a
+    // face turned square to the Sun show its texture at full brightness.
+    const sunLight = new THREE.PointLight(0xffffff, Math.PI, 0, 0);
+    sun.add(sunLight);
 
     const glowTexture = createSunGlowTexture(1 / SUN_GLOW_SCALE);
     const sunGlowMaterial = new THREE.SpriteMaterial({
@@ -883,7 +890,8 @@ export function SolarSystem({
       const segments = spec.texture ? 48 : THREE.MathUtils.clamp(Math.round(12 + radius * 2.5), 16, 48);
       const geometry = new THREE.SphereGeometry(radius, segments, segments);
       const solid = spec.solid || !!spec.texture;
-      const material = new THREE.MeshBasicMaterial({ color: spec.texture ? 0xffffff : spec.color, wireframe: !solid, transparent: true, opacity: solid ? 1 : 0.8 });
+      // Textured bodies are lit by the Sun (a day and a night side); wireframes stay unlit.
+      const material = new (spec.texture ? THREE.MeshLambertMaterial : THREE.MeshBasicMaterial)({ color: spec.texture ? 0xffffff : spec.color, wireframe: !solid, transparent: true, opacity: solid ? 1 : 0.8 });
       if (spec.texture) {
         const tex = textureLoader.load(spec.texture);
         tex.colorSpace = THREE.SRGBColorSpace;
@@ -992,7 +1000,8 @@ export function SolarSystem({
       const solid = isDot || !!spec.texture || !!spec.solid;
       const segments = isDot ? 8 : spec.texture ? 48 : THREE.MathUtils.clamp(Math.round(12 + radius * 2.5), 16, 48);
       const geometry = new THREE.SphereGeometry(radius, segments, segments);
-      const material = new THREE.MeshBasicMaterial({ color: spec.texture ? 0xffffff : spec.color, wireframe: !solid, transparent: true, opacity: solid ? 1 : 0.8 });
+      // Textured bodies are lit by the Sun (a day and a night side); wireframes stay unlit.
+      const material = new (spec.texture ? THREE.MeshLambertMaterial : THREE.MeshBasicMaterial)({ color: spec.texture ? 0xffffff : spec.color, wireframe: !solid, transparent: true, opacity: solid ? 1 : 0.8 });
       if (spec.texture) {
         const tex = textureLoader.load(spec.texture);
         tex.colorSpace = THREE.SRGBColorSpace;
@@ -1596,7 +1605,7 @@ export function SolarSystem({
       scene.updateMatrixWorld(true); camera.updateMatrixWorld(); // picking reads these between frames
     };
     const handles: SceneHandles = {
-      scene, camera, renderer, controls, sun, earthSystem, moon, moonFrame, ambient: ambientLight,
+      scene, camera, renderer, controls, sun, earthSystem, moon, moonFrame, ambient: ambientLight, sunLight,
       globe: globeGroup, earthRadius: EARTH_RADIUS, unitsPerKm: MOON_KM_TO_UNITS, moonRadius: MOON_RADIUS, showOrbits: setOrbitStyle,
     };
     if (ext) ext.init(handles);
