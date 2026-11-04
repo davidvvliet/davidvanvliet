@@ -1,5 +1,7 @@
 {
-  "aether": [],
+  "aether": [
+    "Lettering set in Geist (SIL OFL 1.1)"
+  ],
   "cassini": [
     "NASA 3D Resources, Cassini-Huygens model (layout reference): https://github.com/nasa/NASA-3D-Resources; NASA 3D Resources, Cassini-Huygens (A): propulsion module blanket and black panels copied into refs/cassini/meshes/",
     "NASA 3D Resources, Cassini Assembly model: shapes of the HGA deck, LGA1 and feed cluster copied into refs/cassini/meshes/",

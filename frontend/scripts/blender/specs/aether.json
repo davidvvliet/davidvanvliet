@@ -173,6 +173,14 @@
       "licence": "copyright Dunmore: link and quotes only"
     },
     {
+      "id": "geist_font",
+      "title": "Geist typeface (Regular), The Geist Project Authors",
+      "url": "https://github.com/vercel/geist-font",
+      "read": "2026-11-03",
+      "licence": "SIL Open Font License 1.1: \"This Font Software is licensed under the SIL Open Font License, Version 1.1\" (the font's own licence field)",
+      "credit": "Lettering set in Geist (SIL OFL 1.1)"
+    },
+    {
       "id": "design",
       "title": "Altair Aether's own design choices and estimates",
       "url": "https://github.com/davidvvliet/davidvanvliet/tree/main/frontend/scripts/blender/specs/aether.json",
@@ -856,9 +864,30 @@
       "value": 4.9,
       "source": "design, computed: half the shot orbit's period, π √(a³ / GM) with a = (1737.4 + 9068.4) / 2 km",
       "note": "hours from the track's end to the burn"
+    },
+    "sled_lettering": {
+      "value": "Altair LAUNCH / WE GO TO SPACE / TO IMPROVE LIFE ON EARTH",
+      "source": "design, chosen: on the back of the pusher bulkhead, set in Geist (geist_font) like the finrocket's \"Altair ULTRALIGHT\": the second word half the size of \"Altair\", on one baseline; the motto under it; mask refs/aether/sled-lettering-mask.png drawn by tools/sled_lettering.py",
+      "also": [
+        {
+          "source": "geist_font",
+          "quote": "This Font Software is licensed under the SIL Open Font License, Version 1.1"
+        }
+      ]
+    },
+    "sled_lettering_width": {
+      "value": 0.9,
+      "source": "design, chosen: 0.9 m across the 1.0 m pusher"
     }
   },
-  "materials": {},
+  "materials": {
+    "sled_lettering": {
+      "hex": "#111111",
+      "metallic": 0.0,
+      "roughness": 0.6,
+      "source": "design, chosen: the finrocket's lettering colour; it reads on the sunlit pusher, which reflects near white"
+    }
+  },
   "open_questions": [
     "Launch geometry (decided 2026-11-03: a flat shot): a flat 2.18 km/s shot from the south-pole site puts the orbit's high point over the north pole, so the craft first serves the north. Serving the south pole needs the high point turned round (argument of periselene, a large burn the 550 m/s budget only partly covers), a launch site near the north pole, or the relay accepted over the north.",
     "Lunar Pathfinder's orbit differs between SSTL's guide (673 x 7331 km, 54.9°) and a 2022 NASA slide (500 x 7500 km, 57.8°); SSTL calls its values indicative.",

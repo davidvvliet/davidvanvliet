@@ -2,8 +2,10 @@
 # specs/aether.json (sourced, or a design value said to be one).
 # Frame: x along the track (the direction of travel and the craft's axis, so the launch load runs
 # down it), z up, y left. The craft's separation plane is at x = 0; the sled pushes from behind.
-import math
-from lib import parts
+import math, os
+from lib import materials, parts, textures
+
+HARNESS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 X = (1, 0, 0)
 
@@ -60,7 +62,16 @@ def build(spec):
         parts.lathe("sep_ring_lower", [(ri, -hl), (ro, -hl), (ro, 0), (ri, 0)], closed=True, segments=48,
                     direction=X, material="foil_silver")
         xp = -hl - 0.02
-        parts.box("pusher", (0.04, 2 * R, 2 * flat + 0.05), location=(xp, 0, 0.025), material="dark_metal")
+        pusher = parts.box("pusher", (0.04, 2 * R, 2 * flat + 0.05), location=(xp, 0, 0.025), material="dark_metal")
+        # The lettering on the pusher's back, the face the chase camera sees (refs/aether/sled-lettering-mask.png,
+        # drawn by tools/sled_lettering.py).
+        paint = materials.colour(spec["materials"]["sled_lettering"])
+        img = textures.marking("aether_sled_lettering", [(os.path.join(HARNESS, "refs", "aether", "sled-lettering-mask.png"), paint)],
+                               os.path.join(HARNESS, "out", "aether", "textures"))
+        mat = materials.image("aether_sled_lettering", img, metallic=0.0, roughness=0.6, cutout=True)
+        lw = d["sled_lettering_width"]
+        parts.decal("sled_lettering", pusher, center=(xp - 0.02, 0, 0.025), direction=X, up=(0, 0, 1),
+                    width=lw, height=lw * 484 / 1400, material=mat, step=0.05, lift=0.001)
         x_end = xb
         L_base = x_end - (xp - 0.02)
         parts.box("sled_base", (L_base, gauge + 0.1, 0.05), location=((x_end + xp - 0.02) / 2, 0, base_z - 0.025),

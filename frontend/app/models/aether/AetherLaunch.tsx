@@ -47,7 +47,7 @@ const missionSeconds = (t: number) =>
         : P_COAST + COAST_H * 3600 + BURN_S + (t - P_REVEAL);
 
 // Sled parts leave the craft at the track's end; the model's own short rails are replaced by the long track.
-const SLED = ["sep_ring_lower", "pusher", "sled_base", "shoe0", "shoe1", "shoe2", "shoe3", "armature"];
+const SLED = ["sep_ring_lower", "pusher", "sled_lettering", "sled_base", "shoe0", "shoe1", "shoe2", "shoe3", "armature"];
 const MODEL_TRACK = ["rail0", "rail1", "stator"];
 const RAIL_TOP = 0.19;                   // ground.ts trackGeometry: the rails' top above the bed
 

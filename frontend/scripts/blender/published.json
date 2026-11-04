@@ -1,9 +1,9 @@
 {
  "aether": {
-  "approved": "2026-11-03 22:26",
+  "approved": "2026-11-03 23:27",
   "inputs": {
-   "specs/aether.json": "c8fa34a80bfd12ae",
-   "probes/aether.py": "61d4c1cf4251a5e5",
+   "specs/aether.json": "9723845edb5cbf97",
+   "probes/aether.py": "77ec7e6bd8c73b6e",
    "build.py": "363cabc8976febf0",
    "blender.json": "7bbc071b6e396ec4",
    "lib/__init__.py": "e3b0c44298fc1c14",
@@ -21,7 +21,8 @@
    "lib/rig.py": "87431e5e6051f10e",
    "lib/sources.py": "425a2fcd692532e6",
    "lib/textures.py": "7daa18205cf41859",
-   "lib/tiling.py": "b352f8627c102bf0"
+   "lib/tiling.py": "b352f8627c102bf0",
+   "refs/aether/sled-lettering-mask.png": "8a79757854e4f409"
   }
  },
  "cassini": {
