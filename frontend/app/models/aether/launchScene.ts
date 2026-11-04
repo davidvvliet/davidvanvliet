@@ -113,6 +113,7 @@ function frameMatrix(origin: number[], ax: number[], ay: number[], az: number[],
 export type AetherLaunch = SceneExtension & { start(): void };
 
 const Y = new THREE.Vector3(0, 1, 0);
+const ZERO = new THREE.Vector3();
 const X_AXIS = new THREE.Vector3(1, 0, 0);
 function setUp(camera: THREE.Camera, controls: SceneHandles["controls"], up: THREE.Vector3) {
   camera.up.copy(up);
@@ -225,6 +226,16 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
   // camera circles follows the craft (the camera moves with it), so their angle and zoom stay.
   let touched = false, done = false, lastUi = "", placed = false, followed = false;
   const offLocal = new THREE.Vector3();
+  // While it flies, the camera is our own, not OrbitControls': its turn is kept as a rotation in the flight
+  // frame (forward, away from the Moon, left) and its distance from the point it circles, in metres.
+  // Dragging sideways turns about "away from the Moon", up and down about the camera's own sideways axis,
+  // so the view passes straight up or down smoothly (OrbitControls' two angles break at the poles).
+  const view = new THREE.Quaternion(), qB = new THREE.Quaternion(), qd = new THREE.Quaternion(), mL = new THREE.Matrix4();
+  let viewDist = 11.3;
+  const pointers = new Map<number, { x: number; y: number }>();
+  let pinch = 0;
+  const lookQuat = (dirLocal: THREE.Vector3, out: THREE.Quaternion) =>
+    out.setFromRotationMatrix(mL.lookAt(dirLocal, ZERO, Y));   // the camera at dirLocal, looking at the centre
   // A clicked star: the camera swings round the craft until the star stands just above it, and
   // stays so until the viewer turns the view.
   let aimView: THREE.Vector3 | null = null, aimT0 = 0, loads = 0;
@@ -237,8 +248,44 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
     bx: new THREE.Vector3(), by: new THREE.Vector3(), bz: new THREE.Vector3(), b: new THREE.Matrix4(), binv: new THREE.Matrix4(),
     off: new THREE.Vector3() };
 
+  const flying = () => startAt !== null && !!h0;
+  const zoom = (f: number) => { viewDist = THREE.MathUtils.clamp(viewDist * f, 2, 2e8); touched = true; };
+  const onDown = (e: PointerEvent) => {
+    if (!flying()) return;
+    pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pointers.size === 2) { const [a, b] = [...pointers.values()]; pinch = Math.hypot(a.x - b.x, a.y - b.y); }
+  };
+  const onMove = (e: PointerEvent) => {
+    const p = pointers.get(e.pointerId);
+    if (!p || !flying()) return;
+    const dx = e.clientX - p.x, dy = e.clientY - p.y;
+    p.x = e.clientX; p.y = e.clientY;
+    if (pointers.size === 2) {
+      const [a, b] = [...pointers.values()];
+      const d = Math.hypot(a.x - b.x, a.y - b.y);
+      if (pinch > 0 && d > 0) zoom(pinch / d);
+      pinch = d;
+      return;
+    }
+    if (!dx && !dy) return;
+    touched = true; aimView = null;
+    // As OrbitControls: a drag across the canvas's height turns the view a full circle.
+    const k = (2 * Math.PI) / h0!.renderer.domElement.clientHeight;
+    view.premultiply(qd.setFromAxisAngle(Y, -dx * k));           // about "away from the Moon"
+    view.multiply(qd.setFromAxisAngle(X_AXIS, -dy * k));         // about the camera's own sideways axis
+  };
+  const onUp = (e: PointerEvent) => { pointers.delete(e.pointerId); pinch = 0; };
+  const onWheel = (e: WheelEvent) => {
+    if (!flying()) return;
+    e.preventDefault();
+    zoom(Math.exp(e.deltaY * 0.001));
+  };
+
   return {
-    start() { startAt = performance.now() / 1000; followed = false; touched = false; done = false; },
+    start() {
+      startAt = performance.now() / 1000; followed = false; touched = false; done = false;
+      if (h0) h0.controls.enabled = false;              // the flight camera takes over (see `view`)
+    },
 
     init(h) {
       h0 = h;
@@ -327,6 +374,10 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
 
       controls.addEventListener("start", grab);
       controls.minDistance = 2 * unitsPerM; controls.maxDistance = 2e8 * unitsPerM;
+      const el = h.renderer.domElement;
+      el.addEventListener("pointerdown", onDown); el.addEventListener("pointermove", onMove);
+      window.addEventListener("pointerup", onUp); window.addEventListener("pointercancel", onUp);
+      el.addEventListener("wheel", onWheel, { passive: false });
     },
 
     clock() {
@@ -445,24 +496,35 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
       v.bz.copy(v.side).transformDirection(frame.matrixWorld);
       v.b.makeBasis(v.bx, v.by, v.bz);
       if (running) {
-        if (!followed) { followed = true; touched = false; setUp(camera, controls, v.by); }
-        if (v.by.distanceToSquared(camera.up) > 1e-12) setUp(camera, controls, v.by);
+        if (!followed) { followed = true; touched = false; controls.enabled = false; }
+        camera.up.copy(v.by);
         const alt = onTrack ? 0 : v.pos.length() - R;
         const k = ease(alt / 500e3);                     // 0 on the ground, 1 from 500 km up
         const look = tmp.set(2 * (1 - k), 0.8 * (1 - k), 0);
         controls.target.copy(v.cw).add(look.applyMatrix4(v.b).multiplyScalar(unitsPerM));
-        if (!touched) {
-          // Elevation of the view: 11 degrees on the track, 60 degrees looking down from orbit.
-          const el = THREE.MathUtils.degToRad(11 + 49 * k), dist = 11.3 + 2 * k;
-          offLocal.set(-Math.cos(el) * dist * 0.81, Math.sin(el) * dist, -Math.cos(el) * dist * 0.58);
+        qB.setFromRotationMatrix(v.b);
+        if (aimView) {
+          // Swinging to a clicked star: the planned direction, eased, taken into the flight frame.
+          aimQ.setFromUnitVectors(aimFrom, aimView);
+          aimQk.identity().slerp(aimQ, ease((performance.now() / 1000 - aimT0) / 1.5));
+          lookQuat(tmp.copy(aimFrom).applyQuaternion(aimQk).applyQuaternion(qd.copy(qB).invert()), view);
+        } else if (!touched) {
+          // Elevation of the view: 11 degrees on the track; off it, tilting down quickly (25 degrees by the
+          // end of the separation, 60 from 150 km up) so the Moon stays in view as the craft speeds away.
+          const sep = onTrack ? 0 : ease((t - T_SHOT) / SEP), kt = onTrack ? 0 : ease(alt / 150e3);
+          const el = THREE.MathUtils.degToRad(11 + 14 * sep + 35 * kt);
+          viewDist = 11.3 + 2 * k;
+          offLocal.set(-Math.cos(el) * 0.81, Math.sin(el), -Math.cos(el) * 0.58);
+          lookQuat(offLocal, view);
         }
-        const off = v.off.copy(offLocal).applyMatrix4(v.b).multiplyScalar(unitsPerM);
-        camera.position.copy(controls.target).add(off);
+        camera.quaternion.copy(qB).multiply(view);
+        camera.position.copy(controls.target).add(tmp.set(0, 0, viewDist * unitsPerM).applyQuaternion(camera.quaternion));
         if (onTrack && !touched) {
           // Never inside a cutting's wall.
           const lc = launchFrame.worldToLocal(camera.position.clone());
           lc.y = Math.max(lc.y, groundY(lc.x, lc.z) + 1.5);
           camera.position.copy(launchFrame.localToWorld(lc));
+          camera.lookAt(controls.target);
         }
       }
 
@@ -476,7 +538,7 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
       earthshine.target.position.copy(v.cw); earthshine.target.updateMatrixWorld();
 
       if (running && t >= TOTAL && !done) { done = true; on.done(); }
-      if (aimView) {
+      if (aimView && !running) {
         aimQ.setFromUnitVectors(aimFrom, aimView);
         aimQk.identity().slerp(aimQ, ease((performance.now() / 1000 - aimT0) / 1.5));
         const d = camera.position.distanceTo(controls.target);
@@ -485,11 +547,7 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
       // Near plane: a little in front of whatever the camera circles, so a close-up of the craft isn't clipped.
       const dist = camera.position.distanceTo(controls.target);
       camera.near = Math.max(dist * 1e-3, 0.01 * unitsPerM);
-      controls.update();
-      if (running && touched) {
-        // Keep the viewer's angle and zoom in the flight frame.
-        offLocal.copy(camera.position).sub(controls.target).divideScalar(unitsPerM).applyMatrix4(v.binv.copy(v.b).transpose());
-      }
+      if (!running) controls.update();
 
       const key = u.phase + u.caption + u.readout + (u.orbit ? `${u.orbit.x.toFixed(0)},${u.orbit.y.toFixed(0)},${u.orbit.rp.toFixed(0)}` : "");
       if (key !== lastUi) { lastUi = key; on.ui(running ? u : { phase: "", caption: "", readout: "" }); }
@@ -511,6 +569,11 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
       const h = h0;
       if (!h || !saved) return;
       h.controls.removeEventListener("start", grab);
+      const el = h.renderer.domElement;
+      el.removeEventListener("pointerdown", onDown); el.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp); window.removeEventListener("pointercancel", onUp);
+      el.removeEventListener("wheel", onWheel);
+      h.controls.enabled = true;
       setUp(h.camera, h.controls, Y.clone());
       h.moon.remove(launchFrame); h.moonFrame.remove(orbitFrame);
       h.scene.remove(sunLight, sunLight.target, earthshine);
