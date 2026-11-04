@@ -30,11 +30,11 @@ export default function AetherLaunch() {
   return (
     <div className={styles.page}>
       {launch && <SolarSystem className={styles.canvas} extension={launch} scale="true" onStarHover={setStar} />}
-      {part ? (
+      {part || ui.note ? (
         <div className={styles.star}>
           <div className={styles.starRow}>
-            <span className={styles.starName}>{part.name}</span>
-            <span className={styles.starDim}>{part.size}</span>
+            <span className={styles.starName}>{part ? part.name : ui.note}</span>
+            {part && <span className={styles.starDim}>{part.size}</span>}
           </div>
         </div>
       ) : star && (

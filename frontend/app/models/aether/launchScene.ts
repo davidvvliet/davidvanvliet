@@ -36,10 +36,16 @@ const PERIOD_MIN = (2 * Math.PI * Math.sqrt(R_A ** 3 / GM)) / 60;
 
 const P_COAST = T_SHOT + SEP, P_BURN = P_COAST + COAST, P_REVEAL = P_BURN + BURN;
 const P_ACT = P_REVEAL + REVEAL, TOTAL = P_ACT + ACT;
+// Off the track the clock speeds up gradually: over RAMP seconds the rate eases from true speed to
+// RATE, which then holds to the high point, so the craft still arrives there at the burn (HALF_S after the track).
+const RAMP = 6;
+const RATE = 1 + (HALF_S - (P_BURN - T_SHOT)) / (P_BURN - T_SHOT - RAMP / 2);
+// Seconds gained by scene time tau after the track at a rate easing (smoothstep) from 0 to 1 over RAMP: its integral.
+const eased = (tau: number) => { const x = Math.min(1, tau / RAMP); return tau >= RAMP ? tau - RAMP / 2 : RAMP * (x ** 3 - x ** 4 / 2); };
 // Mission time in seconds at scene time t: real during the shot, the coast and burn sped up.
 const missionSeconds = (t: number) =>
-  t < P_COAST ? t
-    : t < P_BURN ? P_COAST + ((t - P_COAST) / COAST) * (HALF_S - SEP)
+  t < T_SHOT ? t
+    : t < P_BURN ? t + (RATE - 1) * eased(t - T_SHOT)
       : t < P_REVEAL ? T_SHOT + HALF_S + ((t - P_BURN) / BURN) * BURN_S
         : t < TOTAL ? T_SHOT + HALF_S + BURN_S + (t - P_REVEAL)
           : T_SHOT + HALF_S + BURN_S + (TOTAL - P_REVEAL) + (t - TOTAL) * AFTER;
@@ -56,7 +62,9 @@ type Hinge = { node: THREE.Object3D; axis: THREE.Vector3; rest: THREE.Quaternion
 export type OrbitInset = { x: number; y: number; rp: number; target: number; moon: number; ra: number };
 /** The part under the pointer, else the focused one: its name and size, as the models viewer labels it. */
 export type PartLabel = { name: string; size: string } | null;
-export type LaunchUi = { phase: string; caption: string; readout: string; orbit?: OrbitInset };
+export type LaunchUi = { phase: string; caption: string; readout: string; orbit?: OrbitInset;
+  /** A note shown where a hovered label goes (the clock speeding up). */
+  note?: string };
 
 const ease = (u: number) => { const c = Math.min(1, Math.max(0, u)); return c * c * (3 - 2 * c); };
 const shot = { a: (R + R_A) / 2, e: (R_A - R) / (R_A + R) };
@@ -546,6 +554,7 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
         // Before the burn the craft rolls over: the engine still along the motion, the top now down to the Moon.
         roll = Math.PI * ease((t - (P_BURN - ROLL)) / ROLL);
         u.orbit = { x: v.pos.x, y: v.pos.y, rp, target: R_P, moon: R, ra: R_A };
+        if (t < T_SHOT + RAMP) u.note = `Speeding up to ${Math.round(RATE)}×`;
       }
       v.fwd.sub(tmp.copy(v.up).multiplyScalar(v.fwd.dot(v.up))).normalize();   // level forward
       v.side.crossVectors(v.fwd, v.up).normalize();
@@ -667,7 +676,7 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
         controls.update();
       }
 
-      const key = u.phase + u.caption + u.readout + (u.orbit ? `${u.orbit.x.toFixed(0)},${u.orbit.y.toFixed(0)},${u.orbit.rp.toFixed(0)}` : "");
+      const key = u.phase + u.caption + u.readout + (u.note ?? "") + (u.orbit ? `${u.orbit.x.toFixed(0)},${u.orbit.y.toFixed(0)},${u.orbit.rp.toFixed(0)}` : "");
       if (key !== lastUi) { lastUi = key; on.ui(running ? u : { phase: "", caption: "", readout: "" }); }
     },
 

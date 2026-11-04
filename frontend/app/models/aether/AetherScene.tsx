@@ -21,7 +21,9 @@ export default function AetherScene({ onStarHover }: { onStarHover?: (s: Star) =
   const [part, setPart] = useState<PartLabel>(null);
   const [star, setStar] = useState<Star>(null);
   // One label at a time: a craft part (drawn here) or a star (drawn by the page, as on the main page).
-  useEffect(() => { onStarHover?.(part ? null : star); }, [part, star, onStarHover]);
+  // The clock's note takes a part label's place while no part is hovered.
+  const label = part ?? (ui.note ? { name: ui.note, size: "" } : null);
+  useEffect(() => { onStarHover?.(part || ui.note ? null : star); }, [part, ui.note, star, onStarHover]);
   useEffect(() => {
     let live = true;
     Promise.all([
@@ -48,11 +50,11 @@ export default function AetherScene({ onStarHover }: { onStarHover?: (s: Star) =
   return (
     <div className={styles.inScene}>
       {launch && <SolarSystem className={styles.canvas} extension={launch} scale="true" onStarHover={setStar} />}
-      {part && (
+      {label && (
         <div className={styles.star}>
           <div className={styles.starRow}>
-            <span className={styles.starName}>{part.name}</span>
-            <span className={styles.starDim}>{part.size}</span>
+            <span className={styles.starName}>{label.name}</span>
+            {label.size && <span className={styles.starDim}>{label.size}</span>}
           </div>
         </div>
       )}
