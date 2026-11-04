@@ -133,6 +133,7 @@ async function status() {
       note: spec.note ?? null,
       sources: spec.sources ?? [],
       referenceModel: spec.reference_model ?? null,
+      insideView: spec.viewer?.inside_view ?? null,
       published: published[name] ?? null,
       worktrees: sources,
     };

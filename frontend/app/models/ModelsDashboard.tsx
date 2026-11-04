@@ -19,6 +19,7 @@ type Probe = {
   name: string; title: string; fixture: boolean; note: string | null;
   kind?: "circuit"; // a /circuit board (scripts/circuit/build.py): no sheet, its blocks instead
   sources: { title?: string; url?: string }[]; referenceModel: { url?: string; note?: string } | null;
+  insideView?: number[] | null; // the spec's "viewer": {"inside_view"}: where Internal turns the camera to
   // Each git worktree that has this probe, newest build first (app/api/models/[...path]/route.ts).
   worktrees: Source[];
   // Never approved: null. Else what changed since approve (scripts/blender/lib/published.py).
@@ -182,9 +183,9 @@ type Controls = THREE.EventDispatcher<{ start: object }> & { target: THREE.Vecto
 // inside parts seen through an opening (`inside` in the glTF extras), which stay solid.
 // `inner`: a model's inside parts (internal.glb): no framing of its own on load, the camera
 // flies to them instead.
-function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explore = true, focusable = NONE, explodable = NO_PARTS, ghost = false, inner = false }: {
+function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explore = true, focusable = NONE, explodable = NO_PARTS, ghost = false, inner = false, turn }: {
   url: string; title?: string; exploded: boolean; focus: string | null; setFocus: (f: string | null) => void; explore?: boolean;
-  focusable?: Focusable[]; explodable?: string[]; ghost?: boolean; inner?: boolean;
+  focusable?: Focusable[]; explodable?: string[]; ghost?: boolean; inner?: boolean; turn?: number[] | null;
   onLabel: (label: { name: string; size: THREE.Vector3 } | null) => void; onReady?: () => void;
 }) {
   const gltf = useGLTF(url, "/draco/"); // compressed models (the /circuit boards) decode with the copy in public/draco
@@ -219,7 +220,8 @@ function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explor
   }, [gltf.scene, gl]);
   const homeNear = useRef(0.01);
   const homeDist = useRef(1);
-  const flight = useRef<{ dir: THREE.Vector3; box?: THREE.Box3; home?: boolean } | null>(null);
+  // `turn`: swing round the target to `dir` (an arc, not a straight line through the model).
+  const flight = useRef<{ dir: THREE.Vector3; box?: THREE.Box3; home?: boolean; turn?: boolean } | null>(null);
 
   useEffect(() => {
     // The distance that frames the whole model: zoom and flight limits scale with it, so a 4 mm
@@ -230,8 +232,11 @@ function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explor
     if (inner) {
       homeNear.current = dist / 100;
       homeDist.current = dist;
-      // Fly from wherever the camera is to the whole inside, keeping the viewing direction.
-      if (controls) flight.current = { dir: camera.position.clone().sub(controls.target).normalize(), box: new THREE.Box3().setFromObject(scene) };
+      // Fly from wherever the camera is to the whole inside, keeping the viewing direction, or
+      // swinging round to the spec's inside view (Blender's z-up frame; glTF is y-up).
+      const box = new THREE.Box3().setFromObject(scene);
+      if (controls && turn) flight.current = { dir: new THREE.Vector3(turn[0], turn[2], -turn[1]).normalize(), box, turn: true };
+      else if (controls) flight.current = { dir: camera.position.clone().sub(controls.target).normalize(), box };
       return;
     }
     camera.position.copy(centre).addScaledVector(new THREE.Vector3(0.6, 0.45, 0.66).normalize(), dist);
@@ -242,7 +247,7 @@ function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explor
     camera.updateProjectionMatrix();
     if (controls) { controls.target.copy(centre); controls.update(); }
     else camera.lookAt(centre);
-  }, [scene, camera, controls, centre, inner]);
+  }, [scene, camera, controls, centre, inner]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Focusing a part starts a flight to it, and clearing the focus one back to the whole model
   // (the framing it loaded with, from the current side); any drag or scroll ends it.
@@ -300,9 +305,19 @@ function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explor
       const goalTarget = flyBox ? flyBox.getCenter(new THREE.Vector3()).add(off) : centre.clone();
       const dist = flyBox ? Math.max(flyBox.getSize(new THREE.Vector3()).length() * 0.65, Math.min(0.05, homeDist.current * 0.01)) / Math.sin(fov / 2) : homeDist.current;
       const goalPos = goalTarget.clone().addScaledVector(flight.current.dir, dist);
-      const a = 1 - Math.exp(-dt * 5);
-      camera.position.lerp(goalPos, a);
-      controls.target.lerp(goalTarget, a);
+      const a = 1 - Math.exp(-dt * (flight.current.turn ? 3 : 5));
+      if (flight.current.turn) {
+        // Turn the camera's offset from the target towards the goal direction, so it orbits.
+        controls.target.lerp(goalTarget, a);
+        const off = camera.position.clone().sub(controls.target);
+        const len = THREE.MathUtils.lerp(off.length(), dist, a);
+        const q = new THREE.Quaternion().setFromUnitVectors(off.normalize(), flight.current.dir);
+        off.applyQuaternion(new THREE.Quaternion().slerp(q, a)).setLength(len);
+        camera.position.copy(controls.target).add(off);
+      } else {
+        camera.position.lerp(goalPos, a);
+        controls.target.lerp(goalTarget, a);
+      }
       controls.update();
       // Done once there and the part has stopped moving.
       if (t.current === goal && camera.position.distanceTo(goalPos) < dist * 0.002 && controls.target.distanceTo(goalTarget) < dist * 0.002) flight.current = null;
@@ -482,10 +497,10 @@ class ViewerBoundary extends Component<{ children: ReactNode; resetKey: string }
 // `internalUrl`: the model's inside parts (internal.glb), loaded when "Internal" is pressed.
 // `held`: the model is held in the hand (a board that drives a model): dragging turns it about its
 // centre instead of orbiting, shift-drag about its long side (x), double-click sets it straight.
-export function Viewer({ probe, title, url, breakdown, stale, compact, onReady, focus: shown, onFocus, explore = true, focusable = NONE, explodable = NO_PARTS, internalUrl, held }: {
+export function Viewer({ probe, title, url, breakdown, stale, compact, onReady, focus: shown, onFocus, explore = true, focusable = NONE, explodable = NO_PARTS, internalUrl, insideView, held }: {
   probe: string; title?: string; url: string; breakdown: Breakdown | null; stale: boolean; compact?: boolean; onReady?: () => void;
   focus?: string | null; onFocus?: (f: string | null) => void; explore?: boolean; focusable?: Focusable[]; explodable?: string[];
-  internalUrl?: string; held?: React.RefObject<Held>;
+  internalUrl?: string; insideView?: number[] | null; held?: React.RefObject<Held>;
 }) {
   const [exploded, setExploded] = useState(false);
   const [inside, setInside] = useState(false);
@@ -545,7 +560,7 @@ export function Viewer({ probe, title, url, breakdown, stale, compact, onReady, 
         </Suspense>
         <Suspense fallback={null}>
           {inside && internalUrl && (
-            <Model key={internalUrl} url={internalUrl} exploded={false} focus={innerFocus} setFocus={setInnerFocus} onLabel={setInnerLabel} inner />
+            <Model key={internalUrl} url={internalUrl} exploded={false} focus={innerFocus} setFocus={setInnerFocus} onLabel={setInnerLabel} inner turn={insideView} />
           )}
         </Suspense>
         <OrbitControls makeDefault enableZoom={!compact} enableRotate={!held} zoomToCursor />
@@ -799,7 +814,7 @@ export default function ModelsDashboard() {
       </header>
       <div className={styles.grid}>
         <div className={styles.viewCell}>
-          {glbUrl ? <Viewer probe={probe!.name} url={glbUrl} breakdown={breakdown} stale={stale} internalUrl={internalUrl}
+          {glbUrl ? <Viewer probe={probe!.name} url={glbUrl} breakdown={breakdown} stale={stale} internalUrl={internalUrl} insideView={probe!.insideView}
             {...(board ? { focus, onFocus: setFocus } : {})} /> : <div className={styles.empty}>{probe ? "no export" : ""}</div>}
         </div>
         <div className={styles.side}>

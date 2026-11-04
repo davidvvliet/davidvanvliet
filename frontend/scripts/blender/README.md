@@ -157,6 +157,9 @@ shows an "Internal" button when that file exists and loads it only when pressed:
 and the camera flies to the inside parts, each of which can be clicked to focus. They have their own
 budget (`budget.internal_triangles`, `budget.internal_glb_bytes`), and no part may be parented across
 the two files. Every other check (attached, sources, materials) covers them as usual.
+When the inside is best seen from one side (a gyro's laser block hangs under its boards), the
+spec's `"viewer": {"inside_view": [x, y, z]}` (the direction from the model to the camera, in the
+build's z-up frame) makes Internal swing the camera round to that side.
 
 Inside parts that can be seen from outside through an opening (Hubble's mirrors, baffles and spider
 down its open tube) use `inside=True` instead: they stay in `<probe>.glb`, so the outside view is
