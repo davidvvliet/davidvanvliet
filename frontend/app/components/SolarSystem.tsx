@@ -1259,7 +1259,13 @@ export function SolarSystem({
       // An extension keeps the camera: only stars are clicked, and it turns the view to them itself.
       if (ext) {
         const picked = pickStar(event.clientX, event.clientY);
-        if (picked) ext.aimAt?.(picked.object.getWorldPosition(new THREE.Vector3()).sub(camera.position).normalize());
+        if (picked) {
+          ext.aimAt?.(picked.object.getWorldPosition(new THREE.Vector3()).sub(camera.position).normalize());
+          // Its label stays, as a `focus` on the main page, until a drag or zoom.
+          pinnedStar = { name: picked.name, lightYears: picked.lightYears, spectral: picked.spectral, fact: picked.fact };
+          hoveredStarRef.current = picked.name;
+          onStarHover?.(pinnedStar);
+        }
         return;
       }
 

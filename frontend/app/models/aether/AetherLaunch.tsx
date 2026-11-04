@@ -33,6 +33,7 @@ export default function AetherLaunch() {
   const [launch, setLaunch] = useState<Launch | null>(null);
   const [running, setRunning] = useState(false);
   const [ui, setUi] = useState<LaunchUi>({ phase: "", caption: "", readout: "" });
+  const [star, setStar] = useState<{ name: string; lightYears: number; spectral?: string; fact?: string } | null>(null);
   useEffect(() => {
     let live = true;
     Promise.all([
@@ -45,7 +46,17 @@ export default function AetherLaunch() {
   }, []);
   return (
     <div className={styles.page}>
-      {launch && <SolarSystem className={styles.canvas} extension={launch} scale="true" />}
+      {launch && <SolarSystem className={styles.canvas} extension={launch} scale="true" onStarHover={setStar} />}
+      {star && (
+        <div className={styles.star}>
+          <div className={styles.starRow}>
+            <span className={styles.starName}>{star.name}</span>
+            <span className={styles.starDim}>{star.lightYears.toLocaleString()} light-years</span>
+            {star.spectral && <span className={styles.starType}>Type {star.spectral}</span>}
+          </div>
+          {star.fact && <div className={styles.starFact}>{star.fact}</div>}
+        </div>
+      )}
       <div className={styles.title}>Altair Aether</div>
       {ui.phase && (
         <div className={styles.phase}>

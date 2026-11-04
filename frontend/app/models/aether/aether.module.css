@@ -5,6 +5,13 @@
 .phaseName { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.6; }
 .caption { font-size: 15px; line-height: 1.4; margin-top: 4px; }
 .readout { font-family: var(--font-geist-mono, ui-monospace, monospace); font-size: 13px; margin-top: 8px; opacity: 0.85; white-space: pre; }
+/* A hovered or clicked star, as the main page's label (page.module.css .globeLabel). */
+.star { position: absolute; top: 16px; left: 50%; transform: translateX(-50%); width: min(34rem, calc(100vw - 32px)); text-align: center; pointer-events: none; font-family: var(--font-roboto-mono), ui-monospace, monospace; font-size: 0.875rem; }
+.starRow { display: flex; gap: 0.5rem; align-items: center; justify-content: center; flex-wrap: wrap; }
+.starName { color: #00ff00; }
+.starType { color: rgba(0, 255, 0, 0.6); }
+.starDim { color: rgba(255, 255, 255, 0.5); }
+.starFact { margin-top: 0.25rem; font-size: 0.75rem; line-height: 1.5; color: rgba(255, 255, 255, 0.5); }
 .orbit { position: absolute; right: 16px; bottom: 16px; width: 150px; height: 150px; pointer-events: none; }
 /* As the models page's viewer buttons (models.module.css .explode). */
 .launch {
