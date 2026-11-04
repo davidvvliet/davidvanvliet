@@ -8,7 +8,7 @@ usage: python3 -I portrait.py IMAGE FONT.ttf OUT.txt COLS CROP [MIX] [GAMMA] [LE
   BLACK = percentile of the photo that becomes blank (the background), default 2
 
 The thinkers page (app/thinkers) was made with Roboto Mono (google/fonts, ofl/robotomono) and:
-  portrait.py newton.jpeg RobotoMono.ttf newton.txt 80 0.2,0,0.88,0.6 0.5 0.9 14 30
+  portrait.py newton.jpeg RobotoMono.ttf newton.txt 80 0.26,0.08,0.74,0.4 0.4 1.1 14 25
   portrait.py darwin.jpeg RobotoMono.ttf darwin.txt 80 0.1,0.08,0.9,0.7 0.3 1.3 14 30
 """
 import sys
