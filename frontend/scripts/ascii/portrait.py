@@ -9,8 +9,8 @@ usage: python3 -I portrait.py IMAGE FONT.ttf OUT.txt COLS CROP [MIX] [GAMMA] [LE
   FLOOD = faint cells joined to the edge below this level are cleared as background, default 0 (off)
 
 The thinkers page (app/thinkers) was made with Roboto Mono (google/fonts, ofl/robotomono) and:
-  portrait.py newton.jpeg RobotoMono.ttf newton.txt 80 0.26,0.08,0.74,0.45 0.4 1.1 14 25 0.17
-  portrait.py darwin.jpeg RobotoMono.ttf darwin.txt 80 0.25,0.1,0.85,0.57 0.3 1.3 14 30 0.17
+  portrait.py newton.jpeg RobotoMono.ttf newton.txt 80 0.26,0.08,0.74,0.57 0.4 1.1 14 25 0.17
+  portrait.py darwin.jpeg RobotoMono.ttf darwin.txt 80 0.25,0.08,0.85,0.7 0.3 1.3 14 30 0.17
 """
 import sys
 import numpy as np
