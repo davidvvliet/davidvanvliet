@@ -170,12 +170,13 @@ def _runs(row):
     return list(zip(np.nonzero(e == 1)[0], np.nonzero(e == -1)[0]))
 
 
-def traced(d, name, region, cell, z0, z1, mask_path, photo_path):
-    """Silicon traced from the die photo: `mask_path` marks, cell by cell (`cell` µm), where
-    the device layer is; it is extruded from z0 to z1 with the photo itself on top. Top faces
+def traced(d, name, region, cell, z0, z1, m, mat, solid=None):
+    """Silicon traced from the die photo: `m` marks, cell by cell (`cell` µm, row 0 at the
+    photo's top), where the device layer is; it is extruded from z0 to z1 with the photo
+    (material `mat`) on top. `solid`: all the silicon around it (default `m`); walls stand
+    only where `m` meets a cell that isn't in it, so two parts that touch share no wall. Top faces
     are the mask merged into rectangles (runs per row, merged down); walls stand only where
     silicon meets a gap, each taking the photo's colour just inside the edge."""
-    m = _mask(mask_path)
     H, W = m.shape
     u0, v0, u1, v1 = region
     U = lambda j: u0 + j * cell
@@ -213,9 +214,12 @@ def traced(d, name, region, cell, z0, z1, mask_path, photo_path):
     # Walls along rows (between row i-1 and row i) and along columns.
     pad = np.zeros((H + 2, W + 2), bool)
     pad[1:-1, 1:-1] = m
+    full = np.zeros((H + 2, W + 2), bool)
+    full[1:-1, 1:-1] = m if solid is None else solid
     for i in range(H + 1):
         above, below = pad[i, 1:-1], pad[i + 1, 1:-1]
-        for side, edge in ((1, above & ~below), (-1, below & ~above)):
+        fa, fb = full[i, 1:-1], full[i + 1, 1:-1]
+        for side, edge in ((1, above & ~fb), (-1, below & ~fa)):
             for a, b in _runs(edge):
                 v = V(i)
                 vi = v - side * cell / 2              # just inside the silicon
@@ -225,7 +229,8 @@ def traced(d, name, region, cell, z0, z1, mask_path, photo_path):
                 quad([pa, pb, (pb[0], pb[1], z1), (pa[0], pa[1], z1)], [t] * 4, n)
     for j in range(W + 1):
         left, right = pad[1:-1, j], pad[1:-1, j + 1]
-        for side, edge in ((1, left & ~right), (-1, right & ~left)):
+        fl, fr = full[1:-1, j], full[1:-1, j + 1]
+        for side, edge in ((1, left & ~fr), (-1, right & ~fl)):
             for a, b in _runs(edge):
                 u = U(j)
                 ui = u - side * cell / 2
@@ -234,8 +239,6 @@ def traced(d, name, region, cell, z0, z1, mask_path, photo_path):
                 n = (Vector(P(u + side, V(a), 0)) - Vector(P(u, V(a), 0)))
                 quad([pa, pb, (pb[0], pb[1], z1), (pa[0], pa[1], z1)], [t] * 4, n)
     bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=1e-9)
-    photo = bpy.data.images.load(photo_path, check_existing=False)
-    mat = materials.image(f"{name}_photo", photo, metallic=0.4, roughness=0.35)
     return parts._object(name, bm, mat, Matrix())
 
 
@@ -245,9 +248,15 @@ def device_layer(d, f, z):
     T = f["die_trace"]["value"]
     folder = os.path.join(HARNESS, "refs", "mpu6050", "die")
     for key, region in T["regions"].items():
+        m = _mask(os.path.join(folder, f"{key}-mask.png"))
+        dim = _mask(os.path.join(folder, f"{key}-moving.png")) & m
+        photo = bpy.data.images.load(os.path.join(folder, f"{key}.jpg"), check_existing=False)
+        mat = materials.image(f"{key}_photo", photo, metallic=0.4, roughness=0.35)
+        # The photo's dim silicon (the proof masses and what moves with them) and its bright
+        # silicon (anchored frames and fixed combs) as separate parts of the sensor.
         with parts.assembly(key, internal=True):
-            traced(d, key, region, T["cell_um"], z["device_bottom"], z["device_top"],
-                   os.path.join(folder, f"{key}-mask.png"), os.path.join(folder, f"{key}.jpg"))
+            traced(d, f"{key}_frame", region, T["cell_um"], z["device_bottom"], z["device_top"], m & ~dim, mat, m)
+            traced(d, f"{key}_masses", region, T["cell_um"], z["device_bottom"], z["device_top"], dim, mat, m)
 
 
 def build(spec):

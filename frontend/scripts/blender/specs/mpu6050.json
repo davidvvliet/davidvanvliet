@@ -197,7 +197,8 @@
         }
       },
       "source": "zeptobars_mpu6050, traced from mpu6050-small-top-HD.jpg (6704 x 5312, CC BY 3.0) at 2.35 px/\u00b5m with the die's top left corner at (80, 80) px",
-      "method": "each region (\u00b5m on the photo, x right, y down) cut into 2 \u00b5m cells; a cell is a gap when 40% or more of its pixels are darker than 105 (of 255), else silicon; specks and pinholes under 12 cells removed, edges opened by one cell. Masks and the photo crops (1.2 px/\u00b5m) in refs/mpu6050/die/. The photo is the device layer's face towards the CMOS chip; in the model it lies face down, so it is mirrored across X and the photo is shown on the layer's top",
+      "method": "each region (\u00b5m on the photo, x right, y down) cut into 2 \u00b5m cells; a cell is a gap when 40% or more of its pixels are darker than 105 (of 255), else silicon; specks and pinholes under 12 cells removed, no smoothing (it erased the 4-5 \u00b5m comb fingers). Masks and the photo crops (1.0 px/\u00b5m) in refs/mpu6050/die/. The photo is the device layer's face towards the CMOS chip; in the model it lies face down, so it is mirrored across X and the photo is shown on the layer's top",
+      "split": "each sensor is two parts: <sensor>_masses, the silicon the photo shows dim, and <sensor>_frame, the bright rest. The mean of a cell's silicon pixels (those 105 and brighter) under 160 makes it dim; dim or bright islands under 40 cells join their surroundings. Brightness profiles across the Z gyro show anchored bars and combs at 175-195 and the plates and the comb fingers between the fixed ones at 120-140, so dim is read as moving; it is a cue from the photo, not a drawing, and some fine moving parts come out bright",
       "limits": "trenches under about 1 \u00b5m (between comb teeth) are not cut, only seen in the photo; debris on the die reads as gaps in places (accelerometers, lower right)"
     },
     "bond_wires": {
@@ -290,6 +291,6 @@
     "glb_bytes": 1500000,
     "internal_triangles": 100000,
     "internal_glb_bytes": 7000000,
-    "note": "the inside carries the traced device layer (about 78k triangles, 5 MB) and its die photos (1.4 MB); it loads only when Internal is pressed"
+    "note": "the inside carries the traced device layer (about 91k triangles, 5.9 MB) and its die photos (1.1 MB); it loads only when Internal is pressed"
   }
 }
