@@ -12,7 +12,7 @@
 .starType { color: rgba(0, 255, 0, 0.6); }
 .starDim { color: rgba(255, 255, 255, 0.5); }
 .starFact { margin-top: 0.25rem; font-size: 0.75rem; line-height: 1.5; color: rgba(255, 255, 255, 0.5); }
-.orbit { position: absolute; right: 16px; bottom: 16px; width: 150px; height: 150px; pointer-events: none; }
+.orbit { position: absolute; right: 16px; top: 16px; width: 150px; height: 150px; pointer-events: none; }
 /* As the models page's viewer buttons (models.module.css .explode). */
 .launch {
   position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
