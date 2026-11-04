@@ -10,7 +10,7 @@ usage: python3 -I portrait.py IMAGE FONT.ttf OUT.txt COLS CROP [MIX] [GAMMA] [LE
 
 The thinkers page (app/thinkers) was made with Roboto Mono (google/fonts, ofl/robotomono) and:
   portrait.py newton.jpeg RobotoMono.ttf newton.txt 80 0.26,0.08,0.74,0.45 0.4 1.1 14 25 0.17
-  portrait.py darwin.jpeg RobotoMono.ttf darwin.txt 80 0.1,0.08,0.9,0.7 0.3 1.3 14 30 0.17
+  portrait.py darwin.jpeg RobotoMono.ttf darwin.txt 80 0.25,0.1,0.85,0.57 0.3 1.3 14 30 0.17
 """
 import sys
 import numpy as np
@@ -74,6 +74,24 @@ if flood:
         seen[r, c] = True
         stack += [(r + 1, c), (r - 1, c), (r, c + 1), (r, c - 1)]
     v[seen] = 0
+
+# Specks: drop little islands of ink (under 6 cells) that touch nothing else.
+seen = np.zeros(v.shape, bool)
+for r0 in range(v.shape[0]):
+    for c0 in range(v.shape[1]):
+        if v[r0, c0] == 0 or seen[r0, c0]:
+            continue
+        group, stack = [], [(r0, c0)]
+        while stack:
+            r, c = stack.pop()
+            if not (0 <= r < v.shape[0] and 0 <= c < v.shape[1]) or seen[r, c] or v[r, c] == 0:
+                continue
+            seen[r, c] = True
+            group.append((r, c))
+            stack += [(r + dr, c + dc) for dr in (-1, 0, 1) for dc in (-1, 0, 1)]
+        if len(group) < 6:
+            for r, c in group:
+                v[r, c] = 0
 
 lines = []
 for r in v:

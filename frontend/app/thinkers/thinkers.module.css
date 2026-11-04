@@ -32,6 +32,7 @@
   font-family: inherit;
   line-height: 1.2;
   white-space: pre;
+  width: 48em; /* the full 80 characters, so both boxes are the same width */
   font-size: min(calc((100vw - 1.5rem) / 48), 7px);
 }
 
