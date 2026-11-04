@@ -1,0 +1,275 @@
+{
+  "title": "InvenSense MPU-6050 IMU",
+  "logos": [],
+  "listed": false,
+  "note": "A 6-axis MEMS IMU (3-axis gyroscope + 3-axis accelerometer), built to show how one works from the outside in: the QFN package, the CMOS chip on its lead frame, the MEMS chip bonded face down on it, and the six sensors in the MEMS layer. Frame: z up, package bottom at z = 0, centred in x and y; +X and +Y as the datasheet's orientation figure (pin 1 top left in the top view, pins 1-6 down the -X side, 7-12 along -Y, 13-18 up +X, 19-24 along +Y). Real size in metres (the package is 4 mm). Layer thicknesses and the MEMS fine structure are estimates: no free cross-section of any consumer IMU exists (open_questions).",
+  "viewer": {
+    "explore": true
+  },
+  "check_scale": 0.001,
+  "sources": [
+    {
+      "id": "mpu6050_ds",
+      "title": "InvenSense MPU-6000/MPU-6050 Product Specification, PS-MPU-6000A-00 Rev 3.4 (08/19/2013)",
+      "url": "https://www.cdiweb.com/datasheets/invensense/MPU-6050_DataSheet_V3%204.pdf",
+      "read": "2026-11-03",
+      "licence": "copyright InvenSense (TDK): link and quotes only"
+    },
+    {
+      "id": "zeptobars_mpu6050",
+      "title": "Zeptobars, \"Invensense MPU6050 6-axis MEMS IMU : weekend die-shot\" (29 Dec 2013), with die photos mpu6050-HD.jpg, mpu6050-small-top-HD.jpg (6704 x 5312), mpu6050-big-HD.jpg (6699 x 6611)",
+      "url": "https://zeptobars.com/en/read/Invensense-MPU6050-6d-MEMS-IMU-gyroscope-accelerometer",
+      "read": "2026-11-03",
+      "licence": "CC BY 3.0 (ZeptoBars), as stated on the photos' Wikimedia Commons pages (File:Mpu6050-HD.jpg, File:Mpu6050-small-top-HD.jpg, File:Mpu6050-big-HD.jpg); used to measure from and sample colours",
+      "credit": "Die layout and colours measured from Zeptobars' MPU-6050 die photos"
+    },
+    {
+      "id": "spekking_nexus7",
+      "title": "Raimond Spekking, \"Nexus 7 (2012) - board - InvenSense MPU-6050\" (photo, 2024), 1334 x 1334, near-straight-down view of the package top",
+      "url": "https://commons.wikimedia.org/wiki/File:Nexus_7_(2012)_-_board_-_InvenSense_MPU-6050-4865.jpg",
+      "read": "2026-11-03",
+      "licence": "CC BY-SA 4.0 (Raimond Spekking), as stated on the Commons file page; the traced marking mask (refs/mpu6050/marking-mask.png) is a derivative under the same licence",
+      "credit": "MPU-6050 package marking traced from a photo by Raimond Spekking (CC BY-SA 4.0, Wikimedia Commons)"
+    },
+    {
+      "id": "nasiri2010",
+      "title": "J. Seeger, M. Lim, S. Nasiri (InvenSense), \"Development of High-Performance, High-Volume Consumer MEMS Gyroscopes\", Solid-State Sensors, Actuators and Microsystems Workshop, Hilton Head 2010, pp. 61-64",
+      "url": "https://transducer-research-foundation.org/technical_digests/HiltonHead_2010/hh2010_0061.pdf",
+      "read": "2026-11-03",
+      "licence": "copyright 2010 TRF: link and quotes only"
+    }
+  ],
+  "reference_model": {
+    "url": "",
+    "source": "zeptobars_mpu6050",
+    "note": "No 3D model of the MPU-6050's inside exists; layout from the die photos (zeptobars_mpu6050), package from the datasheet drawing (mpu6050_ds 11.2)."
+  },
+  "dimensions": {
+    "package_x": {
+      "value": 0.004,
+      "object": "package_body",
+      "measure": "x",
+      "source": "mpu6050_ds, 11.2 p.41",
+      "quote": "24 Lead QFN (4x4x0.9) mm ... D 3.90 4.00 4.10"
+    },
+    "package_y": {
+      "value": 0.004,
+      "object": "package_body",
+      "measure": "y",
+      "source": "mpu6050_ds, 11.2 p.41",
+      "quote": "E 3.90 4.00 4.10"
+    },
+    "package_height": {
+      "value": 0.0009,
+      "object": "*",
+      "measure": "z",
+      "source": "mpu6050_ds, 11.2 p.41",
+      "quote": "A 0.85 0.90 0.95"
+    },
+    "exposed_pad_x": {
+      "value": 0.0027,
+      "object": "exposed_pad",
+      "measure": "x",
+      "source": "mpu6050_ds, 11.2 p.41",
+      "quote": "D2 2.65 2.70 2.75"
+    },
+    "exposed_pad_y": {
+      "value": 0.0026,
+      "object": "exposed_pad",
+      "measure": "y",
+      "source": "mpu6050_ds, 11.2 p.41",
+      "quote": "E2 2.55 2.60 2.65"
+    },
+    "cmos_die_x": {
+      "value": 0.002782,
+      "object": "cmos_die",
+      "measure": "x",
+      "source": "zeptobars_mpu6050",
+      "quote": "Size of big die is 2782x2718 µm, small die - 2778x2195 µm."
+    },
+    "cmos_die_y": {
+      "value": 0.002718,
+      "object": "cmos_die",
+      "measure": "y",
+      "source": "zeptobars_mpu6050",
+      "quote": "Size of big die is 2782x2718 µm"
+    },
+    "mems_die_x": {
+      "value": 0.002778,
+      "object": "mems_handle",
+      "measure": "x",
+      "source": "zeptobars_mpu6050",
+      "quote": "small die - 2778x2195 µm"
+    },
+    "mems_die_y": {
+      "value": 0.002195,
+      "object": "mems_handle",
+      "measure": "y",
+      "source": "zeptobars_mpu6050",
+      "quote": "small die - 2778x2195 µm"
+    }
+  },
+  "facts": {
+    "leads": {
+      "value": {"count": 24, "per_side": 6, "pitch": 0.0005, "width": 0.00025, "length": 0.00035, "frame_thickness": 0.0002, "standoff": 0.00002},
+      "source": "mpu6050_ds, 11.2 p.41",
+      "quote": "e 0.50; b 0.18 0.25 0.30; L 0.30 0.35 0.40; c 0.20 REF; A1 0.00 0.02 0.05"
+    },
+    "pin_1_mark": {
+      "value": "laser-marked dot on top, at pin 1 (top left corner in the top view); about 0.55 mm across, centred 0.40 mm from the left edge and 0.52 mm from the top edge (part of the marking decal)",
+      "source": "mpu6050_ds, 11.2 p.41 and 7.1 p.21",
+      "quote": "PIN 1 IDENTIFIER IS A LASER MARKED FEATURE ON TOP",
+      "also": [{"source": "spekking_nexus7", "quote": "size and position measured on the photo rectified by the package's four corners to the 4.00 mm body (200 px/mm): dot 99-120 px across, centre (81, 105) px"}]
+    },
+    "marking": {
+      "value": "laser marking on top: pin 1 dot, then INVENSENSE / MPU-6050 / lot code / foundry, vendor, year-week and rev codes, over the whole 4 x 4 mm top",
+      "source": "mpu6050_ds, 11.6 p.46",
+      "quote": "INVENSENSE MPU6050 XXXXXX-XX XX YYWW X ... Part number ... Lot traceability code ... Foundry code ... Package Vendor Code ... Rev Code",
+      "also": [{"source": "spekking_nexus7", "quote": "traced: photo rectified by the package's four corners at (254, 300), (1003, 300), (1004, 1049), (257, 1053) px to 800 x 800 px; median 9 px, minus a 30 px blurred background, threshold 9, specks under 150 px dropped, 7 px closing. The V of INVENSENSE and the left stroke of the M are worn in the photo and were drawn in at the other letters' 13 px stroke width. This chip reads D2G594-L1 / EI 1228 D"}]
+    },
+    "exposed_pad_chamfer": {
+      "value": 0.0003,
+      "source": "mpu6050_ds, 11.2 p.41",
+      "quote": "C0.3 (bottom view, at the exposed pad's corner nearest pin 1)"
+    },
+    "bonded_pins": {
+      "value": [1, 6, 7, 8, 9, 10, 11, 12, 13, 18, 19, 20, 21, 22, 23, 24],
+      "source": "mpu6050_ds, 7.1 p.21 (pin table)",
+      "quote": "NC ... Not internally connected. May be used for PCB trace routing. (pins 2, 3, 4, 5, 14, 15, 16, 17)",
+      "note": "only connected pins get a wire bond; RESV pins (19, 21, 22) are counted as bonded (estimated: 'Do not connect' means used internally)"
+    },
+    "stack": {
+      "value": "lead frame with exposed pad; CMOS chip glued on the pad; MEMS chip face down on the CMOS chip, joined by Al-Ge eutectic bonds that also seal the cavity; the MEMS handle wafer is the lid; gold wires from the CMOS bond pads to the leads; all in mould compound",
+      "source": "nasiri2010, p.61-62",
+      "quote": "Eutectic bonding between a germanium layer deposited on the MEMS and the top aluminum layer on the CMOS simultaneously creates multiple interconnects and a hermetic seal ... After bonding, a portion of the MEMS wafer is removed by conventional dicing saw cuts to expose the CMOS wire bond pads ... Each die is fully encapsulated and is packaged using standard, low-cost QFN packages",
+      "also": "zeptobars_mpu6050: \"It contains 2 dies, soldered/welded face-to-face in multiple places\""
+    },
+    "electrodes_under_mems": {
+      "value": "aluminium electrodes on the CMOS chip's top layer under the moving plates; logic under the MEMS outside the cavities",
+      "source": "nasiri2010, p.61; zeptobars_mpu6050",
+      "quote": "The top layer of CMOS aluminum provides electrodes for actuation and sensing ... The process also allows circuits under the MEMS outside the small cavity areas"
+    },
+    "mems_device_layer": {
+      "value": 0.00004,
+      "source": "nasiri2010, p.62 (range); 40 µm chosen inside it (estimated)",
+      "quote": "Using a bulk silicon device layer allows for thicker MEMS structures (20-100µm)"
+    },
+    "thicknesses": {
+      "value": {"cmos_die": 0.0002, "die_attach": 0.00002, "bond_gap": 0.000004, "handle_wafer": 0.00025, "handle_cavity": 0.00003},
+      "source": "nasiri2010 (stack order only); thicknesses estimated: no source gives them, chosen so the stack (lead frame 0.20 + attach + CMOS + gap + device + handle = 0.71 mm) sits under the 0.90 mm package top with room for the wire loops",
+      "note": "open question"
+    },
+    "die_placement": {
+      "value": "CMOS die centred on the exposed pad, its 2782 µm side along X; MEMS die centred on the CMOS die, leaving bond-pad strips about 260 µm wide along both Y edges of the CMOS die",
+      "source": "zeptobars_mpu6050, estimated from mpu6050-big-HD.jpg (2.35 px/µm): pad strips along the top and bottom edges, seal-ring footprint between; the die's rotation in the package is not known (open question)"
+    },
+    "mems_layout_um": {
+      "value": {
+        "frame": "measured on mpu6050-small-top-HD.jpg, x right, y down from the die's top left corner, in µm; the die lies face down, so in the model x is mirrored",
+        "seal_ring": {"x": [70, 2700], "y": [70, 2120], "width": 50},
+        "gyro_z": {"box": [140, 130, 930, 1440], "plates": [[220, 380, 900, 780], [220, 790, 900, 1180]], "combs": [[160, 140, 460, 370], [580, 140, 930, 370], [160, 1210, 460, 1430], [580, 1210, 930, 1430]], "fingers": "horizontal"},
+        "gyro_y": {"box": [980, 130, 1700, 1440], "plates": [[1010, 560, 1680, 1150]], "combs": [[1010, 150, 1310, 420], [1400, 150, 1680, 420], [1010, 1220, 1310, 1430], [1400, 1220, 1680, 1430]], "fingers": "horizontal"},
+        "gyro_x": {"box": [1760, 130, 2610, 1440], "plates": [[1950, 500, 2200, 1160], [2210, 500, 2470, 1160]], "combs": [[1790, 150, 2580, 440], [1790, 1170, 2580, 1430]], "fingers": "vertical"},
+        "accel_region": {"box": [130, 1500, 2600, 2060]},
+        "accel_x": {"box": [180, 1530, 790, 2010], "cells": [[262, 1536, 627, 1751], [262, 1790, 627, 2005]], "springs": [[185, 1536, 257, 2005], [700, 1536, 785, 2005]], "motion": "x"},
+        "accel_y": {"box": [790, 1560, 1410, 2010], "cells": [[820, 1600, 1116, 1940], [1125, 1600, 1400, 1940]], "springs": [[820, 1566, 1400, 1593], [820, 1947, 1400, 1970]], "motion": "y"},
+        "accel_z": {"box": [1440, 1530, 2600, 2010], "paddles": [[1449, 1541, 1935, 2003], [2113, 1541, 2595, 2003]], "centres": [[1638, 1636, 1836, 1904], [2212, 1636, 2405, 1904]], "beam_v": 1768}
+      },
+      "source": "zeptobars_mpu6050, estimated from mpu6050-small-top-HD.jpg, scaled by the 2778 µm die width (2.35 px/µm); accelerometer cells, springs and paddles from full-resolution crops of its bottom row",
+      "simplified": "each sensor is built from its measured outline and main members (masses, plates, anchors, springs, comb banks); the inner arrangement of springs and combs is representative, not traced line for line",
+      "axes": {
+        "gyros": "left = Z, middle = Y, right = X: nasiri2010 Fig. 7, an InvenSense die photo captioned \"MPU-3000, 3-Axis gyroscope in 2.8mm x 2.4mm\" and labelled \"Z-Axis\", \"Y-Axis\", \"X-Axis\" left to right; the MPU-6050 die's top row has the same three structures in the same order and orientation (compared by eye: left two stacked plates with comb banks above and below, middle one large plate, right two masses with vertical comb arrays)",
+        "accelerometers": "derived, not labelled in any source: the die's X and Y directions follow from the sourced gyros: nasiri2010 p.62-63 says the X gyro's two masses move out of plane in opposition and the Coriolis forces turn its sense frame in plane, which for rotation about X needs the masses apart along X; the X gyro's two masses sit side by side across the die and the Y gyro's are stacked, so across the die is X and along it is Y (the same in both photos, mirror or not). Left accelerometer: hung on long beams running along Y and with comb fingers along Y, so it moves along X: X axis. Middle: the same design turned 90 degrees: Y axis. Right: two masses on a centre beam over electrodes, a teeter-totter: Z axis",
+        "physics": "nasiri2010 p.62-63",
+        "quote": "coupled dual-mass (tuning fork) proof-masses that are driven out-of-plane and generate Coriolis forces in-plane ... The Coriolis torque moves the four-bar linkage which is sensed in-plane using capacitive electrodes"
+      }
+    },
+    "bond_wires": {
+      "value": {"diameter": 0.000025, "loop_height": 0.00015, "pad_size": 0.00008, "pad_strip": 0.00026},
+      "source": "nasiri2010 (wires from CMOS pads exposed beside the MEMS die); diameter, loop height and pad size estimated (no source gives them); pad strip width estimated from zeptobars_mpu6050 mpu6050-big-HD.jpg",
+      "quote": "a portion of the MEMS wafer is removed by conventional dicing saw cuts to expose the CMOS wire bond pads",
+      "note": "pins 6-13 bond to the pads along the -Y edge, pins 18-24 and 1 to the +Y edge, each strip in the order of its leads (estimated)"
+    },
+    "electrodes": {
+      "value": {"inset": 0.00002, "thickness": 0.000001},
+      "source": "nasiri2010, p.62-63 (electrodes under the torsion plates); zeptobars_mpu6050 mpu6050-big-HD.jpg shows the CMOS die's electrode areas as the MEMS layout mirrored, so each sits under its plate; inset and thickness estimated",
+      "quote": "Aluminum electrodes on the IC are located under the torsion plates forming parallel-plate electrodes"
+    },
+    "gyro_structures": {
+      "value": "X/Y gyros: dual proof masses driven out of plane (tuning fork) on torsion plates over CMOS electrodes; Z gyro: two masses resonated in plane, flexibly coupled; comb electrodes for in-plane drive and sense",
+      "source": "nasiri2010, p.62-63",
+      "quote": "coupled dual-mass (tuning fork) proof-masses that are driven out-of-plane ... torsion plates ... Aluminum electrodes on the IC are located under the torsion plates forming parallel-plate electrodes ... two proof-masses that are resonated in-plane ... flexibly coupled"
+    },
+    "gyro_frequencies_khz": {
+      "value": {"x": 33, "y": 30, "z": 27},
+      "source": "mpu6050_ds, 6.1 (Mechanical Frequency, typ.)",
+      "quote": "X-Axis 30 33 36 kHz; Y-Axis 27 30 33 kHz; Z-Axis 24 27 30 kHz"
+    },
+    "accelerometer": {
+      "value": "one proof mass per axis, sensed differentially by capacitance",
+      "source": "mpu6050_ds, 7.8",
+      "quote": "uses separate proof masses for each axis. Acceleration along a particular axis induces displacement on the corresponding proof mass, and capacitive sensors detect the displacement differentially"
+    },
+    "comb_fingers": {
+      "value": {"real_width": 0.000001, "modelled_width": 0.000008, "modelled_gap": 0.000008},
+      "source": "zeptobars_mpu6050 (real width); modelled width and gap a design choice: hundreds of 1 µm fingers would cost far over the triangle budget and not show, so each bank has fewer, wider fingers in the measured outline",
+      "quote": "Width of smallest teethes is 1µm"
+    }
+  },
+  "materials": {
+    "cmos_aluminium": {
+      "hex": "#daddde",
+      "metallic": 1.0,
+      "roughness": 0.35,
+      "source": "zeptobars_mpu6050, mpu6050-HD.jpg: CMOS die's top metal, 3 spots averaged at (438, 284), (460, 361), (416, 416) px (microscope lighting)"
+    },
+    "cmos_surface": {
+      "hex": "#cebf85",
+      "metallic": 0.5,
+      "roughness": 0.4,
+      "source": "zeptobars_mpu6050, mpu6050-big-HD.jpg: the CMOS die's face over its logic, 3 spots averaged at (1500, 4680), (1800, 5100), (900, 4980) px (microscope lighting)"
+    },
+    "silicon": {
+      "hex": "#b5bbbe",
+      "metallic": 0.6,
+      "roughness": 0.3,
+      "source": "zeptobars_mpu6050, mpu6050-HD.jpg: MEMS die's top frame, 3 spots averaged at (1707, 350), (1641, 459), (1575, 613) px (microscope lighting)"
+    },
+    "mems_structure": {
+      "hex": "#babfc9",
+      "metallic": 0.6,
+      "roughness": 0.25,
+      "source": "zeptobars_mpu6050, mpu6050-HD.jpg: MEMS structures, 2 spots averaged at (1455, 317), (1422, 438) px (microscope lighting)"
+    },
+    "mould_compound": {
+      "hex": "#3c403d",
+      "metallic": 0.0,
+      "roughness": 0.85,
+      "source": "spekking_nexus7: package top away from the marking (more than 10 px from any marking, 30 px in from the edges), mean of 313,000 px on the rectified photo; roughness by eye (matte, speckled)"
+    },
+    "laser_marking": {
+      "hex": "#81856f",
+      "metallic": 0.0,
+      "roughness": 0.9,
+      "source": "spekking_nexus7: inside the traced marking (eroded 3 px), mean of 62,500 px on the rectified photo"
+    }
+  },
+  "mounts": {
+    "marking": {
+      "on": "package_body"
+    }
+  },
+  "open_questions": [
+    "Layer thicknesses (CMOS die, handle wafer, bond gap, cavity) are estimates: no free cross-section of the MPU-6050 or any consumer IMU was found.",
+    "Device layer: 40 µm chosen inside the paper's 20-100 µm range; Zeptobars' \"MEMS part is 28µm above surface ... on smaller die - 100 µm above\" is not explained enough to use.",
+    "Accelerometer axes are derived (die axes from the sourced gyros, each mass's direction from its springs and combs), not labelled by any source.",
+    "The dies' rotation inside the package and which edges carry the bond pads relative to the pins: estimated.",
+    "Lead-frame NiPdAu finish and gold wire colour need a sourced photo (the board photo shows the leads soldered); the shared foil_silver and foil_gold stand in. Mould and marking colours are from one photo, under its lighting.",
+    "Corner tie-bar ends of the lead frame (the datasheet's corner detail, dimension a) are left out: a is not in the table.",
+    "Comb fingers are modelled 8 µm wide (real: 1 µm) and fewer: a simplification for the triangle budget."
+  ],
+  "budget": {
+    "triangles": 50000,
+    "glb_bytes": 1500000
+  }
+}

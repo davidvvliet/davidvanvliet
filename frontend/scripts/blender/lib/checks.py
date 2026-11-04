@@ -97,7 +97,7 @@ GROUND_TOUCH = 0.005  # m
 def ground(spec, objs):
     """Problems with standing on the ground: [] when fine."""
     g = spec["ground"]
-    z0, tol = g.get("z", 0.0), g.get("tolerance", GROUND_TOUCH)
+    z0, tol = g.get("z", 0.0), g.get("tolerance", GROUND_TOUCH * SCALE)
     contacts = [o for o in objs if any(fnmatch.fnmatch(o.name, pat) for pat in g["contacts"])]
     problems = []
     if not contacts:
@@ -137,6 +137,9 @@ def triangles(objs):
     return n
 
 ATTACH_GAP = 0.02  # m: parts closer than this count as touching
+# A spec's "check_scale" multiplies these absolute tolerances (GROUND_TOUCH, ATTACH_GAP, MOUNT_GAP,
+# MOUNT_INSIDE) for a model far smaller than a spacecraft: 0.001 for a 4 mm chip. Set by run().
+SCALE = 1.0
 
 def attached(objs):
     """Names of the parts not connected (through touching parts) to the largest group."""
@@ -155,7 +158,7 @@ def attached(objs):
     names = list(pts)
     def near(a, b):
         (alo, ahi), (blo, bhi) = boxes[a], boxes[b]
-        if any(alo[i] > bhi[i] + ATTACH_GAP or blo[i] > ahi[i] + ATTACH_GAP for i in range(3)):
+        if any(alo[i] > bhi[i] + ATTACH_GAP * SCALE or blo[i] > ahi[i] + ATTACH_GAP * SCALE for i in range(3)):
             return False
         if trees[a].overlap(trees[b]):
             return True
@@ -163,7 +166,7 @@ def attached(objs):
             for v in pts[x]:
                 hit, normal, _, dist = trees[y].find_nearest(v)
                 # touching, or inside the other part (behind its nearest face; parts are closed)
-                if hit is not None and (dist <= ATTACH_GAP or (v - hit).dot(normal) < 0):
+                if hit is not None and (dist <= ATTACH_GAP * SCALE or (v - hit).dot(normal) < 0):
                     return True
         return False
     groups = []
@@ -202,24 +205,26 @@ def mounted(part, host):
         back = [w for w, v in zip(pv, part.data.vertices) if any(g.group == group.index for g in v.groups)]
     else:
         zmin = min(v.z for v in pl)
-        back = [w for w, l in zip(pv, pl) if l.z - zmin < 1e-4]
+        back = [w for w, l in zip(pv, pl) if l.z - zmin < 1e-4 * SCALE]
     def signed(v):
         hit, normal, _, dist = tree.find_nearest(v)
         return dist if (v - hit).dot(normal) >= 0 else -dist
     off = [signed(v) for v in back]
     deep = min(signed(v) for v in pv)
     problems = []
-    if deep < -MOUNT_INSIDE:
+    if deep < -MOUNT_INSIDE * SCALE:
         problems.append(f"{part.name} is {-deep * 1000:.0f} mm inside {host.name}")
     far = max(abs(x) for x in off)
-    if far > MOUNT_GAP:
-        lifted = sum(1 for x in off if abs(x) > MOUNT_GAP)
+    if far > MOUNT_GAP * SCALE:
+        lifted = sum(1 for x in off if abs(x) > MOUNT_GAP * SCALE)
         problems.append(f"{lifted}/{len(off)} back-face points off {host.name}'s surface (up to {far * 1000:.0f} mm)")
     return problems
 
 def run(spec, objs):
     """Returns a list of check results: {name, ok, measured, expected, unit, detail}.
     `objs` may include joints (empties); geometry checks use the meshes."""
+    global SCALE
+    SCALE = float(spec.get("check_scale", 1.0))
     all_objs = objs
     objs = [o for o in objs if o.type == "MESH"]
     by_name = {o.name: o for o in all_objs}
