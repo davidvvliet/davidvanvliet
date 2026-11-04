@@ -49,6 +49,8 @@ interface SolarSystemProps {
 export type SceneHandles = {
   scene: THREE.Scene; camera: THREE.PerspectiveCamera; renderer: THREE.WebGLRenderer; controls: OrbitControls;
   sun: THREE.Mesh; earthSystem: THREE.Group; moon: THREE.Mesh; moonFrame: THREE.Group; ambient: THREE.AmbientLight;
+  /** Earth's globe: tilted and turned by sidereal time; longitude 0 on its local -x. */
+  globe: THREE.Group; earthRadius: number;
   unitsPerKm: number; moonRadius: number;
   /** Orbit rings on or off for this scene (the `orbits` setting otherwise). */
   showOrbits(on: boolean): void;
@@ -1566,7 +1568,7 @@ export function SolarSystem({
     };
     const handles: SceneHandles = {
       scene, camera, renderer, controls, sun, earthSystem, moon, moonFrame, ambient: ambientLight,
-      unitsPerKm: MOON_KM_TO_UNITS, moonRadius: MOON_RADIUS, showOrbits: setOrbitStyle,
+      globe: globeGroup, earthRadius: EARTH_RADIUS, unitsPerKm: MOON_KM_TO_UNITS, moonRadius: MOON_RADIUS, showOrbits: setOrbitStyle,
     };
     if (ext) ext.init(handles);
 

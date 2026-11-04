@@ -176,6 +176,13 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
   Object.assign(sunLight.shadow.camera, { left: -8, right: 8, top: 8, bottom: -8, near: 1, far: 60000 });
   sunLight.shadow.camera.updateProjectionMatrix();
   const earthshine = new THREE.DirectionalLight("#cfdcff", 0.1);
+  // The Earth as a sunlit globe (the main page draws it as a wireframe with outlines): NASA's Blue Marble
+  // Next Generation for January (https://science.nasa.gov/earth/earth-observatory/blue-marble-next-generation/base-topography-bathymetry/),
+  // public domain, 2048 x 1024. Equirectangular; a sphere puts its middle (longitude 0) on +x, the globe on -x.
+  const earthTex = new THREE.TextureLoader().load("/models/aether-launch/earth.jpg");
+  earthTex.colorSpace = THREE.SRGBColorSpace;
+  let earthGlobe: THREE.Mesh | null = null;
+  const hiddenOnGlobe: THREE.Object3D[] = [];
 
   let h0: SceneHandles | null = null;
   let unitsPerM = 1;
@@ -225,6 +232,9 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
         .premultiply(new THREE.Matrix4().makeRotationFromQuaternion(moonSceneQuaternion(JD0 + T_SHOT / 86400)));
       h.moonFrame.add(orbitFrame);
       h.scene.add(sunLight, sunLight.target, earthshine);
+      earthGlobe = new THREE.Mesh(new THREE.SphereGeometry(h.earthRadius, 96, 48), new THREE.MeshLambertMaterial({ map: earthTex }));
+      earthGlobe.rotation.y = Math.PI;
+      h.globe.add(earthGlobe);
 
       const load = ++loads;   // a later init (React's dev double mount) supersedes this load
       new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).load("/models/aether.glb", (gltf) => {
@@ -267,6 +277,8 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
     frame(h, jd) {
       const { camera, controls } = h;
       const running = startAt !== null;
+      // Only the textured Earth: the wireframe, outlines and dots (some added later, as they load) stay hidden.
+      for (const c of h.globe.children) if (c !== earthGlobe && c.visible) { c.visible = false; hiddenOnGlobe.push(c); }
       const t = sceneTime();
       const onTrack = t < T_SHOT;
       plume.visible = t >= P_BURN && t < P_REVEAL;
@@ -431,6 +443,9 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
       setUp(h.camera, h.controls, Y.clone());
       h.moon.remove(launchFrame); h.moonFrame.remove(orbitFrame);
       h.scene.remove(sunLight, sunLight.target, earthshine);
+      for (const c of hiddenOnGlobe) c.visible = true;
+      hiddenOnGlobe.length = 0;
+      if (earthGlobe) { h.globe.remove(earthGlobe); earthGlobe.geometry.dispose(); (earthGlobe.material as THREE.Material).dispose(); earthGlobe = null; }
       h.moon.geometry = saved.geometry; h.moon.material = saved.material;
       h.ambient.intensity = saved.ambient;
       h.renderer.shadowMap.enabled = saved.shadows;
