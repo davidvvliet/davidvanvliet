@@ -558,7 +558,7 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
       sled.quaternion.setFromRotationMatrix(v.m2.makeBasis(v.fwd2, v.up2, v.side2));
       sled.position.copy(tmp).addScaledVector(v.up2, lift);
 
-      // The camera rides with the craft, in its flight frame: straight behind it on the track,
+      // The camera rides with the craft, in its flight frame: behind and to the left on the track,
       // rising to look down past it at the Moon as it climbs. The viewer's own angle and zoom, once they
       // turn or zoom, are kept in that frame, so the Moon stays below.
       craft.getWorldPosition(v.cw);
@@ -594,11 +594,11 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
         const look = tmp.set(2 * (1 - k), 0.8 * (1 - k), 0);
         controls.target.copy(v.cw).add(look.applyMatrix4(v.b).multiplyScalar(unitsPerM));
         if (focusK > 1e-4) controls.target.lerp(pc, focusK);
-        // The planned chase view, straight behind the craft. Elevation: 11 degrees on the track; off it, tilting down quickly (25 degrees by
-        // the end of the separation, 60 from 150 km up) so the Moon stays in view as the craft speeds away.
-        const sep = onTrack ? 0 : ease((t - T_SHOT) / SEP), kt = onTrack ? 0 : ease(alt / 150e3);
-        const el = THREE.MathUtils.degToRad(11 + 14 * sep + 35 * kt), plannedDist = 11.3 + 2 * k;
-        lookQuat(offLocal.set(-Math.cos(el), Math.sin(el), 0), planned);
+        // The planned chase view: on the track behind and to the left, 11 degrees above; from the track's end it
+        // eases round to straight behind and down to 60 degrees, slowly at first, arriving at the high point.
+        const climb = onTrack ? 0 : ease((t - T_SHOT) / (P_BURN - T_SHOT)) ** 2;
+        const el = THREE.MathUtils.degToRad(11 + 49 * climb), az = Math.atan2(0.58, 0.81) * (1 - climb), plannedDist = 11.3 + 2 * k;
+        lookQuat(offLocal.set(-Math.cos(el) * Math.cos(az), Math.sin(el), -Math.cos(el) * Math.sin(az)), planned);
         if (focusPart && !framed) {
           viewDist += (frameDist - viewDist) * ez;
           if (Math.abs(viewDist - frameDist) < frameDist * 0.01) framed = true;
