@@ -1,7 +1,8 @@
 # The Earth for the Aether launch page (public/models/aether-launch/earth.jpg): the clouds of NASA SVS 3615
 # ("Equirectangular Projected Earth for LARGEST", https://svs.gsfc.nasa.gov/3615/; the same frame with and
-# without clouds, so the clouds are what brightened), laid over NASA's January Blue Marble Next Generation map.
-#   python3 scripts/aether/earth_clouds.py <dir with dl/still.jpg and dl/noclouds.jpg> <blue marble 2048x1024 jpg>
+# without clouds, so the clouds are what brightened), laid over Solar System Scope's Earth day map
+# (https://www.solarsystemscope.com/textures/, 8k_earth_daymap.jpg resized to 2048 x 1024; CC BY 4.0).
+#   python3 scripts/aether/earth_clouds.py <dir with dl/still.jpg and dl/noclouds.jpg> <day map 2048x1024 jpg>
 # (SVS 3615's flat_earth_Largest_still.0330.jpg and earth_noClouds.0330.jpg.) Writes <dir>/earth-clouds.jpg.
 import sys, numpy as np
 from PIL import Image

@@ -212,8 +212,8 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
   Object.assign(sunLight.shadow.camera, { left: -8, right: 8, top: 8, bottom: -8, near: 1, far: 60000 });
   sunLight.shadow.camera.updateProjectionMatrix();
   const earthshine = new THREE.DirectionalLight("#cfdcff", 0.1);
-  // The Earth as a sunlit globe (the main page draws it as a wireframe with outlines): NASA's Blue Marble
-  // Next Generation for January (https://science.nasa.gov/earth/earth-observatory/blue-marble-next-generation/base-topography-bathymetry/),
+  // The Earth as a sunlit globe (the main page draws it as a wireframe with outlines): Solar System Scope's
+  // Earth day map (https://www.solarsystemscope.com/textures/, 8k_earth_daymap.jpg, CC BY 4.0),
   // with clouds taken from NASA SVS 3615 (https://svs.gsfc.nasa.gov/3615/; scripts/aether/earth_clouds.py), 2048 x 1024.
   // Equirectangular; a sphere puts its middle (longitude 0) on +x, the globe on -x.
   const earthTex = new THREE.TextureLoader().load("/models/aether-launch/earth.jpg");
@@ -595,11 +595,11 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
         controls.target.copy(v.cw).add(look.applyMatrix4(v.b).multiplyScalar(unitsPerM));
         if (focusK > 1e-4) controls.target.lerp(pc, focusK);
         // The planned chase view: on the track behind and to the left, 11 degrees above. From the track's end it
-        // eases round to straight behind by the high point, and tilts down to 22 degrees below the Moon's horizon
-        // (acos(R / r) below level), the horizon near the top of the view: 66 degrees at 700 km.
+        // eases round to straight behind by the high point, and tilts down to 19 degrees below the Moon's horizon
+        // (acos(R / r) below level), the horizon near the top of the view: 63 degrees at 700 km.
         const climb = onTrack ? 0 : ease((t - T_SHOT) / (P_BURN - T_SHOT)) ** 2;
         const dip = onTrack ? 0 : Math.acos(Math.min(1, R / v.pos.length()));
-        const el = THREE.MathUtils.degToRad(11 + 11 * (onTrack ? 0 : ease((t - T_SHOT) / SEP))) + dip, az = Math.atan2(0.58, 0.81) * (1 - climb), plannedDist = 11.3 + 2 * k;
+        const el = THREE.MathUtils.degToRad(11 + 8 * (onTrack ? 0 : ease((t - T_SHOT) / SEP))) + dip, az = Math.atan2(0.58, 0.81) * (1 - climb), plannedDist = 11.3 + 2 * k;
         lookQuat(offLocal.set(-Math.cos(el) * Math.cos(az), Math.sin(el), -Math.cos(el) * Math.sin(az)), planned);
         if (focusPart && !framed) {
           viewDist += (frameDist - viewDist) * ez;
