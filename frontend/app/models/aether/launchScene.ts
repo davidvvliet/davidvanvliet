@@ -204,7 +204,8 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
   const earthshine = new THREE.DirectionalLight("#cfdcff", 0.1);
   // The Earth as a sunlit globe (the main page draws it as a wireframe with outlines): NASA's Blue Marble
   // Next Generation for January (https://science.nasa.gov/earth/earth-observatory/blue-marble-next-generation/base-topography-bathymetry/),
-  // public domain, 2048 x 1024. Equirectangular; a sphere puts its middle (longitude 0) on +x, the globe on -x.
+  // with clouds taken from NASA SVS 3615 (https://svs.gsfc.nasa.gov/3615/; scripts/aether/earth_clouds.py), 2048 x 1024.
+  // Equirectangular; a sphere puts its middle (longitude 0) on +x, the globe on -x.
   const earthTex = new THREE.TextureLoader().load("/models/aether-launch/earth.jpg");
   earthTex.colorSpace = THREE.SRGBColorSpace;
   let earthGlobe: THREE.Mesh | null = null;

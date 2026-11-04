@@ -18,6 +18,7 @@ const credits: Command = {
     "__SMALL__JPL Technical Report 32-740, Mariner 4 injection and encounter conditions",
     "__SMALL__Hibberd, Hein and Eubanks (2020) and Hibberd, Hein, Eubanks and Kennedy (2022), Project Lyra mission designs: https://arxiv.org/abs/1902.04935 and https://arxiv.org/abs/2201.04240",
     "__SMALL__NASA Earth Observatory, Blue Marble: Next Generation, the Earth on the Aether launch page: https://science.nasa.gov/earth/earth-observatory/blue-marble-next-generation/base-topography-bathymetry/",
+    "__SMALL__NASA/Goddard Space Flight Center Scientific Visualization Studio, clouds of the Earth on the Aether launch page: https://svs.gsfc.nasa.gov/3615/",
     "__SMALL__NASA's Scientific Visualization Studio, CGI Moon Kit (LRO LROC colour, LOLA elevation), the Moon on the Aether launch page: https://svs.gsfc.nasa.gov/4720/",
     "__SMALL__Solar System Scope, planet and ring textures: https://www.solarsystemscope.com/textures/",
     "__SMALL__Björn Jónsson, planetary maps: https://bjj.mmedia.is/data/planetary_maps.html",
