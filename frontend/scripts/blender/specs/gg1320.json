@@ -119,9 +119,12 @@
         "cathode_diameter": 0.0137,
         "cathode_length": 0.0145,
         "anode_diameter": 0.007,
-        "anode_height": 0.0037
+        "anode_height": 0.0037,
+        "anode_rim": 0.0004,
+        "cup_depth": 0.0018,
+        "post_radius": 0.0022
       },
-      "source": "sam_gg1320an, laser_block_with_major_parts_labeled1.jpg (labels \"Cathode\" on the bottom face, \"Anode 1\" and \"Anode 2\" on the two upper faces; anode 2 under a red cover)"
+      "source": "sam_gg1320an, laser_block_with_major_parts_labeled1.jpg (labels \"Cathode\" on the bottom face, \"Anode 1\" and \"Anode 2\" on the two upper faces; anode 2 under a red cover); each anode a shallow metal cup with a domed post in it (anode1_closeup1.jpg, scaled by the 7 mm cup, 560 px: rim about 0.4 mm, post about 4.4 mm across; cup depth estimated)"
     },
     "dither": {
       "value": {
@@ -261,12 +264,15 @@
       "source": "sam_gg1320an, cathode_end_of_assembly_closeup1.jpg: a flange where the cathode meets the block, a gold-coloured seal ring and a solder tab with a hole; scaled by the 13.7 mm cathode (estimated)"
     },
     "anode_2_cover": {
-      "value": [
-        0.008,
-        0.008,
-        0.006
-      ],
-      "source": "sam_gg1320an, laser_block_top_on_plate1.jpg (ruler: 1 in = 257 px, 10.1 px/mm; the photo is the labelled view turned 180°): anode 2's red cover 85 px wide; height estimated"
+      "value": {
+        "width": 0.0048,
+        "thickness": 0.0034,
+        "length": 0.006,
+        "neck": 0.0016,
+        "neck_length": 0.0012,
+        "alpha": 0.85
+      },
+      "source": "sam_gg1320an, anode2_closeup1.jpg (scaled by the 7 mm cup, 532 px: 76 px/mm): a red rubbery boot over the anode's post, a narrow neck (about 3.2 mm across) out of the cup, then a body 4.8 mm wide of flattened-oval section with a rounded end; thickness, length and see-through estimated (laser_block_top_on_plate1.jpg)"
     },
     "detector": {
       "value": {
@@ -1102,8 +1108,8 @@
     "anode_cover_red": {
       "hex": "#8b3947",
       "metallic": 0.0,
-      "roughness": 0.4,
-      "source": "sam_gg1320an, laser_block_top_on_plate1.jpg, anode 2's cover"
+      "roughness": 0.6,
+      "source": "sam_gg1320an, laser_block_top_on_plate1.jpg, anode 2's cover; frosted (anode2_closeup1.jpg)"
     },
     "connector_white": {
       "hex": "#e5e1d6",

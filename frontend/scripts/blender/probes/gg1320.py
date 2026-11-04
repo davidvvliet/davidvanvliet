@@ -567,7 +567,7 @@ def pzt_end(f, key, q, u, length):
                 material="aluminium")
 
 
-def discharge(f, zc):
+def discharge(f, spec, zc):
     face = f["block"]["value"]["face_distance"]
     dc = f["discharge"]["value"]
     cf = f["cathode_flange"]["value"]
@@ -590,18 +590,46 @@ def discharge(f, zc):
                 # u is -Y: the tab stands along the cathode, lying on its top.
                 parts.box("cathode_tab", (tx, tz, ty), location=tab, material="gold_seal")
                 tips[key] = tab
-            elif key == "anode_2":
-                parts.lathe(key, _dome(dc["anode_diameter"] / 2, 0.0, dc["anode_height"]), location=p, direction=u,
-                            segments=32, material="cathode_steel")
-                cx, cy, cz = f["anode_2_cover"]["value"]
-                parts.box("anode_2_cover", (cz, cx, cy), location=p + u * (cz / 2), roll_deg=ang,
-                          material="anode_cover_red")
-                tips[key] = p + u * cz
             else:
-                parts.lathe(key, _dome(dc["anode_diameter"] / 2, 0.0, dc["anode_height"]), location=p,
-                            direction=u, segments=32, material="cathode_steel")
-                tips[key] = p + u * dc["anode_height"]
+                _anode_cup(f, key, p, u)
+                if key == "anode_2":
+                    _anode_boot(f, spec, p, u)
+                    tips[key] = p + u * f["anode_2_cover"]["value"]["length"]
+                else:
+                    tips[key] = p + u * f["discharge"]["value"]["anode_height"]
     return tips
+
+
+def _anode_cup(f, key, p, u):
+    """An anode: a shallow metal cup on the block face with a domed post standing in it."""
+    dc = f["discharge"]["value"]
+    r = dc["anode_diameter"] / 2
+    parts.lathe(f"{key}_cup", [(0.0, 0.0), (r, 0.0), (r, dc["cup_depth"]), (r - dc["anode_rim"], dc["cup_depth"]),
+                               (r - dc["anode_rim"], 0.0003), (0.0, 0.0003)],
+                location=p, direction=u, segments=40, material="cathode_steel")
+    pr = dc["post_radius"]
+    parts.lathe(f"{key}_post", _dome(pr, dc["anode_height"] - pr * 0.6, pr * 0.6), location=p, direction=u,
+                segments=32, material="cathode_steel")
+
+
+def _anode_boot(f, spec, p, u):
+    """Anode 2's red boot: a narrow neck out of the cup, then a body of flattened-oval section
+    with a rounded end, frosted and a little see-through."""
+    bt = f["anode_2_cover"]["value"]
+    w, L, nk = bt["width"] / 2, bt["length"], bt["neck"]
+    z0 = f["discharge"]["value"]["cup_depth"] * 0.5
+    prof = [(0.0, z0), (nk, z0), (nk, z0 + bt["neck_length"]), (w * 0.9, z0 + bt["neck_length"] + 0.0006),
+            (w, z0 + bt["neck_length"] + 0.0012)]
+    for k in range(1, 7):
+        t = math.pi / 2 * k / 6
+        prof.append((w * math.cos(t), L - w * 0.5 + w * 0.5 * math.sin(t)))
+    prof[-1] = (0.0, L)
+    mat = _special("anode_cover_red", spec, alpha=bt["alpha"], name="anode_boot")
+    boot = parts.lathe("anode_2_boot", prof, location=p, direction=u, segments=32, material=mat)
+    # Flatten across the block's thickness (the oval stands wide along the face).
+    m = boot.matrix_world.to_3x3()
+    k = bt["thickness"] / bt["width"]
+    boot.scale = (k, 1.0, 1.0) if abs(m.col[0].z) > abs(m.col[1].z) else (1.0, k, 1.0)
 
 
 def _ellipse(c, ang, a, b, n=32):
@@ -748,6 +776,6 @@ def build(spec):
     stack(f)
     z0, zb, zc, R = laser_block(f, spec)
     ends = mirrors(f, spec, zc, R)
-    tips = discharge(f, zc)
+    tips = discharge(f, spec, zc)
     dither(f, z0, zb, f["stack"]["value"]["plate_bottom"])
     extras(f, zc, ends, tips)
