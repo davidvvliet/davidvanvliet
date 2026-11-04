@@ -1038,7 +1038,7 @@
     },
     "sled_lettering": {
       "value": "Altair LAUNCH / WE GO TO SPACE / TO IMPROVE LIFE ON EARTH",
-      "source": "design, chosen: on the back of the pusher bulkhead, set in Geist (geist_font) like the finrocket's \"Altair ULTRALIGHT\": \"Altair\" on top and \"LAUNCH\" half its size right below it, both centred; a gap, then the motto; drawn as the finrocket's mask is (Geist with a 4 px outline at 114 px); mask refs/aether/sled-lettering-mask.png drawn by tools/sled_lettering.py",
+      "source": "design, chosen: on the back of the pusher bulkhead, set in Geist (geist_font) like the finrocket's \"Altair ULTRALIGHT\": \"Altair\" on top and \"LAUNCH\" half its size right below it, both centred; a gap, then the motto; drawn as the finrocket's mask is (Geist with a 4 px outline at 114 px; \"Altair\" with 6 px at 190 px, fitted to the rocket's); mask refs/aether/sled-lettering-mask.png drawn by tools/sled_lettering.py",
       "also": [
         {
           "source": "geist_font",
@@ -1051,12 +1051,12 @@
       "source": "design, chosen: the text 0.85 m across the 1.0 m pusher"
     },
     "sled_lettering_height": {
-      "value": 0.5354,
-      "source": "design, computed: 0.85 m x the mask's 599 / 951 px"
+      "value": 0.5336,
+      "source": "design, computed: 0.85 m x the mask's 597 / 951 px"
     },
     "craft_lettering": {
       "value": "Altair AETHER",
-      "source": "design, chosen: on the two lower slanted sides under the US flag, turned to read upright in flight (the top carries the user arrays, the bottom the Earth tile, the upper sides the folded wings); set in Geist (geist_font) like the finrocket's \"Altair ULTRALIGHT\": the second word half the size, on one baseline, drawn as the finrocket's mask is (Geist with a 4 px outline at 114 px, which thickens and rounds it); mask refs/aether/craft-lettering-mask.png drawn by tools/sled_lettering.py",
+      "source": "design, chosen: on the two lower slanted sides under the US flag, turned to read upright in flight (the top carries the user arrays, the bottom the Earth tile, the upper sides the folded wings); set in Geist (geist_font) like the finrocket's \"Altair ULTRALIGHT\": the second word half the size, on one baseline, drawn as the finrocket's mask is (Geist with a 4 px outline at 114 px, which thickens and rounds it; \"Altair\" with 6 px at 190 px, fitted to the rocket's); mask refs/aether/craft-lettering-mask.png drawn by tools/sled_lettering.py",
       "also": [
         {
           "source": "geist_font",
@@ -1069,8 +1069,8 @@
       "source": "design, chosen: across the clear stretch of each lower side, between the lower deck and the star tracker"
     },
     "craft_lettering_side_height": {
-      "value": 0.0869,
-      "source": "design, computed: 0.4 m x the mask's 240 / 1105 px"
+      "value": 0.0864,
+      "source": "design, computed: 0.4 m x the mask's 238 / 1102 px"
     },
     "craft_lettering_side_offset": {
       "value": -0.07,

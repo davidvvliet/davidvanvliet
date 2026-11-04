@@ -19,13 +19,14 @@ SMALL = 114               # "LAUNCH", "AETHER": as "ULTRALIGHT"
 MOTTO = 66
 LINES = ["WE GO TO SPACE", "TO IMPROVE LIFE ON EARTH"]
 STROKE = 4 / 114          # the outline, as a share of the font size
+ALTAIR_STROKE = 6         # "Altair": the rocket's matches a 6 px outline at 190 px (2.5 % of its pixels differ; 7 px, in proportion, is 6.6 %)
 PAD = 30
 
 
-def word(text, size, scale=1.0):
-    """One word as a mask: drawn with the outline, cropped, scaled; and its baseline from the top."""
+def word(text, size, scale=1.0, stroke=None):
+    """One word as a mask: drawn with the outline (`stroke` px, else in proportion), cropped, scaled; and its baseline from the top."""
     f = ImageFont.truetype(FONT, size)
-    s = round(STROKE * size)
+    s = round(STROKE * size) if stroke is None else stroke
     asc, desc = f.getmetrics()
     img = Image.new("L", (int(f.getlength(text)) + 4 * s + 20, asc + desc + 4 * s + 20), 0)
     ImageDraw.Draw(img).text((2 * s + 10, 2 * s + 10 + asc), text, font=f, fill=255, anchor="ls",
@@ -47,7 +48,7 @@ def save(img, name):
     print(out, img.size)
 
 
-altair, a_base = word("Altair", ALTAIR, SCALE)
+altair, a_base = word("Altair", ALTAIR, SCALE, ALTAIR_STROKE)
 
 # The sled: "Altair" centred on top, "LAUNCH" centred right below it, a gap, then the motto, centred.
 W = 1600

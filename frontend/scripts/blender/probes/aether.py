@@ -389,7 +389,7 @@ def markings(spec, d, flat, xc, xb, t, panels):
             # The flag's left edge on the left edge of "Altair" (the mask's 30 px margin in from its left).
             right = (inward[1] * v[2] - inward[2] * v[1], inward[2] * v[0] - inward[0] * v[2], inward[0] * v[1] - inward[1] * v[0])
             lw = d["craft_lettering_side_width"]
-            shift = -lw / 2 + lw * 30 / 1105 + 1.9 * fh / 2
+            shift = -lw / 2 + lw * 30 / 1102 + 1.9 * fh / 2
             c = on(d["craft_flag_offset"])
             parts.decal(f"craft_flag{k}", panels, center=tuple(c[i] + right[i] * shift for i in range(3)), direction=inward, up=v,
                         width=1.9 * fh, height=fh, material=flag_mat, step=0.02, lift=0.001)

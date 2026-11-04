@@ -1,9 +1,9 @@
 {
  "aether": {
-  "approved": "2026-11-04 16:50",
+  "approved": "2026-11-04 16:53",
   "inputs": {
-   "specs/aether.json": "925bb66c2385ae96",
-   "probes/aether.py": "284ab2694af5b3fc",
+   "specs/aether.json": "46732455ed07a1b5",
+   "probes/aether.py": "692fe47cbaf8951e",
    "build.py": "363cabc8976febf0",
    "blender.json": "7bbc071b6e396ec4",
    "lib/__init__.py": "e3b0c44298fc1c14",
@@ -22,8 +22,8 @@
    "lib/sources.py": "425a2fcd692532e6",
    "lib/textures.py": "7daa18205cf41859",
    "lib/tiling.py": "b352f8627c102bf0",
-   "refs/aether/craft-lettering-mask.png": "2429187437de8549",
-   "refs/aether/sled-lettering-mask.png": "f586664eefc02027"
+   "refs/aether/craft-lettering-mask.png": "f3bdcad1754e869c",
+   "refs/aether/sled-lettering-mask.png": "85bb761f07dc6d72"
   }
  },
  "cassini": {
