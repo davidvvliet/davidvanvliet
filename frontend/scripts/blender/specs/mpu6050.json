@@ -21,7 +21,7 @@
       "url": "https://zeptobars.com/en/read/Invensense-MPU6050-6d-MEMS-IMU-gyroscope-accelerometer",
       "read": "2026-11-03",
       "licence": "CC BY 3.0 (ZeptoBars), as stated on the photos' Wikimedia Commons pages (File:Mpu6050-HD.jpg, File:Mpu6050-small-top-HD.jpg, File:Mpu6050-big-HD.jpg); used to measure from and sample colours",
-      "credit": "Die layout and colours measured from Zeptobars' MPU-6050 die photos"
+      "credit": "MEMS die traced from and textured with ZeptoBars' MPU-6050 die photo (CC BY 3.0, Wikimedia Commons)"
     },
     {
       "id": "spekking_nexus7",
@@ -176,13 +176,29 @@
         "accel_z": {"box": [1440, 1530, 2600, 2010], "paddles": [[1449, 1541, 1935, 2003], [2113, 1541, 2595, 2003]], "centres": [[1638, 1636, 1836, 1904], [2212, 1636, 2405, 1904]], "beam_v": 1768}
       },
       "source": "zeptobars_mpu6050, estimated from mpu6050-small-top-HD.jpg, scaled by the 2778 µm die width (2.35 px/µm); accelerometer cells, springs and paddles from full-resolution crops of its bottom row",
-      "simplified": "each sensor is built from its measured outline and main members (masses, plates, anchors, springs, comb banks); the inner arrangement of springs and combs is representative, not traced line for line",
+      "used_for": "the electrodes under the gyro plates and the sensor axes; the sensors themselves are traced (facts.die_trace)",
       "axes": {
         "gyros": "left = Z, middle = Y, right = X: nasiri2010 Fig. 7, an InvenSense die photo captioned \"MPU-3000, 3-Axis gyroscope in 2.8mm x 2.4mm\" and labelled \"Z-Axis\", \"Y-Axis\", \"X-Axis\" left to right; the MPU-6050 die's top row has the same three structures in the same order and orientation (compared by eye: left two stacked plates with comb banks above and below, middle one large plate, right two masses with vertical comb arrays)",
         "accelerometers": "derived, not labelled in any source: the die's X and Y directions follow from the sourced gyros: nasiri2010 p.62-63 says the X gyro's two masses move out of plane in opposition and the Coriolis forces turn its sense frame in plane, which for rotation about X needs the masses apart along X; the X gyro's two masses sit side by side across the die and the Y gyro's are stacked, so across the die is X and along it is Y (the same in both photos, mirror or not). Left accelerometer: hung on long beams running along Y and with comb fingers along Y, so it moves along X: X axis. Middle: the same design turned 90 degrees: Y axis. Right: two masses on a centre beam over electrodes, a teeter-totter: Z axis",
         "physics": "nasiri2010 p.62-63",
         "quote": "coupled dual-mass (tuning fork) proof-masses that are driven out-of-plane and generate Coriolis forces in-plane ... The Coriolis torque moves the four-bar linkage which is sensed in-plane using capacitive electrodes"
       }
+    },
+    "die_trace": {
+      "value": {
+        "cell_um": 2,
+        "regions": {
+          "gyro_z": [130, 125, 972, 1470],
+          "gyro_y": [972, 125, 1730, 1470],
+          "gyro_x": [1730, 125, 2615, 1470],
+          "accel_x": [130, 1470, 790, 2050],
+          "accel_y": [790, 1470, 1440, 2050],
+          "accel_z": [1440, 1470, 2615, 2050]
+        }
+      },
+      "source": "zeptobars_mpu6050, traced from mpu6050-small-top-HD.jpg (6704 x 5312, CC BY 3.0) at 2.35 px/\u00b5m with the die's top left corner at (80, 80) px",
+      "method": "each region (\u00b5m on the photo, x right, y down) cut into 2 \u00b5m cells; a cell is a gap when 40% or more of its pixels are darker than 105 (of 255), else silicon; specks and pinholes under 12 cells removed, edges opened by one cell. Masks and the photo crops (1.2 px/\u00b5m) in refs/mpu6050/die/. The photo is the device layer's face towards the CMOS chip; in the model it lies face down, so it is mirrored across X and the photo is shown on the layer's top",
+      "limits": "trenches under about 1 \u00b5m (between comb teeth) are not cut, only seen in the photo; debris on the die reads as gaps in places (accelerometers, lower right)"
     },
     "bond_wires": {
       "value": {"diameter": 0.000025, "loop_height": 0.00015, "pad_size": 0.00008, "pad_strip": 0.00026},
@@ -210,10 +226,11 @@
       "source": "mpu6050_ds, 7.8",
       "quote": "uses separate proof masses for each axis. Acceleration along a particular axis induces displacement on the corresponding proof mass, and capacitive sensors detect the displacement differentially"
     },
-    "comb_fingers": {
-      "value": {"real_width": 0.000001, "modelled_width": 0.000008, "modelled_gap": 0.000008},
-      "source": "zeptobars_mpu6050 (real width); modelled width and gap a design choice: hundreds of 1 µm fingers would cost far over the triangle budget and not show, so each bank has fewer, wider fingers in the measured outline",
-      "quote": "Width of smallest teethes is 1µm"
+    "comb_teeth": {
+      "value": {"width_um": 1},
+      "source": "zeptobars_mpu6050, File:Mpu6050-small-top-HD.jpg description",
+      "quote": "Width of the smallest teethes is 1µm",
+      "note": "the teeth (about 5.3 µm pitch, measured on the photo) are finer than the 2 µm trace, so they show in the photo on the traced fingers, not as geometry"
     }
   },
   "materials": {
@@ -266,10 +283,13 @@
     "The dies' rotation inside the package and which edges carry the bond pads relative to the pins: estimated.",
     "Lead-frame NiPdAu finish and gold wire colour need a sourced photo (the board photo shows the leads soldered); the shared foil_silver and foil_gold stand in. Mould and marking colours are from one photo, under its lighting.",
     "Corner tie-bar ends of the lead frame (the datasheet's corner detail, dimension a) are left out: a is not in the table.",
-    "Comb fingers are modelled 8 µm wide (real: 1 µm) and fewer: a simplification for the triangle budget."
+    "The device layer is traced from one photo of a delayered die: comb teeth (1 µm) are only in the photo, debris reads as gaps in places, and moving and anchored parts are one piece per sensor (the photo shows anchored parts brighter, moving ones dimmer)."
   ],
   "budget": {
     "triangles": 50000,
-    "glb_bytes": 1500000
+    "glb_bytes": 1500000,
+    "internal_triangles": 100000,
+    "internal_glb_bytes": 7000000,
+    "note": "the inside carries the traced device layer (about 78k triangles, 5 MB) and its die photos (1.4 MB); it loads only when Internal is pressed"
   }
 }

@@ -3,6 +3,10 @@
 # Frame: z up, package bottom at z = 0, centred in x and y; +X/+Y as the datasheet's
 # orientation figure, pin 1 at the top left of the top view (-X, +Y).
 import os
+import bmesh
+import bpy
+import numpy as np
+from mathutils import Matrix, Vector
 from lib import materials, parts, textures
 
 HARNESS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -149,168 +153,101 @@ def mems(d, f, z):
                     material="silicon")
 
 
-class Layer:
-    """Boxes in the MEMS device layer, in model metres. Moving parts float a bond gap above
-    the CMOS chip; anchors reach down to it (they are what holds the structure)."""
 
-    def __init__(self, z):
-        self.z = z
-        self.items, self.fixed = [], []
-
-    def add(self, cx, cy, w, h):
-        zb, zt = self.z["device_bottom"], self.z["device_top"]
-        self.items.append(((w, h, zt - zb), (cx, cy, (zb + zt) / 2)))
-
-    def anchor(self, cx, cy, w, h):
-        zb, zt = self.z["cmos_top"], self.z["device_top"]
-        self.fixed.append(((w, h, zt - zb), (cx, cy, (zb + zt) / 2)))
-
-    def frame(self, cx, cy, w, h, t):
-        """A rectangular ring of width t."""
-        self.add(cx, cy + (h - t) / 2, w, t)
-        self.add(cx, cy - (h - t) / 2, w, t)
-        self.add(cx - (w - t) / 2, cy, t, h - 2 * t)
-        self.add(cx + (w - t) / 2, cy, t, h - 2 * t)
-
-    def comb(self, cx, cy, w, h, along, finger, gap):
-        """Interdigitated comb bank in the rectangle: two spines on opposite sides with fingers
-        reaching from each in turn (one side moves with the mass, the other is fixed). `along`:
-        the direction the fingers run, "x" or "y"."""
-        spine = finger * 1.5
-        pitch = finger + gap
-        if along == "x":
-            self.add(cx - (w - spine) / 2, cy, spine, h)
-            self.add(cx + (w - spine) / 2, cy, spine, h)
-            n = int((h - finger) // pitch)
-            length = (w - 2 * spine) * 0.85
-            for i in range(n):
-                y = cy - (n - 1) * pitch / 2 + i * pitch
-                side = -1 if i % 2 else 1
-                self.add(cx + side * ((w - 2 * spine) - length) / 2, y, length, finger)
-        else:
-            self.add(cx, cy - (h - spine) / 2, w, spine)
-            self.add(cx, cy + (h - spine) / 2, w, spine)
-            n = int((w - finger) // pitch)
-            length = (h - 2 * spine) * 0.85
-            for i in range(n):
-                x = cx - (n - 1) * pitch / 2 + i * pitch
-                side = -1 if i % 2 else 1
-                self.add(x, cy + side * ((h - 2 * spine) - length) / 2, finger, length)
-
-    def emit(self, name):
-        parts.boxes(name, self.items, material="mems_structure")
-        if self.fixed:
-            parts.boxes(f"{name}_anchors", self.fixed, material="silicon")
+def _mask(path):
+    """A traced mask (white = silicon) as a bool array, row 0 at the top of the image."""
+    img = bpy.data.images.load(path, check_existing=False)
+    w, h = img.size
+    px = np.empty(w * h * 4, dtype=np.float32)
+    img.pixels.foreach_get(px)
+    bpy.data.images.remove(img)
+    return (px.reshape(h, w, 4)[::-1, :, 0] > 0.5)
 
 
-def gyros(d, f, z):
-    """Three vibrating gyroscopes (top row of the die): their drive masses (the plates), the
-    sense frame round them, comb banks above and below, and the anchors and springs holding
-    each frame. Left to right on the die: Z, Y, X (nasiri2010 Fig. 7)."""
-    lay = f["mems_layout_um"]["value"]
-    C = f["comb_fingers"]["value"]
-    s = 1e-6
-    for key in ("gyro_x", "gyro_y", "gyro_z"):
-        g = lay[key]
-        L = Layer(z)
-        plates = [die_rect(d, r) for r in g["plates"]]
-        for (cx, cy), (w, h) in plates:
-            L.add(cx, cy, w, h)
-        # Sense frame: a ring 12 µm wide, 25 µm round the plates (representative).
-        xs = [c[0] + sgn * sz[0] / 2 for c, sz in plates for sgn in (-1, 1)]
-        ys = [c[1] + sgn * sz[1] / 2 for c, sz in plates for sgn in (-1, 1)]
-        fw, fh = max(xs) - min(xs) + 50 * s, max(ys) - min(ys) + 50 * s
-        fx, fy = (max(xs) + min(xs)) / 2, (max(ys) + min(ys)) / 2
-        L.frame(fx, fy, fw, fh, 12 * s)
-        # Each plate hangs from the frame on two torsion beams across its middle (6 µm wide).
-        for (cx, cy), (w, h) in plates:
-            if w >= h:
-                L.add(cx - w / 2 - 12.5 * s, cy, 25 * s, 6 * s)
-                L.add(cx + w / 2 + 12.5 * s, cy, 25 * s, 6 * s)
-            else:
-                L.add(cx, cy - h / 2 - 12.5 * s, 6 * s, 25 * s)
-                L.add(cx, cy + h / 2 + 12.5 * s, 6 * s, 25 * s)
-        for r in g["combs"]:
-            (cx, cy), (w, h) = die_rect(d, r)
-            L.comb(cx, cy, w, h, "x" if g["fingers"] == "horizontal" else "y",
-                   C["modelled_width"], C["modelled_gap"])
-        # Anchors: one above and one below the frame, at its centre line, each tied to the
-        # frame by a spring beam (representative of the die's centre-column anchors).
-        for sgn in (1, -1):
-            ay = fy + sgn * (fh / 2 + 40 * s)
-            L.anchor(fx, ay, 40 * s, 40 * s)
-            L.add(fx, fy + sgn * (fh / 2 + 10 * s), 6 * s, 20 * s)
+def _runs(row):
+    """(start, end) of each run of True in a 1-D bool array."""
+    e = np.diff(np.concatenate(([0], row.astype(np.int8), [0])))
+    return list(zip(np.nonzero(e == 1)[0], np.nonzero(e == -1)[0]))
+
+
+def traced(d, name, region, cell, z0, z1, mask_path, photo_path):
+    """Silicon traced from the die photo: `mask_path` marks, cell by cell (`cell` µm), where
+    the device layer is; it is extruded from z0 to z1 with the photo itself on top. Top faces
+    are the mask merged into rectangles (runs per row, merged down); walls stand only where
+    silicon meets a gap, each taking the photo's colour just inside the edge."""
+    m = _mask(mask_path)
+    H, W = m.shape
+    u0, v0, u1, v1 = region
+    U = lambda j: u0 + j * cell
+    V = lambda i: v0 + i * cell
+    clamp = lambda t: min(1.0, max(0.0, t))
+    uv = lambda u, v: (clamp((u - u0) / (u1 - u0)), clamp(1 - (v - v0) / (v1 - v0)))
+    bm = bmesh.new()
+    lay = bm.loops.layers.uv.new("UVMap")
+
+    def quad(pts, uvs, want):
+        vs = [bm.verts.new(p) for p in pts]
+        n = (Vector(pts[1]) - Vector(pts[0])).cross(Vector(pts[2]) - Vector(pts[0]))
+        if n.dot(Vector(want)) < 0:
+            vs.reverse()
+            uvs = list(reversed(uvs))
+        face = bm.faces.new(vs)
+        for loop, t in zip(face.loops, uvs):
+            loop[lay].uv = t
+
+    def P(u, v, z):
+        x, y = die_xy(d, u, v)
+        return (x, y, z)
+
+    # Tops: rectangles from runs merged down the rows.
+    open_ = {}
+    for i in range(H + 1):
+        runs = set(_runs(m[i])) if i < H else set()
+        for r in [r for r in open_ if r not in runs]:
+            a, b = r
+            ua, ub, va, vb = U(a), U(b), V(open_.pop(r)), V(i)
+            quad([P(ua, va, z1), P(ub, va, z1), P(ub, vb, z1), P(ua, vb, z1)],
+                 [uv(ua, va), uv(ub, va), uv(ub, vb), uv(ua, vb)], (0, 0, 1))
+        for r in runs:
+            open_.setdefault(r, i)
+    # Walls along rows (between row i-1 and row i) and along columns.
+    pad = np.zeros((H + 2, W + 2), bool)
+    pad[1:-1, 1:-1] = m
+    for i in range(H + 1):
+        above, below = pad[i, 1:-1], pad[i + 1, 1:-1]
+        for side, edge in ((1, above & ~below), (-1, below & ~above)):
+            for a, b in _runs(edge):
+                v = V(i)
+                vi = v - side * cell / 2              # just inside the silicon
+                t = uv(U((a + b) / 2), vi)
+                pa, pb = P(U(a), v, z0), P(U(b), v, z0)
+                n = (Vector(P(U(a), v + side, 0)) - Vector(P(U(a), v, 0)))
+                quad([pa, pb, (pb[0], pb[1], z1), (pa[0], pa[1], z1)], [t] * 4, n)
+    for j in range(W + 1):
+        left, right = pad[1:-1, j], pad[1:-1, j + 1]
+        for side, edge in ((1, left & ~right), (-1, right & ~left)):
+            for a, b in _runs(edge):
+                u = U(j)
+                ui = u - side * cell / 2
+                t = uv(ui, V((a + b) / 2))
+                pa, pb = P(u, V(a), z0), P(u, V(b), z0)
+                n = (Vector(P(u + side, V(a), 0)) - Vector(P(u, V(a), 0)))
+                quad([pa, pb, (pb[0], pb[1], z1), (pa[0], pa[1], z1)], [t] * 4, n)
+    bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=1e-9)
+    photo = bpy.data.images.load(photo_path, check_existing=False)
+    mat = materials.image(f"{name}_photo", photo, metallic=0.4, roughness=0.35)
+    return parts._object(name, bm, mat, Matrix())
+
+
+def device_layer(d, f, z):
+    """The MEMS die's device layer, sensor by sensor, traced from the die photo (spec
+    facts.die_trace): each sensor is its own assembly, clicked to focus."""
+    T = f["die_trace"]["value"]
+    folder = os.path.join(HARNESS, "refs", "mpu6050", "die")
+    for key, region in T["regions"].items():
         with parts.assembly(key, internal=True):
-            L.emit(key)
-
-
-def accelerometers(d, f, z):
-    """Three accelerometers (bottom row). X and Y: proof masses in two cells, each with a
-    window holding an anchor and comb banks either side of it along the axis of motion,
-    hung on long folded springs that bend only along that axis. Z: two teeter-totter paddles,
-    each on a torsion beam across its centre, with an electrode under each half."""
-    lay = f["mems_layout_um"]["value"]
-    C = f["comb_fingers"]["value"]
-    s = 1e-6
-    for key in ("accel_x", "accel_y"):
-        a = lay[key]
-        mx = a["motion"] == "x"
-        L = Layer(z)
-        for r in a["cells"]:
-            (cx, cy), (w, h) = die_rect(d, r)
-            # Mass: the cell with a window 70% of its size (representative).
-            ww, wh = w * 0.7, h * 0.7
-            L.frame(cx, cy, w, h, min(w - ww, h - wh) / 2)
-            L.anchor(cx, cy, ww * 0.18, wh * 0.18)
-            # Combs between the anchor and the mass on both sides along the motion; their
-            # fingers run across the motion, so the gaps close as the mass moves.
-            for sgn in (1, -1):
-                if mx:
-                    L.comb(cx + sgn * ww * 0.3, cy, ww * 0.3, wh * 0.85, "y", C["modelled_width"], C["modelled_gap"])
-                else:
-                    L.comb(cx, cy + sgn * wh * 0.3, ww * 0.85, wh * 0.3, "x", C["modelled_width"], C["modelled_gap"])
-        for r in a["springs"]:
-            (cx, cy), (w, h) = die_rect(d, r)
-            # A folded spring: two long beams 6 µm wide joined at both ends, anchored mid-way.
-            if mx:
-                for sgn in (1, -1):
-                    L.add(cx + sgn * w / 4, cy, 6 * s, h)
-                L.add(cx, cy + h / 2 - 3 * s, w / 2 + 6 * s, 6 * s)
-                L.add(cx, cy - h / 2 + 3 * s, w / 2 + 6 * s, 6 * s)
-                L.anchor(cx, cy, w * 0.35, 40 * s)
-            else:
-                for sgn in (1, -1):
-                    L.add(cx, cy + sgn * h / 4, w, 6 * s)
-                L.add(cx + w / 2 - 3 * s, cy, 6 * s, h / 2 + 6 * s)
-                L.add(cx - w / 2 + 3 * s, cy, 6 * s, h / 2 + 6 * s)
-                L.anchor(cx, cy, 40 * s, h * 0.35)
-        with parts.assembly(key, internal=True):
-            L.emit(key)
-    a = lay["accel_z"]
-    L = Layer(z)
-    pads = []
-    for r, c in zip(a["paddles"], a["centres"]):
-        (cx, cy), (w, h) = die_rect(d, r)
-        (ix, iy), (iw, ih) = die_rect(d, c)
-        by = die_xy(d, 0, a["beam_v"])[1]
-        # Paddle: the plate round its centre opening, heavier on one side (its -Y half is
-        # solid, its +Y half has a cut-out), so it tips under acceleration along Z.
-        t = (h - ih) / 2
-        L.add(cx, cy - (h - t) / 2, w, t)
-        L.add(cx - (w + iw) / 4, cy, (w - iw) / 2, ih)
-        L.add(cx + (w + iw) / 4, cy, (w - iw) / 2, ih)
-        L.add(cx - w * 0.35, cy + (h - t) / 2, w * 0.3, t)
-        L.add(cx + w * 0.35, cy + (h - t) / 2, w * 0.3, t)
-        # Torsion beam across the opening, anchored at its middle.
-        L.add(ix, by, iw, 8 * s)
-        L.anchor(ix, by, 40 * s, 40 * s)
-        pads += [(cx, cy + sgn * h / 4, w * 0.8, h * 0.35) for sgn in (1, -1)]
-    with parts.assembly("accel_z", internal=True):
-        L.emit("accel_z")
-    E = f["electrodes"]["value"]
-    with parts.assembly("cmos_die", internal=True):
-        parts.boxes("electrodes_accel_z", [((w, h, E["thickness"]), (x, y, z["cmos_top"] + E["thickness"] / 2))
-                                           for x, y, w, h in pads], material="cmos_aluminium")
+            traced(d, key, region, T["cell_um"], z["device_bottom"], z["device_top"],
+                   os.path.join(folder, f"{key}-mask.png"), os.path.join(folder, f"{key}.jpg"))
 
 
 def build(spec):
@@ -321,5 +258,4 @@ def build(spec):
     pads = cmos(d, f, z)
     wires(d, f, z, pads)
     mems(d, f, z)
-    gyros(d, f, z)
-    accelerometers(d, f, z)
+    device_layer(d, f, z)
