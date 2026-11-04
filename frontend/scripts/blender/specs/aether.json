@@ -1038,7 +1038,7 @@
     },
     "craft_lettering": {
       "value": "Altair AETHER",
-      "source": "design, chosen: on the two lower slanted sides under the US flag, and on the front deck above the forward laser (the top carries the user arrays, the bottom the Earth tile, the upper sides the folded wings); set in Geist (geist_font) like the finrocket's \"Altair ULTRALIGHT\": the second word half the size, on one baseline; mask refs/aether/craft-lettering-mask.png drawn by tools/sled_lettering.py",
+      "source": "design, chosen: on the two lower slanted sides under the US flag, and twice on the front deck, along its two opposite slanted edges (the top carries the user arrays, the bottom the Earth tile, the upper sides the folded wings); set in Geist (geist_font) like the finrocket's \"Altair ULTRALIGHT\": the second word half the size, on one baseline; mask refs/aether/craft-lettering-mask.png drawn by tools/sled_lettering.py",
       "also": [
         {
           "source": "geist_font",
@@ -1082,11 +1082,11 @@
     },
     "craft_lettering_front_width": {
       "value": 0.4,
-      "source": "design, chosen: across the front deck above the forward laser"
+      "source": "design, chosen: along each of the front deck's two opposite slanted edges (towards the sides at 30° and 210°)"
     },
-    "craft_lettering_front_height": {
+    "craft_lettering_front_offset": {
       "value": 0.27,
-      "source": "design, chosen: the lettering's middle this far above the axis"
+      "source": "design, chosen: each lettering's middle this far from the axis, towards its edge, its top facing the edge"
     }
   },
   "materials": {

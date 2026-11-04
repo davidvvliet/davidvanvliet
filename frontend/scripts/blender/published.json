@@ -1,9 +1,9 @@
 {
  "aether": {
-  "approved": "2026-11-04 13:55",
+  "approved": "2026-11-04 14:16",
   "inputs": {
-   "specs/aether.json": "a226ba87cc339ad8",
-   "probes/aether.py": "fe8f1810ffa77947",
+   "specs/aether.json": "18d4c71d7601ff9a",
+   "probes/aether.py": "fbb239dd8384324c",
    "build.py": "363cabc8976febf0",
    "blender.json": "7bbc071b6e396ec4",
    "lib/__init__.py": "e3b0c44298fc1c14",

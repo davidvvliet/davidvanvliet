@@ -355,8 +355,8 @@ def thermal(d, R, flat, xc, xb, t, x0, rt):
 
 
 def markings(spec, d, flat, xc, xb, t, panels, deck):
-    # "Altair AETHER" on the two lower slanted sides, under the US flag (as on the finrocket), and on
-    # the front deck above the forward laser. The top carries the user tiles, the bottom the Earth tile.
+    # "Altair AETHER" on the two lower slanted sides, under the US flag (as on the finrocket), and twice on
+    # the front deck, along its two opposite slanted edges. The top carries the user tiles, the bottom the Earth tile.
     col = lambda k: materials.colour(spec["materials"][k])
     out = os.path.join(HARNESS, "out", "aether", "textures")
     img = textures.marking("aether_craft_lettering",
@@ -384,6 +384,12 @@ def markings(spec, d, flat, xc, xb, t, panels, deck):
             parts.decal(f"craft_lettering{k}", panels, center=on(d["craft_lettering_side_offset"]), direction=inward,
                         up=v, width=d["craft_lettering_side_width"], height=d["craft_lettering_side_height"],
                         material=mat, step=0.02, lift=0.001)
-        parts.decal("craft_lettering_front", deck, center=(xb, 0, d["craft_lettering_front_height"]), direction=(-1, 0, 0),
-                    up=(0, 0, 1), width=d["craft_lettering_front_width"],
-                    height=d["craft_lettering_front_width"] * ratio, material=mat, step=0.02, lift=0.001)
+        # Twice on the front deck, along the two opposite slanted edges (towards the sides at 30° and 210°),
+        # each reading with its top towards its edge.
+        for k, deg in enumerate((30, 210)):
+            a = math.radians(deg)
+            n = (0.0, math.cos(a), math.sin(a))
+            off = d["craft_lettering_front_offset"]
+            parts.decal(f"craft_lettering_front{k}", deck, center=(xb, n[1] * off, n[2] * off), direction=(-1, 0, 0),
+                        up=n, width=d["craft_lettering_front_width"],
+                        height=d["craft_lettering_front_width"] * ratio, material=mat, step=0.02, lift=0.001)
