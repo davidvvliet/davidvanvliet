@@ -119,20 +119,36 @@ def cmos(d, f, z):
 
 
 def wires(d, f, z, pads):
-    """Gold wires from each bonded pin's CMOS pad up in a loop and down onto its lead."""
+    """Gold wires from each bonded pin's CMOS pad up in a loop and down onto its lead: a ball
+    bond on the pad, the wire rising from the ball's top, and a flattened crescent (stitch)
+    bond on the lead (sizes in spec facts.wire_bonds)."""
     Ld = f["leads"]["value"]
     B = f["bond_wires"]["value"]
+    K = f["wire_bonds"]["value"]
+    dw = B["diameter"]
+    t_pad = f["electrodes"]["value"]["thickness"]
+    crescents = []
     with parts.assembly("bond_wires", internal=True):
         for n in f["bonded_pins"]["value"]:
             (cx, cy), (ox, oy) = pin_positions(n, Ld["per_side"], Ld["pitch"], d["package_x"] / 2)
             # The wire lands on the lead's inner end, 0.1 mm in from its tip (estimated).
             lx, ly = cx - ox * (Ld["length"] - 0.0001), cy - oy * (Ld["length"] - 0.0001)
             px, py, pz = pads[n]
+            pz += t_pad                                # on the pad's top
+            hb = K["ball_height_x"] * dw
+            parts.disc(f"ball_{n}", radius=K["ball_diameter_x"] * dw / 2, thickness=hb,
+                       location=(px, py, pz), segments=16, bevel=hb * 0.4, material="foil_gold")
             top = pz + B["loop_height"]
-            pts = [(px, py, pz), (px, py, top), (px + (lx - px) * 0.3, py + (ly - py) * 0.3, top),
-                   (lx, ly, z["frame_top"])]
-            parts.tube(f"wire_{n}", pts, radius=B["diameter"] / 2, segments=6,
+            tc = K["crescent_thickness_x"] * dw
+            pts = [(px, py, pz + hb), (px, py, top), (px + (lx - px) * 0.3, py + (ly - py) * 0.3, top),
+                   (lx, ly, z["frame_top"] + tc)]
+            parts.tube(f"wire_{n}", pts, radius=dw / 2, segments=6,
                        bend_radius=B["loop_height"] * 0.45, material="foil_gold")
+            # The crescent lies along the lead, from under the wire's end outwards.
+            cl, cw = K["crescent_length_x"] * dw, K["crescent_width_x"] * dw
+            c = (lx - ox * cl / 2 * -1, ly - oy * cl / 2 * -1, z["frame_top"] + tc / 2)
+            crescents.append((((cl, cw, tc) if ox else (cw, cl, tc)), c))
+        parts.boxes("crescent_bonds", crescents, material="foil_gold")
 
 
 def mems(d, f, z):

@@ -32,6 +32,13 @@
       "credit": "MPU-6050 package marking traced from a photo by Raimond Spekking (CC BY-SA 4.0, Wikimedia Commons)"
     },
     {
+      "id": "mil_std_883_2010",
+      "title": "MIL-STD-883G, Test Method Standard: Microcircuits, Method 2010.11 Internal Visual (Monolithic), 18 June 2004",
+      "url": "https://q-tech.com/wp-content/uploads/STD-883-2010.pdf",
+      "read": "2026-11-04",
+      "licence": "US Department of Defense standard (a US government work); link and quotes only"
+    },
+    {
       "id": "nasiri2010",
       "title": "J. Seeger, M. Lim, S. Nasiri (InvenSense), \"Development of High-Performance, High-Volume Consumer MEMS Gyroscopes\", Solid-State Sensors, Actuators and Microsystems Workshop, Hilton Head 2010, pp. 61-64",
       "url": "https://transducer-research-foundation.org/technical_digests/HiltonHead_2010/hh2010_0061.pdf",
@@ -200,6 +207,11 @@
       "method": "each region (\u00b5m on the photo, x right, y down) cut into 2 \u00b5m cells; a cell is a gap when 40% or more of its pixels are darker than 105 (of 255), else silicon; specks and pinholes under 12 cells removed, no smoothing (it erased the 4-5 \u00b5m comb fingers). Masks and the photo crops (1.0 px/\u00b5m) in refs/mpu6050/die/. The photo is the device layer's face towards the CMOS chip; in the model it lies face down, so it is mirrored across X and the photo is shown on the layer's top",
       "split": "each sensor is two parts: <sensor>_masses, the silicon the photo shows dim, and <sensor>_frame, the bright rest. The mean of a cell's silicon pixels (those 105 and brighter) under 160 makes it dim; dim or bright islands under 40 cells join their surroundings. Brightness profiles across the Z gyro show anchored bars and combs at 175-195 and the plates and the comb fingers between the fixed ones at 120-140, so dim is read as moving; it is a cue from the photo, not a drawing, and some fine moving parts come out bright",
       "limits": "trenches under about 1 \u00b5m (between comb teeth) are not cut, only seen in the photo; debris on the die reads as gaps in places (accelerometers, lower right)"
+    },
+    "wire_bonds": {
+      "value": {"ball_diameter_x": 2.5, "ball_height_x": 0.6, "crescent_width_x": 2.5, "crescent_length_x": 1.5, "crescent_thickness_x": 0.3},
+      "source": "mil_std_883_2010, 3.2.1.1 and 3.2.1.3 (limits); values, in wire diameters, chosen inside them (ball height and crescent thickness are not in the standard: estimated)",
+      "quote": "Gold ball bonds on the die or package post wherein the ball bond diameter is less than 2.0 times or greater than 5.0 times the wire diameter ... Tailless bonds on the die or package post that are less than 1.2 times or more than 5.0 times the wire diameter in width, or are less than 0.5 times or more than 3.0 times the wire diameter in length"
     },
     "bond_wires": {
       "value": {"diameter": 0.000025, "loop_height": 0.00015, "pad_size": 0.00008, "pad_strip": 0.00026},
