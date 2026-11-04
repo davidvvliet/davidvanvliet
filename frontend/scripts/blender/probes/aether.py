@@ -3,7 +3,8 @@
 # Frame: x along the track (the direction of travel and the craft's axis, so the launch load runs
 # down it), z up, y left. The craft's separation plane is at x = 0; the sled pushes from behind.
 import math, os
-from lib import materials, parts, textures
+import numpy as np
+from lib import materials, parts, textures, tiling
 
 HARNESS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -103,6 +104,7 @@ def build(spec):
     attitude(d, R, flat, xc, xb, t)
     electronics(d, R, flat, xc, xb, t)
     thermal(d, R, flat, xc, xb, t, x0, rt)
+    finishes(spec, d, panels)
     markings(spec, d, flat, xc, xb, t, panels)
     parts.pose({name: j["angle"] for name, j in spec["joints"].items()})
 
@@ -220,13 +222,17 @@ def power(d, R, flat, xc, xb):
                 jp = parts.joint(f"panel_{tag}{n}_j", hinge, axis=X, parent=prev)
                 yc = sign * (y_in + pw / 2)
                 parts.box(f"panel_{tag}{n}", (pl, pw, pt), location=(xm, yc, 0), material="white_paint", parent=jp)
-                cells = []
-                for i in range(5):
-                    for j in range(7):
-                        cells.append(((cl, cw, 0.002), (xm + (i - 2) * (cl + cg), yc + (j - 3) * (cw + cg), pt / 2 + 0.001)))
-                parts.boxes(f"cells_{tag}{n}", cells, material="solar_cell", parent=jp)
+                # The 5 x 7 cells as one sheet, the cell texture repeating once per cell and its gap
+                # (finishes() gives it the texture and UVs).
+                parts.box(f"cells_{tag}{n}", (5 * (cl + cg), 7 * (cw + cg), 0.002), location=(xm, yc, pt / 2 + 0.001),
+                          material="solar_cell", parent=jp)
                 if sign == 1 and n == 0:
-                    parts.box("cell_ref", (cl, cw, 0.002), location=cells[17][1], material="solar_cell", parent=jp)
+                    parts.box("cell_ref", (cl, cw, 0.002), location=(xm, yc, pt / 2 + 0.0005), material="solar_cell", parent=jp)
+                # Hinge brackets on the line to the panel before, one near each end.
+                if n:
+                    for k, dx in enumerate((-0.28, 0.28)):
+                        parts.box(f"hinge_{tag}{n}{k}", (0.04, gap + 0.03, 0.012),
+                                  location=(xm + dx, hinge[1], hinge[2]), material="dark_metal", parent=jp)
                 prev = jp
 
     # Launch locks: two hold-down posts per wing on the upper slanted sides, under the folded stack.
@@ -390,3 +396,114 @@ def markings(spec, d, flat, xc, xb, t, panels):
                         up=v, width=d["craft_lettering_side_width"], height=d["craft_lettering_side_height"],
                         material=mat, step=0.02, lift=0.001)
 
+
+
+def _face_uv(obj, along, repeat_u, repeat_v):
+    """UVs for flat faces: u along `along` (world), v across each face in its own plane (normal x along),
+    so strips laid along `along` keep their width on slanted faces."""
+    from mathutils import Vector
+    me, mw = obj.data, obj.matrix_world
+    a = Vector(along).normalized()
+    n3 = mw.to_3x3()
+    uv = me.uv_layers.new(name="UVMap")
+    for poly in me.polygons:
+        n = (n3 @ poly.normal).normalized()
+        c = n.cross(a)
+        if c.length < 1e-6:
+            c = Vector((0, 0, 1)).cross(a)
+        c.normalize()
+        for li in poly.loop_indices:
+            p = mw @ me.vertices[me.loops[li].vertex_index].co
+            uv.data[li].uv = (p.dot(a) / repeat_u, p.dot(c) / repeat_v)
+
+
+def _hex(name):
+    """The sRGB hex of a material as built (the shared palette or the spec's entry)."""
+    col = materials.definition(name)[0]
+    enc = [c * 12.92 if c <= 0.0031308 else 1.055 * c ** (1 / 2.4) - 0.055 for c in col]
+    return "#" + "".join(f"{round(min(max(e, 0), 1) * 255):02x}" for e in enc)
+
+
+def solar_cell_tile(d, spec):
+    """One AZUR 3G30A assembly and its share of the gaps, as seen on the datasheet photo (azur_3g30c):
+    dark cell, two corners cut off along one long edge, a busbar inside that edge dipping towards its
+    middle, two in-plane interconnects across the gap to the next cell, the bypass diode in one cut corner.
+    Long side along u. Returns (base, normal)."""
+    cw, cl, cg = d["cell_width"], d["cell_length"], d["cell_gap"]
+    pu, pv, px = cl + cg, cw + cg, 4000                  # tile metres; pixels per metre
+    w, h = round(pu * px), round(pv * px)
+    U, V = np.meshgrid((np.arange(w) + 0.5) / w * pu, (np.arange(h) + 0.5) / h * pv)  # rows bottom-up: v up
+    x, y = U - cg / 2, V - cg / 2                        # from the cell's lower left corner
+    chu, chv = d["cell_chamfer"]
+    top = y - cw                                          # <= 0 inside, below the top edge
+    cut = np.maximum(chu - x, x - (cl - chu)) / chu * chv  # how far the top corner's cut reaches down
+    inside = (x >= 0) & (x <= cl) & (y >= 0) & (y <= cw) & (top <= -np.maximum(cut, 0))
+    # The busbar: inset along the top edge and the cuts, dipping by `dip` at the middle.
+    inset, bw, dip = d["cell_busbar_inset"], d["cell_busbar_width"], d["cell_busbar_dip"]
+    edge = cw - np.maximum(cut, 0) - inset - dip * np.clip(1 - np.abs(x - cl / 2) / (cl / 2 - chu), 0, 1)
+    bus = inside & (np.abs(y - edge) < bw / 2) & (x > inset) & (x < cl - inset)
+    tab = np.zeros_like(inside)
+    for xi in d["cell_interconnect_x"]:
+        tw = d["cell_interconnect_width"]
+        tab |= (np.abs(x - xi) < tw / 2) & ((y > edge) | (y < 0))
+    diode = (x > cl - chu * 0.85) & (x < cl - chu * 0.25) & (top > -chv * 0.75) & (top < -chv * 0.2) & ~inside & (y < cw)
+    cell = tiling.srgb(spec["materials"]["solar_cell"]["hex"])
+    silver = tiling.srgb(_hex("foil_silver"))
+    rgb = np.where(inside[..., None], cell[None, None], tiling.srgb(_hex("white_paint"))[None, None])
+    rgb = np.where((bus | tab | diode)[..., None], silver[None, None], rgb)
+    hgt = (bus | tab).astype(np.float32) * 0.5 + inside * 0.3
+    gy, gx = np.gradient(hgt)
+    nrm = np.stack([-gx * 2, -gy * 2, np.ones_like(hgt)], 2)
+    nrm /= np.linalg.norm(nrm, axis=2, keepdims=True)
+    return (tiling.image("aether", "solar_cell_base", rgb.astype(np.float32), "sRGB"),
+            tiling.image("aether", "solar_cell_normal", (nrm * 0.5 + 0.5).astype(np.float32), "Non-Color"))
+
+
+def tape_strips(d, n=10, px=1000, seed=4):
+    """Silvered-Teflon tape laid in strips `radiator_tape_width` wide along u, each overlapping the last
+    a little (a faint line), each lying at its own slight tilt so the strips catch the light one by one.
+    Repeats every n strips across. Returns (base, normal)."""
+    sw = d["radiator_tape_width"]
+    w, h = 64, round(n * sw * px)
+    V = (np.arange(h) + 0.5) / px
+    k = (V // sw).astype(int)
+    f = (V % sw) / sw
+    rng = np.random.default_rng(seed)
+    tilt = rng.uniform(-1, 1, n)[k] * np.tan(np.radians(2.0))
+    bow = (f - 0.5) * np.tan(np.radians(1.5))         # each strip bows a little across
+    seam = np.clip(1 - np.minimum(f, 1 - f) * sw * px / 1.5, 0, 1)
+    shade = (1 + 0.03 * rng.uniform(-1, 1, n)[k]) * (1 - 0.25 * seam)
+    rgb = tiling.srgb(_hex("foil_silver"))[None, None] * np.repeat(shade[:, None, None], w, 1)
+    sy = np.repeat((tilt + bow)[:, None], w, 1)
+    nrm = np.stack([np.zeros_like(sy), -sy, np.ones_like(sy)], 2)
+    nrm /= np.linalg.norm(nrm, axis=2, keepdims=True)
+    return (tiling.image("aether", "radiator_tape_base", np.clip(rgb, 0, 1).astype(np.float32), "sRGB"),
+            tiling.image("aether", "radiator_tape_normal", (nrm * 0.5 + 0.5).astype(np.float32), "Non-Color"))
+
+
+def finishes(spec, d, panels):
+    # The cells' texture, the radiators' tape strips and the top blanket's crinkled foil.
+    sc = spec["materials"]["solar_cell"]
+    cb, cn = solar_cell_tile(d, spec)
+    cell_mat = materials.image("aether_solar_cells", cb, normal=cn, metallic=sc["metallic"], roughness=sc["roughness"])
+    pu, pv = d["cell_length"] + d["cell_gap"], d["cell_width"] + d["cell_gap"]
+    for obj in list(parts.collection().objects):
+        if obj.type == "MESH" and obj.name.startswith("cells_"):
+            obj.data.materials[0] = cell_mat
+            me, mw = obj.data, obj.matrix_world
+            lo = min((mw @ v.co).x for v in me.vertices), min((mw @ v.co).y for v in me.vertices)
+            uv = me.uv_layers.new(name="UVMap")
+            for li, loop in enumerate(me.loops):
+                p = mw @ me.vertices[loop.vertex_index].co
+                uv.data[li].uv = ((p.x - lo[0]) / pu, (p.y - lo[1]) / pv)
+    _, sm, sr = materials.definition("foil_silver")
+    tb, tn = tape_strips(d)
+    panels.data.materials[0] = materials.image("aether_radiator_tape", tb, normal=tn, metallic=sm, roughness=sr)
+    _face_uv(panels, (1, 0, 0), 64 / 1000, 10 * d["radiator_tape_width"])
+    _, gm, gr = materials.definition("foil_gold")
+    fb, fn = tiling.crinkled_foil("aether", "mli_foil", _hex("foil_gold"), facet=0.04, tilt_deg=8, wrinkle=0.15,
+                                  wrinkle_deg=6, spread=0.06, stretch=1.4, pillow=0.25, pillow_deg=10,
+                                  repeat=(0.5, 0.5), px_per_m=700)
+    mli = parts.collection().objects["mli_top"]
+    mli.data.materials[0] = materials.image("aether_mli", fb, normal=fn, metallic=gm, roughness=gr)
+    tiling.box_uv(mli, 0.5)

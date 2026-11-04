@@ -7,7 +7,7 @@
     { "name": "markings, right side", "target": [0.6, -0.38, -0.22], "look": [0, 0.866, 0.5], "radius": 0.35 }
   ],
 
-  "note": "Our own design: a ~300 kg lunar communications relay, fired off a mass driver near the lunar south pole into a 700 km circular polar orbit, one plane of a constellation, built from real flight hardware where it exists. Frame: x along the track (the direction of travel, and the craft's axis: the launch load runs down it), z up, y left. The craft's separation plane is at x = 0; the sled and the rails are behind and below it. Pass 1: structure, tank, main thruster, sled and rails. Pass 2: propulsion (eight 1 N thrusters, latch valve, fill and drain valves, lines). Pass 3: power (two solar wings, deployed; two batteries). Pass 4: comms, resized for the constellation (two K-band user tiles and an S-band antenna on the Moon-facing top, a K-band Earth tile and the X-band array on the bottom, laser terminals ahead and behind, transponder). Pass 5: attitude (four reaction wheels, two star trackers, sun sensors, IMU). Pass 6: electronics (power control unit, power cables; a reserved slot for the flight computer and valve drivers, which are designed separately). Pass 7: thermal (silvered-Teflon radiators on five sides, a blanket on the Moon-facing top, heaters). Pass 8: deployment (wings folded on hinges for the launch, hold-downs; click a wing to unfold).",
+  "note": "Our own design: a ~300 kg lunar communications relay, fired off a mass driver near the lunar south pole into a 700 km circular polar orbit, one plane of a constellation, built from real flight hardware where it exists. Frame: x along the track (the direction of travel, and the craft's axis: the launch load runs down it), z up, y left. The craft's separation plane is at x = 0; the sled and the rails are behind and below it. Pass 1: structure, tank, main thruster, sled and rails. Pass 2: propulsion (eight 1 N thrusters, latch valve, fill and drain valves, lines). Pass 3: power (two solar wings, deployed; two batteries). Pass 4: comms, resized for the constellation (two K-band user tiles and an S-band antenna on the Moon-facing top, a K-band Earth tile and the X-band array on the bottom, laser terminals ahead and behind, transponder). Pass 5: attitude (four reaction wheels, two star trackers, sun sensors, IMU). Pass 6: electronics (power control unit, power cables; a reserved slot for the flight computer and valve drivers, which are designed separately). Pass 7: thermal (silvered-Teflon radiators on five sides, a blanket on the Moon-facing top, heaters). Pass 8: deployment (wings folded on hinges for the launch, hold-downs; click a wing to unfold). Pass 9: finishes (the cells drawn from AZUR's photo, with busbars, interconnects and cut corners; the radiators' tape in 5.08 cm strips; the top blanket's crinkled foil; hinge brackets between the wing panels).",
   "sources": [
     {
       "id": "nssdc_moon",
@@ -682,6 +682,16 @@
       "source": "iau_b3",
       "quote": "1SN⊙ = 1361 W m−2"
     },
+    "cell_width": {"value": 0.0607, "source": "azur_3g30c", "quote": "60.7 (± 0.1) x 124.5 (± 0.1) (assembly)"},
+    "cell_gap": {"value": 0.0015, "source": "design, chosen: the gap between cells on a panel"},
+    "cell_chamfer": {"value": [0.0195, 0.021], "source": "azur_3g30c", "measure": "estimated from its page-1 photo of the representative assembly, scaled by its 124.5 mm length (682 px): each cut corner 107 px along the long edge, 115 px down the short", "note": "m, along the long side, along the short side"},
+    "cell_busbar_inset": {"value": 0.0015, "source": "azur_3g30c", "measure": "estimated from its page-1 photo of the representative assembly, scaled by its 124.5 mm length (682 px): about 8 px in from the edge"},
+    "cell_busbar_width": {"value": 0.001, "source": "azur_3g30c", "measure": "estimated from its page-1 photo of the representative assembly, scaled by its 124.5 mm length (682 px): about 6 px"},
+    "cell_busbar_dip": {"value": 0.0027, "source": "azur_3g30c", "measure": "estimated from its page-1 photo of the representative assembly, scaled by its 124.5 mm length (682 px): the busbar runs about 15 px lower at the middle than at the interconnects"},
+    "cell_interconnect_x": {"value": [0.031, 0.092], "source": "azur_3g30c", "measure": "estimated from its page-1 photo of the representative assembly, scaled by its 124.5 mm length (682 px): the two interconnects at 172 and 502 px from the left end"},
+    "cell_interconnect_width": {"value": 0.00809, "source": "azur_3g30c", "quote": "Interconnector Dimensions n/a 8.09 mm x 12.91 mm x 25 µm"},
+    "radiator_tape_width": {"value": 0.0508, "source": "nasa_agfep", "quote": "tape dimensions were approximately 2.54 cm or 5.08 cm in width and up to 32.9 m (108') in length", "note": "m; the wider tape, laid in strips along the craft's length"},
+    "blanket_finish": {"value": "crinkled foil puffed in cells about 0.25 m across (tiling.crinkled_foil), in the model's foil_gold", "source": "design, chosen: crease sizes by eye, as on the harness's other blankets; no document gives them"},
     "cell_size": {
       "value": "60.7 x 124.5 mm (cell with cover glass), 72.65 cm²",
       "source": "azur_3g30c",
@@ -1082,6 +1092,7 @@
     }
   },
   "materials": {
+    "solar_cell": {"hex": "#221b39", "metallic": 0.6, "roughness": 0.25, "source": "azur_3g30c: mean colour of the representative assembly's cell area on page 1 (rendered at 200 dpi); metallic and roughness the harness's solar_cell"},
     "sled_lettering": {
       "hex": "#f2f2f2",
       "metallic": 0.0,
