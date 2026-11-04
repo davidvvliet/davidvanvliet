@@ -20,7 +20,7 @@ type Probe = {
   name: string; title: string; fixture: boolean; note: string | null;
   kind?: "circuit"; // a /circuit board (scripts/circuit/build.py): no sheet, its blocks instead
   sources: { title?: string; url?: string }[]; referenceModel: { url?: string; note?: string } | null;
-  insideView?: number[] | null; // the spec's "viewer": {"inside_view"}: where Internal turns the camera to
+  insideFlip?: string | null; // the spec's "viewer": {"inside_flip": "x"}: Internal turns the model over
   // Each git worktree that has this probe, newest build first (app/api/models/[...path]/route.ts).
   worktrees: Source[];
   // Never approved: null. Else what changed since approve (scripts/blender/lib/published.py).
@@ -163,9 +163,9 @@ type Controls = THREE.EventDispatcher<{ start: object }> & { target: THREE.Vecto
 // inside parts seen through an opening (`inside` in the glTF extras), which stay solid.
 // `inner`: a model's inside parts (internal.glb): no framing of its own on load, the camera
 // flies to them instead.
-function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explore = true, focusable = NONE, explodable = NO_PARTS, ghost = false, inner = false, turn }: {
+function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explore = true, focusable = NONE, explodable = NO_PARTS, ghost = false, inner = false }: {
   url: string; title?: string; exploded: boolean; focus: string | null; setFocus: (f: string | null) => void; explore?: boolean;
-  focusable?: Focusable[]; explodable?: string[]; ghost?: boolean; inner?: boolean; turn?: number[] | null;
+  focusable?: Focusable[]; explodable?: string[]; ghost?: boolean; inner?: boolean;
   onLabel: (label: { name: string; size: THREE.Vector3 } | null) => void; onReady?: () => void;
 }) {
   const gltf = useGLTF(url, "/draco/"); // compressed models (the /circuit boards) decode with the copy in public/draco
@@ -200,8 +200,9 @@ function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explor
   }, [gltf.scene, gl]);
   const homeNear = useRef(0.01);
   const homeDist = useRef(1);
-  // `turn`: swing round the target to `dir` (an arc, not a straight line through the model).
-  const flight = useRef<{ dir: THREE.Vector3; box?: THREE.Box3; home?: boolean; turn?: boolean } | null>(null);
+  // Boxes are in the model's own frame (as loaded); `box` too. The flight turns them into the
+  // world's with the parents' transform, so a model turned over (FlipGroup) is flown to right.
+  const flight = useRef<{ dir: THREE.Vector3; box?: THREE.Box3; home?: boolean } | null>(null);
 
   useEffect(() => {
     // The distance that frames the whole model: zoom and flight limits scale with it, so a 4 mm
@@ -212,11 +213,10 @@ function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explor
     if (inner) {
       homeNear.current = dist / 100;
       homeDist.current = dist;
-      // Fly from wherever the camera is to the whole inside, keeping the viewing direction, or
-      // swinging round to the spec's inside view (Blender's z-up frame; glTF is y-up).
-      const box = new THREE.Box3().setFromObject(scene);
-      if (controls && turn) flight.current = { dir: new THREE.Vector3(turn[0], turn[2], -turn[1]).normalize(), box, turn: true };
-      else if (controls) flight.current = { dir: camera.position.clone().sub(controls.target).normalize(), box };
+      // Fly from wherever the camera is to the whole inside, keeping the viewing direction.
+      const box = new THREE.Box3();
+      for (const b of boxes.values()) box.union(b);
+      if (controls) flight.current = { dir: camera.position.clone().sub(controls.target).normalize(), box };
       return;
     }
     camera.position.copy(centre).addScaledVector(new THREE.Vector3(0.6, 0.45, 0.66).normalize(), dist);
@@ -276,28 +276,20 @@ function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explor
     if (Math.abs(goal - t.current) < 1e-4) { t.current = goal; } else t.current += (goal - t.current) * Math.min(1, dt * 5);
     const k = smooth(t.current);
     for (const u of units) u.node.position.copy(u.rest).addScaledVector(u.local, explore || explodable.includes(u.group) ? k : 0);
-    const flyBox = flight.current?.box ?? (focus ? boxes.get(focus) : undefined);
+    const parent = scene.parent?.matrixWorld ?? new THREE.Matrix4();
+    const localBox = flight.current?.box ?? (focus ? boxes.get(focus) : undefined);
+    const flyBox = localBox?.clone().applyMatrix4(parent);
     if (controls && flight.current && (flyBox || flight.current.home)) {
       // Where the part is now (it may be exploding), and far enough to see all of it; or home.
       const off = new THREE.Vector3();
       if (flyBox && !flight.current.box) for (const u of units) if (u.group === focus) off.copy(u.node.position).sub(u.rest).applyMatrix3(new THREE.Matrix3().setFromMatrix4(u.node.parent!.matrixWorld));
       const fov = THREE.MathUtils.degToRad(camera.fov) * Math.min(1, camera.aspect);
-      const goalTarget = flyBox ? flyBox.getCenter(new THREE.Vector3()).add(off) : centre.clone();
+      const goalTarget = flyBox ? flyBox.getCenter(new THREE.Vector3()).add(off) : centre.clone().applyMatrix4(parent);
       const dist = flyBox ? Math.max(flyBox.getSize(new THREE.Vector3()).length() * 0.65, Math.min(0.05, homeDist.current * 0.01)) / Math.sin(fov / 2) : homeDist.current;
       const goalPos = goalTarget.clone().addScaledVector(flight.current.dir, dist);
-      const a = 1 - Math.exp(-dt * (flight.current.turn ? 3 : 5));
-      if (flight.current.turn) {
-        // Turn the camera's offset from the target towards the goal direction, so it orbits.
-        controls.target.lerp(goalTarget, a);
-        const off = camera.position.clone().sub(controls.target);
-        const len = THREE.MathUtils.lerp(off.length(), dist, a);
-        const q = new THREE.Quaternion().setFromUnitVectors(off.normalize(), flight.current.dir);
-        off.applyQuaternion(new THREE.Quaternion().slerp(q, a)).setLength(len);
-        camera.position.copy(controls.target).add(off);
-      } else {
-        camera.position.lerp(goalPos, a);
-        controls.target.lerp(goalTarget, a);
-      }
+      const a = 1 - Math.exp(-dt * 5);
+      camera.position.lerp(goalPos, a);
+      controls.target.lerp(goalTarget, a);
       controls.update();
       // Done once there and the part has stopped moving.
       if (t.current === goal && camera.position.distanceTo(goalPos) < dist * 0.002 && controls.target.distanceTo(goalTarget) < dist * 0.002) flight.current = null;
@@ -473,10 +465,10 @@ class ViewerBoundary extends Component<{ children: ReactNode; resetKey: string }
 // `internalUrl`: the model's inside parts (internal.glb), loaded when "Internal" is pressed.
 // `held`: the model is held in the hand (a board that drives a model): dragging turns it about its
 // centre instead of orbiting, shift-drag about its long side (x), double-click sets it straight.
-export function Viewer({ probe, title, url, breakdown, stale, compact, onReady, focus: shown, onFocus, explore = true, focusable = NONE, explodable = NO_PARTS, internalUrl, insideView, held }: {
+export function Viewer({ probe, title, url, breakdown, stale, compact, onReady, focus: shown, onFocus, explore = true, focusable = NONE, explodable = NO_PARTS, internalUrl, insideFlip, held }: {
   probe: string; title?: string; url: string; breakdown: Breakdown | null; stale: boolean; compact?: boolean; onReady?: () => void;
   focus?: string | null; onFocus?: (f: string | null) => void; explore?: boolean; focusable?: Focusable[]; explodable?: string[];
-  internalUrl?: string; insideView?: number[] | null; held?: React.RefObject<Held>;
+  internalUrl?: string; insideFlip?: string | null; held?: React.RefObject<Held>;
 }) {
   const [exploded, setExploded] = useState(false);
   const [inside, setInside] = useState(false);
@@ -528,21 +520,45 @@ export function Viewer({ probe, title, url, breakdown, stale, compact, onReady, 
         }}>
         <color attach="background" args={["#090909"]} />
         <StudioLights />
-        <Suspense fallback={null}>
-          <HeldGroup held={held}>
-            <Model key={url} url={url} title={title} exploded={exploded} focus={inside ? innerFocus : focus} setFocus={inside ? setInnerFocus : setFocus} onLabel={setLabel}
-              onReady={onReady} explore={explore} focusable={focusable} explodable={explodable} ghost={inside} />
-          </HeldGroup>
-        </Suspense>
-        <Suspense fallback={null}>
-          {inside && internalUrl && (
-            <Model key={internalUrl} url={internalUrl} exploded={false} focus={innerFocus} setFocus={setInnerFocus} onLabel={setInnerLabel} inner turn={insideView} />
-          )}
-        </Suspense>
+        <FlipGroup key={url} flipped={inside && insideFlip === "x"}>
+          <Suspense fallback={null}>
+            <HeldGroup held={held}>
+              <Model key={url} url={url} title={title} exploded={exploded} focus={inside ? innerFocus : focus} setFocus={inside ? setInnerFocus : setFocus} onLabel={setLabel}
+                onReady={onReady} explore={explore} focusable={focusable} explodable={explodable} ghost={inside} />
+            </HeldGroup>
+          </Suspense>
+          <Suspense fallback={null}>
+            {inside && internalUrl && (
+              <Model key={internalUrl} url={internalUrl} exploded={false} focus={innerFocus} setFocus={setInnerFocus} onLabel={setInnerLabel} inner />
+            )}
+          </Suspense>
+        </FlipGroup>
         <OrbitControls makeDefault enableZoom={!compact} enableRotate={!held} zoomToCursor />
       </Canvas>
     </ViewerBoundary>
   );
+}
+
+// Turns the model (outside and inside files together) half a turn about x, about its centre,
+// while `flipped`: the inside view of a model whose interesting side faces down, without moving
+// the camera.
+function FlipGroup({ flipped, children }: { flipped: boolean; children: React.ReactNode }) {
+  const g = useRef<THREE.Group>(null);
+  const pivot = useRef<THREE.Vector3 | null>(null);
+  const t = useRef(0);
+  useFrame((_, dt) => {
+    const grp = g.current;
+    if (!grp) return;
+    const goal = flipped ? 1 : 0;
+    if (t.current === goal) return;
+    // The centre as loaded (still unturned when the first flip starts).
+    if (!pivot.current) pivot.current = new THREE.Box3().setFromObject(grp).getCenter(new THREE.Vector3());
+    t.current += Math.sign(goal - t.current) * Math.min(Math.abs(goal - t.current), dt / 1.2);
+    const q = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI * smooth(t.current));
+    grp.quaternion.copy(q);
+    grp.position.copy(pivot.current).sub(pivot.current.clone().applyQuaternion(q));
+  });
+  return <group ref={g}>{children}</group>;
 }
 
 // The held model's turn, about the centre it had when loaded, and the drags that change it.
@@ -790,7 +806,7 @@ export default function ModelsDashboard() {
       </header>
       <div className={styles.grid}>
         <div className={styles.viewCell}>
-          {glbUrl ? <Viewer probe={probe!.name} url={glbUrl} breakdown={breakdown} stale={stale} internalUrl={internalUrl} insideView={probe!.insideView}
+          {glbUrl ? <Viewer probe={probe!.name} url={glbUrl} breakdown={breakdown} stale={stale} internalUrl={internalUrl} insideFlip={probe!.insideFlip}
             {...(board ? { focus, onFocus: setFocus } : {})} /> : <div className={styles.empty}>{probe ? "no export" : ""}</div>}
         </div>
         <div className={styles.side}>
