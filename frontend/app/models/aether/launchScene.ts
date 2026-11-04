@@ -72,6 +72,32 @@ const orbitTangent = (o: { a: number; e: number }, nu: number, out: THREE.Vector
 const utc = (jd: number) => new Date((jd - 2440587.5) * 86400e3).toISOString().slice(0, 16).replace("T", " ");
 
 
+const CAP = THREE.MathUtils.degToRad(15);   // the polar caps reach 15° from each pole
+/** A grid on the Moon's sphere (in the sphere mesh's frame: body-fixed x, z, -y), from colatitude c0 to c1 with
+ * `rows` rings of `seg` segments; uv(colat, lon) gives each vertex's texture coordinates. Faces point outward. */
+function sphereGrid(radius: number, c0: number, c1: number, rows: number, seg: number,
+  uv: (colat: number, lon: number) => [number, number]) {
+  const pos: number[] = [], nrm: number[] = [], uvs: number[] = [], idx: number[] = [];
+  for (let k = 0; k <= rows; k++) {
+    const colat = c0 + ((c1 - c0) * k) / rows, lat = Math.PI / 2 - colat;
+    for (let j = 0; j <= seg; j++) {
+      const lon = (2 * Math.PI * j) / seg - Math.PI;   // as SphereGeometry: u = 0 at longitude -180°
+      const x = Math.cos(lat) * Math.cos(lon), y = Math.cos(lat) * Math.sin(lon), z = Math.sin(lat);
+      nrm.push(x, z, -y); pos.push(x * radius, z * radius, -y * radius); uvs.push(...uv(colat, lon));
+    }
+  }
+  for (let k = 0; k < rows; k++) for (let j = 0; j < seg; j++) {
+    const a = k * (seg + 1) + j, b = a + seg + 1;
+    idx.push(a, b, a + 1, b, b + 1, a + 1);
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+  g.setAttribute("normal", new THREE.Float32BufferAttribute(nrm, 3));
+  g.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
+  g.setIndex(idx);
+  return g;
+}
+
 /** A frame given in the Moon's body-fixed axes (metres), as a matrix in a Moon-aligned scene object. */
 function frameMatrix(origin: number[], ax: number[], ay: number[], az: number[], unitsPerM: number) {
   const v = (a: number[]) => new THREE.Vector3(a[0], a[1], a[2]).applyMatrix4(SCENE_FROM_FIXED);
@@ -187,7 +213,9 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
   let h0: SceneHandles | null = null;
   let unitsPerM = 1;
   let saved: { geometry: THREE.BufferGeometry; material: THREE.Material | THREE.Material[]; ambient: number; shadows: boolean } | null = null;
-  let litMoon: THREE.MeshStandardMaterial | null = null, sunkMoon: THREE.SphereGeometry | null = null;
+  let litMoon: THREE.MeshStandardMaterial | null = null, sunkMoon: THREE.BufferGeometry | null = null;
+  const moonMaps: THREE.Texture[] = [];
+  const caps: THREE.Mesh[] = [];
 
   // Camera shots. Each opens on its planned view; once the viewer turns or zooms, only the point the
   // camera circles follows the craft (the camera moves with it), so their angle and zoom stay.
@@ -220,6 +248,33 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
       moon.material = litMoon;
       sunkMoon = new THREE.SphereGeometry(h.moonRadius * (R + SINK) / R, 256, 128);
       moon.geometry = sunkMoon;
+      // Up close the main page's 2k map is a blur: here an 8k colour map and a relief (normal) map, and the poles
+      // as separate caps with their own top-down (polar stereographic) maps, so they don't pinch. NASA's Scientific
+      // Visualization Studio, CGI Moon Kit (https://svs.gsfc.nasa.gov/4720/): the LROC colour map, and normals
+      // computed from its LOLA elevation map (16 px/deg, km above 1737.4 km). Swapped in once all have arrived.
+      const mat = litMoon, aniso = renderer.capabilities.getMaxAnisotropy();
+      const loader = new THREE.TextureLoader();
+      const names = ["moon-8k", "moon-normal", "moon-cap-n", "moon-cap-n-normal", "moon-cap-s", "moon-cap-s-normal"];
+      Promise.all(names.map((n) => loader.loadAsync(`/models/aether-launch/${n}.jpg`))).then((tex) => {
+        if (litMoon !== mat) { tex.forEach((t) => t.dispose()); return; }
+        tex.forEach((t, i) => { t.anisotropy = aniso; if (i % 2 === 0) t.colorSpace = THREE.SRGBColorSpace; });
+        moonMaps.push(...tex);
+        mat.map = tex[0]; mat.normalMap = tex[1]; mat.needsUpdate = true;
+        const r = h.moonRadius * (R + SINK) / R, seg = 256;
+        const band = sphereGrid(r, CAP, Math.PI - CAP, 107, seg, (c, lon) => [(lon + Math.PI) / (2 * Math.PI), 1 - c / Math.PI]);
+        // Caps: image x along body-fixed +x, image up along +y, out to the cap's edge (tan(colat / 2) scales the plane).
+        const capUv = (c: number, lon: number): [number, number] => {
+          const q = Math.tan(c / 2) / Math.tan(CAP / 2);
+          return [0.5 + 0.5 * q * Math.cos(lon), 0.5 + 0.5 * q * Math.sin(lon)];
+        };
+        const north = sphereGrid(r, 0, CAP, 40, seg, capUv);
+        const south = sphereGrid(r, Math.PI - CAP, Math.PI, 40, seg, (c, lon) => capUv(Math.PI - c, lon));
+        sunkMoon?.dispose(); sunkMoon = band; moon.geometry = band;
+        for (const [g, m, n] of [[north, tex[2], tex[3]], [south, tex[4], tex[5]]] as const) {
+          const cap = new THREE.Mesh(g, new THREE.MeshStandardMaterial({ map: m, normalMap: n, roughness: 1, metalness: 0 }));
+          caps.push(cap); moon.add(cap);
+        }
+      });
       h.ambient.intensity = 0.03;
       h.showOrbits(false);   // the planets' rings would cross the sky from the ground
       renderer.shadowMap.enabled = true;
@@ -449,7 +504,11 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
       h.moon.geometry = saved.geometry; h.moon.material = saved.material;
       h.ambient.intensity = saved.ambient;
       h.renderer.shadowMap.enabled = saved.shadows;
-      litMoon?.dispose(); sunkMoon?.dispose();
+      litMoon?.dispose(); sunkMoon?.dispose(); litMoon = null;
+      for (const t of moonMaps) t.dispose();
+      for (const c of caps) { h.moon.remove(c); c.geometry.dispose(); (c.material as THREE.Material).dispose(); }
+      caps.length = 0;
+      moonMaps.length = 0;
       terrain.geometry.dispose(); (terrain.material as THREE.Material).dispose(); regolith.dispose();
       track.geometry.dispose(); (track.material as THREE.Material).dispose();
       posts.geometry.dispose(); (posts.material as THREE.Material).dispose();
