@@ -30,7 +30,7 @@ def build(spec):
                     segments=48, direction=X, material="dark_metal")
         parts.lathe("deck_lower", [(0, xc), (R, xc), (R, xc + t), (0, xc + t)], material="white_paint", **hexa)
         parts.lathe("deck_upper", [(0, xb - t), (R, xb - t), (R, xb), (0, xb)], material="white_paint", **hexa)
-        parts.lathe("side_panels", [(R - 0.004, xc + t), (R, xc + t), (R, xb - t), (R - 0.004, xb - t)],
+        panels = parts.lathe("side_panels", [(R - 0.004, xc + t), (R, xc + t), (R, xb - t), (R - 0.004, xb - t)],
                     closed=True, material="foil_silver", **hexa)   # radiators (thermal)
 
     # Inside the drum, so in internal.glb: the tank on four legs, the latch valve and the lines.
@@ -92,6 +92,7 @@ def build(spec):
     attitude(d, R, flat, xc, xb, t)
     electronics(d, R, flat, xc, xb, t)
     thermal(d, R, flat, xc, xb, t, x0, rt)
+    markings(spec, d, flat, xc, xb, t, panels)
     parts.pose({name: j["angle"] for name, j in spec["joints"].items()})
 
 
@@ -345,3 +346,38 @@ def thermal(d, R, flat, xc, xb, t, x0, rt):
             zf = sz * (flat - 0.004 - 0.09 - 0.0005)
             parts.box(f"battery_heater{k}", (0.25, 0.14, 0.001), location=(xm, 0, zf), material="foil_gold")
 
+
+
+def markings(spec, d, flat, xc, xb, t, panels):
+    # "Altair AETHER" on the two lower slanted sides, under the US flag (as on the finrocket), and
+    # along the bottom. The top carries the S-band dish, the upper sides the folded wings.
+    col = lambda k: materials.colour(spec["materials"][k])
+    out = os.path.join(HARNESS, "out", "aether", "textures")
+    img = textures.marking("aether_craft_lettering",
+                           [(os.path.join(HARNESS, "refs", "aether", "craft-lettering-mask.png"), col("craft_lettering"))], out)
+    mat = materials.image("aether_craft_lettering", img, metallic=0.0, roughness=0.6, cutout=True)
+    fl = os.path.join(HARNESS, "refs", "finrocket")   # the flag masks drawn for the finrocket (us_flag)
+    flag = textures.marking("aether_flag", [(os.path.join(fl, "flag-field.png"), col("flag_white")),
+                                            (os.path.join(fl, "flag-red.png"), col("flag_red")),
+                                            (os.path.join(fl, "flag-blue.png"), col("flag_blue")),
+                                            (os.path.join(fl, "flag-stars.png"), col("flag_white"))], out)
+    flag_mat = materials.image("aether_flag", flag, metallic=0.0, roughness=0.5)
+    ratio = d["craft_lettering_side_height"] / d["craft_lettering_side_width"]
+    fh = d["craft_flag_hoist"]
+    # Along x, the sides are clear from the lower deck to the star trackers' baffles.
+    xs = (xc + t + xb - 0.15 - 0.05) / 2
+    with parts.assembly("markings"):
+        for k, deg in enumerate((210, 330)):
+            a = math.radians(deg)
+            n = (0.0, math.cos(a), math.sin(a))
+            v = (0.0, -math.sin(a), math.cos(a)) if deg == 330 else (0.0, math.sin(a), -math.cos(a))  # up the side
+            on = lambda off: (xs, n[1] * flat + v[1] * off, n[2] * flat + v[2] * off)
+            inward = (0.0, -n[1], -n[2])
+            parts.decal(f"craft_flag{k}", panels, center=on(d["craft_flag_offset"]), direction=inward, up=v,
+                        width=1.9 * fh, height=fh, material=flag_mat, step=0.02, lift=0.001)
+            parts.decal(f"craft_lettering{k}", panels, center=on(d["craft_lettering_side_offset"]), direction=inward,
+                        up=v, width=d["craft_lettering_side_width"], height=d["craft_lettering_side_height"],
+                        material=mat, step=0.02, lift=0.001)
+        parts.decal("craft_lettering_bottom", panels, center=((xc + xb) / 2, 0, -flat), direction=(0, 0, 1),
+                    up=(0, -1, 0), width=d["craft_lettering_bottom_width"],
+                    height=d["craft_lettering_bottom_width"] * ratio, material=mat, step=0.02, lift=0.001)

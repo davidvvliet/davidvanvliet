@@ -2,6 +2,10 @@
   "title": "Altair Aether",
   "logos": [],
   "viewer": { "page": "/models/aether" },
+  "closeups": [
+    { "name": "markings, left side", "target": [0.6, 0.38, -0.22], "look": [0, -0.866, 0.5], "radius": 0.35 },
+    { "name": "markings, right side", "target": [0.6, -0.38, -0.22], "look": [0, 0.866, 0.5], "radius": 0.35 }
+  ],
   "note": "Our own design: a ~300 kg lunar communications relay, fired off a mass driver near the lunar south pole into an elliptical frozen lunar orbit, built from real flight hardware where it exists. Frame: x along the track (the direction of travel, and the craft's axis: the launch load runs down it), z up, y left. The craft's separation plane is at x = 0; the sled and the rails are behind and below it. Pass 1: structure, tank, main thruster, sled and rails. Pass 2: propulsion (eight 1 N thrusters, latch valve, fill and drain valves, lines). Pass 3: power (two solar wings, deployed; two batteries). Pass 4: comms (S-band dish to the Moon on +z, X-band array to the Earth on +x, transponder). Pass 5: attitude (four reaction wheels, two star trackers, sun sensors, IMU). Pass 6: electronics (power control unit, power cables; a reserved slot for the flight computer and valve drivers, which are designed separately). Pass 7: thermal (silvered-Teflon radiators on five sides, a blanket on the Moon-facing top, heaters). Pass 8: deployment (wings folded on hinges for the launch, hold-downs; click a wing to unfold).",
   "sources": [
     {
@@ -186,6 +190,14 @@
       "url": "https://github.com/davidvvliet/davidvanvliet/tree/main/frontend/scripts/blender/specs/aether.json",
       "read": "2026-11-03",
       "licence": "this repo"
+    },
+    {
+      "id": "us_flag",
+      "title": "Flag of the United States (Wikimedia Commons, Flag_of_the_United_States.svg)",
+      "url": "https://commons.wikimedia.org/wiki/File:Flag_of_the_United_States.svg",
+      "read": "2026-11-03",
+      "licence": "\"This image of a flag is ineligible for copyright and therefore in the public domain\"",
+      "credit": "US flag drawn from the public-domain Commons SVG (Executive Order 10834 proportions, State Department colours)"
     }
   ],
   "reference_model": {
@@ -882,6 +894,46 @@
     "sled_lettering_height": {
       "value": 0.562,
       "source": "design, computed: 0.85 m x the mask's 626 / 947 px"
+    },
+    "craft_lettering": {
+      "value": "Altair AETHER",
+      "source": "design, chosen: on the two lower slanted sides under the US flag, and along the bottom (the top carries the S-band dish, the upper sides the folded wings); set in Geist (geist_font) like the finrocket's \"Altair ULTRALIGHT\": the second word half the size, on one baseline; mask refs/aether/craft-lettering-mask.png drawn by tools/sled_lettering.py",
+      "also": [
+        {
+          "source": "geist_font",
+          "quote": "This Font Software is licensed under the SIL Open Font License, Version 1.1"
+        }
+      ]
+    },
+    "craft_lettering_side_width": {
+      "value": 0.4,
+      "source": "design, chosen: across the clear stretch of each lower side, between the lower deck and the star tracker"
+    },
+    "craft_lettering_side_height": {
+      "value": 0.0835,
+      "source": "design, computed: 0.4 m x the mask's 226 / 1083 px"
+    },
+    "craft_lettering_side_offset": {
+      "value": -0.07,
+      "source": "design, chosen: the lettering's middle this far below the side's middle"
+    },
+    "craft_lettering_bottom_width": {
+      "value": 0.55,
+      "source": "design, chosen: along the bottom panel, its height from the mask's proportions"
+    },
+    "craft_flag": {
+      "value": "the US flag, upright, on each lower slanted side above the lettering, as on the finrocket",
+      "source": "us_flag",
+      "quote": "Current RGB colors and geometric specifications follow the [State Department] Design Guide ... The geometric specifications for the Union and the star sizes and placement come from an attachment to Executive Order 10834",
+      "note": "the finrocket's masks refs/finrocket/flag-*.png (us_flag's 7410 x 3900 geometry)"
+    },
+    "craft_flag_hoist": {
+      "value": 0.12,
+      "source": "design, chosen: the flag's height; its fly is 1.9 times it (us_flag's 7410 x 3900)"
+    },
+    "craft_flag_offset": {
+      "value": 0.09,
+      "source": "design, chosen: the flag's middle this far above the side's middle"
     }
   },
   "materials": {
@@ -890,6 +942,30 @@
       "metallic": 0.0,
       "roughness": 0.6,
       "source": "design, chosen: white on the black sled"
+    },
+    "craft_lettering": {
+      "hex": "#111111",
+      "metallic": 0.0,
+      "roughness": 0.6,
+      "source": "design, chosen: black on the silvered radiator panels, where white doesn't show"
+    },
+    "flag_red": {
+      "hex": "#b31942",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "us_flag: the SVG's fill"
+    },
+    "flag_blue": {
+      "hex": "#0a3161",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "us_flag: the SVG's fill"
+    },
+    "flag_white": {
+      "hex": "#ffffff",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "us_flag: the SVG's fill"
     }
   },
   "open_questions": [

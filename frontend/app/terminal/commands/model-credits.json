@@ -1,6 +1,7 @@
 {
   "aether": [
-    "Lettering set in Geist (SIL OFL 1.1)"
+    "Lettering set in Geist (SIL OFL 1.1)",
+    "US flag drawn from the public-domain Commons SVG (Executive Order 10834 proportions, State Department colours)"
   ],
   "cassini": [
     "NASA 3D Resources, Cassini-Huygens model (layout reference): https://github.com/nasa/NASA-3D-Resources; NASA 3D Resources, Cassini-Huygens (A): propulsion module blanket and black panels copied into refs/cassini/meshes/",
