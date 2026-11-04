@@ -1,6 +1,6 @@
 # Draws refs/aether/sled-lettering-mask.png: the lettering on the back of Aether's sled, in Geist.
-# "Altair LAUNCH" is set like the finrocket's "Altair ULTRALIGHT": the second word half the size of
-# "Altair" (114 px to 1.2 x 190 px there), on one baseline. The motto sits under it in capitals.
+# "Altair" on top, "LAUNCH" right below it at half the size (as "ULTRALIGHT" is to "Altair" on the
+# finrocket: 114 px to 1.2 x 190 px), both centred; a gap, then the motto in capitals.
 #   python3 scripts/blender/tools/sled_lettering.py [Geist-Regular.ttf]     (from frontend/)
 import os, sys
 from PIL import Image, ImageDraw, ImageFont
@@ -20,16 +20,14 @@ big, small, motto = (ImageFont.truetype(FONT, s) for s in (BIG, SMALL, MOTTO))
 img = Image.new("L", (W, 1000), 0)
 g = ImageDraw.Draw(img)
 
-# Line 1 on one baseline ("ls" anchor: left, baseline).
-w1 = g.textlength("Altair", font=big)
-gap = g.textlength(" ", font=big) * 0.6
-w2 = g.textlength("LAUNCH", font=small)
-x0, base = (W - (w1 + gap + w2)) / 2, PAD + big.getmetrics()[0]
-g.text((x0, base), "Altair", font=big, fill=255, anchor="ls")
-g.text((x0 + w1 + gap, base), "LAUNCH", font=small, fill=255, anchor="ls")
+# "Altair" centred on top, "LAUNCH" centred right below it ("ms" anchor: middle, baseline).
+base = PAD + big.getmetrics()[0]
+g.text((W / 2, base), "Altair", font=big, fill=255, anchor="ms")
+base += 0.12 * BIG + small.getmetrics()[0]
+g.text((W / 2, base), "LAUNCH", font=small, fill=255, anchor="ms")
 
-# The motto, centred, two lines.
-y = base + 0.45 * BIG
+# A gap, then the motto, centred, two lines.
+y = base + 0.9 * SMALL
 for line in LINES:
     y += motto.getmetrics()[0]
     g.text((W / 2, y), line, font=motto, fill=255, anchor="ms")

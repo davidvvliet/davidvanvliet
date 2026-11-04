@@ -867,7 +867,7 @@
     },
     "sled_lettering": {
       "value": "Altair LAUNCH / WE GO TO SPACE / TO IMPROVE LIFE ON EARTH",
-      "source": "design, chosen: on the back of the pusher bulkhead, set in Geist (geist_font) like the finrocket's \"Altair ULTRALIGHT\": the second word half the size of \"Altair\", on one baseline; the motto under it; mask refs/aether/sled-lettering-mask.png drawn by tools/sled_lettering.py",
+      "source": "design, chosen: on the back of the pusher bulkhead, set in Geist (geist_font) like the finrocket's \"Altair ULTRALIGHT\": \"Altair\" on top and \"LAUNCH\" half its size right below it, both centred; a gap, then the motto; mask refs/aether/sled-lettering-mask.png drawn by tools/sled_lettering.py",
       "also": [
         {
           "source": "geist_font",
@@ -880,8 +880,8 @@
       "source": "design, chosen: the text 0.85 m across the 1.0 m pusher"
     },
     "sled_lettering_height": {
-      "value": 0.368,
-      "source": "design, computed: 0.85 m x the mask's 484 / 1118 px"
+      "value": 0.562,
+      "source": "design, computed: 0.85 m x the mask's 626 / 947 px"
     }
   },
   "materials": {
