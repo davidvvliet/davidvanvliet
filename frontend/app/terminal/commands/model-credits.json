@@ -29,6 +29,9 @@
     "Roll pattern after the Saturn V's, from NASA's photo of the Apollo 11 rollout",
     "US flag drawn from the public-domain Commons SVG (Executive Order 10834 proportions, State Department colours)"
   ],
+  "gg1320": [
+    "Layout measured and colours sampled from Samuel M. Goldwasser's GG1320AN photos (Sam's Laser FAQ, repairfaq.org)"
+  ],
   "hubble": [
     "Photos: NASA (STS-125 crew)",
     "NASA 3D Resources, Hubble Space Telescope (A) (layout reference)",
@@ -40,6 +43,10 @@
     "NASA/KSC, KSC-97pc730 (unit colour)",
     "NASA/KSC, KSC-97pc732 (platform and PCDU colours)",
     "NASA/JPL, PIA04603 (blanket colour)"
+  ],
+  "mpu6050": [
+    "MEMS die traced from and textured with ZeptoBars' MPU-6050 die photo (CC BY 3.0, Wikimedia Commons)",
+    "MPU-6050 package marking traced from a photo by Raimond Spekking (CC BY-SA 4.0, Wikimedia Commons)"
   ],
   "perseverance": [
     "Material colours sampled from NASA/JPL-Caltech photo PIA24045",
