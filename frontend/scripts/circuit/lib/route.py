@@ -15,17 +15,27 @@ def plane_fanout(b):
     planes = {z.GetNetname() for z in b.Zones() if b.GetLayerType(z.GetLayer()) == pcbnew.LT_POWER}
     if not planes: return 0, []
     ds = b.GetDesignSettings(); nc = ds.m_NetSettings.GetDefaultNetclass()
-    vd, vh = nc.GetViaDiameter(), nc.GetViaDrill()
+    vd0, vh0 = nc.GetViaDiameter(), nc.GetViaDrill()
+    # a net's own class via if it has one (KiCad gives a via its class's drill: a default-size via with a
+    # bigger class drill fails the annular ring check)
+    class_via = {c.GetName(): (c.GetViaDiameter(), c.GetViaDrill()) for c in ds.m_NetSettings.GetNetclasses().values()
+                 if c.HasViaDiameter() and c.HasViaDrill()}
     base_clr = nc.GetClearance()
     class_clr = {c.GetName(): c.GetClearance() for c in ds.m_NetSettings.GetNetclasses().values() if c.HasClearance()}
     tw = ds.m_TrackMinWidth
     keepouts = [z for z in list(b.Zones()) + [z for f in b.GetFootprints() for z in f.Zones()]
                 if z.GetIsRuleArea() and (z.GetDoNotAllowVias() or z.GetDoNotAllowTracks())]
+    # Pads and traces by their real outline (a diagonal trace's bounding box covers free board around it), keep-outs by their box.
     def shapes():
         for f in b.GetFootprints():
-            for p in f.Pads(): yield p.GetNetname(), p.GetBoundingBox()
-        for t in b.GetTracks(): yield t.GetNetname(), t.GetBoundingBox()
+            for p in f.Pads(): yield p.GetNetname(), p
+        for t in b.GetTracks(): yield t.GetNetname(), t
         for z in keepouts: yield None, z.GetBoundingBox()
+    def hits(x, box):
+        if isinstance(x, pcbnew.BOX2I): return x.Intersects(box)
+        # a trace's test is on its centre line: grown by half its width (a via's test already covers its size)
+        grow = x.GetWidth() // 2 if x.GetClass() == "PCB_TRACK" else 0
+        return x.GetBoundingBox().Intersects(box) and x.HitTest(box, False, grow)
     sources = []  # (point, net item, reach, layer, outward angle: from the part's centre to the pad)
     for f in b.GetFootprints():
         for pad in f.Pads():
@@ -52,6 +62,7 @@ def plane_fanout(b):
         done = False
         # the net's own class clearance if wider than the default (a GND class at 0.15 otherwise fails the check)
         clr = max(base_clr, class_clr.get(net.GetNetClassName(), 0))
+        vd, vh = class_via.get(net.GetNetClassName(), (vd0, vh0))
         # directions nearest the outward one first: out of a QFN's row, or towards a BGA's edge between four balls
         for a in sorted((k * math.pi / 4 for k in range(8)), key=lambda a: -math.cos(a - out)):
             for step in range(0, 16):
@@ -65,7 +76,7 @@ def plane_fanout(b):
                     p = pcbnew.VECTOR2I(int(c.x + (v.x - c.x) * q), int(c.y + (v.y - c.y) * q))
                     boxes.append(pcbnew.BOX2I(pcbnew.VECTOR2I(p.x - tw // 2 - clr, p.y - tw // 2 - clr), pcbnew.VECTOR2I(tw + 2 * clr, tw + 2 * clr)))
                 if not b.GetBoardEdgesBoundingBox().Contains(boxes[0]): continue
-                if any(n != net.GetNetname() and any(x.Intersects(sb) for x in boxes) for n, sb in shapes()): continue
+                if any(n != net.GetNetname() and any(hits(sb, x) for x in boxes) for n, sb in shapes()): continue
                 # vias of the same net too: two vias' holes need their own spacing (hole to hole)
                 if any(t.GetClass() == "PCB_VIA" and boxes[0].Intersects(t.GetBoundingBox()) for t in b.GetTracks()): continue
                 t = pcbnew.PCB_TRACK(b); t.SetStart(c); t.SetEnd(v); t.SetWidth(tw); t.SetLayer(layer); t.SetNet(net); b.Add(t)

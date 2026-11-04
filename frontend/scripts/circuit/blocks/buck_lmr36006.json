@@ -1,0 +1,288 @@
+{
+ "name": "buck_lmr36006",
+ "title": "3.3 V regulator",
+ "purpose": "28 V to 3.3 V buck for the logic (LMR36006-Q1, 400 kHz adjustable)",
+ "sources": [
+  {
+   "id": "lmr",
+   "title": "TI LMR36006-Q1 4.2 to 60 V 0.6 A synchronous buck (SNVSAY7D)",
+   "url": "https://www.ti.com/lit/ds/symlink/lmr36006-q1.pdf",
+   "licence": "TI datasheet; link and quotes only",
+   "read": "p1, p3 options, p4 pins, p5-7 ratings, p19-24 application and component selection, p34 TVS note, p46-47 RNX0012B"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "U1",
+   "value": "LMR36006AQRNXRQ1",
+   "symbol": "spacecraft:LMR36006-Q1",
+   "footprint": "spacecraft:Texas_RNX0012B_VQFN-HR-12_2x3mm",
+   "source": "lmr, p1, p3, p4, p5",
+   "quote": "\"4.2-V to 60-V, 0.6-A Ultra-Small Synchronous Step-Down Converter\"; \"LMR36006AQRNXRQ1 Adjustable ... 400 kHz\"; \"VIN to PGND 4.2 ... 60 V\"; pins Table 6-1. 400 kHz, not the 2.1 MHz fixed 3.3 V part: at 28 V in, 3.3 V out at 2.1 MHz needs about 56 ns on-time, at its \"tON-MIN Minimum switch on-time 55 ... 83 ns\""
+  },
+  {
+   "ref": "C1",
+   "value": "4.7uF 100V",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_1210_3225Metric",
+   "source": "lmr, p24",
+   "quote": "\"A minimum ceramic capacitance of 4.7 \u00b5F is required on the input\"; \"rated for at least the maximum input voltage ... preferably twice\"; \"4.7-\u00b5F, 100-V, X7R\""
+  },
+  {
+   "ref": "C2",
+   "value": "220nF 100V",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0603_1608Metric",
+   "source": "lmr, p19, p24",
+   "quote": "\"a small case size 220-nF ceramic capacitor must be used at the input as close a possible to the regulator\" (Fig. 9-1: CHF1, CHF2)"
+  },
+  {
+   "ref": "C3",
+   "value": "220nF 100V",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0603_1608Metric",
+   "source": "lmr, p19",
+   "quote": "Fig. 9-1 CHF2, the second high-frequency input capacitor, on the other VIN pin (10)"
+  },
+  {
+   "ref": "C4",
+   "value": "100nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "lmr, p4, p24",
+   "quote": "\"Connect a high-quality 100-nF capacitor from this pin to the SW pin\"; \"A high-quality ceramic capacitor of 100 nF and at least 16 V is required\""
+  },
+  {
+   "ref": "C5",
+   "value": "1uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "lmr, p4",
+   "quote": "\"Connect a high-quality 1-\u00b5F capacitor from this pin to GND\" (VCC)"
+  },
+  {
+   "ref": "L1",
+   "value": "22uH XFL4020-223",
+   "symbol": "Device:L",
+   "footprint": "startracker:L_Coilcraft_XFL4020",
+   "source": "lmr, p20-21",
+   "quote": "Table 9-3 \"3.3 V 400 kHz ... 2 \u00d7 22 \u00b5F 22 \u00b5H, 250 m\u03a9 LMR36006AQRNXRQ1\"; \"the inductor saturation current must not be less than the device low-side current limit\" and ideally at least \"ISC\" (\"High-side current limit 0.8 1 1.2 A\"). The part number (Coilcraft XFL4020-223, the 4 x 4 mm body used on star-tracker-n6) is unverified: its 22 \u00b5H row was not read"
+  },
+  {
+   "ref": "C6",
+   "value": "22uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0805_2012Metric",
+   "source": "lmr, p19-21",
+   "quote": "Table 9-3 COUT \"2 \u00d7 22 \u00b5F\" for 3.3 V at 400 kHz"
+  },
+  {
+   "ref": "C7",
+   "value": "22uF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0805_2012Metric",
+   "source": "lmr, p19-21",
+   "quote": "the second of the \"2 \u00d7 22 \u00b5F\""
+  },
+  {
+   "ref": "R1",
+   "value": "100k",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "lmr, p22",
+   "quote": "\"The recommended value for RFBT is 100 k\u03a9\""
+  },
+  {
+   "ref": "R2",
+   "value": "43.2k",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "lmr, p19-22",
+   "quote": "Table 9-1 \"400 3.3 22 2 \u00d7 22\u00b5F 1 \u00d7 22\u00b5F 100 k 43.2 k 20 pF\" (RFBT, RFBB, CFF); RFBB = RFBT / (VOUT/VREF - 1), \"VREF is nominally 1 V\""
+  },
+  {
+   "ref": "C8",
+   "value": "20pF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "lmr, p19",
+   "quote": "Table 9-1 CFF \"20 pF\" (across RFBT)"
+  }
+ ],
+ "nets": {
+  "+28V": [
+   "U1.2",
+   "U1.10",
+   "U1.9",
+   "C1.1",
+   "C2.1",
+   "C3.1"
+  ],
+  "GND": [
+   "U1.1",
+   "U1.11",
+   "U1.6",
+   "C1.2",
+   "C2.2",
+   "C3.2",
+   "C5.2",
+   "C6.2",
+   "C7.2",
+   "R2.2"
+  ],
+  "/SW": [
+   "U1.12",
+   "U1.3",
+   "C4.2",
+   "L1.1"
+  ],
+  "/BOOT": [
+   "U1.4",
+   "C4.1"
+  ],
+  "/VCC": [
+   "U1.5",
+   "C5.1"
+  ],
+  "/FB": [
+   "U1.7",
+   "R1.2",
+   "R2.1",
+   "C8.2"
+  ],
+  "+3V3": [
+   "L1.2",
+   "C6.1",
+   "C7.1",
+   "R1.1",
+   "C8.1"
+  ]
+ },
+ "ports": {
+  "+28V": {
+   "net": "+28V",
+   "kind": "power_in"
+  },
+  "+3V3": {
+   "net": "+3V3",
+   "kind": "power_out",
+   "note": "up to 0.6 A"
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   14,
+   12
+  ],
+  "place": {
+   "U1": {
+    "at_mm": [
+     6.0,
+     5.5
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C1": {
+    "at_mm": [
+     1.8,
+     2.5
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "C2": {
+    "at_mm": [
+     1.8,
+     6.6
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "C3": {
+    "at_mm": [
+     3.4,
+     6.6
+    ],
+    "rotation": 90,
+    "side": "front"
+   },
+   "C4": {
+    "at_mm": [
+     3.6,
+     9.2
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C5": {
+    "at_mm": [
+     6.0,
+     9.4
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "L1": {
+    "at_mm": [
+     10.5,
+     3.0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C6": {
+    "at_mm": [
+     9.2,
+     8.5
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C7": {
+    "at_mm": [
+     12.2,
+     8.5
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "R1": {
+    "at_mm": [
+     9.5,
+     11.2
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "R2": {
+    "at_mm": [
+     7.5,
+     11.2
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C8": {
+    "at_mm": [
+     11.5,
+     11.2
+    ],
+    "rotation": 0,
+    "side": "front"
+   }
+  },
+  "traces": [],
+  "vias": [],
+  "rules": "p25-style layout: input capacitors at the VIN pins, short SW loop to L1, feedback divider away from SW"
+ },
+ "open_questions": [
+  "EN tied to VIN (\"Can be connected directly to VIN\"): the regulator runs whenever 28 V is present. PG unused (\"Can be open or grounded when not used\").",
+  "Table 9-3 gives RFBB 43.3 k\u03a9 for the same design; Table 9-1 and the formula's nearest E96 value give 43.2 k\u03a9.",
+  "L1's part number is not verified against Coilcraft's datasheet."
+ ]
+}

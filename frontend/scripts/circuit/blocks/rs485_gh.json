@@ -1,0 +1,86 @@
+{
+ "name": "rs485_gh",
+ "title": "RS-485 connector",
+ "purpose": "Bus data connector: RS-485 A/B and ground on a JST GH 6-pin, as the star trackers' bus connector",
+ "sources": [
+  {
+   "id": "jstgh",
+   "title": "JST GH connector catalogue page (eGH.pdf)",
+   "url": "https://www.jst-mfg.com/product/pdf/eng/eGH.pdf",
+   "licence": "link and quotes only",
+   "read": "ratings and the SM06B-GHS-TB part table (read for the bus_connectors block)"
+  },
+  {
+   "id": "ds009",
+   "title": "Pixhawk Connector Standard DS-009",
+   "url": "https://github.com/pixhawk/Pixhawk-Standards",
+   "licence": "link and quotes only",
+   "read": "p4 connector series, p5 serial port pinout (read for the bus_connectors block)"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "J1",
+   "value": "GH 6-pin",
+   "symbol": "Connector_Generic_MountingPin:Conn_01x06_MountingPin",
+   "footprint": "Connector_JST:JST_GH_SM06B-GHS-TB_1x06-1MP_P1.25mm_Horizontal",
+   "source": "jstgh; ds009",
+   "quote": "the bus_connectors block's J2: jstgh \"Current rating: 1.0 A AC/DC\uff08AWG #26\uff09\", part \"SM06B-GHS-TB\"; pins as there: 1 unused, 2 A, 3 B, 4-5 unused, 6 GND (DS-009 defines no RS-485 port)"
+  }
+ ],
+ "nets": {
+  "/RS485_A": [
+   "J1.2"
+  ],
+  "/RS485_B": [
+   "J1.3"
+  ],
+  "GND": [
+   "J1.6",
+   "J1.MP"
+  ],
+  "/NC1": [
+   "J1.1"
+  ],
+  "/NC4": [
+   "J1.4"
+  ],
+  "/NC5": [
+   "J1.5"
+  ]
+ },
+ "ports": {
+  "/RS485_A": {
+   "net": "/RS485_A",
+   "kind": "data"
+  },
+  "/RS485_B": {
+   "net": "/RS485_B",
+   "kind": "data"
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   9,
+   6
+  ],
+  "place": {
+   "J1": {
+    "at_mm": [
+     4.5,
+     3.0
+    ],
+    "rotation": 0,
+    "side": "front"
+   }
+  },
+  "traces": [],
+  "vias": [],
+  "rules": "at the board edge"
+ },
+ "open_questions": []
+}

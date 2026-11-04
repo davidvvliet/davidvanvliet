@@ -67,8 +67,9 @@ def route(work, ground, planes=False):
                                 "-de", dsn, "-do", ses], capture_output=True, text=True, timeout=ROUTE_TRY_SECONDS)
         except subprocess.TimeoutExpired:
             print(f"try {i + 1}/{ROUTE_TRIES}: router still running after {ROUTE_TRY_SECONDS} s, stopped", flush=True)
-            if last == "timeout": sys.exit("not routed: the router timed out twice (too crowded to finish: give the parts more room)")
-            last = "timeout"; continue
+            # one timeout is enough: a board that routes takes well under the limit (the slowest so far ~250 s), and a
+            # second try of a crowded layout only wastes another five minutes
+            sys.exit("not routed: the router timed out (too crowded to finish: find what crowds it before trying again)")
         if not os.path.exists(ses):
             sys.exit("Freerouting failed:\n" + (r.stdout + r.stderr)[-2000:])
         kpy(os.path.join(HERE, "lib", "route.py"), "import", pcb, ses, ground or "")

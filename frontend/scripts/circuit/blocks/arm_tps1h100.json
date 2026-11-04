@@ -1,0 +1,201 @@
+{
+ "name": "arm_tps1h100",
+ "title": "Arm switch",
+ "purpose": "Smart high-side switch feeding 28 V to every valve coil only when armed (TPS1H100-Q1, current sense)",
+ "sources": [
+  {
+   "id": "tps",
+   "title": "TI TPS1H100-Q1 40 V 100 mOhm smart high-side switch (SLVSCM2D)",
+   "url": "https://www.ti.com/lit/ds/symlink/tps1h100-q1.pdf",
+   "licence": "TI datasheet; link and quotes only",
+   "read": "p1, p3 pins, p4 ratings, p6-7 characteristics, p17-19 current sense and limit, p28-30 reverse polarity and GND network, p32-33 application, p44-46 PWP0014K"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "U1",
+   "value": "TPS1H100BQPWPRQ1",
+   "symbol": "spacecraft:TPS1H100B-Q1",
+   "footprint": "spacecraft:Texas_HTSSOP-14-1EP_4.4x5mm_P0.65mm_EP3.4x5mm_Mask2.6x2.59mm_ThermalVias",
+   "source": "tps, p1, p3, p4, p6",
+   "quote": "\"40-V, 100-m\u03a9 Single-Channel Smart High-Side Power Switch\"; \"Input control, 3.3-V and 5-V logic compatible\"; \"High-side relays and solenoids\"; \"VS Operating voltage 5 ... 40 V\"; \"Io,nom Nominal DC load current 0 ... 4 A\" (16 coils at 0.15 A: 2.4 A); \"Clamp drain-to-source voltage internally clamped 50 min / 70 max V\"; pins p3 (version B: pin 14 CS); \"Thermal pad. Connect to device GND or leave floating.\""
+  },
+  {
+   "ref": "R1",
+   "value": "374R 1%",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "tps, p17-18, p33",
+   "quote": "\"RCS = VCS / ICS = VCS x K / IOUT\" with \"K Current sense current ratio 500\"; \"Ensure the CS voltage is in the linear region (0 to 4 V)\"; \"a 1% accuracy or better resistor is preferred\". 374 R: 4 A reads 2.99 V, inside the RP2040 ADC's 3.3 V (our choice)"
+  },
+  {
+   "ref": "R2",
+   "value": "619R 1%",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "tps, p18-19, p33",
+   "quote": "\"RCL = VCL,th x KCL / IOUT\" with \"VCL,th ... 1.233 V\" and \"KCL Current limit current ratio 2000\": 619 R limits at 3.98 A; \"CL pin must be connected with device GND\"; \"The lower one ... is applied as the actual current limit\" (internal \"7 min / 13 max A\")"
+  },
+  {
+   "ref": "R3",
+   "value": "4.7k",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "tps, p30",
+   "quote": "\"TI recommends 4.7 k\u03a9 when using 3.3-V MCU I/Os\" (in series with IN, protection against loss of GND)"
+  },
+  {
+   "ref": "R4",
+   "value": "4.7k",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "tps, p30",
+   "quote": "as R3, on DIAG_EN (the same MCU-pin protection, our choice)"
+  },
+  {
+   "ref": "R5",
+   "value": "10k",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "tps, p7",
+   "quote": "\"VCS,H Current-sense fault high voltage ... 4.3 / 4.75 / 4.9 V\": above the RP2040's 3.3 V, so the CS line reaches the ADC through 10 k (our choice; it limits the current into the pin's protection)"
+  }
+ ],
+ "nets": {
+  "+28V": [
+   "U1.8",
+   "U1.9",
+   "U1.10"
+  ],
+  "/VALVE_28V": [
+   "U1.5",
+   "U1.6",
+   "U1.7"
+  ],
+  "/IN_PIN": [
+   "U1.3",
+   "R3.2"
+  ],
+  "/DIAG_PIN": [
+   "U1.12",
+   "R4.2"
+  ],
+  "/CS": [
+   "U1.14",
+   "R1.1",
+   "R5.1"
+  ],
+  "/CL": [
+   "U1.13",
+   "R2.1"
+  ],
+  "GND": [
+   "U1.2",
+   "U1.15",
+   "R1.2",
+   "R2.2"
+  ],
+  "/ARM": [
+   "R3.1"
+  ],
+  "/DIAG_EN": [
+   "R4.1"
+  ],
+  "/ARM_SENSE": [
+   "R5.2"
+  ]
+ },
+ "ports": {
+  "+28V": {
+   "net": "+28V",
+   "kind": "power_in"
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground"
+  },
+  "/VALVE_28V": {
+   "net": "/VALVE_28V",
+   "kind": "power_out",
+   "note": "the valve coils' common supply, live only when armed"
+  },
+  "/ARM": {
+   "net": "/ARM",
+   "kind": "gpio",
+   "note": "high: armed"
+  },
+  "/DIAG_EN": {
+   "net": "/DIAG_EN",
+   "kind": "gpio"
+  },
+  "/ARM_SENSE": {
+   "net": "/ARM_SENSE",
+   "kind": "analog",
+   "note": "load current: 2.99 V at 4 A"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   13,
+   8
+  ],
+  "place": {
+   "U1": {
+    "at_mm": [
+     6.2,
+     4.0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "R1": {
+    "at_mm": [
+     11.8,
+     2.0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "R2": {
+    "at_mm": [
+     11.8,
+     3.2
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "R3": {
+    "at_mm": [
+     1.2,
+     2.0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "R4": {
+    "at_mm": [
+     1.2,
+     3.2
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "R5": {
+    "at_mm": [
+     11.8,
+     6.5
+    ],
+    "rotation": 0,
+    "side": "front"
+   }
+  },
+  "traces": [],
+  "vias": [],
+  "rules": "the switch near the input; its thermal pad to ground with vias (POWER class on +28V and /VALVE_28V)"
+ },
+ "open_questions": [
+  "No GND network (1 k + diode): reverse polarity is blocked by the input diode instead (p28 Method 1); loss-of-ground protection then rests on R3/R4 only.",
+  "CS fault level (up to 4.9 V) reaches the RP2040 through 10 k: the RP2040's pin limits are not read here.",
+  "No VS bypass capacitor value in the datasheet (the transient tests ran \"without any filter capacitors in VS and VOUT\"); the input has the TVS and the buck's 4.7 \u00b5F."
+ ]
+}

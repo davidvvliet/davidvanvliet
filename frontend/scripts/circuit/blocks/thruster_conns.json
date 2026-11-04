@@ -1,0 +1,468 @@
+{
+ "name": "thruster_conns",
+ "title": "Thruster connectors",
+ "purpose": "The eight thrusters' harness connectors: two valve coils and two catalyst-bed heater elements each",
+ "sources": [
+  {
+   "id": "jstgh",
+   "title": "JST GH connector catalogue page (eGH.pdf)",
+   "url": "https://www.jst-mfg.com/product/pdf/eng/eGH.pdf",
+   "licence": "link and quotes only",
+   "read": "ratings and the SM06B-GHS-TB part table (read for the bus_connectors block)"
+  },
+  {
+   "id": "nammo",
+   "title": "Nammo MHT-1N monopropellant hydrazine thruster datasheet (2021)",
+   "url": "https://www.nammo.com/wp-content/uploads/2021/04/2021-Nammo-Westcott-MHT-1N-Hydrazine-Thruster.pdf",
+   "licence": "Nammo datasheet; link and quotes only",
+   "read": "performance and electrical table"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "J1",
+   "value": "GH 6-pin",
+   "symbol": "Connector_Generic_MountingPin:Conn_01x06_MountingPin",
+   "footprint": "Connector_JST:JST_GH_SM06B-GHS-TB_1x06-1MP_P1.25mm_Horizontal",
+   "source": "jstgh; nammo",
+   "quote": "jstgh: \"Current rating: 1.0 A AC/DC\uff08AWG #26\uff09\", part \"SM06B-GHS-TB\". nammo: \"Flow Control Valve Dual in-line, series redundant solenoid valve\", \"Valve Power 3.5 W-4.1 W @ 28 Vdc and 20\u00b0C [per coil]\" (0.15 A), \"Catalyst Bed Heater Power 5.5 W-6 W per element at 28 Vdc\" (0.21 A), \"Dual Redundancy Heater\". Pins ours: 1 valve supply (armed 28 V), 2 coil A return, 3 coil B return, 4 heater supply (28 V), 5 heater A return, 6 heater B return; mounting pins to ground"
+  },
+  {
+   "ref": "J2",
+   "value": "GH 6-pin",
+   "symbol": "Connector_Generic_MountingPin:Conn_01x06_MountingPin",
+   "footprint": "Connector_JST:JST_GH_SM06B-GHS-TB_1x06-1MP_P1.25mm_Horizontal",
+   "source": "jstgh; nammo",
+   "quote": "as J1, thruster 2"
+  },
+  {
+   "ref": "J3",
+   "value": "GH 6-pin",
+   "symbol": "Connector_Generic_MountingPin:Conn_01x06_MountingPin",
+   "footprint": "Connector_JST:JST_GH_SM06B-GHS-TB_1x06-1MP_P1.25mm_Horizontal",
+   "source": "jstgh; nammo",
+   "quote": "as J1, thruster 3"
+  },
+  {
+   "ref": "J4",
+   "value": "GH 6-pin",
+   "symbol": "Connector_Generic_MountingPin:Conn_01x06_MountingPin",
+   "footprint": "Connector_JST:JST_GH_SM06B-GHS-TB_1x06-1MP_P1.25mm_Horizontal",
+   "source": "jstgh; nammo",
+   "quote": "as J1, thruster 4"
+  },
+  {
+   "ref": "J5",
+   "value": "GH 6-pin",
+   "symbol": "Connector_Generic_MountingPin:Conn_01x06_MountingPin",
+   "footprint": "Connector_JST:JST_GH_SM06B-GHS-TB_1x06-1MP_P1.25mm_Horizontal",
+   "source": "jstgh; nammo",
+   "quote": "as J1, thruster 5"
+  },
+  {
+   "ref": "J6",
+   "value": "GH 6-pin",
+   "symbol": "Connector_Generic_MountingPin:Conn_01x06_MountingPin",
+   "footprint": "Connector_JST:JST_GH_SM06B-GHS-TB_1x06-1MP_P1.25mm_Horizontal",
+   "source": "jstgh; nammo",
+   "quote": "as J1, thruster 6"
+  },
+  {
+   "ref": "J7",
+   "value": "GH 6-pin",
+   "symbol": "Connector_Generic_MountingPin:Conn_01x06_MountingPin",
+   "footprint": "Connector_JST:JST_GH_SM06B-GHS-TB_1x06-1MP_P1.25mm_Horizontal",
+   "source": "jstgh; nammo",
+   "quote": "as J1, thruster 7"
+  },
+  {
+   "ref": "J8",
+   "value": "GH 6-pin",
+   "symbol": "Connector_Generic_MountingPin:Conn_01x06_MountingPin",
+   "footprint": "Connector_JST:JST_GH_SM06B-GHS-TB_1x06-1MP_P1.25mm_Horizontal",
+   "source": "jstgh; nammo",
+   "quote": "as J1, thruster 8"
+  }
+ ],
+ "nets": {
+  "/VALVE_28V": [
+   "J1.1",
+   "J2.1",
+   "J3.1",
+   "J4.1",
+   "J5.1",
+   "J6.1",
+   "J7.1",
+   "J8.1"
+  ],
+  "/T1_COIL_A": [
+   "J1.2"
+  ],
+  "/T1_COIL_B": [
+   "J1.3"
+  ],
+  "+28V": [
+   "J1.4",
+   "J2.4",
+   "J3.4",
+   "J4.4",
+   "J5.4",
+   "J6.4",
+   "J7.4",
+   "J8.4"
+  ],
+  "/T1_HTR_A": [
+   "J1.5"
+  ],
+  "/T1_HTR_B": [
+   "J1.6"
+  ],
+  "GND": [
+   "J1.MP",
+   "J2.MP",
+   "J3.MP",
+   "J4.MP",
+   "J5.MP",
+   "J6.MP",
+   "J7.MP",
+   "J8.MP"
+  ],
+  "/T2_COIL_A": [
+   "J2.2"
+  ],
+  "/T2_COIL_B": [
+   "J2.3"
+  ],
+  "/T2_HTR_A": [
+   "J2.5"
+  ],
+  "/T2_HTR_B": [
+   "J2.6"
+  ],
+  "/T3_COIL_A": [
+   "J3.2"
+  ],
+  "/T3_COIL_B": [
+   "J3.3"
+  ],
+  "/T3_HTR_A": [
+   "J3.5"
+  ],
+  "/T3_HTR_B": [
+   "J3.6"
+  ],
+  "/T4_COIL_A": [
+   "J4.2"
+  ],
+  "/T4_COIL_B": [
+   "J4.3"
+  ],
+  "/T4_HTR_A": [
+   "J4.5"
+  ],
+  "/T4_HTR_B": [
+   "J4.6"
+  ],
+  "/T5_COIL_A": [
+   "J5.2"
+  ],
+  "/T5_COIL_B": [
+   "J5.3"
+  ],
+  "/T5_HTR_A": [
+   "J5.5"
+  ],
+  "/T5_HTR_B": [
+   "J5.6"
+  ],
+  "/T6_COIL_A": [
+   "J6.2"
+  ],
+  "/T6_COIL_B": [
+   "J6.3"
+  ],
+  "/T6_HTR_A": [
+   "J6.5"
+  ],
+  "/T6_HTR_B": [
+   "J6.6"
+  ],
+  "/T7_COIL_A": [
+   "J7.2"
+  ],
+  "/T7_COIL_B": [
+   "J7.3"
+  ],
+  "/T7_HTR_A": [
+   "J7.5"
+  ],
+  "/T7_HTR_B": [
+   "J7.6"
+  ],
+  "/T8_COIL_A": [
+   "J8.2"
+  ],
+  "/T8_COIL_B": [
+   "J8.3"
+  ],
+  "/T8_HTR_A": [
+   "J8.5"
+  ],
+  "/T8_HTR_B": [
+   "J8.6"
+  ]
+ },
+ "ports": {
+  "/VALVE_28V": {
+   "net": "/VALVE_28V",
+   "kind": "power_in"
+  },
+  "+28V": {
+   "net": "+28V",
+   "kind": "power_in"
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground"
+  },
+  "/T1_COIL_A": {
+   "net": "/T1_COIL_A",
+   "kind": "power_in",
+   "note": "thruster 1: to a low-side driver output"
+  },
+  "/T1_COIL_B": {
+   "net": "/T1_COIL_B",
+   "kind": "power_in",
+   "note": "thruster 1: to a low-side driver output"
+  },
+  "/T1_HTR_A": {
+   "net": "/T1_HTR_A",
+   "kind": "power_in",
+   "note": "thruster 1: to a low-side driver output"
+  },
+  "/T1_HTR_B": {
+   "net": "/T1_HTR_B",
+   "kind": "power_in",
+   "note": "thruster 1: to a low-side driver output"
+  },
+  "/T2_COIL_A": {
+   "net": "/T2_COIL_A",
+   "kind": "power_in",
+   "note": "thruster 2: to a low-side driver output"
+  },
+  "/T2_COIL_B": {
+   "net": "/T2_COIL_B",
+   "kind": "power_in",
+   "note": "thruster 2: to a low-side driver output"
+  },
+  "/T2_HTR_A": {
+   "net": "/T2_HTR_A",
+   "kind": "power_in",
+   "note": "thruster 2: to a low-side driver output"
+  },
+  "/T2_HTR_B": {
+   "net": "/T2_HTR_B",
+   "kind": "power_in",
+   "note": "thruster 2: to a low-side driver output"
+  },
+  "/T3_COIL_A": {
+   "net": "/T3_COIL_A",
+   "kind": "power_in",
+   "note": "thruster 3: to a low-side driver output"
+  },
+  "/T3_COIL_B": {
+   "net": "/T3_COIL_B",
+   "kind": "power_in",
+   "note": "thruster 3: to a low-side driver output"
+  },
+  "/T3_HTR_A": {
+   "net": "/T3_HTR_A",
+   "kind": "power_in",
+   "note": "thruster 3: to a low-side driver output"
+  },
+  "/T3_HTR_B": {
+   "net": "/T3_HTR_B",
+   "kind": "power_in",
+   "note": "thruster 3: to a low-side driver output"
+  },
+  "/T4_COIL_A": {
+   "net": "/T4_COIL_A",
+   "kind": "power_in",
+   "note": "thruster 4: to a low-side driver output"
+  },
+  "/T4_COIL_B": {
+   "net": "/T4_COIL_B",
+   "kind": "power_in",
+   "note": "thruster 4: to a low-side driver output"
+  },
+  "/T4_HTR_A": {
+   "net": "/T4_HTR_A",
+   "kind": "power_in",
+   "note": "thruster 4: to a low-side driver output"
+  },
+  "/T4_HTR_B": {
+   "net": "/T4_HTR_B",
+   "kind": "power_in",
+   "note": "thruster 4: to a low-side driver output"
+  },
+  "/T5_COIL_A": {
+   "net": "/T5_COIL_A",
+   "kind": "power_in",
+   "note": "thruster 5: to a low-side driver output"
+  },
+  "/T5_COIL_B": {
+   "net": "/T5_COIL_B",
+   "kind": "power_in",
+   "note": "thruster 5: to a low-side driver output"
+  },
+  "/T5_HTR_A": {
+   "net": "/T5_HTR_A",
+   "kind": "power_in",
+   "note": "thruster 5: to a low-side driver output"
+  },
+  "/T5_HTR_B": {
+   "net": "/T5_HTR_B",
+   "kind": "power_in",
+   "note": "thruster 5: to a low-side driver output"
+  },
+  "/T6_COIL_A": {
+   "net": "/T6_COIL_A",
+   "kind": "power_in",
+   "note": "thruster 6: to a low-side driver output"
+  },
+  "/T6_COIL_B": {
+   "net": "/T6_COIL_B",
+   "kind": "power_in",
+   "note": "thruster 6: to a low-side driver output"
+  },
+  "/T6_HTR_A": {
+   "net": "/T6_HTR_A",
+   "kind": "power_in",
+   "note": "thruster 6: to a low-side driver output"
+  },
+  "/T6_HTR_B": {
+   "net": "/T6_HTR_B",
+   "kind": "power_in",
+   "note": "thruster 6: to a low-side driver output"
+  },
+  "/T7_COIL_A": {
+   "net": "/T7_COIL_A",
+   "kind": "power_in",
+   "note": "thruster 7: to a low-side driver output"
+  },
+  "/T7_COIL_B": {
+   "net": "/T7_COIL_B",
+   "kind": "power_in",
+   "note": "thruster 7: to a low-side driver output"
+  },
+  "/T7_HTR_A": {
+   "net": "/T7_HTR_A",
+   "kind": "power_in",
+   "note": "thruster 7: to a low-side driver output"
+  },
+  "/T7_HTR_B": {
+   "net": "/T7_HTR_B",
+   "kind": "power_in",
+   "note": "thruster 7: to a low-side driver output"
+  },
+  "/T8_COIL_A": {
+   "net": "/T8_COIL_A",
+   "kind": "power_in",
+   "note": "thruster 8: to a low-side driver output"
+  },
+  "/T8_COIL_B": {
+   "net": "/T8_COIL_B",
+   "kind": "power_in",
+   "note": "thruster 8: to a low-side driver output"
+  },
+  "/T8_HTR_A": {
+   "net": "/T8_HTR_A",
+   "kind": "power_in",
+   "note": "thruster 8: to a low-side driver output"
+  },
+  "/T8_HTR_B": {
+   "net": "/T8_HTR_B",
+   "kind": "power_in",
+   "note": "thruster 8: to a low-side driver output"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   87,
+   6
+  ],
+  "place": {
+   "J1": {
+    "at_mm": [
+     5.0,
+     3.0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "J2": {
+    "at_mm": [
+     16.0,
+     3.0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "J3": {
+    "at_mm": [
+     27.0,
+     3.0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "J4": {
+    "at_mm": [
+     38.0,
+     3.0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "J5": {
+    "at_mm": [
+     49.0,
+     3.0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "J6": {
+    "at_mm": [
+     60.0,
+     3.0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "J7": {
+    "at_mm": [
+     71.0,
+     3.0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "J8": {
+    "at_mm": [
+     82.0,
+     3.0
+    ],
+    "rotation": 0,
+    "side": "front"
+   }
+  },
+  "traces": [],
+  "vias": [],
+  "rules": "along the board edge, cables leaving outward"
+ },
+ "open_questions": [
+  "A flight harness would use a qualified connector (e.g. Micro-D); the GH stands in for the design. Its voltage rating not read.",
+  "Pin 1 carries both coils' supply (0.3 A) and pin 4 both heater elements (0.42 A), inside the GH's 1.0 A per pin."
+ ]
+}

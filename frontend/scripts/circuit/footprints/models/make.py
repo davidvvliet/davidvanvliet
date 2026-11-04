@@ -508,5 +508,19 @@ def tracker_brackets():
                     [(x, y) for x in (3.5, 76.5) for y in (-3.5, -49.5)], -1.6, (35.0, -95.0), "x", 69.97,
                     (-3.0, -140.0, 83.0, 3.0), top_screws=True)
 
+def rnx12():
+    """TI RNX0012B VQFN-HR (LMR36006-Q1 datasheet SNVSAY7D p46): body "2.1"/"1.9" by "3.1"/"2.9" (2 x 3 drawn), "0.9"/"0.8"
+    tall (0.9 drawn); terminals "0.3"/"0.2" wide (0.25) and "0.5"/"0.3" long (0.4), placed as the land pattern (p47);
+    pin 12 a bar "1.725"/"1.525" long (1.625). Terminal thickness 0.1 and the colours are estimates. Model frame y up."""
+    m = Mesh()
+    prism(m, "0.10 0.10 0.10", rounded(2.0, 3.0, 0.02, n=1), 0, 0.9)
+    term = lambda cx, cy, w, h: prism(m, "0.75 0.72 0.65", rounded(w, h, 0.01, n=1, cx=cx, cy=cy), 0, 0.1, shine=0.5)
+    for y in (1.125, 0.475, -0.175, -0.675):
+        term(-0.8, y, 0.4, 0.25); term(0.8, y, 0.4, 0.25)
+    for x in (-0.5, 0.0, 0.5): term(x, -1.3, 0.25, 0.4)
+    term(0.0, 0.8125, 0.25, 1.625)
+    disc(m, "0.6 0.6 0.6", -0.6, 1.1, 0.25, 0.9 + 0.005)
+    m.write(os.path.join(HERE, "TI_RNX0012B.wrl"), "TI VQFN-HR RNX0012B (LMR36006-Q1)")
+
 if __name__ == "__main__":
-    scd4x(); sgp41(); epd154(); zjy128(); tps2121(); gs_camera(); lens16(); pi_zero2w(); star_tracker_cable(); star_tracker_baffle(); star_tracker_n6_cable(); hat_standoffs(); tracker_brackets(); vfbga178(); rgt16(); xfl4020()
+    scd4x(); sgp41(); epd154(); zjy128(); tps2121(); gs_camera(); lens16(); pi_zero2w(); star_tracker_cable(); star_tracker_baffle(); star_tracker_n6_cable(); hat_standoffs(); tracker_brackets(); rnx12(); vfbga178(); rgt16(); xfl4020()

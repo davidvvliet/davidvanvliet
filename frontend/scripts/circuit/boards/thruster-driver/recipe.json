@@ -1,0 +1,405 @@
+{
+ "title": "RCS thruster driver",
+ "purpose": "Valve and catalyst-bed heater driver for eight hydrazine monopropellant thrusters on a 28 V bus: a high-side arm switch feeding every valve coil, four 8-channel low-side drivers (each thruster's coil A and heater A on one, coil B and heater B on another, on separate SPI buses), an RP2040 that takes commands over RS-485",
+ "source": {
+  "title": "thruster-driver recipe",
+  "url": "https://github.com/davidvvliet/davidvanvliet/tree/main/frontend/scripts/circuit/boards/thruster-driver",
+  "author": "the circuit harness: blocks from TI, Vishay, JST, Raspberry Pi documents; RP2040, SWD and LED blocks reused",
+  "licence": "MIT blocks; new blocks quote their datasheets"
+ },
+ "board": {
+  "size_mm": [
+   102,
+   72
+  ],
+  "corner_radius_mm": 3,
+  "layers": 6,
+  "planes": {
+   "In1.Cu": "GND",
+   "In2.Cu": "+28V"
+  },
+  "rules": "boards/thruster-driver/rules.kicad_pro",
+  "ground_fill": "GND",
+  "mask": "Black"
+ },
+ "blocks": {
+  "in": {
+   "block": "power28_in",
+   "at_mm": [
+    1,
+    1
+   ]
+  },
+  "arm": {
+   "block": "arm_tps1h100",
+   "at_mm": [
+    20,
+    1
+   ]
+  },
+  "buck": {
+   "block": "buck_lmr36006",
+   "at_mm": [
+    34,
+    1
+   ]
+  },
+  "bus": {
+   "block": "rs485_gh",
+   "at_mm": [
+    49,
+    1
+   ]
+  },
+  "rs485": {
+   "block": "rs485_thvd1410",
+   "at_mm": [
+    59,
+    1.5
+   ]
+  },
+  "swd": {
+   "block": "swd_tc2030",
+   "at_mm": [
+    70,
+    1
+   ]
+  },
+  "led": {
+   "block": "led_gpio",
+   "at_mm": [
+    80,
+    3
+   ]
+  },
+  "mcu": {
+   "block": "rp2040_core",
+   "at_mm": [
+    1,
+    15
+   ]
+  },
+  "thr": {
+   "block": "thruster_conns",
+   "at_mm": [
+    7.5,
+    64
+   ]
+  },
+  "lsdA1": {
+   "block": "lsd_drv81008",
+   "at_mm": [
+    10,
+    33
+   ]
+  },
+  "lsdB1": {
+   "block": "lsd_drv81008",
+   "at_mm": [
+    28,
+    33
+   ]
+  },
+  "lsdA2": {
+   "block": "lsd_drv81008",
+   "at_mm": [
+    56,
+    33
+   ]
+  },
+  "lsdB2": {
+   "block": "lsd_drv81008",
+   "at_mm": [
+    74,
+    33
+   ]
+  }
+ },
+ "connect": [
+  [
+   "in.+28V",
+   "arm.+28V",
+   "buck.+28V",
+   "thr.+28V",
+   "lsdA1./VM",
+   "lsdB1./VM",
+   "lsdA2./VM",
+   "lsdB2./VM"
+  ],
+  [
+   "buck.+3V3",
+   "mcu.+3V3",
+   "rs485.+3V3",
+   "swd.+3V3",
+   "lsdA1.+3V3",
+   "lsdB1.+3V3",
+   "lsdA2.+3V3",
+   "lsdB2.+3V3"
+  ],
+  [
+   "in.GND",
+   "arm.GND",
+   "buck.GND",
+   "mcu.GND",
+   "rs485.GND",
+   "bus.GND",
+   "swd.GND",
+   "led.GND",
+   "thr.GND",
+   "lsdA1.GND",
+   "lsdB1.GND",
+   "lsdA2.GND",
+   "lsdB2.GND"
+  ],
+  [
+   "arm./VALVE_28V",
+   "thr./VALVE_28V"
+  ],
+  [
+   "mcu./GPIO2",
+   "arm./ARM"
+  ],
+  [
+   "mcu./GPIO3",
+   "arm./DIAG_EN"
+  ],
+  [
+   "mcu./GPIO26",
+   "arm./ARM_SENSE"
+  ],
+  [
+   "mcu./GPIO0",
+   "rs485./UART_TX"
+  ],
+  [
+   "mcu./GPIO1",
+   "rs485./UART_RX"
+  ],
+  [
+   "mcu./GPIO5",
+   "rs485./RS485_DIR"
+  ],
+  [
+   "bus./RS485_A",
+   "rs485./RS485_A"
+  ],
+  [
+   "bus./RS485_B",
+   "rs485./RS485_B"
+  ],
+  [
+   "mcu./SWDIO",
+   "swd./SWDIO"
+  ],
+  [
+   "mcu./SWCLK",
+   "swd./SWCLK"
+  ],
+  [
+   "mcu./RUN",
+   "swd./NRST"
+  ],
+  [
+   "mcu./GPIO25",
+   "led./LED"
+  ],
+  [
+   "mcu./GPIO18",
+   "lsdA1./SCLK",
+   "lsdA2./SCLK"
+  ],
+  [
+   "mcu./GPIO19",
+   "lsdA1./SDI",
+   "lsdA2./SDI"
+  ],
+  [
+   "mcu./GPIO16",
+   "lsdA1./SDO",
+   "lsdA2./SDO"
+  ],
+  [
+   "mcu./GPIO10",
+   "lsdB1./SCLK",
+   "lsdB2./SCLK"
+  ],
+  [
+   "mcu./GPIO11",
+   "lsdB1./SDI",
+   "lsdB2./SDI"
+  ],
+  [
+   "mcu./GPIO12",
+   "lsdB1./SDO",
+   "lsdB2./SDO"
+  ],
+  [
+   "mcu./GPIO17",
+   "lsdA1./nSCS"
+  ],
+  [
+   "mcu./GPIO21",
+   "lsdA1./nSLEEP"
+  ],
+  [
+   "thr./T1_COIL_A",
+   "lsdA1./OUT0"
+  ],
+  [
+   "thr./T1_HTR_A",
+   "lsdA1./OUT4"
+  ],
+  [
+   "thr./T2_COIL_A",
+   "lsdA1./OUT1"
+  ],
+  [
+   "thr./T2_HTR_A",
+   "lsdA1./OUT5"
+  ],
+  [
+   "thr./T3_COIL_A",
+   "lsdA1./OUT2"
+  ],
+  [
+   "thr./T3_HTR_A",
+   "lsdA1./OUT6"
+  ],
+  [
+   "thr./T4_COIL_A",
+   "lsdA1./OUT3"
+  ],
+  [
+   "thr./T4_HTR_A",
+   "lsdA1./OUT7"
+  ],
+  [
+   "mcu./GPIO13",
+   "lsdB1./nSCS"
+  ],
+  [
+   "mcu./GPIO22",
+   "lsdB1./nSLEEP"
+  ],
+  [
+   "thr./T1_COIL_B",
+   "lsdB1./OUT0"
+  ],
+  [
+   "thr./T1_HTR_B",
+   "lsdB1./OUT4"
+  ],
+  [
+   "thr./T2_COIL_B",
+   "lsdB1./OUT1"
+  ],
+  [
+   "thr./T2_HTR_B",
+   "lsdB1./OUT5"
+  ],
+  [
+   "thr./T3_COIL_B",
+   "lsdB1./OUT2"
+  ],
+  [
+   "thr./T3_HTR_B",
+   "lsdB1./OUT6"
+  ],
+  [
+   "thr./T4_COIL_B",
+   "lsdB1./OUT3"
+  ],
+  [
+   "thr./T4_HTR_B",
+   "lsdB1./OUT7"
+  ],
+  [
+   "mcu./GPIO20",
+   "lsdA2./nSCS"
+  ],
+  [
+   "mcu./GPIO6",
+   "lsdA2./nSLEEP"
+  ],
+  [
+   "thr./T5_COIL_A",
+   "lsdA2./OUT0"
+  ],
+  [
+   "thr./T5_HTR_A",
+   "lsdA2./OUT4"
+  ],
+  [
+   "thr./T6_COIL_A",
+   "lsdA2./OUT1"
+  ],
+  [
+   "thr./T6_HTR_A",
+   "lsdA2./OUT5"
+  ],
+  [
+   "thr./T7_COIL_A",
+   "lsdA2./OUT2"
+  ],
+  [
+   "thr./T7_HTR_A",
+   "lsdA2./OUT6"
+  ],
+  [
+   "thr./T8_COIL_A",
+   "lsdA2./OUT3"
+  ],
+  [
+   "thr./T8_HTR_A",
+   "lsdA2./OUT7"
+  ],
+  [
+   "mcu./GPIO14",
+   "lsdB2./nSCS"
+  ],
+  [
+   "mcu./GPIO7",
+   "lsdB2./nSLEEP"
+  ],
+  [
+   "thr./T5_COIL_B",
+   "lsdB2./OUT0"
+  ],
+  [
+   "thr./T5_HTR_B",
+   "lsdB2./OUT4"
+  ],
+  [
+   "thr./T6_COIL_B",
+   "lsdB2./OUT1"
+  ],
+  [
+   "thr./T6_HTR_B",
+   "lsdB2./OUT5"
+  ],
+  [
+   "thr./T7_COIL_B",
+   "lsdB2./OUT2"
+  ],
+  [
+   "thr./T7_HTR_B",
+   "lsdB2./OUT6"
+  ],
+  [
+   "thr./T8_COIL_B",
+   "lsdB2./OUT3"
+  ],
+  [
+   "thr./T8_HTR_B",
+   "lsdB2./OUT7"
+  ]
+ ],
+ "sources": [],
+ "open_questions": [
+  "28V net class (0.4 mm traces) and LOAD class (0.25 mm) are estimates, not checked against a current-capacity source; +28V is a whole inner plane.",
+  "SS36 input diode is rated 3 A; every valve and heater on at once draws about 5.8 A (estimate from the blocks' coil and heater currents).",
+  "SMBJ28A stand-off voltage equals the 28 V bus: a bus above 28 V leaks through it.",
+  "DRV81008 clamp energy per valve turn-off is unchecked: the valve coil's inductance is unknown.",
+  "Valve coils, heaters and their currents are placeholders until a thruster is chosen; the Aether has no 28 V bus yet."
+ ]
+}

@@ -1,0 +1,556 @@
+{
+ "name": "lsd_drv81008",
+ "title": "8-channel low-side driver",
+ "purpose": "Eight protected low-side switches for 28 V valve coils or heaters, driven over SPI (TI DRV81008-Q1)",
+ "sources": [
+  {
+   "id": "drv",
+   "title": "TI DRV81008-Q1 8-channel 40 V low-side driver (SLOSE97B)",
+   "url": "https://www.ti.com/lit/ds/symlink/drv81008-q1.pdf",
+   "licence": "TI datasheet; link and quotes only",
+   "read": "p1 features, p3 pins, p4 ratings (EAS), p14 EAR, p37-39 application and layout, p46-47 PWP0024T package and land pattern"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "U1",
+   "value": "DRV81008-Q1",
+   "symbol": "spacecraft:DRV81008-Q1",
+   "footprint": "spacecraft:HTSSOP-24-1EP_4.4x7.8mm_P0.65mm_EP3.4x7.8mm_Mask2.37x6mm_ThermalVias",
+   "source": "drv, p1, p3 Table 4-1",
+   "quote": "\"8-channel, 40V, 700m\u03a9, Fully Protected Low-side Driver\"; \"42V minimum drain to the source clamping voltage\"; \"330mA per output at 85 \u00b0C, with all channels ON\"; \"Integrated clamp circuits on each output dissipates the stored energy during turning OFF inductive loads\"; pins per Table 4-1 (24-pin HTSSOP PWP); \"Connect the exposed pad to PCB ground for cooling and EMC\""
+  },
+  {
+   "ref": "C1",
+   "value": "68nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0603_1608Metric",
+   "source": "drv, p38 Table 7-1, p39 7.2.1",
+   "quote": "\"Bypass capacitor on VM pin 68nF Battery voltage filtering\"; \"bypassed to GND using low-ESR ceramic bypass capacitor with a recommended value of 68nF rated for VM\" (0603 for the 50 V rating: our choice)"
+  },
+  {
+   "ref": "C2",
+   "value": "100nF",
+   "symbol": "Device:C",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "source": "drv, p38 Table 7-1",
+   "quote": "\"Bypass capacitor on VDD pin 100nF Logic supply voltage filtering\"; \"A value of 100nF rated for 6.3V is recommended\""
+  },
+  {
+   "ref": "R1",
+   "value": "100R",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "drv, p38 Table 7-1",
+   "quote": "\"Resistor in series with VDD pin 100\u03a9 Logic supply voltage filtering\""
+  },
+  {
+   "ref": "R2",
+   "value": "4.7k",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "drv, p3, p38 Table 7-1",
+   "quote": "\"Resistors in series with IN0, IN1 and nSLEEP pins 4.7k\u03a9 Protection of the microcontroller ... Also to guarantee output channels OFF during loss of ground\""
+  },
+  {
+   "ref": "R3",
+   "value": "4.7k",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "drv, p3, p38 Table 7-1",
+   "quote": "\"Resistors in series with IN0, IN1 and nSLEEP pins 4.7k\u03a9 Protection of the microcontroller ... Also to guarantee output channels OFF during loss of ground\". IN0 and IN1 tied low through it: \"IN0 ... Connected to channel 2 by default and in Limp Home mode\" (IN1 channel 3), so only SPI commands turn a channel on and Limp Home can't fire a valve (our choice)"
+  },
+  {
+   "ref": "R4",
+   "value": "4.7k",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "drv, p3, p38 Table 7-1",
+   "quote": "\"Resistors in series with IN0, IN1 and nSLEEP pins 4.7k\u03a9 Protection of the microcontroller ... Also to guarantee output channels OFF during loss of ground\". IN0 and IN1 tied low through it: \"IN0 ... Connected to channel 2 by default and in Limp Home mode\" (IN1 channel 3), so only SPI commands turn a channel on and Limp Home can't fire a valve (our choice)"
+  },
+  {
+   "ref": "R5",
+   "value": "470R",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "drv, p38 Table 7-1",
+   "quote": "\"Resistors in series with nSCS, SCLK, SDI and SDO pins 470\u03a9 Protection of the microcontroller during over voltage and reverse polarity\""
+  },
+  {
+   "ref": "R6",
+   "value": "470R",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "drv, p38 Table 7-1",
+   "quote": "\"Resistors in series with nSCS, SCLK, SDI and SDO pins 470\u03a9 Protection of the microcontroller during over voltage and reverse polarity\""
+  },
+  {
+   "ref": "R7",
+   "value": "470R",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "drv, p38 Table 7-1",
+   "quote": "\"Resistors in series with nSCS, SCLK, SDI and SDO pins 470\u03a9 Protection of the microcontroller during over voltage and reverse polarity\""
+  },
+  {
+   "ref": "R8",
+   "value": "470R",
+   "symbol": "Device:R",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "source": "drv, p38 Table 7-1",
+   "quote": "\"Resistors in series with nSCS, SCLK, SDI and SDO pins 470\u03a9 Protection of the microcontroller during over voltage and reverse polarity\""
+  }
+ ],
+ "nets": {
+  "/VM": [
+   "U1.20",
+   "C1.1"
+  ],
+  "/VDD_LSD": [
+   "U1.24",
+   "C2.1",
+   "R1.2"
+  ],
+  "/nSLEEP_PIN": [
+   "U1.21",
+   "R2.2"
+  ],
+  "/IN0_PIN": [
+   "U1.23",
+   "R3.2"
+  ],
+  "/IN1_PIN": [
+   "U1.22",
+   "R4.2"
+  ],
+  "/nSCS_PIN": [
+   "U1.1",
+   "R5.2"
+  ],
+  "/SCLK_PIN": [
+   "U1.2",
+   "R6.2"
+  ],
+  "/SDI_PIN": [
+   "U1.3",
+   "R7.2"
+  ],
+  "/SDO_PIN": [
+   "U1.4",
+   "R8.2"
+  ],
+  "GND": [
+   "U1.5",
+   "U1.8",
+   "U1.17",
+   "U1.25",
+   "C1.2",
+   "C2.2",
+   "R3.1",
+   "R4.1"
+  ],
+  "/OUT0": [
+   "U1.6"
+  ],
+  "/OUT1": [
+   "U1.19"
+  ],
+  "/OUT2": [
+   "U1.7"
+  ],
+  "/OUT3": [
+   "U1.18"
+  ],
+  "/OUT4": [
+   "U1.9"
+  ],
+  "/OUT5": [
+   "U1.16"
+  ],
+  "/OUT6": [
+   "U1.12"
+  ],
+  "/OUT7": [
+   "U1.13"
+  ],
+  "+3V3": [
+   "R1.1"
+  ],
+  "/nSLEEP": [
+   "R2.1"
+  ],
+  "/nSCS": [
+   "R5.1"
+  ],
+  "/SCLK": [
+   "R6.1"
+  ],
+  "/SDI": [
+   "R7.1"
+  ],
+  "/SDO": [
+   "R8.1"
+  ]
+ },
+ "ports": {
+  "/VM": {
+   "net": "/VM",
+   "kind": "power_in",
+   "note": "the valve or heater supply (VM 4 to 40 V); the board's TVS protects it (Table 7-1: TVS on VM)"
+  },
+  "+3V3": {
+   "net": "+3V3",
+   "kind": "power_in",
+   "note": "logic supply (VDD 3 to 5.5 V) through R1"
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground"
+  },
+  "/nSLEEP": {
+   "net": "/nSLEEP",
+   "kind": "gpio",
+   "note": "high: active; low: sleep, all outputs off"
+  },
+  "/nSCS": {
+   "net": "/nSCS",
+   "kind": "data"
+  },
+  "/SCLK": {
+   "net": "/SCLK",
+   "kind": "data"
+  },
+  "/SDI": {
+   "net": "/SDI",
+   "kind": "data"
+  },
+  "/SDO": {
+   "net": "/SDO",
+   "kind": "data"
+  },
+  "/OUT0": {
+   "net": "/OUT0",
+   "kind": "power_out",
+   "note": "low-side switch to a load's return (open drain)"
+  },
+  "/OUT1": {
+   "net": "/OUT1",
+   "kind": "power_out",
+   "note": "low-side switch to a load's return (open drain)"
+  },
+  "/OUT2": {
+   "net": "/OUT2",
+   "kind": "power_out",
+   "note": "low-side switch to a load's return (open drain)"
+  },
+  "/OUT3": {
+   "net": "/OUT3",
+   "kind": "power_out",
+   "note": "low-side switch to a load's return (open drain)"
+  },
+  "/OUT4": {
+   "net": "/OUT4",
+   "kind": "power_out",
+   "note": "low-side switch to a load's return (open drain)"
+  },
+  "/OUT5": {
+   "net": "/OUT5",
+   "kind": "power_out",
+   "note": "low-side switch to a load's return (open drain)"
+  },
+  "/OUT6": {
+   "net": "/OUT6",
+   "kind": "power_out",
+   "note": "low-side switch to a load's return (open drain)"
+  },
+  "/OUT7": {
+   "net": "/OUT7",
+   "kind": "power_out",
+   "note": "low-side switch to a load's return (open drain)"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   12.5,
+   12
+  ],
+  "place": {
+   "U1": {
+    "at_mm": [
+     6.0,
+     7.5
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C1": {
+    "at_mm": [
+     9.6,
+     0.8
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "C2": {
+    "at_mm": [
+     2.0,
+     0.8
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "R1": {
+    "at_mm": [
+     4.2,
+     0.8
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "R2": {
+    "at_mm": [
+     11.8,
+     2.4
+    ],
+    "rotation": 270,
+    "side": "front"
+   },
+   "R3": {
+    "at_mm": [
+     10.2,
+     2.4
+    ],
+    "rotation": 270,
+    "side": "front"
+   },
+   "R4": {
+    "at_mm": [
+     11.0,
+     2.4
+    ],
+    "rotation": 270,
+    "side": "front"
+   },
+   "R5": {
+    "at_mm": [
+     2.4,
+     2.4
+    ],
+    "rotation": 270,
+    "side": "front"
+   },
+   "R6": {
+    "at_mm": [
+     1.0,
+     2.4
+    ],
+    "rotation": 270,
+    "side": "front"
+   },
+   "R7": {
+    "at_mm": [
+     0.8,
+     5.225
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "R8": {
+    "at_mm": [
+     0.8,
+     6.0
+    ],
+    "rotation": 0,
+    "side": "front"
+   }
+  },
+  "traces": [
+   {
+    "from_mm": [
+     2.4,
+     2.91
+    ],
+    "to_mm": [
+     2.4,
+     3.925
+    ],
+    "width_mm": 0.2,
+    "layer": "F.Cu",
+    "net": "/nSCS_PIN"
+   },
+   {
+    "from_mm": [
+     1.0,
+     2.91
+    ],
+    "to_mm": [
+     1.0,
+     4.575
+    ],
+    "width_mm": 0.2,
+    "layer": "F.Cu",
+    "net": "/SCLK_PIN"
+   },
+   {
+    "from_mm": [
+     1.0,
+     4.575
+    ],
+    "to_mm": [
+     2.6,
+     4.575
+    ],
+    "width_mm": 0.2,
+    "layer": "F.Cu",
+    "net": "/SCLK_PIN"
+   },
+   {
+    "from_mm": [
+     1.31,
+     5.225
+    ],
+    "to_mm": [
+     2.6,
+     5.225
+    ],
+    "width_mm": 0.2,
+    "layer": "F.Cu",
+    "net": "/SDI_PIN"
+   },
+   {
+    "from_mm": [
+     1.31,
+     6.0
+    ],
+    "to_mm": [
+     2.0,
+     5.875
+    ],
+    "width_mm": 0.2,
+    "layer": "F.Cu",
+    "net": "/SDO_PIN"
+   },
+   {
+    "from_mm": [
+     2.0,
+     5.875
+    ],
+    "to_mm": [
+     2.6,
+     5.875
+    ],
+    "width_mm": 0.2,
+    "layer": "F.Cu",
+    "net": "/SDO_PIN"
+   },
+   {
+    "from_mm": [
+     10.2,
+     2.91
+    ],
+    "to_mm": [
+     10.2,
+     4.575
+    ],
+    "width_mm": 0.2,
+    "layer": "F.Cu",
+    "net": "/IN0_PIN"
+   },
+   {
+    "from_mm": [
+     10.2,
+     4.575
+    ],
+    "to_mm": [
+     9.4,
+     4.575
+    ],
+    "width_mm": 0.2,
+    "layer": "F.Cu",
+    "net": "/IN0_PIN"
+   },
+   {
+    "from_mm": [
+     11.0,
+     2.91
+    ],
+    "to_mm": [
+     11.0,
+     5.225
+    ],
+    "width_mm": 0.2,
+    "layer": "F.Cu",
+    "net": "/IN1_PIN"
+   },
+   {
+    "from_mm": [
+     11.0,
+     5.225
+    ],
+    "to_mm": [
+     9.4,
+     5.225
+    ],
+    "width_mm": 0.2,
+    "layer": "F.Cu",
+    "net": "/IN1_PIN"
+   },
+   {
+    "from_mm": [
+     11.8,
+     2.91
+    ],
+    "to_mm": [
+     11.8,
+     5.875
+    ],
+    "width_mm": 0.2,
+    "layer": "F.Cu",
+    "net": "/nSLEEP_PIN"
+   },
+   {
+    "from_mm": [
+     11.8,
+     5.875
+    ],
+    "to_mm": [
+     9.4,
+     5.875
+    ],
+    "width_mm": 0.2,
+    "layer": "F.Cu",
+    "net": "/nSLEEP_PIN"
+   },
+   {
+    "from_mm": [
+     9.4,
+     6.525
+    ],
+    "to_mm": [
+     11.0,
+     6.45
+    ],
+    "width_mm": 0.3,
+    "layer": "F.Cu",
+    "net": "/VM"
+   }
+  ],
+  "vias": [
+   {
+    "at_mm": [
+     11.0,
+     6.45
+    ],
+    "size_mm": 0.6,
+    "drill_mm": 0.3,
+    "net": "/VM"
+   }
+  ],
+  "rules": "p39: VM capacitor \"as close to the VM pin as possible\", VDD capacitor \"as close to the pin as possible\"; \"The thermal PAD of the package must be connected to system ground\", multiple vias, clear copper around it on the bottom layer"
+ },
+ "open_questions": [
+  "Clamp energy (p14): the outputs absorb each coil's turn-off energy (\"Maximum Energy dissipation - repetitive EAR 10mJ @ IL_EAR = 220mA\"); the valve coils' inductance is not published (Nammo gives power only), so the energy per pulse is unchecked. An external diode across each coil would remove that load but slow the valve's closing.",
+  "The optional 10 nF capacitor on each output (Table 7-1, ESD and BCI) is left out: the outputs go to connectors, so it may be worth adding.",
+  "The DRV81008-Q1 is automotive-qualified (AEC-Q100), not radiation-tested."
+ ]
+}

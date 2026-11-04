@@ -1,0 +1,119 @@
+{
+ "name": "power28_in",
+ "title": "28 V input",
+ "purpose": "28 V bus input: reverse-polarity diode and a surge clamp (TVS)",
+ "sources": [
+  {
+   "id": "jstxh",
+   "title": "JST XH connector catalogue page (eXH.pdf)",
+   "url": "https://www.jst-mfg.com/product/pdf/eng/eXH.pdf",
+   "licence": "link and quotes only",
+   "read": "ratings and the B2B-XH-A part table (read for the bus_connectors block)"
+  },
+  {
+   "id": "ss3x",
+   "title": "Vishay SS32 thru SS36 Schottky rectifiers (Doc. 88751, rev 23-Apr-2020)",
+   "url": "https://www.vishay.com/docs/88751/ss32.pdf",
+   "licence": "Vishay datasheet; link and quotes only",
+   "read": "p1 ratings, p2 VF, p3 SMC outline"
+  },
+  {
+   "id": "smbj",
+   "title": "Vishay SMBJ5.0A thru SMBJ188A TVS (Doc. 88392, rev 09-Jan-2024)",
+   "url": "https://www.vishay.com/docs/88392/smbj.pdf",
+   "licence": "Vishay datasheet; link and quotes only",
+   "read": "p1 package and power, p2 Table 1"
+  }
+ ],
+ "parts": [
+  {
+   "ref": "J1",
+   "value": "XH 2-pin",
+   "symbol": "Connector_Generic:Conn_01x02",
+   "footprint": "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical",
+   "source": "jstxh",
+   "quote": "\"Current rating: 3 A AC/DC\uff08AWG #22\uff09\", \"2.5 mm pitch\"; part \"B2B-XH-A\". Pin 1 +28 V, pin 2 GND (our assignment)"
+  },
+  {
+   "ref": "D1",
+   "value": "SS36",
+   "symbol": "Device:D_Schottky",
+   "footprint": "Diode_SMD:D_SMC",
+   "source": "ss3x, p1-3",
+   "quote": "\"Maximum repetitive peak reverse voltage VRRM ... 60 V\" (SS36); \"Maximum average forward rectified current at TL (fig. 1) IF(AV) 3.0 A\"; VF \"0.75\" V at \"3.0 A\" (SS35, SS36); \"Case: SMC (DO-214AB)\"; \"Polarity: color band denotes the cathode end\"; uses include \"polarity protection\". In series with the input: a reversed supply is blocked (TPS1H100-Q1 p28 \"Method 1: Block diode connected with VS. Both the device and load are protected\")"
+  },
+  {
+   "ref": "D2",
+   "value": "SMBJ28A",
+   "symbol": "Device:D_Zener",
+   "footprint": "Diode_SMD:D_SMB",
+   "source": "smbj, p1-2",
+   "quote": "unidirectional (\"For bidirectional devices use CA suffix (e.g. SMBJ10CA)\"; drawn with the Zener symbol, cathode to +28 V); \"SMB (DO-214AA)\", \"600 W ... 10/1000 \u03bcs\"; Table 1 \"SMBJ28A ... 31.1 34.4 ... 28 ... 13.2 45.4\": standoff 28 V, clamping 45.4 V at 13.2 A, under the TPS1H100-Q1's 48 V (\"withstand 48-V load dump voltage for 400 ms\", tps p4); the SMBJ33A's 53.3 V is not"
+  }
+ ],
+ "nets": {
+  "/VIN_RAW": [
+   "J1.1",
+   "D1.2"
+  ],
+  "GND": [
+   "J1.2",
+   "D2.2"
+  ],
+  "+28V": [
+   "D1.1",
+   "D2.1"
+  ]
+ },
+ "ports": {
+  "+28V": {
+   "net": "+28V",
+   "kind": "power_out",
+   "note": "after the diode and the clamp"
+  },
+  "GND": {
+   "net": "GND",
+   "kind": "ground"
+  }
+ },
+ "layout": {
+  "size_mm": [
+   18,
+   11
+  ],
+  "place": {
+   "J1": {
+    "at_mm": [
+     2.5,
+     5.0
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "D1": {
+    "at_mm": [
+     12.5,
+     3.3
+    ],
+    "rotation": 0,
+    "side": "front"
+   },
+   "D2": {
+    "at_mm": [
+     12.5,
+     8.8
+    ],
+    "rotation": 0,
+    "side": "front"
+   }
+  },
+  "traces": [],
+  "vias": [],
+  "rules": "the diode and TVS at the connector, wide traces (POWER class)"
+ },
+ "open_questions": [
+  "SMBJ28A's 28 V standoff equals the nominal bus: above it the TVS starts to leak; the bus's maximum voltage is not set yet (the SMBJ30A's 48.4 V clamp would just exceed the arm switch's 48 V).",
+  "SS36: 3.0 A (at its lead temperature) covers about 8 heaters (0.21 A each) and 8 coils (0.15 A) at once; all 16 heater elements and 16 coils together (about 5.8 A) would exceed it: firmware limits what runs together, or a larger diode / an ideal-diode controller.",
+  "JST XH's voltage rating not read (the catalogue blocks downloads now); XH 3 A per pin covers the current."
+ ]
+}
