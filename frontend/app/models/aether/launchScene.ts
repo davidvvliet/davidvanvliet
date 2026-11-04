@@ -24,20 +24,21 @@ const T_SHOT = V / ACC;                  // 15.8 s, shown in real time
 const SEP = 4;                           // after the track's end
 const COAST = 12;                        // 4.9 h, shown in 12 s
 const BURN = 8;                          // 893 s, shown in 8 s
+const ROLL = 3;                          // the last seconds of the coast: the craft rolls over, dish to the Moon
 const REVEAL = 4;
 const ACT = 13;
 const DV = 59.5;
 const BURN_S = 893;
-const COAST_H = 4.9;
+const HALF_S = Math.PI * Math.sqrt(((R + R_A) / 2) ** 3 / GM);  // half the shot orbit: track's end to the high point, 4.95 h
 
 const P_COAST = T_SHOT + SEP, P_BURN = P_COAST + COAST, P_REVEAL = P_BURN + BURN;
 const P_ACT = P_REVEAL + REVEAL, TOTAL = P_ACT + ACT;
 // Mission time in seconds at scene time t: real during the shot, the coast and burn sped up.
 const missionSeconds = (t: number) =>
   t < P_COAST ? t
-    : t < P_BURN ? P_COAST + ((t - P_COAST) / COAST) * COAST_H * 3600
-      : t < P_REVEAL ? P_COAST + COAST_H * 3600 + ((t - P_BURN) / BURN) * BURN_S
-        : P_COAST + COAST_H * 3600 + BURN_S + (t - P_REVEAL);
+    : t < P_BURN ? P_COAST + ((t - P_COAST) / COAST) * (HALF_S - SEP)
+      : t < P_REVEAL ? T_SHOT + HALF_S + ((t - P_BURN) / BURN) * BURN_S
+        : T_SHOT + HALF_S + BURN_S + (t - P_REVEAL);
 
 // Sled parts leave the craft at the track's end; the model's own short rails are replaced by the long track.
 const SLED = ["sep_ring_lower", "pusher", "sled_lettering", "sled_base", "shoe0", "shoe1", "shoe2", "shoe3", "armature"];
@@ -45,7 +46,10 @@ const MODEL_TRACK = ["rail0", "rail1", "stator"];
 const RAIL_TOP = 0.19;                   // ground.ts trackGeometry: the rails' top above the bed
 
 type Hinge = { node: THREE.Object3D; axis: THREE.Vector3; rest: THREE.Quaternion; restDeg: number };
-export type LaunchUi = { phase: string; caption: string; readout: string };
+/** The orbit inset: the craft in the orbit frame (metres, x along the motion at the low point, y up
+ * through the high point) and the current orbit's low-point radius. */
+export type OrbitInset = { x: number; y: number; rp: number; target: number; moon: number; ra: number };
+export type LaunchUi = { phase: string; caption: string; readout: string; orbit?: OrbitInset };
 
 const ease = (u: number) => { const c = Math.min(1, Math.max(0, u)); return c * c * (3 - 2 * c); };
 const shot = { a: (R + R_A) / 2, e: (R_A - R) / (R_A + R) };
@@ -61,15 +65,11 @@ const trueAnomaly = (M: number, e: number) => {
   return 2 * Math.atan2(Math.sqrt(1 + e) * Math.sin(E / 2), Math.sqrt(1 - e) * Math.cos(E / 2));
 };
 const km = (m: number) => Math.round(m / 1000).toLocaleString("en-US");
+// The craft's velocity direction on an orbit at true anomaly nu (orbit frame).
+const orbitTangent = (o: { a: number; e: number }, nu: number, out: THREE.Vector3) =>
+  out.copy(orbitPoint(o, nu + 1e-5)).sub(orbitPoint(o, nu)).normalize();
 const utc = (jd: number) => new Date((jd - 2440587.5) * 86400e3).toISOString().slice(0, 16).replace("T", " ");
 
-function orbitLine(o: { a: number; e: number }, from: number, to: number, color: string, opacity: number) {
-  const pts = Array.from({ length: 241 }, (_, i) => orbitPoint(o, from + ((to - from) * i) / 240));
-  const line = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),
-    new THREE.LineBasicMaterial({ color, transparent: true, opacity }));
-  line.frustumCulled = false;
-  return line;
-}
 
 /** A frame given in the Moon's body-fixed axes (metres), as a matrix in a Moon-aligned scene object. */
 function frameMatrix(origin: number[], ax: number[], ay: number[], az: number[], unitsPerM: number) {
@@ -83,6 +83,7 @@ function frameMatrix(origin: number[], ax: number[], ay: number[], az: number[],
 export type AetherLaunch = SceneExtension & { start(): void };
 
 const Y = new THREE.Vector3(0, 1, 0);
+const X_AXIS = new THREE.Vector3(1, 0, 0);
 function setUp(camera: THREE.Camera, controls: SceneHandles["controls"], up: THREE.Vector3) {
   camera.up.copy(up);
   const c = controls as unknown as { _quat: THREE.Quaternion; _quatInverse: THREE.Quaternion };
@@ -156,12 +157,6 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
   };
   const heightAt = (p: THREE.Vector3) => Math.hypot(...fixedOf(p)) - R;
 
-  // The orbit: the shot's path and the target orbit, with a marker for the craft (orbit frame, metres).
-  const shotPath = orbitLine(shot, 0, Math.PI, "#ffffff", 0.5);
-  const targetPath = orbitLine(target, 0, 2 * Math.PI, "#ffb347", 0.9);
-  const marker = new THREE.Mesh(new THREE.SphereGeometry(90e3, 16, 8), new THREE.MeshBasicMaterial({ color: "#ffffff" }));
-  const orbitSet = new THREE.Group();
-  orbitSet.add(shotPath, targetPath, marker);
 
   // Frames: the launch frame turns with the Moon; the orbit frame is the body-fixed frame at the launch,
   // held still in space (it rides with the Moon's centre).
@@ -170,7 +165,6 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
   const launchSet = new THREE.Group();
   launchSet.add(terrain, track, posts);
   launchFrame.add(launchSet, craft, sled);
-  orbitFrame.add(orbitSet);
 
   // Light: the Sun (with the terrain's and the craft's shadows) and the Earth's glow, both from where they are.
   const sunLight = new THREE.DirectionalLight("#ffffff", 2.2);
@@ -189,14 +183,18 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
 
   // Camera shots. Each opens on its planned view; once the viewer turns or zooms, only the point the
   // camera circles follows the craft (the camera moves with it), so their angle and zoom stay.
-  let shotKey = "", touched = false, done = false, lastUi = "", placed = false;
+  let touched = false, done = false, lastUi = "", placed = false, followed = false;
+  const offLocal = new THREE.Vector3();
   const grab = () => { touched = true; };
-  const tmp = new THREE.Vector3(), shift = new THREE.Vector3(), q = new THREE.Quaternion();
+  const tmp = new THREE.Vector3(), q = new THREE.Quaternion();
   const v = { pos: new THREE.Vector3(), up: new THREE.Vector3(), fwd: new THREE.Vector3(), side: new THREE.Vector3(),
-    sun: new THREE.Vector3(), m: new THREE.Matrix4(), cw: new THREE.Vector3(), ew: new THREE.Vector3() };
+    sun: new THREE.Vector3(), m: new THREE.Matrix4(), cw: new THREE.Vector3(), ew: new THREE.Vector3(),
+    up2: new THREE.Vector3(), fwd2: new THREE.Vector3(), side2: new THREE.Vector3(), m2: new THREE.Matrix4(),
+    bx: new THREE.Vector3(), by: new THREE.Vector3(), bz: new THREE.Vector3(), b: new THREE.Matrix4(), binv: new THREE.Matrix4(),
+    off: new THREE.Vector3() };
 
   return {
-    start() { startAt = performance.now() / 1000; shotKey = ""; touched = false; done = false; },
+    start() { startAt = performance.now() / 1000; followed = false; touched = false; done = false; },
 
     init(h) {
       h0 = h;
@@ -218,7 +216,8 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
       launchFrame.matrix.copy(frameMatrix(site.origin, site.ex, site.ey, site.ez, unitsPerM));
       moon.add(launchFrame);
       orbitFrame.matrix.copy(frameMatrix([0, 0, 0], site.ox, site.oy, site.oz, unitsPerM))
-        .premultiply(new THREE.Matrix4().makeRotationFromQuaternion(moonSceneQuaternion(JD0)));
+        // Body-fixed at the moment the craft leaves the track, so the hand-over from the turning ground is seamless.
+        .premultiply(new THREE.Matrix4().makeRotationFromQuaternion(moonSceneQuaternion(JD0 + T_SHOT / 86400)));
       h.moonFrame.add(orbitFrame);
       h.scene.add(sunLight, sunLight.target, earthshine);
 
@@ -229,7 +228,10 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
         const rails = new THREE.Box3();
         for (const n of ["rail0", "rail1"]) { const o = root.getObjectByName(n); if (o) rails.union(new THREE.Box3().setFromObject(o)); }
         lift = RAIL_TOP - (rails.isEmpty() ? -0.53 : rails.max.y);
-        for (const n of SLED) { const o = root.getObjectByName(n); if (o) sled.attach(o); }
+        // Split the sled off in the model's own space (a group not yet in the scene), then hang it on the track.
+        const sledParts = new THREE.Group();
+        for (const n of SLED) { const o = root.getObjectByName(n); if (o) sledParts.attach(o); }
+        sled.add(sledParts);
         for (const n of MODEL_TRACK) { const o = root.getObjectByName(n); if (o) o.visible = false; }
         const byName = new Map<string, Hinge>();
         root.traverse((o) => {
@@ -259,24 +261,18 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
       const { camera, controls } = h;
       const running = startAt !== null;
       const t = sceneTime();
-      const local = t < P_COAST, orbitView = (t >= P_COAST && t < P_BURN) || (t >= P_REVEAL && t < P_ACT);
-      launchSet.visible = local;
-      sled.visible = local;
-      orbitSet.visible = orbitView;
-      craft.visible = !orbitView;
+      const onTrack = t < T_SHOT;
       plume.visible = t >= P_BURN && t < P_REVEAL;
-      if (local && craft.parent !== launchFrame) launchFrame.add(craft);
-      if (!local && craft.parent !== orbitFrame) orbitFrame.add(craft);
+      sled.visible = t < P_COAST + 2;
+      if (onTrack && craft.parent !== launchFrame) launchFrame.add(craft);
+      if (!onTrack && craft.parent !== orbitFrame) orbitFrame.add(craft);
       launchFrame.updateWorldMatrix(true, false);
       orbitFrame.updateWorldMatrix(true, false);
-      const frame = local ? launchFrame : orbitFrame;
-      // The camera's up is the frame's up (the local vertical on the ground), not the solar system's north,
-      // which at the south pole points into the ground. OrbitControls keeps its own copy of it.
-      tmp.setFromMatrixColumn(frame.matrixWorld, 1).normalize();
-      if (tmp.distanceToSquared(camera.up) > 1e-12) setUp(camera, controls, tmp);
+      const frame = onTrack ? launchFrame : orbitFrame;
       if (!placed) {
         // Before launch (the Moon is now turned to the launch date): in front of the craft at the track's start, looking back at it.
         placed = true;
+        setUp(camera, controls, tmp.setFromMatrixColumn(launchFrame.matrixWorld, 1).normalize());
         controls.target.copy(launchFrame.localToWorld(new THREE.Vector3(0, 1.5, 0)));
         camera.position.copy(launchFrame.localToWorld(new THREE.Vector3(14, 4, -7)));
       }
@@ -289,115 +285,117 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
         for (const hg of pair) hg.node.quaternion.copy(q.setFromAxisAngle(hg.axis, THREE.MathUtils.degToRad(-hg.restDeg * k)).multiply(hg.rest));
       });
 
-      const cam = (key: string, pos: THREE.Vector3, look: THREE.Vector3, min: number, max: number) => {
-        // pos and look are in `frame`, in metres; min and max too.
-        if (!running || t >= TOTAL) return;
-        const lookW = frame.localToWorld(look.clone()), posW = frame.localToWorld(pos.clone());
-        if (key !== shotKey) {
-          shotKey = key; touched = false;
-          controls.minDistance = min * unitsPerM; controls.maxDistance = max * unitsPerM;
-        }
-        if (touched) camera.position.add(shift.copy(lookW).sub(controls.target));
-        else camera.position.copy(posW);
-        controls.target.copy(lookW);
-      };
-
+      // Where the craft is, and its flight frame (forward along the motion, up away from the Moon), in `frame`.
       let u: LaunchUi = { phase: "", caption: "", readout: "" };
-      if (local) {
-        // On the track: the bed's position, up and forward; then free flight off its end.
-        let xs: number;
-        if (t < T_SHOT) {
-          const s = 0.5 * ACC * t * t; xs = s;
-          site.trackAt(s, v.pos, v.up, v.fwd);
-          u = { phase: "Launch", caption: "On the mass driver 17 km from the south pole: 14 g along a 17.2 km track, cut and banked through the real terrain.",
-            readout: `UTC    ${utc(jd)}\nspeed  ${((ACC * t) / 1000).toFixed(3)} km/s\naccel  14 g\ntrack  ${(s / 1000).toFixed(1)} / ${(TRACK / 1000).toFixed(1)} km` };
-        } else {
-          const tau = t - T_SHOT;
-          // Off the end: along the last stretch of track, falling at lunar gravity (the ground falls away faster).
-          v.pos.copy(site.exitPos).addScaledVector(site.exitFwd, V * tau).addScaledVector(site.exitUp, -0.5 * G_MOON * tau * tau);
-          v.up.copy(site.exitUp); v.fwd.copy(site.exitFwd);
-          const tb = Math.min(tau, V / (30 * G0));
-          xs = TRACK + V * tb - 0.5 * 30 * G0 * tb * tb;
-          const above = heightAt(v.pos) - terrainZ(v.pos.x, -v.pos.z);
-          u = { phase: "Separation", caption: "Off the end of the track at 2.18 km/s. The sled brakes; the craft flies on, and the ground curves away beneath it.",
-            readout: `UTC    ${utc(jd)}\nspeed  ${(V / 1000).toFixed(3)} km/s\nheight ${Math.max(0, above).toFixed(0)} m` };
-        }
-        if (!running) site.trackAt(0, v.pos, v.up, v.fwd);
-        // Craft: its +x along the track, +y up, lifted so its shoes sit on the rails.
-        v.side.crossVectors(v.fwd, v.up).normalize();
-        v.m.makeBasis(v.fwd, v.up, v.side);
-        craft.quaternion.setFromRotationMatrix(v.m);
-        craft.position.copy(v.pos).addScaledVector(v.up, lift);
-        site.trackAt(running ? Math.min(xs, TRACK) : 0, tmp, v.up, v.fwd);
-        v.side.crossVectors(v.fwd, v.up).normalize();
-        sled.quaternion.setFromRotationMatrix(v.m.makeBasis(v.fwd, v.up, v.side));
-        sled.position.copy(tmp).addScaledVector(v.up, lift);
-        // Chase camera: behind and to the left, looking past the craft toward the Earth.
-        const back = t < T_SHOT ? 1 : 1 + (t - T_SHOT) * 1.5;
-        const look = craft.position.clone().addScaledVector(v.fwd, 2).addScaledVector(v.up, 0.8);
-        const camPos = craft.position.clone().addScaledVector(v.fwd, -9 * back).addScaledVector(v.up, 2.2 * back).addScaledVector(v.side, -6.5 * back);
-        camPos.y = Math.max(camPos.y, groundY(camPos.x, camPos.z) + 1.5);   // never inside a cutting's wall
-        cam("track", camPos, look, 2, 2e8);
-      } else if (orbitView) {
-        const coast = t < P_BURN;
-        const f = coast ? (t - P_COAST) / COAST : 1;
-        const nu = trueAnomaly(Math.PI * f, shot.e);
-        const p = f >= 1 ? new THREE.Vector3(0, R_A, 0) : orbitPoint(shot, nu);
-        marker.position.copy(p);
-        craft.position.copy(p);
-        (targetPath.material as THREE.LineBasicMaterial).opacity = coast ? 0.25 : 0.95;
-        (shotPath.material as THREE.LineBasicMaterial).opacity = coast ? 0.6 : 0.2;
-        const r = p.length(), vel = Math.sqrt(GM * (2 / r - 1 / shot.a));
-        u = coast
-          ? { phase: "Coast", caption: "Coasting half an orbit, 4.9 hours, up to 7,331 km over the north pole.",
-              readout: `UTC    ${utc(jd)}\nT+     ${(COAST_H * f).toFixed(1)} h\nheight ${km(r - R)} km\nspeed  ${(vel / 1000).toFixed(2)} km/s` }
-          : { phase: "In orbit", caption: "The low point is lifted from the surface to 673 km: the relay's orbit.",
-              readout: "orbit  673 × 7,331 km\nperiod 10.8 h" };
-        cam(coast ? "coast" : "in orbit", tmp.set(0, 3.0e6, 2.8e7), new THREE.Vector3(0, 3.0e6, 0), 2.5e6, 2e8);
+      let xs = 0, roll = 0, rp = R;
+      if (onTrack) {
+        const s = running ? 0.5 * ACC * t * t : 0; xs = s;
+        site.trackAt(s, v.pos, v.up, v.fwd);
+        v.pos.addScaledVector(v.up, lift);
+        u = { phase: "Launch", caption: "On the mass driver 17 km from the south pole: 14 g along a 17.2 km track, cut and banked through the real terrain.",
+          readout: `UTC    ${utc(jd)}\nspeed  ${((ACC * t) / 1000).toFixed(3)} km/s\naccel  14 g\ntrack  ${(s / 1000).toFixed(1)} / ${(TRACK / 1000).toFixed(1)} km` };
       } else {
-        // At the high point: dish (+y) toward the Moon below, engine firing along the motion (-x).
-        craft.position.set(0, R_A, 0); craft.rotation.set(0, 0, Math.PI);
-        if (t < P_REVEAL) {
+        // Off the track: on the shot's orbit, by mission time since the track's end, up to the high point.
+        // Its low point is drawn at the track's end (the bed less the 1737.4 km sphere, plus the craft's lift).
+        const tau = Math.min(missionSeconds(t) - T_SHOT, HALF_S);
+        const nu = tau >= HALF_S ? Math.PI : trueAnomaly((Math.PI * tau) / HALF_S, shot.e);
+        const zEnd = site.meta.profile.z[site.meta.profile.z.length - 1] + lift;
+        v.pos.copy(orbitPoint(shot, nu));
+        v.up.copy(v.pos).normalize();
+        v.pos.addScaledVector(v.up, zEnd);
+        orbitTangent(shot, nu, v.fwd);
+        const tb = Math.min(t - T_SHOT, V / (30 * G0));
+        xs = TRACK + V * tb - 0.5 * 30 * G0 * tb * tb;
+        const r = v.pos.length(), vel = Math.sqrt(GM * (2 / r - 1 / shot.a));
+        if (t < P_COAST) {
+          const local = launchFrame.worldToLocal(orbitFrame.localToWorld(v.pos.clone()));
+          const above = heightAt(local) - terrainZ(local.x, -local.z);
+          u = { phase: "Separation", caption: "Off the end of the track at 2.18 km/s. The sled brakes; the craft flies on, and the ground curves away beneath it.",
+            readout: `UTC    ${utc(jd)}\nspeed  ${(vel / 1000).toFixed(3)} km/s\nheight ${Math.max(0, above).toFixed(0)} m` };
+        } else if (t < P_BURN) {
+          u = { phase: "Coast", caption: "Coasting half an orbit, 4.9 hours, up to 7,331 km over the north pole.",
+            readout: `UTC    ${utc(jd)}\nT+     ${(tau / 3600).toFixed(1)} h\nheight ${km(r - R)} km\nspeed  ${(vel / 1000).toFixed(2)} km/s` };
+        } else if (t < P_REVEAL) {
           const f = (t - P_BURN) / BURN;
+          rp = R + (R_P - R) * f;
           (plume.material as THREE.MeshBasicMaterial).opacity = 0.25 + 0.1 * Math.sin(t * 40);
           u = { phase: "Orbit insertion", caption: "At the high point the 20 N engine burns 59.5 m/s, lifting the orbit's low point from the surface to 673 km.",
             readout: `Δv     ${(DV * f).toFixed(1)} / ${DV} m/s\nburn   ${Math.round(BURN_S * f)} / ${BURN_S} s` };
-          // From above, looking down past the craft at the Moon 7,331 km below.
-          const ang = 0.5 + 0.1 * (t - P_BURN);
-          cam("burn", tmp.set(4 * Math.cos(ang), R_A + 10, 4 * Math.sin(ang)), new THREE.Vector3(0, R_A - 2, 0), 2, 2e8);
+        } else if (t < P_ACT) {
+          rp = R_P;
+          u = { phase: "In orbit", caption: "The low point is lifted from the surface to 673 km: the relay's orbit.",
+            readout: "orbit  673 × 7,331 km\nperiod 10.8 h" };
         } else {
+          rp = R_P;
           const step = a < 1.5 ? "The hold-downs release." : a < 10.3 ? "The wings unfold: the yoke, then the panels, one by one."
             : "Wings out, 663 W. The S-band dish looks down at the Moon; the X-band panel turns to the Earth.";
           u = { phase: "Activation", caption: step, readout: "orbit  673 × 7,331 km\nwings  2 × 5 panels" };
-          // From the sunward side, so the unfolding wings are lit.
-          craft.getWorldPosition(v.cw);
-          h.sun.getWorldPosition(tmp).sub(v.cw).normalize();
-          orbitFrame.worldToLocal(tmp.add(v.cw)).sub(craft.position).normalize();
-          const dir = tmp.multiplyScalar(0.8).add(new THREE.Vector3(0, -0.5, 0.6)).normalize();
-          cam("activation", dir.multiplyScalar(15).add(new THREE.Vector3(0, R_A, 0)), new THREE.Vector3(0, R_A, 0), 2, 2e8);
+        }
+        // Before the burn the craft rolls over: the engine still along the motion, the dish now down to the Moon.
+        roll = Math.PI * ease((t - (P_BURN - ROLL)) / ROLL);
+        u.orbit = { x: v.pos.x, y: v.pos.y, rp, target: R_P, moon: R, ra: R_A };
+      }
+      v.fwd.sub(tmp.copy(v.up).multiplyScalar(v.fwd.dot(v.up))).normalize();   // level forward
+      v.side.crossVectors(v.fwd, v.up).normalize();
+      v.m.makeBasis(v.fwd, v.up, v.side);
+      craft.quaternion.setFromRotationMatrix(v.m).multiply(q.setFromAxisAngle(X_AXIS, roll));
+      craft.position.copy(v.pos);
+      // The sled brakes to a stop on the track.
+      site.trackAt(running ? Math.min(xs, TRACK) : 0, tmp, v.up2, v.fwd2);
+      v.side2.crossVectors(v.fwd2, v.up2).normalize();
+      sled.quaternion.setFromRotationMatrix(v.m2.makeBasis(v.fwd2, v.up2, v.side2));
+      sled.position.copy(tmp).addScaledVector(v.up2, lift);
+
+      // The camera rides with the craft, in its flight frame: behind and to the left on the track,
+      // rising to look down past it at the Moon as it climbs. The viewer's own angle and zoom, once they
+      // turn or zoom, are kept in that frame, so the Moon stays below.
+      craft.getWorldPosition(v.cw);
+      v.bx.copy(v.fwd).transformDirection(frame.matrixWorld);
+      v.by.copy(v.up).transformDirection(frame.matrixWorld);
+      v.bz.copy(v.side).transformDirection(frame.matrixWorld);
+      v.b.makeBasis(v.bx, v.by, v.bz);
+      if (running) {
+        if (!followed) { followed = true; touched = false; setUp(camera, controls, v.by); }
+        if (v.by.distanceToSquared(camera.up) > 1e-12) setUp(camera, controls, v.by);
+        const alt = onTrack ? 0 : v.pos.length() - R;
+        const k = ease(alt / 1.5e6);                     // 0 on the ground, 1 from 1,500 km up
+        const look = tmp.set(2 * (1 - k), 0.8 * (1 - k), 0);
+        controls.target.copy(v.cw).add(look.applyMatrix4(v.b).multiplyScalar(unitsPerM));
+        if (!touched) {
+          // Elevation of the view: 11 degrees on the track, 60 degrees looking down from high up.
+          const el = THREE.MathUtils.degToRad(11 + 49 * k), dist = 11.3 + 2 * k;
+          offLocal.set(-Math.cos(el) * dist * 0.81, Math.sin(el) * dist, -Math.cos(el) * dist * 0.58);
+        }
+        const off = v.off.copy(offLocal).applyMatrix4(v.b).multiplyScalar(unitsPerM);
+        camera.position.copy(controls.target).add(off);
+        if (onTrack && !touched) {
+          // Never inside a cutting's wall.
+          const lc = launchFrame.worldToLocal(camera.position.clone());
+          lc.y = Math.max(lc.y, groundY(lc.x, lc.z) + 1.5);
+          camera.position.copy(launchFrame.localToWorld(lc));
         }
       }
 
       // The lights: from the Sun and the Earth as they stand now, the Sun's shadow box riding with the craft.
-      craft.getWorldPosition(v.cw);
-      const lit = orbitView ? orbitFrame.localToWorld(new THREE.Vector3()) : v.cw;
-      h.sun.getWorldPosition(v.sun).sub(lit).normalize();
-      sunLight.target.position.copy(lit);
-      sunLight.position.copy(lit).addScaledVector(v.sun, (local ? 59000 : orbitView ? 1e7 : 1500) * unitsPerM);
+      h.sun.getWorldPosition(v.sun).sub(v.cw).normalize();
+      sunLight.target.position.copy(v.cw);
+      sunLight.position.copy(v.cw).addScaledVector(v.sun, 59000 * unitsPerM);
       sunLight.target.updateMatrixWorld();
-      h.earthSystem.getWorldPosition(v.ew).sub(lit).normalize();
-      earthshine.position.copy(lit).addScaledVector(v.ew, 1e4 * unitsPerM);
-      earthshine.target.position.copy(lit); earthshine.target.updateMatrixWorld();
+      h.earthSystem.getWorldPosition(v.ew).sub(v.cw).normalize();
+      earthshine.position.copy(v.cw).addScaledVector(v.ew, 1e4 * unitsPerM);
+      earthshine.target.position.copy(v.cw); earthshine.target.updateMatrixWorld();
 
-      // Once it is over, the camera keeps circling the craft.
       if (running && t >= TOTAL && !done) { done = true; on.done(); }
-      if (done) { camera.position.add(shift.copy(v.cw).sub(controls.target)); controls.target.copy(v.cw); }
       // Near plane: a little in front of whatever the camera circles, so a close-up of the craft isn't clipped.
       const dist = camera.position.distanceTo(controls.target);
       camera.near = Math.max(dist * 1e-3, 0.01 * unitsPerM);
       controls.update();
+      if (running && touched) {
+        // Keep the viewer's angle and zoom in the flight frame.
+        offLocal.copy(camera.position).sub(controls.target).divideScalar(unitsPerM).applyMatrix4(v.binv.copy(v.b).transpose());
+      }
 
-      const key = u.phase + u.caption + u.readout;
+      const key = u.phase + u.caption + u.readout + (u.orbit ? `${u.orbit.x.toFixed(0)},${u.orbit.y.toFixed(0)},${u.orbit.rp.toFixed(0)}` : "");
       if (key !== lastUi) { lastUi = key; on.ui(running ? u : { phase: "", caption: "", readout: "" }); }
     },
 
@@ -415,8 +413,6 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
       terrain.geometry.dispose(); (terrain.material as THREE.Material).dispose(); regolith.dispose();
       track.geometry.dispose(); (track.material as THREE.Material).dispose();
       posts.geometry.dispose(); (posts.material as THREE.Material).dispose();
-      for (const l of [shotPath, targetPath]) { l.geometry.dispose(); (l.material as THREE.Material).dispose(); }
-      marker.geometry.dispose(); (marker.material as THREE.Material).dispose();
       sunLight.dispose(); earthshine.dispose();
     },
   };

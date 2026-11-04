@@ -5,9 +5,12 @@
 .phaseName { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.6; }
 .caption { font-size: 15px; line-height: 1.4; margin-top: 4px; }
 .readout { font-family: var(--font-geist-mono, ui-monospace, monospace); font-size: 13px; margin-top: 8px; opacity: 0.85; white-space: pre; }
+.orbit { position: absolute; right: 16px; bottom: 16px; width: 150px; height: 150px; pointer-events: none; }
+/* As the models page's viewer buttons (models.module.css .explode). */
 .launch {
   position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
-  background: #e8e8e8; color: #000; border: 0; border-radius: 999px; padding: 10px 28px;
-  font-size: 15px; cursor: pointer;
+  background: none; border: 1px solid #00ff00; padding: 0.2rem 0.6rem; color: #bbb;
+  font-family: var(--font-roboto-mono), ui-monospace, monospace; font-size: 0.75rem; cursor: pointer;
 }
+.launch:hover { color: #ededed; }
 .launch:disabled { opacity: 0.3; cursor: default; }
