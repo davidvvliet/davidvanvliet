@@ -628,18 +628,18 @@
       "value": {
         "core_radius": 0.00035,
         "mid_radius": 0.0009,
-        "halo_radius": 0.0018,
-        "core_emission": 2.0,
-        "mid_emission": 1.6,
-        "halo_emission": 1.2,
-        "mid_alpha": 0.45,
-        "halo_alpha": 0.14,
+        "halo_radius": 0.0022,
+        "core_emission": 2.5,
+        "mid_emission": 2.4,
+        "halo_emission": 1.8,
+        "mid_alpha": 0.55,
+        "halo_alpha": 0.2,
         "beam_radius": 0.00012,
         "beam_emission": 1.5,
         "beam_halo_radius": 0.00045,
         "beam_halo_alpha": 0.18
       },
-      "source": "sam_gg1320an, powered_view1-3.jpg: the discharge glows from each anode down its channel, along the side bore to the bottom corner (mirror 1 or 3), along the bottom bore and up the two cathode channels; the bore halves next to mirror 2 stay dark. Drawn in three layers like the photos: a blown-out yellow-white core, the orange glow, and a faint red haze spreading into the glass. Radii, brightness and see-through chosen by eye. The laser beam itself can't be seen in a real gyro: it's drawn as a thin red line"
+      "source": "sam_gg1320an, powered_view1-3.jpg: the discharge glows from each anode down its channel, along the side bore to the bottom corner (mirror 1 or 3), along the bottom bore and up the two cathode channels; the bore halves next to mirror 2 stay dark. Drawn in three layers like the photos: a blown-out yellow-white core, the orange glow, and a faint red haze spreading into the glass. Radii, brightness and see-through chosen by eye; the glowing layers have a black surface so the scene's lights don't wash them out. The laser beam itself can't be seen in a real gyro: it's drawn as a thin red line"
     },
     "pzt_end": {
       "value": {

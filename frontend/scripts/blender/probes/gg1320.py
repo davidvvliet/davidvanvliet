@@ -21,7 +21,7 @@ def _dir(deg):
     return Vector((math.cos(a), math.sin(a), 0.0))
 
 
-def _special(key, spec, alpha=1.0, emission=0.0, name=None):
+def _special(key, spec, alpha=1.0, emission=0.0, name=None, glow_only=False):
     """The spec colour `key` see-through (`alpha` < 1, exported as glTF alphaMode BLEND) or
     glowing (`emission`), as material `name` (default `key`): the shared materials module has
     neither."""
@@ -34,7 +34,8 @@ def _special(key, spec, alpha=1.0, emission=0.0, name=None):
     mat = bpy.data.materials.new(name)
     mat.use_nodes = True
     bsdf = next(n for n in mat.node_tree.nodes if n.type == "BSDF_PRINCIPLED")
-    bsdf.inputs["Base Color"].default_value = (*col, 1.0)
+    # `glow_only`: a black surface, so the scene's lights don't wash the glow towards white.
+    bsdf.inputs["Base Color"].default_value = (0.0, 0.0, 0.0, 1.0) if glow_only else (*col, 1.0)
     bsdf.inputs["Metallic"].default_value = e.get("metallic", 0.0)
     bsdf.inputs["Roughness"].default_value = e.get("roughness", 0.5)
     bsdf.inputs["Alpha"].default_value = alpha
@@ -379,9 +380,9 @@ def laser_block(f, spec):
                           _dir(ang - pad["window_half_angle"]) * pad["window_inner"]])
         holed_plate("pad", outer, holes, zb, pad["thickness"], "pad_lattice")
     dp = f["discharge_path"]["value"]
-    beam = _special("laser_beam", spec, emission=dp["beam_emission"])
+    beam = _special("laser_beam", spec, emission=dp["beam_emission"], name="laser_beam_lit", glow_only=True)
     beam_halo = _special("laser_beam", spec, alpha=dp["beam_halo_alpha"], emission=dp["beam_emission"],
-                         name="laser_beam_haze")
+                         name="laser_beam_haze", glow_only=True)
     with parts.assembly("laser_path", internal=True):
         # A thin red line with a faint haze (the real beam can't be seen: facts.discharge_path).
         for i, (p, q) in enumerate(sides):
@@ -401,11 +402,12 @@ def discharge_glow(f, spec, sides, zc, inr):
     dc = f["discharge_channels"]["value"]
     face = f["block"]["value"]["face_distance"]
     # Three layers, as in the photos: a hot core, the orange glow, a red haze into the glass.
-    layers = [("core", _special("glow_core", spec, emission=dp["core_emission"]), dp["core_radius"]),
-              ("glow", _special("discharge_glow", spec, alpha=dp["mid_alpha"], emission=dp["mid_emission"]),
-               dp["mid_radius"]),
-              ("haze", _special("glow_halo", spec, alpha=dp["halo_alpha"], emission=dp["halo_emission"]),
-               dp["halo_radius"])]
+    layers = [("core", _special("glow_core", spec, emission=dp["core_emission"], name="glow_core_lit",
+                                glow_only=True), dp["core_radius"]),
+              ("glow", _special("discharge_glow", spec, alpha=dp["mid_alpha"], emission=dp["mid_emission"],
+                                name="discharge_glow_lit", glow_only=True), dp["mid_radius"]),
+              ("haze", _special("glow_halo", spec, alpha=dp["halo_alpha"], emission=dp["halo_emission"],
+                                name="glow_halo_lit", glow_only=True), dp["halo_radius"])]
     (m1, m2), (_, m3), _ = sides
     runs = [("bore_1", m1, (m1 + m2) / 2), ("bore_2", m3, (m2 + m3) / 2), ("bore_3", m3, m1)]
     for key, ang in FACES.items():
