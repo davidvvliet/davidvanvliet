@@ -8,6 +8,9 @@ from lib import materials, parts, textures
 HARNESS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 X = (1, 0, 0)
+# The bottom's Earth tile and X-band array: along x, and half across y (the sled's base has a pocket here).
+EARTH_X, XBAND_X = 0.6, 0.8
+POCKET_X, POCKET_Y = (0.47, 0.87), 0.11
 
 
 def build(spec):
@@ -29,7 +32,7 @@ def build(spec):
         parts.lathe("cone", [(rb - 0.004, hu), (rb, hu), (r_top, xc), (r_top - 0.004, xc)], closed=True,
                     segments=48, direction=X, material="dark_metal")
         parts.lathe("deck_lower", [(0, xc), (R, xc), (R, xc + t), (0, xc + t)], material="white_paint", **hexa)
-        parts.lathe("deck_upper", [(0, xb - t), (R, xb - t), (R, xb), (0, xb)], material="white_paint", **hexa)
+        deck = parts.lathe("deck_upper", [(0, xb - t), (R, xb - t), (R, xb), (0, xb)], material="white_paint", **hexa)
         panels = parts.lathe("side_panels", [(R - 0.004, xc + t), (R, xc + t), (R, xb - t), (R - 0.004, xb - t)],
                     closed=True, material="foil_silver", **hexa)   # radiators (thermal)
 
@@ -72,19 +75,27 @@ def build(spec):
         lw = d["sled_lettering_width"]
         parts.decal("sled_lettering", pusher, center=(xp - 0.02, 0, 0.025), direction=X, up=(0, 0, 1),
                     width=lw, height=d["sled_lettering_height"], material=mat, step=0.05, lift=0.001)
-        x_end = xb
-        L_base = x_end - (xp - 0.02)
-        parts.box("sled_base", (L_base, gauge + 0.1, 0.05), location=((x_end + xp - 0.02) / 2, 0, base_z - 0.025),
-                  material="black")
+        x_end, xa = xb, xp - 0.02
+        L_base = x_end - xa
+        # The base is 0.12 m thick with a pocket for the Earth tile and the X-band array on the craft's bottom.
+        T, (px0, px1), py, floor_t = 0.12, POCKET_X, POCKET_Y, 0.02
+        zc, wb = base_z - T / 2, (gauge + 0.1) / 2
+        parts.boxes("sled_base", [((px0 - xa, 2 * wb, T), ((xa + px0) / 2, 0, zc)),
+                                  ((x_end - px1, 2 * wb, T), ((px1 + x_end) / 2, 0, zc)),
+                                  ((px1 - px0, wb - py, T), ((px0 + px1) / 2, (wb + py) / 2, zc)),
+                                  ((px1 - px0, wb - py, T), ((px0 + px1) / 2, -(wb + py) / 2, zc)),
+                                  ((px1 - px0, 2 * py, floor_t), ((px0 + px1) / 2, 0, base_z - T + floor_t / 2))],
+                    material="black")
+        dz = T - 0.05                                # the parts under the base sit this much lower than with a 5 cm base
         for k, (sx, sy) in enumerate([(0.0, 1), (0.0, -1), (x_end - 0.1, 1), (x_end - 0.1, -1)]):
-            parts.box(f"shoe{k}", (0.14, 0.1, 0.05), location=(sx, sy * gauge / 2, base_z - 0.075), material="black")
-        parts.box("armature", (L_base - 0.2, 0.3, 0.03), location=((x_end + xp - 0.02) / 2, 0, base_z - 0.065),
+            parts.box(f"shoe{k}", (0.14, 0.1, 0.05), location=(sx, sy * gauge / 2, base_z - 0.075 - dz), material="black")
+        parts.box("armature", (L_base - 0.2, 0.3, 0.03), location=((x_end + xp - 0.02) / 2, 0, base_z - 0.065 - dz),
                   material="foil_silver")
 
     with parts.assembly("track"):
         for k, sy in enumerate((1, -1)):
-            parts.box(f"rail{k}", (4.0, 0.08, 0.12), location=(0.5, sy * gauge / 2, base_z - 0.16), material="dark_metal")
-        parts.box("stator", (4.0, 0.3, 0.04), location=(0.5, 0, base_z - 0.1), material="dark_metal")
+            parts.box(f"rail{k}", (4.0, 0.08, 0.12), location=(0.5, sy * gauge / 2, base_z - 0.16 - dz), material="dark_metal")
+        parts.box("stator", (4.0, 0.3, 0.04), location=(0.5, 0, base_z - 0.1 - dz), material="dark_metal")
 
     propulsion(d, R, flat, xc, xb, t, x0, rt)
     power(d, R, flat, xc, xb)
@@ -92,7 +103,7 @@ def build(spec):
     attitude(d, R, flat, xc, xb, t)
     electronics(d, R, flat, xc, xb, t)
     thermal(d, R, flat, xc, xb, t, x0, rt)
-    markings(spec, d, flat, xc, xb, t, panels)
+    markings(spec, d, flat, xc, xb, t, panels, deck)
     parts.pose({name: j["angle"] for name, j in spec["joints"].items()})
 
 
@@ -237,33 +248,28 @@ def power(d, R, flat, xc, xb):
 
 
 def comms(d, R, flat, xc, xb, t):
-    # S-band dish on the +z side, facing the Moon: a copy of Lunar Pathfinder's SANT. Only its
-    # diameter is published; the depth, feed and pointing mechanism are estimates (spec).
-    xm = (xc + xb) / 2
-    rd = 0.43
-    f = 0.35 * 2 * rd                                # focal length, f/D 0.35
-    h_apm = 0.15
-    z0 = flat + h_apm                                # the dish's vertex
-    with parts.assembly("sband_antenna"):
-        parts.lathe("apm_base", [(0.0, 0.0), (0.12, 0.0), (0.12, 0.06), (0.0, 0.06)], segments=32,
-                    location=(xm, 0, flat), direction=(0, 0, 1), material="dark_metal")
-        parts.lathe("apm_swashplates", [(0.0, 0.06), (0.1, 0.06), (0.1, 0.1), (0.09, 0.1), (0.09, 0.105),
-                                        (0.1, 0.105), (0.1, h_apm), (0.0, h_apm)], segments=32,
-                    location=(xm, 0, flat), direction=(0.0, math.sin(math.radians(4)), math.cos(math.radians(4))),
-                    material="foil_silver")
-        n = 16
-        dish = [(rd * k / n, (rd * k / n) ** 2 / (4 * f)) for k in range(n + 1)]
-        shell = dish + [(rd, dish[-1][1] - 0.008)] + [(r, z - 0.008) for r, z in reversed(dish[:-1])]
-        parts.lathe("sband_reflector", shell, segments=64, location=(xm, 0, z0), direction=(0, 0, 1),
-                    material="white_paint")
-        # Backfire helix: a mast from the vertex to the focus, a helix cage and a small back reflector.
-        parts.lathe("sband_feed", [(0.0, 0.0), (0.012, 0.0), (0.012, f - 0.2), (0.03, f - 0.2), (0.03, f - 0.01),
-                                   (0.06, f - 0.01), (0.06, f), (0.0, f)], segments=24,
-                    location=(xm, 0, z0), direction=(0, 0, 1), material="foil_gold")
+    # Resized for the constellation (spec: user_array, suit_antenna, earth_array, laser_terminal, pointing_plan).
+    # The craft flies nose along the motion (+x) with its top (+z) on the Moon.
+    window = lambda name, loc, direction: parts.lathe(name, [(0.0, 0.0), (0.03, 0.0), (0.03, 0.004), (0.0, 0.004)],
+                                                      segments=24, location=loc, direction=direction, material="black")
+    # The top, facing the Moon: the laser terminal for the craft behind at the aft end, two K-band user tiles
+    # (send, receive), the S-band antenna for suits.
+    with parts.assembly("user_antennas"):
+        for name, y in (("user_tx", 0.1175), ("user_rx", -0.1175)):
+            parts.box(name, (0.178, 0.229, 0.096), location=(0.66, y, flat + 0.048), material="white_paint")
+        parts.box("suit_antenna", (0.1, 0.1, 0.012), location=(0.83, -0.12, flat + 0.006), material="white_paint")
+    with parts.assembly("lasers"):
+        xa = xc + t + 0.01
+        parts.box("laser_aft", (0.28, 0.23, 0.2), location=(xa + 0.14, 0, flat + 0.1), material="white_paint")
+        window("laser_aft_window", (xa, 0, flat + 0.12), (-1, 0, 0))
+        # The front deck: the terminal for the craft ahead.
+        parts.box("laser_fore", (0.28, 0.23, 0.2), location=(xb + 0.14, 0, -0.13), material="white_paint")
+        window("laser_fore_window", (xb + 0.28, 0, -0.11), (1, 0, 0))
 
-    # X-band patch array on the forward deck, facing +x (the Earth).
-    with parts.assembly("xband_antenna"):
-        parts.box("xband_array", (0.00318, 0.0826, 0.098), location=(xb + 0.00159, 0.18, 0.12), material="white_paint")
+    # The bottom, away from the Moon: the K-band Earth tile and the X-band array (commands, safe mode).
+    with parts.assembly("earth_antennas"):
+        parts.box("earth_array", (0.229, 0.178, 0.096), location=(EARTH_X, 0, -flat - 0.048), material="white_paint")
+        parts.box("xband_array", (0.098, 0.0826, 0.00318), location=(XBAND_X, 0, -flat - 0.00159), material="white_paint")
 
     # The transponder hangs under the forward deck.
     with parts.assembly("radio", internal=True):
@@ -299,7 +305,7 @@ def attitude(d, R, flat, xc, xb, t):
 
     # Bradford coarse sun sensors on +z and +x, the Mini fine sun sensor on +z.
     with parts.assembly("sun_sensors"):
-        parts.box("css_top", (0.11, 0.11, 0.03), location=(xc + 0.08, 0, flat + 0.015), material="dark_metal")
+        parts.box("css_top", (0.11, 0.11, 0.03), location=(xc + 0.08, 0.185, flat + 0.015), material="dark_metal")
         parts.box("css_front", (0.03, 0.11, 0.11), location=(xb + 0.015, -0.18, 0.12), material="dark_metal")
         parts.box("fss", (0.046, 0.05, 0.017), location=(xb - 0.06, 0.12, flat + 0.0085), material="dark_metal")
 
@@ -348,9 +354,9 @@ def thermal(d, R, flat, xc, xb, t, x0, rt):
 
 
 
-def markings(spec, d, flat, xc, xb, t, panels):
-    # "Altair AETHER" on the two lower slanted sides, under the US flag (as on the finrocket), and
-    # along the bottom. The top carries the S-band dish, the upper sides the folded wings.
+def markings(spec, d, flat, xc, xb, t, panels, deck):
+    # "Altair AETHER" on the two lower slanted sides, under the US flag (as on the finrocket), and on
+    # the front deck above the forward laser. The top carries the user tiles, the bottom the Earth tile.
     col = lambda k: materials.colour(spec["materials"][k])
     out = os.path.join(HARNESS, "out", "aether", "textures")
     img = textures.marking("aether_craft_lettering",
@@ -378,6 +384,6 @@ def markings(spec, d, flat, xc, xb, t, panels):
             parts.decal(f"craft_lettering{k}", panels, center=on(d["craft_lettering_side_offset"]), direction=inward,
                         up=v, width=d["craft_lettering_side_width"], height=d["craft_lettering_side_height"],
                         material=mat, step=0.02, lift=0.001)
-        parts.decal("craft_lettering_bottom", panels, center=((xc + xb) / 2, 0, -flat), direction=(0, 0, 1),
-                    up=(0, -1, 0), width=d["craft_lettering_bottom_width"],
-                    height=d["craft_lettering_bottom_width"] * ratio, material=mat, step=0.02, lift=0.001)
+        parts.decal("craft_lettering_front", deck, center=(xb, 0, d["craft_lettering_front_height"]), direction=(-1, 0, 0),
+                    up=(0, 0, 1), width=d["craft_lettering_front_width"],
+                    height=d["craft_lettering_front_width"] * ratio, material=mat, step=0.02, lift=0.001)

@@ -24,7 +24,7 @@ const T_SHOT = V / ACC;                  // 15.8 s, shown in real time
 const SEP = 4;                           // after the track's end
 const COAST = 12;                        // 71 min, shown in 12 s
 const BURN = 8;                          // 1865 s, shown in 8 s
-const ROLL = 3;                          // the last seconds of the coast: the craft rolls over, dish to the Moon
+const ROLL = 3;                          // the last seconds of the coast: the craft rolls over, its top (the user arrays) to the Moon
 const REVEAL = 4;
 const ACT = 13;
 const AFTER = 30;                       // once the wings are out, the orbit goes on at 30 times true speed
@@ -417,11 +417,11 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
         } else {
           rp = R_P;
           const step = a < 1.5 ? "The hold-downs release." : a < 10.3 ? "The wings unfold: the yoke, then the panels, one by one."
-            : "Wings out, 663 W. The S-band dish looks down at the Moon; the X-band panel turns to the Earth.";
+            : "Wings out, 663 W. The user arrays face the Moon below, the lasers the craft ahead and behind; the Earth tile on the far side links to the Earth while it is in view.";
           u = t < TOTAL ? { phase: "Activation", caption: step, readout: `orbit  ${km(R_A - R)} km circular, polar\nwings  2 × 5 panels` }
             : { phase: "In orbit", caption: step, readout: `UTC    ${utc(jd)}\nclock  ${AFTER}× true speed\norbit  ${km(R_A - R)} km, ${Math.round(PERIOD_MIN)} min${lit ? "" : "\nin the Moon's shadow"}` };
         }
-        // Before the burn the craft rolls over: the engine still along the motion, the dish now down to the Moon.
+        // Before the burn the craft rolls over: the engine still along the motion, the top now down to the Moon.
         roll = Math.PI * ease((t - (P_BURN - ROLL)) / ROLL);
         u.orbit = { x: v.pos.x, y: v.pos.y, rp, target: R_P, moon: R, ra: R_A };
       }

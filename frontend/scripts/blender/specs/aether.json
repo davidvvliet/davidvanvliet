@@ -7,7 +7,7 @@
     { "name": "markings, right side", "target": [0.6, -0.38, -0.22], "look": [0, 0.866, 0.5], "radius": 0.35 }
   ],
 
-  "note": "Our own design: a ~300 kg lunar communications relay, fired off a mass driver near the lunar south pole into a 700 km circular polar orbit, one plane of a constellation, built from real flight hardware where it exists. Frame: x along the track (the direction of travel, and the craft's axis: the launch load runs down it), z up, y left. The craft's separation plane is at x = 0; the sled and the rails are behind and below it. Pass 1: structure, tank, main thruster, sled and rails. Pass 2: propulsion (eight 1 N thrusters, latch valve, fill and drain valves, lines). Pass 3: power (two solar wings, deployed; two batteries). Pass 4: comms (S-band dish to the Moon on +z, X-band array to the Earth on +x, transponder). Pass 5: attitude (four reaction wheels, two star trackers, sun sensors, IMU). Pass 6: electronics (power control unit, power cables; a reserved slot for the flight computer and valve drivers, which are designed separately). Pass 7: thermal (silvered-Teflon radiators on five sides, a blanket on the Moon-facing top, heaters). Pass 8: deployment (wings folded on hinges for the launch, hold-downs; click a wing to unfold).",
+  "note": "Our own design: a ~300 kg lunar communications relay, fired off a mass driver near the lunar south pole into a 700 km circular polar orbit, one plane of a constellation, built from real flight hardware where it exists. Frame: x along the track (the direction of travel, and the craft's axis: the launch load runs down it), z up, y left. The craft's separation plane is at x = 0; the sled and the rails are behind and below it. Pass 1: structure, tank, main thruster, sled and rails. Pass 2: propulsion (eight 1 N thrusters, latch valve, fill and drain valves, lines). Pass 3: power (two solar wings, deployed; two batteries). Pass 4: comms, resized for the constellation (two K-band user tiles and an S-band antenna on the Moon-facing top, a K-band Earth tile and the X-band array on the bottom, laser terminals ahead and behind, transponder). Pass 5: attitude (four reaction wheels, two star trackers, sun sensors, IMU). Pass 6: electronics (power control unit, power cables; a reserved slot for the flight computer and valve drivers, which are designed separately). Pass 7: thermal (silvered-Teflon radiators on five sides, a blanket on the Moon-facing top, heaters). Pass 8: deployment (wings folded on hinges for the launch, hold-downs; click a wing to unfold).",
   "sources": [
     {
       "id": "nssdc_moon",
@@ -99,13 +99,6 @@
       "url": "https://arxiv.org/abs/1605.09788",
       "read": "2026-11-03",
       "licence": "copyright the authors / AAS: link and quotes only"
-    },
-    {
-      "id": "sstl_sant",
-      "title": "SSTL, Lunar Pathfinder S-Band Antenna and Pointing Mechanism in test (5 Feb 2024)",
-      "url": "https://sstl.co.uk/media-hub/latest-news/2024/lunar-antenna-vid-in-test",
-      "read": "2026-11-03",
-      "licence": "copyright SSTL: link and quotes only"
     },
     {
       "id": "endurosat_x4x4",
@@ -227,6 +220,34 @@
       "url": "https://ntrs.nasa.gov/citations/20080041459",
       "read": "2026-11-04",
       "licence": "NASA work: \"generally are not subject to copyright in the United States\""
+    },
+    {
+      "id": "lnis_v5",
+      "title": "NASA/ESA, LunaNet Interoperability Specification, Version 5 (LNIS V005, 29 Jan 2025)",
+      "url": "https://www.nasa.gov/wp-content/uploads/2025/02/lunanet-interoperability-specification-v5-baseline.pdf",
+      "read": "2026-11-04",
+      "licence": "NASA and ESA document: link and quotes only"
+    },
+    {
+      "id": "nasa_ka_smallsat",
+      "title": "Budinger (NASA Glenn), Ka-band Technologies for Small Spacecraft Communications via Relays and Direct Data Downlink (CubeSat Workshop, 2016; NTRS 20170003994), with Boeing",
+      "url": "https://ntrs.nasa.gov/api/citations/20170003994/downloads/20170003994.pdf",
+      "read": "2026-11-04",
+      "licence": "NASA with Boeing contributions: link and quotes only"
+    },
+    {
+      "id": "tesat_scot30",
+      "title": "Tesat, SCOT30 optical terminal datasheet",
+      "url": "https://www.tesat.de/images/tesat/products/DataSheet_SCOT30.pdf",
+      "read": "2026-11-04",
+      "licence": "copyright Tesat: link and quotes only"
+    },
+    {
+      "id": "endurosat_s_wide",
+      "title": "EnduroSat, S-Band Antenna Wideband (product page)",
+      "url": "https://www.endurosat.com/products/s-band-antenna-wideband/",
+      "read": "2026-11-04",
+      "licence": "copyright EnduroSat: link and quotes only"
     }
   ],
   "reference_model": {
@@ -316,18 +337,10 @@
       "source": "azur_3g30c",
       "quote": "60.7 (± 0.1) x 124.5 (± 0.1) (assembly)"
     },
-    "sband_dish_diameter": {
-      "value": 0.86,
-      "object": "sband_reflector",
-      "measure": "diameter",
-      "tolerance": 0.02,
-      "source": "sstl_sant",
-      "quote": "The Antenna is a 0.86m Parabolic CFRP Reflector"
-    },
     "xband_array_length": {
       "value": 0.098,
       "object": "xband_array",
-      "measure": "z",
+      "measure": "x",
       "tolerance": 0.02,
       "source": "endurosat_x4x4",
       "quote": "Figure 2: 98.0 ±0.1 (mm)"
@@ -387,6 +400,39 @@
       "tolerance": 0.02,
       "source": "aac_starbuck_mini",
       "quote": "Height 147 mm"
+    },
+    "earth_array_length": {
+      "value": 0.229,
+      "object": "earth_array",
+      "measure": "x",
+      "tolerance": 0.02,
+      "source": "nasa_ka_smallsat",
+      "quote": "Boeing Ka-band Tile Array for SmallSats ... 22.9 cm x 17.8 cm x 9.6 cm"
+    },
+    "earth_array_depth": {
+      "value": 0.096,
+      "object": "earth_array",
+      "measure": "z",
+      "tolerance": 0.03,
+      "source": "nasa_ka_smallsat",
+      "quote": "22.9 cm x 17.8 cm x 9.6 cm"
+    },
+    "laser_length": {
+      "value": 0.28,
+      "object": "laser_aft",
+      "measure": "x",
+      "tolerance": 0.02,
+      "source": "tesat_scot30",
+      "quote": "Size 230 x 280 x 200 mm3",
+      "note": "which side is which isn't given: 280 along the line of sight, 230 across, 200 tall"
+    },
+    "laser_height": {
+      "value": 0.2,
+      "object": "laser_aft",
+      "measure": "z",
+      "tolerance": 0.02,
+      "source": "tesat_scot30",
+      "quote": "Size 230 x 280 x 200 mm3"
     }
   },
   "facts": {
@@ -717,27 +763,87 @@
       "source": "design, computed: 2π √(r³ / GM), r = 1737.4 + 700 km, with moon_gm",
       "note": "minutes"
     },
-    "sband_dish": {
-      "value": "0.86 m parabolic CFRP reflector, backfire helix feed, S-band 2.0-2.3 GHz, >20 dB, pointed up to 25° off centre by two swashplates; 11.3 kg with the mechanism",
-      "source": "sstl_sant",
-      "quote": "The Antenna is a 0.86m Parabolic CFRP Reflector fed by a Backfire Helix, capable of transmitting and receiving in S-Band (2.0 – 2.3 GHz) with gain >20dB. The APM is a novel design which rotates two swashplates to achieve a pointing range up to 25 degrees off-centre. The flight mass of the APM 9.3kg, or 11.3kg with the Antenna installed."
-    },
-    "sband_dish_shape": {
-      "value": "f/D 0.35 (0.154 m deep), feed 60 mm across and 0.2 m long, mechanism 0.24 m across and 0.15 m tall",
-      "source": "design, estimate: SSTL gives the diameter only"
-    },
-    "sband_link": {
-      "value": "forward 2025-2110 MHz, return 2200-2290 MHz, EIRP > 20.14 dBW",
-      "source": "sstl_lp_guide",
-      "quote": "S-band Forward Link (OTM-S) 2025-2110 MHz ... S-band Return Link (OFM-S) 2200-2290 MHz ... EIRP & G/T at HPBW >20.14 dBW @ θ = 7.1°"
-    },
     "xband_link": {
       "value": "8450-8500 MHz to the Earth, up to 5 Mbps",
       "source": "sstl_lp_guide",
       "quote": "Earth X-band 7190-7235MHz Up to 30kbps 8450-8500MHz ≤ 5Mbps"
     },
+    "user_link_bands": {
+      "value": "S-band forward 2025-2110 MHz, return 2200-2290 MHz; K-band forward 23.15-23.55 GHz, return 27.0-27.5 GHz",
+      "source": "lnis_v5",
+      "quote": "S-band Forward ... 2025-2110 MHz ... S-band Return ... 2200-2290 MHz ... K-band Forward 23.15-23.55 GHz ... K-band Return 27.0-27.5 GHz (Table 7); \"LunaNet restricts use of S-band to lunar proximity links while X-band is used for DWE links\""
+    },
+    "earth_link_band": {
+      "value": "K-band down to the Earth 25.5-27.0 GHz, up to 200 Msps",
+      "source": "lnis_v5",
+      "quote": "K-band Downlink 25.5-27.0 GHz ... KD1 ... Max: 200 Msps"
+    },
+    "min_elevation": {
+      "value": 10,
+      "source": "design, chosen: users connect down to 10° above their horizon",
+      "note": "degrees"
+    },
+    "footprint": {
+      "value": 35.4,
+      "source": "design, computed: from 700 km (moon_radius), a user at min_elevation sees the craft 44.6° off straight down (asin(1737.4 cos 10° / 2437.4)); 90 - 10 - 44.6 = 35.4° of arc from the point below the craft",
+      "note": "degrees of the Moon's arc, footprint radius; the arrays must reach 44.6° off straight down"
+    },
+    "user_array": {
+      "value": "two flat K-band tiles on the Moon-facing top, one sending (forward), one receiving (return), each sized as Boeing's smallsat Ka tile: 22.9 x 17.8 x 9.6 cm, 1.8 kg, under 150 W, steering 70° off its face",
+      "source": "design, estimate: no maker publishes a tile for LunaNet's proximity K-band (user_link_bands); Boeing's tile (nasa_ka_smallsat) is the nearest with a size, and its 70° covers the footprint's edge",
+      "also": [
+        {
+          "source": "nasa_ka_smallsat",
+          "quote": "Boeing Ka-band Tile Array for SmallSats • 25.5-27.0 GHz • + 70 degree FOR • 24-, 30- or 36 dBW • 22.9 cm x 17.8 cm x 9.6 cm • 1.8 kg • <150 W depending on # elements and drive level"
+        }
+      ]
+    },
+    "suit_antenna": {
+      "value": "EnduroSat S-Band Antenna Wideband, on the top: 2025-2110 and 2200-2290 MHz, 70° beam, 5+ dBi, 96-115 g; for suits and anything with a small antenna",
+      "source": "endurosat_s_wide",
+      "quote": "Frequency Range 2025-2110 MHz and 2200-2290 MHz ... Half Power Beam Width (HPBW) 70 deg ... Gain 5+ dBi ... Polarization Right-hand circular ... Mass 96-115 g (configuration dependent)",
+      "note": "its half-power beam reaches 35° off straight down, short of the footprint's edge: users near the edge get a weaker signal"
+    },
+    "suit_antenna_size": {
+      "value": "0.10 x 0.10 x 0.012 m",
+      "source": "design, estimate: the maker's page gives no size"
+    },
+    "earth_array": {
+      "value": "Boeing Ka-band tile for smallsats, on the bottom (away from the Moon): 25.5-27.0 GHz, 22.9 x 17.8 x 9.6 cm, 1.8 kg, under 150 W, steering 70° off its face",
+      "source": "nasa_ka_smallsat",
+      "quote": "Boeing Ka-band Tile Array for SmallSats • 25.5-27.0 GHz • + 70 degree FOR • 24-, 30- or 36 dBW • 22.9 cm x 17.8 cm x 9.6 cm • 1.8 kg • <150 W depending on # elements and drive level",
+      "note": "in LunaNet's K-band downlink (earth_link_band); NASA's slide shows it as a future product"
+    },
+    "laser_terminal": {
+      "value": "two Tesat SCOT30 optical terminals, one looking ahead along the orbit (front deck) and one behind (top, aft end): 230 x 280 x 200 mm, under 6 kg, under 60 W peak, up to 3,500 km, up to 1.25 Gbps both ways",
+      "source": "tesat_scot30",
+      "quote": "Up to 3,500 km, depending on counter terminal or OGS configuration ... Asymmetric up to Tx 2.5 Gbps and Rx 1.25 Gbps; Symmetric up to 1.25 Gbps ... Mass < 6 kg ... Size 230 x 280 x 200 mm3 ... Power Consumption < 60 W (peak) ... TRL 6 by Q2/2027 TRL 8 by Q1/2028"
+    },
+    "laser_shape": {
+      "value": "modelled as its 230 x 280 x 200 mm box with a 60 mm window on the end facing the link",
+      "source": "design, estimate: the datasheet gives the envelope only"
+    },
+    "link_range_max": {
+      "value": 3419,
+      "source": "design, computed: two craft at 700 km see each other until the line between them grazes the Moon: 2 √(2437.4² - 1737.4²) km, with moon_radius",
+      "note": "km; inside the SCOT30's 3,500 km"
+    },
+    "comms_power": {
+      "value": 570,
+      "source": "design, computed: three tiles at under 150 W and two terminals at under 60 W peak, all at full drive at once; inside power_need's 600 W",
+      "note": "W, worst case"
+    },
+    "comms_mass": {
+      "value": 17.5,
+      "source": "design, computed: 3 x 1.8 kg (tiles) + 2 x 6 kg (terminals) + 0.115 kg (S-band antenna), replacing the 11.3 kg dish",
+      "note": "kg"
+    },
+    "sled_pocket": {
+      "value": "the sled's base 0.12 m thick (was 0.05) with a pocket under the Earth tile and the X-band array",
+      "source": "design, chosen: the tile stands 96 mm off the bottom the craft rests on"
+    },
     "xband_array": {
-      "value": "EnduroSat X-band 16-element patch array, 82.6 x 98.0 x 3.18 mm, >16 dBi, 18° beam, up to 4 W",
+      "value": "EnduroSat X-band 16-element patch array, on the bottom beside the Earth tile (commands and safe mode): 82.6 x 98.0 x 3.18 mm, >16 dBi, 18° beam, up to 4 W",
       "source": "endurosat_x4x4",
       "quote": "Gain > 16dBi ... Half Power Beam Width (HPBW): 18 degrees ... RF output power: up to 4 W; Figure 2: 82.6 ±0.1, 98.0 ±0.1, 3.18",
       "note": "its band is 8025-8400 MHz, below Lunar Pathfinder's 8450-8500: a retuned version would be needed"
@@ -748,8 +854,8 @@
       "quote": "Outline Dimension 4.0” x 4.5” x 4.0” (core configuration) ... RF Output Power 10 mW to 5 W (commandable) ... X-Band/ Ka-band Transmit/Receive (Options) ... Mass 2.5 - 3.5 lbs."
     },
     "pointing_plan": {
-      "value": "the dish (+z) on the Moon's south pole, the craft rolled about that line to put the X-band array (+x) on the Earth; the wings turn about y for the Sun",
-      "source": "design, chosen: from aposelene over the south pole the Moon and the Earth are about 90° apart"
+      "value": "nose along the motion (+x), the top (+z) on the Moon below, as Starlink flies; the wings turn about y (the orbit's normal) for the Sun; the Earth tile on the bottom reaches the Earth while it is within 70° of straight up, and craft that can't see the Earth pass their traffic along the laser links to one that can",
+      "source": "design, chosen"
     },
     "wheel": {
       "value": "Blue Canyon RW4: 4.0 Nms, 0.25 Nm, 3.2 kg, 175 x 175 x 72 mm",
@@ -770,7 +876,7 @@
       "quote": "LARGE BAFFLE ... Sun Avoidance 22° sun-to-boresight ... Moon Avoidance Demonstrated orbital operation with full moon in FOV ... Dimensions 99 Ø x 120 mm ... Total Mass 243g"
     },
     "star_tracker_place": {
-      "value": "on the two lower slanted sides, looking down and out, away from the dish's Moon and the X-band's Earth",
+      "value": "on the two lower slanted sides, looking down and out, away from the Moon below and the lasers' lines",
       "source": "design, chosen"
     },
     "coarse_sun_sensor": {
@@ -841,7 +947,7 @@
       "note": "m². A side in full sun takes in 0.085 x 1361 = 116 W/m², so the radiators run warmer then"
     },
     "blanket": {
-      "value": "multi-layer insulation over the top (the dish's side, facing the sunlit Moon at periselene); gold outer film",
+      "value": "multi-layer insulation over the top (the user arrays' side, facing the sunlit Moon); gold outer film",
       "source": "design, chosen; the outer film's finish is the model's foil_gold, not a picked product"
     },
     "hydrazine_freeze": {
@@ -932,7 +1038,7 @@
     },
     "craft_lettering": {
       "value": "Altair AETHER",
-      "source": "design, chosen: on the two lower slanted sides under the US flag, and along the bottom (the top carries the S-band dish, the upper sides the folded wings); set in Geist (geist_font) like the finrocket's \"Altair ULTRALIGHT\": the second word half the size, on one baseline; mask refs/aether/craft-lettering-mask.png drawn by tools/sled_lettering.py",
+      "source": "design, chosen: on the two lower slanted sides under the US flag, and on the front deck above the forward laser (the top carries the user arrays, the bottom the Earth tile, the upper sides the folded wings); set in Geist (geist_font) like the finrocket's \"Altair ULTRALIGHT\": the second word half the size, on one baseline; mask refs/aether/craft-lettering-mask.png drawn by tools/sled_lettering.py",
       "also": [
         {
           "source": "geist_font",
@@ -951,10 +1057,6 @@
     "craft_lettering_side_offset": {
       "value": -0.07,
       "source": "design, chosen: the lettering's middle this far below the side's middle"
-    },
-    "craft_lettering_bottom_width": {
-      "value": 0.55,
-      "source": "design, chosen: along the bottom panel, its height from the mask's proportions"
     },
     "craft_flag": {
       "value": "the US flag, upright, on each lower slanted side above the lettering, as on the finrocket",
@@ -977,6 +1079,14 @@
     "launch_date": {
       "value": "2028-01-02 15:00 UTC",
       "source": "design, chosen: an hourly search over 400 days (from 2026-12) on the LOLA 20 m horizon: the whole track sunlit, the Earth at least 0.5° over the real horizon from the track's end, and as much of the Earth lit as possible (73 %, the Earth 4.8° up; the best, 77 %, has the Earth lower). Was 2028-01-05 00:00, with the Earth half lit"
+    },
+    "craft_lettering_front_width": {
+      "value": 0.4,
+      "source": "design, chosen: across the front deck above the forward laser"
+    },
+    "craft_lettering_front_height": {
+      "value": 0.27,
+      "source": "design, chosen: the lettering's middle this far above the axis"
     }
   },
   "materials": {
@@ -1013,14 +1123,14 @@
   },
   "open_questions": [
     "Orbit (decided 2026-11-04): circular and polar at 700 km (orbit_altitude). legnaro_2024's lifetime maps start from one set of angles (ω0 = Ω0 = 0) and sample 300, 500, 700, 900, 2000 and 3000 km; where between 900 and 1300 km polar orbits stop surviving isn't pinned down, and 700 km stays clear of it. The altitude still swings over the years (nasa_lro_sk's 200 km run: about 130 to 270 km), so keeping the craft evenly spaced in a plane needs small burns.",
-    "The craft is still sized as a single relay for the 673 x 7331 km orbit (0.86 m S-band dish, 663 W wings, 300 kg, 550 m/s): at 700 km the dish and the power are far more than one node of a constellation needs, and there are no links between craft yet. Resizing waits for the constellation's design (how many craft, planes, links).",
+    "Constellation: the craft now carries a node's comms (user tiles, laser links ahead and behind, an Earth tile), but how many craft per plane and how many planes isn't designed; no published study sizes one at 700 km. Laser links to the neighbouring planes aren't fitted: their place would be the upper slanted sides, where the wings fold for the launch. The SCOT30 is due 'TRL 8 by Q1/2028'.",
     "Run-out past the map: at 1.815 km/s the shot stays within about 1 km of the 1737.4 km sphere for some 155 km; beyond the 87S map's edge (68 km past the track) it needs a wider elevation map to check.",
     "Propulsion has no filter or pressure transducer yet (no sourced part found); the thruster layout is our own, not copied from a flown craft.",
-    "Comms: no low-gain S-band antenna yet for safe mode (no maker's datasheet found); the EnduroSat array's band (8025-8400 MHz) sits below the 8450-8500 MHz lunar band; with the dish on the Moon and the array on the Earth, the wings turning only about y lose some sunlight in some seasons.",
+    "Comms: no maker publishes a flat array for LunaNet's proximity K-band, so the user tiles are sized as Boeing's 25.5-27.0 GHz tile (user_array), shown by NASA as a future product; the S-band antenna's size is estimated and its 70° beam falls short of the footprint's edge; the EnduroSat X-band array's band (8025-8400 MHz) sits below the 8450-8500 MHz lunar band; no low-gain antenna toward the Earth for safe mode beyond it.",
     "Attitude: the wheel pyramid's tilt and the sensors' places are our own; coverage of the two coarse sun sensors is not a full sphere (safe mode would also lean on the fine sensor and the trackers).",
     "Electronics: the Starbuck-Mini is rated 20 kRAD and '5–7 years in LEO'; whether that covers five years in lunar orbit (no Van Allen belts to cross, since it launches from the Moon, but solar particle events) isn't checked. Its bus follows the battery (22-34 V), not a regulated 28 V. The flight computer and valve drivers come from the separate design; the power budget waits for them.",
     "Thermal: sized by hand for the worst cold-side case (600 W, no sun); not checked against the hot case at periselene (the sunlit Moon's infrared on the radiators) or the 2 h shadow (heater power). Lines and valves need heaters too (not modelled).",
-    "Deployment: the wings are shown folded for the launch (click a wing to unfold it); the hold-downs are placeholders, the dish's launch lock and the panels' hinge hardware aren't modelled, and the wing drive's size is still an estimate."
+    "Deployment: the wings are shown folded for the launch (click a wing to unfold it); the hold-downs are placeholders, the panels' hinge hardware isn't modelled, and the wing drive's size is still an estimate."
   ],
   "budget": {
     "triangles": 50000,
