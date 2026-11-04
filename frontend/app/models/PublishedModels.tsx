@@ -9,6 +9,7 @@ import StudioLights from "./StudioLights";
 import * as THREE from "three";
 import ModelsDashboard, { Viewer, type Focusable } from "./ModelsDashboard";
 import styles from "./models.module.css";
+import Header from "./Header";
 import { PHOTOS } from "./photos";
 import { FinRocketReadout, FinRocketView, type FinRocketData, type Held } from "../circuits/finrocket/FinRocket";
 
@@ -176,16 +177,6 @@ function Sources({ sources }: { sources: Published["sources"] }) {
         ))}
       </ol>
     </aside>
-  );
-}
-
-// Links on the left, the name centred in the home page's title style.
-export function Header({ children }: { children: React.ReactNode }) {
-  return (
-    <header className={styles.siteHeader}>
-      <nav className={styles.siteLinks}>{children}</nav>
-      <Link href="/" className={styles.siteName}>David van Vliet</Link>
-    </header>
   );
 }
 
