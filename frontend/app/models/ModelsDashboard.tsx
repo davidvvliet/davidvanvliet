@@ -222,14 +222,18 @@ function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explor
   const flight = useRef<{ dir: THREE.Vector3; box?: THREE.Box3; home?: boolean } | null>(null);
 
   useEffect(() => {
+    // The distance that frames the whole model: zoom and flight limits scale with it, so a 4 mm
+    // chip works the same as a 40 m spacecraft.
+    const sphere = new THREE.Box3().setFromObject(scene).getBoundingSphere(new THREE.Sphere());
+    const fov = THREE.MathUtils.degToRad(camera.fov) * Math.min(1, camera.aspect);
+    const dist = (sphere.radius * 1.15) / Math.sin(fov / 2);
     if (inner) {
+      homeNear.current = dist / 100;
+      homeDist.current = dist;
       // Fly from wherever the camera is to the whole inside, keeping the viewing direction.
       if (controls) flight.current = { dir: camera.position.clone().sub(controls.target).normalize(), box: new THREE.Box3().setFromObject(scene) };
       return;
     }
-    const sphere = new THREE.Box3().setFromObject(scene).getBoundingSphere(new THREE.Sphere());
-    const fov = THREE.MathUtils.degToRad(camera.fov) * Math.min(1, camera.aspect);
-    const dist = (sphere.radius * 1.15) / Math.sin(fov / 2);
     camera.position.copy(centre).addScaledVector(new THREE.Vector3(0.6, 0.45, 0.66).normalize(), dist);
     camera.near = dist / 100;
     homeNear.current = camera.near;
@@ -294,7 +298,7 @@ function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explor
       if (flyBox && !flight.current.box) for (const u of units) if (u.group === focus) off.copy(u.node.position).sub(u.rest).applyMatrix3(new THREE.Matrix3().setFromMatrix4(u.node.parent!.matrixWorld));
       const fov = THREE.MathUtils.degToRad(camera.fov) * Math.min(1, camera.aspect);
       const goalTarget = flyBox ? flyBox.getCenter(new THREE.Vector3()).add(off) : centre.clone();
-      const dist = flyBox ? Math.max(flyBox.getSize(new THREE.Vector3()).length() * 0.65, 0.05) / Math.sin(fov / 2) : homeDist.current;
+      const dist = flyBox ? Math.max(flyBox.getSize(new THREE.Vector3()).length() * 0.65, Math.min(0.05, homeDist.current * 0.01)) / Math.sin(fov / 2) : homeDist.current;
       const goalPos = goalTarget.clone().addScaledVector(flight.current.dir, dist);
       const a = 1 - Math.exp(-dt * 5);
       camera.position.lerp(goalPos, a);
@@ -443,7 +447,8 @@ function useHinges(scene: THREE.Object3D) {
 
 // Blender's axes from the glTF's (exported y-up): x, -z, y; sizes just swap y and z.
 const blenderSize = (v: THREE.Vector3) => [v.x, v.z, v.y];
-const m2 = (v: number) => (v >= 1 ? `${v.toFixed(2)} m` : v >= 0.01 ? `${Math.round(v * 100)} cm` : `${(v * 1000).toFixed(1)} mm`);
+const m2 = (v: number) => (v >= 1 ? `${v.toFixed(2)} m` : v >= 0.01 ? `${Math.round(v * 100)} cm`
+  : v >= 0.001 ? `${(v * 1000).toFixed(1)} mm` : v >= 0.0001 ? `${(v * 1000).toFixed(2)} mm` : `${Math.round(v * 1e6)} µm`);
 
 function PartLabel({ name, size, row, hasBreakdown, stale }: {
   name: string; size: THREE.Vector3; row?: Breakdown["families"][string]; hasBreakdown: boolean; stale: boolean;
