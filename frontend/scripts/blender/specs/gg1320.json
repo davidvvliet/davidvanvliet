@@ -22,8 +22,8 @@
       "title": "Samuel M. Goldwasser, Sam's Laser FAQ: Honeywell GG1320AN ring laser gyro photo album (a unit taken apart; a labelled photo of the laser block with a 50.8 mm scale bar)",
       "url": "https://repairfaq.org/sam/laserpic/Honeywell-RLGs/GG1320AN/index.html",
       "read": "2026-11-04",
-      "licence": "\"Copyright © 1994-2026 Samuel M. Goldwasser ... All Rights Researved\": measured from and colours sampled; nothing from it ships until David has permission",
-      "credit": "Layout measured and colours sampled from Samuel M. Goldwasser's GG1320AN photos (Sam's Laser FAQ, repairfaq.org)"
+      "licence": "\"Copyright © 1994-2026 Samuel M. Goldwasser ... All Rights Researved\": measured from and colours sampled; the label texture (refs/gg1320/label.jpg) is cropped from closeup_of_label2.jpg, used at David's decision (2026-11-04) with credit",
+      "credit": "Layout measured, colours sampled and the case label photographed from Samuel M. Goldwasser's GG1320AN photos (Sam's Laser FAQ, repairfaq.org)"
     }
   ],
   "reference_model": {
@@ -84,9 +84,10 @@
         "face_distance": 0.0195,
         "corner_cut": 0.0287,
         "thickness": 0.012,
-        "centre_bore": 0.018
+        "centre_bore": 0.018,
+        "chamfer": 0.0008
       },
-      "source": "sam_gg1320an, laser_block_with_major_parts_labeled1.jpg: flat faces 19.5 mm from the centre, corners cut off at the mirrors, centre bore 18 mm (the dither ring); thickness estimated from cathode_end_of_assembly_closeup1.jpg against the 13.7 mm cathode (±15%, perspective)"
+      "source": "sam_gg1320an, laser_block_with_major_parts_labeled1.jpg: flat faces 19.5 mm from the centre, corners cut off at the mirrors, centre bore 18 mm (the dither ring); thickness estimated from cathode_end_of_assembly_closeup1.jpg against the 13.7 mm cathode (±15%, perspective); its outer edges bevelled about 0.8 mm (the bright edge bands, 7-8 px wide in the labelled photo at 9.5 px/mm)"
     },
     "bores": {
       "value": {
@@ -108,9 +109,10 @@
           "mirror_1": "PZT, bottom left",
           "mirror_2": "wedged substrate, top, with the detector assembly",
           "mirror_3": "PZT, bottom right"
-        }
+        },
+        "substrate_alpha": 0.35
       },
-      "source": "sam_gg1320an, laser_block_with_major_parts_labeled1.jpg (labels \"Mirror 1 with PZT\", \"Mirror 2 on Wedged Substrate\", \"Detector Assembly\", \"Mirror 3 with PZT\"; assemblies about 95 px = 10 mm across); lengths estimated from mirrorpzt_assembly1_closeup1.jpg"
+      "source": "sam_gg1320an, laser_block_with_major_parts_labeled1.jpg (labels \"Mirror 1 with PZT\", \"Mirror 2 on Wedged Substrate\", \"Detector Assembly\", \"Mirror 3 with PZT\"; assemblies about 95 px = 10 mm across); lengths estimated from mirrorpzt_assembly1_closeup1.jpg; the substrates are clear glass discs (laser_block_top_view1.jpg, mirrorpzt_assembly1_closeup1.jpg), drawn a little less see-through than the block so they stand apart"
     },
     "discharge": {
       "value": {
@@ -655,9 +657,14 @@
           0.0008,
           0.0006
         ],
-        "blob": 0.0009
+        "blob": 0.0009,
+        "rim": {
+          "inner": 0.9,
+          "groove": 0.84,
+          "height": 0.0004
+        }
       },
-      "source": "sam_gg1320an, mirrorpzt_assembly1_closeup1.jpg (scaled by the 10 mm assembly, 530 px: 53 px/mm): the path-length assembly ends in a metal housing with a white ceramic disc (330 px), a dark ring round its centre hole (180 px; bore 100 px), an orange flex in a horseshoe round the lower part with a solder tab each side and a solder blob at the bottom; housing length estimated"
+      "source": "sam_gg1320an, mirrorpzt_assembly1_closeup1.jpg (scaled by the 10 mm assembly, 530 px: 53 px/mm): the path-length assembly ends in a metal housing with a white ceramic disc (330 px), a dark ring round its centre hole (180 px; bore 100 px), an orange flex in a horseshoe round the lower part with a solder tab each side and a solder blob at the bottom; housing length estimated; the housing's front has a raised rim (outer 10% of the radius) with a dark groove inside it (to 84%), the ceramic recessed below the rim (mirrorpzt_assembly1_closeup1.jpg, mirror_pzt_assembly3_closeup1.jpg; ratios and heights estimated)"
     },
     "temperature_sensor": {
       "value": {
@@ -815,7 +822,7 @@
       "hex": "#484b4d",
       "metallic": 0.0,
       "roughness": 0.4,
-      "source": "sam_gg1320an, top_view_of_complete_rlg1.jpg, the label between its lettering at (250,160), (700,250), (320,520), (780,460) px"
+      "source": "sam_gg1320an, top_view_of_complete_rlg1.jpg, the label between its lettering at (250,160), (700,250), (320,520), (780,460) px; printed with the label photo (sam_gg1320an, closeup_of_label2.jpg), darkened to this grey"
     },
     "connector_steel": {
       "hex": "#9c958c",
@@ -869,12 +876,12 @@
   "open_questions": [
     "Heights inside the case (block, plate, boards) are estimates: no photo shows the stack from the side.",
     "Block thickness (12 mm) is estimated from a close-up with perspective; the block's glass type isn't stated anywhere found.",
-    "The case outline and label are simplified; Sam's photos could be traced once David has permission.",
     "The corner wells (wide bores at each corner) aren't labelled in any photo found: purpose unknown.",
     "Board parts are placed from one oblique photo; which way the boards face and turn against the block is estimated.",
     "Wire routes are simplified.",
-    "The top cover's window depth, the can's top height and the connector's rise above it are estimated; the label's lettering and the can's barcode would come from sam_gg1320an's photos (pending permission).",
-    "The mounting notches' spacing (120°), V depth and height are estimated from oblique photos."
+    "The top cover's window depth, the can's top height and the connector's rise above it are estimated.",
+    "The mounting notches' spacing (120°), V depth and height are estimated from oblique photos.",
+    "The case outline is simplified."
   ],
   "budget": {
     "triangles": 50000,

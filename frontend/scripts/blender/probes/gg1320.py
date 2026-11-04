@@ -1,6 +1,7 @@
 # Honeywell GG1320AN ring laser gyro. Built from lib/parts in metres; every number comes from
 # specs/gg1320.json (with its source) or is marked here as estimated.
 import math
+import os
 
 import bmesh
 import bpy
@@ -124,18 +125,24 @@ def holed_plate(name, outer, holes, z0, thickness, material):
     return parts._object(name, bm, material, Matrix())
 
 
-def block(name, outline, hole_r, z0, z1, material, n=96):
+def block(name, outline, hole_r, z0, z1, material, n=96, chamfer=0.0, inset=None):
     """The resonator block: the outline extruded from z0 to z1 with a round hole through the
     middle (the dither motor's bore). Outline and hole are sampled at the same angles (the
-    outline's corners included), so top and bottom are rings of quads."""
+    outline's corners included), so top and bottom are rings of quads. With `chamfer`, the
+    outer edges are bevelled: top and bottom take the `inset` outline (the outline moved in by
+    the chamfer)."""
     angs = sorted({round(2 * math.pi * k / n, 9) for k in range(n)}
                   | {round(math.atan2(p.y, p.x) % (2 * math.pi), 9) for p in outline})
     bm = bmesh.new()
     rings = []
-    for outer, z in ((True, z0), (True, z1), (False, z1), (False, z0)):
+    if chamfer:
+        loops = ((inset, z0), (outline, z0 + chamfer), (outline, z1 - chamfer), (inset, z1), (None, z1), (None, z0))
+    else:
+        loops = ((outline, z0), (outline, z1), (None, z1), (None, z0))
+    for shape, z in loops:
         ring = []
         for a in angs:
-            r = _ray(outline, a) if outer else hole_r
+            r = _ray(shape, a) if shape else hole_r
             ring.append(bm.verts.new((r * math.cos(a), r * math.sin(a), z)))
         rings.append(ring)
     k = len(angs)
@@ -220,7 +227,7 @@ def connector(f, z):
                         location=(cx + s * c["jackscrews"], cy, zt), material="connector_steel")
 
 
-def case(d, f):
+def case(d, f, spec):
     r = d["case_diameter"] / 2
     h = d["case_height"]
     cs = f["case_shape"]["value"]
@@ -267,8 +274,17 @@ def case(d, f):
         holed_plate("cover_top", rim + list(reversed(_polyline_arc(lr, a_lab, 180.0 - a_lab))), [],
                     h - cv["top_thickness"], cv["top_thickness"], "case_black")
     with parts.assembly("label"):
-        holed_plate("label", _polyline_arc(lr, a_lab, 180.0 - a_lab), [], h - cv["top_thickness"],
-                    cv["top_thickness"] + 0.00005, "case_label")
+        # The label photo itself (refs/gg1320/label.jpg, made by label-make.py: centred on the
+        # screw, 65 mm across, darkened to the label's grey in the overall photos).
+        lab = holed_plate("label", _polyline_arc(lr, a_lab, 180.0 - a_lab), [], h - cv["top_thickness"],
+                          cv["top_thickness"] + 0.00005, "case_label")
+        img = bpy.data.images.load(os.path.join(os.path.dirname(__file__), "..", "refs", "gg1320", "label.jpg"))
+        lab.data.materials[0] = materials.image("case_label_printed", img, metallic=0.0,
+                                                roughness=spec["materials"]["case_label"]["roughness"])
+        uv = lab.data.uv_layers.new(name="UVMap")
+        for loop in lab.data.loops:
+            co = lab.data.vertices[loop.vertex_index].co
+            uv.data[loop.index].uv = (0.5 + co.x / (2 * lr), 0.5 + co.y / (2 * lr))
     with parts.assembly("can_top"):
         # The aluminium can's top, seen through the window, and the peg under the connector.
         parts.cylinder("can_top", r - cv["wall"], cv["can_plate"], location=(0, 0, can - cv["can_plate"]),
@@ -347,8 +363,9 @@ def laser_block(f, spec):
     corners = [_dir(a) * R + Vector((0, 0, zc)) for a in CORNERS.values()]
     sides = list(zip(corners, corners[1:] + corners[:1]))
     with parts.assembly("resonator_block", internal=True):
+        ch = b["chamfer"]
         block("resonator_block", _outline(b["face_distance"], b["corner_cut"]), b["centre_bore"] / 2,
-              z0, zb, glass)
+              z0, zb, glass, chamfer=ch, inset=_outline(b["face_distance"] - ch, b["corner_cut"] - ch))
         # The three beam bores and the discharge channels, as glass tubes so their walls show.
         br = f["bores"]["value"]["diameter"] / 2
         for i, (p, q) in enumerate(sides):
@@ -425,16 +442,18 @@ def discharge_glow(f, spec, sides, zc, inr):
                                segments=12, material=mat)
 
 
-def mirrors(f, zc, R):
+def mirrors(f, spec, zc, R):
     m = f["mirrors"]["value"]
+    sub_glass = _special("block_glass", spec, alpha=f["mirrors"]["value"]["substrate_alpha"], name="substrate_glass")
     dt = f["detector"]["value"]
     ends = {}
     for key, ang in CORNERS.items():
         u = _dir(ang)
         p = u * R + Vector((0, 0, zc))
         with parts.assembly(key, internal=True):
+            # The substrate is a clear glass disc (the coating on its inner face doesn't show).
             parts.cylinder(f"{key}_substrate", m["diameter"] / 2, m["substrate"], location=p, direction=u,
-                           segments=32, material="foil_silver")
+                           segments=32, material=sub_glass)
             q = p + u * m["substrate"]
             if key == "mirror_2":
                 # The detector, potted in grey rubber on the wedged substrate, with its two
@@ -465,8 +484,16 @@ def pzt_end(f, key, q, u, length):
     hole, and the orange flex round its lower part with two solder tabs and a blob."""
     pe = f["pzt_end"]["value"]
     end = q + u * length
-    parts.cylinder(f"{key}_pzt_housing", pe["housing_diameter"] / 2, length, location=q, direction=u, segments=32,
+    R = pe["housing_diameter"] / 2
+    parts.cylinder(f"{key}_pzt_housing", R, length, location=q, direction=u, segments=48,
                    material="mirror_housing")
+    # The housing's front: a raised rim round the ceramic, a dark groove inside it.
+    lip = pe["rim"]
+    parts.lathe(f"{key}_pzt_rim", _ring(lip["inner"] * R, R, length, length + lip["height"], 0.0001), closed=True,
+                location=q, direction=u, segments=48, material="mirror_housing")
+    parts.lathe(f"{key}_pzt_groove", [(lip["groove"] * R, length), (lip["inner"] * R, length),
+                                      (lip["inner"] * R, length + 0.00005), (lip["groove"] * R, length + 0.00005)],
+                closed=True, location=q, direction=u, segments=48, material="black", smooth=False)
     parts.cylinder(f"{key}_pzt_ceramic", pe["ceramic_diameter"] / 2, 0.0002, location=end, direction=u, segments=32,
                    material="pzt_ceramic")
     parts.lathe(f"{key}_pzt_hole", [(pe["hole_inner"] / 2, 0.0), (pe["hole_outer"] / 2, 0.0),
@@ -623,10 +650,10 @@ def extras(f, zc, ends, tips):
 def build(spec):
     d = {k: v["value"] for k, v in spec["dimensions"].items()}
     f = spec["facts"]
-    case(d, f)
+    case(d, f, spec)
     stack(f)
     z0, zb, zc, R = laser_block(f, spec)
-    ends = mirrors(f, zc, R)
+    ends = mirrors(f, spec, zc, R)
     tips = discharge(f, zc)
     dither(f, z0, zb, f["stack"]["value"]["plate_bottom"])
     extras(f, zc, ends, tips)
