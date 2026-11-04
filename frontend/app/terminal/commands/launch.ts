@@ -40,12 +40,22 @@ const launch: Command = {
         "",
         "__DIM__Proposed:",
         ...rows(MISSIONS.filter(proposed)),
+        `__COL__Altair Aether__COL__${run("launch aether", "aether")}`,
       ];
     }
     if (arg === "off") {
       store.endMission(); // back to the date and clock rate from before the launch
       return ["Mission cleared."];
     }
+    if (arg === "aether" || arg === "altair aether") {
+      // Not a path in the solar system: the launch page's own scene, run in the main view.
+      store.endMission();
+      store.openPath("/");
+      store.setFootprintShown(false);
+      store.setAetherLaunch(true);
+      return [`__GRAY__Launching Altair Aether from the Moon's south pole. Use "${run("launch off", "launch off")}" to go back.`];
+    }
+    store.setAetherLaunch(false);
     const mission = MISSIONS.find((m) => m.id === arg.replace(/\s+/g, "") || m.name.toLowerCase() === arg);
     if (!mission) return [`Unknown mission: ${args.join(" ")}. Type "${run("launch")}" to see the list.`];
     store.openPath("/");
@@ -64,7 +74,7 @@ const launch: Command = {
     }
     return [`__GRAY__Launching ${mission.name}. Use "${run("time")}" to speed up the clock.`, ...note];
   },
-  complete: (args) => (args.length <= 1 ? [...MISSIONS.map((m) => m.id), "off"] : []),
+  complete: (args) => (args.length <= 1 ? [...MISSIONS.map((m) => m.id), "aether", "off"] : []),
 };
 
 register(launch);

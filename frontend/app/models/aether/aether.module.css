@@ -21,3 +21,9 @@
 }
 .launch:hover { color: #ededed; }
 .launch:disabled { opacity: 0.3; cursor: default; }
+/* `launch aether` on the main page: fills the scene's cell; the text is a little smaller there. */
+.inScene { position: absolute; inset: 0; overflow: hidden; color: #e8e8e8; font-family: var(--font-geist-sans, system-ui, sans-serif); }
+.inScene .phase { top: 16px; max-width: min(360px, calc(100% - 32px)); }
+.inScene .caption { font-size: 13px; }
+.inScene .readout { font-size: 12px; }
+.inScene .orbit { width: 120px; height: 120px; }

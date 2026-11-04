@@ -20,6 +20,9 @@ interface PageState {
   /** Trace a mission's trajectory (id from MISSIONS), or null to clear. */
   trackRequest: { id: string | null; seq: number } | null;
   requestTrack: (id: string | null) => void;
+  /** `launch aether`: the Aether launch runs in the main view instead of the solar system's own camera. */
+  aetherLaunch: boolean;
+  setAetherLaunch: (on: boolean) => void;
   /** The clock rate before the first `launch`: mission time only lasts the mission, so
    *  endMission() puts it back and returns the date to today (any `date` or `time` change made
    *  during it is dropped). Null when no mission is running. */
@@ -98,6 +101,7 @@ export const usePageStore = create<PageState>()(
   endMission: () => {
     const s = usePageStore.getState();
     s.requestTrack(null);
+    s.setAetherLaunch(false);
     if (s.beforeMission) {
       s.setSecondsPerDay(s.beforeMission.rate);
       // Today, not the sim date at launch: the default clock runs fast, so that one is
@@ -112,6 +116,8 @@ export const usePageStore = create<PageState>()(
   addMissionVideo: (delta) => set((state) => ({ missionVideos: Math.max(0, state.missionVideos + delta) })),
   trackRequest: null,
   requestTrack: (id) => set((state) => ({ trackRequest: { id, seq: (state.trackRequest?.seq ?? 0) + 1 } })),
+  aetherLaunch: false,
+  setAetherLaunch: (on) => set({ aetherLaunch: on }),
   dateRequest: null,
   requestDate: (jd) => set((state) => ({ dateRequest: { jd, seq: (state.dateRequest?.seq ?? 0) + 1 } })),
   apolloVisible: false,

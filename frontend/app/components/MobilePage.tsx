@@ -12,6 +12,7 @@ import { usePageStore } from '../store/pageStore';
 import { BODY_FACTS } from './solarSystemData';
 import { MISSIONS } from '../missions';
 
+const AetherScene = dynamic(() => import('../models/aether/AetherScene'), { ssr: false });
 const SolarSystem = dynamic(() => import('./SolarSystem').then(mod => mod.SolarSystem), {
   ssr: false,
 });
@@ -32,6 +33,7 @@ export default function MobilePage({ panel, photos }: { panel: React.ReactNode; 
   const [tappedStar, setTappedStar] = useState<{ name: string; lightYears: number; spectral?: string; fact?: string } | null>(null);
   const [focusedBody, setFocusedBody] = useState<string | null>('Sun');
   const missionId = usePageStore((s) => s.trackRequest?.id ?? null);
+  const aetherLaunch = usePageStore((s) => s.aetherLaunch);
   const simJD = usePageStore((s) => s.simJD);
   const missionFormat = MISSIONS.find((m) => m.id === missionId)?.dateFormat ?? 'month';
   const missionDate = missionId && simJD
@@ -92,13 +94,13 @@ export default function MobilePage({ panel, photos }: { panel: React.ReactNode; 
                 {missionDate && <span className={labelStyles.missionDate}>{missionDate}</span>}
               </div>
               <div className={labelStyles.globeCanvas}>
-                <SolarSystem
+                {aetherLaunch ? <AetherScene onStarHover={setTappedStar} /> : <SolarSystem
                   dots={dots}
                   onDotClick={(d) => { setTappedDot(d as Dot); setTappedStar(null); }}
                   onStarHover={(star) => { setTappedStar(star); if (star) setTappedDot(null); }}
                   onFocusChange={(name) => { setFocusedBody(name); setTappedDot(null); }}
                   dotSizeMultiplier={0.3}
-                />
+                />}
               </div>
             </div>
           )}

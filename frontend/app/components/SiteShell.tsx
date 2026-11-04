@@ -19,6 +19,8 @@ import { MISSIONS } from '../missions';
 
 const GoldenRecord = dynamic(() => import('./GoldenRecord'), { ssr: false });
 
+const AetherScene = dynamic(() => import('../models/aether/AetherScene'), { ssr: false });
+
 const SolarSystem = dynamic(() => import('./SolarSystem').then(mod => mod.SolarSystem), {
   ssr: false,
 });
@@ -50,6 +52,7 @@ export default function SiteShell({ children, photos }: { children: React.ReactN
   const [focusedBody, setFocusedBody] = useState<string | null>("Sun");
   // Mission date readout: shown while a mission is launched, as month and year.
   const missionId = usePageStore((s) => s.trackRequest?.id ?? null);
+  const aetherLaunch = usePageStore((s) => s.aetherLaunch);
   const simJD = usePageStore((s) => s.simJD);
   const missionFormat = MISSIONS.find((m) => m.id === missionId)?.dateFormat ?? 'month';
   const missionDate = missionId && simJD
@@ -102,7 +105,9 @@ export default function SiteShell({ children, photos }: { children: React.ReactN
                 {missionDate && <span className={styles.missionDate}>{missionDate}</span>}
               </div>
               <div className={styles.globeCanvas}>
-                <SolarSystem dots={dots} onDotClick={setSelectedDot} onDotHover={setHoveredDot} onBodyHover={setHoveredBody} onStarHover={setHoveredStar} onFocusChange={setFocusedBody} dotSizeMultiplier={0.3} />
+                {aetherLaunch
+                  ? <AetherScene onStarHover={setHoveredStar} />
+                  : <SolarSystem dots={dots} onDotClick={setSelectedDot} onDotHover={setHoveredDot} onBodyHover={setHoveredBody} onStarHover={setHoveredStar} onFocusChange={setFocusedBody} dotSizeMultiplier={0.3} />}
               </div>
             </div>
           )}
