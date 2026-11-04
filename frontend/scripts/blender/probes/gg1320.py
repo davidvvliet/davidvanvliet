@@ -230,9 +230,34 @@ def case(d, f):
     can = cv["can_top"]
     with parts.assembly("case", core=True):
         # The side, shaded smooth; the bottom (with its raised disc) separate so it stays flat.
-        parts.lathe("case_body", [(r - e, step), (r, step + e), (r, can)], segments=96, material="case_black")
-        parts.lathe("case_bottom", [(0.0, 0.0), (bd, 0.0), (bd, step), (r - e, step)], segments=96,
-                    material="case_black", smooth=False)
+        mn = f["mount_notches"]["value"]
+        zt = mn["top"]
+        parts.lathe("case_body", [(r, zt), (r, can)], segments=96, material="case_black")
+        parts.lathe("case_bottom", [(0.0, 0.0), (bd, 0.0), (bd, step)], segments=96, material="case_black",
+                    smooth=False)
+        # The rim below the notches' roofs: the floor, cut by the three notches, and the wall
+        # between them.
+        half = math.degrees(math.asin(mn["chord"] / 2 / r))
+        cs_ = sorted(mn["angles"])
+        floor = []
+        for i, c in enumerate(cs_):
+            nxt = cs_[(i + 1) % len(cs_)] + (360.0 if i == len(cs_) - 1 else 0.0)
+            floor.append(_dir(c) * mn["apex"])
+            floor += _polyline_arc(r, c + half, nxt - half)
+            wall_arc(f"rim_wall_{i + 1}", r - cv["wall"], r, step, zt, c + half, nxt - half, "case_black")
+        holed_plate("case_rim", floor, [_circle(bd, 96)], step, cv["wall"], "case_black")
+    with parts.assembly("mount_notches"):
+        # Each notch: two black side walls in a V and an aluminium roof with the mounting hole.
+        for i, c in enumerate(cs_):
+            a, b, apex = _dir(c - half) * r, _dir(c + half) * r, _dir(c) * mn["apex"]
+            for j, (p, q) in enumerate(((a, apex), (apex, b))):
+                m = (p + q) / 2
+                ang = math.degrees(math.atan2((q - p).y, (q - p).x))
+                parts.box(f"notch_{i + 1}_side_{j + 1}", ((q - p).length, cv["wall"], zt - step),
+                          location=(m.x, m.y, (step + zt) / 2), roll_deg=ang, material="case_black")
+            centre = (a + b + apex) / 3
+            holed_plate(f"notch_{i + 1}_pad", [a, apex, b], [_circle(mn["hole"] / 2, 16, (centre.x, centre.y))],
+                        zt - cv["wall"], cv["wall"], "aluminium")
         # The top cover above the can's top, all round but the window.
         wall_arc("cover_wall", r - cv["wall"], r, can, h - e, a_rim, 180.0 - a_rim, "case_black")
         rim = _polyline_arc(r, a_rim, 180.0 - a_rim)
@@ -443,6 +468,12 @@ def dither(f, z0, zb, zp):
         parts.lathe("dither_ring", _ring(ri, ro, z0, zb), closed=True, segments=64, material="dither_wheel")
         # The hub runs up to the plate: the block hangs from it.
         parts.cylinder("dither_hub", rh, zp - z0, location=(0, 0, z0), segments=32, material="dither_wheel")
+        # The three nuts on the hub's free end (they hold it to the plate).
+        hn = f["hub_nuts"]["value"]
+        for k in range(3):
+            c = _dir(90 + 120 * k) * hn["radius"]
+            parts.prism(f"hub_nut_{k + 1}", 6, hn["across_flats"] / math.sqrt(3), hn["height"],
+                        location=(c.x, c.y, z0), direction=(0, 0, -1), material="cathode_steel")
         for k in range(dv["spokes"]):
             deg = 90.0 + 120.0 * k
             L = ri - rh + 0.0004
