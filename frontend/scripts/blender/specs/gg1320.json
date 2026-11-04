@@ -161,13 +161,32 @@
     "connector": {
       "value": {
         "type": "25-pin micro-D",
-        "shell": [
-          0.025,
-          0.008,
-          0.006
+        "flange": [
+          0.0318,
+          0.0082,
+          0.001
+        ],
+        "shell_top": 0.0215,
+        "shell_bottom": 0.0205,
+        "shell_height": 0.0055,
+        "shell_rise": 0.0025,
+        "shell_wall": 0.0004,
+        "rows": [
+          12,
+          13
+        ],
+        "pitch": 0.00136,
+        "row_spacing": 0.00106,
+        "contact_radius": 0.00032,
+        "jackscrews": 0.0133,
+        "jackscrew_flats": 0.0032,
+        "jackscrew_height": 0.0022,
+        "centre": [
+          0.0,
+          -0.0355
         ]
       },
-      "source": "honeywell_gg1320an, p.1: \"RS-422, 25 pin micro \\\"D\\\"\"; place and size estimated from sam_gg1320an top_view_of_complete_rlg1.jpg"
+      "source": "honeywell_gg1320an, p.1: \"RS-422, 25 pin micro \\\"D\\\"\"; flange width from sam_gg1320an, top_view_of_complete_rlg1.jpg (scaled by the 88 mm case, 895 px: 10.2 px/mm): the CINCH flange spans 305-628 px; the rest from sam_gg1320an, main_connector1.jpg (scaled by the 31.8 mm flange, 900 px: 28.3 px/mm): receptacle 605 px wide at its top, 580 px at its bottom, 155 px tall, contacts in rows of 12 and 13 at 38.4 px pitch, rows 30 px apart, jackscrews 750 px apart and 90 px across; rise of the shell and jackscrews above the flange and the place on the can estimated (the connector faces up out of the cover's window)"
     },
     "performance": {
       "value": {
@@ -293,9 +312,9 @@
       "value": {
         "outer": 0.042,
         "wall": 0.002,
-        "top": 0.043
+        "top": 0.039
       },
-      "source": "sam_gg1320an, pcb1_pcb2_in_situ1.jpg and interior_after_separating_case1.jpg: an aluminium cup holding the boards above the plate; sizes estimated to fit the case"
+      "source": "sam_gg1320an, pcb1_pcb2_in_situ1.jpg and interior_after_separating_case1.jpg: an aluminium cup holding the boards above the plate; sizes estimated to fit the case; its top meets the can's top plate (facts.cover)"
     },
     "pcb_parts": {
       "value": {
@@ -540,6 +559,27 @@
         "edge": 0.0005
       },
       "source": "sam_gg1320an, bottom_view_of_complete_rlg1.jpg: a raised disc 71 mm across on the bottom (scaled by the 88 mm case), step height estimated; top_view_of_complete_rlg1.jpg: the label covers a disc about 65 mm across"
+    },
+    "cover": {
+      "value": {
+        "window_y": -0.029,
+        "can_top": 0.0405,
+        "can_plate": 0.0015,
+        "top_thickness": 0.0015,
+        "wall": 0.0015,
+        "peg": [
+          0.002,
+          0.003,
+          0.0035
+        ]
+      },
+      "source": "sam_gg1320an, top_view_of_complete_rlg1.jpg (scaled by the 88 mm case, 895 px: 10.2 px/mm) and top_with_outer_cover_removed1.jpg: the top cover is a black cup over an aluminium can; a window in it, cut straight 29 mm from the centre (label's lower edge at 530 px) out to the rim, shows the can's top with the connector; a round peg sticks out of the can below the connector. Depths estimated"
+    },
+    "cover_screws": {
+      "value": {
+        "radius": 0.0016
+      },
+      "source": "sam_gg1320an, top_view_of_complete_rlg1.jpg (a screw at the label's centre, about 32 px across: 3.1 mm) and bottom_view_of_complete_rlg1.jpg (one at the bottom's centre)"
     }
   },
   "materials": {
@@ -686,16 +726,29 @@
       "metallic": 0.0,
       "roughness": 0.4,
       "source": "sam_gg1320an, top_view_of_complete_rlg1.jpg, the label between its lettering at (250,160), (700,250), (320,520), (780,460) px"
+    },
+    "connector_steel": {
+      "hex": "#9c958c",
+      "metallic": 1.0,
+      "roughness": 0.35,
+      "source": "sam_gg1320an, main_connector1.jpg (scaled by the 31.8 mm flange, 900 px: 28.3 px/mm): the flange at (300,225), (700,230) and the shell at (500,500) px"
+    },
+    "contact_insulator": {
+      "hex": "#561f15",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "sam_gg1320an, main_connector1.jpg (scaled by the 31.8 mm flange, 900 px: 28.3 px/mm): the insulator between the contacts at (560,330), (680,330), (330,335) px (one glare spot left out)"
     }
   },
   "open_questions": [
     "Heights inside the case (block, plate, boards) are estimates: no photo shows the stack from the side.",
     "Block thickness (12 mm) is estimated from a close-up with perspective; the block's glass type isn't stated anywhere found.",
-    "Mirror and detector lengths, connector bar height and the connector's place are estimated.",
     "The case outline and label are simplified; Sam's photos could be traced once David has permission.",
     "The corner wells (wide bores at each corner) aren't labelled in any photo found: purpose unknown.",
     "Board parts are placed from one oblique photo; which way the boards face and turn against the block is estimated.",
-    "Wire routes are simplified."
+    "Wire routes are simplified.",
+    "The top cover's window depth, the can's top height and the connector's rise above it are estimated; the label's lettering and the can's barcode would come from sam_gg1320an's photos (pending permission).",
+    "The bottom cover's notches and the can's mounting flats (bottom_with_outer_cover_removed1.jpg) aren't modelled yet."
   ],
   "budget": {
     "triangles": 50000,

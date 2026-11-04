@@ -156,30 +156,104 @@ def _dome(radius, straight, cap, steps=6):
 
 # --- Outside ----------------------------------------------------------------------------
 
+def _polyline_arc(r, a0, a1, step=3.0):
+    """Points on a circle of radius r from angle a0 to a1 (degrees, either direction)."""
+    n = max(2, int(abs(a1 - a0) / step) + 1)
+    return [_dir(a0 + (a1 - a0) * k / (n - 1)) * r for k in range(n)]
+
+
+def wall_arc(name, ri, ro, z0, z1, a0, a1, material, step=3.0):
+    """A piece of round wall between radii ri and ro, from angle a0 to a1 (degrees,
+    counter-clockwise), with flat ends. Shaded smooth."""
+    angs = [a0 + (a1 - a0) * k / max(2, int((a1 - a0) / step)) for k in range(max(2, int((a1 - a0) / step)) + 1)]
+    bm = bmesh.new()
+    rings = []
+    for r, z in ((ri, z0), (ro, z0), (ro, z1), (ri, z1)):
+        rings.append([bm.verts.new(_dir(a) * r + Vector((0, 0, z))) for a in angs])
+    for p, q in zip(rings, rings[1:] + rings[:1]):
+        for i in range(len(angs) - 1):
+            bm.faces.new((p[i], p[i + 1], q[i + 1], q[i]))
+    bm.faces.new([ring[0] for ring in rings])
+    bm.faces.new([ring[-1] for ring in reversed(rings)])
+    bm.normal_update()
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    return parts._object(name, bm, material, Matrix(), smooth=True)
+
+
+def connector(f, z):
+    """The 25-pin micro-D, facing up from the can's top at height z: flange, D-shaped shell,
+    insulator with the contacts in two rows, and the two jackscrews."""
+    c = f["connector"]["value"]
+    cx, cy = c["centre"]
+    fx, fy, fz = c["flange"]
+    with parts.assembly("connector"):
+        parts.box("connector_flange", (fx, fy, fz), location=(cx, cy, z + fz / 2), material="connector_steel")
+        zt = z + fz
+        hw_t, hw_b, hh = c["shell_top"] / 2, c["shell_bottom"] / 2, c["shell_height"] / 2
+
+        def d_shape(inset):
+            # The D: wider on the +Y side (the photo's top row of 12), corners cut.
+            k = 0.0012
+            pts = [(-hw_t + inset + k, hh - inset), (hw_t - inset - k, hh - inset), (hw_t - inset, hh - inset - k),
+                   (hw_b - inset, -hh + inset + k), (hw_b - inset - k, -hh + inset), (-hw_b + inset + k, -hh + inset),
+                   (-hw_b + inset, -hh + inset + k), (-hw_t + inset, hh - inset - k)]
+            return [Vector((cx + x, cy + y, 0)) for x, y in pts]
+
+        holed_plate("connector_shell", d_shape(0.0), [d_shape(c["shell_wall"])], zt, c["shell_rise"],
+                    "connector_steel")
+        holed_plate("connector_insulator", d_shape(c["shell_wall"]), [], zt, c["shell_rise"] * 0.4,
+                    "contact_insulator")
+        zi = zt + c["shell_rise"] * 0.4
+        for row, n in enumerate(c["rows"]):
+            y = cy + (c["row_spacing"] / 2 if row == 0 else -c["row_spacing"] / 2)
+            for k in range(n):
+                x = cx + (k - (n - 1) / 2) * c["pitch"]
+                parts.lathe(f"contact_{row + 1}_{k + 1}", [(c["contact_radius"] * 0.5, 0.0), (c["contact_radius"], 0.0),
+                                                          (c["contact_radius"], 0.0006),
+                                                          (c["contact_radius"] * 0.5, 0.0006)],
+                            closed=True, location=(x, y, zi), segments=8, material="gold_pin", smooth=False)
+        for s in (-1, 1):
+            parts.prism(f"jackscrew_{'ab'[s > 0]}", 6, c["jackscrew_flats"] / math.sqrt(3), c["jackscrew_height"],
+                        location=(cx + s * c["jackscrews"], cy, zt), material="connector_steel")
+
+
 def case(d, f):
     r = d["case_diameter"] / 2
     h = d["case_height"]
     cs = f["case_shape"]["value"]
+    cv = f["cover"]["value"]
     e, bd, step, lr = cs["edge"], cs["bottom_disc"], cs["bottom_step"], cs["label_radius"]
+    wy = cv["window_y"]
+    # The window's corners on the rim and on the label's edge, as angles.
+    a_rim = math.degrees(math.asin(wy / r))          # about -41 degrees
+    a_lab = math.degrees(math.asin(wy / lr))         # about -63 degrees
+    can = cv["can_top"]
     with parts.assembly("case", core=True):
-        # The side, rounded 0.5 mm at its edges (moulded; estimated), shaded smooth; the flat
-        # faces are separate so they stay flat.
-        parts.lathe("case_body", [(r - e, step), (r, step + e), (r, h - e), (r - e, h)], segments=96,
-                    material="case_black")
+        # The side, shaded smooth; the bottom (with its raised disc) separate so it stays flat.
+        parts.lathe("case_body", [(r - e, step), (r, step + e), (r, can)], segments=96, material="case_black")
         parts.lathe("case_bottom", [(0.0, 0.0), (bd, 0.0), (bd, step), (r - e, step)], segments=96,
                     material="case_black", smooth=False)
-        parts.lathe("case_top", [(r - e, h), (lr, h)], segments=96, material="case_black", smooth=False)
+        # The top cover above the can's top, all round but the window.
+        wall_arc("cover_wall", r - cv["wall"], r, can, h - e, a_rim, 180.0 - a_rim, "case_black")
+        rim = _polyline_arc(r, a_rim, 180.0 - a_rim)
+        holed_plate("cover_top", rim + list(reversed(_polyline_arc(lr, a_lab, 180.0 - a_lab))), [],
+                    h - cv["top_thickness"], cv["top_thickness"], "case_black")
     with parts.assembly("label"):
-        parts.lathe("label", [(lr, h), (0.0, h)], segments=96, material="case_label", smooth=False)
-    with parts.assembly("connector"):
-        # The micro-D in an aluminium bracket at the case's top edge (sam_gg1320an
-        # top_view_of_complete_rlg1.jpg); which side, and the sizes, are estimated.
-        sx, sy, sz = f["connector"]["value"]["shell"]
-        face = r - 0.0005
-        parts.box("connector_bracket", (0.030, 0.010, 0.010), location=(0, -(face - 0.005), h - 0.0052),
-                  material="aluminium")
-        parts.box("connector_shell", (sx, 0.0015, sz), location=(0, -(face + 0.00075), h - 0.005),
-                  material="dark_metal")
+        holed_plate("label", _polyline_arc(lr, a_lab, 180.0 - a_lab), [], h - cv["top_thickness"],
+                    cv["top_thickness"] + 0.00005, "case_label")
+    with parts.assembly("can_top"):
+        # The aluminium can's top, seen through the window, and the peg under the connector.
+        parts.cylinder("can_top", r - cv["wall"], cv["can_plate"], location=(0, 0, can - cv["can_plate"]),
+                       segments=96, material="aluminium")
+        pr, pl, pz = cv["peg"]
+        parts.cylinder("peg", pr, pl, location=(0, -(r - 0.0005), can - pz), direction=(0, -1, 0), segments=16,
+                       material="aluminium")
+    with parts.assembly("cover_screws"):
+        sr = f["cover_screws"]["value"]["radius"]
+        parts.cylinder("top_screw", sr, 0.00036, location=(0, 0, h - 0.0003), segments=24, material="connector_steel")
+        parts.cylinder("bottom_screw", sr, 0.00032, location=(0, 0, 0.0003), direction=(0, 0, -1), segments=24,
+                       material="connector_steel")
+    connector(f, can)
 
 
 # --- Plate, housing and boards ----------------------------------------------------------
