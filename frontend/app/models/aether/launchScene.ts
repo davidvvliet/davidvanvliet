@@ -8,28 +8,29 @@ import { Site, terrainGeometry, regolithTexture, trackGeometry, SINK } from "./g
 // Altair Aether's launch, placed into the site's solar-system scene: the Sun, the Earth, the Moon and the
 // stars are that scene's own, on the launch date. This adds the ground around the track (fixed to the
 // Moon, turning with it), the craft and its flight, the lights, and the camera's shots.
-// The numbers are the spec's (scripts/blender/specs/aether.json): a flat shot off a 17.2 km track at
-// 14 g reaches 2.176 km/s; half an orbit later, 7331 km over the north pole, the 20 N engine burns
-// 59.5 m/s to lift the low point from the surface to 673 km; then the wings unfold.
+// The numbers are the spec's (scripts/blender/specs/aether.json): a flat shot off a 10.8 km track at
+// 14 g reaches 1.725 km/s; half an orbit later, 200 km up over the north pole, the 20 N engine burns
+// 43.9 m/s to make the orbit circular at 200 km (polar, one plane of a constellation); then the wings unfold.
 const G0 = 9.80665;
 const GM = 4.9e12;                       // m^3/s^2 (NSSDCA)
 const R = 1737.4e3;                      // m
-const R_A = R + 7331e3;                  // aposelene radius
-const R_P = R + 673e3;                   // target periselene radius
+const R_A = R + 200e3;                   // the shot's high point: the circular orbit's radius
+const R_P = R_A;                         // the burn lifts the low point to it: circular
 const ACC = 14 * G0;
 const G_MOON = GM / (R * R);
 const V = Math.sqrt((2 * GM * R_A) / (R * (R + R_A)));  // the flat shot's speed
 export const TRACK = (V * V) / (2 * ACC);
 const T_SHOT = V / ACC;                  // 15.8 s, shown in real time
 const SEP = 4;                           // after the track's end
-const COAST = 12;                        // 4.9 h, shown in 12 s
-const BURN = 8;                          // 893 s, shown in 8 s
+const COAST = 12;                        // 59 min, shown in 12 s
+const BURN = 8;                          // 658 s, shown in 8 s
 const ROLL = 3;                          // the last seconds of the coast: the craft rolls over, dish to the Moon
 const REVEAL = 4;
 const ACT = 13;
-const DV = 59.5;
-const BURN_S = 893;
-const HALF_S = Math.PI * Math.sqrt(((R + R_A) / 2) ** 3 / GM);  // half the shot orbit: track's end to the high point, 4.95 h
+const DV = Math.sqrt(GM / R_A) - (V * R) / R_A;                // circular speed less the shot's at its high point, 43.9 m/s
+const BURN_S = Math.round((300 * DV) / 20);                    // 300 kg on the 20 N engine, 658 s
+const HALF_S = Math.PI * Math.sqrt(((R + R_A) / 2) ** 3 / GM);  // half the shot orbit: track's end to the high point, 59 min
+const PERIOD_MIN = (2 * Math.PI * Math.sqrt(R_A ** 3 / GM)) / 60;
 
 const P_COAST = T_SHOT + SEP, P_BURN = P_COAST + COAST, P_REVEAL = P_BURN + BURN;
 const P_ACT = P_REVEAL + REVEAL, TOTAL = P_ACT + ACT;
@@ -298,7 +299,7 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
         const s = running ? 0.5 * ACC * t * t : 0; xs = s;
         site.trackAt(s, v.pos, v.up, v.fwd);
         v.pos.addScaledVector(v.up, lift);
-        u = { phase: "Launch", caption: "On the mass driver 17 km from the south pole: 14 g along a 17.2 km track, cut and banked through the real terrain.",
+        u = { phase: "Launch", caption: `On the mass driver 17 km from the south pole: 14 g along a ${(TRACK / 1000).toFixed(1)} km track, cut and banked through the real terrain.`,
           readout: `UTC    ${utc(jd)}\nspeed  ${((ACC * t) / 1000).toFixed(3)} km/s\naccel  14 g\ntrack  ${(s / 1000).toFixed(1)} / ${(TRACK / 1000).toFixed(1)} km` };
       } else {
         // Off the track: on the shot's orbit, by mission time since the track's end, up to the high point.
@@ -316,26 +317,26 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
         if (t < P_COAST) {
           const local = launchFrame.worldToLocal(orbitFrame.localToWorld(v.pos.clone()));
           const above = heightAt(local) - terrainZ(local.x, -local.z);
-          u = { phase: "Separation", caption: "Off the end of the track at 2.18 km/s. The sled brakes; the craft flies on, and the ground curves away beneath it.",
+          u = { phase: "Separation", caption: `Off the end of the track at ${(V / 1000).toFixed(2)} km/s, a little over orbital speed. The sled brakes; the craft flies on, and the ground curves away beneath it.`,
             readout: `UTC    ${utc(jd)}\nspeed  ${(vel / 1000).toFixed(3)} km/s\nheight ${Math.max(0, above).toFixed(0)} m` };
         } else if (t < P_BURN) {
-          u = { phase: "Coast", caption: "Coasting half an orbit, 4.9 hours, up to 7,331 km over the north pole.",
-            readout: `UTC    ${utc(jd)}\nT+     ${(tau / 3600).toFixed(1)} h\nheight ${km(r - R)} km\nspeed  ${(vel / 1000).toFixed(2)} km/s` };
+          u = { phase: "Coast", caption: `Coasting half an orbit, ${Math.round(HALF_S / 60)} minutes, up to ${km(R_A - R)} km over the north pole.`,
+            readout: `UTC    ${utc(jd)}\nT+     ${Math.round(tau / 60)} min\nheight ${km(r - R)} km\nspeed  ${(vel / 1000).toFixed(3)} km/s` };
         } else if (t < P_REVEAL) {
           const f = (t - P_BURN) / BURN;
           rp = R + (R_P - R) * f;
           (plume.material as THREE.MeshBasicMaterial).opacity = 0.25 + 0.1 * Math.sin(t * 40);
-          u = { phase: "Orbit insertion", caption: "At the high point the 20 N engine burns 59.5 m/s, lifting the orbit's low point from the surface to 673 km.",
-            readout: `Δv     ${(DV * f).toFixed(1)} / ${DV} m/s\nburn   ${Math.round(BURN_S * f)} / ${BURN_S} s` };
+          u = { phase: "Orbit insertion", caption: `At the high point the 20 N engine burns ${DV.toFixed(1)} m/s, lifting the orbit's low point from the surface to ${km(R_P - R)} km: the orbit becomes circular.`,
+            readout: `Δv     ${(DV * f).toFixed(1)} / ${DV.toFixed(1)} m/s\nburn   ${Math.round(BURN_S * f)} / ${BURN_S} s` };
         } else if (t < P_ACT) {
           rp = R_P;
-          u = { phase: "In orbit", caption: "The low point is lifted from the surface to 673 km: the relay's orbit.",
-            readout: "orbit  673 × 7,331 km\nperiod 10.8 h" };
+          u = { phase: "In orbit", caption: `A circular polar orbit ${km(R_A - R)} km up, one plane of the constellation; the Moon turning beneath the track puts each later launch in a new plane.`,
+            readout: `orbit  ${km(R_A - R)} km circular, polar\nperiod ${Math.round(PERIOD_MIN)} min` };
         } else {
           rp = R_P;
           const step = a < 1.5 ? "The hold-downs release." : a < 10.3 ? "The wings unfold: the yoke, then the panels, one by one."
             : "Wings out, 663 W. The S-band dish looks down at the Moon; the X-band panel turns to the Earth.";
-          u = { phase: "Activation", caption: step, readout: "orbit  673 × 7,331 km\nwings  2 × 5 panels" };
+          u = { phase: "Activation", caption: step, readout: `orbit  ${km(R_A - R)} km circular, polar\nwings  2 × 5 panels` };
         }
         // Before the burn the craft rolls over: the engine still along the motion, the dish now down to the Moon.
         roll = Math.PI * ease((t - (P_BURN - ROLL)) / ROLL);
@@ -364,11 +365,11 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
         if (!followed) { followed = true; touched = false; setUp(camera, controls, v.by); }
         if (v.by.distanceToSquared(camera.up) > 1e-12) setUp(camera, controls, v.by);
         const alt = onTrack ? 0 : v.pos.length() - R;
-        const k = ease(alt / 1.5e6);                     // 0 on the ground, 1 from 1,500 km up
+        const k = ease(alt / 150e3);                     // 0 on the ground, 1 from 150 km up
         const look = tmp.set(2 * (1 - k), 0.8 * (1 - k), 0);
         controls.target.copy(v.cw).add(look.applyMatrix4(v.b).multiplyScalar(unitsPerM));
         if (!touched) {
-          // Elevation of the view: 11 degrees on the track, 60 degrees looking down from high up.
+          // Elevation of the view: 11 degrees on the track, 60 degrees looking down from orbit.
           const el = THREE.MathUtils.degToRad(11 + 49 * k), dist = 11.3 + 2 * k;
           offLocal.set(-Math.cos(el) * dist * 0.81, Math.sin(el) * dist, -Math.cos(el) * dist * 0.58);
         }

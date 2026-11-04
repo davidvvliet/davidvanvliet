@@ -6,7 +6,7 @@
     { "name": "markings, left side", "target": [0.6, 0.38, -0.22], "look": [0, -0.866, 0.5], "radius": 0.35 },
     { "name": "markings, right side", "target": [0.6, -0.38, -0.22], "look": [0, 0.866, 0.5], "radius": 0.35 }
   ],
-  "note": "Our own design: a ~300 kg lunar communications relay, fired off a mass driver near the lunar south pole into an elliptical frozen lunar orbit, built from real flight hardware where it exists. Frame: x along the track (the direction of travel, and the craft's axis: the launch load runs down it), z up, y left. The craft's separation plane is at x = 0; the sled and the rails are behind and below it. Pass 1: structure, tank, main thruster, sled and rails. Pass 2: propulsion (eight 1 N thrusters, latch valve, fill and drain valves, lines). Pass 3: power (two solar wings, deployed; two batteries). Pass 4: comms (S-band dish to the Moon on +z, X-band array to the Earth on +x, transponder). Pass 5: attitude (four reaction wheels, two star trackers, sun sensors, IMU). Pass 6: electronics (power control unit, power cables; a reserved slot for the flight computer and valve drivers, which are designed separately). Pass 7: thermal (silvered-Teflon radiators on five sides, a blanket on the Moon-facing top, heaters). Pass 8: deployment (wings folded on hinges for the launch, hold-downs; click a wing to unfold).",
+  "note": "Our own design: a ~300 kg lunar communications relay, fired off a mass driver near the lunar south pole into a 200 km circular polar orbit, one plane of a constellation, built from real flight hardware where it exists. Frame: x along the track (the direction of travel, and the craft's axis: the launch load runs down it), z up, y left. The craft's separation plane is at x = 0; the sled and the rails are behind and below it. Pass 1: structure, tank, main thruster, sled and rails. Pass 2: propulsion (eight 1 N thrusters, latch valve, fill and drain valves, lines). Pass 3: power (two solar wings, deployed; two batteries). Pass 4: comms (S-band dish to the Moon on +z, X-band array to the Earth on +x, transponder). Pass 5: attitude (four reaction wheels, two star trackers, sun sensors, IMU). Pass 6: electronics (power control unit, power cables; a reserved slot for the flight computer and valve drivers, which are designed separately). Pass 7: thermal (silvered-Teflon radiators on five sides, a blanket on the Moon-facing top, heaters). Pass 8: deployment (wings folded on hinges for the launch, hold-downs; click a wing to unfold).",
   "sources": [
     {
       "id": "nssdc_moon",
@@ -198,6 +198,20 @@
       "read": "2026-11-03",
       "licence": "\"This image of a flag is ineligible for copyright and therefore in the public domain\"",
       "credit": "US flag drawn from the public-domain Commons SVG (Executive Order 10834 proportions, State Department colours)"
+    },
+    {
+      "id": "nasa_lro_sk",
+      "title": "Beckman & Lamb, Stationkeeping for the Lunar Reconnaissance Orbiter (LRO), NASA GSFC",
+      "url": "https://ntrs.nasa.gov/citations/20080012683",
+      "read": "2026-11-04",
+      "licence": "NASA work: \"generally are not subject to copyright in the United States\""
+    },
+    {
+      "id": "nasa_lpnt_2024",
+      "title": "Investigating Low-Altitude Constellations of Ad-Hoc Lunar PNT System (NASA, NTRS 20240014938)",
+      "url": "https://ntrs.nasa.gov/citations/20240014938",
+      "read": "2026-11-04",
+      "licence": "NASA work: \"generally are not subject to copyright in the United States\""
     }
   ],
   "reference_model": {
@@ -372,15 +386,11 @@
       "source": "nssdc_moon",
       "quote": "Volumetric mean radius (km) 1737.4"
     },
-    "orbit_periselene_alt": {
-      "value": 673,
-      "source": "sstl_lp_guide",
-      "quote": "Periselene altitude (km) 673 (\"these parameters are indicative and may be subject to change\")"
-    },
-    "orbit_aposelene_alt": {
-      "value": 7331,
-      "source": "sstl_lp_guide",
-      "quote": "Aposelene altitude (km) 7331"
+    "orbit_altitude": {
+      "value": 200,
+      "source": "nasa_lro_sk",
+      "quote": "A spacecraft in an initially circular polar orbit about the moon at an altitude of 50 km will impact the Moon in approximately 41 days ... At 100 km altitude, the impact is delayed until about 150 days. At 200 km altitude, impact is avoided as the altitude variations are bounded. Therefore, a 200 km orbit is valuable since stationkeeping costs are eliminated.",
+      "note": "km, circular and polar (decided 2026-11-04: a Starlink-like constellation of low orbits, not one relay on Lunar Pathfinder's 673 x 7331 km ellipse)"
     },
     "orbit_inclination": {
       "value": 54.856,
@@ -393,10 +403,10 @@
       "quote": "Argument of Pericenter (deg) 86.322"
     },
     "constellation": {
-      "value": 3,
-      "source": "nasa_lcrns_2022",
-      "quote": "With only two properly phased relays in this type of orbit, South Pole coverage could be continuous",
-      "note": "three: two for coverage and one spare"
+      "value": "many small craft on low circular polar orbits, the planes spread by launching through the month as the Moon turns under the track",
+      "source": "nasa_lpnt_2024",
+      "quote": "the ad-hoc Lunar constellation consists of 98 low-altitude satellites, evenly distributed across seven circular polar orbital planes, alongside two satellites in a frozen orbit at an altitude of 5,500 km",
+      "note": "NASA's study flies at 100 km, which it calls unstable (\"operating for fewer than 90 days\" without maintenance); ours flies at 200 km (orbit_altitude)"
     },
     "wet_mass": {
       "value": 300,
@@ -423,13 +433,13 @@
       ]
     },
     "insertion_dv": {
-      "value": 59.5,
-      "source": "design, computed: at aposelene the shot's orbit moves at 416.8 m/s (v x R / r_a) against the target orbit's 476.3 m/s (vis-viva); the burn raises periselene from the surface to 673 km",
-      "note": "m/s, over the north pole"
+      "value": 43.9,
+      "source": "design, computed: at the high point (1737.4 + 200 km) the shot moves at 1546.5 m/s (v x R / r_a) against the circular orbit's 1590.3 m/s (√(GM / r_a)), with moon_gm",
+      "note": "m/s, over the north pole; the burn lifts the low point from the surface to 200 km"
     },
     "dv_budget": {
       "value": 550,
-      "source": "design, chosen: kept; beyond the 59.5 m/s insertion it covers turning the orbit's high point to the south pole later, phasing, station keeping and disposal"
+      "source": "design, chosen: kept; beyond the 43.9 m/s insertion it covers phasing within the plane, station keeping and disposal"
     },
     "main_isp": {
       "value": 222,
@@ -507,7 +517,7 @@
     },
     "track_accel_g": {
       "value": 14,
-      "source": "design, chosen: kept from the first sizing (1.68 km/s over 10 km); at 2.176 km/s it now needs track_length"
+      "source": "design, chosen: kept from the first sizing (1.68 km/s over 10 km); at 1.725 km/s it needs track_length"
     },
     "rcs_count": {
       "value": 8,
@@ -662,14 +672,14 @@
       "quote": "8s4p ... Reference energy 512 Wh ... Battery voltage range 25 - 32.8 volts ... Length 308 mm Width 180 mm Height 90 mm Weight 5,80kg"
     },
     "eclipse_max": {
-      "value": 2.0,
-      "source": "design, computed: the Moon's shadow (2 x 1737.4 km across) crossed at aposelene at 476 m/s takes 2.0 h, the longest shadow on this orbit; the Earth's shadow is not counted",
-      "note": "hours"
+      "value": 0.75,
+      "source": "design, computed: on a circular orbit 200 km up whose plane holds the Sun, the Moon's shadow (a cylinder 2 x 1737.4 km across) covers 2 asin(1737.4 / 1937.4) = 127° of the 127.6 min orbit: 45 min; the Earth's shadow is not counted",
+      "note": "hours, every orbit in that season"
     },
     "eclipse_load": {
       "value": 300,
       "source": "design, chosen: relay running at reduced rate in shadow",
-      "note": "W; 300 W x 2 h = 600 Wh, 59 % of the two batteries' 1024 Wh, inside Saft's \"High DoD (80% in GEO\"",
+      "note": "W; 300 W x 0.75 h = 225 Wh, 22 % of the two batteries' 1024 Wh, inside Saft's \"High DoD (80% in GEO\"",
       "also": [
         {
           "source": "saft_ves16",
@@ -678,9 +688,9 @@
       ]
     },
     "orbit_period": {
-      "value": 10.84,
-      "source": "design, computed: 2π √(a³ / GM), a = 1737.4 + (673 + 7331) / 2 km",
-      "note": "hours; NASA's reference relay orbit is 12 h"
+      "value": 127.6,
+      "source": "design, computed: 2π √(r³ / GM), r = 1737.4 + 200 km, with moon_gm",
+      "note": "minutes"
     },
     "sband_dish": {
       "value": "0.86 m parabolic CFRP reflector, backfire helix feed, S-band 2.0-2.3 GHz, >20 dB, pointed up to 25° off centre by two swashplates; 11.3 kg with the mechanism",
@@ -858,23 +868,23 @@
       "source": "design, chosen: no hold-down and release part picked yet"
     },
     "launch_speed": {
-      "value": 2.176,
-      "source": "design, computed: a flat shot from the surface whose high point is the orbit's aposelene (1737.4 + 7331 km): v = √(2 GM r_a / (R (R + r_a))) with moon_gm, moon_radius",
+      "value": 1.725,
+      "source": "design, computed: a flat shot from the surface whose high point is the 200 km orbit (1737.4 + 200 km): v = √(2 GM r_a / (R (R + r_a))) with moon_gm, moon_radius",
       "note": "km/s, horizontal"
     },
     "track_length": {
-      "value": 17.2,
-      "source": "design, computed: v² / 2a = 2176² / (2 x 14 x 9.80665) m",
-      "note": "km; the shot lasts v / a = 15.8 s"
+      "value": 10.83,
+      "source": "design, computed: v² / 2a = 1724.5² / (2 x 14 x 9.80665) m",
+      "note": "km; the shot lasts v / a = 12.6 s; the same line as the first 17.2 km track (scripts/aether/terrain.py), ended sooner"
     },
     "burn_time": {
-      "value": 893,
-      "source": "design, computed: 300 kg x 59.5 m/s / 20 N",
+      "value": 658,
+      "source": "design, computed: 300 kg x 43.9 m/s / 20 N",
       "note": "s, on the 20 N engine"
     },
     "transfer_coast": {
-      "value": 4.9,
-      "source": "design, computed: half the shot orbit's period, π √(a³ / GM) with a = (1737.4 + 9068.4) / 2 km",
+      "value": 0.98,
+      "source": "design, computed: half the shot orbit's period, π √(a³ / GM) with a = (1737.4 + 1937.4) / 2 km: 58.9 min",
       "note": "hours from the track's end to the burn"
     },
     "sled_lettering": {
@@ -934,6 +944,10 @@
     "craft_flag_offset": {
       "value": 0.09,
       "source": "design, chosen: the flag's middle this far above the side's middle"
+    },
+    "run_out": {
+      "value": "clear for the 70 km of the LOLA map past the track's end: the shot passes 72 m over the ground at its closest (2.1 km past the end); beyond the map's edge it is still within 130 m of the 1737.4 km sphere and is not checked",
+      "source": "design, computed: the shot's conic against the LOLA 87S 20 m overview along the track's line (scratch check, the same samples as scripts/aether/terrain.py)"
     }
   },
   "materials": {
@@ -969,9 +983,9 @@
     }
   },
   "open_questions": [
-    "Launch geometry (decided 2026-11-03: a flat shot): a flat 2.18 km/s shot from the south-pole site puts the orbit's high point over the north pole, so the craft first serves the north. Serving the south pole needs the high point turned round (argument of periselene, a large burn the 550 m/s budget only partly covers), a launch site near the north pole, or the relay accepted over the north.",
-    "Lunar Pathfinder's orbit differs between SSTL's guide (673 x 7331 km, 54.9°) and a 2022 NASA slide (500 x 7500 km, 57.8°); SSTL calls its values indicative.",
-    "A south-pole launch site reaches inclinations near 90° directly; the 54.9° orbit needs a site at or below about 55°S, or a plane change.",
+    "Orbit (decided 2026-11-04): circular and polar at 200 km, the height where nasa_lro_sk finds a polar orbit stays up without station keeping (its 100 km run falls in after about 150 days; the step between 100 and 200 km isn't resolved). A NASA Science article (2006, quoting Konopliv) names four 'frozen' inclinations, 27°, 50°, 76° and 86°, for low orbits; its primary paper isn't read and our track reaches near-polar planes only.",
+    "The craft is still sized as a single relay for the 673 x 7331 km orbit (0.86 m S-band dish, 663 W wings, 300 kg, 550 m/s): at 200 km the dish and the power are far more than one node of a constellation needs, and there are no links between craft yet. Resizing waits for the constellation's design (how many craft, planes, links).",
+    "Run-out past the map: at 1.725 km/s the shot stays within about 1 km of the 1737.4 km sphere for some 250 km; beyond the 87S map's edge (70 km past the track) it needs a wider elevation map to check.",
     "Propulsion has no filter or pressure transducer yet (no sourced part found); the thruster layout is our own, not copied from a flown craft.",
     "Comms: no low-gain S-band antenna yet for safe mode (no maker's datasheet found); the EnduroSat array's band (8025-8400 MHz) sits below the 8450-8500 MHz lunar band; with the dish on the Moon and the array on the Earth, the wings turning only about y lose some sunlight in some seasons.",
     "Attitude: the wheel pyramid's tilt and the sensors' places are our own; coverage of the two coarse sun sensors is not a full sphere (safe mode would also lean on the fine sensor and the trackers).",

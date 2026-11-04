@@ -20,11 +20,11 @@ function Orbit({ o }: { o: OrbitInset }) {
   };
   const now = ellipse(o.rp), goal = ellipse(o.target);
   return (
-    <svg className={styles.orbit} viewBox="-6.5 -10 13 13">
-      <ellipse cx={0} cy={goal.cy} rx={goal.rx} ry={goal.ry} fill="none" stroke="#ffb347" strokeOpacity={0.6} strokeWidth={0.06} strokeDasharray="0.25 0.2" />
-      <ellipse cx={0} cy={now.cy} rx={now.rx} ry={now.ry} fill="none" stroke="#e8e8e8" strokeOpacity={0.7} strokeWidth={0.06} />
-      <circle cx={0} cy={0} r={o.moon / Mm} fill="#2a2a2a" stroke="#888" strokeWidth={0.04} />
-      <circle cx={o.x / Mm} cy={-o.y / Mm} r={0.22} fill="#00ff00" />
+    <svg className={styles.orbit} viewBox="-2.2 -2.2 4.4 4.4">
+      <ellipse cx={0} cy={goal.cy} rx={goal.rx} ry={goal.ry} fill="none" stroke="#ffb347" strokeOpacity={0.6} strokeWidth={0.025} strokeDasharray="0.1 0.08" />
+      <ellipse cx={0} cy={now.cy} rx={now.rx} ry={now.ry} fill="none" stroke="#e8e8e8" strokeOpacity={0.7} strokeWidth={0.025} />
+      <circle cx={0} cy={0} r={o.moon / Mm} fill="#2a2a2a" stroke="#888" strokeWidth={0.015} />
+      <circle cx={o.x / Mm} cy={-o.y / Mm} r={0.08} fill="#00ff00" />
     </svg>
   );
 }

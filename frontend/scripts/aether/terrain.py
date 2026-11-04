@@ -13,7 +13,8 @@
 # metres above the 1737.4 km sphere. We read its 20 m overview, tile by tile (the server refuses fast
 # bursts of range requests, so they go one at a time with a pause).
 #
-# The route and the date were chosen by a search over this map (see README.md): the 17.2 km line
+# The route and the date were chosen by a search over this map (see README.md) for the first, 17.2 km
+# line (to a 673 x 7331 km orbit); the track now ends 10.8 km along it (a 200 km circular orbit). The line
 # with the least earthwork whose run-out is clear, on the Earth-facing side of the pole, and the
 # hour in the next 400 days with the whole track sunlit and the Earth well above the real horizon.
 import json, os, struct, subprocess, sys, time, zlib
@@ -28,11 +29,11 @@ URL = "https://pgda.gsfc.nasa.gov/data/LOLA_5mpp/87S/ldem_87s_5mpp.tif"
 # --- the launch (the same numbers as AetherLaunch.tsx and specs/aether.json) ---
 R = 1737400.0                            # m, the LOLA reference sphere (also the page's R)
 GM = 4.9e12
-R_A = R + 7331e3
+R_A = R + 200e3                          # the shot's high point: the 200 km circular orbit
 G0 = 9.80665
 ACC = 14 * G0
 V = (2 * GM * R_A / (R * (R + R_A))) ** 0.5
-L = V * V / (2 * ACC)                    # track length, 17.2 km
+L = V * V / (2 * ACC)                    # track length, 10.8 km
 START = (16040.0, 6040.0)                # m, polar stereographic: where the track begins
 HEADING = 145.0                          # deg, in the stereographic plane, counter-clockwise from +x
 JD = 2461775.5                           # 2028-01-04 24:00 UTC (00:00 on the 5th)
@@ -47,6 +48,14 @@ def fetch(col0, row0, w, h):
     path = os.path.join(CACHE, f"ldem20_{col0}_{row0}_{w}_{h}.npy")
     if os.path.exists(path):
         return np.load(path)
+    # A larger window fetched before covers this one: cut it out.
+    for name in sorted(os.listdir(CACHE)) if os.path.isdir(CACHE) else []:
+        try:
+            c, r, ww, hh = (int(x) for x in name[len("ldem20_"):-len(".npy")].split("_"))
+        except ValueError:
+            continue
+        if c <= col0 and r <= row0 and c + ww >= col0 + w and r + hh >= row0 + h:
+            return np.load(os.path.join(CACHE, name))[row0 - r:row0 - r + h, col0 - c:col0 - c + w]
     os.makedirs(CACHE, exist_ok=True)
     def get(a, n):
         for k in range(10):
