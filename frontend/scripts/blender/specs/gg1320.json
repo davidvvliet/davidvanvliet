@@ -124,11 +124,29 @@
     "dither": {
       "value": {
         "ring_diameter": 0.018,
-        "hub_diameter": 0.005,
-        "spokes": 3,
+        "rim": 0.0012,
+        "hub_diameter": 0.0074,
+        "hub_hole": 0.0017,
+        "lobes": [
+          90,
+          210,
+          330
+        ],
+        "lobe_radius": 0.0055,
+        "lobe_size": [
+          0.0044,
+          0.0087
+        ],
+        "lobe_hole": 0.0034,
+        "spokes": [
+          270,
+          30,
+          150
+        ],
+        "spoke_width": 0.001,
         "frequency_hz": 567
       },
-      "source": "sam_gg1320an, laser_block_with_major_parts_labeled1.jpg (\"Dither Motor\": ring, hub and three spokes); frequency from the unit's label in top_view_of_complete_rlg1.jpg"
+      "source": "sam_gg1320an, laser_block_with_major_parts_labeled1.jpg (\"Dither Motor\", zoomed round its hub at (524,404) px, 9.49 px/mm): a cloverleaf inside the ring: a hub 7.4 mm across with a 1.7 mm hole, three lobes 5.5 mm out towards the three mirrors, each about 4.4 x 8.7 mm with a 3.4 mm hole, and three thin spokes to the ring between them (towards the cathode and anodes) carrying the piezo plates; frequency from the unit's label in top_view_of_complete_rlg1.jpg"
     },
     "getter": {
       "value": {
@@ -600,18 +618,28 @@
     },
     "hub_nuts": {
       "value": {
-        "across_flats": 0.004,
-        "radius": 0.0027,
+        "across_flats": 0.0055,
+        "radius": 0.0055,
         "height": 0.002
       },
-      "source": "sam_gg1320an, with_custom_umbilical_cable1.jpg: three hex nuts on the dither hub's free end, touching; scaled by the 10 mm mirror (190 px): about 90 px across corners (estimated)"
+      "source": "sam_gg1320an, with_custom_umbilical_cable1.jpg: three hex nuts on the dither motor's free side, about 90 px across corners against the 245 px (18 mm) ring: 6.6 mm (5.7 mm across flats, taken as 5.5); placed on the lobes' holes (labelled photo), which the bolts pass through"
     },
     "discharge_path": {
       "value": {
-        "glow_radius": 0.0009,
-        "emission": 1.2
+        "core_radius": 0.00035,
+        "mid_radius": 0.0009,
+        "halo_radius": 0.0018,
+        "core_emission": 2.0,
+        "mid_emission": 1.6,
+        "halo_emission": 1.2,
+        "mid_alpha": 0.45,
+        "halo_alpha": 0.14,
+        "beam_radius": 0.00012,
+        "beam_emission": 1.5,
+        "beam_halo_radius": 0.00045,
+        "beam_halo_alpha": 0.18
       },
-      "source": "sam_gg1320an, powered_view1-3.jpg: the discharge glows from each anode down its channel, along the side bore to the bottom corner (mirror 1 or 3), along the bottom bore and up the two cathode channels; the bore halves next to mirror 2 stay dark. Glow radius and brightness chosen by eye; solid, so the clear block and bores draw over it"
+      "source": "sam_gg1320an, powered_view1-3.jpg: the discharge glows from each anode down its channel, along the side bore to the bottom corner (mirror 1 or 3), along the bottom bore and up the two cathode channels; the bore halves next to mirror 2 stay dark. Drawn in three layers like the photos: a blown-out yellow-white core, the orange glow, and a faint red haze spreading into the glass. Radii, brightness and see-through chosen by eye. The laser beam itself can't be seen in a real gyro: it's drawn as a thin red line"
     },
     "pzt_end": {
       "value": {
@@ -824,6 +852,18 @@
       "metallic": 0.0,
       "roughness": 0.5,
       "source": "sam_gg1320an, temperature_sensor_ad590_cloesup1.jpg, the package at (490,250), (560,380), (500,360) px"
+    },
+    "glow_core": {
+      "hex": "#fdf5b0",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "sam_gg1320an, powered_view2.jpg: the blown-out cores of the glow at (600,525), (440,525), (530,560) px (#fef6c6, #fcf4a0, #fff38e)"
+    },
+    "glow_halo": {
+      "hex": "#c14347",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "sam_gg1320an, powered_view2.jpg: the red haze in the glass round the glow at (355,330), (690,320), (375,410) px (#c53c43, #dd5a58, #a22d40)"
     }
   },
   "open_questions": [

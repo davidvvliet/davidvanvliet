@@ -21,13 +21,15 @@ def _dir(deg):
     return Vector((math.cos(a), math.sin(a), 0.0))
 
 
-def _special(name, spec, alpha=1.0, emission=0.0):
-    """A spec colour that is see-through (`alpha` < 1, exported as glTF alphaMode BLEND) or
-    glows (`emission`): the shared materials module has neither."""
+def _special(key, spec, alpha=1.0, emission=0.0, name=None):
+    """The spec colour `key` see-through (`alpha` < 1, exported as glTF alphaMode BLEND) or
+    glowing (`emission`), as material `name` (default `key`): the shared materials module has
+    neither."""
+    name = name or key
     mat = bpy.data.materials.get(name)
     if mat is not None:
         bpy.data.materials.remove(mat)
-    e = spec["materials"][name]
+    e = spec["materials"][key]
     col = materials.colour(e)
     mat = bpy.data.materials.new(name)
     mat.use_nodes = True
@@ -376,11 +378,17 @@ def laser_block(f, spec):
             holes.append([_dir(ang) * pad["window_outer"], _dir(ang + pad["window_half_angle"]) * pad["window_inner"],
                           _dir(ang - pad["window_half_angle"]) * pad["window_inner"]])
         holed_plate("pad", outer, holes, zb, pad["thickness"], "pad_lattice")
-    beam = _special("laser_beam", spec, emission=3.0)
+    dp = f["discharge_path"]["value"]
+    beam = _special("laser_beam", spec, emission=dp["beam_emission"])
+    beam_halo = _special("laser_beam", spec, alpha=dp["beam_halo_alpha"], emission=dp["beam_emission"],
+                         name="laser_beam_haze")
     with parts.assembly("laser_path", internal=True):
+        # A thin red line with a faint haze (the real beam can't be seen: facts.discharge_path).
         for i, (p, q) in enumerate(sides):
-            parts.cylinder(f"beam_{i + 1}", 0.0003, (q - p).length, location=p, direction=q - p, segments=8,
-                           material=beam)
+            parts.cylinder(f"beam_{i + 1}", dp["beam_radius"], (q - p).length, location=p, direction=q - p,
+                           segments=8, material=beam)
+            parts.cylinder(f"beam_{i + 1}_haze", dp["beam_halo_radius"], (q - p).length, location=p, direction=q - p,
+                           segments=10, material=beam_halo)
     discharge_glow(f, spec, sides, zc, inr)
     return z0, zb, zc, R
 
@@ -392,8 +400,12 @@ def discharge_glow(f, spec, sides, zc, inr):
     dp = f["discharge_path"]["value"]
     dc = f["discharge_channels"]["value"]
     face = f["block"]["value"]["face_distance"]
-    glow = _special("discharge_glow", spec, emission=dp["emission"])
-    gr = dp["glow_radius"]
+    # Three layers, as in the photos: a hot core, the orange glow, a red haze into the glass.
+    layers = [("core", _special("glow_core", spec, emission=dp["core_emission"]), dp["core_radius"]),
+              ("glow", _special("discharge_glow", spec, alpha=dp["mid_alpha"], emission=dp["mid_emission"]),
+               dp["mid_radius"]),
+              ("haze", _special("glow_halo", spec, alpha=dp["halo_alpha"], emission=dp["halo_emission"]),
+               dp["halo_radius"])]
     (m1, m2), (_, m3), _ = sides
     runs = [("bore_1", m1, (m1 + m2) / 2), ("bore_2", m3, (m2 + m3) / 2), ("bore_3", m3, m1)]
     for key, ang in FACES.items():
@@ -404,8 +416,11 @@ def discharge_glow(f, spec, sides, zc, inr):
             runs.append((f"{key}_{j + 1}", p, p - u * (face - inr)))
     with parts.assembly("discharge_glow", internal=True):
         for name, p, q in runs:
-            r = gr if name.startswith("bore") else min(gr, dc["diameter"] / 2 * 0.8)
-            parts.cylinder(f"glow_{name}", r, (q - p).length, location=p, direction=q - p, segments=10, material=glow)
+            # The channels are narrower than the bores: their glow is scaled down to fit.
+            k = 1.0 if name.startswith("bore") else dc["diameter"] / f["bores"]["value"]["diameter"]
+            for layer, mat, r in layers:
+                parts.cylinder(f"glow_{name}_{layer}", r * k, (q - p).length, location=p, direction=q - p,
+                               segments=12, material=mat)
 
 
 def mirrors(f, zc, R):
@@ -510,33 +525,44 @@ def discharge(f, zc):
     return tips
 
 
+def _ellipse(c, ang, a, b, n=32):
+    """An ellipse round `c`, semi-axis `a` along angle `ang` (degrees) and `b` across it."""
+    u, v = _dir(ang), _dir(ang + 90)
+    return [c + u * (a * math.cos(2 * math.pi * k / n)) + v * (b * math.sin(2 * math.pi * k / n)) for k in range(n)]
+
+
 def dither(f, z0, zb, zp):
+    """The dither motor: a ring in the block's centre bore, and inside it a cloverleaf of a hub
+    and three lobes with holes, joined to the ring by three thin spokes carrying piezo plates."""
     dv = f["dither"]["value"]
     h = zb - z0
     zm = (z0 + zb) / 2
     ro = dv["ring_diameter"] / 2
-    ri = ro - 0.0012
+    ri = ro - dv["rim"]
     rh = dv["hub_diameter"] / 2
     with parts.assembly("dither_motor", internal=True):
         parts.lathe("dither_ring", _ring(ri, ro, z0, zb), closed=True, segments=64, material="dither_wheel")
         # The hub runs up to the plate: the block hangs from it.
-        parts.cylinder("dither_hub", rh, zp - z0, location=(0, 0, z0), segments=32, material="dither_wheel")
-        # The three nuts on the hub's free end (they hold it to the plate).
+        parts.lathe("dither_hub", _ring(dv["hub_hole"] / 2, rh, z0, zp), closed=True, segments=32,
+                    material="dither_wheel")
+        la, lb = dv["lobe_size"][0] / 2, dv["lobe_size"][1] / 2
         hn = f["hub_nuts"]["value"]
-        for k in range(3):
-            c = _dir(90 + 120 * k) * hn["radius"]
+        for k, ang in enumerate(dv["lobes"]):
+            c = _dir(ang) * dv["lobe_radius"]
+            holed_plate(f"dither_lobe_{k + 1}", _ellipse(c, ang, la, lb),
+                        [_circle(dv["lobe_hole"] / 2, 24, (c.x, c.y))], z0, h, "dither_wheel")
+            # A nut on each lobe's free side, on the bolt through its hole.
             parts.prism(f"hub_nut_{k + 1}", 6, hn["across_flats"] / math.sqrt(3), hn["height"],
-                        location=(c.x, c.y, z0), direction=(0, 0, -1), material="cathode_steel")
-        for k in range(dv["spokes"]):
-            deg = 90.0 + 120.0 * k
+                        location=(c.x, c.y, z0), direction=(0, 0, -1), roll_deg=ang, material="cathode_steel")
+        for k, deg in enumerate(dv["spokes"]):
             L = ri - rh + 0.0004
             c = _dir(deg) * (rh - 0.0002 + L / 2)
-            parts.box(f"dither_spoke_{k + 1}", (L, 0.0012, h * 0.8), location=(c.x, c.y, zm), roll_deg=deg,
-                      material="dither_wheel")
+            parts.box(f"dither_spoke_{k + 1}", (L, dv["spoke_width"], h * 0.8), location=(c.x, c.y, zm),
+                      roll_deg=deg, material="dither_wheel")
             # A piezo plate on each side of the spoke: the motor's drive (estimated sizes).
             n = _dir(deg + 90.0)
             for s, tag in ((-1, "a"), (1, "b")):
-                pc = c + n * (s * 0.0009)
+                pc = c + n * (s * (dv["spoke_width"] / 2 + 0.0003))
                 parts.box(f"dither_pzt_{k + 1}{tag}", (L * 0.6, 0.0006, h * 0.6), location=(pc.x, pc.y, zm),
                           roll_deg=deg, material="pzt_ceramic")
 

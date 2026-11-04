@@ -265,7 +265,8 @@ function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explor
         const fade = ghosted || (!!focus && !whole && p.group !== focus);
         mat.transparent = fade || mat.userData.restTransparent;
         mat.opacity = ghosted ? GHOSTED : fade ? FADED : mat.userData.restOpacity;
-        mat.depthWrite = !fade;
+        // See-through surfaces (a glass block) don't hide what's behind them (a glow inside it).
+        mat.depthWrite = !fade && !mat.userData.restTransparent;
         mat.needsUpdate = true;
       }
     }
