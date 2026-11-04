@@ -8,6 +8,11 @@
   font-size: 0.75rem;
 }
 
+/* The intro line keeps the models page's style but without its bottom hairline. */
+.page > p {
+  border-bottom: none;
+}
+
 /* Stacked, on the left. Each portrait is 80 characters of Roboto Mono (0.6 em each) = 48 em wide;
    the font size keeps it on screen without wrapping. */
 .list {
