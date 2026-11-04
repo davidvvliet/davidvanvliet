@@ -59,6 +59,8 @@ export type SceneExtension = {
   clock?(jd: number, dt: number): number;
   /** Each frame, after the bodies are placed for the date and before drawing: the extension moves the camera. */
   frame(h: SceneHandles, jd: number, dt: number): void;
+  /** A star was clicked: the world direction to it from the camera. */
+  aimAt?(dir: THREE.Vector3): void;
   dispose(): void;
 };
 
@@ -1246,11 +1248,18 @@ export function SolarSystem({
     };
 
     const onMouseClick = (event: MouseEvent) => {
-      if (!camera || !globeGroup || ext) return;
+      if (!camera || !globeGroup) return;
 
       // A click that moved the pointer is a drag; ignore it.
       const down = pointerDownPosRef.current;
       if (down && Math.hypot(event.clientX - down.x, event.clientY - down.y) > DRAG_THRESHOLD_PX) return;
+
+      // An extension keeps the camera: only stars are clicked, and it turns the view to them itself.
+      if (ext) {
+        const picked = pickStar(event.clientX, event.clientY);
+        if (picked) ext.aimAt?.(picked.object.getWorldPosition(new THREE.Vector3()).sub(camera.position).normalize());
+        return;
+      }
 
       // 1. Location dots take priority.
       const rect = renderer.domElement.getBoundingClientRect();

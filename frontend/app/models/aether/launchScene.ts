@@ -185,7 +185,11 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
   // camera circles follows the craft (the camera moves with it), so their angle and zoom stay.
   let touched = false, done = false, lastUi = "", placed = false, followed = false;
   const offLocal = new THREE.Vector3();
-  const grab = () => { touched = true; };
+  // A clicked star: the camera swings round the craft until the star stands just above it, and
+  // stays so until the viewer turns the view.
+  let aimView: THREE.Vector3 | null = null, aimT0 = 0, loads = 0;
+  const aimFrom = new THREE.Vector3(), aimQ = new THREE.Quaternion(), aimQk = new THREE.Quaternion();
+  const grab = () => { touched = true; aimView = null; };
   const tmp = new THREE.Vector3(), q = new THREE.Quaternion();
   const v = { pos: new THREE.Vector3(), up: new THREE.Vector3(), fwd: new THREE.Vector3(), side: new THREE.Vector3(),
     sun: new THREE.Vector3(), m: new THREE.Matrix4(), cw: new THREE.Vector3(), ew: new THREE.Vector3(),
@@ -221,7 +225,9 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
       h.moonFrame.add(orbitFrame);
       h.scene.add(sunLight, sunLight.target, earthshine);
 
+      const load = ++loads;   // a later init (React's dev double mount) supersedes this load
       new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).load("/models/aether.glb", (gltf) => {
+        if (load !== loads) return;
         const root = gltf.scene;
         root.updateMatrixWorld(true);
         // The model's own rail tops, so the shoes sit on the long track's rails.
@@ -386,6 +392,12 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
       earthshine.target.position.copy(v.cw); earthshine.target.updateMatrixWorld();
 
       if (running && t >= TOTAL && !done) { done = true; on.done(); }
+      if (aimView) {
+        aimQ.setFromUnitVectors(aimFrom, aimView);
+        aimQk.identity().slerp(aimQ, ease((performance.now() / 1000 - aimT0) / 1.5));
+        const d = camera.position.distanceTo(controls.target);
+        camera.position.copy(controls.target).add(tmp.copy(aimFrom).applyQuaternion(aimQk).multiplyScalar(d));
+      }
       // Near plane: a little in front of whatever the camera circles, so a close-up of the craft isn't clipped.
       const dist = camera.position.distanceTo(controls.target);
       camera.near = Math.max(dist * 1e-3, 0.01 * unitsPerM);
@@ -399,7 +411,19 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
       if (key !== lastUi) { lastUi = key; on.ui(running ? u : { phase: "", caption: "", readout: "" }); }
     },
 
+    aimAt(dir) {
+      const h = h0;
+      if (!h) return;
+      // Look a little below the star, so it shows just above the craft rather than behind it.
+      const right = new THREE.Vector3().crossVectors(dir, h.camera.up).normalize();
+      aimView = dir.clone().applyAxisAngle(right, -THREE.MathUtils.degToRad(10)).negate();
+      aimFrom.copy(h.camera.position).sub(h.controls.target).normalize();
+      aimT0 = performance.now() / 1000;
+      touched = true;
+    },
+
     dispose() {
+      loads++;
       const h = h0;
       if (!h || !saved) return;
       h.controls.removeEventListener("start", grab);
