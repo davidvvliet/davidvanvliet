@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-type Spec = { title?: string; logos?: string[]; listed?: boolean; viewer?: { explore?: boolean; focus?: { part: string; label: string }[]; explode?: string[]; pivot?: string }; sources?: { id: string; title: string; url: string; licence?: string }[] };
+type Spec = { title?: string; logos?: string[]; listed?: boolean; viewer?: { page?: string; explore?: boolean; focus?: { part: string; label: string }[]; explode?: string[]; pivot?: string }; sources?: { id: string; title: string; url: string; licence?: string }[] };
 
 // How many values in the spec cite each source: every `source` outside the top-level list, a
 // citation string that starts with the source's id ("nssdca, p.83"), as scripts/blender/lib/sources.py.
@@ -55,7 +55,7 @@ function published(): Published[] {
       // Licences are shown up to any ":" (the terms, not the harness's note on what it kept).
       return {
         probe, title: (s.title ?? probe).replace(/\s*\(.*\)\s*$/, ""), // the name only, not its note in brackets
-        logos: s.logos ?? [], thumb: files.includes(`${probe}.webp`), explore: s.viewer?.explore !== false, focus: s.viewer?.focus ?? [], explode: s.viewer?.explode ?? [], pivot: pivotOf(dir, probe),
+        logos: s.logos ?? [], page: s.viewer?.page ?? null, thumb: files.includes(`${probe}.webp`), explore: s.viewer?.explore !== false, focus: s.viewer?.focus ?? [], explode: s.viewer?.explode ?? [], pivot: pivotOf(dir, probe),
         internal: fs.existsSync(path.join(dir, "internal", `${probe}.glb`)), // inside parts (run.py approve)
         grid: fs.existsSync(path.join(dir, "grid", `${probe}.glb`)), // the lighter copy for the grid's cards (run.py approve)
         sources: (s.sources ?? []).map((x) => ({ title: x.title, url: x.url, licence: x.licence?.split(":")[0] ?? null, cited: cited.get(x.id) ?? 0 })),

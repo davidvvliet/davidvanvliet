@@ -132,10 +132,22 @@ function Scene({ start, onDone, ui }: { start: number | null; onDone: () => void
   const done = useRef(false);
   const q = useMemo(() => new THREE.Quaternion(), []);
   const tmp = useMemo(() => new THREE.Vector3(), []);
+  const shift = useMemo(() => new THREE.Vector3(), []);
+  const shotKey = useRef("");     // the planned shot now showing
+  const touched = useRef(false);  // the viewer has turned or zoomed since that shot began
   const sun = useRef<THREE.DirectionalLight>(null);
 
-  useEffect(() => { camera.position.set(6, 2.5, 7); controls.current?.target.set(0.6, 0, 0); controls.current?.update(); }, [camera]);
-  useEffect(() => { done.current = false; }, [start]);
+  useEffect(() => {
+    const ctl = controls.current;
+    camera.position.set(6, 2.5, 7);
+    if (!ctl) return;
+    ctl.minDistance = 2; ctl.maxDistance = 60;
+    ctl.target.set(0.6, 0, 0); ctl.update();
+    const grab = () => { touched.current = true; };
+    ctl.addEventListener("start", grab);
+    return () => ctl.removeEventListener("start", grab);
+  }, [camera]);
+  useEffect(() => { done.current = false; shotKey.current = ""; }, [start]);
 
   useFrame(() => {
     const running = start !== null;
@@ -160,9 +172,18 @@ function Scene({ start, onDone, ui }: { start: number | null; onDone: () => void
     });
 
     let u: Ui;
-    const cam = (pos: THREE.Vector3, look: THREE.Vector3) => {
-      if (!running || t >= TOTAL) return;
-      camera.position.copy(pos); camera.lookAt(look);
+    // Each shot opens on its planned view. Once the viewer turns or zooms, only the point the
+    // camera circles follows the craft (the camera moves with it), so their angle and zoom stay.
+    const ctl = controls.current;
+    const cam = (key: string, pos: THREE.Vector3, look: THREE.Vector3, min: number, max: number) => {
+      if (!running || t >= TOTAL || !ctl) return;
+      if (key !== shotKey.current) {
+        shotKey.current = key; touched.current = false;
+        ctl.minDistance = min; ctl.maxDistance = max;
+      }
+      if (touched.current) camera.position.add(shift.copy(look).sub(ctl.target));
+      else camera.position.copy(pos);
+      ctl.target.copy(look); ctl.update();
     };
     if (local) {
       c.rotation.set(0, 0, 0);
@@ -181,7 +202,7 @@ function Scene({ start, onDone, ui }: { start: number | null; onDone: () => void
       }
       c.position.set(x, y, 0); sl.position.set(xs, 0, 0);
       const back = t < T_SHOT ? 1 : 1 + (t - T_SHOT) * 1.5;
-      cam(tmp.set(x - 9 * back, 2.2 * back, 6.5 * back), new THREE.Vector3(x + 2, y, 0));
+      cam("track", tmp.set(x - 9 * back, 2.2 * back, 6.5 * back), new THREE.Vector3(x + 2, y, 0), 2, 500);
     } else if (orbitView) {
       const coast = t < P_BURN;
       const f = coast ? (t - P_COAST) / COAST : 1;
@@ -196,7 +217,7 @@ function Scene({ start, onDone, ui }: { start: number | null; onDone: () => void
             readout: `T+     ${(COAST_H * f).toFixed(1)} h\nheight ${km(r - R)} km\nspeed  ${(v / 1000).toFixed(2)} km/s` }
         : { phase: "In orbit", caption: "The low point is lifted from the surface to 673 km: the relay's orbit.",
             readout: "orbit  673 × 7,331 km\nperiod 10.8 h" };
-      cam(tmp.set(0, 3.0e6, 2.8e7), new THREE.Vector3(0, 3.0e6, 0));
+      cam(coast ? "coast" : "in orbit", tmp.set(0, 3.0e6, 2.8e7), new THREE.Vector3(0, 3.0e6, 0), 2.5e6, 1e8);
     } else {
       // At the high point: dish (+y) toward the Moon below, engine firing along the motion (-x).
       c.position.set(0, R_A, 0); c.rotation.set(0, 0, Math.PI);
@@ -209,27 +230,22 @@ function Scene({ start, onDone, ui }: { start: number | null; onDone: () => void
           readout: `Δv     ${(DV * f).toFixed(1)} / ${DV} m/s\nburn   ${Math.round(BURN_S * f)} / ${BURN_S} s` };
         // From above, looking down past the craft at the Moon 7,331 km below.
         const ang = 0.5 + 0.1 * (t - P_BURN);
-        cam(tmp.set(4 * Math.cos(ang), R_A + 10, 4 * Math.sin(ang)), new THREE.Vector3(0, R_A - 2, 0));
+        cam("burn", tmp.set(4 * Math.cos(ang), R_A + 10, 4 * Math.sin(ang)), new THREE.Vector3(0, R_A - 2, 0), 2, 2e7);
       } else {
         const step = a < 1.5 ? "The hold-downs release." : a < 10.3 ? "The wings unfold: the yoke, then the panels, one by one."
           : "Wings out, 663 W. The S-band dish looks down at the Moon; the X-band panel turns to the Earth.";
         u = { phase: "Activation", caption: step, readout: "orbit  673 × 7,331 km\nwings  2 × 5 panels" };
         // From below, toward the cells and the dish.
-        cam(tmp.set(7, R_A - 6, 9), new THREE.Vector3(0, R_A, 0));
+        cam("activation", tmp.set(7, R_A - 6, 9), new THREE.Vector3(0, R_A, 0), 2, 2e7);
       }
     }
     const key = u.phase + u.caption + u.readout;
     if (key !== last.current) { last.current = key; ui(running ? u : { phase: "", caption: "", readout: "" }); }
 
-    const ctl = controls.current;
-    if (ctl) {
-      const free = !running || t >= TOTAL;
-      if (free && running && !done.current) {
-        done.current = true;
-        c.getWorldPosition(tmp); ctl.target.copy(tmp);
-        onDone();
-      }
-      if (ctl.enabled !== free) ctl.enabled = free;
+    if (ctl && running && t >= TOTAL && !done.current) {
+      done.current = true;
+      c.getWorldPosition(tmp); camera.position.add(shift.copy(tmp).sub(ctl.target)); ctl.target.copy(tmp);
+      onDone();
     }
   });
 
@@ -275,7 +291,7 @@ function Scene({ start, onDone, ui }: { start: number | null; onDone: () => void
         </mesh>
       </group>
       <group ref={sledRef}><primitive object={sled} /></group>
-      <OrbitControls ref={controls} makeDefault enablePan={false} minDistance={2} maxDistance={60} />
+      <OrbitControls ref={controls} makeDefault enablePan={false} />
     </>
   );
 }
