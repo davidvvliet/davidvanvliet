@@ -178,6 +178,368 @@
       },
       "source": "honeywell_gg1320an, p.1",
       "quote": "1,164,352 ±18 pulses/rev. ... 0.0035 deg/hr (typical) ... 900 deg/ sec (maximum ) ... 1 lb. (454 grams)"
+    },
+    "pad": {
+      "value": {
+        "thickness": 0.0008,
+        "inset": 0.0005,
+        "centre_hole": 0.021,
+        "window_outer": 0.024,
+        "window_inner": 0.0135,
+        "window_half_angle": 40
+      },
+      "source": "sam_gg1320an, laser_block_bottom_view1.jpg: a dark lattice pad on the block's plate side, strips along the three faces, a ring round the dither motor, spokes to the face centres and a window at each corner; sizes estimated against the block (19.5 mm faces)"
+    },
+    "corner_wells": {
+      "value": {
+        "diameter": 0.0063,
+        "inner_end": 0.011
+      },
+      "source": "sam_gg1320an, laser_block_with_major_parts_labeled1.jpg: a wide bore along each corner's bisector, from the mirror inward (the top one ends 9.5 mm above the centre; about 60 px across); not labelled, purpose not stated"
+    },
+    "discharge_channels": {
+      "value": {
+        "diameter": 0.0015,
+        "cathode_spacing": 0.002
+      },
+      "source": "sam_gg1320an, laser_block_with_major_parts_labeled1.jpg: thin bores from the cathode (two, side by side) and from each anode to the beam bores; diameter estimated"
+    },
+    "cathode_flange": {
+      "value": {
+        "diameter": 0.016,
+        "thickness": 0.001,
+        "seal_diameter": 0.0146,
+        "seal_thickness": 0.0005,
+        "tab": [
+          0.004,
+          0.0004,
+          0.0045
+        ]
+      },
+      "source": "sam_gg1320an, cathode_end_of_assembly_closeup1.jpg: a flange where the cathode meets the block, a gold-coloured seal ring and a solder tab with a hole; scaled by the 13.7 mm cathode (estimated)"
+    },
+    "anode_2_cover": {
+      "value": [
+        0.008,
+        0.008,
+        0.006
+      ],
+      "source": "sam_gg1320an, laser_block_top_on_plate1.jpg (ruler: 1 in = 257 px, 10.1 px/mm; the photo is the labelled view turned 180°): anode 2's red cover 85 px wide; height estimated"
+    },
+    "detector": {
+      "value": {
+        "potting_radius": 0.005,
+        "potting_height": 0.0035,
+        "photodiodes": [
+          [
+            -0.0017,
+            0.0034
+          ],
+          [
+            0.0019,
+            0.0034
+          ]
+        ],
+        "photodiode_size": [
+          0.0032,
+          0.0015,
+          0.0038
+        ],
+        "pins": 3,
+        "pin_length": 0.0025
+      },
+      "source": "sam_gg1320an, mirror_detector_assembly2_closeup1.jpg: the detector potted in grey rubber over mirror 2, two photodiode packages (\"Fringe Sensor Photodiodes\") side by side with three gold pins each, an amber epoxy blob over the left one; scaled by the 10 mm mirror (estimated)"
+    },
+    "plate": {
+      "value": {
+        "radius": 0.0405,
+        "flats": {
+          "210": 0.035,
+          "330": 0.035,
+          "270": 0.0243
+        },
+        "screws": [
+          [
+            0.036,
+            5
+          ],
+          [
+            0.036,
+            175
+          ],
+          [
+            0.036,
+            68
+          ],
+          [
+            0.036,
+            112
+          ],
+          [
+            0.029,
+            226
+          ],
+          [
+            0.029,
+            314
+          ]
+        ],
+        "screw_head": 0.0045,
+        "hub_screws": 0.003
+      },
+      "source": "sam_gg1320an, laser_block_top_on_plate1.jpg (ruler: 1 in = 257 px, 10.1 px/mm; the photo is the labelled view turned 180°): plate edges cut straight behind mirrors 1 and 3 (35 mm from the centre) and behind the cathode (24.3 mm), six screw holes; interior_after_separating_case1.jpg: screws in aluminium washers, three screws at the centre (the dither hub)"
+    },
+    "housing": {
+      "value": {
+        "outer": 0.042,
+        "wall": 0.002,
+        "top": 0.043
+      },
+      "source": "sam_gg1320an, pcb1_pcb2_in_situ1.jpg and interior_after_separating_case1.jpg: an aluminium cup holding the boards above the plate; sizes estimated to fit the case"
+    },
+    "pcb_parts": {
+      "value": {
+        "pcb2": {
+          "side": 1,
+          "outline": {
+            "radius": 0.037,
+            "flats": [
+              0,
+              60,
+              120,
+              180,
+              240,
+              300
+            ],
+            "flat": 0.0355
+          },
+          "parts": [
+            [
+              "plcc84",
+              [
+                0.025,
+                0.025,
+                0.0038
+              ],
+              [
+                -0.0036,
+                0.0108
+              ],
+              "ic_black"
+            ],
+            [
+              "qfp100",
+              [
+                0.017,
+                0.021,
+                0.0027
+              ],
+              [
+                0.0206,
+                0.0079
+              ],
+              "ic_black"
+            ],
+            [
+              "header",
+              [
+                0.026,
+                0.005,
+                0.004
+              ],
+              [
+                -0.0068,
+                -0.0056
+              ],
+              "header_black"
+            ],
+            [
+              "soic_1",
+              [
+                0.004,
+                0.004,
+                0.0015
+              ],
+              [
+                -0.0278,
+                0.0183
+              ],
+              "ic_black"
+            ],
+            [
+              "soic_2",
+              [
+                0.004,
+                0.003,
+                0.0015
+              ],
+              [
+                0.03,
+                0.0016
+              ],
+              "ic_black"
+            ],
+            [
+              "soic_3",
+              [
+                0.005,
+                0.004,
+                0.0015
+              ],
+              [
+                0.0127,
+                -0.0087
+              ],
+              "ic_black"
+            ],
+            [
+              "soic_4",
+              [
+                0.004,
+                0.003,
+                0.0015
+              ],
+              [
+                0.0238,
+                -0.0071
+              ],
+              "ic_black"
+            ],
+            [
+              "soic_5",
+              [
+                0.004,
+                0.003,
+                0.0015
+              ],
+              [
+                -0.026,
+                -0.011
+              ],
+              "ic_black"
+            ]
+          ]
+        },
+        "pcb1": {
+          "side": -1,
+          "outline": {
+            "radius": 0.032,
+            "flats": [
+              270
+            ],
+            "flat": 0.024
+          },
+          "parts": [
+            [
+              "hybrid",
+              [
+                0.013,
+                0.011,
+                0.003
+              ],
+              [
+                0.0052,
+                0.0181
+              ],
+              "hybrid_beige"
+            ],
+            [
+              "header",
+              [
+                0.027,
+                0.006,
+                0.004
+              ],
+              [
+                -0.0034,
+                0.0078
+              ],
+              "header_black"
+            ],
+            [
+              "dpak",
+              [
+                0.006,
+                0.006,
+                0.002
+              ],
+              [
+                -0.0086,
+                0.0181
+              ],
+              "ic_black"
+            ],
+            [
+              "inductor",
+              [
+                0.006,
+                0.007,
+                0.003
+              ],
+              [
+                -0.0224,
+                0.0043
+              ],
+              "ic_black"
+            ],
+            [
+              "soic_1",
+              [
+                0.005,
+                0.004,
+                0.0015
+              ],
+              [
+                0.012,
+                -0.0147
+              ],
+              "ic_black"
+            ],
+            [
+              "soic_2",
+              [
+                0.005,
+                0.004,
+                0.0015
+              ],
+              [
+                0.023,
+                -0.0138
+              ],
+              "ic_black"
+            ]
+          ]
+        },
+        "flex": {
+          "width": 0.018,
+          "y": -0.0235
+        },
+        "leads": {
+          "chips": [
+            "plcc84",
+            "qfp100"
+          ],
+          "reach": 0.00075,
+          "height": 0.0006
+        }
+      },
+      "source": "sam_gg1320an, pcb1_pcb2_in_situ1.jpg: the two boards side by side (pcb2 about 6.3 px/mm, pcb1 about 5.8 px/mm, scaled by their 74 mm and 64 mm widths, estimated): pcb2 with an 84-lead PLCC, a 100-lead QFP and a header; pcb1 D-shaped with a hybrid module (\"PRECISION INC\"), a header and small parts; joined by an orange flex cable. Which way each board faces, and how they turn against the block, is estimated; the two large chips' lead rows stand 0.75 mm out from their bodies (estimated)"
+    },
+    "wires": {
+      "value": {
+        "radius": 0.00035
+      },
+      "source": "sam_gg1320an, laser_block_bottom_view1.jpg: red, white and black wires from the connector bars to the anodes, mirrors and detector; routes simplified"
+    },
+    "case_shape": {
+      "value": {
+        "bottom_disc": 0.0355,
+        "bottom_step": 0.004,
+        "label_radius": 0.0325,
+        "label_depth": 0.0003,
+        "edge": 0.0005
+      },
+      "source": "sam_gg1320an, bottom_view_of_complete_rlg1.jpg: a raised disc 71 mm across on the bottom (scaled by the 88 mm case), step height estimated; top_view_of_complete_rlg1.jpg: the label covers a disc about 65 mm across"
     }
   },
   "materials": {
@@ -200,10 +562,10 @@
       "source": "sam_gg1320an, interior_after_separating_case1.jpg, the board"
     },
     "cathode_steel": {
-      "hex": "#34383d",
+      "hex": "#656c75",
       "metallic": 1.0,
-      "roughness": 0.15,
-      "source": "sam_gg1320an, cathode_end_of_assembly_closeup1.jpg, the dome (polished)"
+      "roughness": 0.3,
+      "source": "sam_gg1320an, cathode_end_of_assembly_closeup1.jpg: mean over the whole dome (a 150 px circle round (480,470) px); single spots range from #2f4262 to white because the polished dome mirrors its surroundings; roughness chosen by eye"
     },
     "anode_cover_red": {
       "hex": "#8b3947",
@@ -240,14 +602,100 @@
       "metallic": 0.0,
       "roughness": 0.5,
       "source": "sam_gg1320an, laser_block_with_major_parts_labeled1.jpg: the red intracavity beam drawn on the photo (He-Ne, red); the shade is the drawing's"
+    },
+    "aluminium": {
+      "hex": "#aaafb6",
+      "metallic": 1.0,
+      "roughness": 0.4,
+      "source": "sam_gg1320an, pcb1_pcb2_in_situ1.jpg, the housing ring at (915,330), (895,420), (560,445), (500,250) px"
+    },
+    "pad_lattice": {
+      "hex": "#393d4d",
+      "metallic": 0.0,
+      "roughness": 0.6,
+      "source": "sam_gg1320an, laser_block_bottom_view1.jpg, a lattice bar at (345,290) px (the others pick up the blue cloth through the holes)"
+    },
+    "gold_seal": {
+      "hex": "#91803f",
+      "metallic": 1.0,
+      "roughness": 0.3,
+      "source": "sam_gg1320an, cathode_end_of_assembly_closeup1.jpg, the tab at (375,300), (420,292) px"
+    },
+    "rtv_grey": {
+      "hex": "#93989b",
+      "metallic": 0.0,
+      "roughness": 0.6,
+      "source": "sam_gg1320an, mirror_detector_assembly2_closeup1.jpg, the potting at (400,140), (560,250), (650,300) px"
+    },
+    "photodiode_package": {
+      "hex": "#535156",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "sam_gg1320an, mirror_detector_assembly2_closeup1.jpg, the packages at (520,420), (575,500), (470,470) px"
+    },
+    "amber_epoxy": {
+      "hex": "#958658",
+      "metallic": 0.0,
+      "roughness": 0.3,
+      "source": "sam_gg1320an, mirror_detector_assembly2_closeup1.jpg at (310,420), (350,470) px"
+    },
+    "wire_red": {
+      "hex": "#ae2724",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "sam_gg1320an, mirror_detector_assembly2_closeup1.jpg, the red wire at (440-465,620) px"
+    },
+    "wire_white": {
+      "hex": "#a3a5a5",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "sam_gg1320an, mirror_detector_assembly2_closeup1.jpg, the white wire at (850,475) px"
+    },
+    "gold_pin": {
+      "hex": "#866f45",
+      "metallic": 1.0,
+      "roughness": 0.3,
+      "source": "sam_gg1320an, mirror_detector_assembly2_closeup1.jpg, the pins at (497,580), (540,585), (583,575) px"
+    },
+    "ic_black": {
+      "hex": "#495255",
+      "metallic": 0.1,
+      "roughness": 0.5,
+      "source": "sam_gg1320an, pcb1_pcb2_in_situ1.jpg, the QFP at (800,620) px"
+    },
+    "header_black": {
+      "hex": "#52575c",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "sam_gg1320an, pcb1_pcb2_in_situ1.jpg, the headers at (620,720), (680,230) px"
+    },
+    "kapton": {
+      "hex": "#41201c",
+      "metallic": 0.0,
+      "roughness": 0.4,
+      "source": "sam_gg1320an, interior_after_separating_case1.jpg, the flex at (660,400), (640,425) px"
+    },
+    "hybrid_beige": {
+      "hex": "#eaeed2",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "sam_gg1320an, pcb1_pcb2_in_situ1.jpg, the hybrid's lid at (700,190), (760,140) px"
+    },
+    "case_label": {
+      "hex": "#484b4d",
+      "metallic": 0.0,
+      "roughness": 0.4,
+      "source": "sam_gg1320an, top_view_of_complete_rlg1.jpg, the label between its lettering at (250,160), (700,250), (320,520), (780,460) px"
     }
   },
   "open_questions": [
     "Heights inside the case (block, plate, boards) are estimates: no photo shows the stack from the side.",
     "Block thickness (12 mm) is estimated from a close-up with perspective; the block's glass type isn't stated anywhere found.",
-    "The aluminium housing's finish has no clean spot in the photos; the shared foil_silver stands in.",
     "Mirror and detector lengths, connector bar height and the connector's place are estimated.",
-    "The case outline and label are simplified; Sam's photos could be traced once David has permission."
+    "The case outline and label are simplified; Sam's photos could be traced once David has permission.",
+    "The corner wells (wide bores at each corner) aren't labelled in any photo found: purpose unknown.",
+    "Board parts are placed from one oblique photo; which way the boards face and turn against the block is estimated.",
+    "Wire routes are simplified."
   ],
   "budget": {
     "triangles": 50000,
