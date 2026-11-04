@@ -136,6 +136,65 @@ function setUp(camera: THREE.Camera, controls: SceneHandles["controls"], up: THR
   c._quatInverse.copy(c._quat).invert();
 }
 
+// The 20 N engine's exhaust. Hydrazine's decomposed gas is nearly clear, so the plume is faint: a bright core
+// out of the 33 mm nozzle (ArianeGroup 20N: "Nozzle end diameter 33 mm", area ratio 60) spreading into a wide
+// haze, as gas does into vacuum, flickering. The catalyst bed behind the throat runs above 600 °C ("At higher
+// temperatures (typically above 600°C) a thermal equilibrium is reached across the complete catalyst bed"), so it
+// glows a dull red that builds through the burn and fades after it. Craft frame: the nozzle exit at x = 0.055 m.
+const NOZZLE_X = 0.055, NOZZLE_R = 0.0165;
+const PLUME_VERT = `
+  varying float vAlong; varying vec3 vN; varying vec3 vV; varying float vAngle;
+  void main() {
+    vAlong = uv.y; vAngle = uv.x * 6.2832;
+    vec4 mv = modelViewMatrix * vec4(position, 1.0);
+    vN = normalMatrix * normal; vV = -mv.xyz;
+    gl_Position = projectionMatrix * mv;
+  }`;
+const PLUME_FRAG = `
+  uniform float uK; uniform float uTime; uniform vec3 uColor; uniform float uFall; uniform float uEdge;
+  varying float vAlong; varying vec3 vN; varying vec3 vV; varying float vAngle;
+  float hash(vec2 p) { return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
+  float noise(vec2 p) { vec2 i = floor(p), f = fract(p); f = f * f * (3.0 - 2.0 * f);
+    return mix(mix(hash(i), hash(i + vec2(1, 0)), f.x), mix(hash(i + vec2(0, 1)), hash(i + 1.0), f.x), f.y); }
+  void main() {
+    float edge = pow(abs(dot(normalize(vN), normalize(vV))), uEdge);           // soft at the silhouette
+    float fall = pow(1.0 - vAlong, uFall);                                       // fading downstream
+    float flick = 0.75 + 0.5 * noise(vec2(vAlong * 9.0 - uTime * 14.0, vAngle * 1.5));
+    gl_FragColor = vec4(uColor * uK * edge * fall * flick, 1.0);
+  }`;
+function makePlume() {
+  const group = new THREE.Group();
+  const layer = (rFar: number, len: number, colour: string, fall: number, edgePow: number) => {
+    const mat = new THREE.ShaderMaterial({
+      uniforms: { uK: { value: 0 }, uTime: { value: 0 }, uColor: { value: new THREE.Color(colour) }, uFall: { value: fall }, uEdge: { value: edgePow } },
+      vertexShader: PLUME_VERT, fragmentShader: PLUME_FRAG,
+      transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
+    });
+    // A cylinder from the nozzle's 33 mm exit (bottom) to rFar, turned to run back along -x.
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(rFar, NOZZLE_R, len, 48, 1, true), mat);
+    m.rotation.z = Math.PI / 2; m.position.x = NOZZLE_X - len / 2;
+    group.add(m);
+    return mat;
+  };
+  const core = layer(0.07, 0.55, "#e8f0ff", 2.5, 1.2);    // the dense jet just out of the nozzle
+  const haze = layer(0.45, 1.6, "#7f9cc8", 1.8, 2.0);      // the gas spreading wide into vacuum
+  const bed = new THREE.Mesh(new THREE.CylinderGeometry(0.0118, 0.0118, 0.07, 24, 1, true),
+    new THREE.MeshBasicMaterial({ color: "#ff4a14", transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending }));
+  bed.rotation.z = Math.PI / 2; bed.position.x = 0.165;    // the catalyst bed, between the valve and the throat
+  group.add(bed);
+  return {
+    group,
+    update(t: number) {
+      // On in a third of a second, off in half; the bed heats over the burn and cools over 4 s after it.
+      const k = Math.min(ease((t - P_BURN) / 0.3), 1 - ease((t - P_REVEAL) / 0.5));
+      const heat = ease((t - P_BURN) / BURN) * (1 - ease((t - P_REVEAL) / 4));
+      for (const [mat, s] of [[core, 0.9], [haze, 0.22]] as const) { mat.uniforms.uK.value = k * s; mat.uniforms.uTime.value = t; }
+      (bed.material as THREE.MeshBasicMaterial).opacity = 0.7 * heat;
+      group.visible = k > 0 || heat > 0;
+    },
+  };
+}
+
 export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi): void; done(): void; part?(p: PartLabel): void }): AetherLaunch {
   const JD0 = site.meta.jd;
   let startAt: number | null = null;
@@ -146,10 +205,8 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
   craft.add(model);
   let hinges: Hinge[][] = [];
   let lift = RAIL_TOP + 0.53;
-  const plume = new THREE.Mesh(new THREE.ConeGeometry(0.14, 0.9, 24, 1, true),
-    new THREE.MeshBasicMaterial({ color: "#cfe3ff", transparent: true, opacity: 0.3, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide }));
-  plume.position.set(0.055 - 0.45, 0, 0); plume.rotation.set(0, 0, Math.PI / 2);
-  craft.add(plume);
+  const plume = makePlume();
+  craft.add(plume.group);
 
   // The ground: terrain, the track, and a post every 500 m beside it. In the launch frame (metres).
   const regolith = regolithTexture();
@@ -469,7 +526,7 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
       for (const c of h.globe.children) if (c !== earthGlobe && c.visible) { c.visible = false; hiddenOnGlobe.push(c); }
       const t = sceneTime();
       const onTrack = t < T_SHOT;
-      plume.visible = t >= P_BURN && t < P_REVEAL;
+      plume.update(t);
       sled.visible = t < P_COAST + 2;
       if (onTrack && craft.parent !== launchFrame) launchFrame.add(craft);
       if (!onTrack && craft.parent !== orbitFrame) orbitFrame.add(craft);
@@ -537,7 +594,6 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
         } else if (t < P_REVEAL) {
           const f = (t - P_BURN) / BURN;
           rp = R + (R_P - R) * f;
-          (plume.material as THREE.MeshBasicMaterial).opacity = 0.25 + 0.1 * Math.sin(t * 40);
           u = { phase: "Orbit insertion", caption: `At the high point the 20 N engine burns ${DV.toFixed(1)} m/s, lifting the orbit's low point from the surface to ${km(R_P - R)} km: the orbit becomes circular.`,
             readout: `Δv     ${(DV * f).toFixed(1)} / ${DV.toFixed(1)} m/s\nburn   ${Math.round(BURN_S * f)} / ${BURN_S} s` };
         } else if (t < P_ACT) {
