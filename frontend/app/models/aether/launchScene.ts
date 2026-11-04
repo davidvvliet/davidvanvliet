@@ -27,6 +27,7 @@ const BURN = 8;                          // 1865 s, shown in 8 s
 const ROLL = 3;                          // the last seconds of the coast: the craft rolls over, dish to the Moon
 const REVEAL = 4;
 const ACT = 13;
+const AFTER = 10;                       // once the wings are out, the orbit goes on at 10 times true speed
 const DV = Math.sqrt(GM / R_A) - (V * R) / R_A;                // circular speed less the shot's at its high point, 124.3 m/s
 const BURN_S = Math.round((300 * DV) / 20);                    // 300 kg on the 20 N engine, 1865 s
 const HALF_S = Math.PI * Math.sqrt(((R + R_A) / 2) ** 3 / GM);  // half the shot orbit: track's end to the high point, 71 min
@@ -39,7 +40,9 @@ const missionSeconds = (t: number) =>
   t < P_COAST ? t
     : t < P_BURN ? P_COAST + ((t - P_COAST) / COAST) * (HALF_S - SEP)
       : t < P_REVEAL ? T_SHOT + HALF_S + ((t - P_BURN) / BURN) * BURN_S
-        : T_SHOT + HALF_S + BURN_S + (t - P_REVEAL);
+        : t < TOTAL ? T_SHOT + HALF_S + BURN_S + (t - P_REVEAL)
+          : T_SHOT + HALF_S + BURN_S + (TOTAL - P_REVEAL) + (t - TOTAL) * AFTER;
+const T_IN = T_SHOT + HALF_S + BURN_S;  // mission seconds at the burn's end: from here the craft goes round the circular orbit
 
 // Sled parts leave the craft at the track's end; the model's own short rails are replaced by the long track.
 const SLED = ["sep_ring_lower", "pusher", "sled_lettering", "sled_base", "shoe0", "shoe1", "shoe2", "shoe3", "armature"];
@@ -121,7 +124,7 @@ function setUp(camera: THREE.Camera, controls: SceneHandles["controls"], up: THR
 export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi): void; done(): void }): AetherLaunch {
   const JD0 = site.meta.jd;
   let startAt: number | null = null;
-  const sceneTime = () => (startAt === null ? 0 : Math.min(TOTAL, performance.now() / 1000 - startAt));
+  const sceneTime = () => (startAt === null ? 0 : performance.now() / 1000 - startAt);
 
   // The craft (filled in when the model arrives), the sled, the wing hinges.
   const craft = new THREE.Group(), sled = new THREE.Group(), model = new THREE.Group();
@@ -360,6 +363,14 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
         for (const hg of pair) hg.node.quaternion.copy(q.setFromAxisAngle(hg.axis, THREE.MathUtils.degToRad(-hg.restDeg * k)).multiply(hg.rest));
       });
 
+      // In the Moon's shadow (a cylinder its size, away from the Sun) the Sun stops lighting the craft.
+      craft.getWorldPosition(v.cw);
+      h.sun.getWorldPosition(v.sun).sub(v.cw).normalize();
+      h.moon.getWorldPosition(v.ew).sub(v.cw);
+      const along = v.ew.dot(v.sun);
+      const lit = onTrack || along <= 0 || v.ew.lengthSq() - along * along > h.moonRadius * h.moonRadius;
+      sunLight.intensity = lit ? 2.2 : 0;
+
       // Where the craft is, and its flight frame (forward along the motion, up away from the Moon), in `frame`.
       let u: LaunchUi = { phase: "", caption: "", readout: "" };
       let xs = 0, roll = 0, rp = R;
@@ -373,12 +384,15 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
         // Off the track: on the shot's orbit, by mission time since the track's end, up to the high point.
         // Its low point is drawn at the track's end (the bed less the 1737.4 km sphere, plus the craft's lift).
         const tau = Math.min(missionSeconds(t) - T_SHOT, HALF_S);
-        const nu = tau >= HALF_S ? Math.PI : trueAnomaly((Math.PI * tau) / HALF_S, shot.e);
+        // Held at the high point through the burn, then round the circular orbit.
+        const circling = tau >= HALF_S, path = circling ? target : shot;
+        const nu = circling ? Math.PI + (Math.max(0, missionSeconds(t) - T_IN) * 2 * Math.PI) / (PERIOD_MIN * 60)
+          : trueAnomaly((Math.PI * tau) / HALF_S, shot.e);
         const zEnd = site.meta.profile.z[site.meta.profile.z.length - 1] + lift;
-        v.pos.copy(orbitPoint(shot, nu));
+        v.pos.copy(orbitPoint(path, nu));
         v.up.copy(v.pos).normalize();
         v.pos.addScaledVector(v.up, zEnd);
-        orbitTangent(shot, nu, v.fwd);
+        orbitTangent(path, nu, v.fwd);
         const tb = Math.min(t - T_SHOT, V / (30 * G0));
         xs = TRACK + V * tb - 0.5 * 30 * G0 * tb * tb;
         const r = v.pos.length(), vel = Math.sqrt(GM * (2 / r - 1 / shot.a));
@@ -404,7 +418,8 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
           rp = R_P;
           const step = a < 1.5 ? "The hold-downs release." : a < 10.3 ? "The wings unfold: the yoke, then the panels, one by one."
             : "Wings out, 663 W. The S-band dish looks down at the Moon; the X-band panel turns to the Earth.";
-          u = { phase: "Activation", caption: step, readout: `orbit  ${km(R_A - R)} km circular, polar\nwings  2 × 5 panels` };
+          u = t < TOTAL ? { phase: "Activation", caption: step, readout: `orbit  ${km(R_A - R)} km circular, polar\nwings  2 × 5 panels` }
+            : { phase: "In orbit", caption: step, readout: `UTC    ${utc(jd)}\nclock  ${AFTER}× true speed\norbit  ${km(R_A - R)} km, ${Math.round(PERIOD_MIN)} min${lit ? "" : "\nin the Moon's shadow"}` };
         }
         // Before the burn the craft rolls over: the engine still along the motion, the dish now down to the Moon.
         roll = Math.PI * ease((t - (P_BURN - ROLL)) / ROLL);
