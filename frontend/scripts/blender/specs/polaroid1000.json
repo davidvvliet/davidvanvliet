@@ -5,7 +5,7 @@
   "viewer": {
     "explore": true
   },
-  "listed": false,
+  "listed": true,
   "closeups": [
     {
       "name": "lens boss",
@@ -441,10 +441,10 @@
       "source": "retronautik_1000 'Fotokasten mit Spiegel' (a front-surface mirror; colour not sampled, it reflects)"
     },
     "lens_glass": {
-      "hex": "#1b2026",
+      "hex": "#55585d",
       "metallic": 0.0,
       "roughness": 0.05,
-      "source": "halicki_2023 (3), lens seen through the boss opening"
+      "source": "halicki_2023 (3), the lens disc seen through the cover glass, sampled at 950-1040 x 530-560 px (#4d5255-#585b60); its black ring at 925-935 px"
     },
     "flex_foil": {
       "hex": "#a4d8f5",
@@ -463,6 +463,13 @@
       "metallic": 0.0,
       "roughness": 0.85,
       "source": "halicki_2023 (1), the hood's grained side, three spots (crop 1150-1800 x 100-900 px)"
+    },
+    "cover_glass": {
+      "hex": "#5e5e60",
+      "metallic": 0.0,
+      "roughness": 0.05,
+      "alpha": 0.35,
+      "source": "halicki_2023 (3), the cover glass's lower half sampled at 930-1050 x 600-630 px (#5c5c5e-#747476, reflections of the studio included); alpha estimated (0.35) so the lens shows through"
     }
   },
   "open_questions": [
@@ -549,8 +556,8 @@
       "source": "halicki_2023 (3), estimated: straight-on, scaled by the 107 mm width (front plate 0.090 mm/px): boss 785-1205 x 405-840 px, black stepped opening 810-1185 x 470-805 px, lens frame 880-1095 x 505-720 px; depth from (2)"
     },
     "lens_centre_z": {
-      "value": 0.0665,
-      "source": "halicki_2023 (3), estimated: the lens glass centred at (985, 555) px, about 120 px (10.8 mm) across"
+      "value": 0.0666,
+      "source": "halicki_2023 (3), estimated: the lens glass centred at (985, 555) px, about 120 px (10.8 mm) across, behind the cover glass in its upper half"
     },
     "viewfinder_window": {
       "value": {
@@ -630,6 +637,15 @@
         "inset": 0.004
       },
       "source": "graf_classic_2013 (P1010976, rear 3/4), estimated: a flat face set about 4 mm into the eyecup rim with a square hole about a quarter of the opening's width (opening 24 mm here, so 5.5 mm)"
+    },
+    "cover_glass": {
+      "value": {
+        "width": 0.0178,
+        "height": 0.0144,
+        "z": 0.0638,
+        "radius": 0.003
+      },
+      "source": "halicki_2023 (3), estimated: straight-on, scaled by the 107 mm width (0.090 mm/px): a rounded-square glass across the window at the back of the stepped opening, 892-1090 x 505-667 px, the round lens seen through its upper half; also in (1)"
     }
   },
   "estimates": {
@@ -639,8 +655,8 @@
       "source": "halicki_2023 (3), estimate: the print leaves between the rollers at the exit slot (z 0.006-0.0135)"
     },
     "lens_y": {
-      "value": 0.027,
-      "source": "halicki_2023 (2), estimate: at the back of the stepped opening, just in front of the front plate"
+      "value": 0.023,
+      "source": "halicki_2023 (3), estimate: behind the window at the back of the stepped opening (the lens's top is hidden by the window's top edge), so 2 mm behind the front plate (y 0.025)"
     },
     "light_path": {
       "value": 0.105,

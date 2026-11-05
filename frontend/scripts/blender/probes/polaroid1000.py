@@ -270,6 +270,11 @@ def shell(P):
                                            (plate["y"], plate["bottom"]), (plate["y"], fs["top"] - 0.003), (wb, fs["top"] - 0.003)],
                            -HALF_W, HALF_W, "front_white")
         round_edges(cover, 0.0025)
+        # The lens sits behind the hood's back window, its top hidden by the window's edge
+        # (halicki_2023 (3)): a pocket in the cover for it.
+        lp = lens_pocket(P)
+        cut(cover, (lp["w"], lp["y1"] - lp["y0"] + 0.001, lp["z1"] - lp["z0"]),
+            (lp["x"], (lp["y0"] + lp["y1"] + 0.001) / 2, (lp["z0"] + lp["z1"]) / 2))
     stripe(P)
 
 
@@ -288,6 +293,14 @@ def stripe(P):
             x0 = s["width"] / 2 - k * w
             x1 = x0 - w
             slab(m, [(x0, a.y, a.z), (x1, a.y, a.z), (x1, b.y, b.z), (x0, b.y, b.z)], nrm, 0.0002, m)
+
+
+def lens_pocket(P):
+    """The space behind the hood's back window that holds the lens: the window's width, from the
+    window's bottom to above the lens cell, 6 mm deep behind the front plate."""
+    lb, py = P["lens_boss"], P["front_plate"]["y"]
+    return {"x": lb["x"], "w": lb["lens_frame"], "y0": py - 0.006, "y1": py,
+            "z0": lb["lens_frame_z"] - lb["lens_frame"] / 2, "z1": P["lens_centre_z"] + 0.0085}
 
 
 def front_parts(P):
@@ -312,8 +325,17 @@ def front_parts(P):
             front_ring(f"hood_step_{k}", [(u, v + (oz + (lb["lens_frame_z"] - oz) * f0) - zc) for u, v in rrect(w0, h0, 0.004)],
                        rrect(w1, h1, 0.0035), lb["x"], zc, y - dy, y, "body_black")
             y -= dy
-        front_plate("hood_back", rrect(lb["lens_frame"], lb["lens_frame"], 0.0035), lb["x"], lb["lens_frame_z"],
-                    py, py + 0.0005, "body_black")
+        # The pocket behind the window, lined black.
+        lp = lens_pocket(P)
+        pw, ph, pz = lp["w"], lp["z1"] - lp["z0"], (lp["z0"] + lp["z1"]) / 2
+        front_ring("hood_back", rrect(pw + 0.001, ph + 0.001, 0.002), rrect(pw - 0.0005, ph - 0.0005, 0.0015), lp["x"], pz,
+                   lp["y0"], py + 0.0005, "body_black")
+        front_plate("hood_back_wall", rrect(pw, ph, 0.002), lp["x"], pz, lp["y0"], lp["y0"] + 0.0005, "body_black")
+    with parts.assembly("cover_glass"):
+        # A rounded-square glass across the window, the round lens seen through its upper half.
+        cg = P["cover_glass"]
+        front_plate("cover_glass", rrect(cg["width"], cg["height"], cg["radius"]), lb["x"], cg["z"], py - 0.0004, py + 0.0001,
+                    glow("cover_glass", SPEC[0], SPEC[0]["materials"]["cover_glass"]["alpha"], 0.0))
     with parts.assembly("viewfinder_window"):
         vw = P["viewfinder_window"]
         front_ring("window_frame", rrect(vw["width"] + 0.003, vw["height"] + 0.003, 0.0015),
@@ -400,10 +422,11 @@ def optics(P, E):
     zl, yl, zf, path = P["lens_centre_z"], E["lens_y"], E["film_plane_z"], E["light_path"]
     ym = yl + zl - zf - path            # where the lens axis meets the mirror
     c = zl - ym                         # mirror plane: z = y + c
+    xl = P["lens_boss"]["x"]                # centred in the boss's window
     with parts.assembly("lens", inside=True):   # seen through the boss
         parts.lathe("lens_element", [(0, -0.0012), (0.0052, -0.0006), (0.0055, 0), (0.0052, 0.0006), (0, 0.0014)],
-                    location=(0, yl, zl), direction=(0, 1, 0), material="lens_glass", segments=32)
-        ccyl("lens_cell", 0.0068, 0.003, location=(0, yl, zl), direction=(0, 1, 0),
+                    location=(xl, yl, zl), direction=(0, 1, 0), material="lens_glass", segments=32)
+        ccyl("lens_cell", 0.0068, 0.003, location=(xl, yl, zl), direction=(0, 1, 0),
                        material="body_black", segments=32, caps=False)
     with parts.assembly("shutter", internal=True):
         ccyl("shutter_plate", 0.013, 0.0015, location=(0, yl - 0.004, zl), direction=(0, 1, 0),
