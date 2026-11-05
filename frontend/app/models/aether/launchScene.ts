@@ -162,13 +162,20 @@ const PLUME_FRAG = `
     float flick = 0.75 + 0.5 * noise(vec2(vAlong * 9.0 - uTime * 14.0, vAngle * 1.5));
     gl_FragColor = vec4(uColor * uK * edge * fall * flick, 1.0);
   }`;
+// Light added to the colour only: the canvas is transparent over the page, and writing alpha
+// would show the plume's dark parts as a black cone over the page behind.
+const GLOW = {
+  blending: THREE.CustomBlending, blendEquation: THREE.AddEquation,
+  blendSrc: THREE.SrcAlphaFactor, blendDst: THREE.OneFactor,
+  blendSrcAlpha: THREE.ZeroFactor, blendDstAlpha: THREE.OneFactor,
+} as const;
 function makePlume() {
   const group = new THREE.Group();
   const layer = (rFar: number, len: number, colour: string, fall: number, edgePow: number) => {
     const mat = new THREE.ShaderMaterial({
       uniforms: { uK: { value: 0 }, uTime: { value: 0 }, uColor: { value: new THREE.Color(colour) }, uFall: { value: fall }, uEdge: { value: edgePow } },
       vertexShader: PLUME_VERT, fragmentShader: PLUME_FRAG,
-      transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
+      transparent: true, depthWrite: false, side: THREE.DoubleSide, ...GLOW,
     });
     // A cylinder from the nozzle's 33 mm exit (bottom) to rFar, turned to run back along -x.
     const m = new THREE.Mesh(new THREE.CylinderGeometry(rFar, NOZZLE_R, len, 48, 1, true), mat);
@@ -179,7 +186,7 @@ function makePlume() {
   const core = layer(0.07, 0.55, "#e8f0ff", 2.5, 1.2);    // the dense jet just out of the nozzle
   const haze = layer(0.45, 1.6, "#7f9cc8", 1.8, 2.0);      // the gas spreading wide into vacuum
   const bed = new THREE.Mesh(new THREE.CylinderGeometry(0.0118, 0.0118, 0.07, 24, 1, true),
-    new THREE.MeshBasicMaterial({ color: "#ff4a14", transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending }));
+    new THREE.MeshBasicMaterial({ color: "#ff4a14", transparent: true, opacity: 0, depthWrite: false, ...GLOW }));
   bed.rotation.z = Math.PI / 2; bed.position.x = 0.165;    // the catalyst bed, between the valve and the throat
   group.add(bed);
   return {
