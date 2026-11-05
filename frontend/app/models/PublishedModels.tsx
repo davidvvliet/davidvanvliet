@@ -41,7 +41,11 @@ const TURN_SECONDS = 20;
 // Rocketdyne's 1959 logo are English Wikipedia's fair-use files, recoloured light for the dark cards.
 // Thiokol's 1950-1990 script logo is Wikimedia Commons' ThiokolLogo.PNG (public domain text logo,
 // trademarked), recoloured the same way. ESA's is Wikimedia Commons' ESA_logo.svg (public domain:
-// "simple geometric shapes or text", trademarked), filled light.
+// "simple geometric shapes or text", trademarked), filled light. Honeywell's is Wikimedia Commons'
+// Honeywell_logo.svg (public domain, trademarked), as it is. InvenSense's is Wikimedia Commons' InvenSense_logo.jpg
+// (public domain, trademarked), its white made clear, the navy light and the red brighter. Polaroid's 1960-1991 logo
+// (the Land Camera 1000's) is Wikimedia Commons' Polaroid-1960.svg by Thewritestuff92 (CC BY-SA 4.0,
+// https://creativecommons.org/licenses/by-sa/4.0/), its black letters filled light; that change is shared alike.
 // `above`: extra space over a logo, in px, when it sits under another; `after` overrides it under a given logo.
 const LOGOS: Record<string, { name: string; logo: string; height: number; above?: number; after?: Record<string, number> }> = {
   nasa: { name: "NASA", logo: "/logos/nasa.svg", height: 30 },
@@ -51,6 +55,9 @@ const LOGOS: Record<string, { name: string; logo: string; height: number; above?
   rocketdyne: { name: "Rocketdyne", logo: "/logos/rocketdyne.png", height: 24 },
   thiokol: { name: "Thiokol", logo: "/logos/thiokol.png", height: 14 },
   esa: { name: "European Space Agency", logo: "/logos/esa.svg", height: 16, above: 6, after: { nasa: 3 } },
+  honeywell: { name: "Honeywell", logo: "/logos/honeywell.svg", height: 12 },
+  invensense: { name: "InvenSense", logo: "/logos/invensense.png", height: 13 },
+  polaroid: { name: "Polaroid", logo: "/logos/polaroid.svg", height: 13 },
 };
 const ORGS = ["nasa"];
 const LAST = ["spacex"];
@@ -95,16 +102,20 @@ export default function PublishedModels({ models, circuit, dashboard }: {
       </div>
     );
   }
-  // The vehicles in ORGS order, then on a row of its own the way into /circuits, shown by one of its boards.
-  const cards: CardItem[] = [...models].sort((a, b) => orgRank(a) - orgRank(b)).map((m) => ({
+  // The vehicles in ORGS order; then on rows of their own my own design, Altair Aether, and the way into
+  // /circuits, shown by one of its boards.
+  const card = (m: Published): CardItem => ({
     key: m.probe, href: m.page ?? `/models?probe=${m.probe}`, url: `/models/${m.grid ? "grid/" : ""}${m.probe}.glb`, title: m.title,
     thumb: m.thumb ? `/models/${m.probe}.webp` : undefined, corner: <Logos model={m} />, pivot: m.pivot,
-  }));
+  });
+  const OWN = ["aether"];
+  const cards = models.filter((m) => !OWN.includes(m.probe)).sort((a, b) => orgRank(a) - orgRank(b)).map(card);
+  const own = models.filter((m) => OWN.includes(m.probe)).map(card);
   const more: CardItem[] = circuit ? [{
     key: "circuits", href: "/circuits", url: `/circuits/${circuit}.glb`, title: "My circuit experiments",
   }] : [];
   return (
-    <Grid back={{ href: "/", label: "← explore" }} title="Models" rows={[cards, more]} empty="No published models yet.">
+    <Grid back={{ href: "/", label: "← explore" }} title="Models" rows={[cards, own, more]} empty="No published models yet.">
       These models were created using my Blender harness with Opus 5.5. Only primary sources, mostly
       NASA&apos;s own, were used for maximum accuracy. The sources for each model can be found in its detailed view.
     </Grid>

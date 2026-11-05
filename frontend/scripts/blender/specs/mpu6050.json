@@ -1,6 +1,6 @@
 {
   "title": "InvenSense MPU-6050 IMU",
-  "logos": [],
+  "logos": ["invensense"],
   "note": "A 6-axis MEMS IMU (3-axis gyroscope + 3-axis accelerometer), built to show how one works from the outside in: the QFN package, the CMOS chip on its lead frame, the MEMS chip bonded face down on it, and the six sensors in the MEMS layer. Frame: z up, package bottom at z = 0, centred in x and y; +X and +Y as the datasheet's orientation figure (pin 1 top left in the top view, pins 1-6 down the -X side, 7-12 along -Y, 13-18 up +X, 19-24 along +Y). Real size in metres (the package is 4 mm). Layer thicknesses and the MEMS fine structure are estimates: no free cross-section of any consumer IMU exists (open_questions).",
   "viewer": {
     "explore": true

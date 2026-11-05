@@ -1,6 +1,6 @@
 {
   "title": "Polaroid Land Camera 1000",
-  "logos": [],
+  "logos": ["polaroid"],
   "note": "Polaroid's integral-film box camera (1977), built to show how it works from the outside in: the plastic shell, the front plate with lens, shutter, viewfinder and controls, the light box with its 45-degree mirror, the SX-70 film pack with its battery, and the spread rollers, pick and motor that push the print out. Frame: z up, camera bottom at z = 0, centred in x and y; the model faces -y (the lens looks along -y, the button on -x), as Perseverance's forward. The positions in from_photos and estimates are in the camera's own frame (lens along +y, button on +x): the build turns the model 180 degrees about z at the end. Real size in metres. The side profile and front parts are measured from Halicki's photos through cameras fitted to the documented 107 x 140 mm footprint; internal parts are estimates (open_questions).",
   "viewer": {
     "explore": true
