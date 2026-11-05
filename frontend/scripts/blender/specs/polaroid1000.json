@@ -1,0 +1,652 @@
+{
+  "title": "Polaroid Land Camera 1000",
+  "logos": [],
+  "note": "Polaroid's integral-film box camera (1977), built to show how it works from the outside in: the plastic shell, the front plate with lens, shutter, viewfinder and controls, the light box with its 45-degree mirror, the SX-70 film pack with its battery, and the spread rollers, pick and motor that push the print out. Frame: z up, camera bottom at z = 0, centred in x and y; the model faces -y (the lens looks along -y, the button on -x), as Perseverance's forward. The positions in from_photos and estimates are in the camera's own frame (lens along +y, button on +x): the build turns the model 180 degrees about z at the end. Real size in metres. The side profile and front parts are measured from Halicki's photos through cameras fitted to the documented 107 x 140 mm footprint; internal parts are estimates (open_questions).",
+  "viewer": {
+    "explore": true
+  },
+  "listed": false,
+  "closeups": [
+    {
+      "name": "lens boss",
+      "target": [
+        0.0,
+        -0.035,
+        0.062
+      ],
+      "look": [
+        -0.35,
+        0.85,
+        -0.3
+      ],
+      "radius": 0.03
+    },
+    {
+      "name": "button and badge",
+      "target": [
+        -0.036,
+        -0.03,
+        0.058
+      ],
+      "look": [
+        0.4,
+        0.85,
+        -0.3
+      ],
+      "radius": 0.025
+    },
+    {
+      "name": "viewfinder and knob",
+      "target": [
+        0.034,
+        -0.03,
+        0.06
+      ],
+      "look": [
+        -0.4,
+        0.85,
+        -0.25
+      ],
+      "radius": 0.025
+    },
+    {
+      "name": "exit slot",
+      "target": [
+        0.0,
+        -0.07,
+        0.012
+      ],
+      "look": [
+        -0.3,
+        0.9,
+        -0.3
+      ],
+      "radius": 0.04
+    },
+    {
+      "name": "eyecup",
+      "target": [
+        0.034,
+        0.072,
+        0.082
+      ],
+      "look": [
+        -0.3,
+        -0.85,
+        -0.4
+      ],
+      "radius": 0.03
+    },
+    {
+      "name": "door latch",
+      "target": [
+        -0.0535,
+        -0.04,
+        0.012
+      ],
+      "look": [
+        0.9,
+        0.3,
+        -0.3
+      ],
+      "radius": 0.02
+    }
+  ],
+  "sources": [
+    {
+      "id": "hackney_2010_187",
+      "title": "Hackney Museum collection, object 2010.187: Polaroid '1000 SE' land camera (1977)",
+      "url": "https://museum-collection.hackney.gov.uk/object-2010-187",
+      "read": "2026-11-05",
+      "licence": "no licence stated: link and quotes only"
+    },
+    {
+      "id": "kamerastore_sc1000",
+      "title": "Kamerastore, \"Polaroid Supercolor 1000\" product page",
+      "url": "https://kamerastore.com/en-us/products/polaroid-supercolor-1000",
+      "read": "2026-11-05",
+      "licence": "retailer text, no licence stated: link and quotes only"
+    },
+    {
+      "id": "wp_land1000",
+      "title": "Wikipedia, \"Polaroid Land Camera 1000\"",
+      "url": "https://en.wikipedia.org/wiki/Polaroid_Land_Camera_1000",
+      "read": "2026-11-05",
+      "licence": "CC BY-SA 4.0 (used only to find sources and for the variant notes)"
+    },
+    {
+      "id": "polaroid_sx70_film",
+      "title": "Polaroid, \"B&W SX-70 Film\" product page (format and image area)",
+      "url": "https://www.polaroid.com/en_ht/products/bw-sx-70-film-five-pack",
+      "read": "2026-11-05",
+      "licence": "copyright Polaroid: link and quotes only"
+    },
+    {
+      "id": "retronautik_1000",
+      "title": "Retronautik, \"Polaroid Land Camera 1000 Teardown\" (German, with photos of each part)",
+      "url": "https://www.retronautik.de/fotografie/polaroid/kameras/polaroid-land-camera-1000-teardown/",
+      "read": "2026-11-05",
+      "licence": "no licence stated (all rights reserved): link, quotes and measuring from photos only",
+      "credit": "Inside parts shaped after, and their colours sampled from, Retronautik's teardown photos of a Land Camera 1000"
+    },
+    {
+      "id": "ifixit_onestep600",
+      "title": "iFixit, \"Polaroid One-Step 600 Teardown\" (a later 600-film model with a similar layout)",
+      "url": "https://www.ifixit.com/Teardown/Polaroid+One-Step+600+Teardown/2151",
+      "read": "2026-11-05",
+      "licence": "no licence stated on the page text: link and quotes only"
+    },
+    {
+      "id": "sx70_service",
+      "title": "Polaroid SX-70 Land Camera service manual (scan on archive.org; the folding SX-70, which uses the same film pack, pick and rollers)",
+      "url": "https://archive.org/download/manualsonline-id-2f98f65a-8993-41db-9699-2d4eee63b77d/2f98f65a-8993-41db-9699-2d4eee63b77d.pdf",
+      "read": "2026-11-05",
+      "licence": "copyright Polaroid: link and quotes only"
+    },
+    {
+      "id": "us3714879",
+      "title": "US patent 3,714,879, \"Reflex camera\", E. H. Land et al., Polaroid (1973)",
+      "url": "https://patents.google.com/patent/US3714879A/en",
+      "read": "2026-11-05",
+      "licence": "US patent text: link and quotes only"
+    },
+    {
+      "id": "halicki_2023",
+      "title": "Jacek Halicki, \"2023 Aparat Polaroid Land Camera Supercolor 1000\" (1)-(7), 2023-05-08, Wikimedia Commons; (1),(2),(3),(4),(7) in refs/polaroid1000/",
+      "url": "https://commons.wikimedia.org/wiki/File:2023_Aparat_Polaroid_Land_Camera_Supercolor_1000_(3).jpg",
+      "read": "2026-11-05",
+      "licence": "CC BY-SA 4.0 (Jacek Halicki), as stated on the Commons file pages",
+      "credit": "Badge, name strip and viewfinder textures cut from, and finishes sampled from, Jacek Halicki's photos of a Polaroid Supercolor 1000 (CC BY-SA 4.0, Wikimedia Commons)"
+    }
+  ],
+  "reference_model": {
+    "url": "",
+    "note": "none: no free 3D model of the 1000 found; layout from photos"
+  },
+  "dimensions": {
+    "body_depth": {
+      "value": 0.14,
+      "object": [
+        "lower_box",
+        "door_face",
+        "white_cover"
+      ],
+      "measure": "y",
+      "source": "hackney_2010_187",
+      "quote": "Height: 92mm Width: 107mm Depth: 140mm",
+      "also": [
+        {
+          "source": "kamerastore_sc1000",
+          "quote": "Size: 141 x 109 x 94mm"
+        }
+      ]
+    },
+    "body_width": {
+      "value": 0.107,
+      "object": [
+        "lower_box",
+        "front_frame",
+        "white_cover"
+      ],
+      "measure": "x",
+      "source": "hackney_2010_187",
+      "quote": "Height: 92mm Width: 107mm Depth: 140mm",
+      "also": [
+        {
+          "source": "kamerastore_sc1000",
+          "quote": "Size: 141 x 109 x 94mm"
+        }
+      ]
+    },
+    "body_height": {
+      "value": 0.092,
+      "object": [
+        "lower_box",
+        "eyecup"
+      ],
+      "measure": "z",
+      "source": "hackney_2010_187",
+      "quote": "Height: 92mm Width: 107mm Depth: 140mm",
+      "conflict": [
+        {
+          "source": "kamerastore_sc1000",
+          "quote": "Size: 141 x 109 x 94mm",
+          "note": "axis order not stated; 94 read as height. 2 mm apart; whether either includes the eyecup is not stated (open_questions)"
+        }
+      ],
+      "note": "the eyecup is the highest point (halicki_2023 (2) cast: 95-97 mm); 94 used"
+    }
+  },
+  "facts": {
+    "lens": {
+      "value": {
+        "focal_length": 0.103,
+        "f_number": 14.6,
+        "elements": 1,
+        "aperture_diameter_derived": 0.00705
+      },
+      "source": "kamerastore_sc1000",
+      "quote": "Lens: Plastic construction 103mm f14.6 (1 element)",
+      "also": [
+        {
+          "source": "wp_land1000",
+          "quote": "a one element 103mm f/14.6 plastic lens, fixed focus"
+        }
+      ],
+      "note": "aperture = 103 / 14.6 = 7.05 mm, derived"
+    },
+    "shutter_speeds": {
+      "value": "1/4 s to 1/400 s",
+      "source": "kamerastore_sc1000",
+      "quote": "Shutter: 1/4s - 1/400s"
+    },
+    "weight": {
+      "value": 0.397,
+      "source": "kamerastore_sc1000",
+      "quote": "Weight: 397g"
+    },
+    "print_format": {
+      "value": {
+        "x": 0.088,
+        "y": 0.107
+      },
+      "source": "polaroid_sx70_film",
+      "quote": "Format: 107mm x 88mm (4.2\" x 3.5\")",
+      "note": "the print; the cassette is a little larger (not found)"
+    },
+    "image_area": {
+      "value": {
+        "x": 0.079,
+        "y": 0.077
+      },
+      "source": "polaroid_sx70_film",
+      "quote": "Image area: 79mm x 77mm (3.1\" x 3.0\")"
+    },
+    "housing": {
+      "value": "three plastic parts: the body box (with the strap), the front plate (lens, viewfinder, lighten/darken control, button) and the film door; front plate and box hook together with two barbed tongues; the door is held by the mechanism inside, not the housing",
+      "source": "retronautik_1000",
+      "quote": "Das Plasikgehäuse der Kamera besteht aus drei Teilen: dem Kamerakasten mit dem Tragegurt, der Frontplatte mit Objektiv, Sucher, Helligkeitsregler und Auslöser und der Klappe für die Filmkassette."
+    },
+    "light_path": {
+      "value": "fixed plastic lens, shutter behind it, then a light-tight box with a mirror at 45 degrees that turns the image through 90 degrees onto the film in the pack",
+      "source": "retronautik_1000",
+      "quote": "einem lichtdichten Kasten mit Spiegel, der das von der Linse eingefangene Bild um 90° reflektiert auf den Film in der Filmkassette projiziert ... im Kamerakasten im 45°-Winkel angebrachten Spiegel"
+    },
+    "viewfinder": {
+      "value": "a separate tube from the eyepiece on the body to the front plate, with a lens set in its front",
+      "source": "retronautik_1000",
+      "quote": "Der Sucher geht von einem Okular am Gehäuse bis zur Frontplatte. In die Front des Suchers ist eine Linse eingelassen."
+    },
+    "shutter_and_eject": {
+      "value": "mechanical shutter, electric print eject; two contact clips in the film bay take power from the battery in the pack",
+      "source": "retronautik_1000",
+      "quote": "Der Verschluss ist mechanisch, der Bildauswurf ist elektrisch. Zwei im Cassettenfach befestigte Kontaktklemmen leiten den Strom aus der in der Cassette eingebauten Batterie in die Kameraelektrik."
+    },
+    "battery": {
+      "value": "six-volt flat battery inside each film pack",
+      "source": "sx70_service",
+      "quote": "power is provided by a six-volt battery inside the film pack",
+      "also": [
+        {
+          "source": "polaroid_sx70_film",
+          "quote": "Contains a battery to power your camera."
+        }
+      ]
+    },
+    "pack_springs": {
+      "value": "the pack is held by springs on the bay floor; the print is pushed out by a roller mechanism",
+      "source": "retronautik_1000",
+      "quote": "Die Filmcassette wird durch am Boden angebrachte Spannfedern fixiert, das Bild durch eine Rollenmechanik ausgeworfen."
+    },
+    "rollers_and_pick": {
+      "value": "a pick pushes the exposed film into two spread rollers, which break the pod, spread the developer and drive the print out; one (top) roller is geared to the motor's gear train",
+      "source": "sx70_service",
+      "quote": "the picks feeds the exposed film to the spreader rolls. The rolls break the pod, spread the developer, and eject the film from the camera. ... The front cover idler gear meshing with the gear train powers the top roller",
+      "also": [
+        {
+          "source": "retronautik_1000",
+          "quote": "photo 'Rollenmechanik': a gold roller with a spur gear on a steel frame, a plain steel roller, and a brass pick/spring plate"
+        }
+      ]
+    },
+    "motor_side": {
+      "value": "motor beside one side of the film cassette, rollers beside the opposite side, gear train along a third side (SX-70 patent; the 1000's photos to confirm)",
+      "source": "us3714879",
+      "quote": "Motive power is derived from an electric motor 130 attached to the rear portion of frame 12",
+      "also": [
+        {
+          "source": "ifixit_onestep600",
+          "quote": "Pull the electric motor straight out of the plastic piece. ... Remove the solenoid from the back of the lens plate by removing the two tabs."
+        }
+      ]
+    },
+    "frame_counter": {
+      "value": "a white dial numbered 10 down to 0 beside the shutter mechanism",
+      "source": "retronautik_1000",
+      "quote": "photo 'Verschluss, Mechanik und Elektrik': white counter dial reading 10, 9; brass contact fingers, a flex foil, a red and a black wire"
+    },
+    "variants": {
+      "value": "sold as the OneStep in the US; red or green button; Q-light flash made for it",
+      "source": "wp_land1000",
+      "quote": "In the United States, it was marketed as the OneStep. ... They had two unique shutter colors: red and green."
+    }
+  },
+  "materials": {
+    "front_white": {
+      "hex": "#f1eeeb",
+      "metallic": 0.0,
+      "roughness": 0.45,
+      "source": "halicki_2023 (3), front plate below the lens, averaged at two spots"
+    },
+    "body_black": {
+      "hex": "#35363a",
+      "metallic": 0.0,
+      "roughness": 0.35,
+      "source": "halicki_2023 (3), lower black front, averaged at two spots"
+    },
+    "button_red": {
+      "hex": "#c0403a",
+      "metallic": 0.0,
+      "roughness": 0.4,
+      "source": "halicki_2023 (3), shutter button, two spots"
+    },
+    "stripe_magenta": {
+      "hex": "#ff4fab",
+      "metallic": 0.0,
+      "roughness": 0.4,
+      "source": "halicki_2023 (3), stripe scanned across at y=1100 px"
+    },
+    "stripe_orange": {
+      "hex": "#ff9275",
+      "metallic": 0.0,
+      "roughness": 0.4,
+      "source": "halicki_2023 (3), stripe at y=1100 px"
+    },
+    "stripe_yellow": {
+      "hex": "#fef49d",
+      "metallic": 0.0,
+      "roughness": 0.4,
+      "source": "halicki_2023 (3), stripe at y=1100 px"
+    },
+    "stripe_green": {
+      "hex": "#caf090",
+      "metallic": 0.0,
+      "roughness": 0.4,
+      "source": "halicki_2023 (3), stripe at y=1100 px"
+    },
+    "stripe_blue": {
+      "hex": "#01b7ee",
+      "metallic": 0.0,
+      "roughness": 0.4,
+      "source": "halicki_2023 (3), stripe at y=1100 px"
+    },
+    "eyecup_rubber": {
+      "hex": "#3b3b3b",
+      "metallic": 0.0,
+      "roughness": 0.8,
+      "source": "halicki_2023 (3), eyecup"
+    },
+    "roller_gold": {
+      "hex": "#a4a67c",
+      "metallic": 1.0,
+      "roughness": 0.35,
+      "source": "retronautik_1000 'Rollenmechanik' photo, upper roller, four spots (daylight, slight green cast)"
+    },
+    "roller_steel": {
+      "hex": "#999389",
+      "metallic": 1.0,
+      "roughness": 0.25,
+      "source": "retronautik_1000 'Rollenmechanik' photo, lower roller, three spots"
+    },
+    "pick_brass": {
+      "hex": "#7d7461",
+      "metallic": 1.0,
+      "roughness": 0.4,
+      "source": "retronautik_1000 'Rollenmechanik' photo, pick plate, three spots"
+    },
+    "frame_steel": {
+      "hex": "#2b3137",
+      "metallic": 0.8,
+      "roughness": 0.5,
+      "source": "retronautik_1000 'Rollenmechanik' photo, roller frame, two spots"
+    },
+    "lightbox_black": {
+      "hex": "#040505",
+      "metallic": 0.0,
+      "roughness": 0.8,
+      "source": "retronautik_1000 'Fotokasten mit Spiegel' photo, two spots"
+    },
+    "mirror": {
+      "hex": "#e8ecee",
+      "metallic": 1.0,
+      "roughness": 0.03,
+      "source": "retronautik_1000 'Fotokasten mit Spiegel' (a front-surface mirror; colour not sampled, it reflects)"
+    },
+    "lens_glass": {
+      "hex": "#1b2026",
+      "metallic": 0.0,
+      "roughness": 0.05,
+      "source": "halicki_2023 (3), lens seen through the boss opening"
+    },
+    "flex_foil": {
+      "hex": "#a4d8f5",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "retronautik_1000 'Verschluss, Mechanik und Elektrik' photo, flex foil (blown out; shows silver-white)"
+    },
+    "light_bundle": {
+      "hex": "#fff2c8",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "retronautik_1000, diagram: the light the lens gathers, folded by the mirror onto the film (shown see-through; light has no finish to sample)"
+    }
+  },
+  "open_questions": [
+    "Variant: the white Supercolor 1000 with the rainbow stripe (decided by David, 2026-11-05), from Halicki's CC BY-SA 4.0 photos.",
+    "Retronautik's teardown photos (no licence stated) are used to measure the inside parts from, not as textures, and stay out of refs/ (David, 2026-11-05).",
+    "No published size for any internal part (mirror, light box, rollers, motor, gears, pack thickness). They will be estimated from the teardown photos, scaled by the 88 mm print width, and labelled as estimates.",
+    "Overall size: Hackney 92 x 107 x 140 mm vs Kamerastore 141 x 109 x 94 mm (axis order not stated); whether the eyecup is included is not stated.",
+    "Front features (lens surround, viewfinder window, button, knob, exit slot) have no published sizes: to be measured from Halicki (3), scaled by the 107 mm width.",
+    "Mechanism details (motor type, solenoids, gear count, circuit layout) come from the SX-70 manual and the One-Step 600 teardown, related models; the 1000 may differ.",
+    "Inside layout (where the motor, gears and shutter sit) is placed so the parts fit and the light path works; the only photos of the 1000's inside show the parts taken out.",
+    "Eyecup: the photo cast puts its back 15-25 mm behind the body's rear; whether the 140 mm depth includes it is not stated."
+  ],
+  "budget": {
+    "triangles": 50000,
+    "glb_bytes": 1500000
+  },
+  "from_photos": {
+    "door": {
+      "value": {
+        "y0": 0.035,
+        "y1": 0.07,
+        "height": 0.0268
+      },
+      "source": "halicki_2023 (2), estimated: camera fitted to the 107 x 140 mm footprint's bottom corners and three vertical edges (4 px rms), pixels cast onto the side or centre plane; height also from (3): 311 px x 0.0862"
+    },
+    "lower_box": {
+      "value": {
+        "y0": -0.07,
+        "height": 0.025
+      },
+      "source": "halicki_2023 (2), estimated: camera fitted to the 107 x 140 mm footprint's bottom corners and three vertical edges (4 px rms), pixels cast onto the side or centre plane: rear wall top at y -0.072, z 0.025"
+    },
+    "front_section": {
+      "value": {
+        "y0": -0.004,
+        "top": 0.085
+      },
+      "source": "halicki_2023 (2), estimated: camera fitted to the 107 x 140 mm footprint's bottom corners and three vertical edges (4 px rms), pixels cast onto the side or centre plane: its top rear corner at y -0.003, z 0.084; front plate top at z 0.085"
+    },
+    "white_cover_back": {
+      "value": 0.018,
+      "source": "halicki_2023 (2), estimated: camera fitted to the 107 x 140 mm footprint's bottom corners and three vertical edges (4 px rms), pixels cast onto the side or centre plane: the white cover's side starts at y 0.018-0.019"
+    },
+    "front_plate": {
+      "value": {
+        "y": 0.025,
+        "bottom": 0.043
+      },
+      "source": "halicki_2023 (2), estimated: camera fitted to the 107 x 140 mm footprint's bottom corners and three vertical edges (4 px rms), pixels cast onto the side or centre plane: plate top front at y 0.024; the stripe's top end (plate base) at y 0.027, z 0.043"
+    },
+    "shelf_front": {
+      "value": {
+        "y": 0.07,
+        "z": 0.027
+      },
+      "source": "halicki_2023 (2), estimated: camera fitted to the 107 x 140 mm footprint's bottom corners and three vertical edges (4 px rms), pixels cast onto the side or centre plane: the stripe's front end at y 0.068, z 0.028 (straight line through its middle at y 0.047, z 0.036)"
+    },
+    "rear_slope_deg": {
+      "value": 41.6,
+      "source": "halicki_2023 (2), derived: from the rear wall top (y -0.070, z 0.025) to the front section's top rear corner (y -0.004, z 0.084)"
+    },
+    "eyecup": {
+      "value": {
+        "x": -0.034,
+        "width": 0.032,
+        "top": 0.094,
+        "y_rear": -0.072
+      },
+      "source": "halicki_2023 (2), estimated: eyecup corners cast through the fitted camera onto its side planes (rear y -0.072, top z 0.095-0.097, bottom z 0.070); top set to 0.094, Kamerastore's 94 mm, within 2.2% of Hackney's 92"
+    },
+    "lens_boss": {
+      "value": {
+        "x": -0.0015,
+        "z": 0.0605,
+        "width": 0.037,
+        "height": 0.039,
+        "depth": 0.01,
+        "opening_w": 0.0335,
+        "opening_h": 0.03,
+        "opening_z": 0.0592,
+        "lens_frame": 0.0194,
+        "lens_frame_z": 0.0614
+      },
+      "source": "halicki_2023 (3), estimated: straight-on, scaled by the 107 mm width (front plate 0.090 mm/px): boss 785-1205 x 405-840 px, black stepped opening 810-1185 x 470-805 px, lens frame 880-1095 x 505-720 px; depth from (2)"
+    },
+    "lens_centre_z": {
+      "value": 0.0665,
+      "source": "halicki_2023 (3), estimated: the lens glass centred at (985, 555) px, about 120 px (10.8 mm) across"
+    },
+    "viewfinder_window": {
+      "value": {
+        "x": -0.038,
+        "z": 0.069,
+        "width": 0.025,
+        "height": 0.021
+      },
+      "source": "halicki_2023 (3), estimated: straight-on, scaled by the 107 mm width (door 0.0862 mm/px, front plate 0.090 mm/px): 1265-1545 x 410-640 px"
+    },
+    "button": {
+      "value": {
+        "x": 0.0365,
+        "z": 0.047,
+        "bezel": 0.0149,
+        "cap": 0.0113
+      },
+      "source": "halicki_2023 (3), estimated: straight-on, scaled by the 107 mm width (door 0.0862 mm/px, front plate 0.090 mm/px): centre (572, 770) px, bezel 165 px, cap 125 px"
+    },
+    "knob": {
+      "value": {
+        "x": -0.029,
+        "z": 0.047,
+        "diameter": 0.0077,
+        "length": 0.011
+      },
+      "source": "halicki_2023 (3), estimated: straight-on, scaled by the 107 mm width (door 0.0862 mm/px, front plate 0.090 mm/px): centre (1300, 770) px, 85 px across; length from (2)"
+    },
+    "badge": {
+      "value": {
+        "x": 0.0356,
+        "z": 0.0688,
+        "width": 0.0248,
+        "height": 0.0207
+      },
+      "source": "halicki_2023 (3), estimated: straight-on, scaled by the 107 mm width (door 0.0862 mm/px, front plate 0.090 mm/px): 445-720 x 415-645 px"
+    },
+    "stripe": {
+      "value": {
+        "width": 0.0105,
+        "bands": 5
+      },
+      "source": "halicki_2023 (3), estimated: straight-on, scaled by the 107 mm width (door 0.0862 mm/px, front plate 0.090 mm/px): 935-1055 px, magenta, orange, yellow, green, blue from the button side"
+    },
+    "exit_slot": {
+      "value": {
+        "half_width": 0.046,
+        "z0": 0.0057,
+        "z1": 0.0135,
+        "label_z0": 0.0135,
+        "label_z1": 0.0228
+      },
+      "source": "halicki_2023 (3), estimated: straight-on, scaled by the 107 mm width (door 0.0862 mm/px, front plate 0.090 mm/px): label strip 1252-1360 px, slot 1360-1450 px below the door top at 1205 px"
+    },
+    "flash_socket": {
+      "value": {
+        "x": 0.004,
+        "width": 0.03,
+        "depth": 0.016,
+        "height": 0.004
+      },
+      "source": "halicki_2023 (3), estimated: straight-on, scaled by the 107 mm width (door 0.0862 mm/px, front plate 0.090 mm/px): 760-1100 px"
+    },
+    "door_latch": {
+      "value": {
+        "y": 0.04,
+        "z": 0.012,
+        "width": 0.008,
+        "height": 0.014,
+        "depth": 0.0015
+      },
+      "source": "halicki_2023 (2), estimated: the latch on the door's +x side, read through the fitted camera"
+    }
+  },
+  "estimates": {
+    "note": "No published size for any internal part. Chosen so the light path works: a 103 mm lens focused a few metres out needs about 105 mm from lens to film, folded by the 45-degree mirror.",
+    "film_plane_z": {
+      "value": 0.011,
+      "source": "halicki_2023 (3), estimate: the print leaves between the rollers at the exit slot (z 0.006-0.0135)"
+    },
+    "lens_y": {
+      "value": 0.027,
+      "source": "halicki_2023 (2), estimate: at the back of the stepped opening, just in front of the front plate"
+    },
+    "light_path": {
+      "value": 0.105,
+      "source": "kamerastore_sc1000, derived: 1 / (1/103 mm - 1/3 m) = 106.7 mm for a subject at 3 m; 105 mm used"
+    },
+    "pack": {
+      "value": {
+        "x": 0.093,
+        "y": 0.112,
+        "z": 0.009,
+        "front_y": 0.045
+      },
+      "source": "polaroid_sx70_film, estimate: a little larger than the 88 x 107 mm print; front end placed so the picture area's centre is under the mirror (wide border with the developer pod leads out of the camera)"
+    },
+    "battery": {
+      "value": {
+        "x": 0.07,
+        "y": 0.085,
+        "z": 0.0025
+      },
+      "source": "sx70_service, estimate: a flat cell across the pack's floor (size not found)"
+    },
+    "rollers": {
+      "value": {
+        "length": 0.096,
+        "upper_d": 0.0056,
+        "lower_d": 0.0048,
+        "y": 0.052
+      },
+      "source": "retronautik_1000, estimate: length just over the 88 mm print; diameters from Retronautik's roller photo (length about 17 and 20 diameters)"
+    },
+    "motor": {
+      "value": {
+        "d": 0.012,
+        "length": 0.024
+      },
+      "source": "us3714879, estimate: placed under the shelf behind the door, driving the upper roller through a gear train on the +x side (open_questions)"
+    }
+  }
+}

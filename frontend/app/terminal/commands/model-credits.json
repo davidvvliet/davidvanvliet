@@ -53,6 +53,10 @@
     "Material colours sampled from NASA/JPL-Caltech photo PIA23499",
     "NASA 3D Resources, Mars 2020 Perseverance Rover model (layout reference): https://github.com/nasa/NASA-3D-Resources"
   ],
+  "polaroid1000": [
+    "Inside parts shaped after, and their colours sampled from, Retronautik's teardown photos of a Land Camera 1000",
+    "Badge, name strip and viewfinder textures cut from, and finishes sampled from, Jacek Halicki's photos of a Polaroid Supercolor 1000 (CC BY-SA 4.0, Wikimedia Commons)"
+  ],
   "raptor3": [
     "SpaceX, \"Introducing Starship V3\"",
     "SpaceX, photo of Raptor 1, 2 and 3 (measured, not reproduced)"
