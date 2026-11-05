@@ -1,19 +1,17 @@
-// Every missing page, including an unknown /writing post: just "404", in the site's font and colours.
+import Link from "next/link";
+import Header from "./models/Header";
+import models from "./models/models.module.css";
+
+// Every missing page, including an unknown /writing post: the site header, then just "404".
 export default function NotFound() {
   return (
-    <main
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "#0a0a0a",
-        color: "#ededed",
-        fontFamily: "var(--font-roboto-mono), ui-monospace, monospace",
-        fontSize: "1rem",
-      }}
-    >
-      404
-    </main>
+    <div className={models.page}>
+      <Header>
+        <Link href="/" className={models.dim}>← explore</Link>
+      </Header>
+      <main style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1rem" }}>
+        404
+      </main>
+    </div>
   );
 }
