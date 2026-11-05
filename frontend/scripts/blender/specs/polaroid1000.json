@@ -167,8 +167,8 @@
     "body_depth": {
       "value": 0.14,
       "object": [
-        "lower_box",
-        "door_face",
+        "body_shell",
+        "door",
         "white_cover"
       ],
       "measure": "y",
@@ -184,8 +184,7 @@
     "body_width": {
       "value": 0.107,
       "object": [
-        "lower_box",
-        "front_frame",
+        "body_shell",
         "white_cover"
       ],
       "measure": "x",
@@ -201,7 +200,7 @@
     "body_height": {
       "value": 0.092,
       "object": [
-        "lower_box",
+        "body_shell",
         "eyecup"
       ],
       "measure": "z",
@@ -341,7 +340,7 @@
     "body_black": {
       "hex": "#35363a",
       "metallic": 0.0,
-      "roughness": 0.35,
+      "roughness": 0.3,
       "source": "halicki_2023 (3), lower black front, averaged at two spots"
     },
     "button_red": {
@@ -439,6 +438,12 @@
       "metallic": 0.0,
       "roughness": 0.5,
       "source": "retronautik_1000, diagram: the light the lens gathers, folded by the mirror onto the film (shown see-through; light has no finish to sample)"
+    },
+    "hood_matte": {
+      "hex": "#3d3d3e",
+      "metallic": 0.0,
+      "roughness": 0.85,
+      "source": "halicki_2023 (1), the hood's grained side, three spots (crop 1150-1800 x 100-900 px)"
     }
   },
   "open_questions": [

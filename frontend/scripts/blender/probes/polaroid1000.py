@@ -95,6 +95,43 @@ def slab(name, corners, normal, t, material):
     return _solid(name, verts, faces, material)
 
 
+def _apply(obj):
+    """Bake an object's modifiers into its mesh."""
+    dg = bpy.context.evaluated_depsgraph_get()
+    dg.update()
+    me = bpy.data.meshes.new_from_object(obj.evaluated_get(dg))
+    obj.modifiers.clear()
+    old = obj.data
+    obj.data = me
+    bpy.data.meshes.remove(old)
+
+
+def fuse(name, objs):
+    """One moulding from several closed solids (exact boolean union); keeps the first's tags."""
+    base = objs[0]
+    for o in objs[1:]:
+        m = base.modifiers.new("union", "BOOLEAN")
+        m.operation, m.solver, m.object = "UNION", "EXACT", o
+        m.material_mode = "TRANSFER"
+    _apply(base)
+    for o in objs[1:]:
+        bpy.data.objects.remove(o)
+    base.name = base.data.name = name
+    return base
+
+
+def round_edges(obj, width, segments=4, angle=30):
+    """Round every edge sharper than `angle` degrees (moulded plastic), concave ones filleted."""
+    m = obj.modifiers.new("round", "BEVEL")
+    m.width, m.segments, m.limit_method = width, segments, "ANGLE"
+    m.angle_limit = math.radians(angle)
+    m.use_clamp_overlap = True
+    _apply(obj)
+    obj.data.shade_smooth()
+    obj.data.set_sharp_from_angle(angle=math.radians(35))
+    return obj
+
+
 def gear(name, radius, width, centre, material, module=0.0005):
     """A spur gear on the x axis: teeth about two modules deep, one per 3.14 modules of rim."""
     teeth = max(8, int(2 * radius / module))
@@ -153,22 +190,35 @@ def shell(P):
     door, low, fs = P["door"], P["lower_box"], P["front_section"]
     plate, shelf, wb = P["front_plate"], P["shelf_front"], P["white_cover_back"]
     with parts.assembly("body", core=True):
-        side_prism("lower_box", [(low["y0"], 0.0), (door["y0"], 0.0), (door["y0"], low["height"]),
-                                 (low["y0"], low["height"])], -HALF_W, HALF_W, "body_black")
-        side_prism("front_frame", [(fs["y0"], low["height"]), (wb, low["height"]), (wb, fs["top"]),
-                                   (fs["y0"], fs["top"])], -HALF_W, HALF_W, "body_black")
+        body = [side_prism("lower_box", [(low["y0"], 0.0), (door["y0"], 0.0), (door["y0"], low["height"]),
+                                 (low["y0"], low["height"])], -HALF_W, HALF_W, "body_black")]
+        body.append(side_prism("front_frame", [(fs["y0"], low["height"]), (wb, low["height"]), (wb, fs["top"]),
+                                   (fs["y0"], fs["top"])], -HALF_W, HALF_W, "body_black"))
         # The pyramid over the mirror: its back slopes down to the rear wall and its sides lean
         # in (7 mm inset at the top, estimated from halicki_2023 (1) and (2)).
         z0, z1, y0, y1, inset = low["height"], fs["top"], low["y0"], fs["y0"], 0.007
         verts = [(HALF_W, y0, z0), (-HALF_W, y0, z0), (-HALF_W, y1, z0), (HALF_W, y1, z0),
                  (HALF_W - inset, y1, z1), (-HALF_W + inset, y1, z1)]
-        _solid("pyramid", verts, [(0, 1, 2, 3), (3, 2, 5, 4), (0, 4, 5, 1), (0, 3, 4), (1, 5, 2)], "body_black")
+        body.append(_solid("pyramid", verts, [(0, 1, 2, 3), (3, 2, 5, 4), (0, 4, 5, 1), (0, 3, 4), (1, 5, 2)], "body_black"))
+        # The frame's top edge runs forward over the white plate (halicki_2023 (2): the top is all black).
+        lip = 0.003
+        body.append(side_prism("frame_lip", [(wb - 0.002, fs["top"] - lip), (plate["y"] + 0.0005, fs["top"] - lip),
+                                             (plate["y"] + 0.0005, fs["top"]), (wb - 0.002, fs["top"])],
+                               -HALF_W, HALF_W, "body_black"))
+        body.append(viewfinder_hood(P))
+        # One moulding with rounded edges, the hood filleted into the sloped back (halicki_2023 (1)).
+        round_edges(fuse("body_shell", body), 0.003)
+        # Strap lugs: a small rounded bar on each side of the front frame, near the top.
+        for sgn in (1, -1):
+            lug = parts.box(f"strap_lug_{'p' if sgn > 0 else 'm'}", (0.004, 0.009, 0.0028),
+                            location=(sgn * (HALF_W + 0.001), wb - 0.007, fs["top"] - 0.008), material="body_black")
+            round_edges(lug, 0.001, segments=3)
     with parts.assembly("film_door"):
         dz, dy0, dy1 = door["height"], door["y0"], door["y1"]
         slot = P["exit_slot"]
         hw = slot["half_width"]
-        side_prism("door_body", [(dy0, 0.0), (dy1 - 0.006, 0.0), (dy1 - 0.006, dz), (dy0, dz)],
-                   -HALF_W, HALF_W, "body_black")
+        door_body = side_prism("door_body", [(dy0, 0.0), (dy1 - 0.006, 0.0), (dy1 - 0.006, dz), (dy0, dz)],
+                               -HALF_W + 0.0002, HALF_W - 0.0002, "body_black")
         zs = (slot["z0"] + slot["z1"]) / 2
         parts.boxes("door_face", [
             ((2 * HALF_W, 0.006, slot["z0"]), (0, dy1 - 0.003, slot["z0"] / 2)),
@@ -176,6 +226,8 @@ def shell(P):
             ((HALF_W - hw, 0.006, slot["z1"] - slot["z0"]), ((HALF_W + hw) / 2, dy1 - 0.003, zs)),
             ((HALF_W - hw, 0.006, slot["z1"] - slot["z0"]), (-(HALF_W + hw) / 2, dy1 - 0.003, zs)),
         ], material="body_black")
+        face = bpy.data.objects["door_face"]
+        round_edges(fuse("door", [face, door_body]), 0.0018)
         strip = parts.box("name_strip", (0.101, 0.0008, slot["label_z1"] - slot["label_z0"]),
                           location=(0, dy1 + 0.0004, (slot["label_z0"] + slot["label_z1"]) / 2),
                           material=_image_material("name_strip", "name-strip.jpg", 0.4))
@@ -183,12 +235,14 @@ def shell(P):
         _uv_plane(strip, 0, 2, 0.0505, -0.0505, slot["label_z0"], slot["label_z1"])
     with parts.assembly("door_latch"):
         la = P["door_latch"]
-        parts.box("latch", (la["depth"], la["width"], la["height"]), location=(HALF_W + la["depth"] / 2, la["y"], la["z"]),
-                  material="body_black")
+        latch = parts.box("latch", (la["depth"], la["width"], la["height"]), location=(HALF_W + la["depth"] / 2, la["y"], la["z"]),
+                          material="body_black")
+        round_edges(latch, 0.0005, segments=2)
     with parts.assembly("front_cover"):
-        side_prism("white_cover", [(wb, door["height"]), (shelf["y"], door["height"]), (shelf["y"], shelf["z"]),
-                                   (plate["y"], plate["bottom"]), (plate["y"], fs["top"]), (wb, fs["top"])],
-                   -HALF_W, HALF_W, "front_white")
+        cover = side_prism("white_cover", [(wb, door["height"]), (shelf["y"], door["height"]), (shelf["y"], shelf["z"]),
+                                           (plate["y"], plate["bottom"]), (plate["y"], fs["top"] - 0.003), (wb, fs["top"] - 0.003)],
+                           -HALF_W, HALF_W, "front_white")
+        round_edges(cover, 0.0025)
     stripe(P)
 
 
@@ -216,8 +270,9 @@ def front_parts(P):
         ow, oh, oz = lb["opening_w"], lb["opening_h"], lb["opening_z"]
         # The white frame (its hole off-centre: the top border is the widest) ...
         outer = [(u, v + lb["z"] - oz) for u, v in rrect(lb["width"], lb["height"], 0.007)]
-        front_ring("boss", outer, rrect(ow, oh, 0.005), lb["x"], oz, py, py + lb["depth"], "front_white",
-                   inner_y0=py + lb["depth"] - 0.0015)
+        boss = front_ring("boss", outer, rrect(ow, oh, 0.005), lb["x"], oz, py - 0.001, py + lb["depth"], "front_white",
+                          inner_y0=py + lb["depth"] - 0.0015)
+        round_edges(boss, 0.0015, segments=3, angle=40)
         # ... and inside it the black stepped hood, narrowing back to the lens frame.
         steps = 6
         y = py + lb["depth"] - 0.0015
@@ -257,26 +312,50 @@ def front_parts(P):
         _uv_plane(badge, 0, 2, bd["x"] + bd["width"] / 2, bd["x"] - bd["width"] / 2,
                   bd["z"] - bd["height"] / 2, bd["z"] + bd["height"] / 2)
     with parts.assembly("flash_socket"):
+        # A flat grained pad with sloped edges and a long slot for the flash's plug (halicki_2023 (2)).
         fs = P["flash_socket"]
         top = P["front_section"]["top"]
-        parts.box("socket_cover", (fs["width"], fs["depth"], fs["height"]),
-                  location=(fs["x"], P["white_cover_back"] - fs["depth"] / 2 + 0.004, top + fs["height"] / 2),
-                  material="eyecup_rubber")
+        cy = P["white_cover_back"] - fs["depth"] / 2 + 0.004
+        w, d, h, ch = fs["width"], fs["depth"], fs["height"], 0.0015
+        verts = [(fs["x"] + sx * w / 2, cy + sy * d / 2, top - 0.0005) for sx, sy in ((1, 1), (-1, 1), (-1, -1), (1, -1))] + \
+                [(fs["x"] + sx * (w / 2 - ch), cy + sy * (d / 2 - ch), top + h) for sx, sy in ((1, 1), (-1, 1), (-1, -1), (1, -1))]
+        pad = _solid("socket_pad", verts, [(0, 1, 2, 3), (7, 6, 5, 4), (0, 4, 5, 1), (1, 5, 6, 2), (2, 6, 7, 3), (3, 7, 4, 0)],
+                     "hood_matte")
+        slot = parts.box("socket_slot_cut", (0.022, 0.0016, h * 2), location=(fs["x"], cy, top + h), material="hood_matte")
+        m = pad.modifiers.new("slot", "BOOLEAN")
+        m.operation, m.solver, m.object = "DIFFERENCE", "EXACT", slot
+        _apply(pad)
+        bpy.data.objects.remove(slot)
+        round_edges(pad, 0.0004, segments=2, angle=20)
+        # The plug's contacts at the bottom of the slot.
+        parts.box("socket_contacts", (0.020, 0.0012, 0.0003), location=(fs["x"], cy, top + 0.0003), material="pick_brass")
 
 
 def viewfinder_hood(P):
+    """The hood over the viewfinder tube (returned, to be fused into the body): its top rises to
+    the eyecup, its underside curves down into the sloped back (halicki_2023 (1), (2))."""
     e, fs, low = P["eyecup"], P["front_section"], P["lower_box"]
-    top = fs["top"] + 0.001
     slope = lambda y: low["height"] + (y - low["y0"]) * (fs["top"] - low["height"]) / (fs["y0"] - low["y0"])
-    with parts.assembly("viewfinder_hood"):
-        # Its top rises from the front section to the eyecup (halicki_2023 (1), (2)).
-        side_prism("hood", [(fs["y0"], top - 0.004), (fs["y0"], top), (e["y_rear"] + 0.008, e["top"] - 0.004),
-                            (e["y_rear"] + 0.008, slope(e["y_rear"] + 0.008) + 0.002)],
-                   e["x"] - e["width"] / 2, e["x"] + e["width"] / 2, "body_black")
+    yr = e["y_rear"] + 0.008          # the hood's end, inside the eyecup
+    yf = fs["y0"] + 0.006             # its front, inside the front frame
+    zb = e["top"] - 0.026 + 0.002     # underside at the end, just above the eyecup's bottom
+    ym = yr + 0.040                   # where the underside meets the sloped back
+    poly = [(yf, fs["top"] + 0.001), (yr, e["top"] - 0.004), (yr, zb)]
+    for k in range(1, 7):             # quadratic curve from the end down to the slope
+        s = k / 6
+        a, b, c = Vector((yr, zb)), Vector((ym - 0.010, zb - 0.002)), Vector((ym, slope(ym)))
+        q = a * (1 - s) ** 2 + b * 2 * s * (1 - s) + c * s * s
+        poly.append((q.x, q.y))
+    poly += [(ym + 0.004, slope(ym + 0.004) - 0.006), (yf, slope(yf) - 0.010)]
+    with parts.assembly("body"):
+        hood = side_prism("hood", poly, e["x"] - e["width"] / 2, e["x"] + e["width"] / 2, "hood_matte")
     with parts.assembly("eyecup"):
-        h = 0.026
-        front_ring("eyecup", rrect(e["width"] + 0.002, h, 0.004), rrect(e["width"] - 0.006, h - 0.008, 0.003),
-                   e["x"], e["top"] - h / 2, e["y_rear"], e["y_rear"] + 0.010, "eyecup_rubber")
+        # A rubber cap over the hood's end, a little larger all round, open for the eye.
+        h, w = 0.026, e["width"] + 0.004
+        cup = front_ring("eyecup", rrect(w, h, 0.006), rrect(e["width"] - 0.008, h - 0.010, 0.004),
+                         e["x"], e["top"] - h / 2, e["y_rear"], e["y_rear"] + 0.016, "eyecup_rubber")
+        round_edges(cup, 0.002, segments=3, angle=40)
+    return hood
 
 
 # --- inside -------------------------------------------------------------------------------
@@ -421,7 +500,6 @@ def build(spec):
     E = {k: v["value"] for k, v in spec["estimates"].items() if isinstance(v, dict)}
     shell(P)
     front_parts(P)
-    viewfinder_hood(P)
     ym = optics(P, E)
     film(E, ym)
     drive(E)
