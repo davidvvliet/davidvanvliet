@@ -114,9 +114,9 @@
   }
  },
  "gg1320": {
-  "approved": "2026-11-04 16:53",
+  "approved": "2026-11-04 20:37",
   "inputs": {
-   "specs/gg1320.json": "b8712ea42d27fab9",
+   "specs/gg1320.json": "3700aa656d81eb58",
    "probes/gg1320.py": "aa26c513d8f63c97",
    "build.py": "363cabc8976febf0",
    "blender.json": "7bbc071b6e396ec4",
@@ -195,9 +195,9 @@
   }
  },
  "mpu6050": {
-  "approved": "2026-11-04 14:01",
+  "approved": "2026-11-04 20:37",
   "inputs": {
-   "specs/mpu6050.json": "10a83df13cb558aa",
+   "specs/mpu6050.json": "0f225a0e0a099b2a",
    "probes/mpu6050.py": "8aa4df45680a0c02",
    "build.py": "363cabc8976febf0",
    "blender.json": "7bbc071b6e396ec4",
