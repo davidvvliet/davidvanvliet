@@ -323,7 +323,13 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
   // A part let go while the camera is inside the craft (looking at it through the see-through rest): the rest
   // stays see-through until the camera is out, or the hull, solid again, would hide the whole craft from inside.
   let ghost: string | null = null;
-  const craftBox = new THREE.Box3();
+  // Inside the hull: the camera within any piece of the structure (decks, side panels, cone), each tested in its
+  // own frame, so the box is the drum's and not the whole craft's (the wings would make that metres wide).
+  const lp = new THREE.Vector3();
+  const insideHull = (p: THREE.Vector3) => (parts.get("structure") ?? []).some((m) => {
+    if (!m.geometry.boundingBox) m.geometry.computeBoundingBox();
+    return m.geometry.boundingBox!.containsPoint(m.worldToLocal(lp.copy(p)));
+  });
   let focusK = 0;            // 0: the camera circles the chase point; 1: the focused part's centre
   let framed = true;         // the fly-in to a part's framing distance is done (or the viewer zoomed)
   let homing = false;        // flying back to the chase view after a part was let go
@@ -735,7 +741,7 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
         const d = camera.position.distanceTo(controls.target);
         camera.position.copy(controls.target).add(tmp.copy(aimFrom).applyQuaternion(aimQk).multiplyScalar(d));
       }
-      if (ghost && !craftBox.setFromObject(model).containsPoint(camera.position)) { ghost = null; restyle(); }
+      if (ghost && !insideHull(camera.position)) { ghost = null; restyle(); }
       // Near plane: a little in front of whatever the camera circles, so a close-up of the craft isn't clipped.
       const dist = camera.position.distanceTo(controls.target);
       camera.near = Math.max(dist * 1e-3, 0.01 * unitsPerM);
