@@ -22,6 +22,7 @@ const credits: Command = {
     "__SMALL__NASA's Scientific Visualization Studio, CGI Moon Kit (LRO LROC colour, LOLA elevation), the Moon on the Aether launch page: https://svs.gsfc.nasa.gov/4720/",
     "__SMALL__Solar System Scope, planet and ring textures: https://www.solarsystemscope.com/textures/",
     "__SMALL__Björn Jónsson, planetary maps: https://bjj.mmedia.is/data/planetary_maps.html",
+    "__SMALL__Thewritestuff92, Polaroid's 1960-1991 logo (CC BY-SA 4.0, letters filled light), on the models page: https://commons.wikimedia.org/wiki/File:Polaroid-1960.svg",
     ...[...new Set(Object.values(modelCredits as Record<string, string[]>).flat())].map((c) => `__SMALL__${c}`),
   ],
 };
