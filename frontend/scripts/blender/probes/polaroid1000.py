@@ -142,12 +142,28 @@ def fuse(name, objs):
 
 def cut(obj, size, location):
     """Cut a box out of an object (exact boolean difference)."""
-    box = parts.box(obj.name + "_cut", size, location=location, material="hood_matte")
+    box = parts.box(obj.name + "_cut", size, location=location, material=obj.data.materials[0].name)  # the cut's walls take the object's finish
     m = obj.modifiers.new("cut", "BOOLEAN")
     m.operation, m.solver, m.object = "DIFFERENCE", "EXACT", box
     _apply(obj)
     bpy.data.objects.remove(box)
     return obj
+
+
+def hull(name, points, material):
+    """The convex hull of a set of points, as a closed solid."""
+    bm = bmesh.new()
+    vs = [bm.verts.new(p) for p in points]
+    res = bmesh.ops.convex_hull(bm, input=vs)
+    bmesh.ops.delete(bm, geom=[v for v in res["geom_interior"] + res["geom_unused"] if isinstance(v, bmesh.types.BMVert)],
+                     context="VERTS")
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    return parts._object(name, bm, material, Matrix(), None)
+
+
+def _apply_transform(obj):
+    obj.data.transform(obj.matrix_basis)
+    obj.matrix_basis = Matrix()
 
 
 def round_edges(obj, width, segments=4, angle=30):
@@ -351,11 +367,12 @@ def front_parts(P):
         front_ring("hood_back", rrect(pw + 0.001, ph + 0.001, 0.002), rrect(pw - 0.0005, ph - 0.0005, 0.0015), lp["x"], pz,
                    lp["y0"], py + 0.0005, "body_black")
         front_plate("hood_back_wall", rrect(pw, ph, 0.002), lp["x"], pz, lp["y0"], lp["y0"] + 0.0005, "body_black")
-    with parts.assembly("cover_glass"):
-        # A domed rounded-square glass filling the window, the round element seen through it.
-        cg = P["cover_glass"]
-        glass = domed_plate("cover_glass", rrect(cg["width"], cg["height"], cg["radius"]), lb["x"], cg["z"], py - 0.0004,
-                            0.0004, cg["dome"], glow("cover_glass", SPEC[0], SPEC[0]["materials"]["cover_glass"]["alpha"], 0.0))
+    with parts.assembly("lens"):
+        # The single 103 mm element: domed, rounded-square, filling the window; the shutter's round
+        # opening shows through it.
+        cg = P["lens_dome"]
+        glass = domed_plate("lens_element", rrect(cg["width"], cg["height"], cg["radius"]), lb["x"], cg["z"], py - 0.0004,
+                            0.0004, cg["dome"], glow("lens_dome", SPEC[0], SPEC[0]["materials"]["lens_dome"]["alpha"], 0.0))
         glass.data.shade_smooth()
     with parts.assembly("viewfinder_window"):
         vw = P["viewfinder_window"]
@@ -444,16 +461,17 @@ def optics(P, E):
     ym = yl + zl - zf - path            # where the lens axis meets the mirror
     c = zl - ym                         # mirror plane: z = y + c
     xl = P["lens_boss"]["x"]                # centred in the boss's window
-    with parts.assembly("lens", inside=True):   # seen through the boss
-        parts.lathe("lens_element", [(0, -0.0012), (0.0052, -0.0006), (0.0055, 0), (0.0052, 0.0006), (0, 0.0014)],
-                    location=(xl, yl, zl), direction=(0, 1, 0), material="lens_glass", segments=32)
-        ccyl("lens_cell", 0.0068, 0.003, location=(xl, yl, zl), direction=(0, 1, 0),
+    ya = P["front_plate"]["y"] - 0.002          # the shutter's opening, just behind the lens
+    with parts.assembly("shutter_opening", inside=True):   # seen through the lens
+        parts.lathe("shutter_disc", [(0, -0.0012), (0.0052, -0.0006), (0.0055, 0), (0.0052, 0.0006), (0, 0.0014)],
+                    location=(xl, ya, zl), direction=(0, 1, 0), material="lens_glass", segments=32)
+        ccyl("shutter_ring", 0.0068, 0.003, location=(xl, ya, zl), direction=(0, 1, 0),
                        material="body_black", segments=32, caps=False)
     with parts.assembly("shutter", internal=True):
-        ccyl("shutter_plate", 0.013, 0.0015, location=(0, yl - 0.004, zl), direction=(0, 1, 0),
+        ccyl("shutter_plate", 0.013, 0.0015, location=(xl, ya - 0.0045, zl), direction=(0, 1, 0),
                        material="body_black", segments=40)
         for k, sgn in enumerate((1, -1)):
-            parts.box(f"shutter_blade_{k}", (0.011, 0.0002, 0.007), location=(sgn * 0.003, yl - 0.003, zl + sgn * 0.001),
+            parts.box(f"shutter_blade_{k}", (0.011, 0.0002, 0.007), location=(xl + sgn * 0.003, ya - 0.0033, zl + sgn * 0.001),
                       material="frame_steel")
     # The mirror covers the cone from the lens to the 79 x 77 mm picture area. Unfolded about the
     # mirror, the film point (y, zf) sits at (zf - c, y + c).
@@ -473,12 +491,42 @@ def optics(P, E):
         slab("mirror", [(hx_top, top.y, top.z), (-hx_top, top.y, top.z), (-hx_bot, bot.y, bot.z), (hx_bot, bot.y, bot.z)],
              Vector((0, -1, 1)), 0.0015, "mirror")
     with parts.assembly("light_box", internal=True):
-        yf0, yf1 = ym - iy - 0.002, ym + iy + 0.002
-        yb = P["front_plate"]["y"] - 0.004   # behind the front plate
-        poly = [(yf1, zf + 0.0015), (yb, zl - 0.012), (yb, zl + 0.012), (top.y, top.z + 0.002),
-                (bot.y - 0.002, bot.z), (yf0, zf + 0.0015)]
-        for sgn in (1, -1):
-            side_prism(f"box_wall_{'p' if sgn > 0 else 'm'}", poly, sgn * 0.0435, sgn * 0.0445, "lightbox_black")
+        # One black moulding (retronautik_1000, the light box out of the camera): open over the
+        # picture, its sides leaning in to a narrow top, the back wall carrying the mirror, a
+        # window in the front wall for the light from the shutter; a steel frame round its foot.
+        lbx = E["light_box"]
+        t, mg = lbx["wall"], lbx["margin"]
+        yf0, yf1 = ym - iy - mg, ym + iy + mg
+        yfr = ya - 0.0075                     # the front wall, just behind the shutter
+        zt = top.z + 0.003                    # the top, over the mirror's top edge
+        bx, tx = ix + mg, hx_top + mg
+        def pts(d, below=0.0):
+            hx = lambda z: bx + (tx - bx) * (z - zf) / (zt - zf) - d
+            k = 0.0035 - d * 1.414            # the sloped back wall: 3.5 mm behind the mirror's plane
+            zk = yf0 + d + c + k              # where the upright back meets it
+            zb = zf - below
+            out = []
+            for sx in (1, -1):
+                out += [(sx * hx(zf), yf0 + d, zb), (sx * hx(zk), yf0 + d, zk),
+                        (sx * hx(zt), zt - d - c - k, zt - d), (sx * hx(zt), yfr - d, zt - d),
+                        (sx * hx(zf), yf1 - d, zb)]
+            return out
+        box = hull("light_box", pts(0.0), "lightbox_black")
+        inner = hull("light_box_inner", pts(t, 0.01), "lightbox_black")
+        m = box.modifiers.new("hollow", "BOOLEAN")
+        m.operation, m.solver, m.object = "DIFFERENCE", "EXACT", inner
+        _apply(box)
+        bpy.data.objects.remove(inner)
+        cut(box, (lbx["window"][0], 0.01, lbx["window"][1]), (xl, yfr, zl))
+        # The steel frame round the foot, with a tab turned up at each end.
+        fw, fd, ft = lbx["frame"]["width"], lbx["frame"]["depth"], 0.0006
+        frame = front_ring("light_box_frame", rrect(fw, fd, 0.001), rrect(2 * bx, yf1 - yf0, 0.0005), 0, 0, 0, ft, "frame_steel")
+        frame.rotation_euler = (math.pi / 2, 0, 0)
+        frame.location = (0, (yf0 + yf1) / 2, zf + ft)
+        _apply_transform(frame)
+        for sx in (1, -1):
+            parts.box(f"frame_tab_{'p' if sx > 0 else 'm'}", (ft, 0.012, 0.010),
+                      location=(sx * (fw / 2 - ft / 2), (yf0 + yf1) / 2, zf + 0.005), material="frame_steel")
     with parts.assembly("light_path", internal=True):
         # The light from the lens to the mirror (a pyramid) and from the mirror down onto the
         # picture area (the folded image), drawn see-through.

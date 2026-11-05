@@ -464,12 +464,12 @@
       "roughness": 0.85,
       "source": "halicki_2023 (1), the hood's grained side, three spots (crop 1150-1800 x 100-900 px)"
     },
-    "cover_glass": {
+    "lens_dome": {
       "hex": "#55585d",
       "metallic": 0.0,
       "roughness": 0.05,
       "alpha": 0.7,
-      "source": "halicki_2023 (3), the domed glass sampled at 930-1050 x 530-630 px (#4d5255-#747476, studio reflections included); alpha estimated (0.7) so the inner element shows faintly"
+      "source": "halicki_2023 (3), the domed lens sampled at 930-1050 x 530-630 px (#4d5255-#747476, studio reflections included); alpha estimated (0.7) so the shutter opening behind it shows faintly"
     }
   },
   "open_questions": [
@@ -480,7 +480,8 @@
     "Front features (lens surround, viewfinder window, button, knob, exit slot) have no published sizes: to be measured from Halicki (3), scaled by the 107 mm width.",
     "Mechanism details (motor type, solenoids, gear count, circuit layout) come from the SX-70 manual and the One-Step 600 teardown, related models; the 1000 may differ.",
     "Inside layout (where the motor, gears and shutter sit) is placed so the parts fit and the light path works; the only photos of the 1000's inside show the parts taken out.",
-    "Eyecup: the photo cast puts its back 15-25 mm behind the body's rear; whether the 140 mm depth includes it is not stated."
+    "Eyecup: the photo cast puts its back 15-25 mm behind the body's rear; whether the 140 mm depth includes it is not stated.",
+    "Lens to film: with the lens where the photos put it and the picture inside the pack, the folded path is 101 mm, 2% shorter than the 103 mm focal length; the film plane height (11 mm) or the pack's placement may be a few mm off."
   ],
   "budget": {
     "triangles": 50000,
@@ -558,7 +559,7 @@
     },
     "lens_centre_z": {
       "value": 0.0619,
-      "source": "halicki_2023 (3), estimated: the round element behind the domed glass, set on the glass's centre (straight on it reads 555 px, z 0.0666, in the glass's upper half, but in (1) it sits mid-height: it is seen through the curved glass, so its apparent place moves with the view)"
+      "source": "halicki_2023 (3), estimated: the optical axis through the middle of the domed lens (lens_dome z); the round opening seen through it (straight on at 555 px, z 0.0666; mid-height in (1)) is the shutter's, set on the same axis"
     },
     "viewfinder_window": {
       "value": {
@@ -639,7 +640,7 @@
       },
       "source": "graf_classic_2013 (P1010976, rear 3/4), estimated: a flat face set about 4 mm into the eyecup rim with a square hole about a quarter of the opening's width (opening 24 mm here, so 5.5 mm)"
     },
-    "cover_glass": {
+    "lens_dome": {
       "value": {
         "width": 0.019,
         "height": 0.0182,
@@ -647,7 +648,7 @@
         "radius": 0.004,
         "dome": 0.0025
       },
-      "source": "halicki_2023 (3), estimated: straight-on, scaled by the 107 mm width (0.090 mm/px): a domed rounded-square glass filling the window at the back of the stepped opening, 877-1100 x 505-710 px, centred in it; dome estimated from the highlight along its top edge in (1)"
+      "source": "halicki_2023 (3), estimated: straight-on, scaled by the 107 mm width (0.090 mm/px): the lens: a domed rounded-square plastic element (the single 103 mm element, facts.lens) filling the window at the back of the stepped opening, 877-1100 x 505-710 px, centred in it; dome estimated from the highlight along its top edge in (1)"
     }
   },
   "estimates": {
@@ -657,12 +658,12 @@
       "source": "halicki_2023 (3), estimate: the print leaves between the rollers at the exit slot (z 0.006-0.0135)"
     },
     "lens_y": {
-      "value": 0.023,
-      "source": "halicki_2023 (3), estimate: behind the window at the back of the stepped opening (the lens's top is hidden by the window's top edge), so 2 mm behind the front plate (y 0.025)"
+      "value": 0.026,
+      "source": "halicki_2023 (3), estimate: the lens is the domed element at the back of the stepped opening, its middle 1 mm in front of the front plate (y 0.025)"
     },
     "light_path": {
-      "value": 0.105,
-      "source": "kamerastore_sc1000, derived: 1 / (1/103 mm - 1/3 m) = 106.7 mm for a subject at 3 m; 105 mm used"
+      "value": 0.101,
+      "source": "kamerastore_sc1000, derived: a 103 mm lens needs 103 mm to the film for distant subjects, 106.7 mm at 3 m; set to 101 mm so the picture's trailing edge stays 4.5 mm inside the pack's rear end with the lens where the photos put it (2% short of focus at infinity: an open question)"
     },
     "pack": {
       "value": {
@@ -696,6 +697,21 @@
         "length": 0.024
       },
       "source": "us3714879, estimate: placed under the shelf behind the door, driving the upper roller through a gear train on the +x side (open_questions)"
+    },
+    "light_box": {
+      "value": {
+        "wall": 0.0012,
+        "margin": 0.002,
+        "window": [
+          0.016,
+          0.012
+        ],
+        "frame": {
+          "width": 0.1,
+          "depth": 0.088
+        }
+      },
+      "source": "retronautik_1000 (the light box out of the camera, photo 102321308), estimated: scaled by its picture opening taken as the 79 mm image width (about 0.16 mm/px): the steel frame about 100 mm across, the window in the narrow end about 14 x 10 mm; walls and margins estimated"
     }
   }
 }
