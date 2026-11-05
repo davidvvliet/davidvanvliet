@@ -3,6 +3,8 @@
   "logos": [],
   "viewer": { "page": "/models/aether" },
   "closeups": [
+    { "name": "star tracker", "target": [0.85, -0.43, -0.25], "look": [-0.4, 0.75, 0.45], "radius": 0.13 },
+    { "name": "S-band antenna", "target": [0.83, -0.12, 0.44], "look": [0.3, 0.3, -0.9], "radius": 0.09 },
     { "name": "markings, left side", "target": [0.6, 0.38, -0.22], "look": [0, -0.866, 0.5], "radius": 0.35 },
     { "name": "markings, right side", "target": [0.6, -0.38, -0.22], "look": [0, 0.866, 0.5], "radius": 0.35 },
     { "name": "top: user tiles, aft laser", "target": [0.5, 0, 0.52], "look": [0.55, 0.45, -0.7], "radius": 0.4 },
@@ -823,8 +825,13 @@
       "note": "its half-power beam reaches 35° off straight down, short of the footprint's edge: users near the edge get a weaker signal"
     },
     "suit_antenna_size": {
-      "value": "0.10 x 0.10 x 0.012 m",
-      "source": "design, estimate: the maker's page gives no size"
+      "value": "0.10 x 0.10 x 0.0045 m",
+      "source": "design, estimate: the maker's page gives no size; the thickness from its gallery photos (two plates and a gold layer, about a twentieth of the width)"
+    },
+    "suit_antenna_layout": {
+      "value": {"board": 0.1, "plates": [0.002, 0.0005], "notch": 0.005, "patches": [0.028, 0.022], "side_offset": 0.038, "screws": [0.025, 0.005]},
+      "source": "endurosat_s_wide",
+      "measure": "estimated from the product page's gallery photos (S-Band-Antenna-Wideband-web-13 and -render-1-2) against the 100 mm board (itself estimated: the page gives no size): two white plates 2 mm thick with a gold layer 0.5 mm between, corners notched 5 mm, a 28 mm round patch in the middle and four 22 mm ones 38 mm out at the edges' middles, two screws per edge 25 mm either side of the middle, 5 mm in"
     },
     "earth_array": {
       "value": "Boeing Ka-band tile for smallsats, on the bottom (away from the Moon): 25.5-27.0 GHz, 22.9 x 17.8 x 9.6 cm, 1.8 kg, under 150 W, steering 70° off its face",
@@ -892,6 +899,11 @@
       "value": "two Rocket Lab ST-16RT2 with the large baffle, 99 mm across x 120 mm, 243 g, 22° sun avoidance",
       "source": "rl_st16rt2",
       "quote": "LARGE BAFFLE ... Sun Avoidance 22° sun-to-boresight ... Moon Avoidance Demonstrated orbital operation with full moon in FOV ... Dimensions 99 Ø x 120 mm ... Total Mass 243g"
+    },
+    "star_tracker_shape": {
+      "value": {"base": [0.052, 0.026], "flange": [0.022, 0.008], "cone_foot": 0.012},
+      "source": "rl_st16rt2",
+      "measure": "estimated from the data sheet's photo (large baffle), scaled by its 120 mm length (325 px): the black square base 52 mm across and 26 mm tall, the flange 44 mm across and 8 mm thick with six bolts, the bare aluminium cone 24 mm across at its foot opening to the 99 mm rim, black inside"
     },
     "star_tracker_place": {
       "value": "on the two lower slanted sides, looking down and out, away from the Moon below and the lasers' lines",
@@ -1101,6 +1113,7 @@
   },
   "materials": {
     "laser_glass": {"hex": "#71cfd7", "metallic": 0.3, "roughness": 0.1, "source": "tesat_scot30: the window on the page-1 photo, mean over its middle (rendered at 80 dpi)"},
+    "baffle_aluminium": {"hex": "#bdb3a9", "metallic": 1.0, "roughness": 0.35, "source": "rl_st16rt2: the data sheet's photo, mean of the cone's lit middle (x 232-262, y 240-300 of the 483 px image)"},
     "patch_gold": {"hex": "#edd4af", "metallic": 0.8, "roughness": 0.4, "source": "endurosat_x4x4: Figure 1, mean of the patches' pixels (rendered at 200 dpi)"},
     "solar_cell": {"hex": "#221b39", "metallic": 0.6, "roughness": 0.25, "source": "azur_3g30c: mean colour of the representative assembly's cell area on page 1 (rendered at 200 dpi); metallic and roughness the harness's solar_cell"},
     "sled_lettering": {

@@ -261,7 +261,7 @@ def comms(d, R, flat, xc, xb, t):
     with parts.assembly("user_antennas"):
         for name, y in (("user_tx", 0.1175), ("user_rx", -0.1175)):
             ka_tile(d, name, (0.66, y, flat), 1, along_x=False)
-        parts.box("suit_antenna", (0.1, 0.1, 0.012), location=(0.83, -0.12, flat + 0.006), material="white_paint")
+        suit_antenna(d, (0.83, -0.12, flat + 0.005))       # on the 5 mm top blanket (mli_top)
     with parts.assembly("lasers"):
         xa = xc + t + 0.01
         scot30(d, "laser_aft", (xa, 0, flat), -1)
@@ -272,6 +272,11 @@ def comms(d, R, flat, xc, xb, t):
     with parts.assembly("earth_antennas"):
         ka_tile(d, "earth_array", (EARTH_X, 0, -flat), -1, along_x=True)
         parts.box("xband_array", (0.098, 0.0826, 0.00318), location=(XBAND_X, 0, -flat - 0.00159), material="white_paint")
+        # Its four 3.2 mm mounting holes, 3.2 mm in from the edges (endurosat_x4x4 Figure 2).
+        hx, hy = 0.049 - 0.0032, 0.0413 - 0.0032
+        for k, (sx, sy) in enumerate(((1, 1), (1, -1), (-1, 1), (-1, -1))):
+            parts.disc(f"xband_hole{k}", 0.0016, 0.0002, location=(XBAND_X + sx * hx, sy * hy, -flat - 0.00318),
+                       direction=(0, 0, -1), segments=12, bevel=0.0001, material="black")
         # Its sixteen patches, 4 x 4.
         pu, pv = d["xband_patch_pitch"]
         ps = d["xband_patch_size"]
@@ -306,9 +311,7 @@ def attitude(d, R, flat, xc, xb, t):
         for k, deg in enumerate((210, 330)):
             n = face(deg)
             p = (xb - 0.15, n[1] * flat, n[2] * flat)
-            parts.lathe(f"star_tracker{k}", [(0.0, 0.0), (0.035, 0.0), (0.035, 0.055), (0.0495, 0.065),
-                                             (0.0495, 0.12), (0.046, 0.12), (0.03, 0.07), (0.0, 0.07)],
-                        segments=24, location=p, direction=n, material="black")
+            star_tracker(d, k, p, n)
 
     # Bradford coarse sun sensors on +z and +x, the Mini fine sun sensor on +z.
     with parts.assembly("sun_sensors"):
@@ -397,6 +400,62 @@ def markings(spec, d, flat, xc, xb, t, panels):
                         up=v, width=d["craft_lettering_side_width"], height=d["craft_lettering_side_height"],
                         material=mat, step=0.02, lift=0.001)
 
+
+
+def star_tracker(d, k, base, n):
+    """Rocket Lab ST-16RT2 with the large baffle (rl_st16rt2 photo, scaled by its 99 x 120 mm): a black square
+    electronics base, a round flange with six bolts, and the bare aluminium cone baffle, black inside.
+    `base`: the middle of its mounting face; `n`: the way it looks."""
+    sh = d["star_tracker_shape"]
+    bw, bh = sh["base"]
+    fr, ft = sh["flange"]
+    r0, r1, L = sh["cone_foot"], 0.0495, 0.12
+    z0 = bh + ft                                       # where the cone starts
+    wall = 0.0015
+    parts.prism(f"star_tracker{k}_base", 4, bw / math.sqrt(2), bh, location=base, direction=n, roll_deg=45,
+                material="dark_metal")
+    parts.lathe(f"star_tracker{k}", [(0.0, 0.0), (fr, 0.0), (fr, z0), (r0, z0), (r1, L), (r1 - wall, L),
+                                     (r0 - wall, z0 + 0.002), (0.0, z0 + 0.002)],
+                segments=32, location=base, direction=n, material="baffle_aluminium")
+    parts.lathe(f"star_tracker{k}_inside", [(0.0, z0 + 0.0025), (r0 - wall - 0.0004, z0 + 0.0025),
+                                            (r1 - wall - 0.0004, L - 0.0005)],
+                segments=32, location=base, direction=n, material="black")
+    # Six bolts round the flange.
+    u = (1.0, 0.0, 0.0)
+    v = (n[1] * u[2] - n[2] * u[1], n[2] * u[0] - n[0] * u[2], n[0] * u[1] - n[1] * u[0])
+    rb = (fr + r0) / 2
+    pts = []
+    for i in range(6):
+        a = math.radians(30 + 60 * i)
+        pts.append(tuple(base[j] + n[j] * z0 + rb * (math.cos(a) * u[j] + math.sin(a) * v[j]) for j in range(3)))
+    for i, q in enumerate(pts):
+        parts.cylinder(f"star_tracker{k}_bolt{i}", 0.0015, 0.0018, location=q, direction=n, segments=8,
+                       material="foil_silver")
+
+
+def suit_antenna(d, base):
+    """EnduroSat S-band wideband antenna (endurosat_s_wide gallery photos): two white ceramic plates stacked
+    with a gold layer between, the corners notched, a large round gold patch in the middle and four smaller
+    ones at the middle of the edges, two screws per edge. `base`: the middle of its back, on the top face."""
+    sh = d["suit_antenna_layout"]
+    w, (pt, gt), nt = sh["board"], sh["plates"], sh["notch"]
+    bx, by, bz = base
+    cross = lambda z0, h, mat, name: parts.boxes(name, [((w, w - 2 * nt, h), (bx, by, z0 + h / 2)),
+                                                         ((w - 2 * nt, w, h), (bx, by, z0 + h / 2))], material=mat)
+    cross(bz, pt, "white_paint", "suit_antenna")
+    cross(bz + pt, gt, "patch_gold", "suit_antenna_layer")
+    cross(bz + pt + gt, pt, "white_paint", "suit_antenna_top")
+    top = bz + 2 * pt + gt
+    (dc, ds), off = sh["patches"], sh["side_offset"]
+    parts.disc("suit_patch0", dc / 2, 0.0002, location=(bx, by, top), segments=32, bevel=0.0001, material="patch_gold")
+    for i, (sx, sy) in enumerate(((1, 0), (-1, 0), (0, 1), (0, -1))):
+        parts.disc(f"suit_patch{i + 1}", ds / 2, 0.0002, location=(bx + sx * off, by + sy * off, top), segments=32,
+                   bevel=0.0001, material="patch_gold")
+    sa, si = sh["screws"]
+    e = w / 2 - si
+    heads = [(sx * sa, e * sy) for sx in (-1, 1) for sy in (-1, 1)] + [(e * sx, sy * sa) for sx in (-1, 1) for sy in (-1, 1)]
+    parts.boxes("suit_antenna_screws", [((0.003, 0.003, 0.0008), (bx + hx, by + hy, top + 0.0004)) for hx, hy in heads],
+                material="foil_silver")
 
 
 def ka_tile(d, name, base, up, along_x):
