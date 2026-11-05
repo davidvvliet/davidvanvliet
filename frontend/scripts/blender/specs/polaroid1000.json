@@ -673,6 +673,16 @@
         }
       },
       "source": "graf_classic_2013 (P1010976, rear 3/4, the same body) and a rear photo David supplied (2026-11-05), estimated against the 107 mm width: the sloped back's foot sits about 4 mm in from the lower box's sides; the strap leaves through a slot under the top edge of the rear face about 13 mm in from each side, a little wider than the 10 mm strap"
+    },
+    "rounding": {
+      "value": {
+        "body": 0.0035,
+        "back": 0.0045,
+        "hood": 0.003,
+        "front": 0.003,
+        "door": 0.0025
+      },
+      "source": "halicki_2023 (1), (2), (3) and rear photos David supplied (2026-11-05), estimated against the 107 mm width: the white front rounded over its top and side edges by about 3 mm, the lower box and frame corners about 3.5 mm, the sloped back's edges about 4.5 mm, the hood about 3 mm; the film door's edges about 2.5 mm"
     }
   },
   "estimates": {

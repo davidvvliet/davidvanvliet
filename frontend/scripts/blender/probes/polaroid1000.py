@@ -168,12 +168,21 @@ def _apply_transform(obj):
     obj.matrix_basis = Matrix()
 
 
-def round_edges(obj, width, segments=4, angle=30):
-    """Round every edge sharper than `angle` degrees (moulded plastic), concave ones filleted."""
+def round_edges(obj, width, segments=4, angle=30, clamp=True):
+    """Round every edge sharper than `angle` degrees (moulded plastic), concave ones filleted.
+    The mesh is tidied first: a boolean leaves split faces and sliver edges, and the bevel's
+    overlap clamp would shrink the rounding to the shortest of them."""
+    bm = bmesh.new()
+    bm.from_mesh(obj.data)
+    bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=1e-6)
+    bmesh.ops.dissolve_limit(bm, angle_limit=math.radians(0.5), verts=bm.verts, edges=bm.edges)
+    bmesh.ops.dissolve_degenerate(bm, dist=1e-6, edges=bm.edges)
+    bm.to_mesh(obj.data)
+    bm.free()
     m = obj.modifiers.new("round", "BEVEL")
     m.width, m.segments, m.limit_method = width, segments, "ANGLE"
     m.angle_limit = math.radians(angle)
-    m.use_clamp_overlap = True
+    m.use_clamp_overlap = clamp
     _apply(obj)
     obj.data.shade_smooth()
     obj.data.set_sharp_from_angle(angle=math.radians(35))
@@ -238,27 +247,33 @@ def shell(P):
     door, low, fs = P["door"], P["lower_box"], P["front_section"]
     plate, shelf, wb = P["front_plate"], P["shelf_front"], P["white_cover_back"]
     with parts.assembly("body", core=True):
-        # The lower box runs on under the door, so its rounding stops short of the seam cut below.
-        body = [side_prism("lower_box", [(low["y0"], 0.0), (door["y0"] + 0.004, 0.0), (door["y0"] + 0.004, low["height"]),
-                                 (low["y0"], low["height"])], -HALF_W, HALF_W, "body_black")]
-        body.append(side_prism("front_frame", [(fs["y0"], low["height"]), (wb, low["height"]), (wb, fs["top"]),
-                                   (fs["y0"], fs["top"])], -HALF_W, HALF_W, "body_black"))
+        # One moulding, built from simple pieces each rounded on its own (a single bevel over the
+        # joined body gets capped by its shortest edges), then joined; where two pieces meet, the
+        # rounded edge of one is buried in the other.
+        # The lower box and the front frame: one L-shaped profile. The box runs on under the door,
+        # so its rounding stops short of the seam cut below.
+        frame = side_prism("lower_frame", [(low["y0"], 0.0), (door["y0"] + 0.004, 0.0), (door["y0"] + 0.004, low["height"]),
+                                           (wb, low["height"]), (wb, fs["top"]), (fs["y0"], fs["top"]),
+                                           (fs["y0"], low["height"]), (low["y0"], low["height"])], -HALF_W, HALF_W, "body_black")
+        round_edges(frame, P["rounding"]["body"])
         # The pyramid over the mirror: its back slopes down to the rear wall and its sides lean
-        # in (7 mm inset at the top, estimated from halicki_2023 (1) and (2)).
+        # in (7 mm inset at the top, estimated from halicki_2023 (1) and (2)); its foot and front
+        # run on into the box and frame, so only its free edges show rounded.
         z0, z1, y0, y1, inset = low["height"], fs["top"], low["y0"], fs["y0"], 0.007
         b = P["back"]["base_inset"]          # a ledge along the lower box's sides at the foot
-        verts = [(HALF_W - b, y0, z0), (-HALF_W + b, y0, z0), (-HALF_W + b, y1, z0), (HALF_W - b, y1, z0),
-                 (HALF_W - inset, y1, z1), (-HALF_W + inset, y1, z1)]
+        zd, yd = z0 - 0.006, y1 + 0.006
+        verts = [(HALF_W - b, y0, zd), (-HALF_W + b, y0, zd), (-HALF_W + b, yd, zd), (HALF_W - b, yd, zd),
+                 (HALF_W - b, y0, z0), (-HALF_W + b, y0, z0),
+                 (HALF_W - inset, y1, z1 - 0.001), (-HALF_W + inset, y1, z1 - 0.001),
+                 (HALF_W - inset, yd, z1 - 0.001), (-HALF_W + inset, yd, z1 - 0.001)]    # just under the frame's top
         # Matte and grained like the hood; the rest of the moulding is glossy (halicki_2023 (2)).
-        body.append(_solid("pyramid", verts, [(0, 1, 2, 3), (3, 2, 5, 4), (0, 4, 5, 1), (0, 3, 4), (1, 5, 2)], "hood_matte"))
-        # The frame's top edge runs forward over the white plate (halicki_2023 (2): the top is all black).
-        lip = 0.003
-        body.append(side_prism("frame_lip", [(wb - 0.002, fs["top"] - lip), (plate["y"] + 0.0005, fs["top"] - lip),
-                                             (plate["y"] + 0.0005, fs["top"]), (wb - 0.002, fs["top"])],
-                               -HALF_W, HALF_W, "body_black"))
-        body.append(viewfinder_hood(P))
-        # One moulding with rounded edges, the hood filleted into the sloped back (halicki_2023 (1)).
-        shell_obj = round_edges(fuse("body_shell", body), 0.0045)
+        pyr = hull("pyramid", verts, "hood_matte")
+        round_edges(pyr, P["rounding"]["back"])
+        hood = viewfinder_hood(P)
+        round_edges(hood, P["rounding"]["hood"])
+        shell_obj = fuse("body_shell", [frame, pyr, hood])
+        shell_obj.data.shade_smooth()
+        shell_obj.data.set_sharp_from_angle(angle=math.radians(35))
         # The strap's two slots at the top of the rear face.
         sl = P["back"]["strap_slot"]
         for sx in (1, -1):
@@ -274,17 +289,12 @@ def shell(P):
         dz, dy0, dy1 = door["height"], door["y0"], door["y1"]
         slot = P["exit_slot"]
         hw = slot["half_width"]
-        door_body = side_prism("door_body", [(dy0 - 0.004, 0.0), (dy1 - 0.006, 0.0), (dy1 - 0.006, dz), (dy0 - 0.004, dz)],
-                               -HALF_W + 0.0002, HALF_W - 0.0002, "body_black")
-        zs = (slot["z0"] + slot["z1"]) / 2
-        parts.boxes("door_face", [
-            ((2 * HALF_W, 0.006, slot["z0"]), (0, dy1 - 0.003, slot["z0"] / 2)),
-            ((2 * HALF_W, 0.006, dz - slot["z1"]), (0, dy1 - 0.003, (dz + slot["z1"]) / 2)),
-            ((HALF_W - hw, 0.006, slot["z1"] - slot["z0"]), ((HALF_W + hw) / 2, dy1 - 0.003, zs)),
-            ((HALF_W - hw, 0.006, slot["z1"] - slot["z0"]), (-(HALF_W + hw) / 2, dy1 - 0.003, zs)),
-        ], material="body_black")
-        face = bpy.data.objects["door_face"]
-        door_obj = round_edges(fuse("door", [face, door_body]), 0.0018)
+        # One rounded block, the exit slot cut into its face.
+        door_obj = side_prism("door", [(dy0 - 0.004, 0.0), (dy1, 0.0), (dy1, dz), (dy0 - 0.004, dz)],
+                              -HALF_W + 0.0002, HALF_W - 0.0002, "body_black")
+        round_edges(door_obj, P["rounding"]["door"])
+        cut(door_obj, (2 * hw, 0.012, slot["z1"] - slot["z0"]), (0, dy1, (slot["z0"] + slot["z1"]) / 2))
+        round_edges(door_obj, 0.0006, segments=2, angle=60)
         cut(door_obj, (0.2, 0.1, 0.1), (0, door["y0"] + SEAM / 2 - 0.05, 0))
         # The seam's floor: dark, just inside the outer faces.
         parts.box("door_seam", (2 * HALF_W - 0.0012, SEAM, dz - 0.0008), location=(0, dy0, dz / 2 + 0.0002),
@@ -309,10 +319,11 @@ def shell(P):
         side_prism("latch_arrow", [(ya, zc - 0.0016), (ya + 0.0020, zc - 0.0016), (ya + 0.0036, zc), (ya + 0.0020, zc + 0.0016),
                                    (ya, zc + 0.0016)], x - 0.0001, x + 0.00025, "body_black")
     with parts.assembly("front_cover"):
-        cover = side_prism("white_cover", [(wb, door["height"]), (shelf["y"], door["height"]), (shelf["y"], shelf["z"]),
-                                           (plate["y"], plate["bottom"]), (plate["y"], fs["top"] - 0.003), (wb, fs["top"] - 0.003)],
+        # White right up to the top edge, rounded over it; the black deck starts behind it.
+        cover = side_prism("white_cover", [(wb, shelf["z"]), (shelf["y"], shelf["z"]),
+                                           (plate["y"], plate["bottom"]), (plate["y"], fs["top"]), (wb, fs["top"])],
                            -HALF_W, HALF_W, "front_white")
-        round_edges(cover, 0.0025)
+        round_edges(cover, P["rounding"]["front"])
         # The lens sits behind the hood's back window, its top hidden by the window's edge
         # (halicki_2023 (3)): a pocket in the cover for it.
         lp = lens_pocket(P)
@@ -463,7 +474,7 @@ def viewfinder_hood(P):
     yf = fs["y0"] + 0.006             # its front, inside the front frame
     zb = e["top"] - 0.026 + 0.002     # underside at the end, just above the eyecup's bottom
     ym = yr + 0.040                   # where the underside meets the sloped back
-    poly = [(yf, fs["top"] + 0.001), (yr, e["top"] - 0.004), (yr, zb)]
+    poly = [(yf, fs["top"] - 0.001), (yr, e["top"] - 0.004), (yr, zb)]   # its front rises out of the frame's back
     for k in range(1, 7):             # quadratic curve from the end down to the slope
         s = k / 6
         a, b, c = Vector((yr, zb)), Vector((ym - 0.010, zb - 0.002)), Vector((ym, slope(ym)))
