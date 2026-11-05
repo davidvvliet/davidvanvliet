@@ -320,6 +320,10 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
   // Each mesh gets its own materials, so a tint or fade stays on its part.
   const parts = new Map<string, THREE.Mesh[]>(), partSize = new Map<string, THREE.Vector3>(), partBoxes = new Map<string, THREE.Box3>();
   let hoverPart: string | null = null, focusPart: string | null = null;
+  // A part let go while the camera is inside the craft (looking at it through the see-through rest): the rest
+  // stays see-through until the camera is out, or the hull, solid again, would hide the whole craft from inside.
+  let ghost: string | null = null;
+  const craftBox = new THREE.Box3();
   let focusK = 0;            // 0: the camera circles the chase point; 1: the focused part's centre
   let framed = true;         // the fly-in to a part's framing distance is done (or the viewer zoomed)
   let homing = false;        // flying back to the chase view after a part was let go
@@ -332,7 +336,8 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
     for (const [g, ms] of parts) for (const m of ms) for (const mat of mats(m)) {
       const u = mat.userData;
       if (u.restOpacity === undefined) { u.restOpacity = mat.opacity; u.restTransparent = mat.transparent; u.rest = mat.emissive?.clone(); }
-      const fade = !!focusPart && g !== focusPart;
+      const keep = focusPart ?? ghost;
+      const fade = !!keep && g !== keep;
       mat.transparent = fade || u.restTransparent;
       mat.opacity = fade ? (g === hoverPart ? HOVER_FADED : FADED) : u.restOpacity;
       mat.depthWrite = !fade;
@@ -355,13 +360,13 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
     return partBox.getCenter(out);
   };
   const focusOn = (g: string) => {
-    focusPart = g; framed = false; homing = padHoming = false; aimView = null;
+    focusPart = g; ghost = null; framed = false; homing = padHoming = false; aimView = null;
     if (startAt !== null) touched = true;      // keep the current direction; only the point circled moves
     restyle();
   };
   const letGo = () => {
     if (!focusPart) return;
-    focusPart = null; framed = true;
+    ghost = focusPart; focusPart = null; framed = true;
     if (startAt !== null) homing = true; else padHoming = true;
     restyle();
   };
@@ -730,6 +735,7 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
         const d = camera.position.distanceTo(controls.target);
         camera.position.copy(controls.target).add(tmp.copy(aimFrom).applyQuaternion(aimQk).multiplyScalar(d));
       }
+      if (ghost && !craftBox.setFromObject(model).containsPoint(camera.position)) { ghost = null; restyle(); }
       // Near plane: a little in front of whatever the camera circles, so a close-up of the craft isn't clipped.
       const dist = camera.position.distanceTo(controls.target);
       camera.near = Math.max(dist * 1e-3, 0.01 * unitsPerM);
