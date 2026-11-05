@@ -322,6 +322,7 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
   let focusK = 0;            // 0: the camera circles the chase point; 1: the focused part's centre
   let framed = true;         // the fly-in to a part's framing distance is done (or the viewer zoomed)
   let homing = false;        // flying back to the chase view after a part was let go
+  let movedAt = 0;           // when the viewer last turned or zoomed the camera (s); 3 s later it goes back to the chase view
   let padHoming = false;     // the same, on the pad before launch (OrbitControls)
   const partBox = new THREE.Box3(), pb = new THREE.Box3(), pc = new THREE.Vector3(), planned = new THREE.Quaternion();
   const padTarget = new THREE.Vector3();
@@ -370,7 +371,7 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
   // stays so until the viewer turns the view.
   let aimView: THREE.Vector3 | null = null, aimT0 = 0, loads = 0;
   const aimFrom = new THREE.Vector3(), aimQ = new THREE.Quaternion(), aimQk = new THREE.Quaternion();
-  const grab = () => { touched = true; aimView = null; framed = true; padHoming = false; };
+  const grab = () => { movedAt = performance.now() / 1000; touched = true; aimView = null; framed = true; padHoming = false; };
   const tmp = new THREE.Vector3(), q = new THREE.Quaternion();
   const v = { pos: new THREE.Vector3(), up: new THREE.Vector3(), fwd: new THREE.Vector3(), side: new THREE.Vector3(),
     sun: new THREE.Vector3(), m: new THREE.Matrix4(), cw: new THREE.Vector3(), ew: new THREE.Vector3(),
@@ -379,7 +380,7 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
     off: new THREE.Vector3() };
 
   const flying = () => startAt !== null && !!h0;
-  const zoom = (f: number) => { viewDist = THREE.MathUtils.clamp(viewDist * f, 0.05, 2e8); touched = true; framed = true; homing = false; };
+  const zoom = (f: number) => { movedAt = performance.now() / 1000; viewDist = THREE.MathUtils.clamp(viewDist * f, 0.05, 2e8); touched = true; framed = true; homing = false; };
   const onDown = (e: PointerEvent) => {
     if (!flying()) return;
     pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
@@ -398,7 +399,7 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
       return;
     }
     if (!dx && !dy) return;
-    touched = true; aimView = null; homing = false;
+    touched = true; aimView = null; homing = false; movedAt = performance.now() / 1000;
     // As OrbitControls: a drag across the canvas's height turns the view a full circle.
     const k = (2 * Math.PI) / h0!.renderer.domElement.clientHeight;
     view.premultiply(qd.setFromAxisAngle(Y, -dx * k));           // about "away from the Moon"
@@ -679,6 +680,7 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
           viewDist += (frameDist - viewDist) * ez;
           if (Math.abs(viewDist - frameDist) < frameDist * 0.01) framed = true;
         }
+        if (touched && !homing && !focusPart && !aimView && !pointers.size && performance.now() / 1000 - movedAt > 3) homing = true;
         if (aimView) {
           // Swinging to a clicked star: the planned direction, eased, taken into the flight frame.
           aimQ.setFromUnitVectors(aimFrom, aimView);
