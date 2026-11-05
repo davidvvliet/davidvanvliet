@@ -9,7 +9,9 @@ import bmesh
 import bpy
 from mathutils import Matrix, Vector
 
-from lib import materials, parts
+import numpy as np
+
+from lib import materials, parts, tiling
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REFS = os.path.join(HERE, "..", "refs", "polaroid1000")
@@ -244,9 +246,11 @@ def shell(P):
         # The pyramid over the mirror: its back slopes down to the rear wall and its sides lean
         # in (7 mm inset at the top, estimated from halicki_2023 (1) and (2)).
         z0, z1, y0, y1, inset = low["height"], fs["top"], low["y0"], fs["y0"], 0.007
-        verts = [(HALF_W, y0, z0), (-HALF_W, y0, z0), (-HALF_W, y1, z0), (HALF_W, y1, z0),
+        b = P["back"]["base_inset"]          # a ledge along the lower box's sides at the foot
+        verts = [(HALF_W - b, y0, z0), (-HALF_W + b, y0, z0), (-HALF_W + b, y1, z0), (HALF_W - b, y1, z0),
                  (HALF_W - inset, y1, z1), (-HALF_W + inset, y1, z1)]
-        body.append(_solid("pyramid", verts, [(0, 1, 2, 3), (3, 2, 5, 4), (0, 4, 5, 1), (0, 3, 4), (1, 5, 2)], "body_black"))
+        # Matte and grained like the hood; the rest of the moulding is glossy (halicki_2023 (2)).
+        body.append(_solid("pyramid", verts, [(0, 1, 2, 3), (3, 2, 5, 4), (0, 4, 5, 1), (0, 3, 4), (1, 5, 2)], "hood_matte"))
         # The frame's top edge runs forward over the white plate (halicki_2023 (2): the top is all black).
         lip = 0.003
         body.append(side_prism("frame_lip", [(wb - 0.002, fs["top"] - lip), (plate["y"] + 0.0005, fs["top"] - lip),
@@ -254,7 +258,11 @@ def shell(P):
                                -HALF_W, HALF_W, "body_black"))
         body.append(viewfinder_hood(P))
         # One moulding with rounded edges, the hood filleted into the sloped back (halicki_2023 (1)).
-        shell_obj = round_edges(fuse("body_shell", body), 0.003)
+        shell_obj = round_edges(fuse("body_shell", body), 0.0045)
+        # The strap's two slots at the top of the rear face.
+        sl = P["back"]["strap_slot"]
+        for sx in (1, -1):
+            cut(shell_obj, (sl["w"], 2 * sl["depth"], sl["h"]), (sx * sl["x"], low["y0"], sl["z"]))
         # The film door's seam: a fine square-edged gap on the sides and bottom (halicki_2023 (2)).
         cut(shell_obj, (0.2, 0.1, door["height"] + 0.01), (0, door["y0"] - SEAM / 2 + 0.05, (door["height"] - 0.0101) / 2))
         # Strap lugs: a small rounded bar on each side of the front frame, near the top.
@@ -314,7 +322,7 @@ def shell(P):
 
 
 def stripe(P):
-    """Five bands down the shelf, from the lens boss to the shelf's front edge, magenta on +x."""
+    """Five bands from under the lens boss down the front plate and the shelf to its front edge, magenta on +x."""
     s, plate, shelf = P["stripe"], P["front_plate"], P["shelf_front"]
     w = s["width"] / s["bands"]
     a = Vector((0, plate["y"], plate["bottom"]))
@@ -328,6 +336,9 @@ def stripe(P):
             x0 = s["width"] / 2 - k * w
             x1 = x0 - w
             slab(m, [(x0, a.y, a.z), (x1, a.y, a.z), (x1, b.y, b.z), (x0, b.y, b.z)], nrm, 0.0002, m)
+            # ... and a short run down the front plate, from under the lens boss to the shelf.
+            zb = P["lens_boss"]["z"] - P["lens_boss"]["height"] / 2 + 0.001
+            slab(m + "_plate", [(x0, a.y, zb), (x1, a.y, zb), (x1, a.y, a.z), (x0, a.y, a.z)], Vector((0, 1, 0)), 0.0002, m)
 
 
 def lens_pocket(P):
@@ -358,8 +369,9 @@ def front_parts(P):
             w0, w1 = ow + (lb["lens_frame"] - ow) * f0, ow + (lb["lens_frame"] - ow) * f1
             h0, h1 = oh + (lb["lens_frame"] - oh) * f0, oh + (lb["lens_frame"] - oh) * f1
             zc = oz + (lb["lens_frame_z"] - oz) * f1
-            front_ring(f"hood_step_{k}", [(u, v + (oz + (lb["lens_frame_z"] - oz) * f0) - zc) for u, v in rrect(w0, h0, 0.004)],
+            step = front_ring(f"hood_step_{k}", [(u, v + (oz + (lb["lens_frame_z"] - oz) * f0) - zc) for u, v in rrect(w0, h0, 0.004)],
                        rrect(w1, h1, 0.0035), lb["x"], zc, y - dy, y, "body_black")
+            round_edges(step, 0.0002, segments=2)
             y -= dy
         # The pocket behind the window, lined black.
         lp = lens_pocket(P)
@@ -376,22 +388,46 @@ def front_parts(P):
         glass.data.shade_smooth()
     with parts.assembly("viewfinder_window"):
         vw = P["viewfinder_window"]
-        front_ring("window_frame", rrect(vw["width"] + 0.003, vw["height"] + 0.003, 0.0015),
+        wf = front_ring("window_frame", rrect(vw["width"] + 0.003, vw["height"] + 0.003, 0.0015),
                    rrect(vw["width"], vw["height"], 0.001), vw["x"], vw["z"], py, py + 0.0015, "front_white")
+        round_edges(wf, 0.0004, segments=2)
         glass = front_plate("window_glass", rrect(vw["width"], vw["height"], 0.001), vw["x"], vw["z"],
                             py, py + 0.0005, _image_material("viewfinder_glass", "viewfinder.jpg", 0.05))
         _uv_plane(glass, 0, 2, vw["x"] + vw["width"] / 2, vw["x"] - vw["width"] / 2,
                   vw["z"] - vw["height"] / 2, vw["z"] + vw["height"] / 2)
     with parts.assembly("shutter_button"):
         b = P["button"]
-        front_plate("button_bezel", circle(b["bezel"] / 2), b["x"], b["z"], py, py + 0.0015, "front_white")
-        front_plate("button_cap", circle(b["cap"] / 2), b["x"], b["z"], py + 0.0015, py + 0.0045, "button_red")
+        round_edges(front_plate("button_bezel", circle(b["bezel"] / 2), b["x"], b["z"], py, py + 0.0015, "front_white"),
+                    0.0005, segments=3)
+        round_edges(front_plate("button_cap", circle(b["cap"] / 2), b["x"], b["z"], py + 0.0015, py + 0.0045, "button_red"),
+                    0.0008, segments=3)
     with parts.assembly("exposure_knob"):
         k = P["knob"]
-        # Knurled: 24 ridges round the rim (halicki_2023 (3)).
-        ridges = [((k["diameter"] / 2) * (1.0 if i % 2 else 0.93) * math.cos(math.pi * i / 24),
-                   (k["diameter"] / 2) * (1.0 if i % 2 else 0.93) * math.sin(math.pi * i / 24)) for i in range(48)]
-        front_plate("knob", ridges, k["x"], k["z"], py, py + k["length"], "body_black")
+        L, yw = k["length"], py + k["length"] * k["drum"]
+        rd, rc = k["drum_d"] / 2, k["cap_d"] / 2
+        # Behind: a white drum ruled by thin black lines (the lighten/darken scale) ...
+        drum = ccyl("knob_drum", rd, yw - py, location=(k["x"], (py + yw) / 2, k["z"]), direction=(0, 1, 0),
+                    material="front_white", segments=48)
+        round_edges(drum, 0.0004, segments=2)
+        for i in range(k["lines"]):
+            a = 2 * math.pi * i / k["lines"]
+            line = parts.box(f"knob_line_{i}", (0.0004, yw - py - 0.0012, 0.0003),
+                             location=(k["x"] + rd * math.cos(a), (py + yw) / 2, k["z"] + rd * math.sin(a)),
+                             material="body_black")
+            line.rotation_euler = (0, math.pi / 2 - a, 0)
+        # ... and in front the black cap: knurled round its back, smooth in front, its face dished.
+        kn = yw + k["knurl"]
+        ridges = [(rc * (1.0 if i % 2 else 0.95) * math.cos(math.pi * i / 36),
+                   rc * (1.0 if i % 2 else 0.95) * math.sin(math.pi * i / 36)) for i in range(72)]
+        round_edges(front_plate("knob_knurl", ridges, k["x"], k["z"], yw, kn, "body_black"), 0.0003, segments=2, angle=60)
+        cap = front_ring("knob_cap", circle(rc * 0.97, 48), circle(rc * 0.78, 48), k["x"], k["z"], kn - 0.0002, py + L, "body_black",
+                         inner_y0=py + L - 0.0015)
+        round_edges(cap, 0.0006, segments=3)
+        front_plate("knob_face", circle(rc * 0.8, 48), k["x"], k["z"], py + L - 0.0018, py + L - 0.0015, "body_black")
+        # The pointer moulded into the plate between the viewfinder window and the knob.
+        pt = k["pointer"]
+        side_prism("knob_pointer", [(py, pt["z"] + pt["h"]), (py + 0.0006, pt["z"] + pt["h"]), (py, pt["z"])],
+                   k["x"] - pt["w"] / 2, k["x"] + pt["w"] / 2, "front_white")
     with parts.assembly("badge"):
         bd = P["badge"]
         badge = parts.box("badge", (bd["width"], 0.0004, bd["height"]), location=(bd["x"], py + 0.0002, bd["z"]),
@@ -445,11 +481,51 @@ def viewfinder_hood(P):
         # Inside the rim: a flat face with a small square eyepiece hole, dark behind it.
         ep = P["eyepiece"]
         y = e["y_rear"] + ep["inset"]
-        front_ring("eyepiece", rrect(e["width"] - 0.008, h - 0.010, 0.004), rrect(ep["hole"], ep["hole"], 0.0008),
+        ep_ring = front_ring("eyepiece", rrect(e["width"] - 0.008, h - 0.010, 0.004), rrect(ep["hole"], ep["hole"], 0.0008),
                    e["x"], e["top"] - h / 2, y, y + 0.0015, "eyecup_rubber")
+        round_edges(ep_ring, 0.0004, segments=2)
         front_plate("eyepiece_dark", rrect(ep["hole"] + 0.001, ep["hole"] + 0.001, 0.0008), e["x"], e["top"] - h / 2,
                     y + 0.0015, y + 0.0025, "lightbox_black")
     return hood
+
+
+def grain_finishes(spec):
+    """The moulded plastic's fine texture on every outside part: each plain finish named in the
+    spec's surface_grain swapped for the same colour with a little mottle and a bump map of
+    grain `cell` metres across and `depth` deep, on a `repeat`-metre tile (box-projected UVs)."""
+    g = spec["estimates"]["surface_grain"]["value"]
+    swap = {}
+    for key, e in g["finishes"].items():
+        m = spec["materials"][key]
+        px, rep = 256, g["repeat"]
+        mpp = rep / px
+        h = tiling._noise(px, px, e["cell"] / mpp, e["cell"] / mpp, e["seed"])
+        h += 0.5 * tiling._noise(px, px, e["cell"] / mpp / 2.5, e["cell"] / mpp / 2.5, e["seed"] + 7)
+        h *= e["depth"]                                           # metres
+        dx = (np.roll(h, -1, 1) - np.roll(h, 1, 1)) / (2 * mpp)
+        dy = (np.roll(h, -1, 0) - np.roll(h, 1, 0)) / (2 * mpp)
+        nrm = np.stack([-dx, -dy, np.ones_like(dx)], 2)
+        nrm /= np.linalg.norm(nrm, axis=2, keepdims=True)
+        mot = tiling._noise(px, px, 0.004 / mpp, 0.004 / mpp, e["seed"] + 3)
+        col = tiling.srgb(m["hex"])[None, None] * (1 + e["mottle"] * mot)[..., None]
+        base = tiling.image("polaroid1000", f"{key}_grain_base", np.clip(col, 0, 1).astype(np.float32), "sRGB")
+        normal = tiling.image("polaroid1000", f"{key}_grain_normal", (nrm * 0.5 + 0.5).astype(np.float32), "Non-Color")
+        swap[key] = materials.image(f"{key}_grain", base, normal, metallic=m.get("metallic", 0.0),
+                                    roughness=m.get("roughness", 0.5))
+    for obj in parts.collection().objects:
+        if obj.type != "MESH" or obj.get("internal") or obj.get("inside"):
+            continue
+        slots = [sl for sl in obj.material_slots if sl.material and sl.material.name in swap]
+        if not slots:
+            continue
+        if any(sl.material and sl.material.name not in swap and any(n.type == "TEX_IMAGE" for n in sl.material.node_tree.nodes)
+               for sl in obj.material_slots):
+            continue                                              # already UV-mapped for a picture
+        while obj.data.uv_layers:
+            obj.data.uv_layers.remove(obj.data.uv_layers[0])
+        tiling.box_uv(obj, g["repeat"])
+        for sl in slots:
+            sl.material = swap[sl.material.name]
 
 
 # --- inside -------------------------------------------------------------------------------
@@ -630,6 +706,7 @@ def build(spec):
     film(E, ym)
     drive(E)
     viewfinder_optics(P)
+    grain_finishes(spec)
     # The spec's positions are in the camera's own frame (lens along +y, button on +x). Turn the
     # whole model 180 degrees about z so it faces the viewer's front (-y, as Perseverance's).
     turn = Matrix.Rotation(math.pi, 4, "Z")

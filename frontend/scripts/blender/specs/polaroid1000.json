@@ -1,6 +1,8 @@
 {
   "title": "Polaroid Land Camera 1000",
-  "logos": ["polaroid"],
+  "logos": [
+    "polaroid"
+  ],
   "note": "Polaroid's integral-film box camera (1977), built to show how it works from the outside in: the plastic shell, the front plate with lens, shutter, viewfinder and controls, the light box with its 45-degree mirror, the SX-70 film pack with its battery, and the spread rollers, pick and motor that push the print out. Frame: z up, camera bottom at z = 0, centred in x and y; the model faces -y (the lens looks along -y, the button on -x), as Perseverance's forward. The positions in from_photos and estimates are in the camera's own frame (lens along +y, button on +x): the build turns the model 180 degrees about z at the end. Real size in metres. The side profile and front parts are measured from Halicki's photos through cameras fitted to the documented 107 x 140 mm footprint; internal parts are estimates (open_questions).",
   "viewer": {
     "explore": true
@@ -517,9 +519,9 @@
     "front_plate": {
       "value": {
         "y": 0.025,
-        "bottom": 0.043
+        "bottom": 0.038
       },
-      "source": "halicki_2023 (2), estimated: camera fitted to the 107 x 140 mm footprint's bottom corners and three vertical edges (4 px rms), pixels cast onto the side or centre plane: plate top front at y 0.024; the stripe's top end (plate base) at y 0.027, z 0.043"
+      "source": "halicki_2023 (2), estimated: camera fitted to the 107 x 140 mm footprint's bottom corners and three vertical edges (4 px rms), pixels cast onto the side or centre plane: plate top front at y 0.024. Bottom from halicki_2023 (3), straight on (0.090 mm/px, the plate's top at 350 px = z 0.085): the crease between plate and shelf at 872 px, z 0.038; (2)'s cast of the stripe's top end (z 0.043) is the lens boss's lower edge, 3 mm above the crease"
     },
     "shelf_front": {
       "value": {
@@ -581,12 +583,21 @@
     },
     "knob": {
       "value": {
-        "x": -0.029,
-        "z": 0.047,
-        "diameter": 0.0077,
-        "length": 0.011
+        "x": -0.032,
+        "z": 0.0466,
+        "drum_d": 0.0148,
+        "cap_d": 0.0133,
+        "length": 0.013,
+        "drum": 0.3,
+        "knurl": 0.003,
+        "lines": 10,
+        "pointer": {
+          "z": 0.0545,
+          "h": 0.0022,
+          "w": 0.0026
+        }
       },
-      "source": "halicki_2023 (3), estimated: straight-on, scaled by the 107 mm width (door 0.0862 mm/px, front plate 0.090 mm/px): centre (1300, 770) px, 85 px across; length from (2)"
+      "source": "halicki_2023 (3), estimated: straight-on, scaled by the 107 mm width (0.090 mm/px, the knob's earlier centre at 770 px = z 0.047): the white drum 1255-1420 px across (14.8 mm), its circle centred at (1337, 775) px; the black cap 147 px across (13.3 mm), knurled round its back; the pointer below the window at 667-690 px; length and the drum's share from (1) and (2)"
     },
     "badge": {
       "value": {
@@ -649,6 +660,19 @@
         "dome": 0.0025
       },
       "source": "halicki_2023 (3), estimated: straight-on, scaled by the 107 mm width (0.090 mm/px): the lens: a domed rounded-square plastic element (the single 103 mm element, facts.lens) filling the window at the back of the stepped opening, 877-1100 x 505-710 px, centred in it; dome estimated from the highlight along its top edge in (1)"
+    },
+    "back": {
+      "value": {
+        "base_inset": 0.004,
+        "strap_slot": {
+          "x": 0.04,
+          "z": 0.021,
+          "w": 0.011,
+          "h": 0.004,
+          "depth": 0.005
+        }
+      },
+      "source": "graf_classic_2013 (P1010976, rear 3/4, the same body) and a rear photo David supplied (2026-11-05), estimated against the 107 mm width: the sloped back's foot sits about 4 mm in from the lower box's sides; the strap leaves through a slot under the top edge of the rear face about 13 mm in from each side, a little wider than the 10 mm strap"
     }
   },
   "estimates": {
@@ -712,6 +736,20 @@
         }
       },
       "source": "retronautik_1000 (the light box out of the camera, photo 102321308), estimated: scaled by its picture opening taken as the 79 mm image width (about 0.16 mm/px): the steel frame about 100 mm across, the window in the narrow end about 14 x 10 mm; walls and margins estimated"
+    },
+    "surface_grain": {
+      "value": {
+        "repeat": 0.02,
+        "finishes": {
+          "hood_matte": {
+            "cell": 0.0004,
+            "depth": 4e-05,
+            "mottle": 0.05,
+            "seed": 21
+          }
+        }
+      },
+      "source": "halicki_2023 (1), (2), estimated: only the sloped back and the hood are grained and matte, the rest of the moulding glossy (David, from a rear photo, 2026-11-05); grain size and depth estimated (a few tenths of a millimetre), not measured"
     }
   }
 }
