@@ -1,5 +1,5 @@
 {
-  "title": "Honeywell GG1320AN ring laser gyro",
+  "title": "Honeywell GG1320AN",
   "logos": ["honeywell"],
   "note": "A single-axis ring laser gyro shown from the case in: the round case and its connector, two circuit boards, the mounting plate, and under it the clear glass block with the triangular laser path, three corner mirrors (two on piezo path-length actuators, one passing light to the detector), the cathode and two anodes that drive the helium-neon discharge, and the dither motor in the centre. Frame: z up along the sensing axis (perpendicular to the block), case bottom at z = 0, centred; +Y towards mirror 2 and the detector, -Y towards the cathode, as in sam_gg1320an's labelled photo of the block. Real size in metres (88 mm across). Positions in the block are measured from that photo, scaled by its scale bar; heights inside the case are estimates (open_questions).",
   "viewer": {
