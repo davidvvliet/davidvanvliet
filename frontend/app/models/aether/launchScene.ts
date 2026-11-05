@@ -160,14 +160,16 @@ const PLUME_FRAG = `
     float edge = pow(abs(dot(normalize(vN), normalize(vV))), uEdge);           // soft at the silhouette
     float fall = pow(1.0 - vAlong, uFall);                                       // fading downstream
     float flick = 0.75 + 0.5 * noise(vec2(vAlong * 9.0 - uTime * 14.0, vAngle * 1.5));
-    gl_FragColor = vec4(uColor * uK * edge * fall * flick, 1.0);
+    vec3 c = uColor * uK * edge * fall * flick;
+    gl_FragColor = vec4(c, max(c.r, max(c.g, c.b)));
   }`;
-// Light added to the colour only: the canvas is transparent over the page, and writing alpha
-// would show the plume's dark parts as a black cone over the page behind.
+// Light added, with the canvas's alpha raised only as much as the light is bright: the canvas is
+// transparent over the page, so alpha 1 shows the plume's dark parts as a black cone, and alpha 0
+// makes the browser drop the light altogether.
 const GLOW = {
   blending: THREE.CustomBlending, blendEquation: THREE.AddEquation,
-  blendSrc: THREE.SrcAlphaFactor, blendDst: THREE.OneFactor,
-  blendSrcAlpha: THREE.ZeroFactor, blendDstAlpha: THREE.OneFactor,
+  blendSrc: THREE.OneFactor, blendDst: THREE.OneFactor,
+  blendSrcAlpha: THREE.OneFactor, blendDstAlpha: THREE.OneFactor,
 } as const;
 function makePlume() {
   const group = new THREE.Group();
@@ -186,7 +188,7 @@ function makePlume() {
   const core = layer(0.07, 0.55, "#e8f0ff", 2.5, 1.2);    // the dense jet just out of the nozzle
   const haze = layer(0.45, 1.6, "#7f9cc8", 1.8, 2.0);      // the gas spreading wide into vacuum
   const bed = new THREE.Mesh(new THREE.CylinderGeometry(0.0118, 0.0118, 0.07, 24, 1, true),
-    new THREE.MeshBasicMaterial({ color: "#ff4a14", transparent: true, opacity: 0, depthWrite: false, ...GLOW }));
+    new THREE.MeshBasicMaterial({ color: "#ff4a14", transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending }));
   bed.rotation.z = Math.PI / 2; bed.position.x = 0.165;    // the catalyst bed, between the valve and the throat
   group.add(bed);
   return {
