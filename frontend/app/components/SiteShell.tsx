@@ -82,21 +82,22 @@ export default function SiteShell({ children, photos }: { children: React.ReactN
           ) : (
             <div className={styles.globeWrapper}>
               <div className={styles.globeLabel}>
-                {hoveredDot ? (
+                {/* The solar system's labels are stale during the Aether launch (its scene is unmounted). */}
+                {hoveredDot && !aetherLaunch ? (
                   <div className={styles.globeLabelRow}><span className={styles.globeLabelLocation}>{hoveredDot.label}</span><span className={styles.globeLabelSubtitle}>{hoveredDot.subtitle}</span><span className={styles.globeLabelDescription}>{hoveredDot.description}</span></div>
-                ) : hoveredBody === 'Sun' ? (
+                ) : hoveredBody === 'Sun' && !aetherLaunch ? (
                   <>
                     <div className={styles.globeLabelRow}><span className={styles.globeLabelLocation}>Sun</span><span className={styles.globeLabelDescription}>8.3 light-minutes</span><span className={styles.globeLabelSubtitle}>Type G</span></div>
                     <span className={styles.globeLabelFact}>Click to focus</span>
                   </>
-                ) : hoveredBody ? (
+                ) : hoveredBody && !aetherLaunch ? (
                   <div className={styles.globeLabelRow}><span className={styles.globeLabelLocation}>{hoveredBody}</span><span className={styles.globeLabelDescription}>Click to focus</span></div>
                 ) : hoveredStar ? (
                   <>
                     <div className={styles.globeLabelRow}><span className={styles.globeLabelLocation}>{hoveredStar.name}</span><span className={styles.globeLabelDescription}>{hoveredStar.lightYears.toLocaleString()} light-years</span>{hoveredStar.spectral && <span className={styles.globeLabelSubtitle}>Type {hoveredStar.spectral}</span>}</div>
                     {hoveredStar.fact && <span className={styles.globeLabelFact}>{hoveredStar.fact}</span>}
                   </>
-                ) : focusedBody ? (
+                ) : focusedBody && !aetherLaunch ? (
                   <>
                     <span className={styles.globeLabelLocation}>{focusedBody}</span>
                     {BODY_FACTS[focusedBody] && <span className={styles.globeLabelFact}>{BODY_FACTS[focusedBody]}</span>}
