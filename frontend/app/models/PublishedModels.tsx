@@ -35,7 +35,7 @@ const VIEW_DIR = new THREE.Vector3(0.6, 0.45, 0.66).normalize(); // from the mod
 const TURN_SECONDS = 20;
 
 // The logos in each card's top right corner (and the detailed view's), from the spec's "logos": who
-// built the real vehicle first (the grid lists models in ORGS order, anyone else last), then who else
+// built the real vehicle first (the grid lists models in ORGS order, then anyone else, then LAST), then who else
 // built it, each centred under the first. NASA's and SpaceX's are from Wikimedia Commons (public domain);
 // JPL's red letters too (public domain, trademarked). North American Aviation's (copyright Boeing) and
 // Rocketdyne's 1959 logo are English Wikipedia's fair-use files, recoloured light for the dark cards.
@@ -52,10 +52,14 @@ const LOGOS: Record<string, { name: string; logo: string; height: number; above?
   thiokol: { name: "Thiokol", logo: "/logos/thiokol.png", height: 14 },
   esa: { name: "European Space Agency", logo: "/logos/esa.svg", height: 16, above: 6, after: { nasa: 3 } },
 };
-const ORGS = ["nasa", "spacex"];
+const ORGS = ["nasa"];
+const LAST = ["spacex"];
 const logosOf = (m: Published) => m.logos.filter((k): k is keyof typeof LOGOS => k in LOGOS)
   .map((k, i, ks) => { const o = LOGOS[k]; return { ...o, above: (i > 0 ? o.after?.[ks[i - 1]] : undefined) ?? o.above }; });
-const orgRank = (m: Published) => { const i = ORGS.indexOf(m.logos[0]); return i < 0 ? ORGS.length : i; };
+const orgRank = (m: Published) => {
+  const i = ORGS.indexOf(m.logos[0]), j = LAST.indexOf(m.logos[0]);
+  return j >= 0 ? ORGS.length + 1 + j : i < 0 ? ORGS.length : i;
+};
 
 // /models on the live site. Without ?probe: a grid of the published models, each spinning in its
 // card. All cards draw into one shared canvas (one WebGL context however many models there are),
