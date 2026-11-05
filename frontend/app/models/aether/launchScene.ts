@@ -699,8 +699,9 @@ export function aetherLaunch(site: Site, bin: ArrayBuffer, on: { ui(u: LaunchUi)
         }
         camera.quaternion.copy(qB).multiply(view);
         camera.position.copy(controls.target).add(tmp.set(0, 0, viewDist * unitsPerM).applyQuaternion(camera.quaternion));
-        if (onTrack && !touched) {
-          // Never inside a cutting's wall.
+        if (onTrack) {
+          // Never inside a cutting's wall or under the ground, also when flying to a clicked part or turned by hand
+          // (the ground hid the craft until a zoom pulled the camera back out).
           const lc = launchFrame.worldToLocal(camera.position.clone());
           lc.y = Math.max(lc.y, groundY(lc.x, lc.z) + 1.5);
           camera.position.copy(launchFrame.localToWorld(lc));
