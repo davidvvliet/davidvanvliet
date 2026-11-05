@@ -87,6 +87,25 @@ def front_plate(name, outline, cx, cz, y0, y1, material):
     return _solid(name, verts, faces, material)
 
 
+def domed_plate(name, outline, cx, cz, y0, t, dome, material, rings=5):
+    """A plate from a front outline, `t` thick from y0, its front bulging forward by `dome`."""
+    n = len(outline)
+    layers = [(1.0, y0), (1.0, y0 + t)]
+    for i in range(1, rings):
+        a = (math.pi / 2) * i / rings
+        layers.append((math.cos(a), y0 + t + dome * math.sin(a)))
+    verts = [(cx + u * k, y, cz + v * k) for k, y in layers for u, v in outline]
+    verts.append((cx, y0 + t + dome, cz))
+    faces = [list(range(n - 1, -1, -1))]
+    for L in range(len(layers) - 1):
+        for i in range(n):
+            j = (i + 1) % n
+            faces.append((L * n + i, L * n + j, (L + 1) * n + j, (L + 1) * n + i))
+    top, c = (len(layers) - 1) * n, len(verts) - 1
+    faces += [(top + i, top + (i + 1) % n, c) for i in range(n)]
+    return _solid(name, verts, faces, material)
+
+
 def slab(name, corners, normal, t, material):
     """A thin plate on four world corners, thickness t along `normal`."""
     nv = Vector(normal).normalized() * t
@@ -296,11 +315,12 @@ def stripe(P):
 
 
 def lens_pocket(P):
-    """The space behind the hood's back window that holds the lens: the window's width, from the
-    window's bottom to above the lens cell, 6 mm deep behind the front plate."""
+    """The space behind the hood's back window that holds the lens: the window's width, from just
+    below the window to above it and the lens cell, 6 mm deep behind the front plate."""
     lb, py = P["lens_boss"], P["front_plate"]["y"]
     return {"x": lb["x"], "w": lb["lens_frame"], "y0": py - 0.006, "y1": py,
-            "z0": lb["lens_frame_z"] - lb["lens_frame"] / 2, "z1": P["lens_centre_z"] + 0.0085}
+            "z0": lb["lens_frame_z"] - lb["lens_frame"] / 2 - 0.001,
+            "z1": max(P["lens_centre_z"] + 0.0085, lb["lens_frame_z"] + lb["lens_frame"] / 2 + 0.001)}
 
 
 def front_parts(P):
@@ -314,7 +334,7 @@ def front_parts(P):
                           inner_y0=py + lb["depth"] - 0.0015)
         round_edges(boss, 0.0015, segments=3, angle=40)
         # ... and inside it the black stepped hood, narrowing back to the lens frame.
-        steps = 6
+        steps = lb["steps"]
         y = py + lb["depth"] - 0.0015
         dy = (y - py - 0.0005) / steps
         for k in range(steps):
@@ -332,10 +352,11 @@ def front_parts(P):
                    lp["y0"], py + 0.0005, "body_black")
         front_plate("hood_back_wall", rrect(pw, ph, 0.002), lp["x"], pz, lp["y0"], lp["y0"] + 0.0005, "body_black")
     with parts.assembly("cover_glass"):
-        # A rounded-square glass across the window, the round lens seen through its upper half.
+        # A domed rounded-square glass filling the window, the round element seen through it.
         cg = P["cover_glass"]
-        front_plate("cover_glass", rrect(cg["width"], cg["height"], cg["radius"]), lb["x"], cg["z"], py - 0.0004, py + 0.0001,
-                    glow("cover_glass", SPEC[0], SPEC[0]["materials"]["cover_glass"]["alpha"], 0.0))
+        glass = domed_plate("cover_glass", rrect(cg["width"], cg["height"], cg["radius"]), lb["x"], cg["z"], py - 0.0004,
+                            0.0004, cg["dome"], glow("cover_glass", SPEC[0], SPEC[0]["materials"]["cover_glass"]["alpha"], 0.0))
+        glass.data.shade_smooth()
     with parts.assembly("viewfinder_window"):
         vw = P["viewfinder_window"]
         front_ring("window_frame", rrect(vw["width"] + 0.003, vw["height"] + 0.003, 0.0015),

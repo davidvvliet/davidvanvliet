@@ -465,11 +465,11 @@
       "source": "halicki_2023 (1), the hood's grained side, three spots (crop 1150-1800 x 100-900 px)"
     },
     "cover_glass": {
-      "hex": "#5e5e60",
+      "hex": "#55585d",
       "metallic": 0.0,
       "roughness": 0.05,
-      "alpha": 0.35,
-      "source": "halicki_2023 (3), the cover glass's lower half sampled at 930-1050 x 600-630 px (#5c5c5e-#747476, reflections of the studio included); alpha estimated (0.35) so the lens shows through"
+      "alpha": 0.7,
+      "source": "halicki_2023 (3), the domed glass sampled at 930-1050 x 530-630 px (#4d5255-#747476, studio reflections included); alpha estimated (0.7) so the inner element shows faintly"
     }
   },
   "open_questions": [
@@ -551,13 +551,14 @@
         "opening_h": 0.03,
         "opening_z": 0.0592,
         "lens_frame": 0.0194,
-        "lens_frame_z": 0.0614
+        "lens_frame_z": 0.0614,
+        "steps": 12
       },
-      "source": "halicki_2023 (3), estimated: straight-on, scaled by the 107 mm width (front plate 0.090 mm/px): boss 785-1205 x 405-840 px, black stepped opening 810-1185 x 470-805 px, lens frame 880-1095 x 505-720 px; depth from (2)"
+      "source": "halicki_2023 (3), estimated: straight-on, scaled by the 107 mm width (front plate 0.090 mm/px): boss 785-1205 x 405-840 px, black stepped opening 810-1185 x 470-805 px, lens frame 880-1095 x 505-720 px; depth from (2); 12 steps counted along the opening's bottom and left side in (3)"
     },
     "lens_centre_z": {
-      "value": 0.0666,
-      "source": "halicki_2023 (3), estimated: the lens glass centred at (985, 555) px, about 120 px (10.8 mm) across, behind the cover glass in its upper half"
+      "value": 0.0619,
+      "source": "halicki_2023 (3), estimated: the round element behind the domed glass, set on the glass's centre (straight on it reads 555 px, z 0.0666, in the glass's upper half, but in (1) it sits mid-height: it is seen through the curved glass, so its apparent place moves with the view)"
     },
     "viewfinder_window": {
       "value": {
@@ -640,12 +641,13 @@
     },
     "cover_glass": {
       "value": {
-        "width": 0.0178,
-        "height": 0.0144,
-        "z": 0.0638,
-        "radius": 0.003
+        "width": 0.019,
+        "height": 0.0182,
+        "z": 0.0619,
+        "radius": 0.004,
+        "dome": 0.0025
       },
-      "source": "halicki_2023 (3), estimated: straight-on, scaled by the 107 mm width (0.090 mm/px): a rounded-square glass across the window at the back of the stepped opening, 892-1090 x 505-667 px, the round lens seen through its upper half; also in (1)"
+      "source": "halicki_2023 (3), estimated: straight-on, scaled by the 107 mm width (0.090 mm/px): a domed rounded-square glass filling the window at the back of the stepped opening, 877-1100 x 505-710 px, centred in it; dome estimated from the highlight along its top edge in (1)"
     }
   },
   "estimates": {
