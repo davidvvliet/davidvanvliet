@@ -185,8 +185,8 @@ function makePlume() {
     group.add(m);
     return mat;
   };
-  const core = layer(0.07, 0.55, "#c4dcff", 2.5, 1.2);    // the dense jet just out of the nozzle
-  const haze = layer(0.45, 1.6, "#4f86ff", 1.8, 2.0);      // the gas spreading wide into vacuum
+  const core = layer(0.07, 0.55, "#e8f0ff", 2.5, 1.2);    // the dense jet just out of the nozzle
+  const haze = layer(0.45, 1.6, "#7f9cc8", 1.8, 2.0);      // the gas spreading wide into vacuum
   const bed = new THREE.Mesh(new THREE.CylinderGeometry(0.0118, 0.0118, 0.07, 24, 1, true),
     new THREE.MeshBasicMaterial({ color: "#ff4a14", transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending }));
   bed.rotation.z = Math.PI / 2; bed.position.x = 0.165;    // the catalyst bed, between the valve and the throat
