@@ -14,6 +14,7 @@ from lib import materials, parts
 HERE = os.path.dirname(os.path.abspath(__file__))
 REFS = os.path.join(HERE, "..", "refs", "polaroid1000")
 HALF_W = 0.0535  # half the 107 mm width
+SEAM = 0.0005  # the film door's gap, estimated from halicki_2023 (2)
 
 
 # --- shape helpers ------------------------------------------------------------------------
@@ -120,6 +121,16 @@ def fuse(name, objs):
     return base
 
 
+def cut(obj, size, location):
+    """Cut a box out of an object (exact boolean difference)."""
+    box = parts.box(obj.name + "_cut", size, location=location, material="hood_matte")
+    m = obj.modifiers.new("cut", "BOOLEAN")
+    m.operation, m.solver, m.object = "DIFFERENCE", "EXACT", box
+    _apply(obj)
+    bpy.data.objects.remove(box)
+    return obj
+
+
 def round_edges(obj, width, segments=4, angle=30):
     """Round every edge sharper than `angle` degrees (moulded plastic), concave ones filleted."""
     m = obj.modifiers.new("round", "BEVEL")
@@ -190,7 +201,8 @@ def shell(P):
     door, low, fs = P["door"], P["lower_box"], P["front_section"]
     plate, shelf, wb = P["front_plate"], P["shelf_front"], P["white_cover_back"]
     with parts.assembly("body", core=True):
-        body = [side_prism("lower_box", [(low["y0"], 0.0), (door["y0"], 0.0), (door["y0"], low["height"]),
+        # The lower box runs on under the door, so its rounding stops short of the seam cut below.
+        body = [side_prism("lower_box", [(low["y0"], 0.0), (door["y0"] + 0.004, 0.0), (door["y0"] + 0.004, low["height"]),
                                  (low["y0"], low["height"])], -HALF_W, HALF_W, "body_black")]
         body.append(side_prism("front_frame", [(fs["y0"], low["height"]), (wb, low["height"]), (wb, fs["top"]),
                                    (fs["y0"], fs["top"])], -HALF_W, HALF_W, "body_black"))
@@ -207,7 +219,9 @@ def shell(P):
                                -HALF_W, HALF_W, "body_black"))
         body.append(viewfinder_hood(P))
         # One moulding with rounded edges, the hood filleted into the sloped back (halicki_2023 (1)).
-        round_edges(fuse("body_shell", body), 0.003)
+        shell_obj = round_edges(fuse("body_shell", body), 0.003)
+        # The film door's seam: a fine square-edged gap on the sides and bottom (halicki_2023 (2)).
+        cut(shell_obj, (0.2, 0.1, door["height"] + 0.01), (0, door["y0"] - SEAM / 2 + 0.05, (door["height"] - 0.0101) / 2))
         # Strap lugs: a small rounded bar on each side of the front frame, near the top.
         for sgn in (1, -1):
             lug = parts.box(f"strap_lug_{'p' if sgn > 0 else 'm'}", (0.004, 0.009, 0.0028),
@@ -217,7 +231,7 @@ def shell(P):
         dz, dy0, dy1 = door["height"], door["y0"], door["y1"]
         slot = P["exit_slot"]
         hw = slot["half_width"]
-        door_body = side_prism("door_body", [(dy0, 0.0), (dy1 - 0.006, 0.0), (dy1 - 0.006, dz), (dy0, dz)],
+        door_body = side_prism("door_body", [(dy0 - 0.004, 0.0), (dy1 - 0.006, 0.0), (dy1 - 0.006, dz), (dy0 - 0.004, dz)],
                                -HALF_W + 0.0002, HALF_W - 0.0002, "body_black")
         zs = (slot["z0"] + slot["z1"]) / 2
         parts.boxes("door_face", [
@@ -227,17 +241,30 @@ def shell(P):
             ((HALF_W - hw, 0.006, slot["z1"] - slot["z0"]), (-(HALF_W + hw) / 2, dy1 - 0.003, zs)),
         ], material="body_black")
         face = bpy.data.objects["door_face"]
-        round_edges(fuse("door", [face, door_body]), 0.0018)
+        door_obj = round_edges(fuse("door", [face, door_body]), 0.0018)
+        cut(door_obj, (0.2, 0.1, 0.1), (0, door["y0"] + SEAM / 2 - 0.05, 0))
+        # The seam's floor: dark, just inside the outer faces.
+        parts.box("door_seam", (2 * HALF_W - 0.0012, SEAM, dz - 0.0008), location=(0, dy0, dz / 2 + 0.0002),
+                  material="lightbox_black")
         strip = parts.box("name_strip", (0.101, 0.0008, slot["label_z1"] - slot["label_z0"]),
                           location=(0, dy1 + 0.0004, (slot["label_z0"] + slot["label_z1"]) / 2),
                           material=_image_material("name_strip", "name-strip.jpg", 0.4))
         # The photo runs left to right as seen from the front, so +x is its left edge.
         _uv_plane(strip, 0, 2, 0.0505, -0.0505, slot["label_z0"], slot["label_z1"])
     with parts.assembly("door_latch"):
+        # On the body just behind the seam: ribs on the rear part, an arrow pointing forward.
         la = P["door_latch"]
-        latch = parts.box("latch", (la["depth"], la["width"], la["height"]), location=(HALF_W + la["depth"] / 2, la["y"], la["z"]),
+        y0, y1, z0, z1, d = la["y0"], la["y1"], la["z0"], la["z1"], la["depth"]
+        latch = parts.box("latch", (d, y1 - y0, z1 - z0), location=(HALF_W + d / 2, (y0 + y1) / 2, (z0 + z1) / 2),
                           material="body_black")
-        round_edges(latch, 0.0005, segments=2)
+        round_edges(latch, 0.0004, segments=2)
+        x = HALF_W + d
+        n, pitch = 7, 0.0011
+        parts.boxes("latch_ribs", [((0.0003, 0.0005, z1 - z0 - 0.0014), (x + 0.0001, y0 + 0.0012 + k * pitch, (z0 + z1) / 2))
+                                   for k in range(n)], material="body_black")
+        zc, ya = (z0 + z1) / 2, y0 + 0.0012 + n * pitch + 0.0008
+        side_prism("latch_arrow", [(ya, zc - 0.0016), (ya + 0.0020, zc - 0.0016), (ya + 0.0036, zc), (ya + 0.0020, zc + 0.0016),
+                                   (ya, zc + 0.0016)], x - 0.0001, x + 0.00025, "body_black")
     with parts.assembly("front_cover"):
         cover = side_prism("white_cover", [(wb, door["height"]), (shelf["y"], door["height"]), (shelf["y"], shelf["z"]),
                                            (plate["y"], plate["bottom"]), (plate["y"], fs["top"] - 0.003), (wb, fs["top"] - 0.003)],
@@ -355,6 +382,13 @@ def viewfinder_hood(P):
         cup = front_ring("eyecup", rrect(w, h, 0.006), rrect(e["width"] - 0.008, h - 0.010, 0.004),
                          e["x"], e["top"] - h / 2, e["y_rear"], e["y_rear"] + 0.016, "eyecup_rubber")
         round_edges(cup, 0.002, segments=3, angle=40)
+        # Inside the rim: a flat face with a small square eyepiece hole, dark behind it.
+        ep = P["eyepiece"]
+        y = e["y_rear"] + ep["inset"]
+        front_ring("eyepiece", rrect(e["width"] - 0.008, h - 0.010, 0.004), rrect(ep["hole"], ep["hole"], 0.0008),
+                   e["x"], e["top"] - h / 2, y, y + 0.0015, "eyecup_rubber")
+        front_plate("eyepiece_dark", rrect(ep["hole"] + 0.001, ep["hole"] + 0.001, 0.0008), e["x"], e["top"] - h / 2,
+                    y + 0.0015, y + 0.0025, "lightbox_black")
     return hood
 
 

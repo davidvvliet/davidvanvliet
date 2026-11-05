@@ -78,18 +78,18 @@
       "radius": 0.03
     },
     {
-      "name": "door latch",
+      "name": "door latch and seam",
       "target": [
         -0.0535,
-        -0.04,
-        0.012
+        -0.03,
+        0.008
       ],
       "look": [
-        0.9,
-        0.3,
+        0.85,
+        0.35,
         -0.3
       ],
-      "radius": 0.02
+      "radius": 0.016
     }
   ],
   "sources": [
@@ -157,6 +157,21 @@
       "read": "2026-11-05",
       "licence": "CC BY-SA 4.0 (Jacek Halicki), as stated on the Commons file pages",
       "credit": "Badge, name strip and viewfinder textures cut from, and finishes sampled from, Jacek Halicki's photos of a Polaroid Supercolor 1000 (CC BY-SA 4.0, Wikimedia Commons)"
+    },
+    {
+      "id": "kitakaze_2009",
+      "title": "Kitakaze (Chris Lüders), \"PolaroidLandCamera1000.JPG\", 2009-11-14, Wikimedia Commons",
+      "url": "https://commons.wikimedia.org/wiki/File:PolaroidLandCamera1000.JPG",
+      "read": "2026-11-05",
+      "licence": "CC BY-SA 4.0 (Kitakaze), as stated on the Commons file page",
+      "credit": "Stripe yellow and green sampled from Kitakaze's photo of a Polaroid Land Camera 1000 (CC BY-SA 4.0, Wikimedia Commons)"
+    },
+    {
+      "id": "graf_classic_2013",
+      "title": "David (Charlie Graf collection), \"Classic cameras P1010973/P1010974/P1010976-P1S\", 2013-06-26, Wikimedia Commons (a white OneStep, the same body)",
+      "url": "https://commons.wikimedia.org/wiki/File:Classic_cameras_P1010976-P1S_(9153352766).jpg",
+      "read": "2026-11-05",
+      "licence": "CC BY-SA 2.0, as stated on the Commons file pages"
     }
   ],
   "reference_model": {
@@ -328,6 +343,10 @@
       "value": "sold as the OneStep in the US; red or green button; Q-light flash made for it",
       "source": "wp_land1000",
       "quote": "In the United States, it was marketed as the OneStep. ... They had two unique shutter colors: red and green."
+    },
+    "stripe_bands": {
+      "value": "five bands on the Supercolor 1000 (magenta, orange, yellow, green, blue); the earlier 1000 and the OneStep have six (pink, red, orange, yellow, green, blue)",
+      "source": "halicki_2023 (3), scanned across the stripe at y=1100 px: five bands; kitakaze_2009 (a Land Camera 1000), rows 780-800 px: six"
     }
   },
   "materials": {
@@ -362,16 +381,16 @@
       "source": "halicki_2023 (3), stripe at y=1100 px"
     },
     "stripe_yellow": {
-      "hex": "#fef49d",
+      "hex": "#ffdc57",
       "metallic": 0.0,
       "roughness": 0.4,
-      "source": "halicki_2023 (3), stripe at y=1100 px"
+      "source": "kitakaze_2009, 3/4 front, rows 780-800 px, averaged; scaled by 1.21 so its white shelf (#c6c5c2) matches front_white. Halicki's bright studio light puts this band level with the white (G 0xf4), so it read washed out (Halicki: #fef49d)"
     },
     "stripe_green": {
-      "hex": "#caf090",
+      "hex": "#96b050",
       "metallic": 0.0,
       "roughness": 0.4,
-      "source": "halicki_2023 (3), stripe at y=1100 px"
+      "source": "kitakaze_2009, 3/4 front, rows 780-800 px, averaged; scaled by 1.21 so its white shelf (#c6c5c2) matches front_white. Halicki's bright studio light puts this band level with the white (G 0xf4), so it read washed out (Halicki: #caf090)"
     },
     "stripe_blue": {
       "hex": "#01b7ee",
@@ -597,13 +616,20 @@
     },
     "door_latch": {
       "value": {
-        "y": 0.04,
-        "z": 0.012,
-        "width": 0.008,
-        "height": 0.014,
+        "y0": 0.0195,
+        "y1": 0.034,
+        "z0": 0.0033,
+        "z1": 0.0106,
         "depth": 0.0015
       },
-      "source": "halicki_2023 (2), estimated: the latch on the door's +x side, read through the fitted camera"
+      "source": "halicki_2023 (2), estimated: latch corners cast through the fitted camera onto the +x side (y 0.019-0.0345, z 0.0033-0.0106); it sits on the body just behind the door seam (seam cast at y 0.0349), ribbed at the back with a forward arrow"
+    },
+    "eyepiece": {
+      "value": {
+        "hole": 0.0055,
+        "inset": 0.004
+      },
+      "source": "graf_classic_2013 (P1010976, rear 3/4), estimated: a flat face set about 4 mm into the eyecup rim with a square hole about a quarter of the opening's width (opening 24 mm here, so 5.5 mm)"
     }
   },
   "estimates": {
