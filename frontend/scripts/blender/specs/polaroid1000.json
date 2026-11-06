@@ -326,13 +326,13 @@
       ]
     },
     "motor_side": {
-      "value": "motor beside one side of the film cassette, rollers beside the opposite side, gear train along a third side (SX-70 patent; the 1000's photos to confirm)",
-      "source": "us3714879",
-      "quote": "Motive power is derived from an electric motor 130 attached to the rear portion of frame 12",
+      "value": "motor across the front under the lens block, its shaft driving a gear train in the side rail back to the gold roller's gear (One-Step 600 teardown; the 1000's photos don't show it)",
+      "source": "ifixit_onestep600",
+      "quote": "Pull the electric motor straight out of the plastic piece. ... Remove the solenoid from the back of the lens plate by removing the two tabs.",
       "also": [
         {
-          "source": "ifixit_onestep600",
-          "quote": "Pull the electric motor straight out of the plastic piece. ... Remove the solenoid from the back of the lens plate by removing the two tabs."
+          "source": "us3714879",
+          "quote": "Motive power is derived from an electric motor 130 attached to the rear portion of frame 12"
         }
       ]
     },
@@ -735,10 +735,17 @@
     },
     "motor": {
       "value": {
-        "d": 0.012,
-        "length": 0.024
+        "length": 0.02,
+        "width": 0.015,
+        "flat": 0.012,
+        "x": 0.01,
+        "y": 0.026,
+        "z": 0.023,
+        "bell_d": 0.011,
+        "bell": 0.003,
+        "shaft_d": 0.0015
       },
-      "source": "us3714879, estimate: placed under the shelf behind the door, driving the upper roller through a gear train on the +x side (open_questions)"
+      "source": "ifixit_onestep600, step 18, estimate: a flat-sided silver can lying across the front under the lens block, beside the switch contacts, its shaft toward the side rail; about 190 x 150 px against the chassis's roughly 1000 px (100 mm) front edge, so 20 x 15 mm, 12 mm across the flats (the One-Step 600; the 1000's motor is not in Retronautik's photos)"
     },
     "light_box": {
       "value": {
@@ -864,6 +871,27 @@
         }
       },
       "source": "retronautik_1000 'Rollenmechanik' photo, estimate: scaled by the gold roller's 96 mm (estimates.rollers), 0.12 mm/px at 1200 px: the steel strip 7 mm wide carrying the gold roller on its bent-up ends 12 mm off the axle, two long slots, the hooked plate at the gear end; the steel roller's end journals; the brass three-tine spring. Where the strip and the spring sit in the camera is not shown: the strip laid over the gold roller inside the door, the spring under the steel roller (open_questions)"
+    },
+    "gear_train": {
+      "value": {
+        "planes": [
+          0.0515,
+          0.0525,
+          0.0535
+        ],
+        "width": 0.0009,
+        "motor_pinion": 0.002,
+        "a": {
+          "r": 0.008,
+          "pinion": 0.0025
+        },
+        "b": {
+          "r": 0.007,
+          "pinion": 0.0025
+        },
+        "roller_gear_d": 0.0135
+      },
+      "source": "ifixit_onestep600 steps 26 and 28 (two white compound gears, a large gear with a small pinion each, in the side rail between the motor and the rollers) and retronautik_1000 'Rollenmechanik' photo (the gold roller's black gear, about 2.4 roller diameters, so 13.5 mm), estimate: the compound gears' radii chosen so the chain spans the motor-to-roller distance, in three planes beside the roller frame"
     }
   }
 }

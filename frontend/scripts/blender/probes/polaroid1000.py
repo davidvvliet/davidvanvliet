@@ -731,7 +731,7 @@ def drive(E):
         # The gold roller, its ends turned down to the axle; the steel roller with thin journals.
         parts.lathe("upper_roller", [(0, -L / 2 - 0.002), (0.0012, -L / 2 - 0.002), (0.0012, -L / 2), (ru * 0.85, -L / 2),
                                      (ru, -L / 2 + 0.003), (ru, L / 2 - 0.003), (ru * 0.85, L / 2), (0.0012, L / 2),
-                                     (0.0012, L / 2 + 0.0045), (0, L / 2 + 0.0045)],
+                                     (0.0012, L / 2 + 0.006), (0, L / 2 + 0.006)],
                     location=(0, ry, za), direction=(1, 0, 0), segments=24, material="roller_gold")
         jr, jl = rf["journal"]["d"] / 2, rf["journal"]["length"]
         parts.lathe("lower_roller", [(0, -L / 2 - jl), (jr, -L / 2 - jl), (jr, -L / 2), (rl, -L / 2 + 0.0004), (rl, L / 2 - 0.0004),
@@ -777,26 +777,49 @@ def drive(E):
         fork = _solid("roller_spring", verts, bm_faces, "pick_brass")
         cut(fork, (0.003, 0.0025, 0.01), (x0 + 0.010, ry, zk))
     with parts.assembly("pick", internal=True):
-        parts.box("pick_plate", (0.008, 0.07, 0.0004), location=(0.040, pk["front_y"] - 0.045, zf + 0.0006),
+        parts.box("pick_plate", (0.007, 0.07, 0.0004), location=(0.0435, pk["front_y"] - 0.045, zf - 0.0004),
                   material="pick_brass")
-    mx, my, mz = 0.026, 0.010, 0.036   # estimate: under the lens, beside the light cone
-    gx = r["length"] / 2 + 0.0045            # outboard of the roller frame
+    gt = E["gear_train"]
+    p1, p2, p3 = gt["planes"]
+    mx, my, mz = m["x"], m["y"], m["z"]
     with parts.assembly("motor", internal=True):
-        ccyl("motor_can", m["d"] / 2, m["length"], location=(mx, my, mz), direction=(1, 0, 0),
-                       material="foil_silver", segments=24)
-        ccyl("motor_pinion", 0.002, gx - mx - m["length"] / 2 + 0.001,
-                       location=((mx + m["length"] / 2 + gx) / 2, my, mz), direction=(1, 0, 0),
-                       material="pick_brass", segments=12)
+        # A flat-sided can across the front, its black end bell away from the rail, the shaft
+        # running out to the gear train (ifixit_onestep600 step 18).
+        can = ccyl("motor_can", m["width"] / 2, m["length"], location=(mx, my, mz), direction=(1, 0, 0),
+                   material="foil_silver", segments=32)
+        for sz in (1, -1):
+            cut(can, (0.03, 0.03, 0.01), (mx, my, mz + sz * (m["flat"] / 2 + 0.005)))
+        ccyl("motor_bell", m["bell_d"] / 2, m["bell"], location=(mx - m["length"] / 2 - m["bell"] / 2, my, mz), direction=(1, 0, 0),
+             material="body_black", segments=24)
+        x0 = mx + m["length"] / 2
+        ccyl("motor_shaft", m["shaft_d"] / 2, p1 + gt["width"] / 2 - x0, location=((x0 + p1 + gt["width"] / 2) / 2, my, mz),
+             direction=(1, 0, 0), material="frame_steel", segments=12)
     with parts.assembly("gear_train", internal=True):
-        # Pinion -> four idlers -> the roller's gear, in the plane x = gx (layout estimated).
-        a, b = Vector((my, mz)), Vector((r["y"], zf + ru))
-        r0, r_end, n = 0.002, 0.006, 4
-        dist = (b - a).length
-        ri = (dist - r0 - r_end) / (2 * n)
-        for k in range(n + 1):
-            rr = ri if k < n else r_end
-            cc = a + (b - a) * ((r0 + (2 * k + 1) * ri) / dist) if k < n else b
-            gear(f"gear_{k}", rr, 0.0015, (gx, cc.x, cc.y), "body_black" if k < n else "roller_gold")
+        # Motor pinion -> two white compound gears -> the gold roller's black gear, in three planes
+        # beside the roller frame. The chain bends upward between its ends.
+        P0, P3 = Vector((my, mz)), Vector((r["y"], zf + ru))
+        d1, d2, d3 = gt["motor_pinion"] + gt["a"]["r"], gt["a"]["pinion"] + gt["b"]["r"], gt["b"]["pinion"] + gt["roller_gear_d"] / 2
+        u = (P3 - P0).normalized()
+        n = Vector((-u.y, u.x))
+        if n.y < 0:
+            n = -n
+        P1 = P0 + (u * math.cos(0.25) + n * math.sin(0.25)) * d1
+        D = (P3 - P1).length
+        assert abs(d2 - d3) < D < d2 + d3, "gear chain can't span the motor to the roller"
+        aa = (d2 ** 2 - d3 ** 2 + D ** 2) / (2 * D)
+        h = math.sqrt(max(d2 ** 2 - aa ** 2, 0.0))
+        w = (P3 - P1).normalized()
+        nw = Vector((-w.y, w.x))
+        P2 = P1 + w * aa + (nw if nw.y > 0 else -nw) * h
+        wd = gt["width"]
+        def g(name, rad, plane, c, mat):
+            gear(name, rad, wd, (plane, c.x, c.y), mat, module=0.0004)
+        g("motor_pinion", gt["motor_pinion"], p1, P0, "frame_steel")
+        g("gear_a", gt["a"]["r"], p1, P1, "front_white")
+        g("gear_a_pinion", gt["a"]["pinion"], p2, P1, "front_white")
+        g("gear_b", gt["b"]["r"], p2, P2, "front_white")
+        g("gear_b_pinion", gt["b"]["pinion"], p3, P2, "front_white")
+        g("roller_gear", gt["roller_gear_d"] / 2, p3, P3, "body_black")
     with parts.assembly("wiring", internal=True):
         # From the battery's contacts up to the switch contacts under the shutter block.
         z0, ct = zf - pk["z"], E["shutter_block"]["contacts"]
