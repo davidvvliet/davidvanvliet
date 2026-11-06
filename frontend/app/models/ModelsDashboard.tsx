@@ -530,15 +530,20 @@ export function Viewer({ probe, title, url, breakdown, stale, compact, onReady, 
   const [flash, setFlash] = useState(false);
   useEffect(() => { setInside(false); setInnerFocus(null); setLit(false); setPlayStart(null); }, [probe]);
   // The light shows while the shutter is open, whether or not "Light" is on.
+  // Checked every frame against the animation's clock (timers drift when frames are slow).
+  const [w0, w1] = play?.light ?? [-1, -1];
   useEffect(() => {
     setFlash(false);
-    const w = play?.light;
-    if (playStart === null || !w) return;
-    const left = (t: number) => Math.max(0, t * 1000 - (performance.now() - playStart));
-    const on = setTimeout(() => setFlash(true), left(w[0]));
-    const off = setTimeout(() => setFlash(false), left(w[1]));
-    return () => { clearTimeout(on); clearTimeout(off); };
-  }, [playStart, play]);
+    if (playStart === null || w0 < 0) return;
+    let id = 0;
+    const tick = () => {
+      const e = (performance.now() - playStart) / 1000;
+      setFlash(e >= w0 && e <= w1);
+      if (e <= w1) id = requestAnimationFrame(tick);
+    };
+    tick();
+    return () => cancelAnimationFrame(id);
+  }, [playStart, w0, w1]);
   const [own, setOwn] = useState<string | null>(null);
   const focus = shown !== undefined ? shown : own;
   const setFocus = onFocus ?? setOwn;
