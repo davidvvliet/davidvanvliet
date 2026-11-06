@@ -490,7 +490,8 @@
     "Inside layout (where the motor, gears and shutter sit) is placed so the parts fit and the light path works; the only photos of the 1000's inside show the parts taken out.",
     "Eyecup: the photo cast puts its back 15-25 mm behind the body's rear; whether the 140 mm depth includes it is not stated.",
     "Lens to film: with the lens where the photos put it and the picture inside the pack, the folded path is 101 mm, 2% shorter than the 103 mm focal length; the film plane height (11 mm) or the pack's placement may be a few mm off.",
-    "Shutter block: the long arm with the frame counter and the switch contacts is placed along the button-side wall running back; no photo shows it inside the camera, and the 1000's counter window was not found in the exterior photos."
+    "Shutter block: the long arm with the frame counter and the switch contacts is placed along the button-side wall running back; no photo shows it inside the camera, and the 1000's counter window was not found in the exterior photos.",
+    "Rollers: the steel strip that carries the gold roller and the brass three-tine spring are placed (strip over the gold roller inside the door, spring under the steel roller) so they fit; no photo shows them in the camera."
   ],
   "budget": {
     "triangles": 50000,
@@ -827,6 +828,42 @@
         }
       },
       "source": "retronautik_1000 'Verschluss, Mechanik und Elektrik' photo, estimate: scaled 0.057 mm/px by taking the black tube beside the lens cup as the exposure knob's barrel (its centre 34 mm from the lens's on the front, 594 px in the photo); positions turned into the front's frame by the same pair (the photo is turned about 34 degrees); the arm's run inside the body is not shown by any photo: laid back along the button-side wall, above the light box's foot (open_questions)"
+    },
+    "roller_frame": {
+      "value": {
+        "strip": {
+          "width": 0.0072,
+          "t": 0.0006,
+          "above_axle": 0.012,
+          "slots": [
+            [
+              -0.03,
+              0.014
+            ],
+            [
+              0.026,
+              0.016
+            ]
+          ],
+          "slot_w": 0.0025
+        },
+        "journal": {
+          "d": 0.0018,
+          "length": 0.003
+        },
+        "latch": {
+          "back": 0.015,
+          "hook_drop": 0.006
+        },
+        "fork": {
+          "length": 0.065,
+          "width": 0.012,
+          "tines": 3,
+          "tine_length": 0.04,
+          "t": 0.0004
+        }
+      },
+      "source": "retronautik_1000 'Rollenmechanik' photo, estimate: scaled by the gold roller's 96 mm (estimates.rollers), 0.12 mm/px at 1200 px: the steel strip 7 mm wide carrying the gold roller on its bent-up ends 12 mm off the axle, two long slots, the hooked plate at the gear end; the steel roller's end journals; the brass three-tine spring. Where the strip and the spring sit in the camera is not shown: the strip laid over the gold roller inside the door, the spring under the steel roller (open_questions)"
     }
   }
 }

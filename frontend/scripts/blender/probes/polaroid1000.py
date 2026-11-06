@@ -724,19 +724,63 @@ def film(E, ym):
 def drive(E):
     r, zf, pk, m = E["rollers"], E["film_plane_z"], E["pack"], E["motor"]
     ru, rl = r["upper_d"] / 2, r["lower_d"] / 2
+    rf = E["roller_frame"]
+    L, ry = r["length"], r["y"]
+    za = zf + ru                                  # the gold roller's axle
     with parts.assembly("rollers", internal=True):
-        ccyl("upper_roller", ru, r["length"], location=(0, r["y"], zf + ru), direction=(1, 0, 0),
-                       material="roller_gold", segments=24)
-        ccyl("lower_roller", rl, r["length"], location=(0, r["y"], zf - rl), direction=(1, 0, 0),
-                       material="roller_steel", segments=24)
+        # The gold roller, its ends turned down to the axle; the steel roller with thin journals.
+        parts.lathe("upper_roller", [(0, -L / 2 - 0.002), (0.0012, -L / 2 - 0.002), (0.0012, -L / 2), (ru * 0.85, -L / 2),
+                                     (ru, -L / 2 + 0.003), (ru, L / 2 - 0.003), (ru * 0.85, L / 2), (0.0012, L / 2),
+                                     (0.0012, L / 2 + 0.0045), (0, L / 2 + 0.0045)],
+                    location=(0, ry, za), direction=(1, 0, 0), segments=24, material="roller_gold")
+        jr, jl = rf["journal"]["d"] / 2, rf["journal"]["length"]
+        parts.lathe("lower_roller", [(0, -L / 2 - jl), (jr, -L / 2 - jl), (jr, -L / 2), (rl, -L / 2 + 0.0004), (rl, L / 2 - 0.0004),
+                                     (jr, L / 2), (jr, L / 2 + jl), (0, L / 2 + jl)],
+                    location=(0, ry, zf - rl), direction=(1, 0, 0), segments=24, material="roller_steel")
+        # The steel roller's ends sit in the body's two bearing blocks.
         for sgn in (1, -1):
-            parts.box(f"roller_bracket_{'p' if sgn > 0 else 'm'}", (0.001, 0.014, 0.016),
-                      location=(sgn * (r["length"] / 2 + 0.001), r["y"], zf), material="frame_steel")
+            parts.box(f"roller_bearing_{'p' if sgn > 0 else 'm'}", (0.0025, 0.006, 0.004),
+                      location=(sgn * (L / 2 + jl - 0.00125), ry, zf - rl), material="body_black")
+        # The strip over the gold roller, its ends bent down to the axle; two long slots in it.
+        st = rf["strip"]
+        zs = za + st["above_axle"]
+        strip = parts.box("roller_strip", (L + 0.002, st["width"], st["t"]), location=(0, ry, zs + st["t"] / 2),
+                          material="frame_steel")
+        for x, ln in st["slots"]:
+            cut(strip, (ln, st["slot_w"], 0.01), (x, ry, zs))
+        x_end = L / 2 + 0.0023
+        # The far end: a plain tab down to the axle.
+        side_prism("strip_end_m", [(ry - 0.003, za - 0.0025), (ry + 0.003, za - 0.0025), (ry + 0.003, zs + st["t"]),
+                                   (ry - 0.003, zs + st["t"])], -x_end - 0.0006, -x_end, "frame_steel")
+        # The gear end: a plate reaching back past the axle to a hook (the door's catch).
+        la = rf["latch"]
+        yb = ry - la["back"]
+        side_prism("strip_end_p", [(ry + 0.0036, zs + st["t"]), (ry + 0.0036, za - 0.0025), (ry - 0.004, za - 0.0025),
+                                   (yb + 0.003, za - 0.002), (yb + 0.003, za - la["hook_drop"]), (yb, za - la["hook_drop"]),
+                                   (yb, za + 0.004), (ry - 0.004, zs - 0.002), (ry - 0.0036, zs + st["t"])],
+                   x_end, x_end + 0.0006, "frame_steel")
+        # The brass spring under the steel roller: a plate with three tines along it.
+        fk = rf["fork"]
+        zk = zf - 2 * rl - fk["t"] - 0.0001
+        x0 = -fk["length"] / 2
+        tw = fk["width"] / (2 * fk["tines"] - 1)
+        poly = [(x0, ry - fk["width"] / 2), (x0 + fk["length"] - fk["tine_length"], ry - fk["width"] / 2)]
+        for i in range(fk["tines"]):
+            yy = ry - fk["width"] / 2 + 2 * i * tw
+            poly += [(x0 + fk["length"], yy), (x0 + fk["length"], yy + tw)]
+            if i < fk["tines"] - 1:
+                poly += [(x0 + fk["length"] - fk["tine_length"], yy + tw), (x0 + fk["length"] - fk["tine_length"], yy + 2 * tw)]
+        poly += [(x0, ry + fk["width"] / 2)]
+        verts = [(u, v, zk) for u, v in poly] + [(u, v, zk + fk["t"]) for u, v in poly]
+        n = len(poly)
+        bm_faces = [list(range(n - 1, -1, -1)), list(range(n, 2 * n))] + [(i, (i + 1) % n, n + (i + 1) % n, n + i) for i in range(n)]
+        fork = _solid("roller_spring", verts, bm_faces, "pick_brass")
+        cut(fork, (0.003, 0.0025, 0.01), (x0 + 0.010, ry, zk))
     with parts.assembly("pick", internal=True):
         parts.box("pick_plate", (0.008, 0.07, 0.0004), location=(0.040, pk["front_y"] - 0.045, zf + 0.0006),
                   material="pick_brass")
     mx, my, mz = 0.026, 0.010, 0.036   # estimate: under the lens, beside the light cone
-    gx = r["length"] / 2 + 0.003
+    gx = r["length"] / 2 + 0.0045            # outboard of the roller frame
     with parts.assembly("motor", internal=True):
         ccyl("motor_can", m["d"] / 2, m["length"], location=(mx, my, mz), direction=(1, 0, 0),
                        material="foil_silver", segments=24)
