@@ -323,7 +323,8 @@ function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explor
     const goal = exploded ? 1 : 0;
     if (Math.abs(goal - t.current) < 1e-4) { t.current = goal; } else t.current += (goal - t.current) * Math.min(1, dt * 5);
     const k = smooth(t.current);
-    for (const u of units) u.node.position.copy(u.rest).addScaledVector(u.local, explore || explodable.includes(u.group) ? k : 0);
+    // While the model's animation plays, it places the parts.
+    if (playStart === null) for (const u of units) u.node.position.copy(u.rest).addScaledVector(u.local, explore || explodable.includes(u.group) ? k : 0);
     const parent = scene.parent?.matrixWorld ?? new THREE.Matrix4();
     const localBox = flight.current?.box ?? (focus ? boxes.get(focus) : undefined);
     const flyBox = localBox?.clone().applyMatrix4(parent);
