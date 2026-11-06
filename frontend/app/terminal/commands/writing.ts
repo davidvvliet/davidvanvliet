@@ -17,7 +17,7 @@ const writing: Command = {
         "__DIM__Usage: writing | w <post>",
         "",
         "Writing:",
-        ...posts.map((p) => `  ${run(`writing ${p.slug}`, p.slug)}${" ".repeat(maxSlug - p.slug.length)}    __GRAY__${p.title}  ${p.date}`),
+        ...posts.map((p) => `  ${run(`writing ${p.slug}`, p.slug)}${" ".repeat(maxSlug - p.slug.length)}    __GRAY__${p.shortTitle ?? p.title}  ${p.date}`),
       ];
     }
 
