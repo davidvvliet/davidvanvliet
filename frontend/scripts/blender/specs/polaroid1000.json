@@ -472,6 +472,12 @@
       "roughness": 0.05,
       "alpha": 0.7,
       "source": "halicki_2023 (3), the domed lens sampled at 930-1050 x 530-630 px (#4d5255-#747476, studio reflections included); alpha estimated (0.7) so the shutter opening behind it shows faintly"
+    },
+    "coil_red": {
+      "hex": "#d4595f",
+      "metallic": 0.3,
+      "roughness": 0.4,
+      "source": "retronautik_1000 'Verschluss, Mechanik und Elektrik' photo, the red winding behind the shutter gear (316 red pixels averaged #b5596d, corrected for the photo's blue cast measured on the black plastic, #6e8193)"
     }
   },
   "open_questions": [
@@ -483,7 +489,8 @@
     "Mechanism details (motor type, solenoids, gear count, circuit layout) come from the SX-70 manual and the One-Step 600 teardown, related models; the 1000 may differ.",
     "Inside layout (where the motor, gears and shutter sit) is placed so the parts fit and the light path works; the only photos of the 1000's inside show the parts taken out.",
     "Eyecup: the photo cast puts its back 15-25 mm behind the body's rear; whether the 140 mm depth includes it is not stated.",
-    "Lens to film: with the lens where the photos put it and the picture inside the pack, the folded path is 101 mm, 2% shorter than the 103 mm focal length; the film plane height (11 mm) or the pack's placement may be a few mm off."
+    "Lens to film: with the lens where the photos put it and the picture inside the pack, the folded path is 101 mm, 2% shorter than the 103 mm focal length; the film plane height (11 mm) or the pack's placement may be a few mm off.",
+    "Shutter block: the long arm with the frame counter and the switch contacts is placed along the button-side wall running back; no photo shows it inside the camera, and the 1000's counter window was not found in the exterior photos."
   ],
   "budget": {
     "triangles": 50000,
@@ -760,6 +767,66 @@
         }
       },
       "source": "halicki_2023 (1), (2), estimated: only the sloped back and the hood are grained and matte, the rest of the moulding glossy (David, from a rear photo, 2026-11-05); grain size and depth estimated (a few tenths of a millimetre), not measured"
+    },
+    "shutter_block": {
+      "value": {
+        "plate": {
+          "y0": 0.017,
+          "t": 0.0016,
+          "hole_d": 0.0084
+        },
+        "cup": {
+          "d": 0.03,
+          "rim_d": 0.0256,
+          "step_d": 0.016,
+          "depth": 0.0059,
+          "step_at": 0.0035
+        },
+        "barrel": {
+          "d": 0.0126,
+          "wall": 0.0008
+        },
+        "gear": {
+          "d": 0.0172,
+          "u": 0.0355,
+          "v": 0.0076
+        },
+        "coil": {
+          "d": 0.006,
+          "length": 0.009,
+          "u": 0.0355,
+          "v": -0.007
+        },
+        "blade": {
+          "r0": 0.0155,
+          "r1": 0.021,
+          "a0": -100,
+          "a1": -30
+        },
+        "counter": {
+          "d": 0.011,
+          "width": 0.005,
+          "x": 0.0475,
+          "y": 0.0115,
+          "z": 0.046
+        },
+        "contacts": {
+          "x": 0.042,
+          "y0": 0.0176,
+          "y1": 0.0276,
+          "z": 0.018,
+          "fingers": 4
+        },
+        "arm": {
+          "x0": 0.0425,
+          "x1": 0.0495,
+          "y0": -0.048,
+          "y1": 0.0055,
+          "z0": 0.031,
+          "z1": 0.039
+        }
+      },
+      "source": "retronautik_1000 'Verschluss, Mechanik und Elektrik' photo, estimate: scaled 0.057 mm/px by taking the black tube beside the lens cup as the exposure knob's barrel (its centre 34 mm from the lens's on the front, 594 px in the photo); positions turned into the front's frame by the same pair (the photo is turned about 34 degrees); the arm's run inside the body is not shown by any photo: laid back along the button-side wall, above the light box's foot (open_questions)"
     }
   }
 }

@@ -554,12 +554,7 @@ def optics(P, E):
                     location=(xl, ya, zl), direction=(0, 1, 0), material="lens_glass", segments=32)
         ccyl("shutter_ring", 0.0068, 0.003, location=(xl, ya, zl), direction=(0, 1, 0),
                        material="body_black", segments=32, caps=False)
-    with parts.assembly("shutter", internal=True):
-        ccyl("shutter_plate", 0.013, 0.0015, location=(xl, ya - 0.0045, zl), direction=(0, 1, 0),
-                       material="body_black", segments=40)
-        for k, sgn in enumerate((1, -1)):
-            parts.box(f"shutter_blade_{k}", (0.011, 0.0002, 0.007), location=(xl + sgn * 0.003, ya - 0.0033, zl + sgn * 0.001),
-                      material="frame_steel")
+    shutter_block(P, E, xl, zl)
     # The mirror covers the cone from the lens to the 79 x 77 mm picture area. Unfolded about the
     # mirror, the film point (y, zf) sits at (zf - c, y + c).
     ix, iy = 0.079 / 2, 0.077 / 2
@@ -630,6 +625,81 @@ def optics(P, E):
     return ym
 
 
+def shutter_block(P, E, xl, zl):
+    """The shutter and electronics block behind the front plate (retronautik_1000, 'Verschluss,
+    Mechanik und Elektrik'): a black frame carrying the lens cup with the shutter's opening, the
+    silver shutter blade, the gear and its red winding, the exposure knob's barrel; the flex foil
+    down to the switch contacts, and the arm with the frame counter. Sizes in estimates."""
+    sb = E["shutter_block"]
+    pl, cp = sb["plate"], sb["cup"]
+    y0, y1 = pl["y0"], pl["y0"] + pl["t"]
+    k = P["knob"]
+    with parts.assembly("shutter_block", internal=True):
+        # The frame: round the cup, out to the knob's barrel on one side and the gear on the other,
+        # clear of the viewfinder tube above the knob.
+        outline = [(0.045, 0.016), (0.012, 0.0175), (-0.012, 0.0175), (-0.020, 0.008), (-0.024, 0.0),
+                   (-0.040, -0.006), (-0.042, -0.020), (-0.040, -0.026), (-0.020, -0.026), (0.045, -0.026)]
+        frame = front_ring("shutter_frame", outline, circle(pl["hole_d"] / 2), xl, zl, y0, y1, "body_black")
+        round_edges(frame, 0.0004, segments=2)
+        # The lens cup: a thick rim, a step, then a cone in to the opening in the frame.
+        ro, ri, rs, d, st = cp["d"] / 2, cp["rim_d"] / 2, cp["step_d"] / 2, cp["depth"], cp["step_at"]
+        parts.lathe("lens_cup", [(pl["hole_d"] / 2 + 0.0003, 0), (ro, 0), (ro, d), (ri, d), (ri, st), (rs, st),
+                                 (rs, 0.0012), (pl["hole_d"] / 2 + 0.0003, 0.0003)],
+                    location=(xl, y1, zl), direction=(0, 1, 0), closed=True, segments=48, material="body_black")
+        # The exposure knob's barrel: a black tube on the frame, behind the knob.
+        br = sb["barrel"]
+        parts.lathe("knob_barrel", [(br["d"] / 2 - br["wall"], 0), (br["d"] / 2, 0), (br["d"] / 2, d), (br["d"] / 2 - br["wall"], d)],
+                    location=(k["x"], y1, k["z"]), direction=(0, 1, 0), closed=True, segments=32, material="body_black")
+        # The shutter blade: a dimpled steel crescent on the frame, below the cup on the gear side.
+        bl = sb["blade"]
+        n = 12
+        arc = lambda r, rev: [(r * math.cos(math.radians(a)), r * math.sin(math.radians(a)))
+                              for a in (bl["a0"] + (bl["a1"] - bl["a0"]) * i / n for i in (range(n, -1, -1) if rev else range(n + 1)))]
+        front_plate("shutter_blade", arc(bl["r1"], False) + arc(bl["r0"], True), xl, zl, y1, y1 + 0.0003, "frame_steel")
+        # The gear (axis forward) and, below it, the red winding.
+        g = sb["gear"]
+        gr = gear("shutter_gear", g["d"] / 2, 0.0012, (0, 0, 0), "body_black")
+        gr.rotation_euler = (0, 0, math.pi / 2)
+        gr.location = (xl + g["u"], y1 + 0.0009, zl + g["v"])
+        _apply_transform(gr)
+        c = sb["coil"]
+        cx, cz, cy = xl + c["u"], zl + c["v"], y1 + c["d"] / 2 + 0.001
+        ccyl("coil", c["d"] / 2, c["length"], location=(cx, cy, cz), direction=(1, 0, 0), material="coil_red", segments=24)
+        for sx in (1, -1):
+            ccyl(f"coil_end_{'p' if sx > 0 else 'm'}", c["d"] / 2 + 0.0008, 0.0008, location=(cx + sx * (c["length"] / 2 + 0.0004), cy, cz),
+                 direction=(1, 0, 0), material="body_black", segments=24)
+        # The switch contacts: brass fingers on a black block low on the gear side.
+        ct = sb["contacts"]
+        cb = parts.box("contact_block", (0.008, ct["y1"] - ct["y0"], 0.006), location=(ct["x"], (ct["y0"] + ct["y1"]) / 2, ct["z"]),
+                       material="body_black")
+        round_edges(cb, 0.0004, segments=2)
+        for i in range(ct["fingers"]):
+            parts.box(f"contact_finger_{i}", (0.0011, ct["y1"] - ct["y0"] - 0.002, 0.0004),
+                      location=(ct["x"] - 0.0027 + i * 0.0018, (ct["y0"] + ct["y1"]) / 2, ct["z"] + 0.0032), material="pick_brass")
+        # The flex foil from under the frame down to the contacts.
+        zt, zb = zl - 0.024, ct["z"] + 0.003
+        parts.box("flex_foil", (0.010, 0.0003, zt - zb), location=(ct["x"] - 0.005, ct["y0"] - 0.00015, (zt + zb) / 2),
+                  material="flex_foil")
+        # The arm: a black channel back along the wall, toothed underneath, a steel rod and a hook on
+        # top; the frame counter's white wheel at its front, in a cheek.
+        a = sb["arm"]
+        teeth = []
+        yt0, yt1, pitch = a["y0"] + 0.012, a["y1"] - 0.006, 0.0012
+        nt = int((yt1 - yt0) / pitch)
+        for i in range(nt):
+            yy = yt1 - i * pitch
+            teeth += [(yy, a["z0"]), (yy - pitch * 0.3, a["z0"] - 0.0006), (yy - pitch * 0.7, a["z0"] - 0.0006)]
+        arm = side_prism("counter_arm", [(a["y1"], a["z0"])] + teeth + [(a["y0"], a["z0"]), (a["y0"], a["z1"] + 0.004),
+                                                                         (a["y0"] + 0.003, a["z1"] + 0.004), (a["y0"] + 0.003, a["z1"]),
+                                                                         (a["y1"], a["z1"])], a["x0"], a["x1"], "body_black")
+        ccyl("arm_rod", 0.0014, 0.030, location=((a["x0"] + a["x1"]) / 2, a["y0"] + 0.028, a["z1"] + 0.0014), direction=(0, 1, 0),
+             material="frame_steel", segments=16)
+        cn = sb["counter"]
+        drum = ccyl("counter_wheel", cn["d"] / 2, cn["width"], location=(cn["x"], cn["y"], cn["z"]), direction=(1, 0, 0),
+                    material="front_white", segments=32)
+        parts.box("counter_cheek", (0.001, cn["d"] + 0.002, cn["d"] + 0.003), location=(cn["x"] - cn["width"] / 2 - 0.0012, cn["y"], cn["z"]),
+                  material="body_black")
+
 def film(E, ym):
     pk, zf = E["pack"], E["film_plane_z"]
     y0, z0 = pk["front_y"] - pk["y"], zf - pk["z"]
@@ -684,12 +754,14 @@ def drive(E):
             cc = a + (b - a) * ((r0 + (2 * k + 1) * ri) / dist) if k < n else b
             gear(f"gear_{k}", rr, 0.0015, (gx, cc.x, cc.y), "body_black" if k < n else "roller_gold")
     with parts.assembly("wiring", internal=True):
-        z0 = zf - pk["z"]
+        # From the battery's contacts up to the switch contacts under the shutter block.
+        z0, ct = zf - pk["z"], E["shutter_block"]["contacts"]
         for k, (sgn, mat) in enumerate(((1, "button_red"), (-1, "body_black"))):
             x = sgn * 0.012
-            pts = [(x, pk["front_y"] - 0.004, z0 - 0.0006), (0.044, pk["front_y"] - 0.004 - 0.002 * k, z0 - 0.0006),
-                   (0.046, pk["front_y"] - 0.006 - 0.002 * k, zf + 0.006), (0.046, my + 0.004, mz - 0.004),
-                   (mx + 0.004 * sgn, my, mz - m["d"] / 2 - 0.0005)]
+            yw = pk["front_y"] - 0.004 - 0.006 * k          # the second wire runs clear of the first contact
+            pts = [(x, pk["front_y"] - 0.004, z0 - 0.0006)] + ([(x, yw, z0 - 0.0011)] if k else []) + \
+                  [(0.048, yw, z0 - 0.0011), (0.048, yw - 0.002, zf + 0.004),
+                   (ct["x"] - 0.002 * sgn, ct["y1"] - 0.003, ct["z"] - 0.0032)]
             parts.tube(f"wire_{k}", pts, 0.0005, segments=8, bend_radius=0.002, material=mat)
 
 
