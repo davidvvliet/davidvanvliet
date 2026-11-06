@@ -637,8 +637,8 @@ def shutter_block(P, E, xl, zl):
     with parts.assembly("shutter_block", internal=True):
         # The frame: round the cup, out to the knob's barrel on one side and the gear on the other,
         # clear of the viewfinder tube above the knob.
-        outline = [(0.045, 0.016), (0.012, 0.0175), (-0.012, 0.0175), (-0.020, 0.008), (-0.024, 0.0),
-                   (-0.040, -0.006), (-0.042, -0.020), (-0.040, -0.026), (-0.020, -0.026), (0.045, -0.026)]
+        outline = [(0.045, 0.016), (0.012, 0.0175), (-0.012, 0.0175), (-0.020, 0.008), (-0.024, -0.003),
+                   (-0.040, -0.008), (-0.042, -0.020), (-0.040, -0.026), (-0.020, -0.026), (0.045, -0.026)]
         frame = front_ring("shutter_frame", outline, circle(pl["hole_d"] / 2), xl, zl, y0, y1, "body_black")
         round_edges(frame, 0.0004, segments=2)
         # The lens cup: a thick rim, a step, then a cone in to the opening in the frame.
@@ -832,15 +832,35 @@ def drive(E):
             parts.tube(f"wire_{k}", pts, 0.0005, segments=8, bend_radius=0.002, material=mat)
 
 
-def viewfinder_optics(P):
-    vw = P["viewfinder_window"]
-    y_front = P["front_plate"]["y"] - 0.004
-    y_back = P["lower_box"]["y0"] + 0.006
+def viewfinder_optics(P, E):
+    """The viewfinder: a separate black channel from the front window to the eyepiece, open on top
+    between its end blocks, a glass block in the front and a square element a third of the way
+    from the rear (retronautik_1000, 'Sucher')."""
+    vw, e, t = P["viewfinder_window"], P["eyecup"], E["viewfinder_tube"]
+    F = Vector((vw["x"], t["y_front"], vw["z"]))
+    R = Vector((vw["x"], t["y_rear"], e["top"] - 0.013))    # level with the eyepiece's centre (the tube still covers its hole)
+    L = (R - F).length
+    M = Matrix.Translation(F) @ (R - F).normalized().to_track_quat("-Y", "Z").to_matrix().to_4x4()
+    w, h, wl = t["width"], t["height"], t["wall"]
+    pieces = []    # each built at the origin, its mesh moved along the axis
     with parts.assembly("viewfinder_optics", internal=True):
-        parts.box("finder_tube", (0.020, y_front - y_back, 0.016), location=(vw["x"], (y_front + y_back) / 2, vw["z"] + 0.004),
-                  material="lightbox_black")
-        parts.box("eyepiece_lens", (0.016, 0.002, 0.013), location=(vw["x"], y_back - 0.001, vw["z"] + 0.005),
-                  material="lens_glass")
+        def box(name, size, at, mat="lightbox_black"):
+            o = parts.box(name, size, material=mat)
+            o.data.transform(M @ Matrix.Translation(at))
+            pieces.append(o)
+        for sx in (1, -1):
+            box(f"finder_side_{'p' if sx > 0 else 'm'}", (wl, L, h), (sx * (w - wl) / 2, -L / 2, 0))
+        box("finder_floor", (w - 2 * wl, L, wl), (0, -L / 2, -(h - wl) / 2))
+        c, rb = t["collar"], t["rear_block"]
+        box("finder_collar", (w + 0.002, c, h + 0.002), (0, -c / 2, 0))
+        box("finder_rear", (w + 0.002, rb, h + 0.002), (0, -L + rb / 2, 0))
+        # The glass: a block in the collar, the square element in its slots, the eyepiece lens.
+        box("finder_front_lens", (w - 0.002, 0.003, h - 0.002), (0, 0.0002, 0), "lens_glass")
+        ym = -L + (L - c - rb) * t["mid_lens_at"] + rb
+        box("finder_mid_lens", (w - 2 * wl, t["lens_t"], h - 2 * wl), (0, ym, 0.0005), "lens_glass")
+        for sx in (1, -1):
+            box(f"finder_slot_{'p' if sx > 0 else 'm'}", (0.0012, t["lens_t"] + 0.002, h), (sx * (w / 2 - wl - 0.0006), ym, 0))
+        box("eyepiece_lens", (w - 0.006, 0.002, h - 0.005), (0, -L - 0.001, 0), "lens_glass")
 
 
 SPEC = [None]
@@ -855,7 +875,7 @@ def build(spec):
     ym = optics(P, E)
     film(E, ym)
     drive(E)
-    viewfinder_optics(P)
+    viewfinder_optics(P, E)
     grain_finishes(spec)
     # The spec's positions are in the camera's own frame (lens along +y, button on +x). Turn the
     # whole model 180 degrees about z so it faces the viewer's front (-y, as Perseverance's).

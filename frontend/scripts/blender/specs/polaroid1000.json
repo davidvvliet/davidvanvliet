@@ -892,6 +892,20 @@
         "roller_gear_d": 0.0135
       },
       "source": "ifixit_onestep600 steps 26 and 28 (two white compound gears, a large gear with a small pinion each, in the side rail between the motor and the rollers) and retronautik_1000 'Rollenmechanik' photo (the gold roller's black gear, about 2.4 roller diameters, so 13.5 mm), estimate: the compound gears' radii chosen so the chain spans the motor-to-roller distance, in three planes beside the roller frame"
+    },
+    "viewfinder_tube": {
+      "value": {
+        "width": 0.02,
+        "height": 0.016,
+        "wall": 0.001,
+        "collar": 0.006,
+        "rear_block": 0.008,
+        "mid_lens_at": 0.33,
+        "lens_t": 0.0025,
+        "y_front": 0.021,
+        "y_rear": -0.065
+      },
+      "source": "retronautik_1000 'Sucher' photo, estimate: an open-topped black channel with a solid block at each end, a square glass block in the front one and a square glass element in slots about a third of the way from the rear; its cross-section about 20 x 16 mm against the 25 x 21 mm front window (from_photos.viewfinder_window), its axis from the window's centre to the eyepiece's"
     }
   }
 }
