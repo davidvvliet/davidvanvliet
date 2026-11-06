@@ -19,6 +19,7 @@ import "./commands/footprint";
 import "./commands/radarcorp";
 import "./commands/books";
 import "./commands/films";
+import "./commands/people";
 import "./commands/photos";
 import "./commands/puzzle";
 
