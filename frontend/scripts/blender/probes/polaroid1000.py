@@ -744,8 +744,7 @@ def film(E, ym):
     with parts.assembly("film_pack", internal=True):
         parts.box("pack_case", (pk["x"], pk["y"], pk["z"] - 0.0006), location=(0, yc, z0 + (pk["z"] - 0.0006) / 2),
                   material="body_black")
-        # The top print under the pack's opening, its picture centred under the mirror.
-        parts.box("film_sheet", (0.079, 0.077, 0.0004), location=(0, ym, zf - 0.0004), material="lens_glass")
+    print_sheet(E, ym)
     with parts.assembly("battery", internal=True):
         b = E["battery"]
         parts.box("battery", (b["x"], b["y"], b["z"]), location=(0, yc, z0 + 0.0006 + b["z"] / 2), material="dark_metal")
@@ -756,6 +755,31 @@ def film(E, ym):
         for sgn in (1, -1):
             parts.box(f"spring_{'p' if sgn > 0 else 'm'}", (0.006, 0.07, 0.0004),
                       location=(sgn * 0.03, yc, z0 - 0.0008), material="frame_steel")
+
+
+def print_sheet(E, ym):
+    """The top print in the pack, its picture centred under the mirror, its wide (pod) border
+    toward the rollers, so it leaves the camera pod first. Its face shows the picture (refs
+    print.jpg); over it the blue-green layer that clears as it develops (the viewer fades it out
+    over the time in its "fade_out")."""
+    pr, zf = E["print"], E["film_plane_z"]
+    hx = pr["x"] / 2
+    yr = ym - pr["picture"][1] / 2 - pr["narrow_border"]       # its trailing (rear) edge
+    yf = yr + pr["y"]
+    with parts.assembly("print", inside=True):   # solid in Internal mode; out of the slot it shows outside too
+        card = parts.box("print_card", (pr["x"], pr["y"], pr["t"] - 0.00004), location=(0, (yr + yf) / 2, zf - pr["t"] / 2 - 0.00002),
+                         material="print_back")
+        face = slab("print_face", [(hx, yr, zf), (-hx, yr, zf), (-hx, yf, zf), (hx, yf, zf)], Vector((0, 0, 1)), 0.00002,
+                    _image_material("print", "print.jpg", 0.3))
+        # Seen from above with its narrow border at the rear, the picture's top is at the rear and its
+        # right on -x (the lens turns the scene over; the mirror turns it back the right way round).
+        _uv_plane(face, 0, 1, hx, -hx, yf, yr)
+        pw, ph = pr["picture"]
+        y0 = yr + pr["narrow_border"]
+        dev = slab("print_developer", [(pw / 2, y0, zf + 0.00004), (-pw / 2, y0, zf + 0.00004), (-pw / 2, y0 + ph, zf + 0.00004),
+                                       (pw / 2, y0 + ph, zf + 0.00004)], Vector((0, 0, 1)), 0.00002, "print_developing")
+        dev["fade_out"] = list(E["capture"]["develop"])
+    ANIM["print"] = [card, face, dev]
 
 
 def drive(E):
@@ -814,8 +838,12 @@ def drive(E):
         fork = _solid("roller_spring", verts, bm_faces, "pick_brass")
         cut(fork, (0.003, 0.0025, 0.01), (x0 + 0.010, ry, zk))
     with parts.assembly("pick", internal=True):
-        parts.box("pick_plate", (0.007, 0.07, 0.0004), location=(0.0435, pk["front_y"] - 0.045, zf - 0.0004),
-                  material="pick_brass")
+        # Beside the print on the pack, a tab turned in behind the print's trailing edge.
+        pr = E["print"]
+        yr = E["_ym"] - pr["picture"][1] / 2 - pr["narrow_border"]
+        ANIM["pick"] = [parts.box("pick_tab", (0.0035, 0.0006, 0.0006), location=(0.04225, yr - 0.0003, zf - 0.0003), material="pick_brass")]
+        ANIM["pick"].append(parts.box("pick_plate", (0.005, 0.07, 0.0004), location=(0.0465, yr + 0.035 - 0.0006, zf - 0.0004),
+                                      material="pick_brass"))
     gt = E["gear_train"]
     p1, p2, p3 = gt["planes"]
     mx, my, mz = m["x"], m["y"], m["z"]
@@ -857,6 +885,7 @@ def drive(E):
         g("gear_b", gt["b"]["r"], p2, P2, "front_white")
         g("gear_b_pinion", gt["b"]["pinion"], p3, P2, "front_white")
         g("roller_gear", gt["roller_gear_d"] / 2, p3, P3, "body_black")
+        ANIM["gears"] = {"motor": (p1, P0), "a": (p1, P1), "b": (p2, P2), "roller": (p3, P3)}
     with parts.assembly("wiring", internal=True):
         # From the battery's contacts up to the switch contacts under the shutter block.
         z0, ct = zf - pk["z"], E["shutter_block"]["contacts"]
@@ -917,6 +946,98 @@ def viewfinder_optics(P, E):
 
 
 SPEC = [None]
+ANIM = {}          # parts the capture moves, and their pivots, gathered while building
+
+
+# --- the capture ----------------------------------------------------------------------------
+
+def capture(P, E, turn):
+    """One picture, keyframed (sx70_service: the button starts the cycle, the shutter opens and
+    closes, the motor drives the pick and the rolls, which break the pod, spread the developer and
+    eject the print; the counter turns). Times in estimates.capture. Called after the model is
+    turned, so pivots and moves go through `turn`; a turn of 180 degrees about z reverses x and y,
+    so a turn about x or y runs the other way."""
+    cp, r, gt, zf = E["capture"], E["rollers"], E["gear_train"], E["film_plane_z"]
+    sc = bpy.context.scene
+    fps = cp["fps"]
+    sc.render.fps = fps
+    n = int(round(cp["end"] * fps))
+    sc.frame_start, sc.frame_end = 0, n
+    ob = bpy.data.objects
+
+    def pivot(o, p_cam):
+        p = turn @ Vector(p_cam)
+        W = o.matrix_basis.copy()                  # unparented: its own transform is its world one
+        o.data.transform(Matrix.Translation(-p) @ W)
+        o.matrix_basis = Matrix.Translation(p)
+        o.rotation_mode = "XYZ"
+
+    def ramp(t, t0, t1):
+        return 0.0 if t <= t0 else 1.0 if t >= t1 else (t - t0) / (t1 - t0)
+
+    def smooth(t, t0, t1):
+        u = ramp(t, t0, t1)
+        return u * u * (3 - 2 * u)
+
+    # The print's travel: still until the motor starts, then steady to the end of the eject.
+    t_m0, t_m1, travel = cp["motor"][0], cp["motor"][1], cp["travel"]
+    s_at = lambda t: travel * ramp(t, t_m0, t_m1)
+    ru, rl = r["upper_d"] / 2, r["lower_d"] / 2
+    rg, bp, br, ap, ar, mp = gt["roller_gear_d"] / 2, gt["b"]["pinion"], gt["b"]["r"], gt["a"]["pinion"], gt["a"]["r"], gt["motor_pinion"]
+    lb = P["lens_boss"]
+    sb = E["shutter_block"]
+    xl, zl = lb["x"], P["lens_centre_z"]
+    y1 = sb["plate"]["y0"] + sb["plate"]["t"]
+    G = ANIM["gears"]
+    cn = sb["counter"]
+    # (object names, pivot in the camera's frame, axis 0 = x / 1 = y, angle in the camera's frame at time t)
+    turners = [
+        (["upper_roller", "roller_gear"], (0, r["y"], zf + ru), 0, lambda t: s_at(t) / ru),
+        (["lower_roller"], (0, r["y"], zf - rl), 0, lambda t: -s_at(t) / rl),
+        (["gear_b", "gear_b_pinion"], (0, G["b"][1].x, G["b"][1].y), 0, lambda t: -s_at(t) / ru * rg / bp),
+        (["gear_a", "gear_a_pinion"], (0, G["a"][1].x, G["a"][1].y), 0, lambda t: s_at(t) / ru * rg / bp * br / ap),
+        # The motor would turn ar/mp times faster again (about 9000 rpm), more than the frames can
+        # show: drawn at most cp["motor_cap"] radians a frame.
+        (["motor_shaft", "motor_pinion"], (0, G["motor"][1].x, G["motor"][1].y), 0,
+         lambda t: -min(s_at(t) / ru * rg / bp * br / ap * ar / mp, cp["motor_cap"] * fps * max(0.0, t - t_m0))),
+        (["shutter_gear"], (xl + sb["gear"]["u"], 0, zl + sb["gear"]["v"]), 1,
+         lambda t: math.radians(cp["shutter_turn"]) * (smooth(t, *cp["shutter_open"]) - smooth(t, *cp["shutter_close"]))),
+        (["shutter_blade"], (xl, 0, zl), 1,
+         lambda t: math.radians(cp["blade_turn"]) * (smooth(t, *cp["shutter_open"]) - smooth(t, *cp["shutter_close"]))),
+        (["counter_wheel"], (cn["x"], cn["y"], cn["z"]), 0, lambda t: math.radians(36) * smooth(t, *cp["counter"])),
+    ]
+    for names, pc, axis, ang in turners:
+        for nm in names:
+            pivot(ob[nm], pc)
+    # Things that slide: (objects, direction in the camera's frame, distance at time t)
+    feed = cp["pick_feed"]
+    t_feed = t_m0 + feed / (travel / (t_m1 - t_m0))
+    sliders = [
+        (["button_cap"], (0, -1, 0), lambda t: cp["button_travel"] * (smooth(t, *cp["press"]) - smooth(t, *cp["release"]))),
+        ([o.name for o in ANIM["print"]], (0, 1, 0), s_at),
+        ([o.name for o in ANIM["pick"]], (0, 1, 0), lambda t: min(s_at(t), feed) - feed * smooth(t, t_feed, t_feed + 0.3)),
+    ]
+    rest = {nm: ob[nm].location.copy() for names, _, _ in sliders for nm in names}
+    for f in range(n + 1):
+        t = f / fps
+        for names, pc, axis, ang in turners:
+            a = -ang(t)                                # the turn reverses x and y
+            for nm in names:
+                o = ob[nm]
+                o.rotation_euler = (a, 0, 0) if axis == 0 else (0, a, 0)
+                o.keyframe_insert("rotation_euler", frame=f)
+        for names, d, dist in sliders:
+            dv = turn.to_3x3() @ Vector(d) * dist(t)
+            for nm in names:
+                o = ob[nm]
+                o.location = rest[nm] + dv
+                o.keyframe_insert("location", frame=f)
+    for o in ob:
+        if o.animation_data and o.animation_data.action:
+            for fc in o.animation_data.action.fcurves if hasattr(o.animation_data.action, "fcurves") else []:
+                for kp in fc.keyframe_points:
+                    kp.interpolation = "LINEAR"
+    sc.frame_set(0)
 
 
 def build(spec):
@@ -926,6 +1047,7 @@ def build(spec):
     shell(P)
     front_parts(P)
     ym = optics(P, E)
+    E["_ym"] = ym
     film(E, ym)
     drive(E)
     viewfinder_optics(P, E)
@@ -936,3 +1058,4 @@ def build(spec):
     for obj in parts.collection().objects:
         if obj.parent is None:
             obj.matrix_world = turn @ obj.matrix_world
+    capture(P, E, turn)

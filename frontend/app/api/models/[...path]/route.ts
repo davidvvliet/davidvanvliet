@@ -135,6 +135,7 @@ async function status() {
       referenceModel: spec.reference_model ?? null,
       insideFlip: spec.viewer?.inside_flip ?? null,
       light: spec.viewer?.light ?? [],
+      play: spec.viewer?.play ?? null,
       published: published[name] ?? null,
       worktrees: sources,
     };

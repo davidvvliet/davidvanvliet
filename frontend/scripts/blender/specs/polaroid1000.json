@@ -9,7 +9,14 @@
     "light": [
       "light_path",
       "finder_light"
-    ]
+    ],
+    "play": {
+      "label": "Capture",
+      "light": [
+        0.45,
+        0.9
+      ]
+    }
   },
   "listed": true,
   "closeups": [
@@ -178,6 +185,14 @@
       "url": "https://commons.wikimedia.org/wiki/File:Classic_cameras_P1010976-P1S_(9153352766).jpg",
       "read": "2026-11-05",
       "licence": "CC BY-SA 2.0, as stated on the Commons file pages"
+    },
+    {
+      "id": "nasa_as11_40_5903",
+      "title": "NASA, AS11-40-5903, \"Astronaut Edwin Aldrin walks on lunar surface near leg of Lunar Module\" (Apollo 11, 20 July 1969; photo by Neil Armstrong)",
+      "url": "https://images.nasa.gov/details/as11-40-5903",
+      "read": "2026-11-06",
+      "licence": "public domain: NASA still images are generally not subject to copyright in the United States",
+      "credit": "The picture on the print: NASA, Apollo 11, AS11-40-5903 (Aldrin on the Moon, photo by Neil Armstrong)"
     }
   ],
   "reference_model": {
@@ -353,6 +368,11 @@
     "stripe_bands": {
       "value": "five bands on the Supercolor 1000 (magenta, orange, yellow, green, blue); the earlier 1000 and the OneStep have six (pink, red, orange, yellow, green, blue)",
       "source": "halicki_2023 (3), scanned across the stripe at y=1100 px: five bands; kitakaze_2009 (a Land Camera 1000), rows 780-800 px: six"
+    },
+    "print_picture": {
+      "value": "the print shows Aldrin on the Moon (AS11-40-5903), cropped to the 79 x 77 mm picture (refs print.jpg, made by textures-make.py)",
+      "source": "nasa_as11_40_5903",
+      "quote": "Astronaut Edwin E. Aldrin Jr., lunar module pilot, walks on the surface of the moon near the leg of the Lunar Module (LM) \"Eagle\" during the Apollo 11 extravehicular activity (EVA). Astronaut Neil A. Armstrong, commander, took this photograph"
     }
   },
   "materials": {
@@ -506,6 +526,18 @@
       "metallic": 0.0,
       "roughness": 0.5,
       "source": "retronautik_1000, diagram colour, not a finish: rays drawn to show the light's path (light has no finish to sample); the light through the viewfinder to the eye"
+    },
+    "print_back": {
+      "hex": "#1b1b1b",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "polaroid_sx70_film, estimate: the print's back is black (not sampled)"
+    },
+    "print_developing": {
+      "hex": "#3f6e70",
+      "metallic": 0.0,
+      "roughness": 0.3,
+      "source": "polaroid_sx70_film, estimate: the blue-green opacifier over the picture as the print leaves the camera (not sampled)"
     }
   },
   "open_questions": [
@@ -519,7 +551,8 @@
     "Eyecup: the photo cast puts its back 15-25 mm behind the body's rear; whether the 140 mm depth includes it is not stated.",
     "Lens to film: with the lens where the photos put it and the picture inside the pack, the folded path is 101 mm, 2% shorter than the 103 mm focal length; the film plane height (11 mm) or the pack's placement may be a few mm off.",
     "Shutter block: the long arm with the frame counter and the switch contacts is placed along the button-side wall running back; no photo shows it inside the camera, and the 1000's counter window was not found in the exterior photos.",
-    "Rollers: the steel strip that carries the gold roller and the brass three-tine spring are placed (strip over the gold roller inside the door, spring under the steel roller) so they fit; no photo shows them in the camera."
+    "Rollers: the steel strip that carries the gold roller and the brass three-tine spring are placed (strip over the gold roller inside the door, spring under the steel roller) so they fit; no photo shows them in the camera.",
+    "Capture: the print's back (black) and the undeveloped picture's blue-green are estimates, not sampled from a photo; the shutter's real motion (gear and blade travel) is not known, so its turns are illustrative; the motor is drawn slower than its gear ratio."
   ],
   "budget": {
     "triangles": 50000,
@@ -939,6 +972,60 @@
         "y_rear": -0.065
       },
       "source": "retronautik_1000 'Sucher' photo, estimate: an open-topped black channel with a solid block at each end, a square glass block in the front one and a square glass element in slots about a third of the way from the rear; its cross-section about 20 x 16 mm against the 25 x 21 mm front window (from_photos.viewfinder_window), its axis from the window's centre to the eyepiece's"
+    },
+    "print": {
+      "value": {
+        "x": 0.088,
+        "y": 0.107,
+        "t": 0.0006,
+        "picture": [
+          0.079,
+          0.077
+        ],
+        "narrow_border": 0.006
+      },
+      "source": "polaroid_sx70_film (format 107 x 88 mm, image area 79 x 77 mm), estimate: the picture 4.5 mm in from the sides and 6 mm from the narrow end, the rest the wide border with the developer's pod, which leads into the rollers (the rolls break the pod and spread the developer across the picture, sx70_service); 0.6 mm thick; picture nasa_as11_40_5903"
+    },
+    "capture": {
+      "value": {
+        "fps": 60,
+        "end": 4.6,
+        "press": [
+          0.0,
+          0.2
+        ],
+        "release": [
+          1.1,
+          1.3
+        ],
+        "button_travel": 0.002,
+        "shutter_open": [
+          0.3,
+          0.45
+        ],
+        "shutter_close": [
+          0.9,
+          1.05
+        ],
+        "shutter_turn": 40,
+        "blade_turn": -12,
+        "motor": [
+          1.2,
+          4.2
+        ],
+        "travel": 0.1305,
+        "pick_feed": 0.008,
+        "motor_cap": 2.4,
+        "counter": [
+          4.25,
+          4.55
+        ],
+        "develop": [
+          4.6,
+          9.6
+        ]
+      },
+      "source": "sx70_service, estimate: the order from the manual (\"presses the red shutter release button (S1)\" ... the shutter opens for the exposure and closes ... \"starting the motor to eject the exposed film\"; \"the picks feeds the exposed film to the spreader rolls. The rolls break the pod, spread the developer, and eject the film from the camera\"; the counter turns); the times chosen to be seen (the real exposure is a fraction of a second, the eject about as long as drawn, the developing minutes, shown in 5 s); the print travels until its trailing edge is just inside the slot; the shutter's gear and blade turns are illustrative (their real travel is not known)"
     }
   }
 }
