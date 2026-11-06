@@ -300,6 +300,39 @@ function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explor
     });
     return fs;
   }, [scene]);
+  // A mesh with "parallax": [shown, slide] in its extras (a viewfinder's view) shows that share
+  // of its picture, slid with the viewing angle as a distant scene would be: the eye to the
+  // right sees more of the left. Its picture's u runs along the mesh's x, v along y (glTF axes),
+  // and it faces +z.
+  useEffect(() => {
+    scene.traverse((o) => {
+      const px = o.userData.parallax;
+      if (!(o as THREE.Mesh).isMesh || !Array.isArray(px) || px.length !== 2) return;
+      for (const mat of [(o as THREE.Mesh).material].flat() as THREE.Material[]) {
+        mat.onBeforeCompile = (sh) => {
+          sh.vertexShader = sh.vertexShader.replace("#include <uv_vertex>", `#include <uv_vertex>
+            {
+              vec3 wp = (modelMatrix * vec4(position, 1.0)).xyz;
+              vec3 d = normalize(wp - cameraPosition);
+              vec3 U = normalize(mat3(modelMatrix) * vec3(1.0, 0.0, 0.0));
+              vec3 V = normalize(mat3(modelMatrix) * vec3(0.0, 1.0, 0.0));
+              vec3 N = normalize(mat3(modelMatrix) * vec3(0.0, 0.0, 1.0));
+              float into = max(dot(d, -N), 0.2);
+              vec2 tilt = clamp(vec2(dot(d, U), dot(d, V)) / into, -1.0, 1.0);
+              vec2 uv0 = vec2(0.5) + (uv - vec2(0.5)) * ${Number(px[0]).toFixed(4)};
+              vec2 slid = clamp(uv0 + tilt * ${Number(px[1]).toFixed(4)}, 0.0, 1.0);
+              #ifdef USE_MAP
+                vMapUv = slid;
+              #endif
+              #ifdef USE_EMISSIVEMAP
+                vEmissiveMapUv = slid;
+              #endif
+            }`);
+        };
+        mat.needsUpdate = true;
+      }
+    });
+  }, [scene]);
   const playing = useRef(false);
   useFrame(() => {
     if (!actions.length && !fades.length) return;

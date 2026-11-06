@@ -518,6 +518,10 @@ def viewfinder_hood(P):
         scene = front_plate("eyepiece_scene", rrect(sw, sw, 0.0008), e["x"], e["top"] - h / 2,
                             y + 0.0015, y + 0.0025, _scene_material())
         _uv_plane(scene, 0, 2, e["x"] - sw / 2, e["x"] + sw / 2, e["top"] - h / 2 - sw / 2, e["top"] - h / 2 + sw / 2)
+        # The viewer slides the picture with the viewing angle, as a distant scene would move
+        # through the finder (estimates.viewfinder_parallax: the share shown and the slide).
+        scene["parallax"] = [SPEC[0]["estimates"]["viewfinder_parallax"]["value"]["shown"],
+                             SPEC[0]["estimates"]["viewfinder_parallax"]["value"]["slide"]]
     return hood
 
 

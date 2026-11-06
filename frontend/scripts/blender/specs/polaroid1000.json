@@ -1027,6 +1027,13 @@
         ]
       },
       "source": "sx70_service, estimate: the order from the manual (\"presses the red shutter release button (S1)\" ... the shutter opens for the exposure and closes ... \"starting the motor to eject the exposed film\"; \"the picks feeds the exposed film to the spreader rolls. The rolls break the pod, spread the developer, and eject the film from the camera\"; the counter turns); the times chosen to be seen (the real exposure is a fraction of a second, the eject about as long as drawn, the developing minutes, shown in 5 s); the print travels until its trailing edge is just inside the slot; the shutter's gear and blade turns are illustrative (their real travel is not known)"
+    },
+    "viewfinder_parallax": {
+      "value": {
+        "shown": 0.75,
+        "slide": 0.12
+      },
+      "source": "nasa_as15_88_11972 is the scene; a look, not a measurement: 75 % of the picture shows at once, and it slides 0.12 of its width per unit of the viewing angle's tangent (about 45 degrees to the edge), as a distant scene shifts in a finder when the eye moves"
     }
   },
   "joints": {
