@@ -758,9 +758,15 @@
         "frame": {
           "width": 0.1,
           "depth": 0.088
-        }
+        },
+        "ribs": {
+          "pitch": 0.0025,
+          "width": 0.0008,
+          "depth": 0.0005
+        },
+        "cutaway": "-x"
       },
-      "source": "retronautik_1000 (the light box out of the camera, photo 102321308), estimated: scaled by its picture opening taken as the 79 mm image width (about 0.16 mm/px): the steel frame about 100 mm across, the window in the narrow end about 14 x 10 mm; walls and margins estimated"
+      "source": "retronautik_1000 (the light box out of the camera, photo 102321308), estimated: scaled by its picture opening taken as the 79 mm image width (about 0.16 mm/px): the steel frame about 100 mm across, the window in the narrow end about 14 x 10 mm; walls and margins estimated; ribs: fine upright ribs on the inside walls (retronautik_1000, light box photo), pitch coarsened to 2.5 mm; cutaway: the viewfinder-side wall opened in the model so the mirror and light path show (not on the real part)"
     },
     "surface_grain": {
       "value": {

@@ -600,6 +600,37 @@ def optics(P, E):
         _apply(box)
         bpy.data.objects.remove(inner)
         cut(box, (lbx["window"][0], 0.01, lbx["window"][1]), (xl, yfr, zl))
+        # A cutaway in the viewfinder-side wall (the model's, not the camera's) so the mirror and
+        # the light path show; and the fine upright ribs on the far wall's inside.
+        hxz = lambda z: bx + (tx - bx) * (z - zf) / (zt - zf)
+        k = 0.0035
+        zk = yf0 + c + k
+        y_front = lambda z: yf1 + (yfr - yf1) * (z - zf) / (zt - zf) - t
+        y_back = lambda z: max(yf0, z - c - k) + t
+        z1, z2 = zf + 0.006, zt - 0.005
+        corners = [(y_back(z1) + 0.003, z1), (y_back(zk) + 0.003, zk), (y_back(z2) + 0.003, z2),
+                   (y_front(z2) - 0.003, z2), (y_front(z1) - 0.003, z1)]
+        win = hull("light_box_cutaway", [(-(hxz(z) + 0.01), y, z) for y, z in corners] +
+                   [(-(hxz(z) - t - 0.0003), y, z) for y, z in corners], "lightbox_black")
+        m = box.modifiers.new("cutaway", "BOOLEAN")
+        m.operation, m.solver, m.object = "DIFFERENCE", "EXACT", win
+        _apply(box)
+        bpy.data.objects.remove(win)
+        rb = lbx["ribs"]
+        verts, faces = [], []
+        y = yf0 + t + 0.002
+        while y + rb["width"] < y_front(zt) - 0.002:
+            za, zb = zf + 0.002, min(zt - 0.002, y + c - 0.0025)      # stopping short of the mirror
+            if zb - za > 0.004:
+                i = len(verts)
+                for z in (za, zb):
+                    xs = hxz(z) - t
+                    for yy in (y, y + rb["width"]):
+                        verts += [(xs + 0.0001, yy, z), (xs - rb["depth"], yy, z)]
+                faces += [(i, i + 2, i + 6, i + 4), (i + 1, i + 5, i + 7, i + 3), (i + 1, i + 3, i + 2, i),
+                          (i + 4, i + 6, i + 7, i + 5), (i, i + 4, i + 5, i + 1), (i + 2, i + 3, i + 7, i + 6)]
+            y += rb["pitch"]
+        _solid("light_box_ribs", verts, faces, "lightbox_black")
         # The steel frame round the foot, with a tab turned up at each end.
         fw, fd, ft = lbx["frame"]["width"], lbx["frame"]["depth"], 0.0006
         frame = front_ring("light_box_frame", rrect(fw, fd, 0.001), rrect(2 * bx, yf1 - yf0, 0.0005), 0, 0, 0, ft, "frame_steel")
