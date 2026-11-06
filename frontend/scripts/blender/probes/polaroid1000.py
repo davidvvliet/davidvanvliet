@@ -380,9 +380,9 @@ def front_parts(P):
             w0, w1 = ow + (lb["lens_frame"] - ow) * f0, ow + (lb["lens_frame"] - ow) * f1
             h0, h1 = oh + (lb["lens_frame"] - oh) * f0, oh + (lb["lens_frame"] - oh) * f1
             zc = oz + (lb["lens_frame_z"] - oz) * f1
-            step = front_ring(f"hood_step_{k}", [(u, v + (oz + (lb["lens_frame_z"] - oz) * f0) - zc) for u, v in rrect(w0, h0, 0.004)],
+            front_ring(f"hood_step_{k}", [(u, v + (oz + (lb["lens_frame_z"] - oz) * f0) - zc) for u, v in rrect(w0, h0, 0.004)],
                        rrect(w1, h1, 0.0035), lb["x"], zc, y - dy, y, "body_black")
-            round_edges(step, 0.0002, segments=2)
+            # No edge rounding: along the top a step is only ~0.26 mm deep and a bevel folds it.
             y -= dy
         # The pocket behind the window, lined black.
         lp = lens_pocket(P)
