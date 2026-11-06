@@ -14,7 +14,7 @@ import { PHOTOS } from "./photos";
 import { FinRocketReadout, FinRocketView, type FinRocketData, type Held } from "../circuits/finrocket/FinRocket";
 
 export type Published = {
-  probe: string; title: string; page: string | null; thumb: boolean; logos: string[]; explore: boolean; focus: Focusable[]; explode: string[]; insideFlip: string | null; internal: boolean; grid: boolean;
+  probe: string; title: string; page: string | null; thumb: boolean; logos: string[]; explore: boolean; focus: Focusable[]; explode: string[]; insideFlip: string | null; light: string[]; internal: boolean; grid: boolean;
   pivot: [number, number, number] | null; // the point the card turns about: the spec's viewer.pivot part's centre
   sources: { title: string; url: string; licence: string | null; cited: number }[];
 };
@@ -93,7 +93,7 @@ export default function PublishedModels({ models, circuit, dashboard }: {
         <div className={styles.detail}>
           <div className={styles.viewCell}>
             <Viewer probe={probe} title={model.title} url={`/models/${probe}.glb`} breakdown={null} stale={false} explore={model.explore} focusable={model.focus} explodable={model.explode}
-              internalUrl={model.internal ? `/models/internal/${probe}.glb` : undefined} insideFlip={model.insideFlip} />
+              internalUrl={model.internal ? `/models/internal/${probe}.glb` : undefined} insideFlip={model.insideFlip} light={model.light} />
             <Logos model={model} />
             <Photos probe={probe} />
           </div>

@@ -5,7 +5,11 @@
   ],
   "note": "Polaroid's integral-film box camera (1977), built to show how it works from the outside in: the plastic shell, the front plate with lens, shutter, viewfinder and controls, the light box with its 45-degree mirror, the SX-70 film pack with its battery, and the spread rollers, pick and motor that push the print out. Frame: z up, camera bottom at z = 0, centred in x and y; the model faces -y (the lens looks along -y, the button on -x), as Perseverance's forward. The positions in from_photos and estimates are in the camera's own frame (lens along +y, button on +x): the build turns the model 180 degrees about z at the end. Real size in metres. The side profile and front parts are measured from Halicki's photos through cameras fitted to the documented 107 x 140 mm footprint; internal parts are estimates (open_questions).",
   "viewer": {
-    "explore": true
+    "explore": true,
+    "light": [
+      "light_path",
+      "finder_light"
+    ]
   },
   "listed": true,
   "closeups": [
@@ -478,6 +482,30 @@
       "metallic": 0.3,
       "roughness": 0.4,
       "source": "retronautik_1000 'Verschluss, Mechanik und Elektrik' photo, the red winding behind the shutter gear (316 red pixels averaged #b5596d, corrected for the photo's blue cast measured on the black plastic, #6e8193)"
+    },
+    "ray_top": {
+      "hex": "#ff4fb0",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "retronautik_1000, diagram colour, not a finish: rays drawn to show the light's path (light has no finish to sample); the light from the top of the scene"
+    },
+    "ray_centre": {
+      "hex": "#ffe45c",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "retronautik_1000, diagram colour, not a finish: rays drawn to show the light's path (light has no finish to sample); the light from the middle of the scene"
+    },
+    "ray_bottom": {
+      "hex": "#4fd8ff",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "retronautik_1000, diagram colour, not a finish: rays drawn to show the light's path (light has no finish to sample); the light from the bottom of the scene"
+    },
+    "ray_finder": {
+      "hex": "#6dff7a",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "retronautik_1000, diagram colour, not a finish: rays drawn to show the light's path (light has no finish to sample); the light through the viewfinder to the eye"
     }
   },
   "open_questions": [

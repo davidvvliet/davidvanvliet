@@ -21,6 +21,7 @@ type Probe = {
   kind?: "circuit"; // a /circuit board (scripts/circuit/build.py): no sheet, its blocks instead
   sources: { title?: string; url?: string }[]; referenceModel: { url?: string; note?: string } | null;
   insideFlip?: string | null; // the spec's "viewer": {"inside_flip": "x"}: Internal turns the model over
+  light?: string[]; // the spec's "viewer": {"light": [...]}: inside groups drawing the light, shown by the Light button
   // Each git worktree that has this probe, newest build first (app/api/models/[...path]/route.ts).
   worktrees: Source[];
   // Never approved: null. Else what changed since approve (scripts/blender/lib/published.py).
@@ -163,9 +164,10 @@ type Controls = THREE.EventDispatcher<{ start: object }> & { target: THREE.Vecto
 // inside parts seen through an opening (`inside` in the glTF extras), which stay solid.
 // `inner`: a model's inside parts (internal.glb): no framing of its own on load, the camera
 // flies to them instead.
-function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explore = true, focusable = NONE, explodable = NO_PARTS, ghost = false, inner = false }: {
+// `hide`: groups not drawn (the light paths while the Light button is off).
+function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explore = true, focusable = NONE, explodable = NO_PARTS, ghost = false, inner = false, hide = NO_PARTS }: {
   url: string; title?: string; exploded: boolean; focus: string | null; setFocus: (f: string | null) => void; explore?: boolean;
-  focusable?: Focusable[]; explodable?: string[]; ghost?: boolean; inner?: boolean;
+  focusable?: Focusable[]; explodable?: string[]; ghost?: boolean; inner?: boolean; hide?: string[];
   onLabel: (label: { name: string; size: THREE.Vector3 } | null) => void; onReady?: () => void;
 }) {
   const gltf = useGLTF(url, "/draco/"); // compressed models (the /circuit boards) decode with the copy in public/draco
@@ -271,6 +273,10 @@ function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explor
       }
     }
   }, [focus, parts, ghost, seen]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    for (const p of parts) for (const m of p.meshes) m.visible = !hide.includes(p.group);
+  }, [parts, hide]);
 
   useFrame((_, dt) => {
     const goal = exploded ? 1 : 0;
@@ -464,17 +470,19 @@ class ViewerBoundary extends Component<{ children: ReactNode; resetKey: string }
 // `compact`: embedded in a scrolling page (the terminal): no wheel zoom, so the wheel scrolls the page.
 // `focus`/`onFocus`: the focused part, when the page around the viewer also picks it (the /circuit block list).
 // `internalUrl`: the model's inside parts (internal.glb), loaded when "Internal" is pressed.
+// `light`: inside groups that draw the light's path, shown only while "Light" is on.
 // `held`: the model is held in the hand (a board that drives a model): dragging turns it about its
 // centre instead of orbiting, shift-drag about its long side (x), double-click sets it straight.
-export function Viewer({ probe, title, url, breakdown, stale, compact, onReady, focus: shown, onFocus, explore = true, focusable = NONE, explodable = NO_PARTS, internalUrl, insideFlip, held }: {
+export function Viewer({ probe, title, url, breakdown, stale, compact, onReady, focus: shown, onFocus, explore = true, focusable = NONE, explodable = NO_PARTS, internalUrl, insideFlip, light = NO_PARTS, held }: {
   probe: string; title?: string; url: string; breakdown: Breakdown | null; stale: boolean; compact?: boolean; onReady?: () => void;
   focus?: string | null; onFocus?: (f: string | null) => void; explore?: boolean; focusable?: Focusable[]; explodable?: string[];
-  internalUrl?: string; insideFlip?: string | null; held?: React.RefObject<Held>;
+  internalUrl?: string; insideFlip?: string | null; light?: string[]; held?: React.RefObject<Held>;
 }) {
   const [exploded, setExploded] = useState(false);
   const [inside, setInside] = useState(false);
   const [innerFocus, setInnerFocus] = useState<string | null>(null);
-  useEffect(() => { setInside(false); setInnerFocus(null); }, [probe]);
+  const [lit, setLit] = useState(false);
+  useEffect(() => { setInside(false); setInnerFocus(null); setLit(false); }, [probe]);
   const [own, setOwn] = useState<string | null>(null);
   const focus = shown !== undefined ? shown : own;
   const setFocus = onFocus ?? setOwn;
@@ -507,6 +515,11 @@ export function Viewer({ probe, title, url, breakdown, stale, compact, onReady, 
             {inside ? "Exterior" : "Internal"}
           </button>
         )}
+        {inside && light.length > 0 && (
+          <button className={`${styles.explode} ${lit ? styles.active : ""}`} onClick={() => { setInnerFocus(null); setLit((x) => !x); }}>
+            Light
+          </button>
+        )}
       </div>
       {shownLabel && (
         <PartLabel name={shownLabel.name} size={shownLabel.size} row={breakdown?.families[shownLabel.name]}
@@ -530,7 +543,7 @@ export function Viewer({ probe, title, url, breakdown, stale, compact, onReady, 
           </Suspense>
           <Suspense fallback={null}>
             {inside && internalUrl && (
-              <Model key={internalUrl} url={internalUrl} exploded={false} focus={innerFocus} setFocus={setInnerFocus} onLabel={setInnerLabel} inner />
+              <Model key={internalUrl} url={internalUrl} exploded={false} focus={innerFocus} setFocus={setInnerFocus} onLabel={setInnerLabel} inner hide={lit ? NO_PARTS : light} />
             )}
           </Suspense>
         </FlipGroup>
@@ -807,7 +820,7 @@ export default function ModelsDashboard() {
       </header>
       <div className={styles.grid}>
         <div className={styles.viewCell}>
-          {glbUrl ? <Viewer probe={probe!.name} url={glbUrl} breakdown={breakdown} stale={stale} internalUrl={internalUrl} insideFlip={probe!.insideFlip}
+          {glbUrl ? <Viewer probe={probe!.name} url={glbUrl} breakdown={breakdown} stale={stale} internalUrl={internalUrl} insideFlip={probe!.insideFlip} light={probe!.light}
             {...(board ? { focus, onFocus: setFocus } : {})} /> : <div className={styles.empty}>{probe ? "no export" : ""}</div>}
         </div>
         <div className={styles.side}>

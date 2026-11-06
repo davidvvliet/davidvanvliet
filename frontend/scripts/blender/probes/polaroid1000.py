@@ -629,9 +629,9 @@ def optics(P, E):
             parts.box(f"frame_tab_{'p' if sx > 0 else 'm'}", (ft, 0.012, 0.010),
                       location=(sx * (fw / 2 - ft / 2), (yf0 + yf1) / 2, zf + 0.005), material="frame_steel")
     with parts.assembly("light_path", internal=True):
-        # The light from the lens to the mirror (a pyramid) and from the mirror down onto the
-        # picture area (the folded image), drawn see-through.
-        mat = glow("light_bundle", SPEC[0], 0.22, 0.6)
+        # The light from the lens to the mirror and from the mirror down onto the picture area,
+        # as a faint envelope ...
+        mat = glow("light_bundle", SPEC[0], 0.08, 0.3)
         m = [Vector((ix * t_top, top0.y, top0.z)), Vector((-ix * t_top, top0.y, top0.z)),
              Vector((-ix * t_bot, bot0.y, bot0.z)), Vector((ix * t_bot, bot0.y, bot0.z))]
         film = [Vector((ix, ym + iy, zf + 0.0003)), Vector((-ix, ym + iy, zf + 0.0003)),
@@ -641,6 +641,24 @@ def optics(P, E):
         # Mirror corners pair with film corners: the top of the mirror lights the film's front edge.
         verts = [tuple(v) for v in m] + [tuple(v) for v in film]
         _solid("light_to_film", verts, [(0, 1, 5, 4), (1, 2, 6, 5), (2, 3, 7, 6), (3, 0, 4, 7), (0, 3, 2, 1), (4, 5, 6, 7)], mat)
+        # ... and nine rays, coloured by where in the scene they come from: each starts in front
+        # of the camera, crosses at the lens, folds at the mirror and lands on the film, so the
+        # top of the scene lands at one edge of the print and the bottom at the other.
+        cols = {}
+        for key in ("ray_top", "ray_centre", "ray_bottom"):
+            cols[key] = glow(key, SPEC[0], 0.95, 0.7)
+        for i, fy in enumerate((iy * 0.85, 0.0, -iy * 0.85)):
+            for j, fx in enumerate((ix * 0.85, 0.0, -ix * 0.85)):
+                P = Vector((fx, ym + fy, zf + 0.0003))            # on the film
+                V = Vector((fx, zf - c, ym + fy + c))             # the same point unfolded about the mirror
+                d = V - L
+                t = (c - (L.z - L.y)) / (d.z - d.y)
+                M = L + d * t                                      # where it meets the mirror
+                S = L - d.normalized() * 0.07                      # 70 mm in front of the lens
+                key = "ray_centre" if fy == 0 else ("ray_top" if S.z > L.z else "ray_bottom")
+                parts.tube(f"ray_{i}{j}", [tuple(S), tuple(L), tuple(M), tuple(P)], 0.00035, segments=6,
+                           material=cols[key])
+                parts.disc(f"ray_spot_{i}{j}", 0.0012, 0.0002, location=(fx, ym + fy, zf + 0.0004), material=cols[key])
     return ym
 
 
@@ -880,6 +898,22 @@ def viewfinder_optics(P, E):
         for sx in (1, -1):
             box(f"finder_slot_{'p' if sx > 0 else 'm'}", (0.0012, t["lens_t"] + 0.002, h), (sx * (w / 2 - wl - 0.0006), ym, 0))
         box("eyepiece_lens", (w - 0.006, 0.002, h - 0.005), (0, -L - 0.001, 0), "lens_glass")
+    with parts.assembly("finder_light", internal=True):
+        # Its own light: rays from the scene through the front window, past the square element,
+        # gathering at the eyepiece and on to the eye behind the eyecup.
+        mat = glow("ray_finder", SPEC[0], 0.95, 0.7)
+        u = (R - F).normalized()
+        R3 = M.to_3x3()
+        py = P["front_plate"]["y"]
+        mid = F + u * (L - (L - c - rb) * t["mid_lens_at"] - rb)
+        eye = R + u * 0.02
+        for k, (a, b) in enumerate(((0, 0), (0.007, 0.005), (-0.007, 0.005), (0.007, -0.005), (-0.007, -0.005))):
+            o = R3 @ Vector((a, 0, b))
+            W = F + u * ((py - F.y) / u.y) + o
+            Mi = mid + o * 0.5
+            S = W + (W - Mi).normalized() * 0.06
+            parts.tube(f"finder_ray_{k}", [tuple(S), tuple(W), tuple(Mi), tuple(R), tuple(eye)], 0.00035, segments=6,
+                       material=mat)
 
 
 SPEC = [None]
