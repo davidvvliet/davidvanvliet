@@ -17,12 +17,8 @@ const people: Command = {
   name: "people",
   description: "People I admire",
   execute: () => {
-    const width = Math.max(...admired.map(([name]) => name.length));
-    return [
-      "People I admire:",
-      "",
-      ...admired.map(([name, why]) => `  ${name}${" ".repeat(width - name.length)}    __GRAY__${why}`),
-    ];
+    // A name, then why, below it: the terminal is too narrow for two columns.
+    return ["People I admire:", "", ...admired.flatMap(([name, why]) => [`  ${name}`, `  __GRAY__${why}`, ""])];
   },
 };
 
