@@ -14,7 +14,7 @@ import { PHOTOS } from "./photos";
 import { FinRocketReadout, FinRocketView, type FinRocketData, type Held } from "../circuits/finrocket/FinRocket";
 
 export type Published = {
-  probe: string; title: string; page: string | null; thumb: boolean; logos: string[]; explore: boolean; focus: Focusable[]; explode: string[]; insideFlip: string | null; light: string[]; play: { label: string; light?: [number, number] } | null; internal: boolean; grid: boolean;
+  probe: string; title: string; page: string | null; thumb: boolean; logos: string[]; explore: boolean; focus: Focusable[]; explode: string[]; insideFlip: string | null; light: string[]; play: { part: string; light?: [number, number] } | null; internal: boolean; grid: boolean;
   pivot: [number, number, number] | null; // the point the card turns about: the spec's viewer.pivot part's centre
   sources: { title: string; url: string; licence: string | null; cited: number }[];
 };

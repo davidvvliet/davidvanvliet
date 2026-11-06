@@ -11,7 +11,7 @@
       "finder_light"
     ],
     "play": {
-      "label": "Capture",
+      "part": "shutter_button",
       "light": [
         0.45,
         0.9
@@ -552,7 +552,8 @@
     "Lens to film: with the lens where the photos put it and the picture inside the pack, the folded path is 101 mm, 2% shorter than the 103 mm focal length; the film plane height (11 mm) or the pack's placement may be a few mm off.",
     "Shutter block: the long arm with the frame counter and the switch contacts is placed along the button-side wall running back; no photo shows it inside the camera, and the 1000's counter window was not found in the exterior photos.",
     "Rollers: the steel strip that carries the gold roller and the brass three-tine spring are placed (strip over the gold roller inside the door, spring under the steel roller) so they fit; no photo shows them in the camera.",
-    "Capture: the print's back (black) and the undeveloped picture's blue-green are estimates, not sampled from a photo; the shutter's real motion (gear and blade travel) is not known, so its turns are illustrative; the motor is drawn slower than its gear ratio."
+    "Capture: the print's back (black) and the undeveloped picture's blue-green are estimates, not sampled from a photo; the shutter's real motion (gear and blade travel) is not known, so its turns are illustrative; the motor is drawn slower than its gear ratio.",
+    "How far the lighten/darken knob turns end to end: not found in a source; the viewer turns it 120 degrees (joints.knob_turn), an estimate."
   ],
   "budget": {
     "triangles": 50000,
@@ -1026,6 +1027,16 @@
         ]
       },
       "source": "sx70_service, estimate: the order from the manual (\"presses the red shutter release button (S1)\" ... the shutter opens for the exposure and closes ... \"starting the motor to eject the exposed film\"; \"the picks feeds the exposed film to the spreader rolls. The rolls break the pod, spread the developer, and eject the film from the camera\"; the counter turns); the times chosen to be seen (the real exposure is a fraction of a second, the eject about as long as drawn, the developing minutes, shown in 5 s); the print travels until its trailing edge is just inside the slot; the shutter's gear and blade turns are illustrative (their real travel is not known)"
+    }
+  },
+  "joints": {
+    "knob_turn": {
+      "angle": 0,
+      "min": -180,
+      "max": 180,
+      "move_to": 120,
+      "group": "exposure_knob",
+      "source": "halicki_2023 (3) shows the lighten/darken knob; how far it turns is an estimate: 120 degrees, not measured (see open_questions), only to show the knob turning"
     }
   }
 }

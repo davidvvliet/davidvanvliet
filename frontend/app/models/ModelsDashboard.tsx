@@ -169,9 +169,10 @@ type Controls = THREE.EventDispatcher<{ start: object }> & { target: THREE.Vecto
 // `playStart`: when the model's animation was started (performance.now()), or null: at rest. Every
 // clip in the file plays once from then and holds its end; a mesh with "fade_out": [t0, t1] in its
 // extras fades away between those times (a print developing).
-function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explore = true, focusable = NONE, explodable = NO_PARTS, ghost = false, inner = false, hide = NO_PARTS, playStart = null }: {
+// `playPart`: the part that starts the animation when clicked (`onPlay`), the camera's shutter button.
+function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explore = true, focusable = NONE, explodable = NO_PARTS, ghost = false, inner = false, hide = NO_PARTS, playStart = null, playPart = null, onPlay }: {
   url: string; title?: string; exploded: boolean; focus: string | null; setFocus: (f: string | null) => void; explore?: boolean;
-  focusable?: Focusable[]; explodable?: string[]; ghost?: boolean; inner?: boolean; hide?: string[]; playStart?: number | null;
+  focusable?: Focusable[]; explodable?: string[]; ghost?: boolean; inner?: boolean; hide?: string[]; playStart?: number | null; playPart?: string | null; onPlay?: () => void;
   onLabel: (label: { name: string; size: THREE.Vector3 } | null) => void; onReady?: () => void;
 }) {
   const gltf = useGLTF(url, "/draco/"); // compressed models (the /circuit boards) decode with the copy in public/draco
@@ -392,7 +393,13 @@ function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explor
     }
     return focus && groups.includes(focus) ? focus : groups[0] ?? groupOf(e.object, scene);
   };
+  // The play part, if it's the first of this model's parts under the pointer (even ghosted).
+  const onPlayPart = (e: ThreeEvent<PointerEvent | MouseEvent>) => {
+    const first = e.intersections.find((i) => within(i.object, scene));
+    return !!playPart && !!first && groupOf(first.object, scene) === playPart;
+  };
   const onMove = (e: ThreeEvent<PointerEvent>) => {
+    if (onPlayPart(e)) { e.stopPropagation(); setHover(null); gl.domElement.style.cursor = "pointer"; return; }
     // Seen through the faded outside, the inside file's parts behind it get the event.
     if (ghost) { const g = pick(e); setHover(g); if (g) { e.stopPropagation(); gl.domElement.style.cursor = "pointer"; } return; }
     e.stopPropagation();
@@ -403,6 +410,7 @@ function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explor
   };
   const onClick = (e: ThreeEvent<MouseEvent>) => {
     if (e.delta > 4) return; // the end of an orbit drag, not a click
+    if (onPlayPart(e)) { e.stopPropagation(); onPlay?.(); return; }
     if (ghost) { const g = pick(e); if (g) { e.stopPropagation(); setFocus(g === focus ? null : g); } return; }
     e.stopPropagation();
     // A part on a hinge with somewhere to go (its joint's move_to) moves instead of focusing.
@@ -428,7 +436,7 @@ export type Focusable = { part: string; label: string };
 const WHOLE = "\u0000whole";
 const NONE: Focusable[] = [];
 const NO_PARTS: string[] = [];
-export type Play = { label: string; light?: [number, number] };
+export type Play = { part: string; light?: [number, number] };
 
 // Hinged parts: joints the build exported with a "joint_move_to" (the spec's joints). A click
 // on a part under one turns every joint in its group to that angle, or back to rest. The axis
@@ -514,7 +522,7 @@ class ViewerBoundary extends Component<{ children: ReactNode; resetKey: string }
 // `focus`/`onFocus`: the focused part, when the page around the viewer also picks it (the /circuit block list).
 // `internalUrl`: the model's inside parts (internal.glb), loaded when "Internal" is pressed.
 // `light`: inside groups that draw the light's path, shown only while "Light" is on.
-// `play`: a button (play.label) that plays the model's animation; the light shows during play.light [t0, t1].
+// `play`: clicking its part (play.part) plays the model's animation; the light shows during play.light [t0, t1].
 // `held`: the model is held in the hand (a board that drives a model): dragging turns it about its
 // centre instead of orbiting, shift-drag about its long side (x), double-click sets it straight.
 export function Viewer({ probe, title, url, breakdown, stale, compact, onReady, focus: shown, onFocus, explore = true, focusable = NONE, explodable = NO_PARTS, internalUrl, insideFlip, light = NO_PARTS, play = null, held }: {
@@ -581,11 +589,6 @@ export function Viewer({ probe, title, url, breakdown, stale, compact, onReady, 
             Light
           </button>
         )}
-        {play && (
-          <button className={styles.explode} onClick={() => setPlayStart(performance.now())}>
-            {play.label}
-          </button>
-        )}
       </div>
       {shownLabel && (
         <PartLabel name={shownLabel.name} size={shownLabel.size} row={breakdown?.families[shownLabel.name]}
@@ -604,7 +607,8 @@ export function Viewer({ probe, title, url, breakdown, stale, compact, onReady, 
           <Suspense fallback={null}>
             <HeldGroup held={held}>
               <Model key={url} url={url} title={title} exploded={exploded} focus={inside ? innerFocus : focus} setFocus={inside ? setInnerFocus : setFocus} onLabel={setLabel}
-                onReady={onReady} explore={explore} focusable={focusable} explodable={explodable} ghost={inside} playStart={playStart} />
+                onReady={onReady} explore={explore} focusable={focusable} explodable={explodable} ghost={inside} playStart={playStart}
+                playPart={play?.part ?? null} onPlay={() => setPlayStart(performance.now())} />
             </HeldGroup>
           </Suspense>
           <Suspense fallback={null}>

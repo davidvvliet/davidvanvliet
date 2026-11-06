@@ -439,6 +439,11 @@ def front_parts(P):
         pt = k["pointer"]
         side_prism("knob_pointer", [(py, pt["z"] + pt["h"]), (py + 0.0006, pt["z"] + pt["h"]), (py, pt["z"])],
                    k["x"] - pt["w"] / 2, k["x"] + pt["w"] / 2, "front_white")
+        # The knob turns on its axis (a click in the viewer turns it: the spec's joints.knob_turn).
+        j = parts.joint("knob_turn", (k["x"], py, k["z"]), axis=(0, 1, 0))
+        for o in [ob for ob in parts.collection().objects if ob.name.startswith(("knob_drum", "knob_line_", "knob_knurl", "knob_cap", "knob_face"))]:
+            o.parent = j
+            o.matrix_parent_inverse = j.matrix_world.inverted()
     with parts.assembly("badge"):
         bd = P["badge"]
         badge = parts.box("badge", (bd["width"], 0.0004, bd["height"]), location=(bd["x"], py + 0.0002, bd["z"]),
