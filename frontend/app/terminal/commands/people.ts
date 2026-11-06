@@ -2,8 +2,8 @@ import { Command } from "../types";
 import { register } from "../registry";
 
 const admired: [string, string][] = [
-  ["Isaac Newton", "For sparking the enlightenment through the power of his ideas alone"],
-  ["Charles Darwin", "For defending his earth shattering insight in the face of dogma"],
+  ["Isaac Newton", "For sparking the Enlightenment through the power of his ideas alone"],
+  ["Charles Darwin", "For defending his earth-shattering insight in the face of dogma"],
   ["David Deutsch", "For his always good-faith and correct optimism"],
   ["Peter Thiel", "For his individualism and for taking the future seriously"],
   ["Elon Musk", "For taking the strides of technological progress in an otherwise stale world"],
