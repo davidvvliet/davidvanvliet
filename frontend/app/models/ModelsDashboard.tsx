@@ -294,9 +294,10 @@ function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explor
   }), [mixer, gltf.animations]);
   const fades = useMemo(() => {
     const fs: { mesh: THREE.Mesh; t0: number; t1: number }[] = [];
+    // On the node: the published (compressed) files hold each mesh in a child node of its own.
     scene.traverse((o) => {
       const f = o.userData.fade_out;
-      if ((o as THREE.Mesh).isMesh && Array.isArray(f) && f.length === 2) fs.push({ mesh: o as THREE.Mesh, t0: f[0], t1: f[1] });
+      if (Array.isArray(f) && f.length === 2) o.traverse((m) => { if ((m as THREE.Mesh).isMesh) fs.push({ mesh: m as THREE.Mesh, t0: f[0], t1: f[1] }); });
     });
     return fs;
   }, [scene]);
@@ -305,10 +306,13 @@ function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explor
   // right sees more of the left. Its picture's u runs along the mesh's x, v along y (glTF axes),
   // and it faces +z.
   useEffect(() => {
+    const meshes: [THREE.Mesh, number[]][] = [];
     scene.traverse((o) => {
-      const px = o.userData.parallax;
-      if (!(o as THREE.Mesh).isMesh || !Array.isArray(px) || px.length !== 2) return;
-      for (const mat of [(o as THREE.Mesh).material].flat() as THREE.Material[]) {
+      const px = o.userData.parallax; // on the node, as fade_out
+      if (Array.isArray(px) && px.length === 2) o.traverse((m) => { if ((m as THREE.Mesh).isMesh) meshes.push([m as THREE.Mesh, px]); });
+    });
+    for (const [mesh, px] of meshes) {
+      for (const mat of [mesh.material].flat() as THREE.Material[]) {
         mat.onBeforeCompile = (sh) => {
           sh.vertexShader = sh.vertexShader.replace("#include <uv_vertex>", `#include <uv_vertex>
             {
@@ -331,7 +335,7 @@ function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explor
         };
         mat.needsUpdate = true;
       }
-    });
+    }
   }, [scene]);
   const playing = useRef(false);
   useFrame(() => {
