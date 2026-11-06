@@ -18,7 +18,7 @@ const people: Command = {
   description: "People I admire",
   execute: () => {
     // A name, then why, below it: the terminal is too narrow for two columns.
-    return ["People I admire:", "", ...admired.flatMap(([name, why]) => [`  ${name}`, `  __GRAY__${why}`, ""])];
+    return ["People I admire:", "", ...admired.flatMap(([name, why]) => [name, `__GRAY__${why}`, ""])];
   },
 };
 
