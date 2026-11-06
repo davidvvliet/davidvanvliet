@@ -3,7 +3,7 @@ import { registerPost } from "../registry";
 registerPost({
   slug: "next-bottlenecks",
   title: "The next bottlenecks to technological progress",
-  shortTitle: "The next bottlenecks",
+  shortTitle: "The Next Bottlenecks",
   date: "2026-11-04",
   image: "/writing/next-bottlenecks.jpg",
   content: `In the not-so-distant past, one of the many limiting factors to creating a new product was the assembly of a team of software engineers, and the costly endeavour of writing the required code. This was expensive and time-consuming, and was therefore a genuine bottleneck to bringing a vision into existence. Now, with the advent of agents, harnesses and cheap tokens, this is no longer the case. The team you would have needed can now be reduced by an order of magnitude, and the time to build has decreased significantly through the parallelisation of tasks orchestrated by a few savvy engineers.
