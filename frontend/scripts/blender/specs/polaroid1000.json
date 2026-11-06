@@ -553,7 +553,8 @@
     "Shutter block: the long arm with the frame counter and the switch contacts is placed along the button-side wall running back; no photo shows it inside the camera, and the 1000's counter window was not found in the exterior photos.",
     "Rollers: the steel strip that carries the gold roller and the brass three-tine spring are placed (strip over the gold roller inside the door, spring under the steel roller) so they fit; no photo shows them in the camera.",
     "Capture: the print's back (black) and the undeveloped picture's blue-green are estimates, not sampled from a photo; the shutter's real motion (gear and blade travel) is not known, so its turns are illustrative; the motor is drawn slower than its gear ratio.",
-    "How far the lighten/darken knob turns end to end: not found in a source; the viewer turns it 120 degrees (joints.knob_turn), an estimate."
+    "How far the lighten/darken knob turns end to end: not found in a source; the viewer turns it 120 degrees (joints.knob_turn), an estimate.",
+    "The mirror's back sits only ~0.45 mm inside the camera's sloped back at its top, and the light box wall behind it would come through (both trimmed 0.3 mm inside the slope). A real moulding wall is thicker, so the mirror's plane (estimates) or the back's slope (from photos) is likely off by a millimetre or two."
   ],
   "budget": {
     "triangles": 50000,

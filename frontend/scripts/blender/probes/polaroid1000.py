@@ -152,6 +152,28 @@ def cut(obj, size, location):
     return obj
 
 
+def back_slope(P):
+    """The camera's sloped back over the mirror: its foot and top, (y, z) in the camera's frame."""
+    low, fs = P["lower_box"], P["front_section"]
+    return (low["y0"], low["height"]), (fs["y0"], fs["top"] - 0.001)
+
+
+def slope_cut(obj, a, b, inset):
+    """Cut away everything beyond the line a-b (points (y, z), running up toward +y), `inset`
+    inside it: the half-space on the -y / +z side, across the whole width."""
+    a, b = Vector((0, *a)), Vector((0, *b))
+    d = (b - a).normalized()
+    n = Vector((0, -d.z, d.y))                # outward: back and up
+    box = parts.box(obj.name + "_slope_cut", (0.3, 0.4, 0.1), location=tuple((a + b) / 2 + n * (0.05 - inset)),
+                    material=obj.data.materials[0].name)
+    box.rotation_euler = (math.atan2(-n.y, n.z), 0, 0)
+    m = obj.modifiers.new("slope_cut", "BOOLEAN")
+    m.operation, m.solver, m.object = "DIFFERENCE", "EXACT", box
+    _apply(obj)
+    bpy.data.objects.remove(box)
+    return obj
+
+
 def hull(name, points, material):
     """The convex hull of a set of points, as a closed solid."""
     bm = bmesh.new()
@@ -595,8 +617,9 @@ def optics(P, E):
     top, bot = top + up * 0.002, bot - up * 0.002
     hx_top, hx_bot = ix * t_top + 0.002, ix * t_bot + 0.002
     with parts.assembly("mirror", internal=True):
-        slab("mirror", [(hx_top, top.y, top.z), (-hx_top, top.y, top.z), (-hx_bot, bot.y, bot.z), (hx_bot, bot.y, bot.z)],
-             Vector((0, -1, 1)), 0.0015, "mirror")
+        mirror = slab("mirror", [(hx_top, top.y, top.z), (-hx_top, top.y, top.z), (-hx_bot, bot.y, bot.z), (hx_bot, bot.y, bot.z)],
+                      Vector((0, -1, 1)), 0.0015, "mirror")
+        slope_cut(mirror, *back_slope(P), 0.0003)     # its back's top corner, as the light box's
     with parts.assembly("light_box"):     # faded with the shell in Internal mode, so what it holds shows
         # One black moulding (retronautik_1000, the light box out of the camera): open over the
         # picture, its sides leaning in to a narrow top, the back wall carrying the mirror, a
@@ -625,6 +648,10 @@ def optics(P, E):
         _apply(box)
         bpy.data.objects.remove(inner)
         cut(box, (lbx["window"][0], 0.01, lbx["window"][1]), (xl, yfr, zl))
+        # The camera's sloped back leans a little less than the box's back wall (45 degrees), so
+        # near the top the box's back edge would come through it: trimmed 0.3 mm inside that slope.
+        # (The mirror's back is only ~0.45 mm inside it there: see open_questions.)
+        slope_cut(box, *back_slope(P), 0.0003)
         # The fine upright ribs on the inside of the far wall.
         hxz = lambda z: bx + (tx - bx) * (z - zf) / (zt - zf)
         k = 0.0035
