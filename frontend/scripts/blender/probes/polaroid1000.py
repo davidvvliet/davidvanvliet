@@ -572,7 +572,7 @@ def optics(P, E):
     with parts.assembly("mirror", internal=True):
         slab("mirror", [(hx_top, top.y, top.z), (-hx_top, top.y, top.z), (-hx_bot, bot.y, bot.z), (hx_bot, bot.y, bot.z)],
              Vector((0, -1, 1)), 0.0015, "mirror")
-    with parts.assembly("light_box", internal=True):
+    with parts.assembly("light_box"):     # faded with the shell in Internal mode, so what it holds shows
         # One black moulding (retronautik_1000, the light box out of the camera): open over the
         # picture, its sides leaning in to a narrow top, the back wall carrying the mirror, a
         # window in the front wall for the light from the shutter; a steel frame round its foot.
@@ -600,22 +600,10 @@ def optics(P, E):
         _apply(box)
         bpy.data.objects.remove(inner)
         cut(box, (lbx["window"][0], 0.01, lbx["window"][1]), (xl, yfr, zl))
-        # A cutaway in the viewfinder-side wall (the model's, not the camera's) so the mirror and
-        # the light path show; and the fine upright ribs on the far wall's inside.
+        # The fine upright ribs on the inside of the far wall.
         hxz = lambda z: bx + (tx - bx) * (z - zf) / (zt - zf)
         k = 0.0035
-        zk = yf0 + c + k
         y_front = lambda z: yf1 + (yfr - yf1) * (z - zf) / (zt - zf) - t
-        y_back = lambda z: max(yf0, z - c - k) + t
-        z1, z2 = zf + 0.006, zt - 0.005
-        corners = [(y_back(z1) + 0.003, z1), (y_back(zk) + 0.003, zk), (y_back(z2) + 0.003, z2),
-                   (y_front(z2) - 0.003, z2), (y_front(z1) - 0.003, z1)]
-        win = hull("light_box_cutaway", [(-(hxz(z) + 0.01), y, z) for y, z in corners] +
-                   [(-(hxz(z) - t - 0.0003), y, z) for y, z in corners], "lightbox_black")
-        m = box.modifiers.new("cutaway", "BOOLEAN")
-        m.operation, m.solver, m.object = "DIFFERENCE", "EXACT", win
-        _apply(box)
-        bpy.data.objects.remove(win)
         rb = lbx["ribs"]
         verts, faces = [], []
         y = yf0 + t + 0.002

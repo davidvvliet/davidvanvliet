@@ -256,10 +256,10 @@
   }
  },
  "polaroid1000": {
-  "approved": "2026-11-05 22:31",
+  "approved": "2026-11-05 22:35",
   "inputs": {
-   "specs/polaroid1000.json": "0008f7c0ab4ae196",
-   "probes/polaroid1000.py": "c210a3e7025fe35f",
+   "specs/polaroid1000.json": "ea0de5c38d438246",
+   "probes/polaroid1000.py": "1d73103397e921da",
    "build.py": "363cabc8976febf0",
    "blender.json": "7bbc071b6e396ec4",
    "lib/__init__.py": "e3b0c44298fc1c14",
