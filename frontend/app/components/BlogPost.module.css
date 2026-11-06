@@ -42,7 +42,9 @@
 .image {
   display: block;
   width: 100%;
-  height: auto;
+  max-width: 560px;
+  max-height: 360px;
+  object-fit: cover;
   margin-bottom: 1.25rem;
 }
 
