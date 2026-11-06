@@ -23,9 +23,9 @@
   border-radius: 3px;
 }
 
-/* the article is 75% of the panel wide; the panel still scrolls */
+/* the article is 80% of the panel wide; the panel still scrolls */
 .column {
-  max-width: 75%;
+  max-width: 80%;
 }
 
 .title {
