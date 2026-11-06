@@ -117,6 +117,7 @@
 
 .run {
   cursor: pointer;
+  white-space: nowrap; /* a command never breaks at its hyphens; the text beside it wraps instead */
   text-decoration: underline;
   text-decoration-color: rgba(0, 255, 0, 0.35);
   text-underline-offset: 2px;
