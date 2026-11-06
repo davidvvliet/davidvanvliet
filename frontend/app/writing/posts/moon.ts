@@ -4,6 +4,8 @@ registerPost({
   slug: "moon",
   title: "Moon",
   date: "2026-02-28",
+  subtitle: "Overvieweffectmaxx",
+  image: "/writing/moon.jpg",
   content: `If someone wanted to convince me of the existence of god, their best shot would be to continuously remind me of the wonders of our moon. About how lucky we can consider ourselves to be for having it.
 
 Why?

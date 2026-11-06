@@ -4,6 +4,7 @@ registerPost({
   slug: "250-years-of-courage",
   title: "250 Years Of Courage",
   date: "2026-07-04",
+  image: "/writing/250-years-of-courage.jpg",
   content: `Today is the 250th anniversary of American independence. During this time, I find it important to reflect on the virtues of the greatest nation, for whose existence we can all be grateful. It's not hyperbole to say that the establishment of America is the most important achievement in our history. This is the nation where we had the courage to respect reason over dogma, where we can be individuals, and where we can be free. Its values are the prerequisite for prosperity and civilizational flourishing, and having cemented them here is something to treasure and protect.
 
 America provides us with the place where we can strive to achieve our desires, and where we can engage one another as rational individuals. A place where we can reshape the nature we were dealt to our preferences. It's where you could've seen horse carriages crowding through a muddy New York City as a child, and witnessed your flag planted on the Moon in the very same lifetime. It's where we alleviated the tyranny of day and night with the mass production of cheap light. Where we said no to disease, while saying yes to the prospect of flight. Where we decided to say: it doesn't have to be this way, it can always be better. Only here has that been possible without any fear of persecution, and with encouragement.
