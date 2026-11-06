@@ -187,12 +187,12 @@
       "licence": "CC BY-SA 2.0, as stated on the Commons file pages"
     },
     {
-      "id": "nasa_as11_40_5903",
-      "title": "NASA, AS11-40-5903, \"Astronaut Edwin Aldrin walks on lunar surface near leg of Lunar Module\" (Apollo 11, 20 July 1969; photo by Neil Armstrong)",
-      "url": "https://images.nasa.gov/details/as11-40-5903",
+      "id": "nasa_as15_88_11972",
+      "title": "NASA, AS15-88-11972, \"Apollo 15 CSM Endeavour during rendezvous\" (Apollo 15, 1971; seen from the Lunar Module Falcon), Wikimedia Commons copy",
+      "url": "https://commons.wikimedia.org/wiki/File:Apollo_15_CSM_Endeavour_during_rendezvous.jpg",
       "read": "2026-11-06",
-      "licence": "public domain: NASA still images are generally not subject to copyright in the United States",
-      "credit": "The picture on the print: NASA, Apollo 11, AS11-40-5903 (Aldrin on the Moon, photo by Neil Armstrong)"
+      "licence": "public domain: NASA (\"Public domain\" on the Commons file page)",
+      "credit": "The picture on the print: NASA, Apollo 15, AS15-88-11972 (the CSM Endeavour over the Moon, seen from the LM Falcon)"
     }
   ],
   "reference_model": {
@@ -370,9 +370,9 @@
       "source": "halicki_2023 (3), scanned across the stripe at y=1100 px: five bands; kitakaze_2009 (a Land Camera 1000), rows 780-800 px: six"
     },
     "print_picture": {
-      "value": "the print shows Aldrin on the Moon (AS11-40-5903), cropped to the 79 x 77 mm picture (refs print.jpg, made by textures-make.py)",
-      "source": "nasa_as11_40_5903",
-      "quote": "Astronaut Edwin E. Aldrin Jr., lunar module pilot, walks on the surface of the moon near the leg of the Lunar Module (LM) \"Eagle\" during the Apollo 11 extravehicular activity (EVA). Astronaut Neil A. Armstrong, commander, took this photograph"
+      "value": "the print shows Apollo 15's CSM Endeavour over the Moon (AS15-88-11972), cropped to the 79 x 77 mm picture (refs print.jpg, made by textures-make.py)",
+      "source": "nasa_as15_88_11972",
+      "quote": "Apollo 15's Command/Service Module Endeavour as seen by from the Lunar Module Falcon, during rendezvous."
     }
   },
   "materials": {
@@ -984,7 +984,7 @@
         ],
         "narrow_border": 0.006
       },
-      "source": "polaroid_sx70_film (format 107 x 88 mm, image area 79 x 77 mm), estimate: the picture 4.5 mm in from the sides and 6 mm from the narrow end, the rest the wide border with the developer's pod, which leads into the rollers (the rolls break the pod and spread the developer across the picture, sx70_service); 0.6 mm thick; picture nasa_as11_40_5903"
+      "source": "polaroid_sx70_film (format 107 x 88 mm, image area 79 x 77 mm), estimate: the picture 4.5 mm in from the sides and 6 mm from the narrow end, the rest the wide border with the developer's pod, which leads into the rollers (the rolls break the pod and spread the developer across the picture, sx70_service); 0.6 mm thick; picture nasa_as15_88_11972"
     },
     "capture": {
       "value": {
