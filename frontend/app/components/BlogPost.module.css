@@ -23,6 +23,11 @@
   border-radius: 3px;
 }
 
+/* the article is 75% of the panel wide; the panel still scrolls */
+.column {
+  max-width: 75%;
+}
+
 .title {
   font-size: 1rem;
   color: #ededed;

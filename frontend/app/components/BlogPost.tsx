@@ -36,23 +36,25 @@ export default function BlogPost({ slug }: { slug: string }) {
 
   return (
     <div className={styles.blog}>
-      <div className={styles.title}>{post.title}</div>
-      {post.subtitle && <div className={styles.subtitle}>{post.subtitle}</div>}
-      <div className={styles.date}>{post.date}</div>
-      {post.image && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img className={styles.image} src={post.image} alt="" />
-      )}
-      <div className={styles.content}>
-        {blocks(post.content).map((b, i) =>
-          b.list ? (
-            <ul key={i} className={styles.list}>
-              {b.items.map((item, j) => <li key={j}>{item}</li>)}
-            </ul>
-          ) : (
-            <p key={i} className={styles.paragraph}>{b.text}</p>
-          ),
+      <div className={styles.column}>
+        <div className={styles.title}>{post.title}</div>
+        {post.subtitle && <div className={styles.subtitle}>{post.subtitle}</div>}
+        <div className={styles.date}>{post.date}</div>
+        {post.image && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img className={styles.image} src={post.image} alt="" />
         )}
+        <div className={styles.content}>
+          {blocks(post.content).map((b, i) =>
+            b.list ? (
+              <ul key={i} className={styles.list}>
+                {b.items.map((item, j) => <li key={j}>{item}</li>)}
+              </ul>
+            ) : (
+              <p key={i} className={styles.paragraph}>{b.text}</p>
+            ),
+          )}
+        </div>
       </div>
     </div>
   );
