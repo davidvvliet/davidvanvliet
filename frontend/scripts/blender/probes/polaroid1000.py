@@ -230,6 +230,17 @@ def _image_material(name, file, roughness=0.5):
     return materials.image(name, img, metallic=0.0, roughness=roughness)
 
 
+def _scene_material():
+    """The viewfinder's view (refs viewfinder-scene.jpg), glowing at half strength."""
+    mat = _image_material("viewfinder_scene", "viewfinder-scene.jpg", 0.6)
+    nt = mat.node_tree
+    bsdf = next(n for n in nt.nodes if n.type == "BSDF_PRINCIPLED")
+    tex = next(n for n in nt.nodes if n.type == "TEX_IMAGE")
+    nt.links.new(tex.outputs["Color"], bsdf.inputs["Emission Color"])
+    bsdf.inputs["Emission Strength"].default_value = 0.5
+    return mat
+
+
 def _uv_plane(obj, axis_u, axis_v, u0, u1, v0, v1):
     """Planar UVs: world axis_u from u0 to u1 and axis_v from v0 to v1 map to [0, 1]."""
     me = obj.data
@@ -500,8 +511,13 @@ def viewfinder_hood(P):
         ep_ring = front_ring("eyepiece", rrect(e["width"] - 0.008, h - 0.010, 0.004), rrect(ep["hole"], ep["hole"], 0.0008),
                    e["x"], e["top"] - h / 2, y, y + 0.0015, "eyecup_rubber")
         round_edges(ep_ring, 0.0004, segments=2)
-        front_plate("eyepiece_dark", rrect(ep["hole"] + 0.001, ep["hole"] + 0.001, 0.0008), e["x"], e["top"] - h / 2,
-                    y + 0.0015, y + 0.0025, "lightbox_black")
+        # Behind the hole, the scene the camera is aimed at, as the eye sees it through the finder:
+        # upright and the right way round (seen from behind, +x is on the right). Lit by itself a
+        # little, as the finder brings in light from the front; the eyecup shades it otherwise.
+        sw = ep["hole"] + 0.001
+        scene = front_plate("eyepiece_scene", rrect(sw, sw, 0.0008), e["x"], e["top"] - h / 2,
+                            y + 0.0015, y + 0.0025, _scene_material())
+        _uv_plane(scene, 0, 2, e["x"] - sw / 2, e["x"] + sw / 2, e["top"] - h / 2 - sw / 2, e["top"] - h / 2 + sw / 2)
     return hood
 
 

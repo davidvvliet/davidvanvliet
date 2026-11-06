@@ -256,10 +256,10 @@
   }
  },
  "polaroid1000": {
-  "approved": "2026-11-06 13:44",
+  "approved": "2026-11-06 13:53",
   "inputs": {
    "specs/polaroid1000.json": "979c2f2dbf5f2473",
-   "probes/polaroid1000.py": "46ee73c36a373bda",
+   "probes/polaroid1000.py": "8e945f1e943fb078",
    "build.py": "363cabc8976febf0",
    "blender.json": "7bbc071b6e396ec4",
    "lib/__init__.py": "e3b0c44298fc1c14",
@@ -281,7 +281,8 @@
    "refs/polaroid1000/badge.jpg": "a7319397e4012f2d",
    "refs/polaroid1000/name-strip.jpg": "9909745378ee8c49",
    "refs/polaroid1000/print.jpg": "323c2aeae944667a",
-   "refs/polaroid1000/textures-make.py": "275545e2afe3783b",
+   "refs/polaroid1000/textures-make.py": "2bc3fc5961f5d1bd",
+   "refs/polaroid1000/viewfinder-scene.jpg": "4997362bbcb717e1",
    "refs/polaroid1000/viewfinder.jpg": "febe9829a96e62eb"
   }
  },

@@ -22,3 +22,5 @@ if len(sys.argv) > 1:
     card = Image.new("RGB", (880, 1070), (238, 236, 228))
     card.paste(pic, (45, 60))
     card.save(os.path.join(HERE, "print.jpg"), quality=90)
+    # What the viewfinder shows: the same scene, square for the square eyepiece.
+    ph.crop((39, 20, 1542, 1523)).resize((512, 512), Image.LANCZOS).save(os.path.join(HERE, "viewfinder-scene.jpg"), quality=88)
