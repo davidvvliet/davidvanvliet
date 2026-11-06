@@ -131,7 +131,7 @@
       "value": "laser marking on top: pin 1 dot, then INVENSENSE / MPU-6050 / lot code / foundry, vendor, year-week and rev codes, over the whole 4 x 4 mm top",
       "source": "mpu6050_ds, 11.6 p.46",
       "quote": "INVENSENSE MPU6050 XXXXXX-XX XX YYWW X ... Part number ... Lot traceability code ... Foundry code ... Package Vendor Code ... Rev Code",
-      "also": [{"source": "spekking_nexus7", "quote": "traced: photo rectified by the package's four corners at (254, 300), (1003, 300), (1004, 1049), (257, 1053) px to 800 x 800 px; median 9 px, minus a 30 px blurred background, threshold 9, specks under 150 px dropped, 7 px closing. The V of INVENSENSE and the left stroke of the M are worn in the photo and were drawn in at the other letters' 13 px stroke width. This chip reads D2G594-L1 / EI 1228 D"}]
+      "also": [{"source": "spekking_nexus7", "quote": "traced: photo rectified by the package's four corners at (254, 300), (1003, 300), (1004, 1049), (257, 1053) px to 800 x 800 px; each character's box and each row's stroke width (13 px, 17 px on the two code rows) measured there, and the character drawn as even, round-ended strokes along its centre line as seen in the photo (refs/mpu6050/marking-draw.py, 1600 px); a plain threshold came out ragged on the speckled compound. The faint mark between 4 and L reads as a scratch and is left out. This chip reads D2G594 L1 / EI 1228 D"}]
     },
     "exposed_pad_chamfer": {
       "value": 0.0003,
