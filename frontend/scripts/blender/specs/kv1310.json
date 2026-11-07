@@ -1,6 +1,8 @@
 {
   "title": "Sony KV-1310 Trinitron",
-  "logos": [],
+  "logos": [
+    "sony"
+  ],
   "note": "Sony's first Trinitron colour television (Japan, 1968): a walnut-grain cabinet with a carry handle, the screen on the left, a speaker and channel dial column on the right, and inside it the Trinitron picture tube (one gun, three beams, an aperture grille) on a transistor chassis. Frame: z up, cabinet bottom at z = 0, centred in x and y, the screen facing -y. Real size in metres. The cabinet's size is the Smithsonian's KV-1310; its layout comes from the Sony-owned set in the Japanese national registry (kahaku_00063, a photo we may measure from but not publish). The tube's construction is from Sony's 1967 patent and Belt (1972); its sizes are not yet found (open_questions).",
   "viewer": {
     "explore": true,

@@ -46,6 +46,7 @@ const TURN_SECONDS = 20;
 // (public domain, trademarked), its white made clear, the navy light and the red brighter. Polaroid's 1960-1991 logo
 // (the Land Camera 1000's) is Wikimedia Commons' Polaroid-1960.svg by Thewritestuff92 (CC BY-SA 4.0,
 // https://creativecommons.org/licenses/by-sa/4.0/), its black letters filled light; that change is shared alike.
+// Sony's is Wikimedia Commons' Sony_logo.svg (public domain: "simple geometric shapes or text", trademarked), filled light.
 // `above`: extra space over a logo, in px, when it sits under another; `after` overrides it under a given logo.
 const LOGOS: Record<string, { name: string; logo: string; height: number; above?: number; after?: Record<string, number> }> = {
   nasa: { name: "NASA", logo: "/logos/nasa.svg", height: 30 },
@@ -58,6 +59,7 @@ const LOGOS: Record<string, { name: string; logo: string; height: number; above?
   honeywell: { name: "Honeywell", logo: "/logos/honeywell.svg", height: 12 },
   invensense: { name: "InvenSense", logo: "/logos/invensense.png", height: 13 },
   polaroid: { name: "Polaroid", logo: "/logos/polaroid.svg", height: 13 },
+  sony: { name: "Sony", logo: "/logos/sony.svg", height: 11 },
 };
 const ORGS = ["nasa"];
 const LAST = ["spacex"];
