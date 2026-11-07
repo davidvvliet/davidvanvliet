@@ -473,7 +473,7 @@ export type Focusable = { part: string; label: string };
 const WHOLE = "\u0000whole";
 const NONE: Focusable[] = [];
 const NO_PARTS: string[] = [];
-export type Play = { part: string; light?: [number, number] };
+export type Play = { part?: string; button?: string; light?: [number, number] };
 
 // Hinged parts: joints the build exported with a "joint_move_to" (the spec's joints). A click
 // on a part under one turns every joint in its group to that angle, or back to rest. The axis
@@ -559,7 +559,8 @@ class ViewerBoundary extends Component<{ children: ReactNode; resetKey: string }
 // `focus`/`onFocus`: the focused part, when the page around the viewer also picks it (the /circuit block list).
 // `internalUrl`: the model's inside parts (internal.glb), loaded when "Internal" is pressed.
 // `light`: inside groups that draw the light's path, shown only while "Light" is on.
-// `play`: clicking its part (play.part) plays the model's animation; the light shows during play.light [t0, t1].
+// `play`: clicking its part (play.part), or its button (play.button, which also opens the inside), plays the
+// model's animation; the light shows during play.light [t0, t1].
 // `held`: the model is held in the hand (a board that drives a model): dragging turns it about its
 // centre instead of orbiting, shift-drag about its long side (x), double-click sets it straight.
 export function Viewer({ probe, title, url, breakdown, stale, compact, onReady, focus: shown, onFocus, explore = true, focusable = NONE, explodable = NO_PARTS, internalUrl, insideFlip, light = NO_PARTS, play = null, held }: {
@@ -619,6 +620,13 @@ export function Viewer({ probe, title, url, breakdown, stale, compact, onReady, 
           <button className={`${styles.explode} ${inside ? styles.active : ""}`}
             onClick={() => { setFocus(null); setInnerFocus(null); setExploded(false); setInside((x) => !x); }}>
             {inside ? "Exterior" : "Internal"}
+          </button>
+        )}
+        {/* "play": {"button": label}: a button that plays the animation (opening the inside, if any). */}
+        {play?.button && (
+          <button className={styles.explode}
+            onClick={() => { if (internalUrl && !inside) { setFocus(null); setInnerFocus(null); setExploded(false); setInside(true); } setPlayStart(performance.now()); }}>
+            {play.button}
           </button>
         )}
         {inside && light.length > 0 && (
