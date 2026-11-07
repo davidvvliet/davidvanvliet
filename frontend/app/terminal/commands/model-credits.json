@@ -44,6 +44,9 @@
     "NASA/KSC, KSC-97pc732 (platform and PCDU colours)",
     "NASA/JPL, PIA04603 (blanket colour)"
   ],
+  "kv1310": [
+    "KV-1310 back cover modelled on and coloured from the Science Museum Group's photo of a KV-1320UB (CC BY 4.0, Wikimedia Commons)"
+  ],
   "mpu6050": [
     "MEMS die traced from and textured with ZeptoBars' MPU-6050 die photo (CC BY 3.0, Wikimedia Commons)",
     "MPU-6050 package marking traced from a photo by Raimond Spekking (CC BY-SA 4.0, Wikimedia Commons)"

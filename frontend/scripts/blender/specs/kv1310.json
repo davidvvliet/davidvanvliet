@@ -1,0 +1,597 @@
+{
+  "title": "Sony KV-1310 Trinitron",
+  "logos": [],
+  "note": "Sony's first Trinitron colour television (Japan, 1968): a walnut-grain cabinet with a carry handle, the screen on the left, a speaker and channel dial column on the right, and inside it the Trinitron picture tube (one gun, three beams, an aperture grille) on a transistor chassis. Frame: z up, cabinet bottom at z = 0, centred in x and y, the screen facing -y. Real size in metres. The cabinet's size is the Smithsonian's KV-1310; its layout comes from the Sony-owned set in the Japanese national registry (kahaku_00063, a photo we may measure from but not publish). The tube's construction is from Sony's 1967 patent and Belt (1972); its sizes are not yet found (open_questions).",
+  "viewer": {
+    "explore": true
+  },
+  "listed": true,
+  "sources": [
+    {
+      "id": "si_nmah_706163",
+      "title": "Smithsonian National Museum of American History, EM.334925: Sony \"Trinitron\" model KV 1310 color television receiver (ca. 1970), from Sony Corporation, thru Akio Morita",
+      "url": "https://www.si.edu/object/sony-trinitron-model-kv-1310-color-television-receiver:nmah_706163",
+      "read": "2026-11-06",
+      "licence": "metadata CC0 (Smithsonian Open Access API, record edanmdm:nmah_706163, metadata_usage access CC0); no images in the open record",
+      "saved": "refs/kv1310/sources/si_nmah_706163.txt"
+    },
+    {
+      "id": "kahaku_00063",
+      "title": "National Museum of Nature and Science (Tokyo), Essential Historical Materials for Science and Technology, Number 00063: Trinitoron color TV KV-1310 (registered 6 October 2010; owner Sony Corporation), record sheet with photo",
+      "url": "https://sts.kahaku.go.jp/albums/abm.php?d=7296&f=abm00016282.pdf&n=no63.pdf",
+      "read": "2026-11-06",
+      "licence": "no licence stated; the museum's catalogue pages prohibit reproducing their text and images: link and quotes only, the photo used to measure from, never published"
+    },
+    {
+      "id": "belt_1972",
+      "title": "Forest H. Belt, \"Trinitron - Still a Mystery?\", Popular Electronics, February 1972 (RF Cafe transcription)",
+      "url": "https://www.rfcafe.com/references/popular-electronics/trinitron-mystery-february-1972.htm",
+      "read": "2026-11-06",
+      "licence": "copyright Ziff-Davis 1972: link and quotes only"
+    },
+    {
+      "id": "us3514663",
+      "title": "US patent 3,514,663, S. Yoshida, A. Ohgoshi, S. Miyaoka, Y. Katagiri (Sony): single-gun, plural-beam cathode ray tube (priority 1967)",
+      "url": "https://patents.google.com/patent/US3514663A/en",
+      "read": "2026-11-06",
+      "licence": "US patent: public domain",
+      "saved": "refs/kv1310/sources/us3514663.txt"
+    },
+    {
+      "id": "radiomuseum_kv1310e",
+      "title": "Radiomuseum.org, Sony KV-1310E Ch= SCC-51A-A (ID 83531), Wayback copy",
+      "url": "https://web.archive.org/web/2023/https://www.radiomuseum.org/r/sony_kv1310e_kv_1310_e.html",
+      "read": "2026-11-06",
+      "licence": "member-contributed, no licence stated: link and quotes only"
+    },
+    {
+      "id": "smg_kv1320ub",
+      "title": "Science Museum Group, object 2005-343: Sony 'Trinitron' Colour Television, 1969-1970 (KV-1320UB)",
+      "url": "https://collection.sciencemuseumgroup.org.uk/objects/co8066774",
+      "read": "2026-11-06",
+      "licence": "text CC BY 4.0, images CC BY-NC-SA 4.0 (as stated on the page): quotes only"
+    },
+    {
+      "id": "kv7010ua_sm",
+      "title": "Sony KV-7010UA service manual (1968), archive.org item sony_kv7010ua_service_data",
+      "url": "https://archive.org/download/sony_kv7010ua_service_data/Sony-KV-7010UA-Service%20(1).pdf",
+      "read": "2026-11-06",
+      "licence": "copyright Sony: link and quotes only"
+    },
+    {
+      "id": "ohkoshi_1973",
+      "title": "Akio Ohkoshi (Sony), \"2-3 トリニトロン\" (Trinitron Tube), テレビジョン (Journal of the Institute of Television Engineers of Japan) vol. 27 no. 5 (1973), pp. 315-320",
+      "url": "https://www.jstage.jst.go.jp/article/itej1954/27/5/27_5_315/_article/-char/ja/",
+      "read": "2026-11-06",
+      "licence": "copyright The Institute of Image Information and Television Engineers: link and quotes only (free to read on J-STAGE)"
+    },
+    {
+      "id": "commons_kv1320ub_back",
+      "title": "Wikimedia Commons, File:Trinitron_KV-1320UB_back.jpg (Science Museum Group photo of the KV-1320UB, back view)",
+      "url": "https://commons.wikimedia.org/wiki/File:Trinitron_KV-1320UB_back.jpg",
+      "read": "2026-11-06",
+      "licence": "CC BY 4.0 (as stated on the Commons file page)",
+      "credit": "KV-1310 back cover modelled on and coloured from the Science Museum Group's photo of a KV-1320UB (CC BY 4.0, Wikimedia Commons)"
+    }
+  ],
+  "reference_model": {
+    "url": "",
+    "note": "none: no 3D model of the KV-1310 found; the layout comes from the kahaku_00063 photo"
+  },
+  "dimensions": {
+    "cabinet_width": {
+      "value": 0.451,
+      "object": "*",
+      "measure": "x",
+      "source": "si_nmah_706163",
+      "quote": "overall: 15 in x 15 in x 17 3/4 in; 38.1 cm x 38.1 cm x 45.085 cm",
+      "note": "the record doesn't name the axes; 17 3/4 in is taken as the width because the set is wider than tall and deep (kahaku_00063 photo)",
+      "conflict": [
+        {
+          "source": "radiomuseum_kv1310e",
+          "quote": "Dimensions (WHD) 470 x 320 x 380 mm",
+          "note": "the later European KV-1310E (\"Year 1973 ?\", PAL, 13\"), a different front panel"
+        },
+        {
+          "source": "smg_kv1320ub",
+          "quote": "Overall: 337 mm x 505 mm x 430 mm",
+          "note": "the 1969-70 KV-1320UB (MK II), a different front panel"
+        }
+      ]
+    },
+    "overall_height": {
+      "value": 0.381,
+      "object": "*",
+      "measure": "z",
+      "source": "si_nmah_706163",
+      "quote": "overall: 15 in x 15 in x 17 3/4 in",
+      "note": "taken as the height over the carry handle: on the kahaku_00063 photo the front is about 1.3 times as wide as the cabinet is tall, and the handle stands about a tenth of the cabinet's height above it (451 / 1.3 = 347 mm + ~35 mm)"
+    },
+    "cabinet_depth": {
+      "value": 0.381,
+      "object": "*",
+      "measure": "y",
+      "source": "si_nmah_706163",
+      "quote": "overall: 15 in x 15 in x 17 3/4 in",
+      "note": "the other 15 in, taken as overall depth from the knobs' fronts to the back cover; the KV-1310E's 380 mm agrees",
+      "also": [
+        {
+          "source": "radiomuseum_kv1310e",
+          "quote": "Dimensions (WHD) 470 x 320 x 380 mm"
+        }
+      ]
+    }
+  },
+  "facts": {
+    "identity": {
+      "value": "Trinitron colour TV KV-1310, Sony, 1968",
+      "source": "kahaku_00063",
+      "quote": "Name (Model, etc.) Trinitoron color TV KV-1310 ... Manufacturer (Company) Sony Corporation Year Manufactured 1968"
+    },
+    "single_gun_three_beams": {
+      "value": "one electron gun, three beams side by side, crossing at the centre of one common focus lens; an aperture grille instead of a shadow mask",
+      "source": "kahaku_00063",
+      "quote": "Sony Corporation used a single-electron-gun-three-beam system and replaced the shadow mask with an aperture grille ... even when three beams cross over at a center of main lens of single electron gun, each beam shows a good focus on the phosphor screen",
+      "also": [
+        {
+          "source": "us3514663",
+          "quote": "a single electron gun emits a plurality of electron beams ... the beams are made to cross each other or intersect substantially at the optical center of electrostatic focusing lens common to all of the beams"
+        },
+        {
+          "source": "belt_1972",
+          "quote": "The Trinitron emits three beams, one for each primary color, but from only one electron gun ... The beams in a Trinitron are side-by-side"
+        }
+      ]
+    },
+    "cathodes": {
+      "value": "three separate cathodes; grid 1 common to all three (9- and 12-inch tubes)",
+      "source": "belt_1972",
+      "quote": "In early Trinitrons - the 9- and 12-inch - only the cathodes are separate. Grid 1 is common to all three cathodes"
+    },
+    "beam_paths": {
+      "value": "the red and blue beams bend in, cross and fan out; the green beam runs straight; convergence plates steer the outer two back to cross again at the grille",
+      "source": "belt_1972",
+      "quote": "the red and blue beams bend, cross, and aim outward, while the green beam remains straight. As they pass between the convergence plates, the red and blue beams are directed back toward the center axis"
+    },
+    "convergence": {
+      "value": "electrostatic convergence plates in the neck, four neck magnets for static convergence, no convergence yoke",
+      "source": "belt_1972",
+      "quote": "Special plates converge Trinitron beams electrostatically ... Once mechanical (static) convergence is adjusted with four neck magnets"
+    },
+    "grille_and_phosphor": {
+      "value": "a grille of vertical slots; phosphor in narrow vertical stripes",
+      "source": "belt_1972",
+      "quote": "The Trinitron phosphor screen is deposited in narrow vertical stripes instead of tiny dots. (2) The mask behind the Trinitron phosphor is a grille of vertical slots"
+    },
+    "solid_state": {
+      "value": "transistor chassis: the picture tube is the set's vacuum tube",
+      "source": "kahaku_00063",
+      "quote": "front panel label, read on the record's photo: \"SOLID STATE | TRINITRON COLOR\"",
+      "also": [
+        {
+          "source": "radiomuseum_kv1310e",
+          "quote": "Number of Tubes 1 ... Semiconductors present",
+          "note": "the KV-1310E"
+        },
+        {
+          "source": "kv7010ua_sm",
+          "quote": "49 transistors, 32 diodes, 1 tube and 3 thermistors",
+          "note": "the 7-inch KV-7010UA of 1968"
+        }
+      ]
+    },
+    "front_layout": {
+      "value": "walnut-grain wooden box with a black carry handle on top; a silver trim frame round the front; the screen in a black bezel on the left with a SONY plate under it; four knobs in a row below the screen; on the right a perforated speaker panel, a TRINITRON badge with red, green and blue bars, a COLOR plate and a rotary channel dial; PULL ON/VOL knob and two jacks at the bottom right; \"SOLID STATE | TRINITRON COLOR\" along the bottom; small feet",
+      "source": "kahaku_00063",
+      "quote": "read on the record's photo (three-quarter view from front left)"
+    },
+    "aperture_grille": {
+      "value": {
+        "material": "mild steel sheet with etched vertical slits, stretched in a steel frame",
+        "sheet_thickness_small_tubes": 0.0001,
+        "pitch_small_tubes": [
+          0.0005,
+          0.0006
+        ],
+        "centre_transmission": 0.2
+      },
+      "source": "ohkoshi_1973",
+      "quote": "薄軟鋼板にエッチングで縦縞状の開口を作り,これを鋼枠に適当な張力を持たせた状態で架張したものである.軟鋼板は小型で0.1mm,大型で0.13mm ... グリルのピッチは小型で0.5〜0.6mm,大型で0.8mm前後であり,電子透過率は中心で20%",
+      "note": "1973 figures for Trinitron tubes in general ('small' sizes), not stated for the 1968 KV-1310 tube"
+    },
+    "grille_dampers": {
+      "value": "fine wires stretched across the strips as vibration dampers; the frame's top and bottom edges L-section, held apart by two steel members",
+      "source": "ohkoshi_1973",
+      "quote": "各条に直交して振動のダンパーとしての細線を適当な張力で張って押えている ... 上下の辺はL形断面を有し ... 2本の鋼材eで支える構造である"
+    },
+    "face_shape": {
+      "value": "cylindrical: straight top to bottom, curved side to side",
+      "source": "ohkoshi_1973",
+      "quote": "パネルは螢光面のY軸が直線に近く,X軸は適当なRを持った内面で構成され,円筒面として構成されたアパチャーグリルに対し"
+    },
+    "focus_voltage": {
+      "value": "4-5 kV on the unipotential focus electrode; convergence plates' outer plates 0.4-1.5 kV below the gun's high voltage",
+      "source": "ohkoshi_1973",
+      "quote": "ユニポテンシャルのフォーカス電極に中電圧の4〜5kVを印加する ... 偏向板の両外側の極板に電子銃の高圧電源よりも0.4〜1.5kV低い電圧を印加して",
+      "also": [
+        {
+          "source": "belt_1972",
+          "quote": "Only a few hundred volts is needed.",
+          "note": "conflicts: Belt writes of a few hundred volts for focus"
+        }
+      ]
+    },
+    "boards_kv7010ua": {
+      "value": [
+        "SD signal-deflection",
+        "CV chroma-video output",
+        "power",
+        "RV voltage regulator",
+        "N tube socket",
+        "convergence"
+      ],
+      "source": "kv7010ua_sm",
+      "quote": "SIGNAL- DEFLECTION BOARD \"SD\" ... Chroma and Video Circuit Board \"CV\" ... POWER BOARD ... VOLTAGE REGULATOR BOARD ... N Circuit Board ... convergence board (OCR of the scanned manual)",
+      "note": "the 7-inch KV-7010UA of 1968: the KV-1310's chassis is built from this list as a stand-in, its layout estimated"
+    }
+  },
+  "estimates": {
+    "deflection_angle": {
+      "value": 90,
+      "unit": "degrees",
+      "source": "kv7010ua_sm",
+      "quote": "90° Deflection Trinitron System",
+      "note": "stated for the 7-inch KV-7010UA of 1968, not the KV-1310: a stand-in until the 12-inch tube's figure is found"
+    },
+    "sleeve_depth": {
+      "value": 0.29,
+      "source": "commons_kv1320ub_back",
+      "quote": "estimated: the sibling KV-1320UB's back shows an open-backed wood sleeve with a black plastic back cover standing out behind it, a raised hood over the tube's neck; the KV-1310's back is not shown in any photo found"
+    },
+    "wall": {
+      "value": 0.009,
+      "source": "kahaku_00063",
+      "quote": "estimated: the wood edge round the front reads 6-10 mm"
+    },
+    "feet": {
+      "value": 0.006,
+      "source": "kahaku_00063",
+      "quote": "estimated: small black feet show under the front corners"
+    },
+    "handle_height": {
+      "value": 0.03,
+      "source": "si_nmah_706163",
+      "quote": "estimated: 381 mm overall less 345 mm cabinet and 6 mm feet"
+    },
+    "panel_recess": {
+      "value": 0.008,
+      "source": "kahaku_00063",
+      "quote": "estimated: the black front panel sits behind the silver trim; the screen bezel stands forward of the panel"
+    },
+    "tube": {
+      "value": {
+        "deflection_centre_behind_face": 0.17,
+        "neck_radius": 0.0146,
+        "neck_end_behind_face": 0.32,
+        "panel_skirt": 0.035,
+        "face_radius_x": 0.55,
+        "cathode_spacing": 0.0045,
+        "grille_gap": 0.012
+      },
+      "source": "kv7010ua_sm",
+      "quote": "estimated: with the KV-7010UA's \"90° Deflection\", the deflection centre sits about half the screen's 340 mm diagonal behind the face (170 / tan 45°); neck, cathode spacing, skirt, grille gap and face radius are estimates, not found for this tube (open_questions)"
+    },
+    "chassis": {
+      "value": {
+        "speaker": [
+          0.055,
+          0.1,
+          0.03
+        ],
+        "tuner": [
+          0.05,
+          0.06,
+          0.07
+        ]
+      },
+      "source": "radiomuseum_kv1310e",
+      "quote": "estimated: an elliptical moving-coil speaker behind the grille (KV-1310E: \"Loudspeaker (moving coil) - elliptical\") and a drum VHF tuner behind the channel dial (\"Trommeltuner und UHF-Abstimmrad\"); sizes estimated to fit behind the column"
+    }
+  },
+  "materials": {
+    "walnut": {
+      "hex": "#4f4140",
+      "metallic": 0.0,
+      "roughness": 0.45,
+      "source": "kahaku_00063: top (2 spots) and right side (1 strip), mean of #423232 and #5b504e"
+    },
+    "trim_silver": {
+      "hex": "#9b8f8a",
+      "metallic": 1.0,
+      "roughness": 0.35,
+      "source": "kahaku_00063: silver trim frame, rectified front, left and top runs"
+    },
+    "panel_black": {
+      "hex": "#3d3f47",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "kahaku_00063: black front panel above the bezel and right of the column"
+    },
+    "bezel_black": {
+      "hex": "#0e0f1d",
+      "metallic": 0.0,
+      "roughness": 0.4,
+      "source": "kahaku_00063: screen bezel, left and right of the glass"
+    },
+    "screen_glass": {
+      "hex": "#7e7d8f",
+      "metallic": 0.0,
+      "roughness": 0.08,
+      "source": "kahaku_00063: the switched-off screen, centre area"
+    },
+    "speaker_grille": {
+      "hex": "#bfaea0",
+      "metallic": 0.3,
+      "roughness": 0.5,
+      "source": "kahaku_00063: perforated speaker panel"
+    },
+    "control_plate": {
+      "hex": "#c7b8af",
+      "metallic": 0.6,
+      "roughness": 0.4,
+      "source": "kahaku_00063: control plate either side of the COLOR plate"
+    },
+    "knob_red": {
+      "hex": "#a3394c",
+      "metallic": 0.0,
+      "roughness": 0.35,
+      "source": "kahaku_00063: red rings of the two left knobs and PULL ON/VOL, pixels with R more than G+90 (168 px), averaged"
+    },
+    "knob_black": {
+      "hex": "#21212a",
+      "metallic": 0.0,
+      "roughness": 0.35,
+      "source": "kahaku_00063: the two black knobs, dark pixels averaged"
+    },
+    "back_plastic": {
+      "hex": "#49494a",
+      "metallic": 0.0,
+      "roughness": 0.6,
+      "source": "commons_kv1320ub_back: back cover, two areas (the neck hood and the left panel), 58,800 px"
+    },
+    "letter_silver": {
+      "hex": "#b4b4b7",
+      "metallic": 0.6,
+      "roughness": 0.35,
+      "source": "kahaku_00063: the SONY plate's letters, brightest 15% of pixels (373 px) on the rectified front"
+    },
+    "badge_blue": {
+      "hex": "#799d9d",
+      "metallic": 0.0,
+      "roughness": 0.4,
+      "source": "kahaku_00063: TRINITRON badge, left bar, rows 349-356 px of the rectified front"
+    },
+    "badge_red": {
+      "hex": "#c86670",
+      "metallic": 0.0,
+      "roughness": 0.4,
+      "source": "kahaku_00063: TRINITRON badge, middle bar, same rows"
+    },
+    "badge_green": {
+      "hex": "#739a68",
+      "metallic": 0.0,
+      "roughness": 0.4,
+      "source": "kahaku_00063: TRINITRON badge, right bar, same rows"
+    },
+    "tube_glass": {
+      "hex": "#8a8f8c",
+      "metallic": 0.0,
+      "roughness": 0.1,
+      "alpha": 0.35,
+      "source": "ohkoshi_1973: the bulb is glass (ガラスバルブ); colour and see-through estimated, so the gun shows in the Internal view"
+    },
+    "grille_steel": {
+      "hex": "#6e6f72",
+      "metallic": 1.0,
+      "roughness": 0.45,
+      "source": "ohkoshi_1973: mild steel sheet and steel frame (軟鋼板, 鋼枠); colour estimated"
+    },
+    "gun_metal": {
+      "hex": "#a3a6aa",
+      "metallic": 1.0,
+      "roughness": 0.35,
+      "source": "us3514663: the gun's electrodes are metal; colour estimated"
+    },
+    "yoke_copper": {
+      "hex": "#b06a3b",
+      "metallic": 1.0,
+      "roughness": 0.4,
+      "source": "ohkoshi_1973: the deflection yoke's windings (図8 偏向ヨーク); copper colour estimated"
+    },
+    "beam_red": {
+      "hex": "#ff3030",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "alpha": 0.8,
+      "source": "belt_1972: \"three beams, one for each primary color\"; drawn in its colour (a convention, beams are invisible)"
+    },
+    "beam_green": {
+      "hex": "#30ff50",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "alpha": 0.8,
+      "source": "belt_1972: as beam_red"
+    },
+    "beam_blue": {
+      "hex": "#3070ff",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "alpha": 0.8,
+      "source": "belt_1972: as beam_red"
+    },
+    "pcb": {
+      "hex": "#9a7a4a",
+      "metallic": 0.0,
+      "roughness": 0.6,
+      "source": "kv7010ua_sm: printed circuit boards (the manual's board list); paper-phenolic colour estimated"
+    },
+    "capacitor": {
+      "hex": "#2f4f7a",
+      "metallic": 0.0,
+      "roughness": 0.4,
+      "source": "kv7010ua_sm: electrolytic capacitors on the boards; sleeve colour estimated"
+    },
+    "resistor": {
+      "hex": "#c8b48a",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "kv7010ua_sm: resistors on the boards; body colour estimated"
+    },
+    "speaker_cone": {
+      "hex": "#3a3530",
+      "metallic": 0.0,
+      "roughness": 0.8,
+      "source": "radiomuseum_kv1310e: \"Loudspeaker (moving coil) - elliptical\"; paper cone colour estimated"
+    }
+  },
+  "open_questions": [
+    "Axes of the Smithsonian's 15 x 15 x 17 3/4 in: read here as height over the handle, depth and width (fits the kahaku photo's proportions). A front and a side photo of a KV-1310 would settle it; the cabinet heights of the KV-1310E (320 mm) and KV-1320UB (337 mm) are without handles and are later cabinets.",
+    "Screen size: 12-inch is what the sources say for the first sets (Science Museum: \"This initial 12-inch model\"; Belt: \"the 9- and 12-inch\"), but no source gives the KV-1310's tube type, its diagonal, neck diameter or length. The KV-1310E has a 330AB22 (\"13\\\" (sichtbar 30,5 cm)\"), the Science Museum's sectioned 1971 tube is a 330CB22. Until found, the tube is sized from the photo's screen opening and these figures stay estimates.",
+    "Aperture grille pitch, strip width, frame and any damper wires; cathode spacing and focus lens size: none found for the 1968 tube. The IEEE paper (Yoshida, Ohgoshi, Miyaoka, \"The 'Trinitron' - A New Color Tube\", IEEE Trans. BTR-14, July 1968) likely has them but wasn't obtained. Belt (1972) has the gun's layout, not its sizes.",
+    "Chassis layout (boards, tuner, flyback, power supply): no KV-1310 manual or interior photo found. The KV-1310's chassis would be built from the 1968 KV-7010UA manual's board list (SD, CV, N, P, RV) as a stand-in, marked as such; whether that is acceptable is David's call.",
+    "Finishes (walnut grain, trim, bezel, knob colours): to be sampled from a photo. The only KV-1310 photo is kahaku_00063, which may not be reproduced; sampling colours from it is measuring, but no texture can be taken from it. A wood-grain texture would have to be made, not copied.",
+    "Photo licence: no openly licensed photo of a KV-1310 was found. The Commons photos are of the KV-1320UB (CC BY 4.0) and a 13-inch European set in Milan (CC BY-SA 4.0), both with different front panels.",
+    "The back: no KV-1310 back view found; the open wood sleeve and black plastic back cover follow the sibling KV-1320UB (Commons photo, CC BY 4.0), as estimates.",
+    "Inside finishes (bulb glass, grille steel, gun metal, yoke copper) are estimated colours: no photo of a 1968 tube's inside found. The Science Museum's sectioned 1971 tube (co34468) photos are CC BY-NC-SA and weren't used.",
+    "Chassis layout: the boards are the KV-7010UA's list (SD, CV, power, RV, N, convergence), placed where they fit round the tube (SD under the tube, CV, power and RV upright behind the column, flyback near the anode); their positions and parts are estimates."
+  ],
+  "budget": {
+    "triangles": 50000,
+    "glb_bytes": 1500000
+  },
+  "from_photos": {
+    "note": "kahaku_00063: front face rectified by its four corners to 451 mm wide (2 px/mm), positions in mm from the front's top-left corner (u right, v down); each is read to about +-2 mm, more on the rectification's far side (the photo is a three-quarter view)",
+    "front_height": {
+      "value": 345,
+      "source": "kahaku_00063",
+      "quote": "the rectified front is 1.31 times as wide as tall (552 x 419 px across the photo's corners, 1% width foreshortening): 451 / 1.31"
+    },
+    "layout": {
+      "value": {
+        "trim_outer": [
+          7,
+          11,
+          442,
+          335
+        ],
+        "trim_width": 3,
+        "bezel": [
+          16.5,
+          42.5,
+          328.5,
+          303
+        ],
+        "screen_opening": [
+          50,
+          62.5,
+          306,
+          277.5
+        ],
+        "screen_corner_r": 14,
+        "sony_plate": [
+          136,
+          286,
+          201,
+          297
+        ],
+        "column": [
+          340,
+          35,
+          417.5,
+          300
+        ],
+        "speaker": [
+          344,
+          39,
+          412.5,
+          167.5
+        ],
+        "badge": [
+          344,
+          167.5,
+          412.5,
+          180
+        ],
+        "control_plate": [
+          344,
+          180,
+          412.5,
+          297.5
+        ],
+        "color_plate": [
+          373.5,
+          192.5,
+          383.5,
+          207.5
+        ],
+        "dial_centre": [
+          378.5,
+          260
+        ],
+        "dial_r": 22,
+        "knobs_u": [
+          45,
+          76,
+          112.5,
+          145
+        ],
+        "knob_v": 320,
+        "knob_d": 15,
+        "power_knob": [
+          378.5,
+          320
+        ],
+        "jacks": [
+          [
+            415,
+            311
+          ],
+          [
+            415,
+            322.5
+          ]
+        ],
+        "front_text": [
+          209,
+          310,
+          340,
+          320
+        ],
+        "front_text_box": [
+          205,
+          311,
+          345,
+          320
+        ]
+      },
+      "source": "kahaku_00063",
+      "quote": "measured on the rectified front (2 px/mm)"
+    },
+    "handle": {
+      "value": {
+        "length": 212,
+        "from_front": 0.35
+      },
+      "source": "kahaku_00063",
+      "quote": "handle spans 0.47 of the front's width; its posts stand about a third of the way back on the top"
+    },
+    "speaker_holes": {
+      "value": {
+        "pitch": 0.0018,
+        "hole": 0.0009
+      },
+      "source": "kahaku_00063",
+      "quote": "about 36 hole columns across 64 mm of the speaker panel (square grid); hole size by eye"
+    }
+  }
+}

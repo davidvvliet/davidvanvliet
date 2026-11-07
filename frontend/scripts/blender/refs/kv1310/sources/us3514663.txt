@@ -1,0 +1,1066 @@
+US3514663A - Cathode ray tube
+- Google Patents
+
+Cathode ray tube
+
+Download PDF
+
+Info
+
+Publication number
+US3514663A
+
+US3514663A
+US829292A
+US3514663DA
+US3514663A
+US 3514663 A
+US3514663 A
+US 3514663A
+US 829292 A
+US829292 A
+US 829292A
+US 3514663D A
+US3514663D A
+US 3514663DA
+US 3514663 A
+US3514663 A
+US 3514663A
+
+Authority
+US
+United States
+
+Prior art keywords
+beams
+screen
+electron
+gun
+color
+
+Prior art date
+1967-01-14
+
+Legal status (The legal status is an assumption and is not a legal conclusion. Google has not performed a legal analysis and makes no representation as to the accuracy of the status listed.)
+
+Expired - Lifetime
+
+Application number
+US829292A
+
+Inventor
+Susumu Yoshida
+Akio Ohgoshi
+Senri Miyaoka
+Yoshiharu Katagiri
+
+Current Assignee (The listed assignees may be inaccurate. Google has not performed a legal analysis and makes no representation or warranty as to the accuracy of the list.)
+
+Sony Corp
+
+Original Assignee
+Sony Corp
+
+Priority date (The priority date is an assumption and is not a legal conclusion. Google has not performed a legal analysis and makes no representation as to the accuracy of the date listed.)
+1967-01-14
+
+Filing date
+1969-06-02
+
+Publication date
+1970-05-26
+
+1969-06-02
+Application filed by Sony Corp
+filed
+Critical
+
+Sony Corp
+
+1970-05-26
+Application granted
+granted
+Critical
+
+1970-05-26
+Publication of US3514663A
+publication
+Critical
+
+patent/US3514663A/en
+
+1987-05-26
+Anticipated expiration
+legal-status
+Critical
+
+Status
+Expired - Lifetime
+legal-status
+Critical
+Current
+
+Links
+
+USPTO
+
+USPTO PatentCenter
+
+USPTO Assignment
+
+Espacenet
+
+Global Dossier
+
+Discuss
+
+Images
+
+Classifications
+
+H—ELECTRICITY
+
+H01—ELECTRIC ELEMENTS
+
+H01J—ELECTRIC DISCHARGE TUBES OR DISCHARGE LAMPS
+
+H01J29/00—Details of cathode-ray tubes or of electron-beam tubes of the types covered by group H01J31/00
+
+H01J29/46—Arrangements of electrodes and associated parts for generating or controlling the ray or beam, e.g. electron-optical arrangement
+
+H01J29/48—Electron guns
+
+H01J29/50—Electron guns two or more guns in a single vacuum space, e.g. for plural-ray tube
+
+H01J29/503—Three or more guns, the axes of which lay in a common plane
+
+H—ELECTRICITY
+
+H01—ELECTRIC ELEMENTS
+
+H01J—ELECTRIC DISCHARGE TUBES OR DISCHARGE LAMPS
+
+H01J29/00—Details of cathode-ray tubes or of electron-beam tubes of the types covered by group H01J31/00
+
+H01J29/46—Arrangements of electrodes and associated parts for generating or controlling the ray or beam, e.g. electron-optical arrangement
+
+H01J29/48—Electron guns
+
+H01J29/51—Arrangements for controlling convergence of a plurality of beams by means of electric field only
+
+H—ELECTRICITY
+
+H01—ELECTRIC ELEMENTS
+
+H01J—ELECTRIC DISCHARGE TUBES OR DISCHARGE LAMPS
+
+H01J31/00—Cathode ray tubes; Electron beam tubes
+
+H01J31/08—Cathode ray tubes; Electron beam tubes having a screen on or from which an image or pattern is formed, picked up, converted, or stored
+
+H01J31/10—Image or pattern display tubes, i.e. having electrical input and optical output; Flying-spot tubes for scanning purposes
+
+H01J31/20—Image or pattern display tubes, i.e. having electrical input and optical output; Flying-spot tubes for scanning purposes for displaying images or patterns in two or more colours
+
+H01J31/201—Image or pattern display tubes, i.e. having electrical input and optical output; Flying-spot tubes for scanning purposes for displaying images or patterns in two or more colours using a colour-selection electrode
+
+H01J31/203—Image or pattern display tubes, i.e. having electrical input and optical output; Flying-spot tubes for scanning purposes for displaying images or patterns in two or more colours using a colour-selection electrode with more than one electron beam
+
+H01J31/206—Image or pattern display tubes, i.e. having electrical input and optical output; Flying-spot tubes for scanning purposes for displaying images or patterns in two or more colours using a colour-selection electrode with more than one electron beam with three coplanar electron beams
+
+H—ELECTRICITY
+
+H04—ELECTRIC COMMUNICATION TECHNIQUE
+
+H04N—PICTORIAL COMMUNICATION, e.g. TELEVISION
+
+H04N9/00—Details of colour television systems
+
+H04N9/12—Picture reproducers
+
+H04N9/16—Picture reproducers using cathode ray tubes
+
+H04N9/18—Picture reproducers using cathode ray tubes using separate electron beams for the primary colour signals
+
+H04N9/20—Picture reproducers using cathode ray tubes using separate electron beams for the primary colour signals with more than one beam in a tube
+
+Definitions
+
+u g m 2 D 2 a
+a Q 8 E u INVENTORS SUSUMU YOSHIDA AKIO ouaosm SENRI MIYAOKA YOSHIHARU KATAGIRI.
+
+a cathode ray tube of the type in which a single electron gun emits a plurality of electron beams to produce a color picture
+for example, as in color television receiver
+
+the beams
+are made to cross each other or intersect substantially at the optical center of electrostatic focusing lens common to all of the beams and by which the latter are focused'on the color phosphor screen of the tube while avoiding the introduction of coma and/or spherical aberration by reason of such focusing of the beams, and the video signals modulating the plural beams have time differences imparted thereto to compensate for the spacing of the beam landing spots on the screen arising from the divergence of the beams from the focusing lens, whereby to achieve correspondence between the pictures produced on the screen by the respective beams.
+
+This invention
+generally relates to cathode ray tubes, and more particularly is directed to improvements in color cathode ray tubes of the type in which a single electron gun is provided for emitting a plurality of electron beams to produce a color picture, for example, as in color television receivers.
+
+Existing color picture tubes
+are usually of the multigun type and include three independent electron guns emitting respective electron beams which are modulated by corresponding oolor signals and acted upon by a grid system so as to be focused on a collector or electronreceiving screen which may be simply a phosphor or luminescent screen or a phosphor screen with a perforated electrode or shadow mask in front thereof.
+
+the three electron guns
+have to be aligned with respect to each other so that the emitted electron beams converge at the electron-receiving screen.
+
+Such color picture tubes of the multi-gun type
+are disadvantageous in that it is diflicult to obtain and maintain the precise alignment of the three electron guns required for the convergence of their beams on the electron-receiving screen and any misconvergence of the beams causes deterioration of the quality and resolution of the color picture that results. Further, when using three independent electron guns to produce the beams, the color picture tube is necessarily costly and, by reason of the space required for the three guns, the possible miniaturization of the tube is correspondingly limited.
+
+cathode ray tube of the single-gun, plural-beam type
+which is free of the above mentioned disadvantages characteristic of tubes of that type as previously proposed, and which is particularly suited to serve as a color picture tube for producing color pictures of high resolution and brightness.
+
+Another object of this invention
+is to provide a cathode ray tube, particularly a color picture tube, which is of the single-gun, plural-beam type and can be relatively easily manufactured even when miniaturized to a considerable degree.
+
+a further object
+is to provide a single-gun, pluralbeam type color picture tube, as aforesaid and in which the neck portion of the tube may be made relatively short.
+
+Still another object
+is to provide a single-gun, pluralbeam color picture tube in which high utilization is made of the electron beams, that is, there is minimized loss of the beam energy.
+
+a still further object
+isto provide a single-gun, pluralbeam color picture tube, as aforesaid, which makes it possible to minimize the power required to deflect the beams for scanning of the color phosphor screen.
+
+a cathode ray tube adapted for use as the picture tube of a. color television receiver
+has a single electron gun including means by which a plurality of electron beams are made to converge or intersect substantially at the optical center of a lens-like, electrostatic focusing means which is common to all the beams and focuses the beams on the color phosphor screen, whereby the introduction, by the focusing means, of spherical aberration and/or coma is substantially avoided, the beams emerging from the focusing means along divergent paths are allowed to continue along such paths to land at spaced locations or spots on the screen, and the video signals modulating the respective electron beams have suitable time differences or relative delays imparted thereto to compensate for the spacing of the beam landing spots and thus to achieve correspondence between the pictures produced on the screen by the respective beams.
+
+the length of the single electron gun
+can be relatively reduced to permit its accommodation in a tube with a desirably short neck portion.
+
+the deflection yoke by which the beams are made to scan the screen
+may be positioned in the vicinity of the axial location where the beams are made to intersect, that is, substantially at the optical center of the lens-like focusing means, whereby the horizontal and vertical deflection fields produced by such yoke may be of relatively small size, measured normal to the tube axis, for minimizing the power required to generate the deflection fields.
+
+FIG. 1
+is a diagrammatic view illustrating the optical 3 equivalent or analogy of a three electron gun system, as in a conventional color cathode ray tube;
+
+FIGS. 2 and 3
+are similar diagrammatic views of the optical equivalent or analogy of a single-gun, plural-beam system, as previously proposed;
+
+FIG. 4
+is a diagrammatic vieW of the optical equivalent or analogy of still another single-gun, plural-beam system as previously proposed;
+
+FIG. 5
+is a similar diagrammatic view showing the optical equivalent of an electron gun according to an embodiment of this invention.
+
+FIG. 6
+is a view similar to that of FIG. 5, but illustrating an electron gun according to a second embodiment of this invention
+
+FIG. 7
+is a schematic longitudinal sectional view of an electron gun in accordance with the embodiment of this invention represented by the optical analogy of FIG. 5;
+
+FIG. 8
+is a diagrammatic view illustrating a color picture tube having an electron gun of the type shown in FIG. 7 and the circuitry associated therewith according to this invention.
+
+FIG. 1
+shows the optical equivalent or analogy of a conventional system employing three independent electron guns A A and A
+
+three independent beam generating sources K K and K
+emitting three beams B B and B respectively, which are focused onto an electron-receiving or phosphor screen S through separate main lens system L L and L respectively.
+
+the three independent electron guns A A and A
+which need to be accommodated in the neck portion of the tube envelope obviously restrict the extent to which the diameter of the neck portion can be reduced.
+
+each electron gun
+is limited so as to permit the accommodation of the three guns in a neck portion of reasonable diameter, the outer portions of each beam necessarily pass through parts of the respective main lens system L L or L which are spaced substantially from the optical axis thereof whereby spherical aberration results with the consequence that each beam impinges on the screen S as a relatively large spot, as indicated at the right-hand side of FIG. 1, and high resolution cannot be obtained.
+
+L L or L
+which are spaced substantially from the optical axis thereof whereby spherical aberration results with the consequence that each beam impinges on the screen S as a relatively large spot, as indicated at the right-hand side of FIG. 1, and high resolution cannot be obtained.
+
+FIG. 2
+shows the optical equivalent of a conventional single-gun, triple-beam system in which the single electron gun A includes equivalent beam generating sources K K and K spaced from each other by the distances d and from which three beams B B and B are emitted in parallel to each other so as to pass through the common main lens system L and be converged by the latter on the screen S.
+
+the electron gun system of a color cathode ray tube
+is of the triple-gun type (FIG. 1) or of the singlegun, triple-beam type (FIG. 2), it is necessary that the three electron beams be converged with an angle of A0 be included between the center beam (B in the drawing) and each of the other beams so that the three beams cross or intersect each other at the position of a mask or grid provided in front of the phosphor or luminescent screen and are thus made to land or impinge on respective color dots or stripes which are adapted to produce different color light rays.
+
+the three beams B B and B
+be spaced apart from each other by the substantial distance d when they pass through the main lens L.
+
+beams B and B
+pass through portions of lens L which are spaced substantially from the axis of the lens L by the distance d, so that the beam spots on the screen S are deformed, asshown at the right-hand side of FIG. 2, due to coma as well as to spherical aberration.
+
+the focusing of the beams
+is adjusted to achieve perfect convergence at the screen S. This inevitably decreases the focusing effect imparted to each beam.
+
+the beams
+are under-focused so that the resulting beam spots are enlarged, as is apparent at the right-hand side of FIG. 2.
+
+the focusing voltage
+is adjusted to sharply focus beam B on screen S, this causes the beam spots B B and B on the screen S to be scattered, as shown on FIG. 3. Therefore, special means have to be provided to converge or superimpose the beam spots which are thus scattered.
+
+the beam spots B and B
+are deformed due to coma, as shown on the right-hand side of FIG. 3.
+
+the three beams B B and B
+could be emitted from a beam generating source K in three different or angularly displaced directions so as to be spaced apart from each other a distance d at the position of the main lens L, as illustrated on FIG. 4.
+
+the side beam spots B and B
+are blurred due to the coma, as shown at the right-hand side of FIG. 4, since the side beams pass through the main lens L at positions spaced from the'axis of the lens by the distance a.
+
+cathode ray tubes employing the single-gun, triple-beam system as previously devised or proposed
+fail to satisfactorily meet the three-beam spot focusing condition and the three-beam spot converging condition and therefore have not been put to practical use as yet.
+
+a single electron gun A
+includes equivalent beam generating sources K K and K which are located on a straight line in a plane substantially perpendicular to the axis of the electron gun and spaced apart from each other by a distance d
+
+These beam generating sources K K and K
+emit three electron beams B B and B respectively, which are refracted by means of a common auxiliary lens L so as to be converged substantially at the optical center of a main lens L.
+
+the three beams B B and B
+are made to intersect or cross each other substantially at the optical center of the main lens L and then emerge from the lens L in divergent directions.
+
+FIG. 6
+shows the optical equivalent of a cathode ray tube according to a second embodiment of this invention in which a single electron gun A includes beam generating sources K K and K arranged on an arcuate surface having its center substantially at the optical center of a main lens L, and being spaced from each other by 5 the straight distance d
+
+the auxiliary lens L of FIG. 5
+is omitted, as the arrangement of the sources K K and K, on the described arcuate surface causes the three beams B B and B to intersect or cross each other substantially at the optical center of the main lens L, as in the embodiment shown on FIG. 3.
+
+the beam generating sources K K and K in FIGS. 5 and 6
+are spaced apart from each other by a distance d or d along a straight line, it is possible to arrange these beam generating sources at the vertices of an equilateral triangle.
+
+the three beams B B and B
+after intersecting or crossing each other at the optical center of the main lens L, continue along divergent paths so as to strike the screen at three different positions spaced from each other by a predetermined distance.
+
+the beam spots
+are spaced apart on screen S, as shown, means are provided according: to this invention, as hereinafter described, to input time difference corresponding to the three beam spot positions to the video signals modulating the three beams, thereby achieving correspondence between the three pictures produced on the phosphor screen by the three beams.
+
+a cathode K
+constitutes the electron beam generating sources K K and K
+
+a first control grid G
+which comprises three grid members G and G supported in close, opposing relationship to the electron-emitting end surface of cathode K.
+
+the three grid members G G and G
+which are suitably insulated from each other have apertures g g and g respectively, ar-
+
+a common grid G
+is mounted in opposing, adjacent relationship to the grid G and has three, apertures in alignment with the apertures g g and g respectively.
+
+the grid G
+may be cup-shaped to include a disk 1 having the apertures therein at spaced locations on a diametrical line and a cylindrical side wall 2 extending from the periphery of disk 1 in the axial direction away from grid G G
+
+Arranged in order following the grid G in the direction away from control grid G
+are successive, open-ended, tubular grids or electrodes G3, G4, and G5- Electrode G includes relatively small diameter end portions 3 and 4 and a larger diameter intermediate portion 5, and is supported with its end portion 3 extending into cup-shaped grid G and spaced radially from side wall 2 of the latter.
+
+Electrode G
+includes end portions 6 and 7 of a diameter larger than that of end portions 3 and 4 of electrodes G and an intermediate portion 8 of still larger diameter, and electrode G is mounted so that end portion 4 extends into, and is spaced radially inward from end portion 6.
+
+Electrode 6;
+includes an end portion 9 of a diameter smaller than that of end portion 7 and a relatively larger diameter portion 10, and electrode G is moutned so that its end portion 9 extends into, and is spaced radially inward from end portion 7 of electrode G
+
+the several electrodes G G and G grids G G and cathode K
+are all assembled together in the above described relation by means of suitable supports 12 ,of insulating material.
+
+a voltage of to 400 v.
+is applied to the grid G (G G and G a voltage of O to 500 v. is applied to the grid 6;
+
+a voltage of 13 to 20 kv.
+is applied to the electrodes G and G and a voltage of 0 to 400 v. is applied to the electrode G with the voltage of cathode K as the reference. Therefore, the voltage distributions with respect to the grids and electrodes G to G and their lengths and diameters are substantially identical with those of a unipotential-single beam.
+
+type electron gun
+which includes a first single grid member and a second grid provided with a single aperture.
+
+an electron lens field
+is established between grid G and the end 3 of electrode G which corresponds to the auxiliary lens L' of FIG. 5, and an electron lens field corresponding to the main lens L of FIG. 5 is formed at the axial center of electrode G; by the electrodes G G and G5.
+
+the three beams B B and B emanating from the cathode K
+are made to pass through the apertures g g and g of grid members G G and G and are modulated with three different signals applied between the cathode K and the grid members G 1, G and G
+
+the beams B B and B
+pass through the common axiliary lens L which is formed mainly by the grid G and electrode G and across each other at the center of the main lens L which is constituted mainly by the electrodes G G and G
+
+the beams B B and B
+diverge, as particularly shown on FIG.
+
+a color screen S
+provided on the face plate FP of the tube T after passing through beam selecting means which may be in the form of an apertured grill or mask G
+
+the color screen S
+is comprised of suitably arranged sets of red, green and blue phosphor stripes or dots which are adapted to be selectively energized by the beams B B and B respectively.
+
+the usual horizontal and vertical deflection means, as indicated by the yoke D
+are provided for horizontally and vertically deflecting the beams B B and B simultaneously so that such beams scan with respect to screen S, as in the conventional picture tube.
+
+the three beams
+are intensity-modulated, and by reason of the scanning of the screen, the modulated beams produce respective color pictures on screen S.
+
+the red, green and blue pictures respectively produced by beams B B and B
+will be offset relative to each other in the direction, and to the extent of the spacing between the beams at the screen, assuming that, at any point in time, all beams are being modulated by respective color video signals corresponding to the same element of the composite color picture to be produced.
+
+such offsetting of the pictures
+is avoided by suitably time delaying the color video signals which modulate those beams in trailing or lagging positions considering the scanning direction of the beams.
+
+beams B B and B of the color picture tube of FIG. 8
+originate at points on a horizontal straight line, as is preferred, and if the horizontal scanning direction of the beams is as indicated by the arrow H with blanking occurring in the opposite horizontal direction, then beam B is in the foremost or advanced positions as screen S and beams B and B successively lag or trail beam B
+
+the green color video signals which modulate beam B
+will be time delayed relative to the blue color video signals modulating beam B and the red color video signals modulating beam B, will be further time delayed.
+
+the landing spot of beam B
+may be spaced 22.5 mm. from the landing spot of beam B and, similarly, the landing spot of beam B may be spaced 22.5 mm. from that of beam B
+
+the horizontal scanning time
+is 60 nsec. and the horizontal spacing between the beam landing spots is of the horizontal distance across the screen, as in the foregoing example, then the green color video signals modulating beam B are time delayed by 6 sec. with respect to the blue color video signals modulating beam B and the red color video signals modulating beam B are time delayed a further 6 .tSC., that is, a time delay of 12 uses. with respect to the blue color video signals.
+
+Such time delays
+will result in the desired correspondence of the red, green and blue pictures produced on screen S by beams B B2 and B3.
+
+conventional color television receiver circuits 13
+for example, as disclosed in McGraw-Hill Encyclopedia of Science and Technology, McGraw-Hill Book Co., New York, N.Y., vol 13, page 474, are provided to process the color television signal received by an antenna 14 and to supply the chrominance components I and Q and the luminance component M to the usual matrix circuits 15 by which the I, Q and M components are combined in the proper proportions to produce red, green and blue signals R, G and B which are applied, as by the conductors 16, 17 and 18, between grid members G11, G and G respectively, and cathode K.
+
+the blue signal B
+is transmitted, without delay, by way of conductor 18; whereas the green and red signals G and R are subjected to time delays, for example, by delay lines 19 and 20, respectively, which delay the respective signals by time increments t and 2t, that is, by 6 ,usec. and 12 sec. in the example given.
+
+Circuits 13
+further supply the usual horizontal and vertical sweep signals H and V to yoke D to cause the beams to scan screen S, with the delays imparted to the green and red signals modulating beams B and B being proportioned to the horizontal sweep time and to the spacing between the landing spots of the beams on screen S to obtain the desired correspondence of the respective pictures that are produced.
+
+beams B B and B
+are allowed to diverge from focusing lens L and are not thereafter deflected for convergence at a common spot or aperture of beam selecting means G the beam loss that would be associated with such convergence deflection is avoided and hence, high utilization of the beams is realized for enhanced brightness of the color picture.
+
+the omission of a convergence deflection device after the focusing lens L of gun A
+serves to reduce the length of the gun, and thereby makes it possible to accommodate the gun A in a desirably short neck portion N of the color picture tube T so that such tube can be installed in a cabinet of reduced depth.
+
+the omission of a convergence deflection device between focusing lens L and screen S
+makes it possible to dispose the deflection yoke D in the vicinity of the axial location where beams B B and B are made to intersect, that is substantially at the optical center of focusing lens L, as shown.
+
+he beams B B and B
+are bunched together in their passage through the deflection fields produced by yoke D so that these fields may be of relatively small size, measured normal to the tube axis, for minimizing the power required to generate the deflection fields.
+
+the bunching together of the three beams in their pasage through the deflection fields
+further ensures that such beams will be equally affected by the fields, to avoid the distortions of the picture that may result when the beams pass through spaced portions of the fields.
+
+Apparatus for the reproduction of images in color
+comprising an electron receiving screen, an electron gun having means for generating a plurality of electron beams directed toward said screen and which are made to intersect at a location between the electron beam generating means and said screen so as to have spaced apart landing spots on the screen, focusing lens means to focus said beams on the screen, said focusing lens means having an optical center and being positioned to dispose said optical center substantially at said location where the electron beams intersect, means for causing said beams to simultaneously scan said screen, means for modulating said electron beams with respective color video signals, and means imparting time differences to said color video signals with which the plurality of beams are respectively modulated so as to compensate for the spacing of said landing spots of the beams on the screen.
+
+said means for causing the beams to scan the screen
+includes deflection yoke means disposed in the vicinity of said location where the electron beams intersect and producing beam deflecting fields traversed by said beams.
+
+Apparatus according to claim 1, in which said means imparting time differences to said color video signals
+includes time delay means acting on the color video signals for modulating at least one of said beams.
+
+Landscapes
+
+Engineering & Computer Science
+(AREA)
+
+Multimedia
+(AREA)
+
+Signal Processing
+(AREA)
+
+Video Image Reproduction Devices For Color Tv Systems
+(AREA)
+
+Description
+
+y 1970 susuMu YOSHIDA ETAL 3,514,663
+
+CATHODE RAY TUBE Filed ne 2, 1969 s Sheets$heet 1 INVENTORS ATTORNEY A. FE
+
+FIG. 3.
+
+susumu vosmm AKIO onaosm SENR! MIYAOKA YOSHIHARU KATAGIRI BY 251;. 6
+
+FIG. 4.
+
+May 26, 1970 susuMu YOSHIDA ETAL 3,514,653
+
+CATHODE RAY TUBE Filed Jun 2, 1969 3 Sheets-Sheet 2 3 A A, 6; 1 kzda, .6 FIG. 6. 0' 2 I N VE N TORS SUSUMU YOSHIDA AKIO OHGOSHI SENRI M! YAOKA YOSHIHARU KA TAGIRI ATTORNEY May 26, 1970 susuMu YOSHIDA ETAL 3,
+
+CATHODE RAY TUBE Filed June 2, 1969 5 Sheets-Sheet 5 5 x Q E 3 LL 2 a: 2 G
+
+. u g m 2 D 2 a: a Q 8 E u INVENTORS SUSUMU YOSHIDA AKIO ouaosm SENRI MIYAOKA YOSHIHARU KATAGIRI.
+
+BY 4 5:. 5; e
+
+ATTORNEY US. Cl. 31513 4 Claims ABSTRACT OF THE DISCLOSURE In a cathode ray tube of the type in which a single electron gun emits a plurality of electron beams to produce a color picture, for example, as in color television receiver, the beams are made to cross each other or intersect substantially at the optical center of electrostatic focusing lens common to all of the beams and by which the latter are focused'on the color phosphor screen of the tube while avoiding the introduction of coma and/or spherical aberration by reason of such focusing of the beams, and the video signals modulating the plural beams have time differences imparted thereto to compensate for the spacing of the beam landing spots on the screen arising from the divergence of the beams from the focusing lens, whereby to achieve correspondence between the pictures produced on the screen by the respective beams.
+
+This application is a continuation-in-part of the copending application Ser. No. 697,414, filed Jan. 12, 1968, and issuing June 3, 1969, as US. Patent No. 3,448,316.
+
+This invention generally relates to cathode ray tubes, and more particularly is directed to improvements in color cathode ray tubes of the type in which a single electron gun is provided for emitting a plurality of electron beams to produce a color picture, for example, as in color television receivers.
+
+Existing color picture tubes are usually of the multigun type and include three independent electron guns emitting respective electron beams which are modulated by corresponding oolor signals and acted upon by a grid system so as to be focused on a collector or electronreceiving screen which may be simply a phosphor or luminescent screen or a phosphor screen with a perforated electrode or shadow mask in front thereof. The three electron guns have to be aligned with respect to each other so that the emitted electron beams converge at the electron-receiving screen. Such color picture tubes of the multi-gun type are disadvantageous in that it is diflicult to obtain and maintain the precise alignment of the three electron guns required for the convergence of their beams on the electron-receiving screen and any misconvergence of the beams causes deterioration of the quality and resolution of the color picture that results. Further, when using three independent electron guns to produce the beams, the color picture tube is necessarily costly and, by reason of the space required for the three guns, the possible miniaturization of the tube is correspondingly limited.
+
+In an attempt to avoid the above mentioned disadvantages and limitations of the existing color picture tubes of the multi-gun type, it has been proposed to provide a color picture tube of the single-gun, plural-beam type in which a single electron gun emits three beams from either three respective cathodes or a single cathode, and the three electron beams are passed through a lens-like focusing system, so as to converge at the electron-receiving ,nited States Patent 0 ice screen. However, in the tubes of the single-gun, pluralbeam type heretofore proposed, no more than one of the electron beams passes through the lens-like focusing system at the optical axis of the latter, and the beams that pass through the focusing system at a distance from the optical axis are subject to coma and spherical aberration. By reason of such coma and spherical aberration and the consequent deterioration of the quality of the color picture that results, color picture tubes of the single-gun, plural-type have not enjoyed any widespread use.
+
+Accordingly, it is an object of this invention to provide a cathode ray tube of the single-gun, plural-beam type which is free of the above mentioned disadvantages characteristic of tubes of that type as previously proposed, and which is particularly suited to serve as a color picture tube for producing color pictures of high resolution and brightness.
+
+Another object of this invention is to provide a cathode ray tube, particularly a color picture tube, which is of the single-gun, plural-beam type and can be relatively easily manufactured even when miniaturized to a considerable degree.
+
+A further object is to provide a single-gun, pluralbeam type color picture tube, as aforesaid and in which the neck portion of the tube may be made relatively short.
+
+Still another object is to provide a single-gun, pluralbeam color picture tube in which high utilization is made of the electron beams, that is, there is minimized loss of the beam energy.
+
+A still further object isto provide a single-gun, pluralbeam color picture tube, as aforesaid, which makes it possible to minimize the power required to deflect the beams for scanning of the color phosphor screen.
+
+In accordance with an aspect of this invention, a cathode ray tube adapted for use as the picture tube of a. color television receiver has a single electron gun including means by which a plurality of electron beams are made to converge or intersect substantially at the optical center of a lens-like, electrostatic focusing means which is common to all the beams and focuses the beams on the color phosphor screen, whereby the introduction, by the focusing means, of spherical aberration and/or coma is substantially avoided, the beams emerging from the focusing means along divergent paths are allowed to continue along such paths to land at spaced locations or spots on the screen, and the video signals modulating the respective electron beams have suitable time differences or relative delays imparted thereto to compensate for the spacing of the beam landing spots and thus to achieve correspondence between the pictures produced on the screen by the respective beams.
+
+Since no convergence deflection means need be provided to act on the beams emerging from the focusing means along divergent paths and cause convergence of all beams at a common spot on the screen, the length of the single electron gun can be relatively reduced to permit its accommodation in a tube with a desirably short neck portion. Further, by reason of this feature, the deflection yoke by which the beams are made to scan the screen may be positioned in the vicinity of the axial location where the beams are made to intersect, that is, substantially at the optical center of the lens-like focusing means, whereby the horizontal and vertical deflection fields produced by such yoke may be of relatively small size, measured normal to the tube axis, for minimizing the power required to generate the deflection fields.
+
+The above, and other objects, features and advantages of this invention, will become apparent from the following detailed description of illustrative embodiments which is to be read in conjunction with the accompanying drawings, in which:
+
+FIG. 1 is a diagrammatic view illustrating the optical 3 equivalent or analogy of a three electron gun system, as in a conventional color cathode ray tube;
+
+FIGS. 2 and 3 are similar diagrammatic views of the optical equivalent or analogy of a single-gun, plural-beam system, as previously proposed;
+
+FIG. 4 is a diagrammatic vieW of the optical equivalent or analogy of still another single-gun, plural-beam system as previously proposed;
+
+FIG. 5 is a similar diagrammatic view showing the optical equivalent of an electron gun according to an embodiment of this invention;
+
+FIG. 6 is a view similar to that of FIG. 5, but illustrating an electron gun according to a second embodiment of this invention;
+
+FIG. 7 is a schematic longitudinal sectional view of an electron gun in accordance with the embodiment of this invention represented by the optical analogy of FIG. 5; and
+
+FIG. 8 is a diagrammatic view illustrating a color picture tube having an electron gun of the type shown in FIG. 7 and the circuitry associated therewith according to this invention.
+
+In order that the electron gun for a cathode ray tube according to the present invention may be better understood, the principles and features of conventional electron guns employing the triple-gun system and the single-gun, triple-beam system, respectively, will first be described in detail with reference to FIGS. 1 to 4.
+
+FIG. 1 shows the optical equivalent or analogy of a conventional system employing three independent electron guns A A and A In such system, there are provided three independent beam generating sources K K and K emitting three beams B B and B respectively, Which are focused onto an electron-receiving or phosphor screen S through separate main lens system L L and L respectively. With such an arrangement, however, the three independent electron guns A A and A which need to be accommodated in the neck portion of the tube envelope obviously restrict the extent to which the diameter of the neck portion can be reduced. Further, if the effective diameter of each electron gun is limited so as to permit the accommodation of the three guns in a neck portion of reasonable diameter, the outer portions of each beam necessarily pass through parts of the respective main lens system L L or L which are spaced substantially from the optical axis thereof whereby spherical aberration results with the consequence that each beam impinges on the screen S as a relatively large spot, as indicated at the right-hand side of FIG. 1, and high resolution cannot be obtained. It will also be apparent that, in using three independent electron guns, it is inherent that difliculties will be encountered in obtaining and maintaining the precise alignment of the guns necessary for converging the beams B B and B at screen S.
+
+FIG. 2 shows the optical equivalent of a conventional single-gun, triple-beam system in which the single electron gun A includes equivalent beam generating sources K K and K spaced from each other by the distances d and from which three beams B B and B are emitted in parallel to each other so as to pass through the common main lens system L and be converged by the latter on the screen S.
+
+Whether the electron gun system of a color cathode ray tube is of the triple-gun type (FIG. 1) or of the singlegun, triple-beam type (FIG. 2), it is necessary that the three electron beams be converged with an angle of A0 be included between the center beam (B in the drawing) and each of the other beams so that the three beams cross or intersect each other at the position of a mask or grid provided in front of the phosphor or luminescent screen and are thus made to land or impinge on respective color dots or stripes which are adapted to produce different color light rays.
+
+In order to meet the foregoing requirements with respect to the angle A0 in the single gun, triple-beam sys tern, it is essential that the three beams B B and B be spaced apart from each other by the substantial distance d when they pass through the main lens L. Thus, beams B and B pass through portions of lens L which are spaced substantially from the axis of the lens L by the distance d, so that the beam spots on the screen S are deformed, asshown at the right-hand side of FIG. 2, due to coma as well as to spherical aberration. In the case shown on FIG. 2, the focusing of the beams is adjusted to achieve perfect convergence at the screen S. This inevitably decreases the focusing effect imparted to each beam. Thus, the beams are under-focused so that the resulting beam spots are enlarged, as is apparent at the right-hand side of FIG. 2. On the other hand, if the focusing voltage is adjusted to sharply focus beam B on screen S, this causes the beam spots B B and B on the screen S to be scattered, as shown on FIG. 3. Therefore, special means have to be provided to converge or superimpose the beam spots which are thus scattered. However, even in that case, the beam spots B and B are deformed due to coma, as shown on the right-hand side of FIG. 3.
+
+In an attempt to satisfy the contradictory conditions of focusing the three beams on screen S and of converging the three beams at the screen, it is conceivable that the three beams B B and B could be emitted from a beam generating source K in three different or angularly displaced directions so as to be spaced apart from each other a distance d at the position of the main lens L, as illustrated on FIG. 4. Although the above two conditions can thus be simultaneously satisfied with only negligible spherical aberration, nevertheless the side beam spots B and B are blurred due to the coma, as shown at the right-hand side of FIG. 4, since the side beams pass through the main lens L at positions spaced from the'axis of the lens by the distance a.
+
+It will be seen from the above that cathode ray tubes employing the single-gun, triple-beam system as previously devised or proposed fail to satisfactorily meet the three-beam spot focusing condition and the three-beam spot converging condition and therefore have not been put to practical use as yet.
+
+In the following detailed description of illustartive embodiments of single-gun, plural-beam systems according to this invention, particular reference is made to the use thereof in color picture tubes, but it is to be understood that the described single-gun, plural-beam systems according to this invention can be applied to any other cathode ray tubes in which plural electron beams are required.
+
+In the system according to this invention, as illustrated by its optical equivalent or analogy on FIG. 5, a single electron gun A includes equivalent beam generating sources K K and K which are located on a straight line in a plane substantially perpendicular to the axis of the electron gun and spaced apart from each other by a distance d These beam generating sources K K and K emit three electron beams B B and B respectively, which are refracted by means of a common auxiliary lens L so as to be converged substantially at the optical center of a main lens L. Thus, the three beams B B and B are made to intersect or cross each other substantially at the optical center of the main lens L and then emerge from the lens L in divergent directions.
+
+With the arrangement of FIG. 5, very small beam spots can be obtained since all three beams B B and B pass through the center of main lens L, and thus the foeused beam spots are prevented from being blurred due to the coma and spherical aberration. Consequently, a picture with a high resolution can be produced.
+
+FIG. 6 shows the optical equivalent of a cathode ray tube according to a second embodiment of this invention in which a single electron gun A includes beam generating sources K K and K arranged on an arcuate surface having its center substantially at the optical center of a main lens L, and being spaced from each other by 5 the straight distance d In this embodiment, the auxiliary lens L of FIG. 5 is omitted, as the arrangement of the sources K K and K, on the described arcuate surface causes the three beams B B and B to intersect or cross each other substantially at the optical center of the main lens L, as in the embodiment shown on FIG. 3.
+
+Although. the beam generating sources K K and K in FIGS. 5 and 6 are spaced apart from each other by a distance d or d along a straight line, it is possible to arrange these beam generating sources at the vertices of an equilateral triangle.
+
+It will be apparent that in the embodiments of this invention described above with reference to FIGS. 5 and 6, the three beams B B and B after intersecting or crossing each other at the optical center of the main lens L, continue along divergent paths so as to strike the screen at three different positions spaced from each other by a predetermined distance. When the beam spots are spaced apart on screen S, as shown, means are provided according: to this invention, as hereinafter described, to input time difference corresponding to the three beam spot positions to the video signals modulating the three beams, thereby achieving correspondence between the three pictures produced on the phosphor screen by the three beams.
+
+A particular example of the structure of an electron gun A corresponding to the optical analogy of FIG. 5 will now be described with reference to FIG. 7 in which a cathode K constitutes the electron beam generating sources K K and K A first control grid G which comprises three grid members G and G supported in close, opposing relationship to the electron-emitting end surface of cathode K. The three grid members G G and G which are suitably insulated from each other have apertures g g and g respectively, ar-
+
+ranged on a straight line. A common grid G is mounted in opposing, adjacent relationship to the grid G and has three, apertures in alignment with the apertures g g and g respectively. The grid G may be cup-shaped to include a disk 1 having the apertures therein at spaced locations on a diametrical line and a cylindrical side wall 2 extending from the periphery of disk 1 in the axial direction away from grid G Arranged in order following the grid G in the direction away from control grid G are successive, open-ended, tubular grids or electrodes G3, G4, and G5- Electrode G includes relatively small diameter end portions 3 and 4 and a larger diameter intermediate portion 5, and is supported with its end portion 3 extending into cup-shaped grid G and spaced radially from side wall 2 of the latter. Electrode G includes end portions 6 and 7 of a diameter larger than that of end portions 3 and 4 of electrodes G and an intermediate portion 8 of still larger diameter, and electrode G is mounted so that end portion 4 extends into, and is spaced radially inward from end portion 6. Electrode 6;, includes an end portion 9 of a diameter smaller than that of end portion 7 and a relatively larger diameter portion 10, and electrode G is moutned so that its end portion 9 extends into, and is spaced radially inward from end portion 7 of electrode G The several electrodes G G and G grids G G and cathode K are all assembled together in the above described relation by means of suitable supports 12 ,of insulating material.
+
+In operating the electron gun of FIG. 7, appropriate voltages are applied to grids G and G and to electrodes G G and G For example, a voltage of to 400 v. is applied to the grid G (G G and G a voltage of O to 500 v. is applied to the grid 6;, a voltage of 13 to 20 kv. is applied to the electrodes G and G and a voltage of 0 to 400 v. is applied to the electrode G with the voltage of cathode K as the reference. Therefore, the voltage distributions with respect to the grids and electrodes G to G and their lengths and diameters are substantially identical with those of a unipotential-single beam. type electron gun which includes a first single grid member and a second grid provided with a single aperture. With the applied voltage distribution described above, an electron lens field is established between grid G and the end 3 of electrode G which corresponds to the auxiliary lens L' of FIG. 5, and an electron lens field corresponding to the main lens L of FIG. 5 is formed at the axial center of electrode G; by the electrodes G G and G5.
+
+Thus, the three beams B B and B emanating from the cathode K are made to pass through the apertures g g and g of grid members G G and G and are modulated with three different signals applied between the cathode K and the grid members G 1, G and G The beams B B and B pass through the common axiliary lens L which is formed mainly by the grid G and electrode G and across each other at the center of the main lens L which is constituted mainly by the electrodes G G and G Then, the beams B B and B diverge, as particularly shown on FIG. 8, to land or impinge at spaced locations on a color screen S provided on the face plate FP of the tube T after passing through beam selecting means which may be in the form of an apertured grill or mask G The color screen S is comprised of suitably arranged sets of red, green and blue phosphor stripes or dots which are adapted to be selectively energized by the beams B B and B respectively. The usual horizontal and vertical deflection means, as indicated by the yoke D are provided for horizontally and vertically deflecting the beams B B and B simultaneously so that such beams scan with respect to screen S, as in the conventional picture tube. By supplying red, green and blue color video signals between cathode K and grid members G G and G 3, respectively, the three beams are intensity-modulated, and by reason of the scanning of the screen, the modulated beams produce respective color pictures on screen S. However, by reason of the spacing between the landing spots of the beams on screen S, the red, green and blue pictures respectively produced by beams B B and B will be offset relative to each other in the direction, and to the extent of the spacing between the beams at the screen, assuming that, at any point in time, all beams are being modulated by respective color video signals corresponding to the same element of the composite color picture to be produced.
+
+In accordance with this invention, such offsetting of the pictures is avoided by suitably time delaying the color video signals which modulate those beams in trailing or lagging positions considering the scanning direction of the beams. Thus, for example, if beams B B and B of the color picture tube of FIG. 8 originate at points on a horizontal straight line, as is preferred, and if the horizontal scanning direction of the beams is as indicated by the arrow H with blanking occurring in the opposite horizontal direction, then beam B is in the foremost or advanced positions as screen S and beams B and B successively lag or trail beam B With the foregoing relationship, the green color video signals which modulate beam B will be time delayed relative to the blue color video signals modulating beam B and the red color video signals modulating beam B, will be further time delayed. For example, in the case of a color picture tube according to this invention having a screen measuring 225 mm. thereacross, the landing spot of beam B may be spaced 22.5 mm. from the landing spot of beam B and, similarly, the landing spot of beam B may be spaced 22.5 mm. from that of beam B If the horizontal scanning time is 60 nsec. and the horizontal spacing between the beam landing spots is of the horizontal distance across the screen, as in the foregoing example, then the green color video signals modulating beam B are time delayed by 6 sec. with respect to the blue color video signals modulating beam B and the red color video signals modulating beam B are time delayed a further 6 .tSC., that is, a time delay of 12 uses. with respect to the blue color video signals. Such time delays will result in the desired correspondence of the red, green and blue pictures produced on screen S by beams B B2 and B3.
+
+As shown diagrammatically on FIG. 8, conventional color television receiver circuits 13, for example, as disclosed in McGraw-Hill Encyclopedia of Science and Technology, McGraw-Hill Book Co., New York, N.Y., vol 13, page 474, are provided to process the color television signal received by an antenna 14 and to supply the chrominance components I and Q and the luminance component M to the usual matrix circuits 15 by which the I, Q and M components are combined in the proper proportions to produce red, green and blue signals R, G and B which are applied, as by the conductors 16, 17 and 18, between grid members G11, G and G respectively, and cathode K.
+
+In accordance with this invention, the blue signal B is transmitted, without delay, by way of conductor 18; whereas the green and red signals G and R are subjected to time delays, for example, by delay lines 19 and 20, respectively, which delay the respective signals by time increments t and 2t, that is, by 6 ,usec. and 12 sec. in the example given. Circuits 13 further supply the usual horizontal and vertical sweep signals H and V to yoke D to cause the beams to scan screen S, with the delays imparted to the green and red signals modulating beams B and B being proportioned to the horizontal sweep time and to the spacing between the landing spots of the beams on screen S to obtain the desired correspondence of the respective pictures that are produced.
+
+Since beams B B and B are allowed to diverge from focusing lens L and are not thereafter deflected for convergence at a common spot or aperture of beam selecting means G the beam loss that would be associated with such convergence deflection is avoided and hence, high utilization of the beams is realized for enhanced brightness of the color picture. Further, the omission of a convergence deflection device after the focusing lens L of gun A serves to reduce the length of the gun, and thereby makes it possible to accommodate the gun A in a desirably short neck portion N of the color picture tube T so that such tube can be installed in a cabinet of reduced depth.
+
+It will also be seen that the omission of a convergence deflection device between focusing lens L and screen S makes it possible to dispose the deflection yoke D in the vicinity of the axial location where beams B B and B are made to intersect, that is substantially at the optical center of focusing lens L, as shown. Thus, he beams B B and B are bunched together in their passage through the deflection fields produced by yoke D so that these fields may be of relatively small size, measured normal to the tube axis, for minimizing the power required to generate the deflection fields. The bunching together of the three beams in their pasage through the deflection fields further ensures that such beams will be equally affected by the fields, to avoid the distortions of the picture that may result when the beams pass through spaced portions of the fields.
+
+Although illustrative embodiments of the invention have been described in detail herein with reference to the drawings, it is to be understood that the invention is not limited to those precise embodiments, and that various changes and modifications may be effected therein by one skilled in the art without departing from the scope or spirit of the invention.
+
+What is claimed is:
+
+1. Apparatus for the reproduction of images in color, comprising an electron receiving screen, an electron gun having means for generating a plurality of electron beams directed toward said screen and which are made to intersect at a location between the electron beam generating means and said screen so as to have spaced apart landing spots on the screen, focusing lens means to focus said beams on the screen, said focusing lens means having an optical center and being positioned to dispose said optical center substantially at said location where the electron beams intersect, means for causing said beams to simultaneously scan said screen, means for modulating said electron beams with respective color video signals, and means imparting time differences to said color video signals with which the plurality of beams are respectively modulated so as to compensate for the spacing of said landing spots of the beams on the screen.
+
+2. Apparatus according to claim 1, in which said means for causing the beams to scan the screen includes deflection yoke means disposed in the vicinity of said location where the electron beams intersect and producing beam deflecting fields traversed by said beams.
+
+3. Apparatus according to claim 1, in which said means imparting time differences to said color video signals includes time delay means acting on the color video signals for modulating at least one of said beams.
+
+4. Apparatus according to claim 3, in which there are three of said beams and the landing spots of said beams on the screen are successively spaced apart in the horizontal scanning direction of said beams, and said time delay means applies relatively small and relatively large time delays, respectively, to the color video signals which modulate the two beams having their landing spots in successive trailing positions, considered in said horizontal scanning direction, with respect to the landing spot of the third beam.
+
+References Cited UNITED STATES PATENTS 2,673,614 5/1954 Friend. 2,690,517 9/1954- Nicoll et al. 3,028,521 4/1962 Szegho.
+
+RODNEY D. BENNETT, Primary Examiner M. F. HUBLER, Assistant Examiner
+
+US829292A
+1967-01-14
+1969-06-02
+Cathode ray tube
+
+Expired - Lifetime
+
+US3514663A
+(en)
+
+Applications Claiming Priority (3)
+
+Application Number
+
+Priority Date
+
+Filing Date
+
+Title
+
+JP262967
+
+1967-01-14
+
+JP1785667
+
+1967-03-22
+
+US82929269A
+
+1969-06-02
+
+1969-06-02
+
+Publications (1)
+
+Publication Number
+
+Publication Date
+
+US3514663A
+
+true
+
+US3514663A
+(en)
+
+1970-05-26
+
+Family
+
+ID=27275447
+
+Family Applications (1)
+
+Application Number
+
+Title
+
+Priority Date
+
+Filing Date
+
+US829292A
+Expired - Lifetime
+
+US3514663A
+(en)
+
+1967-01-14
+
+1969-06-02
+
+Cathode ray tube
+
+Country Status (1)
+
+Country
+
+Link
+
+US
+(1)
+
+US3514663A
+(en)
+
+Cited By (3)
+
+* Cited by examiner, † Cited by third party
+
+Publication number
+
+Priority date
+
+Publication date
+
+Assignee
+
+Title
+
+US3678329A
+(en)
+
+*
+
+1969-06-30
+
+1972-07-18
+
+Sony Corp
+
+Cathode ray tube
+
+US4338541A
+(en)
+
+*
+
+1979-12-07
+
+1982-07-06
+
+International Business Machines Corporation
+
+Multiple beam cathode ray tube having reduced off-axis aberrations
+
+US4349767A
+(en)
+
+*
+
+1977-01-17
+
+1982-09-14
+
+Sony Corporation
+
+Cathode ray tube resistance of ruthenium oxide and glass containing alumina powder
+
+Citations (3)
+
+* Cited by examiner, † Cited by third party
+
+Publication number
+
+Priority date
+
+Publication date
+
+Assignee
+
+Title
+
+US2673614A
+(en)
+
+*
+
+1949-10-14
+
+1954-03-30
+
+Otis Eng Co
+
+Anchoring assembly for oil tools
+
+US2690517A
+(en)
+
+*
+
+1952-09-30
+
+1954-09-28
+
+Rca Corp
+
+Plural beam electron gun
+
+US3028521A
+(en)
+
+*
+
+1956-12-21
+
+1962-04-03
+
+Zenith Radio Corp
+
+Image-reproducting device
+
+1969
+
+1969-06-02
+US
+US829292A
+patent/US3514663A/en
+not_active
+Expired - Lifetime
+
+Patent Citations (3)
+
+* Cited by examiner, † Cited by third party
+
+Publication number
+
+Priority date
+
+Publication date
+
+Assignee
+
+Title
+
+US2673614A
+(en)
+
+*
+
+1949-10-14
+
+1954-03-30
+
+Otis Eng Co
+
+Anchoring assembly for oil tools
+
+US2690517A
+(en)
+
+*
+
+1952-09-30
+
+1954-09-28
+
+Rca Corp
+
+Plural beam electron gun
+
+US3028521A
+(en)
+
+*
+
+1956-12-21
+
+1962-04-03
+
+Zenith Radio Corp
+
+Image-reproducting device
+
+Cited By (3)
+
+* Cited by examiner, † Cited by third party
+
+Publication number
+
+Priority date
+
+Publication date
+
+Assignee
+
+Title
+
+US3678329A
+(en)
+
+*
+
+1969-06-30
+
+1972-07-18
+
+Sony Corp
+
+Cathode ray tube
+
+US4349767A
+(en)
+
+*
+
+1977-01-17
+
+1982-09-14
+
+Sony Corporation
+
+Cathode ray tube resistance of ruthenium oxide and glass containing alumina powder
+
+US4338541A
+(en)
+
+*
+
+1979-12-07
+
+1982-07-06
+
+International Business Machines Corporation
+
+Multiple beam cathode ray tube having reduced off-axis aberrations
+
+Similar Documents
+
+Publication
+
+Publication Date
+
+Title
+
+US3448316A
+(en)
+
+1969-06-03
+
+Cathode ray tube
+
+US2581487A
+(en)
+
+1952-01-08
+
+Color television reproduction tube
+
+US3852608A
+(en)
+
+1974-12-03
+
+Cathode-ray tube having an astigmatic lens element in its electron gun
+
+US2579705A
+(en)
+
+1951-12-25
+
+Color television system
+
+US3970890A
+(en)
+
+1976-07-20
+
+Plural beam cathode ray tube including an astigmatic electron lens and self-converging
+
+US3467881A
+(en)
+
+1969-09-16
+
+Color picture tube
+
+US3735190A
+(en)
+
+1973-05-22
+
+Color cathode ray tube
+
+US3500114A
+(en)
+
+1970-03-10
+
+Convergence system for a color picture tube
+
+US3651359A
+(en)
+
+1972-03-21
+
+Abberation correction of plurality of beams in color cathode ray tube
+
+US3619686A
+(en)
+
+1971-11-09
+
+Color cathode-ray tube with in-line plural electron sources and central section of common grid protruding toward central source
+
+US3011090A
+(en)
+
+1961-11-28
+
+Plural beam tube
+
+JP2603415B2
+(en)
+
+1997-04-23
+
+Electron gun for color cathode ray tube
+
+US3028521A
+(en)
+
+1962-04-03
+
+Image-reproducting device
+
+US3548248A
+(en)
+
+1970-12-15
+
+Misconvergence compensation for single gun,plural beam type color tv picture tube
+
+US3883771A
+(en)
+
+1975-05-13
+
+Collinear electron gun system including accelerating grid having greater effective thickness for off axis beams
+
+US2806163A
+(en)
+
+1957-09-10
+
+Triple gun for color television
+
+US4845401A
+(en)
+
+1989-07-04
+
+Color cathode ray tube with deflection means
+
+US3603839A
+(en)
+
+1971-09-07
+
+Color television picture tube of the single electron gun type
+
+US2726348A
+(en)
+
+1955-12-06
+
+Multiple beam gun
+
+US3678329A
+(en)
+
+1972-07-18
+
+Cathode ray tube
+
+US3393336A
+(en)
+
+1968-07-16
+
+Three gun color tube with central gun of smaller cross-section than lateral guns
+
+US2921228A
+(en)
+
+1960-01-12
+
+Color television apparatus
+
+US4119883A
+(en)
+
+1978-10-10
+
+Cathode ray tube
+
+US3575625A
+(en)
+
+1971-04-20
+
+Color tube with convergence electrode mounting and connecting structure
+
+US3638064A
+(en)
+
+1972-01-25
+
+Convergence deflection system for a color picture tube
