@@ -877,13 +877,14 @@ def labels(F):
 
 def dial_joint(F):
     """The channel dial turns on its shaft (the spec's joints.dial_turn: a click in the viewer
-    turns it); the silver ring round it and the mark above stay on the panel."""
+    turns it); the whole dial is on the joint, ring included, so a click anywhere on it turns it
+    rather than focusing it, as the Land Camera's knob."""
     L = F.L
     du, dv = L["dial_centre"]
     with parts.assembly("channel_dial"):
         j = parts.joint("dial_turn", (F.x(du), F.y_front, F.z(dv)), axis=(0, 1, 0))
     bpy.context.view_layer.update()          # the grip's turn must be in matrix_world first
-    for o in [ob for ob in parts.collection().objects if ob.name.startswith(("dial_face", "dial_hub", "dial_grip", "dial_numbers"))]:
+    for o in [ob for ob in parts.collection().objects if ob.name.startswith(("dial_ring", "dial_face", "dial_hub", "dial_grip", "dial_numbers"))]:
         mw = o.matrix_world.copy()
         o.parent = j
         o.matrix_world = mw

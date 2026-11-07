@@ -807,7 +807,7 @@
       "max": 360,
       "move_to": 66,
       "group": "channel_dial",
-      "source": "kahaku_00063: the dial's numbers stand 22 degrees apart with 6 under the mark at the top (measured for refs/kv1310/markings-draw.py); a click turns it 66 degrees clockwise, three channels, to 9 (how far is a choice, only to show the dial turning)"
+      "source": "kahaku_00063: the dial's numbers stand 22 degrees apart with 6 under the mark at the top (measured for refs/kv1310/markings-draw.py); a click turns it 66 degrees clockwise, three channels, to 9 (how far is a choice, only to show the dial turning; the whole dial, ring included, is on the joint)"
     }
   }
 }
