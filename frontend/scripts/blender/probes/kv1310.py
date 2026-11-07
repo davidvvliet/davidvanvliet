@@ -875,6 +875,20 @@ def labels(F):
               [du - R, dv - R, du + R, dv + R], yf + ip - 0.0122)
 
 
+def dial_joint(F):
+    """The channel dial turns on its shaft (the spec's joints.dial_turn: a click in the viewer
+    turns it); the silver ring round it and the mark above stay on the panel."""
+    L = F.L
+    du, dv = L["dial_centre"]
+    with parts.assembly("channel_dial"):
+        j = parts.joint("dial_turn", (F.x(du), F.y_front, F.z(dv)), axis=(0, 1, 0))
+    bpy.context.view_layer.update()          # the grip's turn must be in matrix_world first
+    for o in [ob for ob in parts.collection().objects if ob.name.startswith(("dial_face", "dial_hub", "dial_grip", "dial_numbers"))]:
+        mw = o.matrix_world.copy()
+        o.parent = j
+        o.matrix_world = mw
+
+
 def walnut(spec):
     """Walnut veneer on the sleeve: long streaks along the wrap (across the top, down the sides),
     the sampled colour lightened and darkened by up to a quarter (grain estimated)."""
@@ -935,6 +949,7 @@ def build(spec):
     picture_tube(spec, F)
     chassis(spec, F)
     labels(F)
+    dial_joint(F)
     walnut(spec)
     speaker_holes(spec, F)
     beam_animation(spec, F)

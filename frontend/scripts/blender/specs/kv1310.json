@@ -797,5 +797,15 @@
       "source": "commons_kv1320ub_back",
       "quote": "measured on the 1536 x 1150 px photo of the KV-1320UB's back: the black cover spans cover_px (x0, y0, x1, y1); every box is [u0, v0, u1, v1] as fractions of the cover (u from the photo's left, v from the top), points [u, v, size] with size a fraction of the cover's width; slot_pitch as a fraction of the width (11 px); hood items as fractions of the hood's back face (hood_face_px). Used on the KV-1310 as estimates: its cover (0.431 x 0.325 m) has nearly the KV-1320UB's proportions (947 x 700 px), but no KV-1310 back photo was found. The cover's two top knobs and the metal bracket are left out (no room under the KV-1310's sleeve top)"
     }
+  },
+  "joints": {
+    "dial_turn": {
+      "angle": 0,
+      "min": -360,
+      "max": 360,
+      "move_to": 66,
+      "group": "channel_dial",
+      "source": "kahaku_00063: the dial's numbers stand 22 degrees apart with 6 under the mark at the top (measured for refs/kv1310/markings-draw.py); a click turns it 66 degrees clockwise, three channels, to 9 (how far is a choice, only to show the dial turning)"
+    }
   }
 }
