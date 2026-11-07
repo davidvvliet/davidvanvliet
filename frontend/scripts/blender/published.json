@@ -195,9 +195,9 @@
   }
  },
  "kv1310": {
-  "approved": "2026-11-06 23:31",
+  "approved": "2026-11-07 00:48",
   "inputs": {
-   "specs/kv1310.json": "74c0848f07673611",
+   "specs/kv1310.json": "6d35f2b9b7ca0259",
    "probes/kv1310.py": "0cc49f11bdcd23bd",
    "build.py": "363cabc8976febf0",
    "blender.json": "7bbc071b6e396ec4",

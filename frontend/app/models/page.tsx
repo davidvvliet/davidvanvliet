@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-type Spec = { title?: string; logos?: string[]; listed?: boolean; viewer?: { page?: string; explore?: boolean; focus?: { part: string; label: string }[]; explode?: string[]; pivot?: string; inside_flip?: string; light?: string[]; play?: { part?: string; button?: string; light?: [number, number] } }; sources?: { id: string; title: string; url: string; licence?: string }[] };
+type Spec = { title?: string; logos?: string[]; listed?: boolean; viewer?: { page?: string; explore?: boolean; focus?: { part: string; label: string }[]; explode?: string[]; pivot?: string; inside_flip?: string; light?: string[]; play?: { part?: string; button?: string; note?: string; light?: [number, number] } }; sources?: { id: string; title: string; url: string; licence?: string }[] };
 
 // How many values in the spec cite each source: every `source` outside the top-level list, a
 // citation string that starts with the source's id ("nssdca, p.83"), as scripts/blender/lib/sources.py.

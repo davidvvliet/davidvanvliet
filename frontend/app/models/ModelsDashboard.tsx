@@ -169,10 +169,11 @@ type Controls = THREE.EventDispatcher<{ start: object }> & { target: THREE.Vecto
 // `playStart`: when the model's animation was started (performance.now()), or null: at rest. Every
 // clip in the file plays once from then and holds its end; a mesh with "fade_out": [t0, t1] in its
 // extras fades away between those times (a print developing).
+// `onEnd`: called once when a play reaches the end of the longest clip or fade.
 // `playPart`: the part that starts the animation when clicked (`onPlay`), the camera's shutter button.
-function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explore = true, focusable = NONE, explodable = NO_PARTS, ghost = false, inner = false, hide = NO_PARTS, playStart = null, playPart = null, onPlay }: {
+function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explore = true, focusable = NONE, explodable = NO_PARTS, ghost = false, inner = false, hide = NO_PARTS, playStart = null, playPart = null, onPlay, onEnd }: {
   url: string; title?: string; exploded: boolean; focus: string | null; setFocus: (f: string | null) => void; explore?: boolean;
-  focusable?: Focusable[]; explodable?: string[]; ghost?: boolean; inner?: boolean; hide?: string[]; playStart?: number | null; playPart?: string | null; onPlay?: () => void;
+  focusable?: Focusable[]; explodable?: string[]; ghost?: boolean; inner?: boolean; hide?: string[]; playStart?: number | null; playPart?: string | null; onPlay?: () => void; onEnd?: () => void;
   onLabel: (label: { name: string; size: THREE.Vector3 } | null) => void; onReady?: () => void;
 }) {
   const gltf = useGLTF(url, "/draco/"); // compressed models (the /circuit boards) decode with the copy in public/draco
@@ -338,6 +339,8 @@ function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explor
     }
   }, [scene]);
   const playing = useRef(false);
+  const ended = useRef(false);
+  useEffect(() => { ended.current = false; }, [playStart]);
   useFrame(() => {
     if (!actions.length && !fades.length) return;
     if (playStart === null) {
@@ -354,6 +357,10 @@ function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explor
     for (const { mesh, t0, t1 } of fades) {
       const k = 1 - Math.min(1, Math.max(0, (e - t0) / (t1 - t0)));
       for (const mat of [mesh.material].flat() as THREE.Material[]) { mat.transparent = true; mat.opacity = k; mat.depthWrite = k > 0.99; }
+    }
+    if (!ended.current && e >= Math.max(0, ...actions.map((a) => a.getClip().duration), ...fades.map((f) => f.t1))) {
+      ended.current = true;
+      onEnd?.();
     }
   });
 
@@ -473,7 +480,7 @@ export type Focusable = { part: string; label: string };
 const WHOLE = "\u0000whole";
 const NONE: Focusable[] = [];
 const NO_PARTS: string[] = [];
-export type Play = { part?: string; button?: string; light?: [number, number] };
+export type Play = { part?: string; button?: string; note?: string; light?: [number, number] };
 
 // Hinged parts: joints the build exported with a "joint_move_to" (the spec's joints). A click
 // on a part under one turns every joint in its group to that angle, or back to rest. The axis
@@ -560,7 +567,7 @@ class ViewerBoundary extends Component<{ children: ReactNode; resetKey: string }
 // `internalUrl`: the model's inside parts (internal.glb), loaded when "Internal" is pressed.
 // `light`: inside groups that draw the light's path, shown only while "Light" is on.
 // `play`: clicking its part (play.part), or its button (play.button, which also opens the inside), plays the
-// model's animation; the light shows during play.light [t0, t1].
+// model's animation; the light shows during play.light [t0, t1], and play.note beside the buttons until it ends.
 // `held`: the model is held in the hand (a board that drives a model): dragging turns it about its
 // centre instead of orbiting, shift-drag about its long side (x), double-click sets it straight.
 export function Viewer({ probe, title, url, breakdown, stale, compact, onReady, focus: shown, onFocus, explore = true, focusable = NONE, explodable = NO_PARTS, internalUrl, insideFlip, light = NO_PARTS, play = null, held }: {
@@ -574,7 +581,9 @@ export function Viewer({ probe, title, url, breakdown, stale, compact, onReady, 
   const [lit, setLit] = useState(false);
   const [playStart, setPlayStart] = useState<number | null>(null);
   const [flash, setFlash] = useState(false);
-  useEffect(() => { setInside(false); setInnerFocus(null); setLit(false); setPlayStart(null); }, [probe]);
+  const [noting, setNoting] = useState(false);
+  const start = () => { setPlayStart(performance.now()); setNoting(true); };
+  useEffect(() => { setInside(false); setInnerFocus(null); setLit(false); setPlayStart(null); setNoting(false); }, [probe]);
   // The light shows while the shutter is open, whether or not "Light" is on.
   // Checked every frame against the animation's clock (timers drift when frames are slow).
   const [w0, w1] = play?.light ?? [-1, -1];
@@ -625,10 +634,11 @@ export function Viewer({ probe, title, url, breakdown, stale, compact, onReady, 
         {/* "play": {"button": label}: a button that plays the animation (opening the inside, if any). */}
         {play?.button && (
           <button className={styles.explode}
-            onClick={() => { if (internalUrl && !inside) { setFocus(null); setInnerFocus(null); setExploded(false); setInside(true); } setPlayStart(performance.now()); }}>
+            onClick={() => { if (internalUrl && !inside) { setFocus(null); setInnerFocus(null); setExploded(false); setInside(true); } start(); }}>
             {play.button}
           </button>
         )}
+        {noting && play?.note && <span className={styles.playNote}>{play.note}</span>}
         {inside && light.length > 0 && (
           <button className={`${styles.explode} ${lit ? styles.active : ""}`} onClick={() => { setInnerFocus(null); setLit((x) => !x); }}>
             Light
@@ -653,12 +663,12 @@ export function Viewer({ probe, title, url, breakdown, stale, compact, onReady, 
             <HeldGroup held={held}>
               <Model key={url} url={url} title={title} exploded={exploded} focus={inside ? innerFocus : focus} setFocus={inside ? setInnerFocus : setFocus} onLabel={setLabel}
                 onReady={onReady} explore={explore} focusable={focusable} explodable={explodable} ghost={inside} playStart={playStart}
-                playPart={play?.part ?? null} onPlay={() => setPlayStart(performance.now())} />
+                playPart={play?.part ?? null} onPlay={start} onEnd={internalUrl ? undefined : () => setNoting(false)} />
             </HeldGroup>
           </Suspense>
           <Suspense fallback={null}>
             {inside && internalUrl && (
-              <Model key={internalUrl} url={internalUrl} exploded={false} focus={innerFocus} setFocus={setInnerFocus} onLabel={setInnerLabel} inner hide={lit || flash ? NO_PARTS : light} playStart={playStart} />
+              <Model key={internalUrl} url={internalUrl} exploded={false} focus={innerFocus} setFocus={setInnerFocus} onLabel={setInnerLabel} inner hide={lit || flash ? NO_PARTS : light} playStart={playStart} onEnd={() => setNoting(false)} />
             )}
           </Suspense>
         </FlipGroup>

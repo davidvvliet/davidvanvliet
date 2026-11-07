@@ -5,7 +5,8 @@
   "viewer": {
     "explore": true,
     "play": {
-      "button": "Beam"
+      "button": "Beam",
+      "note": "Sweep slowed ≈13,000×"
     }
   },
   "listed": true,
@@ -75,6 +76,13 @@
       "read": "2026-11-06",
       "licence": "CC BY 4.0 (as stated on the Commons file page)",
       "credit": "KV-1310 back cover modelled on and coloured from the Science Museum Group's photo of a KV-1320UB (CC BY 4.0, Wikimedia Commons)"
+    },
+    {
+      "id": "itu_bt470",
+      "title": "Recommendation ITU-R BT.470-6 (11/1998), Conventional television systems",
+      "url": "https://www.itu.int/dms_pubrec/itu-r/rec/bt/R-REC-BT.470-6-199811-S!!PDF-E.pdf",
+      "read": "2026-11-07",
+      "licence": "ITU copyright; link and quotes only"
     }
   ],
   "reference_model": {
@@ -236,6 +244,18 @@
       "source": "kv7010ua_sm",
       "quote": "SIGNAL- DEFLECTION BOARD \"SD\" ... Chroma and Video Circuit Board \"CV\" ... POWER BOARD ... VOLTAGE REGULATOR BOARD ... N Circuit Board ... convergence board (OCR of the scanned manual)",
       "note": "the 7-inch KV-7010UA of 1968: the KV-1310's chassis is built from this list as a stand-in, its layout estimated"
+    },
+    "line_period": {
+      "value": 6.35555e-05,
+      "source": "itu_bt470",
+      "quote": "Table 1, System M: \"Number of lines per picture (frame) 525\", \"Line frequency fH ... 15 750 (15 734.264\"; line synchronizing signals, M: \"Nominal line period (µs) 63.492 (63.5555)\", \"Line-blanking interval (µs) 10.2 to 11.4\"; the bracketed values are the colour (NTSC) ones",
+      "note": "System M is the 525-line, 60-field system of Japan and the US (the table's Japan footnotes sit under M)"
+    },
+    "beam_slowdown": {
+      "value": 13000,
+      "source": "itu_bt470",
+      "quote": "derived: one line in the Beam animation takes estimates.beam_animation line + retrace = 0.7 + 0.15 = 0.85 s; a real line takes 63.5555 µs (facts.line_period); 0.85 s / 63.5555 µs = 13,374, and the visible sweep alone 0.7 s / (63.5555 - 10.9) µs = 13,294; shown rounded as \"≈13,000×\"",
+      "note": "only the sweep: the electrons' flight through the gun is slowed far more, and 12 lines stand in for 525"
     }
   },
   "estimates": {
