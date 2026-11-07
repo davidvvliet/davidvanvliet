@@ -340,10 +340,10 @@
   },
   "materials": {
     "walnut": {
-      "hex": "#4f4140",
+      "hex": "#533d38",
       "metallic": 0.0,
       "roughness": 0.45,
-      "source": "kahaku_00063: top (2 spots) and right side (1 strip), mean of #423232 and #5b504e"
+      "source": "kahaku_00063: median of the top, two patches clear of the handle's shadow (#543d37, 3,479 px; #523d39, 969 px); the sides read greyer (#5a4f4d) because their sheen reflects the grey backdrop, which the render adds itself; the backdrop's grey shows little cast (gains 1.01, 1.02, 0.97)"
     },
     "trim_silver": {
       "hex": "#9b8f8a",
@@ -499,6 +499,36 @@
       "roughness": 0.5,
       "alpha": 0.95,
       "source": "belt_1972: the three beams light their own phosphor stripes, which together read as white; drawn as one white glow (estimated)"
+    },
+    "vent_shadow": {
+      "hex": "#19181a",
+      "metallic": 0.0,
+      "roughness": 0.9,
+      "source": "commons_kv1320ub_back: darkest quarter of the top vent row (x 450-1150, y 345-395)"
+    },
+    "back_knob": {
+      "hex": "#242426",
+      "metallic": 0.0,
+      "roughness": 0.6,
+      "source": "commons_kv1320ub_back: rear knob tops (x 475-505, y 280-300), used for the slide switch and power socket"
+    },
+    "button_red": {
+      "hex": "#d64c42",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "source": "commons_kv1320ub_back: red button (x 574-584, y 750-760)"
+    },
+    "nameplate_brass": {
+      "hex": "#46372b",
+      "metallic": 0.7,
+      "roughness": 0.45,
+      "source": "commons_kv1320ub_back: nameplate, 2,813 px with R - B > 15 outside the cable (x 690-850, y 878-925); partly in shade"
+    },
+    "aerial_socket": {
+      "hex": "#3b3a3c",
+      "metallic": 0.6,
+      "roughness": 0.4,
+      "source": "commons_kv1320ub_back: aerial socket (x 522-538, y 522-538)"
     }
   },
   "open_questions": [
@@ -508,7 +538,7 @@
     "Chassis layout (boards, tuner, flyback, power supply): no KV-1310 manual or interior photo found. The KV-1310's chassis would be built from the 1968 KV-7010UA manual's board list (SD, CV, N, P, RV) as a stand-in, marked as such; whether that is acceptable is David's call.",
     "Finishes (walnut grain, trim, bezel, knob colours): to be sampled from a photo. The only KV-1310 photo is kahaku_00063, which may not be reproduced; sampling colours from it is measuring, but no texture can be taken from it. A wood-grain texture would have to be made, not copied.",
     "Photo licence: no openly licensed photo of a KV-1310 was found. The Commons photos are of the KV-1320UB (CC BY 4.0) and a 13-inch European set in Milan (CC BY-SA 4.0), both with different front panels.",
-    "The back: no KV-1310 back view found; the open wood sleeve and black plastic back cover follow the sibling KV-1320UB (Commons photo, CC BY 4.0), as estimates.",
+    "The back: no KV-1310 back view found; the open wood sleeve and black plastic back cover follow the sibling KV-1320UB (Commons photo, CC BY 4.0), as estimates. The back's vents, aerial panel, switch, power socket and nameplate are laid out from the same photo (from_photos.back_layout).",
     "Inside finishes (bulb glass, grille steel, gun metal, yoke copper) are estimated colours: no photo of a 1968 tube's inside found. The Science Museum's sectioned 1971 tube (co34468) photos are CC BY-NC-SA and weren't used.",
     "Chassis layout: the boards are the KV-7010UA's list (SD, CV, power, RV, N, convergence), placed where they fit round the tube (SD under the tube, CV, power and RV upright behind the column, flyback near the anode); their positions and parts are estimates."
   ],
@@ -639,6 +669,91 @@
       },
       "source": "kahaku_00063",
       "quote": "about 36 hole columns across 64 mm of the speaker panel (square grid); hole size by eye"
+    },
+    "back_layout": {
+      "value": {
+        "cover_px": [
+          307,
+          290,
+          1254,
+          990
+        ],
+        "top_vents": [
+          0.117,
+          0.064,
+          0.946,
+          0.157
+        ],
+        "bottom_vents": [
+          0.16,
+          0.95,
+          0.94,
+          0.986
+        ],
+        "slot_pitch": 0.0116,
+        "slot_fill": 0.45,
+        "aerial_panel": [
+          0.159,
+          0.243,
+          0.301,
+          0.6
+        ],
+        "aerial_socket": [
+          0.235,
+          0.343,
+          0.016
+        ],
+        "switch": [
+          0.204,
+          0.657,
+          0.262,
+          0.689
+        ],
+        "red_button": [
+          0.286,
+          0.664,
+          0.008
+        ],
+        "power_socket": [
+          0.257,
+          0.771,
+          0.309,
+          0.857
+        ],
+        "nameplate": [
+          0.404,
+          0.843,
+          0.568,
+          0.893
+        ],
+        "hood_face_px": [
+          720,
+          410,
+          1140,
+          745
+        ],
+        "hood_vents": [
+          [
+            0.195,
+            0.24,
+            0.51,
+            0.33
+          ],
+          [
+            0.63,
+            0.24,
+            0.95,
+            0.33
+          ]
+        ],
+        "hood_badge": [
+          0.49,
+          0.61,
+          0.083
+        ]
+      },
+      "source": "commons_kv1320ub_back",
+      "quote": "measured on the 1536 x 1150 px photo of the KV-1320UB's back: the black cover spans cover_px (x0, y0, x1, y1); every box is [u0, v0, u1, v1] as fractions of the cover (u from the photo's left, v from the top), points [u, v, size] with size a fraction of the cover's width; slot_pitch as a fraction of the width (11 px); hood items as fractions of the hood's back face (hood_face_px). Used on the KV-1310 as estimates: its cover (0.431 x 0.325 m) has nearly the KV-1320UB's proportions (947 x 700 px), but no KV-1310 back photo was found. The cover's two top knobs and the metal bracket are left out (no room under the KV-1310's sleeve top)"
     }
   }
 }

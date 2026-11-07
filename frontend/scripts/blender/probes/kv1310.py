@@ -245,6 +245,59 @@ def back_cover(F):
         parts.box("back_panel", (iw, 0.050, ih), location=(0, yb - 0.010, z0 + H / 2), material="back_plastic")
         sx, sz, _, _ = F.box(F.L["screen_opening"])
         plate("neck_hood", rrect(0.20, 0.15, 0.025), sx, sz, yb + 0.014, back, "back_plastic")
+        back_detail(F, iw, ih, yb + 0.015, sx, sz, 0.20, 0.15, back)
+
+
+def boxes(name, rects, y0, y1, material):
+    """Several boxes in one mesh: rects [(x0, z0, x1, z1)], from y0 back to y1."""
+    verts, faces = [], []
+    for x0, z0, x1, z1 in rects:
+        k = len(verts)
+        verts += [(x, y, z) for y in (y0, y1) for z in (z0, z1) for x in (x0, x1)]
+        faces += [(k + a, k + b, k + c, k + d) for a, b, c, d in
+                  ((0, 1, 3, 2), (4, 6, 7, 5), (0, 4, 5, 1), (2, 3, 7, 6), (0, 2, 6, 4), (1, 5, 7, 3))]
+    return _solid(name, verts, faces, material)
+
+
+def back_detail(F, cw, ch, yf, hx, hz, hw, hh, yh):
+    """Vents, aerial panel, switch, power socket and nameplate on the back cover, laid out as
+    fractions of the KV-1320UB's cover (spec from_photos.back_layout). Seen from behind, the
+    photo's left is +x."""
+    B = SPEC[0]["from_photos"]["back_layout"]["value"]
+    cz = F.feet + F.H / 2
+    X = lambda u: (0.5 - u) * cw
+    Z = lambda v: cz + (0.5 - v) * ch
+    R = lambda r: (X(r[2]), Z(r[3]), X(r[0]), Z(r[1]))           # [u0, v0, u1, v1] -> x0, z0, x1, z1
+    pitch = B["slot_pitch"] * cw
+    def slots(r, xf, zf, w, h):
+        u0, v0, u1, v1 = r
+        n = int((u1 - u0) * w / pitch)
+        out = []
+        for i in range(n):
+            u = u0 + (i + 0.5) * (u1 - u0) / n
+            x = xf(u)
+            out.append((x - pitch * B["slot_fill"] / 2, zf(v1), x + pitch * B["slot_fill"] / 2, zf(v0)))
+        return out
+    p = 0.0004                                                    # paint-thin, just behind the face
+    boxes("back_vents", slots(B["top_vents"], X, Z, cw, ch) + slots(B["bottom_vents"], X, Z, cw, ch),
+          yf - p, yf + p, "vent_shadow")
+    HX = lambda u: hx + (0.5 - u) * hw
+    HZ = lambda v: hz + (0.5 - v) * hh
+    boxes("hood_vents", sum((slots(r, HX, HZ, hw, hh) for r in B["hood_vents"]), []), yh - p, yh + p, "vent_shadow")
+    bu, bv, bs = B["hood_badge"]
+    cyl_y("hood_badge", bs * hw / 2, HX(bu), HZ(bv), yh - 0.001, yh + 0.0012, "back_plastic", segments=24)
+    x0, z0, x1, z1 = R(B["aerial_panel"])
+    boxes("aerial_panel", [(x0, z0, x1, z1)], yf - 0.001, yf + 0.002, "back_plastic")
+    su, sv, ss = B["aerial_socket"]
+    cyl_y("aerial_socket", ss * cw / 2, X(su), Z(sv), yf + 0.001, yf + 0.008, "aerial_socket", segments=16)
+    x0, z0, x1, z1 = R(B["switch"])
+    boxes("slide_switch", [(x0, z0, x1, z1)], yf - 0.001, yf + 0.003, "back_knob")
+    ru, rv, rs = B["red_button"]
+    cyl_y("red_button", rs * cw / 2, X(ru), Z(rv), yf - 0.001, yf + 0.004, "button_red", segments=12)
+    x0, z0, x1, z1 = R(B["power_socket"])
+    boxes("power_socket", [(x0, z0, x1, z1)], yf - 0.001, yf + 0.006, "back_knob")
+    x0, z0, x1, z1 = R(B["nameplate"])
+    boxes("nameplate", [(x0, z0, x1, z1)], yf - 0.0003, yf + 0.0006, "nameplate_brass")
 
 
 # --- the picture tube (Internal view) -------------------------------------------------------
@@ -819,7 +872,8 @@ def speaker_holes(spec, F):
     """The speaker panel's square grid of holes (pitch from the photo, hole size by eye)."""
     S = spec["from_photos"]["speaker_holes"]["value"]
     m = spec["materials"]["speaker_grille"]
-    px, k = 160, 8                          # 8 x 8 holes per tile
+    px, k = 256, 8                          # 8 x 8 holes per tile, 32 px each: every mipmap level
+                                            # halves whole holes, so the zoomed-out grille is even grey
     rep = S["pitch"] * k
     mpp = rep / px
     yy, xx = np.mgrid[0:px, 0:px] * mpp
