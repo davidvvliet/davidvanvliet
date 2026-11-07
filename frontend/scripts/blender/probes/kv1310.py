@@ -6,12 +6,14 @@ import math
 import os
 
 import bmesh
+import bpy
 import numpy as np
 from mathutils import Matrix, Vector
 
 from lib import materials, parts, textures, tiling
 
 SPEC = [None]
+ANIM = {}
 HERE = os.path.dirname(os.path.abspath(__file__))
 LABELS = os.path.join(HERE, "..", "refs", "kv1310", "labels")
 TEX = os.path.join(HERE, "..", "out", "kv1310", "textures")
@@ -461,13 +463,189 @@ def electron_gun(spec, sx, sz, y_def, y_neck0, y_end, rn, y_grille, T):
     with parts.assembly("beams", internal=True):
         # Red and blue bend in, cross green at the lens, fan out, and the plates turn them back
         # to cross again at the grille (belt_1972); all three aimed at the screen's centre here.
+        # From the yoke's deflection centre on, the three beams hang from one pivot, which the
+        # Beam animation swings across the screen (beam_animation).
         land = y_grille - 0.012
+        y_b = y_plates - 0.05
+        pivot = bpy.data.objects.new("beam_pivot", None)
+        parts.collection().objects.link(pivot)
+        parts._tag(pivot)
+        pivot.matrix_world = Matrix.Translation((sx, y_def, sz))
+        paths = {}
         for i, (x, col) in enumerate(((-cs, "beam_red"), (0, "beam_green"), (cs, "beam_blue"))):
             spread = -x * 0.75                # after the crossing, on the other side
-            pts = [(sx + x, y_k - 0.001, sz), (sx + x * 0.5, y_k - 0.012, sz), (sx, y_lens, sz),
+            x_def = sx + spread * 0.7 * (y_def - y_grille) / (y_b - y_grille)
+            gun = [(sx + x, y_k - 0.001, sz), (sx + x * 0.5, y_k - 0.012, sz), (sx, y_lens, sz),
                    (sx + spread * 0.6, y_plates, sz), (sx + spread, y_plates - 0.018, sz),
-                   (sx + spread * 0.7, y_plates - 0.05, sz), (sx, y_grille, sz), (sx + x * 0.12, land, sz)]
-            parts.tube(f"beam_{col[5:]}", pts, 0.0004, segments=6, material=glow(col, 2.0))
+                   (sx + spread * 0.7, y_b, sz), (x_def, y_def, sz)]
+            fan = [(x_def, y_def, sz), (sx, y_grille, sz), (sx + x * 0.12, land, sz)]
+            mat = glow(col, 2.0)
+            parts.tube(f"beam_{col[5:]}", gun, 0.0004, segments=6, material=mat)
+            f = parts.tube(f"beam_{col[5:]}_swept", fan, 0.0004, segments=6, material=mat)
+            f.parent = pivot
+            f.matrix_parent_inverse = pivot.matrix_world.inverted()
+            paths[col] = (gun, fan, mat)
+        ANIM.update(pivot=pivot, paths=paths, sx=sx, sz=sz, y_def=y_def, land=land)
+
+
+# --- the Beam animation ----------------------------------------------------------------------
+
+def _along(pts, u):
+    """The point a share `u` (0..1) of the way along a polyline."""
+    P = [Vector(p) for p in pts]
+    seg = [(P[i + 1] - P[i]).length for i in range(len(P) - 1)]
+    d = u * sum(seg)
+    for i, s in enumerate(seg):
+        if d <= s or i == len(seg) - 1:
+            return P[i].lerp(P[i + 1], min(1.0, d / s if s else 0.0))
+        d -= s
+
+
+def beam_animation(spec, F):
+    """Slow motion (estimates.beam_animation): electrons stream from the three cathodes, cross
+    in the lens, are bent back by the convergence plates and land together on the phosphor; the
+    yoke swings them across the screen line by line, and each spot glows and fades behind them.
+    The real beam draws its lines far too fast to see; only a few lines are drawn here."""
+    A = spec["estimates"]["beam_animation"]["value"]
+    fps = A["fps"]
+    sc = bpy.context.scene
+    sc.render.fps = fps
+    pivot, paths = ANIM["pivot"], ANIM["paths"]
+    sx, sz, y_def, land = ANIM["sx"], ANIM["sz"], ANIM["y_def"], ANIM["land"]
+    L = F.L
+    _, _, sw, sh = F.box(L["screen_opening"])
+    R = spec["estimates"]["tube"]["value"]["face_radius_x"]
+    D = y_def - land
+    n_lines, n_spots = A["lines"], A["spots"]
+    t0 = A["to_start"]
+    per = A["line"] + A["retrace"]
+    t_end_raster = t0 + n_lines * per
+    t_end = t_end_raster + A["back"]
+    n = int(round(t_end * fps))
+    sc.frame_start, sc.frame_end = 0, n
+    xs = [-sw / 2 * A["fill"] + sw * A["fill"] * (j + 0.5) / n_spots for j in range(n_spots)]
+    zs = [sh / 2 * A["fill"] - sh * A["fill"] * (k + 0.5) / n_lines for k in range(n_lines)]
+    sag = lambda x: R - math.sqrt(R * R - x * x)
+
+    def aim(x, z):
+        """Pivot rotation (x, z euler) and y scale that put the beams' end on the phosphor at (x, z)."""
+        d = Vector((x, -(D - sag(x)), z))
+        ln = d.length
+        d.normalize()
+        return math.asin(-d.z), math.atan2(d.x, -d.y), ln / D
+
+    def target(t):
+        """Where the beams land at time t (screen x, z from its centre)."""
+        if t <= t0:
+            s = smoothstep(t / t0)
+            return xs[0] * 1.08 * s, zs[0] * s
+        if t >= t_end_raster:
+            s = smoothstep(min(1.0, (t - t_end_raster) / A["back"]))
+            return xs[-1] * 1.08 * (1 - s), zs[-1] * (1 - s)
+        k = min(n_lines - 1, int((t - t0) / per))
+        u = (t - t0 - k * per)
+        x0, x1 = xs[0] * 1.08, xs[-1] * 1.08
+        if u <= A["line"]:
+            return x0 + (x1 - x0) * u / A["line"], zs[k]
+        # retrace: back to the left, down to the next line
+        r = smoothstep((u - A["line"]) / A["retrace"])
+        zn = zs[min(k + 1, n_lines - 1)]
+        return x1 + (x0 - x1) * r, zs[k] + (zn - zs[k]) * r
+
+    # Electron packets: on the gun's path (fixed) and on the swept path (riding the pivot).
+    packets = []
+    with parts.assembly("beams", internal=True):
+        for col, (gun, fan, mat) in paths.items():
+            for j in range(A["packets"]):
+                g = parts.cylinder(f"electrons_{col[5:]}_{j + 1}", 0.0009, 0.0018, location=gun[0],
+                                   direction=(0, -1, 0), material=glow(col, 6.0), segments=8)
+                f = parts.cylinder(f"electrons_{col[5:]}_{j + 1}_swept", 0.0009, 0.0018, location=fan[0],
+                                   direction=(0, -1, 0), material=glow(col, 6.0), segments=8)
+                f.parent = pivot
+                f.matrix_parent_inverse = pivot.matrix_world.inverted()
+                packets.append((g, f, gun, fan, j))
+        # The landing spot.
+        spot = parts.cylinder("beam_spot", 0.003, 0.0006, location=(sx, land + 0.0004, sz), direction=(0, -1, 0),
+                              material=glow("phosphor_glow", 8.0), segments=16)
+        spot.parent = pivot
+        spot.matrix_parent_inverse = pivot.matrix_world.inverted()
+    # The phosphor where the spot passed: a patch per spot, lit as the beam crosses it, then
+    # fading (the viewer's fade_out); shown on the face's outside, as the picture is seen.
+    patches = []
+    with parts.assembly("phosphor_glow", internal=True):
+        pw, ph = sw * A["fill"] / n_spots * 1.25, sh * A["fill"] / n_lines * 0.7   # overlapping: a continuous line
+        for k, z in enumerate(zs):
+            for j, x in enumerate(xs):
+                # On the face's outside (the glass is drawn opaque), where the picture is seen.
+                y = land - 0.010 + sag(x) - 0.0003
+                o = plate(f"glow_{k + 1}_{j + 1}", rrect(pw, ph, min(pw, ph) * 0.45, 3), sx + x, sz + z, y - 0.0002, y,
+                          glow("phosphor_glow", 3.0))
+                o.data.transform(Matrix.Translation((-(sx + x), -y, -(sz + z))))
+                o.location = (sx + x, y, sz + z)
+                t_hit = t0 + k * per + A["line"] * (x - xs[0] * 1.08) / (xs[-1] * 1.08 - xs[0] * 1.08)
+                o["fade_out"] = [t_hit + 0.15, t_hit + 0.15 + A["persist"]]
+                patches.append((o, t_hit))
+
+    total = {}
+    for g, f, gun, fan, j in packets:
+        lg = sum((Vector(gun[i + 1]) - Vector(gun[i])).length for i in range(len(gun) - 1))
+        lf = sum((Vector(fan[i + 1]) - Vector(fan[i])).length for i in range(len(fan) - 1))
+        total[g.name] = (lg, lf)
+    rest = {o.name: o.location.copy() for o in [p[0] for p in packets] + [p[1] for p in packets]}
+    for fr in range(n + 1):
+        t = fr / fps
+        on = 0.0 < t < t_end
+        x, z = target(t)
+        rx, rz, sy = aim(x, z)
+        pivot.rotation_mode = "XYZ"
+        pivot.rotation_euler = (rx, 0, rz)
+        pivot.scale = (1, sy, 1)
+        pivot.keyframe_insert("rotation_euler", frame=fr)
+        pivot.keyframe_insert("scale", frame=fr)
+        for g, f, gun, fan, j in packets:
+            lg, lf = total[g.name]
+            u = ((t / A["packet_period"]) + j / A["packets"]) % 1.0
+            d = u * (lg + lf)
+            if d <= lg:
+                g.location = rest[g.name] + (_along(gun, d / lg) - Vector(gun[0]))
+                g.scale = (1, 1, 1) if on else (0, 0, 0)
+                f.scale = (0, 0, 0)
+            else:
+                f.location = rest[f.name] + (_along(fan, (d - lg) / lf) - Vector(fan[0]))
+                f.scale = (1, 1, 1) if on else (0, 0, 0)
+                g.scale = (0, 0, 0)
+            for o in (g, f):
+                o.keyframe_insert("location", frame=fr)
+                o.keyframe_insert("scale", frame=fr)
+        spot.scale = (1, 1, 1) if on else (0, 0, 0)
+        spot.keyframe_insert("scale", frame=fr)
+    for o, t_hit in patches:
+        f_hit = max(1, int(round(t_hit * fps)))
+        for fr, s in ((0, 0.0), (f_hit - 1, 0.0), (f_hit + 1, 1.0), (n, 1.0)):
+            o.scale = (s, s, s)
+            o.keyframe_insert("scale", frame=fr)
+    for o in [pivot, spot] + [p[0] for p in packets] + [p[1] for p in packets] + [p[0] for p in patches]:
+        if o.animation_data and o.animation_data.action:
+            for fc in _fcurves(o.animation_data.action):
+                for kp in fc.keyframe_points:
+                    kp.interpolation = "LINEAR"
+    sc.frame_set(0)
+
+
+def _fcurves(action):
+    if hasattr(action, "fcurves"):
+        return list(action.fcurves)
+    out = []
+    for layer in getattr(action, "layers", []):
+        for strip in layer.strips:
+            for bag in strip.channelbags:
+                out += list(bag.fcurves)
+    return out
+
+
+def smoothstep(u):
+    u = max(0.0, min(1.0, u))
+    return u * u * (3 - 2 * u)
 
 
 # --- the chassis (stand-in from the KV-7010UA's board list, layout estimated) ---------------
@@ -670,3 +848,4 @@ def build(spec):
     labels(F)
     walnut(spec)
     speaker_holes(spec, F)
+    beam_animation(spec, F)

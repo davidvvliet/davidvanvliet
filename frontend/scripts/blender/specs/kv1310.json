@@ -3,7 +3,10 @@
   "logos": [],
   "note": "Sony's first Trinitron colour television (Japan, 1968): a walnut-grain cabinet with a carry handle, the screen on the left, a speaker and channel dial column on the right, and inside it the Trinitron picture tube (one gun, three beams, an aperture grille) on a transistor chassis. Frame: z up, cabinet bottom at z = 0, centred in x and y, the screen facing -y. Real size in metres. The cabinet's size is the Smithsonian's KV-1310; its layout comes from the Sony-owned set in the Japanese national registry (kahaku_00063, a photo we may measure from but not publish). The tube's construction is from Sony's 1967 patent and Belt (1972); its sizes are not yet found (open_questions).",
   "viewer": {
-    "explore": true
+    "explore": true,
+    "play": {
+      "button": "Beam"
+    }
   },
   "listed": true,
   "sources": [
@@ -296,6 +299,23 @@
       },
       "source": "radiomuseum_kv1310e",
       "quote": "estimated: an elliptical moving-coil speaker behind the grille (KV-1310E: \"Loudspeaker (moving coil) - elliptical\") and a drum VHF tuner behind the channel dial (\"Trommeltuner und UHF-Abstimmrad\"); sizes estimated to fit behind the column"
+    },
+    "beam_animation": {
+      "value": {
+        "fps": 24,
+        "to_start": 1.0,
+        "lines": 12,
+        "spots": 14,
+        "line": 0.7,
+        "retrace": 0.15,
+        "back": 0.8,
+        "persist": 1.2,
+        "packets": 4,
+        "packet_period": 1.2,
+        "fill": 0.92
+      },
+      "source": "belt_1972",
+      "quote": "slow motion, timings chosen to be watched: the beams cross at the lens and again at the grille (belt_1972) and the yoke sweeps them line by line; 12 lines of 14 spots stand in for the full raster"
     }
   },
   "materials": {
@@ -452,6 +472,13 @@
       "metallic": 0.0,
       "roughness": 0.8,
       "source": "radiomuseum_kv1310e: \"Loudspeaker (moving coil) - elliptical\"; paper cone colour estimated"
+    },
+    "phosphor_glow": {
+      "hex": "#eef3ff",
+      "metallic": 0.0,
+      "roughness": 0.5,
+      "alpha": 0.95,
+      "source": "belt_1972: the three beams light their own phosphor stripes, which together read as white; drawn as one white glow (estimated)"
     }
   },
   "open_questions": [
