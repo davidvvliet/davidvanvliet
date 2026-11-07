@@ -706,19 +706,19 @@ def smoothstep(u):
 def board(name, x, y, z, w, d, along, seed, parts_count=40):
     """A printed circuit board `w` x `d` (thickness 1.6 mm) and its parts, seeded so every
     build places them the same. `along`: "xy" lies flat (parts on top), "yz" stands upright
-    facing -x (parts on that side), "xz" stands upright facing -y."""
+    facing -x (parts on that side), "zy" the same facing +x, "xz" stands upright facing -y."""
     rng = np.random.default_rng(seed)
     t = 0.0016
     if along == "xy":
         size, nrm = (w, d, t), (0, 0, 1)
-    elif along == "yz":
-        size, nrm = (t, w, d), (-1, 0, 0)
+    elif along in ("yz", "zy"):
+        size, nrm = (t, w, d), (-1 if along == "yz" else 1, 0, 0)
     else:
         size, nrm = (w, t, d), (0, -1, 0)
     parts.box(name, size, location=(x, y, z), material="pcb")
     n = Vector(nrm)
     # in-plane axes
-    a1, a2 = {"xy": ((1, 0, 0), (0, 1, 0)), "yz": ((0, 1, 0), (0, 0, 1)), "xz": ((1, 0, 0), (0, 0, 1))}[along]
+    a1, a2 = {"xy": ((1, 0, 0), (0, 1, 0)), "yz": ((0, 1, 0), (0, 0, 1)), "zy": ((0, 1, 0), (0, 0, 1)), "xz": ((1, 0, 0), (0, 0, 1))}[along]
     a1, a2 = Vector(a1), Vector(a2)
     base = Vector((x, y, z)) + n * (t / 2)
     for i in range(parts_count):
@@ -746,8 +746,18 @@ def chassis(spec, F):
         # A steel tray on the cabinet floor carries everything.
         parts.box("chassis_tray", (W - 2 * t - 0.004, yb - yf - 0.01, 0.0015),
                   location=(0, (yf + yb) / 2, z0 + t + 0.00075), material="dark_metal")
+    C = spec["estimates"]["chassis_kv7010"]["value"]
     with parts.assembly("board_sd", internal=True):
-        board("board_sd", sx, (yf + yb) / 2 + 0.03, z0 + t + 0.012, 0.26, 0.20, "xy", 1, 60)
+        # Upright on the left, beside the tube's cone, parts facing the tube (Sams side view).
+        bw, bh = C["sd_board"]
+        board("board_sd", -W / 2 + t + 0.012, yb - bw / 2 - 0.005, z0 + t + 0.01 + bh / 2, bw, bh, "zy", 1, 60)
+    with parts.assembly("power_transformer", internal=True):
+        # PT under the HV section at the back (Sams top and bottom views).
+        px_, py_, pz_ = C["pt"]
+        x, y, z = sx + 0.10, yb - 0.045, z0 + t + 0.0015
+        parts.box("pt_core", (px_, py_, pz_), location=(x, y, z + pz_ / 2), material="dark_metal")
+        parts.box("pt_winding", (px_ * 0.5, py_ + 0.008, pz_ * 0.7), location=(x, y, z + pz_ * 0.45), material="yoke_copper")
+        parts.box("pt_clamp", (px_ + 0.006, py_ * 0.3, 0.003), location=(x, y, z + pz_ + 0.0015), material="gun_metal")
     with parts.assembly("board_cv", internal=True):
         board("board_cv", x_col - 0.045, yf + 0.13, z0 + t + 0.11, 0.16, 0.17, "yz", 2, 45)
     with parts.assembly("board_power", internal=True):
@@ -759,6 +769,31 @@ def chassis(spec, F):
         T = spec["estimates"]["tube"]["value"]
         y_end = F.y_front + F.recess + 0.004 + T["neck_end_behind_face"]
         board("board_n", sx, y_end + 0.014, sz, 0.05, 0.05, "xz", 5, 6)
+    with parts.assembly("hv_rectifier", internal=True):
+        # V801, a 1S2/DY86 vacuum diode beside the flyback: glass bulb, its anode inside, a cap on top.
+        rd, rl = C["rectifier"]
+        rx, ry, rz = sx + 0.085, yb - 0.06, z0 + H * 0.66
+        parts.cylinder("v801_socket", rd * 0.75, 0.008, location=(rx, ry, rz), direction=(0, 0, 1), material="black", segments=16)
+        parts.lathe("v801_bulb", [(0, 0), (rd / 2, 0), (rd / 2, rl * 0.85), (rd * 0.3, rl), (0, rl)],
+                    location=(rx, ry, rz + 0.008), material="tube_glass", segments=20)
+        parts.cylinder("v801_anode", rd * 0.25, rl * 0.45, location=(rx, ry, rz + 0.008 + rl * 0.25), direction=(0, 0, 1),
+                       material="gun_metal", segments=12)
+        parts.cylinder("v801_cap", rd * 0.18, 0.004, location=(rx, ry, rz + 0.008 + rl), direction=(0, 0, 1),
+                       material="gun_metal", segments=12)
+    with parts.assembly("horizontal_output", internal=True):
+        # HOT and the damper diode below the flyback; Q801 on a finned heat sink (Sams top view).
+        hx_, hy_, hz_ = C["hot"]
+        x, y, z = sx + 0.10, yb - 0.025, z0 + H * 0.45
+        parts.box("hot_core", (hx_, hy_, hz_), location=(x, y, z), material="black")
+        parts.cylinder("hot_winding", hx_ * 0.38, hy_ + 0.006, location=(x, y - hy_ / 2 - 0.003, z), direction=(0, 1, 0),
+                       material="yoke_copper", segments=16)
+        parts.cylinder("damper_diode", 0.003, 0.012, location=(x + hx_ / 2 + 0.006, y - 0.006, z - hz_ / 2),
+                       direction=(0, 1, 0), material="black", segments=10)
+        kx, ky, kz = x + 0.05, yb - 0.02, z0 + H * 0.40
+        parts.box("q801_sink", (0.002, 0.03, 0.035), location=(kx, ky, kz), material="foil_silver")
+        for i in range(4):
+            parts.box(f"q801_fin_{i}", (0.012, 0.0015, 0.035), location=(kx + 0.007, ky - 0.012 + i * 0.008, kz), material="foil_silver")
+        parts.box("q801", (0.004, 0.012, 0.016), location=(kx - 0.003, ky, kz), material="black")
     with parts.assembly("flyback", internal=True):
         # High-voltage transformer behind the tube, its lead to the anode button.
         fx, fy, fz = sx + 0.12, yb - 0.06, z0 + H * 0.72

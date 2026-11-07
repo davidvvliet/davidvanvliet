@@ -83,6 +83,13 @@
       "url": "https://www.itu.int/dms_pubrec/itu-r/rec/bt/R-REC-BT.470-6-199811-S!!PDF-E.pdf",
       "read": "2026-11-07",
       "licence": "ITU copyright; link and quotes only"
+    },
+    {
+      "id": "sams_1085_2",
+      "title": "Howard W. Sams PHOTOFACT Folder, Set 1085, Folder 2: Sony KV-7010UA (1970), archive.org item sony_kv7010ua_service_data",
+      "url": "https://archive.org/download/sony_kv7010ua_service_data/1085_2n.pdf",
+      "read": "2026-11-07",
+      "licence": "© 1970 Howard W. Sams & Co.: \"Reproduction or use, without express permission, of editorial or pictorial content, in any matter, is prohibited\"; link and quotes only, layout measured, nothing reproduced"
     }
   ],
   "reference_model": {
@@ -256,6 +263,18 @@
       "source": "itu_bt470",
       "quote": "derived: one line in the Beam animation takes estimates.beam_animation line + retrace = 0.7 + 0.15 = 0.85 s; a real line takes 63.5555 µs (facts.line_period); 0.85 s / 63.5555 µs = 13,374, and the visible sweep alone 0.7 s / (63.5555 - 10.9) µs = 13,294; shown rounded as \"≈13,000×\"",
       "note": "only the sweep: the electrons' flight through the gun is slowed far more, and 12 lines stand in for 525"
+    },
+    "chassis_kv7010": {
+      "value": [
+        "SD board upright on the left side of the tube",
+        "CV board upright on the right",
+        "tuners at the front",
+        "HV section behind them: FBT, HOT, HCT, damper diode, Q801 HV driver 2SC806, V801 1S2/DY86",
+        "power board and PT at the bottom"
+      ],
+      "source": "sams_1085_2",
+      "quote": "TOP VIEW: \"UHF TUNER\", \"VHF TUNER\", \"DIODE (DAMPER)\", \"Q801 HV DRIVER 2SC806\", \"HCT\", \"V801 1S2/DY86\", \"FBT\", \"HOT\", \"Q901 HORIZ DEFL OUTPUT 2SC806\"; CHASSIS BOTTOM VIEW: \"PT\", \"POWER BOARD\"; CHASSIS - SIDE VIEW: two photos, the left side's board with TP202-TP205 and TP501-TP504 (SD), the right side's with TP301-TP311 and TP401-TP406 (CV)",
+      "note": "the KV-7010UA (7-inch, 1968-70) is the KV-1310's sibling; no KV-1310 chassis drawing or photo was found, so its chassis follows this one"
     }
   },
   "estimates": {
@@ -336,6 +355,30 @@
       },
       "source": "belt_1972",
       "quote": "slow motion, timings chosen to be watched: the beams cross at the lens and again at the grille (belt_1972) and the yoke sweeps them line by line; 12 lines of 14 spots stand in for the full raster"
+    },
+    "chassis_kv7010": {
+      "value": {
+        "sd_board": [
+          0.13,
+          0.2
+        ],
+        "pt": [
+          0.06,
+          0.05,
+          0.05
+        ],
+        "rectifier": [
+          0.01,
+          0.035
+        ],
+        "hot": [
+          0.03,
+          0.025,
+          0.035
+        ]
+      },
+      "source": "sams_1085_2",
+      "quote": "estimated: the parts' places follow the Sams views (fact chassis_kv7010), their sizes fit the KV-1310's space behind the tube; the Sams top view is a sketch, not to scale. sd_board [along y, height], pt [x, y, z], rectifier [diameter, glass length], hot [x, y, z]"
     }
   },
   "materials": {
@@ -535,12 +578,11 @@
     "Axes of the Smithsonian's 15 x 15 x 17 3/4 in: read here as height over the handle, depth and width (fits the kahaku photo's proportions). A front and a side photo of a KV-1310 would settle it; the cabinet heights of the KV-1310E (320 mm) and KV-1320UB (337 mm) are without handles and are later cabinets.",
     "Screen size: 12-inch is what the sources say for the first sets (Science Museum: \"This initial 12-inch model\"; Belt: \"the 9- and 12-inch\"), but no source gives the KV-1310's tube type, its diagonal, neck diameter or length. The KV-1310E has a 330AB22 (\"13\\\" (sichtbar 30,5 cm)\"), the Science Museum's sectioned 1971 tube is a 330CB22. Until found, the tube is sized from the photo's screen opening and these figures stay estimates.",
     "Aperture grille pitch, strip width, frame and any damper wires; cathode spacing and focus lens size: none found for the 1968 tube. The IEEE paper (Yoshida, Ohgoshi, Miyaoka, \"The 'Trinitron' - A New Color Tube\", IEEE Trans. BTR-14, July 1968) likely has them but wasn't obtained. Belt (1972) has the gun's layout, not its sizes.",
-    "Chassis layout (boards, tuner, flyback, power supply): no KV-1310 manual or interior photo found. The KV-1310's chassis would be built from the 1968 KV-7010UA manual's board list (SD, CV, N, P, RV) as a stand-in, marked as such; whether that is acceptable is David's call.",
+    "Chassis layout: no KV-1310 manual or interior photo found. The chassis follows its sibling the KV-7010UA: the board list from its Sony service manual, the places from its Sams Photofact (SD and CV upright beside the tube, HV section with the 1S2/DY86 rectifier tube behind the tuners, power transformer below); sizes estimated.",
     "Finishes (walnut grain, trim, bezel, knob colours): to be sampled from a photo. The only KV-1310 photo is kahaku_00063, which may not be reproduced; sampling colours from it is measuring, but no texture can be taken from it. A wood-grain texture would have to be made, not copied.",
     "Photo licence: no openly licensed photo of a KV-1310 was found. The Commons photos are of the KV-1320UB (CC BY 4.0) and a 13-inch European set in Milan (CC BY-SA 4.0), both with different front panels.",
     "The back: no KV-1310 back view found; the open wood sleeve and black plastic back cover follow the sibling KV-1320UB (Commons photo, CC BY 4.0), as estimates. The back's vents, aerial panel, switch, power socket and nameplate are laid out from the same photo (from_photos.back_layout).",
-    "Inside finishes (bulb glass, grille steel, gun metal, yoke copper) are estimated colours: no photo of a 1968 tube's inside found. The Science Museum's sectioned 1971 tube (co34468) photos are CC BY-NC-SA and weren't used.",
-    "Chassis layout: the boards are the KV-7010UA's list (SD, CV, power, RV, N, convergence), placed where they fit round the tube (SD under the tube, CV, power and RV upright behind the column, flyback near the anode); their positions and parts are estimates."
+    "Inside finishes (bulb glass, grille steel, gun metal, yoke copper) are estimated colours: no photo of a 1968 tube's inside found. The Science Museum's sectioned 1971 tube (co34468) photos are CC BY-NC-SA and weren't used."
   ],
   "budget": {
     "triangles": 50000,
