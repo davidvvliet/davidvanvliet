@@ -558,7 +558,7 @@ def beam_animation(spec, F):
     """Slow motion (estimates.beam_animation): electrons stream from the three cathodes, cross
     in the lens, are bent back by the convergence plates and land together on the phosphor; the
     yoke swings them across the screen line by line, and each spot glows and fades behind them.
-    The real beam draws its lines far too fast to see; only a few lines are drawn here."""
+    The real beam draws 525 lines a frame; 64 are drawn here, slowed about 1,900 times."""
     A = spec["estimates"]["beam_animation"]["value"]
     fps = A["fps"]
     sc = bpy.context.scene
@@ -569,15 +569,17 @@ def beam_animation(spec, F):
     _, _, sw, sh = F.box(L["screen_opening"])
     R = spec["estimates"]["tube"]["value"]["face_radius_x"]
     D = y_def - land
-    n_lines, n_spots = A["lines"], A["spots"]
+    n_lines, n_seg = A["lines"], A["segments"]
     t0 = A["to_start"]
     per = A["line"] + A["retrace"]
     t_end_raster = t0 + n_lines * per
     t_end = t_end_raster + A["back"]
     n = int(round(t_end * fps))
     sc.frame_start, sc.frame_end = 0, n
-    xs = [-sw / 2 * A["fill"] + sw * A["fill"] * (j + 0.5) / n_spots for j in range(n_spots)]
-    zs = [sh / 2 * A["fill"] - sh * A["fill"] * (k + 0.5) / n_lines for k in range(n_lines)]
+    # The raster overscans the screen (runs on behind the bezel), so the picture fills it.
+    X0, X1 = -sw / 2 * A["overscan"], sw / 2 * A["overscan"]
+    pitch = sh * A["overscan"] / n_lines
+    zs = [sh / 2 * A["overscan"] - pitch * (k + 0.5) for k in range(n_lines)]
     sag = lambda x: R - math.sqrt(R * R - x * x)
 
     def aim(x, z):
@@ -591,13 +593,13 @@ def beam_animation(spec, F):
         """Where the beams land at time t (screen x, z from its centre)."""
         if t <= t0:
             s = smoothstep(t / t0)
-            return xs[0] * 1.08 * s, zs[0] * s
+            return X0 * s, zs[0] * s
         if t >= t_end_raster:
             s = smoothstep(min(1.0, (t - t_end_raster) / A["back"]))
-            return xs[-1] * 1.08 * (1 - s), zs[-1] * (1 - s)
+            return X1 * (1 - s), zs[-1] * (1 - s)
         k = min(n_lines - 1, int((t - t0) / per))
         u = (t - t0 - k * per)
-        x0, x1 = xs[0] * 1.08, xs[-1] * 1.08
+        x0, x1 = X0, X1
         if u <= A["line"]:
             return x0 + (x1 - x0) * u / A["line"], zs[k]
         # retrace: back to the left, down to the next line
@@ -618,26 +620,27 @@ def beam_animation(spec, F):
                 f.matrix_parent_inverse = pivot.matrix_world.inverted()
                 packets.append((g, f, gun, fan, j))
         # The landing spot.
-        spot = parts.cylinder("beam_spot", 0.003, 0.0006, location=(sx, land + 0.0004, sz), direction=(0, -1, 0),
+        spot = parts.cylinder("beam_spot", A["spot"], 0.0006, location=(sx, land + 0.0004, sz), direction=(0, -1, 0),
                               material=glow("phosphor_glow", 8.0), segments=16)
         spot.parent = pivot
         spot.matrix_parent_inverse = pivot.matrix_world.inverted()
-    # The phosphor where the spot passed: a patch per spot, lit as the beam crosses it, then
-    # fading (the viewer's fade_out); shown on the face's outside, as the picture is seen.
-    patches = []
+    # The phosphor where the spot passed: each line in short pieces that light as the spot
+    # reaches them ("show_from") and fade behind it ("fade_out"); on the face's outside, where the
+    # picture is seen (the glass is drawn opaque).
     with parts.assembly("phosphor_glow", internal=True):
-        pw, ph = sw * A["fill"] / n_spots * 1.25, sh * A["fill"] / n_lines * 0.7   # overlapping: a continuous line
+        h = pitch * A["line_fill"]
+        face = lambda x: land - 0.010 + sag(x) - 0.0003
+        seg = (X1 - X0) / n_seg
         for k, z in enumerate(zs):
-            for j, x in enumerate(xs):
-                # On the face's outside (the glass is drawn opaque), where the picture is seen.
-                y = land - 0.010 + sag(x) - 0.0003
-                o = plate(f"glow_{k + 1}_{j + 1}", rrect(pw, ph, min(pw, ph) * 0.45, 3), sx + x, sz + z, y - 0.0002, y,
-                          glow("phosphor_glow", 3.0))
-                o.data.transform(Matrix.Translation((-(sx + x), -y, -(sz + z))))
-                o.location = (sx + x, y, sz + z)
-                t_hit = t0 + k * per + A["line"] * (x - xs[0] * 1.08) / (xs[-1] * 1.08 - xs[0] * 1.08)
-                o["fade_out"] = [t_hit + 0.15, t_hit + 0.15 + A["persist"]]
-                patches.append((o, t_hit))
+            for j in range(n_seg):
+                xa, xb = X0 + j * seg - 0.0003, X0 + (j + 1) * seg + 0.0003
+                verts = [(sx + xa, face(xa), sz + z - h / 2), (sx + xb, face(xb), sz + z - h / 2),
+                         (sx + xb, face(xb), sz + z + h / 2), (sx + xa, face(xa), sz + z + h / 2)]
+                o = _solid(f"glow_{k + 1}_{j + 1}", verts, [(0, 1, 2, 3)], glow("phosphor_glow", 3.0))
+                t_hit = t0 + k * per + A["line"] * (j + 0.5) / n_seg
+                o["show_from"] = round(t_hit, 4)
+                o["fade_out"] = [round(t_hit + 0.05, 4), round(t_hit + 0.05 + A["persist"], 4)]
+                o.hide_render = True    # dark at rest: left out of the sheet (still exported)
 
     total = {}
     for g, f, gun, fan, j in packets:
@@ -672,12 +675,7 @@ def beam_animation(spec, F):
                 o.keyframe_insert("scale", frame=fr)
         spot.scale = (1, 1, 1) if on else (0, 0, 0)
         spot.keyframe_insert("scale", frame=fr)
-    for o, t_hit in patches:
-        f_hit = max(1, int(round(t_hit * fps)))
-        for fr, s in ((0, 0.0), (f_hit - 1, 0.0), (f_hit + 1, 1.0), (n, 1.0)):
-            o.scale = (s, s, s)
-            o.keyframe_insert("scale", frame=fr)
-    for o in [pivot, spot] + [p[0] for p in packets] + [p[1] for p in packets] + [p[0] for p in patches]:
+    for o in [pivot, spot] + [p[0] for p in packets] + [p[1] for p in packets]:
         if o.animation_data and o.animation_data.action:
             for fc in _fcurves(o.animation_data.action):
                 for kp in fc.keyframe_points:
