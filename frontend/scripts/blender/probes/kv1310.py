@@ -558,7 +558,7 @@ def beam_animation(spec, F):
     """Slow motion (estimates.beam_animation): electrons stream from the three cathodes, cross
     in the lens, are bent back by the convergence plates and land together on the phosphor; the
     yoke swings them across the screen line by line, and each spot glows and fades behind them.
-    The real beam draws 525 lines a frame; 64 are drawn here, slowed about 1,900 times."""
+    The real beam draws 525 lines a frame; 64 are drawn here, slowed 100 times (facts.beam_slowdown)."""
     A = spec["estimates"]["beam_animation"]["value"]
     fps = A["fps"]
     sc = bpy.context.scene
@@ -571,6 +571,10 @@ def beam_animation(spec, F):
     D = y_def - land
     n_lines, n_seg = A["lines"], A["segments"]
     t0 = A["to_start"]
+    fx = spec["facts"]
+    slow = fx["beam_slowdown"]["value"]
+    A = dict(A, retrace=fx["line_blanking"]["value"] * slow,
+             line=(fx["line_period"]["value"] - fx["line_blanking"]["value"]) * slow)
     per = A["line"] + A["retrace"]
     t_end_raster = t0 + n_lines * per
     t_end = t_end_raster + A["back"]
@@ -638,8 +642,8 @@ def beam_animation(spec, F):
                          (sx + xb, face(xb), sz + z + h / 2), (sx + xa, face(xa), sz + z + h / 2)]
                 o = _solid(f"glow_{k + 1}_{j + 1}", verts, [(0, 1, 2, 3)], glow("phosphor_glow", 3.0))
                 t_hit = t0 + k * per + A["line"] * (j + 0.5) / n_seg
-                o["show_from"] = round(t_hit, 4)
-                o["fade_out"] = [round(t_hit + 0.05, 4), round(t_hit + 0.05 + A["persist"], 4)]
+                o["show_from"] = round(t_hit, 5)
+                o["fade_out"] = [round(t_hit + 0.05, 5), round(t_hit + 0.05 + A["persist"], 5)]
                 o.hide_render = True    # dark at rest: left out of the sheet (still exported)
 
     total = {}

@@ -8,7 +8,7 @@
     "explore": true,
     "play": {
       "button": "Beam",
-      "note": "Sweep slowed ≈1,900×"
+      "note": "Sweep slowed 100×"
     }
   },
   "listed": true,
@@ -261,9 +261,9 @@
       "note": "System M is the 525-line, 60-field system of Japan and the US (the table's Japan footnotes sit under M)"
     },
     "beam_slowdown": {
-      "value": 1900,
+      "value": 100,
       "source": "itu_bt470",
-      "quote": "derived: one line in the Beam animation takes estimates.beam_animation line + retrace = 0.1 + 0.02 = 0.12 s; a real line takes 63.5555 µs (facts.line_period); 0.12 s / 63.5555 µs = 1,888, and the visible sweep alone 0.1 s / (63.5555 - 10.9) µs = 1,899; shown rounded as \"≈1,900×\"",
+      "quote": "chosen: the Beam sweep runs 100 times slower than a real line (facts.line_period 63.5555 µs, of which facts.line_blanking is the retrace), so a line's visible sweep takes 100 × (63.5555 − 10.8) µs = 5.28 ms and its retrace 1.08 ms; 64 lines take 0.41 s",
       "note": "only the sweep: the electrons' flight through the gun is slowed far more, and 64 lines stand in for 525"
     },
     "chassis_kv7010": {
@@ -277,6 +277,11 @@
       "source": "sams_1085_2",
       "quote": "TOP VIEW: \"UHF TUNER\", \"VHF TUNER\", \"DIODE (DAMPER)\", \"Q801 HV DRIVER 2SC806\", \"HCT\", \"V801 1S2/DY86\", \"FBT\", \"HOT\", \"Q901 HORIZ DEFL OUTPUT 2SC806\"; CHASSIS BOTTOM VIEW: \"PT\", \"POWER BOARD\"; CHASSIS - SIDE VIEW: two photos, the left side's board with TP202-TP205 and TP501-TP504 (SD), the right side's with TP301-TP311 and TP401-TP406 (CV)",
       "note": "the KV-7010UA (7-inch, 1968-70) is the KV-1310's sibling; no KV-1310 chassis drawing or photo was found, so its chassis follows this one"
+    },
+    "line_blanking": {
+      "value": 1.08e-05,
+      "source": "itu_bt470",
+      "quote": "Table 1 line synchronizing signals, System M: \"Line-blanking interval (µs) 10.2 to 11.4\"; the middle of the range, 10.8 µs"
     }
   },
   "estimates": {
@@ -347,8 +352,6 @@
         "to_start": 0.5,
         "lines": 64,
         "segments": 12,
-        "line": 0.1,
-        "retrace": 0.02,
         "back": 0.4,
         "overscan": 1.04,
         "line_fill": 0.85,
@@ -358,7 +361,7 @@
         "packet_period": 0.6
       },
       "source": "belt_1972",
-      "quote": "slow motion, timings chosen to be watched: the beams cross at the lens and again at the grille (belt_1972) and the yoke sweeps them line by line; 64 lines stand in for the 525 of a frame (facts.line_period's System M), each lit in 12 pieces as the spot passes and fading over persist seconds; the raster overscans the screen opening by 4% so it fills it behind the bezel; 50 frames a second so a line (0.1 s) and its retrace (0.02 s) fall on whole frames"
+      "quote": "slow motion, timings chosen to be watched: the beams cross at the lens and again at the grille (belt_1972) and the yoke sweeps them line by line; 64 lines stand in for the 525 of a frame (facts.line_period's System M), each lit in 12 pieces as the spot passes and fading over persist seconds; the raster overscans the screen opening by 4% so it fills it behind the bezel; a line and its retrace take facts.line_period and facts.line_blanking slowed facts.beam_slowdown times; 50 frames a second, so the spot is sampled about every third line (the phosphor pieces light at their exact times)"
     },
     "chassis_kv7010": {
       "value": {
