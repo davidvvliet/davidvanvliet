@@ -168,7 +168,8 @@ type Controls = THREE.EventDispatcher<{ start: object }> & { target: THREE.Vecto
 // `hide`: groups not drawn (the light paths while the Light button is off).
 // `playStart`: when the model's animation was started (performance.now()), or null: at rest. Every
 // clip in the file plays once from then and holds its end; a mesh with "fade_out": [t0, t1] in its
-// extras fades away between those times (a print developing).
+// extras fades away between those times (a print developing); one with "show_from": t is hidden at
+// rest and appears t seconds into the play (a TV's phosphor lighting as the beam passes).
 // `onEnd`: called once when a play reaches the end of the longest clip or fade.
 // `playPart`: the part that starts the animation when clicked (`onPlay`), the camera's shutter button.
 function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explore = true, focusable = NONE, explodable = NO_PARTS, ghost = false, inner = false, hide = NO_PARTS, playStart = null, playPart = null, onPlay, onEnd }: {
@@ -302,6 +303,12 @@ function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explor
     });
     return fs;
   }, [scene]);
+  const shows = useMemo(() => {
+    const ss: { node: THREE.Object3D; t: number }[] = [];
+    scene.traverse((o) => { if (typeof o.userData.show_from === "number") ss.push({ node: o, t: o.userData.show_from }); });
+    for (const { node } of ss) node.visible = false;
+    return ss;
+  }, [scene]);
   // A mesh with "parallax": [shown, slide] in its extras (a viewfinder's view) shows that share
   // of its picture, slid with the viewing angle as a distant scene would be: the eye to the
   // right sees more of the left. Its picture's u runs along the mesh's x, v along y (glTF axes),
@@ -342,18 +349,20 @@ function Model({ url, title, exploded, focus, setFocus, onLabel, onReady, explor
   const ended = useRef(false);
   useEffect(() => { ended.current = false; }, [playStart]);
   useFrame(() => {
-    if (!actions.length && !fades.length) return;
+    if (!actions.length && !fades.length && !shows.length) return;
     if (playStart === null) {
       if (!playing.current) return;
       playing.current = false;
       mixer.stopAllAction(); // back to the exported pose
       for (const { mesh } of fades) for (const mat of [mesh.material].flat() as THREE.Material[]) { mat.opacity = 1; mat.transparent = false; mat.depthWrite = true; }
+      for (const { node } of shows) node.visible = false;
       return;
     }
     playing.current = true;
     const e = (performance.now() - playStart) / 1000;
     for (const a of actions) { a.play(); a.paused = true; a.time = Math.min(e, a.getClip().duration); }
     mixer.update(0);
+    for (const { node, t } of shows) node.visible = e >= t;
     for (const { mesh, t0, t1 } of fades) {
       const k = 1 - Math.min(1, Math.max(0, (e - t0) / (t1 - t0)));
       for (const mat of [mesh.material].flat() as THREE.Material[]) { mat.transparent = true; mat.opacity = k; mat.depthWrite = k > 0.99; }
