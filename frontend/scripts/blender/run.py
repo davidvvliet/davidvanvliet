@@ -47,7 +47,22 @@ MODEL_CREDITS = os.path.join(FRONTEND, "app", "terminal", "commands", "model-cre
 OUT = os.path.join(HERE, "out")
 STATUS = os.path.join(OUT, "status.json")
 CONFIG = json.load(open(os.path.join(HERE, "blender.json")))
-BLENDER = os.environ.get("BLENDER_PATH", CONFIG["path"])
+def find_blender():
+    # BLENDER_PATH, else blender.json's path (macOS), else the pinned version's standard install
+    # on this system, so Windows and Linux need no setup.
+    if os.environ.get("BLENDER_PATH"):
+        return os.environ["BLENDER_PATH"]
+    if os.path.exists(CONFIG["path"]):
+        return CONFIG["path"]
+    series = ".".join(CONFIG["version"].split(".")[:2])
+    if sys.platform == "win32":
+        for root in (os.environ.get("ProgramFiles", r"C:\Program Files"), os.environ.get("LOCALAPPDATA", "")):
+            exe = os.path.join(root, "Blender Foundation", f"Blender {series}", "blender.exe")
+            if root and os.path.exists(exe):
+                return exe
+    return shutil.which("blender") or CONFIG["path"]
+
+BLENDER = find_blender()
 PORT = CONFIG.get("port", 9876)
 
 def die(msg, code=1):

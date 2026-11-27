@@ -32,7 +32,9 @@ Python; the command line needs only the system `python3`.
 - `refs/<probe>/sources/`: saved texts of the sources a spec uses
 - `build.py`: the build itself (spec → model → checks → render → export), headless or live
 - `run.py`: the command line
-- `blender.json`: pinned Blender version, path and live-server port
+- `blender.json`: pinned Blender version, path and live-server port. The path is the macOS one; on
+  Windows `run.py` finds the pinned version under `Program Files\Blender Foundation`, elsewhere
+  `blender` on the PATH. `BLENDER_PATH` overrides all of these
 - `out/` (ignored): sheets, history, `.glb`/`.blend` per build and `status.json`
 
 ## Commands (from `frontend/`)
